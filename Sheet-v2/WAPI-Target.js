@@ -52,7 +52,7 @@ class TargetData {
 
     importTokenData(token) {
         if (token == undefined) {
-            Debug.Log(`[TargetData] No token exists.`);
+            Debug.LogError(`[TargetData] No token exists.`);
             return;
         }
 
@@ -186,9 +186,10 @@ class TokenTargetData extends TargetData {
     initToken() {
         if (this.token == undefined) {
             Debug.Log (`[TokenTargetData] No token data exists for ${this.charName}`);
-            return;
+            return false;
         }
         this.token.set("bar_location", "overlap_bottom");
+        return true;
     }
     setBar(barIndex, variableObj, showBar, showText) {
         if (variableObj == undefined) {
@@ -223,17 +224,27 @@ class TokenTargetData extends TargetData {
     // tooltip
     showTooltip(isShown) {
         this.token.set("show_tooltip", isShown);
+        if (!isShown) {
+            this.setTooltip("");
+        }
     }
     setTooltip(value) {
-        Debug.Log(`Setting Tooltip to ${value}`);
         this.token.set("tooltip", value);
     }
 
     // status settings
     setEnergy(value) {
+        if (this.token == undefined) {
+            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
+            return;
+        }
         this.token.set(this.elem, value);
     }
     setTurnIcon(value) {
+        if (this.token == undefined) {
+            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
+            return;
+        }
         this.token.set("status_yellow", value);
     }
 
@@ -470,7 +481,7 @@ class TokenTargetData extends TargetData {
 var TargetReference = TargetReference || (function () {
     'use strict';
 
-    var schemaVersion = "0.1.2",
+    var schemaVersion = "0.1.3",
 
         checkInstall = function () {
             if (!state.hasOwnProperty('TargetReference') || state.TargetReference.version != schemaVersion) {
@@ -609,7 +620,7 @@ var TargetReference = TargetReference || (function () {
 
         commandResetToken = function (targets) {
             _.each(targets, function (tokenTargetData) {
-                resetTokenDisplay(tokenTargetData);
+                TokenReference.ResetTokenDisplay(tokenTargetData);
             });
         },
 
@@ -818,7 +829,7 @@ var TargetReference = TargetReference || (function () {
         iterateOverActiveTargetData = function (callback) {
             for (let targetData in state.TargetReference.activeCharacters.targetData) {
                 let tokenTargetData = TokenReference.GetTokenData(targetData);
-                if (tokenTargetData != undefined) {
+                if (tokenTargetData != undefined && tokenTargetData.token != undefined) {
                     callback(tokenTargetData);
                 }
             }
@@ -829,20 +840,19 @@ var TargetReference = TargetReference || (function () {
                 Debug.LogError(`[TargetReference][addToActiveCharacters] No target data exists.`);
                 return;
             }
-            delete (tokenTargetData.token);
             if (state.TargetReference.activeCharacters.targetData.hasOwnProperty(tokenTargetData.tokenId)) {
                 state.TargetReference.activeCharacters.targetData[tokenTargetData.tokenId] = tokenTargetData;
             }
             else {
                 state.TargetReference.activeCharacters.targetData[tokenTargetData.tokenId] = tokenTargetData;
-                state.TargetReference.activeCharacters.names[tokenTargetData.charName] = tokenTargetData.tokenId;
+                state.TargetReference.activeCharacters.nameDatabase[tokenTargetData.charName] = tokenTargetData.tokenId;
             }
         },
 
         removeActiveTargetData = function (tokenId) {
             if (state.TargetReference.activeCharacters.targetData[tokenId] != undefined) {
                 let targetData = state.TargetReference.activeCharacters.targetData[tokenId];
-                delete state.TargetReference.activeCharacters.names[targetData.charName];
+                delete state.TargetReference.activeCharacters.nameDatabase[targetData.charName];
                 delete state.TargetReference.activeCharacters.targetData[tokenId];
             }
         },
@@ -862,7 +872,7 @@ var TargetReference = TargetReference || (function () {
         },
 
         getTokenTargetDataByName = function (characterName) {
-            if (state.TargetReference.activeCharacters.names[characterName] == undefined) {
+            if (state.TargetReference.activeCharacters.nameDatabase[characterName] == undefined) {
                 let tokenTargetData = new TokenTargetData();
                 tokenTargetData.importCharacterByName(characterName);
                 if (tokenTargetData.charId == "") {
@@ -876,11 +886,11 @@ var TargetReference = TargetReference || (function () {
                 }
                 return tokenTargetData;
             }
-            return TokenReference.GetTokenData(state.TargetReference.activeCharacters.targetData[state.TargetReference.activeCharacters.names[characterName]]);
+            return TokenReference.GetTokenData(state.TargetReference.activeCharacters.targetData[state.TargetReference.activeCharacters.nameDatabase[characterName]]);
         },
 
         getTargetDataByName = function (characterName) {
-            if (state.TargetReference.activeCharacters.names[characterName] == undefined) {
+            if (state.TargetReference.activeCharacters.nameDatabase[characterName] == undefined) {
                 let targetData = new TargetData();
                 targetData.importCharacterByName(characterName);
                 if (targetData.charId == "") {
@@ -889,7 +899,7 @@ var TargetReference = TargetReference || (function () {
                 }
                 return targetData;
             }
-            return TokenReference.GetTokenData(state.TargetReference.activeCharacters.targetData[state.TargetReference.activeCharacters.names[characterName]]);
+            return TokenReference.GetTokenData(state.TargetReference.activeCharacters.targetData[state.TargetReference.activeCharacters.nameDatabase[characterName]]);
         }
         ;
     return {
@@ -932,56 +942,75 @@ var TokenReference = TokenReference || (function () {
         },
 
         getTokenData = function (data) {
-            let tokenData;
             if (data.tokenId != undefined) {
-                if (state.TokenReference.tokens[data.tokenId] == undefined) {
-                    let token = getToken(data.tokenId);
-                    if (token == undefined) {
-                        Debug.LogError(`[TokenReference][getToken] Token for ${data.charName} not found`);
-                        return undefined;
-                    }
-                    tokenData = new TokenTargetData(token, data);
-                    if (tokenData == undefined) {
-                        Debug.LogError(`[TokenReference][getToken] Tokendata for ${data.charName} could not be created`);
-                        return undefined;
-                    }
-                    tokenData.setDisplayName();
-                    addToken(tokenData, data.tokenId);
-                }
-                else {
-                    tokenData = state.TokenReference.tokens[data.tokenId];
-                    if (tokenData == undefined) {
-                        Debug.LogError(`[TokenReference][getToken] Something went wrong. Tokendata for ${data.charName} is undefined`);
-                        return undefined;
-                    }
-                    tokenData.setDisplayName();
-                }
+                return getTokenDataFromTargetData(data);
             }
             else {
-                if (state.TokenReference.tokens[data] == undefined) {
-                    let token = getToken(data);
-                    if (token == undefined) {
-                        Debug.LogError(`[TokenReference][getToken] Token for id ${data} not found`);
-                        return undefined;
-                    }
-                    tokenData = new TokenTargetData(token);
-                    if (tokenData == undefined) {
-                        Debug.LogError(`[TokenReference][getToken] Tokendata for id ${data} could not be created`);
-                        return undefined;
-                    }
-                    tokenData.setDisplayName();
-                    addToken(tokenData, data);
-                }
-                else {
-                    tokenData = state.TokenReference.tokens[data];
-                    if (tokenData == undefined) {
-                        Debug.LogError(`[TokenReference][getToken] Something went wrong. Tokendata for ${data} is undefined`);
-                        return undefined;
-                    }
-                    tokenData.setDisplayName();
-                }
+                return getTokenDataFromId(data);
             }
-            return tokenData;
+        },
+        
+        getTokenDataFromTargetData = function (targetData) {
+            if (state.TokenReference.tokens[targetData.tokenId] == undefined) {
+                let token = getToken(targetData.tokenId);
+                if (token == undefined) {
+                    Debug.LogError(`[TokenReference][getToken] Token for ${targetData.charName} not found`);
+                    return undefined;
+                }
+                let tokenData = new TokenTargetData(token, targetData);
+                if (tokenData == undefined) {
+                    Debug.LogError(`[TokenReference][getToken] Tokendata for ${targetData.charName} could not be created`);
+                    return undefined;
+                }
+                tokenData.setDisplayName();
+                addToken(tokenData, targetData.tokenId);
+                return tokenData;
+            }
+            else {
+                let tokenData = state.TokenReference.tokens[targetData.tokenId];
+                if (tokenData == undefined) {
+                    Debug.LogError(`[TokenReference][getToken] Something went wrong. Tokendata for ${targetData.charName} is undefined`);
+                    return undefined;
+                }
+                if (tokenData.token == undefined) {
+                    let token = getToken(targetData.tokenId);
+                    tokenData = new TokenTargetData(token, targetData);
+                }
+                tokenData.setDisplayName();
+                return tokenData;
+            }
+        },
+        
+        getTokenDataFromId = function (tokenId) {
+            if (state.TokenReference.tokens[tokenId] == undefined) {
+                let token = getToken(tokenId);
+                if (token == undefined) {
+                    Debug.LogError(`[TokenReference][getToken] Token for id ${tokenId} not found`);
+                    return undefined;
+                }
+                let tokenData = new TokenTargetData(token);
+                if (tokenData == undefined) {
+                    Debug.LogError(`[TokenReference][getToken] Tokendata for id ${tokenId} could not be created`);
+                    return undefined;
+                }
+                tokenData.setDisplayName();
+                addToken(tokenData, tokenId);
+                return tokenData;
+            }
+            else {
+                let tokenData = state.TokenReference.tokens[tokenId];
+                if (tokenData == undefined) {
+                    Debug.LogError(`[TokenReference][getToken] Something went wrong. Tokendata for ${tokenId} is undefined`);
+                    return undefined;
+                }
+                if (tokenData.token == undefined) {
+                    let token = getToken(tokenId.tokenId);
+                    tokenData = new TokenTargetData(token, tokenId);
+                }
+                tokenData.setDisplayName();
+                return tokenData;
+            }
+        
         },
 
         addToken = function (tokenData, tokenId) {
@@ -1026,17 +1055,18 @@ var TokenReference = TokenReference || (function () {
         // ---------------------------
 
         setTokenForConflict = function (conflictType, tokenTargetData, attributeHandler) {
-            tokenTargetData.initToken();
-            tokenTargetData.showTokenName(true);
-            tokenTargetData.showTooltip(true);
+            if(tokenTargetData.initToken()) {
+                tokenTargetData.showTokenName(true);
+                tokenTargetData.showTooltip(true);
 
-            switch (conflictType) {
-                case "Battle":
-                    setTokenForBattle(tokenTargetData, attributeHandler);
-                    break;
-                case "Social":
-                    setTokenForSocialBattle(tokenTargetData, attributeHandler);
-                    break;
+                switch (conflictType) {
+                    case "Battle":
+                        setTokenForBattle(tokenTargetData, attributeHandler);
+                        break;
+                    case "Social":
+                        setTokenForSocialBattle(tokenTargetData, attributeHandler);
+                        break;
+                }
             }
         },
         setTokenForBattle = function (tokenTargetData, attributeHandler) {

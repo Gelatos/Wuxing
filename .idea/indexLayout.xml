@@ -3,6 +3,8 @@
   <component name="UserContentModel">
     <attachedFolders />
     <explicitIncludes />
-    <explicitExcludes />
+    <explicitExcludes>
+      <Path>Sheet-v2/Character Sheet</Path>
+    </explicitExcludes>
   </component>
 </project>
