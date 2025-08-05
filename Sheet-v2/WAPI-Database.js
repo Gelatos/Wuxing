@@ -645,6 +645,9 @@ class TechniqueData extends WuxDatabaseData {
                 this.effects.add(effect.name, effect);
                 break;
         }
+        if (effect.traits != "") {
+            this.addDefinition(`Trait_${effect.traits}`);
+        }
     }
 
     addDefinition(definition) {
@@ -2201,7 +2204,11 @@ class TechniqueEffectDisplayData {
             case "Surge":
                 return `If target has a surge, they must spend one and heal ${this.formatCalcBonus(effect)} ${hp}`;
             default:
-                return `${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+                let traits = "";
+                if (effect.traits != "") {
+                    traits = `[${effect.traits}] `;
+                }
+                return `${traits}${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
         }
     }
 
@@ -2436,6 +2443,9 @@ class TechniqueEffectDisplayData {
         if (formulaString != "" && output != "") {
             output += " + ";
         }
+        if (formulaString == "[MAX]") {
+            return "the maximum value (3 x Character Rank)";
+        }
         return output + formulaString;
     }
 
@@ -2595,7 +2605,7 @@ class FormulaData {
     iterateFormulaComponentsForImport(baseFormula, callback) {
         let definitionName = "";
         let definitionNameModifier = "";
-        let multiplier = 1;
+        let multiplier = 1.0;
         let max = 0;
         let formulaArray = baseFormula.split(";");
         formulaArray.forEach((formula) => {
