@@ -276,10 +276,10 @@ class TokenTargetData extends TargetData {
             return results;
         });
     }
-    setFavor(attributeHandler, value) {
-        let patienceVar = WuxDef.GetVariable("Soc_Favor");
-        attributeHandler.addUpdate(patienceVar);
-        attributeHandler.addUpdate(patienceVar, value, true);
+    setMaxFavor(attributeHandler, value) {
+        let favorMaxVar = WuxDef.GetVariable("Soc_Favor", WuxDef._max);
+        attributeHandler.addUpdate(favorMaxVar);
+        attributeHandler.addUpdate(favorMaxVar, value, true);
         this.token.set(`bar3_max`, value);
     }
     addFavor(attributeHandler, value) {
@@ -290,40 +290,85 @@ class TokenTargetData extends TargetData {
             return results;
         });
     }
+    emptyFavor(attributeHandler) {
+        let tokenTargetData = this;
+        this.modifyResourceAttribute(attributeHandler, "Soc_Favor", 0,
+            function (results) {
+                tokenTargetData.setModifierToAttribute(results, 0);
+            },
+            function (results, attrHandler, attributeVar) {
+                attrHandler.addUpdate(attributeVar, results.newValue, false);
+                tokenTargetData.setBarValue(3, results.newValue);
+                return results;
+            }
+        );
+    }
     addHp(attributeHandler, value) {
+        let tokenTargetData = this;
         this.modifyResourceAttribute(attributeHandler, "HP", value,
             function (results, value) {
-                this.addModifierToAttribute(results, value);
+                tokenTargetData.addModifierToAttribute(results, value);
                 if (!isNaN(parseInt(value)) && parseInt(value) < 0 && results.remainder < 0) {
                     while (results.remainder < 0) {
                         results.current = results.max;
-                        let vitalityResult = this.addVitality(attributeHandler, -1);
-                        if (vitalityResult.current == 0) {
-                            // TODO: add the downed status
-                        }
-                        this.addModifierToAttribute(results, results.remainder);
+                        tokenTargetData.addVitality(attributeHandler, -1);
+                        tokenTargetData.addModifierToAttribute(results, results.remainder);
                     }
                 }
             },
             function (results, attrHandler, attributeVar) {
                 attrHandler.addUpdate(attributeVar, results.newValue, false);
-                this.setBarValue(1, results.newValue);
+                tokenTargetData.setBarValue(1, results.newValue);
                 return results;
-            });
+            }
+        );
     }
-    addVitality(attributeHandler, value) {
-        this.modifyResourceAttribute(attributeHandler, "Vitality", value, this.addModifierToAttribute, function (results, attrHandler, attributeVar) {
-            attrHandler.addUpdate(attributeVar, results.newValue, false);
-            return results;
-        });
-    }
-    addEnergy(attributeHandler, value, resultsCallback) {
+    setHpToFull(attributeHandler) {
         let tokenTargetData = this;
-        this.modifyResourceAttribute(attributeHandler, "EN", value,
-            function (results, value) {
-                tokenTargetData.addModifierToAttribute(results, value);
+        this.modifyResourceAttribute(attributeHandler, "HP", 0,
+            function (results) {
+                tokenTargetData.setModifierToAttribute(results, "max");
             },
             function (results, attrHandler, attributeVar) {
+                attrHandler.addUpdate(attributeVar, results.newValue, false);
+                tokenTargetData.setBarValue(1, results.newValue);
+                return results;
+            }
+        );
+    }
+    setWillToFull(attributeHandler) {
+        let tokenTargetData = this;
+        this.modifyResourceAttribute(attributeHandler, "WILL", 0,
+            function (results) {
+                tokenTargetData.setModifierToAttribute(results, "max");
+            },
+            function (results, attrHandler, attributeVar) {
+                attrHandler.addUpdate(attributeVar, results.newValue, false);
+                tokenTargetData.setBarValue(2, results.newValue);
+                return results;
+            }
+        );
+    }
+    addVitality(attributeHandler, value) {
+        this.modifyResourceAttribute(attributeHandler, 
+            "Cmb_Vitality", 
+            value, 
+            this.addModifierToAttribute, 
+            function (results, attrHandler, attributeVar) {
+                attrHandler.addUpdate(attributeVar, results.newValue, false);
+                if (results <= 0) {
+                    // TODO: Add the Downed status
+                }
+            }
+        );
+    }
+    addEnergy(attributeHandler, value, resultsCallback) {
+        Debug.Log(`[TokenTargetData] Adding ${value} Energy to ${this.displayName}`);
+        let tokenTargetData = this;
+        this.modifyResourceAttribute(attributeHandler, "EN", value,
+            tokenTargetData.addModifierToAttribute,
+            function (results, attrHandler, attributeVar) {
+                Debug.Log(`[TokenTargetData] New Energy Value is ${results.newValue}`);
                 if (resultsCallback != undefined) {
                     resultsCallback(results, attrHandler, attributeVar);
                 }
@@ -359,7 +404,7 @@ class TokenTargetData extends TargetData {
         let tokenTargetData = this;
         let roundEnVar = WuxDef.GetVariable("RoundEN");
         attributeHandler.addMod(roundEnVar);
-        this.modifyResourceAttribute(attributeHandler, "EN", value,
+        this.modifyResourceAttribute(attributeHandler, "EN", 0,
             function (results, value, attrHandler) {
                 tokenTargetData.addModifierToAttribute(results, attrHandler.parseInt(roundEnVar));
             },
@@ -507,14 +552,26 @@ var TargetReference = TargetReference || (function () {
                 case "!actclr":
                     commandClearActiveTargets();
                     break;
+                case "!tokenoptions":
+                    commandShowTokenOptions(msg);
+                    break;
                 case "!tss":
-                    commandSetSocialData(TokenReference.GetTokenTargetDataArray(msg), content);
+                    commandSetRequestCheck(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
                 case "!ten":
                     commandAddEnergy(TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
                 case "!tmove":
                     commandAddMoveCharge(TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
+                case "!tfullheal":
+                    commandFullHeal(TokenReference.GetTokenTargetDataArray(msg));
+                    break;
+                case "!tresetSocial":
+                    commandResetSocial(TokenReference.GetTokenTargetDataArray(msg));
+                    break;
+                case "!tdetails":
+                    commandUpdateCombatDetails(TokenReference.GetTokenTargetDataArray(msg));
                     break;
                 case "!treset":
                     commandResetToken(TokenReference.GetTokenTargetDataArray(msg));
@@ -592,12 +649,75 @@ var TargetReference = TargetReference || (function () {
             return output;
         },
 
-        commandSetSocialData = function (targets, content) {
-            let contents = content.split(",");
+        commandShowTokenOptions = function (msg) {
+            let sender = msg.who;
+
+            let output = "";
+            output += tokenOptionTitle("Token State");
+            output += tokenOptionButton("Update Tooltip", "tdetails");
+            if (playerIsGM(msg.playerid)) {
+                output += tokenOptionButton("Reset Token", "treset");
+            }
+
+            output += tokenOptionSpacer();
+            output += tokenOptionTitle("Combat Options");
+            output += tokenOptionButton("Add Energy", "ten ?{How much energy to add?|1}");
+            output += tokenOptionButton("Add Move Charge", "tmove ?{How much move charge to add?|1}");
+
+            if (playerIsGM(msg.playerid)) {
+                output += tokenOptionButton("Full Heal", "tfullheal");
+            }
+            
+            if (playerIsGM(msg.playerid)) {
+                output += tokenOptionSpacer();
+                output += tokenOptionTitle("Social Options");
+                output += tokenOptionButton("Reset Social", "tresetSocial");
+                output += tokenOptionButton("Request Threshold", "tss ?{Set the difficulty of the request|" +
+                    "Simple DC 15|Inconvenient DC 30|Disruptive DC 40|Serious DC 50|Life-Changing DC 60}");
+            }
+            
+            let senderMessage = new SystemInfoMessage(output);
+            senderMessage.setSender(sender);
+            WuxMessage.Send(senderMessage, sender);
+        },
+
+        tokenOptionTitle = function (title) {
+            return `<div style='font-weight: bold'>${title}</div>`;
+        },
+
+        tokenOptionSpacer = function () {
+            return `<div>&nbsp</div>`;
+        },
+        
+        tokenOptionButton = function (name, message) {
+             return `<span class="sheet-wuxInlineRow">[${name}](!${message})</span> `;
+        },
+
+        commandSetRequestCheck = function (msg, targets, content) {
+            let sender = msg.who;
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                tokenTargetData.setImpatience(attributeHandler, contents[0]);
-                tokenTargetData.setFavor(attributeHandler, contents[1]);
+                switch (content) {
+                    case "Simple DC 15":
+                        tokenTargetData.setMaxFavor(attributeHandler, 7);
+                        break;
+                    case "Inconvenient DC 30":
+                        tokenTargetData.setMaxFavor(attributeHandler, 15);
+                        break;
+                    case "Disruptive DC 40":
+                        tokenTargetData.setMaxFavor(attributeHandler, 20);
+                        break;
+                    case "Serious DC 50":
+                        tokenTargetData.setMaxFavor(attributeHandler, 25);
+                        break;
+                    case "Life-Changing DC 60":
+                        tokenTargetData.setMaxFavor(attributeHandler, 30);
+                        break;
+                }
+                let senderMessage = new SystemInfoMessage(`This request has been set as ${content}.`);
+                senderMessage.setSender(sender);
+                WuxMessage.Send(senderMessage);
+                
                 attributeHandler.run();
             });
         },
@@ -614,6 +734,35 @@ var TargetReference = TargetReference || (function () {
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
                 tokenTargetData.addMoveCharge(content);
+                attributeHandler.run();
+            });
+        },
+
+        commandFullHeal = function (targets) {
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.setHpToFull(attributeHandler);
+                tokenTargetData.setWillToFull(attributeHandler);
+                attributeHandler.run();
+            });
+        },
+
+        commandResetSocial = function (targets) {
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.emptyFavor(attributeHandler);
+                tokenTargetData.setWillToFull(attributeHandler);
+                attributeHandler.run();
+            });
+        },
+
+        commandUpdateCombatDetails = function (targets) {
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
+                attributeHandler.addFinishCallback(function (attrHandler) {
+                    tokenTargetData.setTooltip(combatDetailsHandler.printTooltip(attrHandler));
+                });
                 attributeHandler.run();
             });
         },

@@ -21,6 +21,9 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             let healValueVar = WuxDef.GetVariable("Cmb_HV");
             let surgeDef = WuxDef.Get("Cmb_Surge");
             let vitalityDef = WuxDef.Get("Cmb_Vitality");
+            attributeHandler.addMod([healValueVar,
+                surgeDef.getVariable(), surgeDef.getVariable(WuxDef._max),
+                vitalityDef.getVariable(), vitalityDef.getVariable(WuxDef._max)]);
 
             for (let i = 0; i < formulaDefinitions.length; i++) {
                 attributeHandler.addFormulaMods(formulaDefinitions[i]);
@@ -35,11 +38,13 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                         attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
                     }
                 }
-                combatDetailsHandler.onUpdateHealValue(attrHandler, attrHandler.parseInt(healValueVar));
-                combatDetailsHandler.onUpdateSurges(attrHandler, attrHandler.parseInt(surgeDef.getVariable()));
-                combatDetailsHandler.onUpdateMaxSurges(attrHandler, attrHandler.parseInt(surgeDef.getVariable(WuxDef._max)));
-                combatDetailsHandler.onUpdateVitality(attrHandler, attrHandler.parseInt(vitalityDef.getVariable()));
-                combatDetailsHandler.onUpdateMaxVitality(attrHandler, attrHandler.parseInt(vitalityDef.getVariable(WuxDef._max)));
+                if (combatDetailsHandler != undefined) {
+                    combatDetailsHandler.onUpdateHealValue(attrHandler, attrHandler.parseInt(healValueVar));
+                    combatDetailsHandler.onUpdateSurges(attrHandler, attrHandler.parseInt(surgeDef.getVariable()));
+                    combatDetailsHandler.onUpdateMaxSurges(attrHandler, attrHandler.parseInt(surgeDef.getVariable(WuxDef._max)));
+                    combatDetailsHandler.onUpdateVitality(attrHandler, attrHandler.parseInt(vitalityDef.getVariable()));
+                    combatDetailsHandler.onUpdateMaxVitality(attrHandler, attrHandler.parseInt(vitalityDef.getVariable(WuxDef._max)));
+                }
             });
         },
         updateDisplayName = function (eventinfo) {
