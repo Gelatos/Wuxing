@@ -1,10 +1,14 @@
 var wuxCurrentVersion = "1.0.1";
 var upgrade_to_1_0_1 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.1");
-	let maxDef = WuxDef.Get("MAX");
-	attributeHandler.addFormulaMods(maxDef);
+	let statBonusFilter = WuxDef.Filter([new DatabaseFilterData("group", "StatBonus")]);
+	for (let i = 0; i < statBonusFilter.length; i++) {
+		attributeHandler.addFormulaMods(statBonusFilter[i]);
+	}
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
-		attrHandler.addUpdate(maxDef.getVariable(), maxDef.formula.getValue(attrHandler));
+		for (let i = 0; i < statBonusFilter.length; i++) {
+			attrHandler.addUpdate(statBonusFilter[i].getVariable(), statBonusFilter[i].formula.getValue(attrHandler));
+		}
 	});
 	attributeHandler.run();
 };

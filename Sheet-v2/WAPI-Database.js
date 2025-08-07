@@ -2443,9 +2443,6 @@ class TechniqueEffectDisplayData {
         if (formulaString != "" && output != "") {
             output += " + ";
         }
-        if (formulaString == "[MAX]") {
-            return "the maximum value (3 x Character Rank)";
-        }
         return output + formulaString;
     }
 
@@ -2722,7 +2719,10 @@ class FormulaData {
                         if (output != "") {
                             output += " + ";
                         }
-                        if (worker.multiplier != 1) {
+                        if (definition.group == "StatBonus") {
+                            output += `${definition.getDescription()} (${definition.formula.getString()})`;
+                        }
+                        else if (worker.multiplier != 1) {
                             if (worker.multiplier > 1) {
                                 output += `[${definition.title} x ${worker.multiplier}]`;
                             } else {

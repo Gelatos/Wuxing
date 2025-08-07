@@ -16,10 +16,10 @@ var Debug = Debug || (function () {
     };
 }());
 
-function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefinitionArray, systemDefinitionArray,
+function SetDefinitionsDatabase(definitionTypesArray, groupDefinitionArray, definitionArray, systemDefinitionArray,
                                 styleArray, skillsArray, languageArray, loreArray, jobsArray, statusArray, namesArray, regionArray) {
     let definitionDatabase = SheetsDatabase.CreateDefinitionTypes(definitionTypesArray);
-    definitionDatabase.importSheets(definitionArray, function (arr) {
+    definitionDatabase.importSheets(groupDefinitionArray, function (arr) {
         let definition = new DefinitionData(arr);
         let baseDefinition = definitionDatabase.get(definition.group);
         if (baseDefinition != undefined && baseDefinition.group == "Type") {
@@ -27,7 +27,7 @@ function SetDefinitionsDatabase(definitionTypesArray, definitionArray, groupDefi
         }
         return definition;
     });
-    definitionDatabase.importSheets(groupDefinitionArray, function (arr) {
+    definitionDatabase.importSheets(definitionArray, function (arr) {
         let definition = new DefinitionData(arr);
         let baseDefinition = definitionDatabase.get(definition.group);
         if (baseDefinition != undefined && baseDefinition.group == "Type") {
