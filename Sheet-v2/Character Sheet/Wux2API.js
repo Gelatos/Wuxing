@@ -7853,7 +7853,6 @@ class TechniqueEffectDisplayData {
     formatBoostEffect(effect) {
         switch (effect.subType) {
             case "Set":
-                Debug.Log (`formatBoostEffect Set for ${effect.effect} to ${this.formatCalcBonus(effect)}`);
                 return `${WuxDef.GetTitle(effect.effect)} is set to ${this.formatCalcBonus(effect)}`;
             case "Penalty":
                 return `${WuxDef.GetTitle(effect.effect)} decreases by ${this.formatCalcBonus(effect)}`;
@@ -8159,7 +8158,7 @@ class FormulaData {
             variableName: variableName,
             definitionName: definitionName,
             value: isNaN(parseInt(value)) ? 0 : parseInt(value),
-            multiplier: isNaN(parseInt(multiplier)) ? 1 : parseInt(multiplier),
+            multiplier: isNaN(parseFloat(multiplier)) ? 1 : parseFloat(multiplier),
             max: max
         }
     }
@@ -8210,7 +8209,7 @@ class FormulaData {
         if (printName != undefined) {
             Debug.Log(`${printName} Formula: ${printOutput} = ${output}`);
         }
-        return output;
+        return parseInt(output);
     }
     addPrintModifier(printOutput, value, multiplier) {
         if (printOutput != "") {
@@ -8227,17 +8226,14 @@ class FormulaData {
         let output = "";
         let definition = {};
         this.workers.forEach((worker) => {
-            Debug.Log(`[formula.getString] Worker: ${worker.variableName} (${worker.definitionName})`);
             if (worker.variableName != "") {
                 if (worker.definitionName != "") {
                     definition = WuxDef.Get(worker.definitionName);
-                    Debug.Log (`[formula.getString] Definition Found for ${worker.definitionName}: ${JSON.stringify(definition)}`);
                     if (definition != undefined) {
                         if (output != "") {
                             output += " + ";
                         }
                         if (definition.group == "StatBonus") {
-                            Debug.Log (`Stat Bonus Found for ${definition.name} with desc ${definition.getDescription()} and formula ${definition.formula.getString()}`);
                             output += `${definition.getDescription()} (${definition.formula.getString()})`;
                         }
                         else if (worker.multiplier != 1) {
@@ -11229,7 +11225,7 @@ var WuxDef = WuxDef || (function() {
             "WILL":{"name":"WILL","fieldName":"will","group":"General","description":"","variable":"gen-will{0}","title":"Willpower","subGroup":"","descriptions":["Willpower is a character's ability to stay invested in a situation. "],
                 "abbreviation":"WILL","baseFormula":"","modifiers":"_tech","formula":{"workers":[{"variableName":"","definitionName":"","value":15,"multiplier":1,"max":0},
                         {"variableName":"adv-cr","definitionName":"CR","value":0,"multiplier":15,"max":0},
-                        {"variableName":"adv-level","definitionName":"Level","value":0,"multiplier":0,"max":0},
+                        {"variableName":"adv-level","definitionName":"Level","value":0,"multiplier":0.5,"max":0},
                         {"variableName":"atr-cnv","definitionName":"Attr_CNV","value":0,"multiplier":1,"max":0},
                         {"variableName":"gen-will_tech","definitionName":"","value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
@@ -11307,7 +11303,7 @@ var WuxDef = WuxDef || (function() {
                 "isResource":true},
             "Cmb_Surge":{"name":"Cmb_Surge","fieldName":"surge","group":"Combat","description":"","variable":"cmb-surge{0}","title":"Surge","subGroup":"Life","descriptions":["Surge is a resource that allows a character to tap into their resolve to continue a fight. It is most often spent to restore their HP.","After completing a brief rest, healing surge is restored to full."],
                 "abbreviation":"","baseFormula":"","modifiers":"_tech;_affinity","formula":{"workers":[{"variableName":"","definitionName":"","value":3,"multiplier":1,"max":0},
-                        {"variableName":"adv-cr","definitionName":"CR","value":0,"multiplier":0,"max":0},
+                        {"variableName":"adv-cr","definitionName":"CR","value":0,"multiplier":0.5,"max":0},
                         {"variableName":"cmb-surge_tech","definitionName":"","value":0,"multiplier":1,"max":0},
                         {"variableName":"cmb-surge_affinity","definitionName":"","value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],

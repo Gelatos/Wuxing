@@ -2644,7 +2644,7 @@ class FormulaData {
             variableName: variableName,
             definitionName: definitionName,
             value: isNaN(parseInt(value)) ? 0 : parseInt(value),
-            multiplier: isNaN(parseInt(multiplier)) ? 1 : parseInt(multiplier),
+            multiplier: isNaN(parseFloat(multiplier)) ? 1 : parseFloat(multiplier),
             max: max
         }
     }
@@ -2695,7 +2695,7 @@ class FormulaData {
         if (printName != undefined) {
             Debug.Log(`${printName} Formula: ${printOutput} = ${output}`);
         }
-        return output;
+        return parseInt(output);
     }
     addPrintModifier(printOutput, value, multiplier) {
         if (printOutput != "") {
