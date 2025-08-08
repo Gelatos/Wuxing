@@ -46,12 +46,13 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         let gearBoosters = attrHandler.parseJSON(WuxDef.GetVariable("BoostGearTech"));
         let perkBoosters = attrHandler.parseJSON(WuxDef.GetVariable("BoostPerkTech"));
         let healValueVar = WuxDef.GetVariable("Cmb_HV");
+        let armorDefVar = WuxDef.GetVariable("Cmb_Armor");
         let surgeDef = WuxDef.Get("Cmb_Surge");
         let vitalityDef = WuxDef.Get("Cmb_Vitality");
         Debug.Log(`Boost Perk Tech: ${perkBoosters}`);
 
         let attributeHandler = new WorkerAttributeHandler();
-        attributeHandler.addMod([healValueVar,
+        attributeHandler.addMod([healValueVar, armorDefVar,
             surgeDef.getVariable(), surgeDef.getVariable(WuxDef._max),
             vitalityDef.getVariable(), vitalityDef.getVariable(WuxDef._max)]);
         let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
@@ -96,6 +97,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             combatDetailsHandler.onUpdateMaxSurges(attrHandler, attrHandler.parseInt(surgeDef.getVariable(WuxDef._max)));
             combatDetailsHandler.onUpdateVitality(attrHandler, attrHandler.parseInt(vitalityDef.getVariable()));
             combatDetailsHandler.onUpdateMaxVitality(attrHandler, attrHandler.parseInt(vitalityDef.getVariable(WuxDef._max)));
+            combatDetailsHandler.onUpdateArmorValue(attrHandler, attrHandler.parseInt(armorDefVar));
         });
         attributeHandler.run();
     }

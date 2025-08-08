@@ -3183,6 +3183,7 @@ var TargetReference = TargetReference || (function () {
                 let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
                 attributeHandler.addFinishCallback(function (attrHandler) {
                     tokenTargetData.setTooltip(combatDetailsHandler.printTooltip(attrHandler));
+                    Debug.Log(`Combat Details: ${JSON.stringify(combatDetailsHandler.combatDetails)}`);
                 });
                 attributeHandler.run();
             });
@@ -3654,6 +3655,7 @@ var TokenReference = TokenReference || (function () {
                 tokenTargetData.setEnergy(attrHandler.parseInt(enVar, 0, false));
                 combatDetailsHandler.onUpdateDisplayStyle(attrHandler, "Battle");
                 tokenTargetData.setTooltip(combatDetailsHandler.printTooltip(attrHandler));
+                Debug.Log(`Combat Details: ${JSON.stringify(combatDetailsHandler.combatDetails)}`);
             });
         },
         setTokenForSocialBattle = function (tokenTargetData, attributeHandler) {
@@ -8512,27 +8514,30 @@ class CombatDetails {
         this.job = "";
         this.jobDefenses = "";
         this.status = [];
-        this.healvalue = 0;
         this.surges = 2;
         this.maxsurges = 2;
         this.vitality = 1;
         this.maxvitality = 1;
+        this.healvalue = 0;
+        this.armorvalue = 0;
         this.supportiveInfluence = 0;
         this.opposingInfluence = 0;
     }
 
     importJson(json) {
+        Debug.Log(`[CombatDetails][importJson] Importing combat details from JSON: ${JSON.stringify(json)}`);
         this.displayStyle = json.displayStyle != undefined ? json.displayStyle : "";
         this.displayName = json.displayName != undefined ? json.displayName : "";
         this.cr = json.cr != undefined ? json.cr : 1;
         this.job = json.job != undefined ? json.job : "";
         this.jobDefenses = json.jobDefenses != undefined ? json.jobDefenses : "";
         this.status = json.status != undefined ? json.status : [];
-        this.healvalue = json.healvalue;
         this.surges = json.surges != undefined ? json.surges : 2;
         this.maxsurges = json.maxsurges != undefined ? json.maxsurges : 2;
         this.vitality = json.vitality != undefined ? json.vitality : 1;
         this.maxvitality = json.maxvitality != undefined ? json.maxvitality : 1;
+        this.healvalue = json.healvalue;
+        this.armorvalue = json.armorvalue;
         this.supportiveInfluence = json.supportiveInfluence != undefined ? json.supportiveInfluence : 0;
         this.opposingInfluence = json.opposingInfluence != undefined ? json.opposingInfluence : 0;
     }
@@ -8544,8 +8549,7 @@ class CombatDetails {
 
         switch (this.displayStyle) {
             case "Battle":
-                output += `HV:${this.healvalue}`;
-                output += `.Surges:`;
+                output += `Surges:`;
                 for (let i = 0; i < this.maxsurges; i++) {
                     output += i < this.surges ? `⛊` : `⛉`;
                 }
@@ -8553,6 +8557,8 @@ class CombatDetails {
                 for (let i = 0; i < this.maxvitality; i++) {
                     output += i < this.vitality ? `♥` : `♡`;
                 }
+                output += ` HV:${this.healvalue}`;
+                output += `.Armor:${this.armorvalue}`;
                 break;
             case "Social":
                 output += `Influences:`;
@@ -8618,6 +8624,7 @@ class CombatDetailsHandler {
     }
 
     printTooltip(attrHandler) {
+        Debug.Log(`[CombatDetailsHandler][printTooltip] Printing combat details tooltip.\n${attrHandler.parseString(this.combatDetailsVar)}`);
         this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
         return this.combatDetails.printTooltip();
     }
@@ -8654,6 +8661,12 @@ class CombatDetailsHandler {
     onUpdateHealValue(attrHandler, healValue) {
         this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
         this.combatDetails.healvalue = healValue;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+    
+    onUpdateArmorValue(attrHandler, armorValue) {
+        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        this.combatDetails.armorvalue = armorValue;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 

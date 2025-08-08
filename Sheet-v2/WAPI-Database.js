@@ -2998,11 +2998,12 @@ class CombatDetails {
         this.job = "";
         this.jobDefenses = "";
         this.status = [];
-        this.healvalue = 0;
         this.surges = 2;
         this.maxsurges = 2;
         this.vitality = 1;
         this.maxvitality = 1;
+        this.healvalue = 0;
+        this.armorvalue = 0;
         this.supportiveInfluence = 0;
         this.opposingInfluence = 0;
     }
@@ -3014,11 +3015,12 @@ class CombatDetails {
         this.job = json.job != undefined ? json.job : "";
         this.jobDefenses = json.jobDefenses != undefined ? json.jobDefenses : "";
         this.status = json.status != undefined ? json.status : [];
-        this.healvalue = json.healvalue;
         this.surges = json.surges != undefined ? json.surges : 2;
         this.maxsurges = json.maxsurges != undefined ? json.maxsurges : 2;
         this.vitality = json.vitality != undefined ? json.vitality : 1;
         this.maxvitality = json.maxvitality != undefined ? json.maxvitality : 1;
+        this.healvalue = json.healvalue;
+        this.armorvalue = json.armorvalue;
         this.supportiveInfluence = json.supportiveInfluence != undefined ? json.supportiveInfluence : 0;
         this.opposingInfluence = json.opposingInfluence != undefined ? json.opposingInfluence : 0;
     }
@@ -3030,8 +3032,7 @@ class CombatDetails {
 
         switch (this.displayStyle) {
             case "Battle":
-                output += `HV:${this.healvalue}`;
-                output += `.Surges:`;
+                output += `Surges:`;
                 for (let i = 0; i < this.maxsurges; i++) {
                     output += i < this.surges ? `⛊` : `⛉`;
                 }
@@ -3039,6 +3040,8 @@ class CombatDetails {
                 for (let i = 0; i < this.maxvitality; i++) {
                     output += i < this.vitality ? `♥` : `♡`;
                 }
+                output += ` HV:${this.healvalue}`;
+                output += `.Armor:${this.armorvalue}`;
                 break;
             case "Social":
                 output += `Influences:`;
@@ -3130,7 +3133,6 @@ class CombatDetailsHandler {
         let jobCatDef = WuxDef.Get("Job");
         let jobDefinitionName = `${jobCatDef.abbreviation}_${jobName}`;
         let jobDef = WuxDef.Get(jobDefinitionName);
-        Debug.Log(`[CombatDetailsHandler][onUpdateJob] Updating job to ${jobDef.title} with defenses ${jobDef.defenses}`);
         this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
         this.combatDetails.job = jobDef.title;
         this.combatDetails.jobDefenses = jobDef.defenses;
@@ -3140,6 +3142,12 @@ class CombatDetailsHandler {
     onUpdateHealValue(attrHandler, healValue) {
         this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
         this.combatDetails.healvalue = healValue;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+    
+    onUpdateArmorValue(attrHandler, armorValue) {
+        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        this.combatDetails.armorvalue = armorValue;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 

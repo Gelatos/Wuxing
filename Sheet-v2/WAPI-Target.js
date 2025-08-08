@@ -762,6 +762,7 @@ var TargetReference = TargetReference || (function () {
                 let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
                 attributeHandler.addFinishCallback(function (attrHandler) {
                     tokenTargetData.setTooltip(combatDetailsHandler.printTooltip(attrHandler));
+                    Debug.Log(`Combat Details: ${JSON.stringify(combatDetailsHandler.combatDetails)}`);
                 });
                 attributeHandler.run();
             });
@@ -1233,6 +1234,7 @@ var TokenReference = TokenReference || (function () {
                 tokenTargetData.setEnergy(attrHandler.parseInt(enVar, 0, false));
                 combatDetailsHandler.onUpdateDisplayStyle(attrHandler, "Battle");
                 tokenTargetData.setTooltip(combatDetailsHandler.printTooltip(attrHandler));
+                Debug.Log(`Combat Details: ${JSON.stringify(combatDetailsHandler.combatDetails)}`);
             });
         },
         setTokenForSocialBattle = function (tokenTargetData, attributeHandler) {
