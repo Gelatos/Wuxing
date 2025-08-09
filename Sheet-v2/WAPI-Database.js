@@ -3110,6 +3110,11 @@ class CombatDetailsHandler {
         this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
         return this.combatDetails.printTooltip();
     }
+    
+    hasDisplayStyle() {
+        Debug.Log(`Display Style: ${this.combatDetails.displayStyle}`);
+        return this.combatDetails.displayStyle != "";
+    }
 
     onUpdateDisplayStyle(attrHandler, value) {
         this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));

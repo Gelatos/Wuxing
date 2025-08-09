@@ -10,6 +10,8 @@ var upgrade_to_1_0_1 = function (currentVersion) {
 			attrHandler.addUpdate(statBonusFilter[i].getVariable(), statBonusFilter[i].formula.getValue(attrHandler));
 		}
 	});
+	attributeHandler.addUpdate(WuxDef.GetVariable("EN"), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("EN", WuxDef._max), 9);
 	attributeHandler.run();
 };
 

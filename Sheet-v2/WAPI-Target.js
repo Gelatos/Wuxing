@@ -559,22 +559,28 @@ var TargetReference = TargetReference || (function () {
                     commandSetRequestCheck(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
                 case "!ten":
-                    commandAddEnergy(TokenReference.GetTokenTargetDataArray(msg), content);
+                    commandAddEnergy(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
                 case "!tmove":
-                    commandAddMoveCharge(TokenReference.GetTokenTargetDataArray(msg), content);
+                    commandAddMoveCharge(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
                 case "!tfullheal":
-                    commandFullHeal(TokenReference.GetTokenTargetDataArray(msg));
+                    commandFullHeal(msg, TokenReference.GetTokenTargetDataArray(msg));
+                    break;
+                case "!thealsurge":
+                    commandHealSurge(msg, TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
+                case "!thealvit":
+                    commandHealVitality(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
                 case "!tresetSocial":
-                    commandResetSocial(TokenReference.GetTokenTargetDataArray(msg));
+                    commandResetSocial(msg, TokenReference.GetTokenTargetDataArray(msg));
                     break;
                 case "!tdetails":
-                    commandUpdateCombatDetails(TokenReference.GetTokenTargetDataArray(msg));
+                    commandUpdateCombatDetails(msg, TokenReference.GetTokenTargetDataArray(msg));
                     break;
                 case "!treset":
-                    commandResetToken(TokenReference.GetTokenTargetDataArray(msg));
+                    commandResetToken(msg, TokenReference.GetTokenTargetDataArray(msg));
                     break;
                 case "!tshowgroup":
                     commandShowGroup(msg.who, TokenReference.GetTokenTargetDataArray(msg), content);
@@ -663,6 +669,8 @@ var TargetReference = TargetReference || (function () {
             output += tokenOptionTitle("Combat Options");
             output += tokenOptionButton("Add Energy", "ten ?{How much energy to add?|1}");
             output += tokenOptionButton("Add Move Charge", "tmove ?{How much move charge to add?|1}");
+            output += tokenOptionButton("Add Surge", "thealsurge ?{How much surge to add?|1}");
+            output += tokenOptionButton("Add Vitality", "thealvit ?{How much vitality to add?|1}");
 
             if (playerIsGM(msg.playerid)) {
                 output += tokenOptionButton("Full Heal", "tfullheal");
@@ -722,56 +730,103 @@ var TargetReference = TargetReference || (function () {
             });
         },
 
-        commandAddEnergy = function (targets, content) {
+        commandAddEnergy = function (msg, targets, content) {
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
                 tokenTargetData.addEnergy(attributeHandler, content);
                 attributeHandler.run();
             });
+            
+            sendTokenUpdateMessage(msg, targets, ` ${content} EN`);
         },
 
-        commandAddMoveCharge = function (targets, content) {
+        commandAddMoveCharge = function (msg, targets, content) {
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
                 tokenTargetData.addMoveCharge(content);
                 attributeHandler.run();
             });
+            
+            sendTokenUpdateMessage(msg, targets, `: ${content} Move Charge`);
         },
 
-        commandFullHeal = function (targets) {
+        commandFullHeal = function (msg, targets) {
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
                 tokenTargetData.setHpToFull(attributeHandler);
                 tokenTargetData.setWillToFull(attributeHandler);
                 attributeHandler.run();
             });
+            
+            sendTokenUpdateMessage(msg, targets, `: fully healed`);
         },
 
-        commandResetSocial = function (targets) {
+        commandHealSurge = function (msg, targets, content) {
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
+                tokenTargetData.modifyResourceAttribute(attributeHandler, "Cmb_Surge", content, tokenTargetData.addModifierToAttribute,
+                    function (results, attrHandler, attributeVar) {
+                        attrHandler.addUpdate(attributeVar, results.newValue, false);
+                        combatDetailsHandler.onUpdateSurges(attrHandler, results.newValue);
+                        if (combatDetailsHandler.hasDisplayStyle()) {
+                            tokenTargetData.setTooltip(combatDetailsHandler.printTooltip(attrHandler));
+                        }
+                    });
+                attributeHandler.run();
+            });
+            
+            sendTokenUpdateMessage(msg, targets, `: ${content} Surge`);
+        },
+
+        commandHealVitality = function (msg, targets, content) {
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
+                tokenTargetData.modifyResourceAttribute(attributeHandler, "Cmb_Vitality", content, tokenTargetData.addModifierToAttribute,
+                    function (results, attrHandler, attributeVar) {
+                        attrHandler.addUpdate(attributeVar, results.newValue, false);
+                        combatDetailsHandler.onUpdateVitality(attrHandler, results.newValue);
+                        if (combatDetailsHandler.hasDisplayStyle()) {
+                            tokenTargetData.setTooltip(combatDetailsHandler.printTooltip(attrHandler));
+                        }
+                    });
+                attributeHandler.run();
+            });
+
+            sendTokenUpdateMessage(msg, targets,`: ${content} Vitality`);
+        },
+
+        commandResetSocial = function (msg, targets) {
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
                 tokenTargetData.emptyFavor(attributeHandler);
                 tokenTargetData.setWillToFull(attributeHandler);
                 attributeHandler.run();
             });
+            
+            sendTokenUpdateMessage(msg, targets, `: social data reset`);
         },
 
-        commandUpdateCombatDetails = function (targets) {
+        commandUpdateCombatDetails = function (msg, targets) {
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
                 let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
                 attributeHandler.addFinishCallback(function (attrHandler) {
                     tokenTargetData.setTooltip(combatDetailsHandler.printTooltip(attrHandler));
-                    Debug.Log(`Combat Details: ${JSON.stringify(combatDetailsHandler.combatDetails)}`);
                 });
                 attributeHandler.run();
             });
+            
+            sendTokenUpdateMessage(msg, targets, ` have their tooltip updated`);
         },
 
-        commandResetToken = function (targets) {
+        commandResetToken = function (msg, targets) {
             _.each(targets, function (tokenTargetData) {
                 TokenReference.ResetTokenDisplay(tokenTargetData);
             });
+
+            sendTokenUpdateMessage(msg, targets, ` have their token reset`);
         },
 
         commandShowGroup = function (sender, targets, content) {
@@ -884,6 +939,30 @@ var TargetReference = TargetReference || (function () {
                 attributeHandler.run();
             });
         
+        },
+        
+        sendTokenUpdateMessage = function (msg, targets, message) {
+            let targetNames = "";
+            for (let i = 0; i < targets.length; i++) {
+                if (targets.length > 1) {
+                    if (i == targets.length - 1) {
+                        targetNames += " and ";
+                    }
+                    else if (targetNames != "") {
+                        targetNames += ", ";
+                    }
+                }
+                targetNames += `${targets[i].displayName}`;
+            }
+        
+            let messageObject = new SystemInfoMessage(targetNames + message);
+            messageObject.setSender("System");
+            
+            let senderTargets = ["GM"];
+            if (!playerIsGM(msg.playerid)) {
+                senderTargets.push(msg.who.split(" ")[0]); // Send to the player who sent the command
+            }
+            WuxMessage.Send(messageObject, senderTargets);
         },
 
         // Data Checkers
@@ -1228,7 +1307,7 @@ var TokenReference = TokenReference || (function () {
             attributeHandler.addAttribute(enVar);
             let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
 
-            attributeHandler.addFinishCallback(function (attrHandler) {
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
                 tokenTargetData.setBar(1, attrHandler.getAttribute(hpVar), true, true);
                 tokenTargetData.setBar(2, attrHandler.getAttribute(willpowerVar), true, true);
                 tokenTargetData.setEnergy(attrHandler.parseInt(enVar, 0, false));
@@ -1265,6 +1344,13 @@ var TokenReference = TokenReference || (function () {
             tokenTargetData.showTooltip(false);
             tokenTargetData.setEnergy(false);
             tokenTargetData.setTurnIcon(false);
+
+            let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+            let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
+            attributeHandler.addFinishCallback(function (attrHandler) {
+                combatDetailsHandler.onUpdateDisplayStyle(attrHandler, "");
+            });
+            attributeHandler.run();
         }
 
         ;
