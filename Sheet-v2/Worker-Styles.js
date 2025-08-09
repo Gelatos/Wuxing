@@ -516,6 +516,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                         case "Advanced":
                             actionFieldName = "RepeatingAdvTech";
                             attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsAdvanced")), "on");
+                            attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Tier")), parseInt(styleVariableData.value / 2));
                             advancedSlots.forEach(function (slot) {
                                 if(slot.name == style.name) {
                                     matchingSlotData = slot;

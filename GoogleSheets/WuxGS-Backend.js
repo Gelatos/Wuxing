@@ -484,6 +484,7 @@ var ActionBuilder = ActionBuilder || (function () {
             let output = "";
             output += listenerInspectRepeatingStyles();
             output += listenerSetDataRepeatingStyles();
+            output += listenerRefreshRepeatingActions();
             return output;
         },
         listenerInspectRepeatingStyles = function () {
@@ -501,6 +502,16 @@ var ActionBuilder = ActionBuilder || (function () {
         listenerSetDataRepeatingStyles = function () {
             return `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingCustomTech")}:${WuxDef.GetVariable("Action_SetData")}`],
                 `WuxWorkerActions.SetCustomTechnique(eventinfo)`, true)}`;
+        },
+        listenerRefreshRepeatingActions = function () {
+            let output = "";
+            for (let i = 1; i <= 3; i++) {
+                output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Forme_JobSlot", i)}${WuxDef._refresh}`],
+                    `WuxWorkerActions.RefreshJobStyleActions(${i})`, false)}`;
+                output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Forme_AdvancedSlot", i)}${WuxDef._refresh}`],
+                    `WuxWorkerActions.RefreshAdvancedStyleActions(${i})`, false)}`;
+            }
+            return output;
         }
     return {
         Print: print

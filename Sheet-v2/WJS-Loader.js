@@ -84,6 +84,7 @@ var versioning = function () {
 				console.log(`Wuxing Sheet modified from 5th Edition OGL by Roll20 v${wuxCurrentVersion}`);
 				break;
 			case "1.0.0":
+			case "1.0.1":
 				upgrade_to_1_0_2(v["version"]);
 				break;
 			default:

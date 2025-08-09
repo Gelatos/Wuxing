@@ -1966,6 +1966,31 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
 }
 
 /*========================================
+    Actions
+========================================*/
+
+div.wuxStyleRefreshButton {
+    background: none;
+    border: none;
+}
+
+div.wuxStyleRefreshButton span {
+    font-family: pictos, serif;
+    font-size: 18px;
+    color: #979898;
+}
+
+div.wuxStyleRefreshButton:hover {
+    background: none;
+    box-shadow: none;
+    border: none;
+}
+
+div.wuxStyleRefreshButton:hover span {
+    color: #f4f6f8;
+}
+
+/*========================================
     Techniques
 ========================================*/
 

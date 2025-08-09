@@ -309,6 +309,38 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             );
         });
     };
+    
+    const refreshStyleActions = function (repeatingSectionName, styleVarName, repeatingSectionIndex, styleWorkerType) {
+        Debug.Log("Update Style Stats");
+        let attributeHandler = new WorkerAttributeHandler();
+        let styleWorker = new WuxBasicWorkerBuild(styleWorkerType);
+        let styleNameVar = WuxDef.GetVariable(styleVarName, repeatingSectionIndex);
+        Debug.Log(`Style Worker Type: ${styleWorkerType}, with draft: ${styleWorker.attrBuildDraft} and Style Name Var: ${styleNameVar}`);
+        attributeHandler.addMod([styleWorker.attrBuildDraft, styleNameVar]);
+        Debug.Log("Repeated Inspection Elements");
+
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            Debug.Log("Refreshing Style Actions");
+            let jobName = attrHandler.parseString(styleNameVar);
+            styleWorker.setBuildStatsDraft(attrHandler);
+            styleWorker.iterateBuildStats(function (styleVariableData) {
+                Debug.Log(`Checking style variable ${styleVariableData.name} with value ${styleVariableData.value}`);
+
+                let style = WuxStyles.GetByVariableName(styleVariableData.name);
+                if (style.group != "" && styleVariableData.value > 0 && style.name == jobName) {
+                    if (style.group == "Advanced") {
+                        populateStyleActions(repeatingSectionName, repeatingSectionIndex, jobName, parseInt(styleVariableData.value / 2));
+                    }
+                    else {
+                        populateStyleActions(repeatingSectionName, repeatingSectionIndex, jobName, styleVariableData.value);
+                    }
+                }
+            });
+        });
+        let loader = new LoadingScreenHandler(attributeHandler);
+        loader.run();
+
+    }
     'use strict';
 
     const updateStats = function (attributeHandler) {
@@ -413,6 +445,14 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 attributeHandler.run();
             });
         },
+        refreshJobStyleActions = function (repeatingSectionIndex) {
+            Debug.Log(`Refreshing Job Style Actions in slot ${repeatingSectionIndex}`);
+            refreshStyleActions("RepeatingJobTech", "Forme_JobSlot", repeatingSectionIndex, "Job");
+        },
+        refreshAdvancedStyleActions = function (repeatingSectionIndex) {
+            Debug.Log(`Refreshing Advanced Style Actions in slot ${repeatingSectionIndex}`);
+            refreshStyleActions("RepeatingAdvTech", "Forme_AdvancedSlot", repeatingSectionIndex, "Style");
+        },
         populateGearActions = function () {
             let actionsRepeatingWorker = new WorkerRepeatingSectionHandler("RepeatingGearTech");
             actionsRepeatingWorker.getIds(function (actionsRepeater) {
@@ -485,6 +525,8 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         InspectTechniqueBasicSocial: inspectTechniqueBasicSocial,
         InspectTechniqueBasicSpirit: inspectTechniqueBasicSpirit,
         PopulateStyleActions: populateStyleActions,
+        RefreshJobStyleActions: refreshJobStyleActions,
+        RefreshAdvancedStyleActions: refreshAdvancedStyleActions,
         PopulateGearActions: populateGearActions,
         RemoveStyleActions: removeStyleActions,
         SetCustomTechnique: setCustomTechnique,

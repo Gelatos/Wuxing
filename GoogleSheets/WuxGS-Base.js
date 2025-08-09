@@ -1293,8 +1293,10 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     for (let i = 1; i <= repeaterData.max; i++) {
                         let repeatingFieldName = WuxDef.GetVariable(repeaterData.repeater, i + repeaterData.slotMod);
                         let slotFieldName = WuxDef.GetAttribute(repeaterData.slot, i);
+                        let header = WuxSheetMain.Button(slotFieldName + WuxDef._refresh, "1", "wuxStyleRefreshButton") + 
+                            `<span name="${slotFieldName}"></span>`;
                         contents += WuxSheetMain.HiddenField(slotFieldName,
-                            repeatingTechniquesSection(`<span name="${slotFieldName}"></span>`, repeatingFieldName)
+                            repeatingTechniquesSection(header, repeatingFieldName)
                         );
                     }
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
