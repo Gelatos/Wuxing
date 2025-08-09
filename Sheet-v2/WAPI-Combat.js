@@ -152,7 +152,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
                         tokenTargetData.setDash(attributeHandler);
                         break;
                     case "Social":
-                        tokenTargetData.addImpatience(attributeHandler, -1);
+                        tokenTargetData.addImpatience(attributeHandler, 1);
                         tokenTargetData.setTurnIcon(true);
                         break;
                 }
@@ -276,6 +276,7 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                 messages = [],
 
                 use = function (msg, content) {
+                    Debug.Log(`[ResourceConsumption] content: ${content}`);
                     initializeData(content);
                     if (tokenTargetData == undefined) {
                         Debug.Log(`[ResourceConsumption] ${resourceData.sheetname} tokenData not found`);
@@ -291,6 +292,7 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                     resourceData = new TechniqueResources();
                     resourceData.importSandboxJson(content);
                     tokenTargetData = TargetReference.GetTokenTargetDataByName(resourceData.sheetname);
+                    Debug.Log(`[ResourceConsumption] got ${JSON.stringify(resourceData)}`);
                     messages = [];
                 },
 
@@ -301,12 +303,15 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                         let resource = resourceNames[i].trim().split(" ", 2);
                         resources[resource[1]] = parseInt(resource[0]);
                     }
+                    Debug.Log(`[ResourceConsumption] resources to consume: ${JSON.stringify(resources)}`);
                 },
 
                 consumeResources = function () {
                     let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
                     let failure = false;
                     let enChange = 999;
+                    let crVar = WuxDef.GetVariable("CR");
+                    attributeHandler.addMod(crVar, 0); 
 
                     for (let resourceName in resources) {
                         let resourceValue = resources[resourceName];
@@ -324,6 +329,18 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                                         messages.push(`Consumed ${resourceValue} ${resourceTitle}`);
                                         attrHandler.addUpdate(attributeVar, results.newValue, false);
                                         enChange = results.newValue;
+                                    }
+                                });
+                                break;
+                            case "WILL":
+                                tokenTargetData.addWill(attributeHandler, resourceValue * -1, function (results, attrHandler, attributeVar) {
+                                    messages.push(`Consumed ${resourceValue} ${resourceTitle}`);
+                                    attrHandler.addUpdate(attributeVar, results.newValue, false);
+                                    if (results.remainder < 0) {
+                                        messages.push(`WillBreak incurred!`);
+                                        let hpDamage = 5 + (attrHandler.parseInt(crVar) * 5);
+                                        message.push(`${tokenTargetData.displayName} took ${hpDamage} tension damage`);
+                                        tokenTargetData.addHp(attributeHandler, hpDamage * -1, () => {});
                                     }
                                 });
                                 break;
@@ -361,7 +378,7 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                 printMessages = function () {
                     let message = `${resourceData.sheetname} uses ${resourceData.name}`;
                     for (let i = 0; i < messages.length; i++) {
-                        message += `\n${messages[i]}`;
+                        message += `\${messages[i]}`;
                     }
 
                     let systemMessage = new SystemInfoMessage(message);

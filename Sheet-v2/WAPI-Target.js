@@ -336,6 +336,27 @@ class TokenTargetData extends TargetData {
             }
         );
     }
+    addWill(attributeHandler, value, resultsCallback) {
+        let tokenTargetData = this;
+        this.modifyResourceAttribute(attributeHandler, "WILL", value,
+            function (results, value, attrHandler) {
+                tokenTargetData.addModifierToAttribute(results, value);
+                if (!isNaN(parseInt(value)) && parseInt(value) < 0 && results.remainder < 0) {
+                    while (results.remainder < 0) {
+                        results.current = results.max;
+                        tokenTargetData.addChakra(attrHandler, -1);
+                        tokenTargetData.addModifierToAttribute(results, results.remainder);
+                    }
+                }
+                resultsCallback(results, value, attrHandler);
+            },
+            function (results, attrHandler, attributeVar) {
+                attrHandler.addUpdate(attributeVar, results.newValue, false);
+                tokenTargetData.setBarValue(1, results.newValue);
+                return results;
+            }
+        );
+    }
     setWillToFull(attributeHandler) {
         let tokenTargetData = this;
         this.modifyResourceAttribute(attributeHandler, "WILL", 0,
@@ -350,15 +371,25 @@ class TokenTargetData extends TargetData {
         );
     }
     addVitality(attributeHandler, value) {
-        this.modifyResourceAttribute(attributeHandler, 
-            "Cmb_Vitality", 
-            value, 
-            this.addModifierToAttribute, 
+        this.modifyResourceAttribute(attributeHandler,
+            "Cmb_Vitality",
+            value,
+            this.addModifierToAttribute,
             function (results, attrHandler, attributeVar) {
                 attrHandler.addUpdate(attributeVar, results.newValue, false);
                 if (results <= 0) {
                     // TODO: Add the Downed status
                 }
+            }
+        );
+    }
+    addChakra(attributeHandler, value) {
+        this.modifyResourceAttribute(attributeHandler,
+            "Cmb_Chakra",
+            value,
+            this.addModifierToAttribute,
+            function (results, attrHandler, attributeVar) {
+                attrHandler.addUpdate(attributeVar, results.newValue, false);
             }
         );
     }
