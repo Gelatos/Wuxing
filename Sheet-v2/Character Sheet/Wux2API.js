@@ -797,7 +797,7 @@ class TeamData {
 var WuxConflictManager = WuxConflictManager || (function () {
     'use strict';
 
-    var schemaVersion = "0.1.2",
+    var schemaVersion = "0.1.3",
 
         checkInstall = function () {
             if (!state.hasOwnProperty('WuxConflictManager') || state.WuxConflictManager.version !== schemaVersion) {
@@ -960,7 +960,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
         endTurn = function (msg) {
             setNextActiveTeam();
             TokenReference.IterateOverSelectedTokens(msg, function (tokenTargetData) {
-                TokenReference.SetTurnIcon(tokenTargetData, false);
+                tokenTargetData.setTurnIcon(false);
                 sendEndTurnMessage(tokenTargetData);
             });
         },
@@ -968,7 +968,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
             let activeTeam = state.WuxConflictManager.activeTeamIndex;
             activeTeam++;
             if (activeTeam >= state.WuxConflictManager.teams.length) {
-                activeTeam == 0;
+                activeTeam = 0;
             }
             state.WuxConflictManager.activeTeamIndex = activeTeam;
         },
@@ -981,11 +981,15 @@ var WuxConflictManager = WuxConflictManager || (function () {
         },
         getPhaseStartMessage = function () {
             let team = state.WuxConflictManager.teams[state.WuxConflictManager.activeTeamIndex];
-            if (team.isPlayer && team.lastActiveOwner != "") {
-                return `${team.name} Phase Start!\n${team.lastActiveOwner}, select the next character to have a turn`;
-            } else {
-                return " Phase Start!";
+            if (team == undefined) {
+                Debug.LogError(`[getPhaseStartMessage] No team found at index ${state.WuxConflictManager.activeTeamIndex}.` + 
+                    ` Current teams: ${JSON.stringify(state.WuxConflictManager.teams)}`);
+                return "Phase Start!";
             }
+            if (!team.isPlayer || team.lastActiveOwner == "") {
+                return `${team.name} Phase Start!`;
+            }
+            return `${team.name} Phase Start!\n${team.lastActiveOwner}, select the next character to have a turn`;
         },
 
         // Token State
@@ -2784,12 +2788,10 @@ class TokenTargetData extends TargetData {
         );
     }
     addEnergy(attributeHandler, value, resultsCallback) {
-        Debug.Log(`[TokenTargetData] Adding ${value} Energy to ${this.displayName}`);
         let tokenTargetData = this;
         this.modifyResourceAttribute(attributeHandler, "EN", value,
             tokenTargetData.addModifierToAttribute,
             function (results, attrHandler, attributeVar) {
-                Debug.Log(`[TokenTargetData] New Energy Value is ${results.newValue}`);
                 if (resultsCallback != undefined) {
                     resultsCallback(results, attrHandler, attributeVar);
                 }
@@ -2841,27 +2843,67 @@ class TokenTargetData extends TargetData {
             }
         );
     }
-    addMoveCharge(value) {
-        let current = parseInt(this.token.get("status_yellow"));
-        let newValue = (isNaN(current) ? 0 : current) + parseInt(value);
-        this.setTurnIcon(newValue);
+    addMoveCharge(attributeHandler, value) {
+        let tokenTargetData = this;
+        this.modifyResourceAttribute(attributeHandler, "MvCharge", value,
+            tokenTargetData.addModifierToAttribute,
+            function (results, attrHandler, attributeVar) {
+                attrHandler.addUpdate(attributeVar, results.newValue, false);
+                tokenTargetData.setTurnIcon(results.newValue);
+                return results;
+            }
+        );
     }
     setDash(attributeHandler) {
         let tokenTargetData = this;
         let baseSpeedVar = WuxDef.GetVariable("Cmb_Mv");
         let maxSpeedVar = WuxDef.GetVariable("Cmb_MvPotency");
-        if (baseSpeedVar > maxSpeedVar) {
-            baseSpeedVar = maxSpeedVar;
-        }
-        attributeHandler.addMod(baseSpeedVar);
-        attributeHandler.addMod(maxSpeedVar);
-        attributeHandler.addFinishCallback(function (attrHandler) {
-            let dieRoll = new DieRoll();
-            dieRoll.rollDice(1, attrHandler.parseInt(maxSpeedVar, 0, false));
+        let moveChargeVar = WuxDef.GetVariable("MvCharge");
+        attributeHandler.addMod([baseSpeedVar, maxSpeedVar, moveChargeVar]);
+        
+        this.modifyResourceAttribute(attributeHandler, "MvCharge", 0,
+            function (results, value, attrHandler) {
+                let baseMoveSpeed = attrHandler.parseInt(baseSpeedVar, 0, false);
+                let maxMoveSpeed = attrHandler.parseInt(maxSpeedVar, 0, false);
+                if (baseMoveSpeed > maxMoveSpeed) {
+                    baseMoveSpeed = maxMoveSpeed;
+                }
+                let dieRoll = new DieRoll();
+                dieRoll.rollDice(1, maxMoveSpeed);
+                results.newValue = Math.max(baseMoveSpeed, dieRoll.total);
+            },
+            function (results, attrHandler, attributeVar) {
+                // Update the attribute and set the turn icon
+                Debug.Log(`Setting MvCharge to ${results.newValue} for ${tokenTargetData.displayName}`);
+                attrHandler.addUpdate(attributeVar, results.newValue, false);
+                tokenTargetData.setTurnIcon(results.newValue);
+                return results;
+            }
+        );
+    }
+    addDash(attributeHandler) {
+        let tokenTargetData = this;
+        let baseSpeedVar = WuxDef.GetVariable("Cmb_Mv");
+        let maxSpeedVar = WuxDef.GetVariable("Cmb_MvPotency");
+        attributeHandler.addMod([baseSpeedVar, maxSpeedVar]);
 
-            let move = Math.ceil(attrHandler.parseInt(baseSpeedVar, 0, false), dieRoll);
-            tokenTargetData.setTurnIcon(move);
-        });
+        this.modifyResourceAttribute(attributeHandler, "MvCharge", 0,
+            function (results, value, attrHandler) {
+                let baseMoveSpeed = attrHandler.parseInt(baseSpeedVar, 0, false);
+                let maxMoveSpeed = attrHandler.parseInt(maxSpeedVar, 0, false);
+                if (baseMoveSpeed > maxMoveSpeed) {
+                    baseMoveSpeed = maxMoveSpeed;
+                }
+                let dieRoll = new DieRoll();
+                dieRoll.rollDice(1, maxMoveSpeed);
+                results.newValue = results.current + Math.max(baseMoveSpeed, dieRoll.total);
+            },
+            function (results, attrHandler, attributeVar) {
+                attrHandler.addUpdate(attributeVar, results.newValue, false);
+                tokenTargetData.setTurnIcon(results.newValue);
+                return results;
+            }
+        );
     }
     resetBattleTracks(attributeHandler) {
         let hpVar = WuxDef.GetVariable("HP");
@@ -2976,6 +3018,9 @@ var TargetReference = TargetReference || (function () {
                 case "!tokenoptions":
                     commandShowTokenOptions(msg);
                     break;
+                case "!tconflictstate":
+                    commandSetConflictState(msg, TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
                 case "!tss":
                     commandSetRequestCheck(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
@@ -3088,6 +3133,12 @@ var TargetReference = TargetReference || (function () {
 
             output += tokenOptionSpacer();
             output += tokenOptionTitle("Combat Options");
+            if (!playerIsGM(msg.playerid)) {
+                output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@0`);
+            }
+            else {
+                output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@?{Set team index|0`);
+            }
             output += tokenOptionButton("Add Energy", "ten ?{How much energy to add?|1}");
             output += tokenOptionButton("Add Move Charge", "tmove ?{How much move charge to add?|1}");
             output += tokenOptionButton("Add Surge", "thealsurge ?{How much surge to add?|1}");
@@ -3096,10 +3147,14 @@ var TargetReference = TargetReference || (function () {
             if (playerIsGM(msg.playerid)) {
                 output += tokenOptionButton("Full Heal", "tfullheal");
             }
-            
-            if (playerIsGM(msg.playerid)) {
-                output += tokenOptionSpacer();
-                output += tokenOptionTitle("Social Options");
+
+            output += tokenOptionSpacer();
+            output += tokenOptionTitle("Social Options");
+            if (!playerIsGM(msg.playerid)) {
+                output += tokenOptionButton("Prep4 Social", `tconflictstate Social@0`);
+            }
+            else {
+                output += tokenOptionButton("Prep4 Social", `tconflictstate Social@?{Set team index|0`);
                 output += tokenOptionButton("Reset Social", "tresetSocial");
                 output += tokenOptionButton("Request Threshold", "tss ?{Set the difficulty of the request|" +
                     "Simple DC 15|Inconvenient DC 30|Disruptive DC 40|Serious DC 50|Life-Changing DC 60}");
@@ -3120,6 +3175,10 @@ var TargetReference = TargetReference || (function () {
         
         tokenOptionButton = function (name, message) {
              return `<span class="sheet-wuxInlineRow">[${name}](!${message})</span> `;
+        },
+
+        commandSetConflictState = function (msg, targets, content) {
+
         },
 
         commandSetRequestCheck = function (msg, targets, content) {
@@ -3164,7 +3223,7 @@ var TargetReference = TargetReference || (function () {
         commandAddMoveCharge = function (msg, targets, content) {
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                tokenTargetData.addMoveCharge(content);
+                tokenTargetData.addMoveCharge(attributeHandler, content);
                 attributeHandler.run();
             });
             
@@ -8596,7 +8655,7 @@ class CombatDetails {
     createEmpty() {
         this.displayStyle = "";
         this.displayName = "";
-        this.cr = 1;
+        this.cr = 0;
         this.job = "";
         this.jobDefenses = "";
         this.status = [];
@@ -8708,30 +8767,38 @@ class CombatDetailsHandler {
         this.combatDetails = new CombatDetails();
     }
 
-    printTooltip(attrHandler) {
-        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+    printTooltip(attrHandler, displayname) {
+        if (this.combatDetails.cr == 0) {
+            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        }
+        this.combatDetails.displayName = displayname;
         return this.combatDetails.printTooltip();
     }
     
     hasDisplayStyle() {
-        Debug.Log(`Display Style: ${this.combatDetails.displayStyle}`);
         return this.combatDetails.displayStyle != "";
     }
 
     onUpdateDisplayStyle(attrHandler, value) {
-        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        if (this.combatDetails.cr == 0) {
+            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        }
         this.combatDetails.displayStyle = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateDisplayName(attrHandler, value) {
-        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        if (this.combatDetails.cr == 0) {
+            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        }
         this.combatDetails.displayName = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateCR(attrHandler, value) {
-        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        if (this.combatDetails.cr == 0) {
+            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        }
         this.combatDetails.cr = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
@@ -8740,56 +8807,75 @@ class CombatDetailsHandler {
         let jobCatDef = WuxDef.Get("Job");
         let jobDefinitionName = `${jobCatDef.abbreviation}_${jobName}`;
         let jobDef = WuxDef.Get(jobDefinitionName);
-        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        
+        if (this.combatDetails.cr == 0) {
+            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        }
         this.combatDetails.job = jobDef.title;
         this.combatDetails.jobDefenses = jobDef.defenses;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateHealValue(attrHandler, healValue) {
-        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        if (this.combatDetails.cr == 0) {
+            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        }
         this.combatDetails.healvalue = healValue;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
     
     onUpdateArmorValue(attrHandler, armorValue) {
-        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        if (this.combatDetails.cr == 0) {
+            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        }
         this.combatDetails.armorvalue = armorValue;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateStatus(attrHandler, value) {
-        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        if (this.combatDetails.cr == 0) {
+            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        }
         this.combatDetails.status = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateSurges(attrHandler, value) {
-        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        if (this.combatDetails.cr == 0) {
+            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        }
         this.combatDetails.surges = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateMaxSurges(attrHandler, value) {
-        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        if (this.combatDetails.cr == 0) {
+            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        }
         this.combatDetails.maxsurges = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateVitality(attrHandler, value) {
-        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        if (this.combatDetails.cr == 0) {
+            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        }
         this.combatDetails.vitality = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateMaxVitality(attrHandler, value) {
-        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        if (this.combatDetails.cr == 0) {
+            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        }
         this.combatDetails.maxvitality = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateInfluences(attrHandler, support, oppose) {
-        this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        if (this.combatDetails.cr == 0) {
+            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        }
         this.combatDetails.supportiveInfluence = support;
         this.combatDetails.opposingInfluence = oppose;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));

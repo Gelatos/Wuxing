@@ -363,12 +363,10 @@ class TokenTargetData extends TargetData {
         );
     }
     addEnergy(attributeHandler, value, resultsCallback) {
-        Debug.Log(`[TokenTargetData] Adding ${value} Energy to ${this.displayName}`);
         let tokenTargetData = this;
         this.modifyResourceAttribute(attributeHandler, "EN", value,
             tokenTargetData.addModifierToAttribute,
             function (results, attrHandler, attributeVar) {
-                Debug.Log(`[TokenTargetData] New Energy Value is ${results.newValue}`);
                 if (resultsCallback != undefined) {
                     resultsCallback(results, attrHandler, attributeVar);
                 }
@@ -420,27 +418,67 @@ class TokenTargetData extends TargetData {
             }
         );
     }
-    addMoveCharge(value) {
-        let current = parseInt(this.token.get("status_yellow"));
-        let newValue = (isNaN(current) ? 0 : current) + parseInt(value);
-        this.setTurnIcon(newValue);
+    addMoveCharge(attributeHandler, value) {
+        let tokenTargetData = this;
+        this.modifyResourceAttribute(attributeHandler, "MvCharge", value,
+            tokenTargetData.addModifierToAttribute,
+            function (results, attrHandler, attributeVar) {
+                attrHandler.addUpdate(attributeVar, results.newValue, false);
+                tokenTargetData.setTurnIcon(results.newValue);
+                return results;
+            }
+        );
     }
     setDash(attributeHandler) {
         let tokenTargetData = this;
         let baseSpeedVar = WuxDef.GetVariable("Cmb_Mv");
         let maxSpeedVar = WuxDef.GetVariable("Cmb_MvPotency");
-        if (baseSpeedVar > maxSpeedVar) {
-            baseSpeedVar = maxSpeedVar;
-        }
-        attributeHandler.addMod(baseSpeedVar);
-        attributeHandler.addMod(maxSpeedVar);
-        attributeHandler.addFinishCallback(function (attrHandler) {
-            let dieRoll = new DieRoll();
-            dieRoll.rollDice(1, attrHandler.parseInt(maxSpeedVar, 0, false));
+        let moveChargeVar = WuxDef.GetVariable("MvCharge");
+        attributeHandler.addMod([baseSpeedVar, maxSpeedVar, moveChargeVar]);
+        
+        this.modifyResourceAttribute(attributeHandler, "MvCharge", 0,
+            function (results, value, attrHandler) {
+                let baseMoveSpeed = attrHandler.parseInt(baseSpeedVar, 0, false);
+                let maxMoveSpeed = attrHandler.parseInt(maxSpeedVar, 0, false);
+                if (baseMoveSpeed > maxMoveSpeed) {
+                    baseMoveSpeed = maxMoveSpeed;
+                }
+                let dieRoll = new DieRoll();
+                dieRoll.rollDice(1, maxMoveSpeed);
+                results.newValue = Math.max(baseMoveSpeed, dieRoll.total);
+            },
+            function (results, attrHandler, attributeVar) {
+                // Update the attribute and set the turn icon
+                Debug.Log(`Setting MvCharge to ${results.newValue} for ${tokenTargetData.displayName}`);
+                attrHandler.addUpdate(attributeVar, results.newValue, false);
+                tokenTargetData.setTurnIcon(results.newValue);
+                return results;
+            }
+        );
+    }
+    addDash(attributeHandler) {
+        let tokenTargetData = this;
+        let baseSpeedVar = WuxDef.GetVariable("Cmb_Mv");
+        let maxSpeedVar = WuxDef.GetVariable("Cmb_MvPotency");
+        attributeHandler.addMod([baseSpeedVar, maxSpeedVar]);
 
-            let move = Math.ceil(attrHandler.parseInt(baseSpeedVar, 0, false), dieRoll);
-            tokenTargetData.setTurnIcon(move);
-        });
+        this.modifyResourceAttribute(attributeHandler, "MvCharge", 0,
+            function (results, value, attrHandler) {
+                let baseMoveSpeed = attrHandler.parseInt(baseSpeedVar, 0, false);
+                let maxMoveSpeed = attrHandler.parseInt(maxSpeedVar, 0, false);
+                if (baseMoveSpeed > maxMoveSpeed) {
+                    baseMoveSpeed = maxMoveSpeed;
+                }
+                let dieRoll = new DieRoll();
+                dieRoll.rollDice(1, maxMoveSpeed);
+                results.newValue = results.current + Math.max(baseMoveSpeed, dieRoll.total);
+            },
+            function (results, attrHandler, attributeVar) {
+                attrHandler.addUpdate(attributeVar, results.newValue, false);
+                tokenTargetData.setTurnIcon(results.newValue);
+                return results;
+            }
+        );
     }
     resetBattleTracks(attributeHandler) {
         let hpVar = WuxDef.GetVariable("HP");
@@ -555,6 +593,9 @@ var TargetReference = TargetReference || (function () {
                 case "!tokenoptions":
                     commandShowTokenOptions(msg);
                     break;
+                case "!tconflictstate":
+                    commandSetConflictState(msg, TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
                 case "!tss":
                     commandSetRequestCheck(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
@@ -667,6 +708,12 @@ var TargetReference = TargetReference || (function () {
 
             output += tokenOptionSpacer();
             output += tokenOptionTitle("Combat Options");
+            if (!playerIsGM(msg.playerid)) {
+                output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@0`);
+            }
+            else {
+                output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@?{Set team index|0`);
+            }
             output += tokenOptionButton("Add Energy", "ten ?{How much energy to add?|1}");
             output += tokenOptionButton("Add Move Charge", "tmove ?{How much move charge to add?|1}");
             output += tokenOptionButton("Add Surge", "thealsurge ?{How much surge to add?|1}");
@@ -675,10 +722,14 @@ var TargetReference = TargetReference || (function () {
             if (playerIsGM(msg.playerid)) {
                 output += tokenOptionButton("Full Heal", "tfullheal");
             }
-            
-            if (playerIsGM(msg.playerid)) {
-                output += tokenOptionSpacer();
-                output += tokenOptionTitle("Social Options");
+
+            output += tokenOptionSpacer();
+            output += tokenOptionTitle("Social Options");
+            if (!playerIsGM(msg.playerid)) {
+                output += tokenOptionButton("Prep4 Social", `tconflictstate Social@0`);
+            }
+            else {
+                output += tokenOptionButton("Prep4 Social", `tconflictstate Social@?{Set team index|0`);
                 output += tokenOptionButton("Reset Social", "tresetSocial");
                 output += tokenOptionButton("Request Threshold", "tss ?{Set the difficulty of the request|" +
                     "Simple DC 15|Inconvenient DC 30|Disruptive DC 40|Serious DC 50|Life-Changing DC 60}");
@@ -699,6 +750,10 @@ var TargetReference = TargetReference || (function () {
         
         tokenOptionButton = function (name, message) {
              return `<span class="sheet-wuxInlineRow">[${name}](!${message})</span> `;
+        },
+
+        commandSetConflictState = function (msg, targets, content) {
+
         },
 
         commandSetRequestCheck = function (msg, targets, content) {
@@ -743,7 +798,7 @@ var TargetReference = TargetReference || (function () {
         commandAddMoveCharge = function (msg, targets, content) {
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                tokenTargetData.addMoveCharge(content);
+                tokenTargetData.addMoveCharge(attributeHandler, content);
                 attributeHandler.run();
             });
             

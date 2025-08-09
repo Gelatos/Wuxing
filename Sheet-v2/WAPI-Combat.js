@@ -10,7 +10,7 @@ class TeamData {
 var WuxConflictManager = WuxConflictManager || (function () {
     'use strict';
 
-    var schemaVersion = "0.1.2",
+    var schemaVersion = "0.1.3",
 
         checkInstall = function () {
             if (!state.hasOwnProperty('WuxConflictManager') || state.WuxConflictManager.version !== schemaVersion) {
@@ -173,7 +173,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
         endTurn = function (msg) {
             setNextActiveTeam();
             TokenReference.IterateOverSelectedTokens(msg, function (tokenTargetData) {
-                TokenReference.SetTurnIcon(tokenTargetData, false);
+                tokenTargetData.setTurnIcon(false);
                 sendEndTurnMessage(tokenTargetData);
             });
         },
@@ -181,7 +181,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
             let activeTeam = state.WuxConflictManager.activeTeamIndex;
             activeTeam++;
             if (activeTeam >= state.WuxConflictManager.teams.length) {
-                activeTeam == 0;
+                activeTeam = 0;
             }
             state.WuxConflictManager.activeTeamIndex = activeTeam;
         },
@@ -194,11 +194,15 @@ var WuxConflictManager = WuxConflictManager || (function () {
         },
         getPhaseStartMessage = function () {
             let team = state.WuxConflictManager.teams[state.WuxConflictManager.activeTeamIndex];
-            if (team.isPlayer && team.lastActiveOwner != "") {
-                return `${team.name} Phase Start!\n${team.lastActiveOwner}, select the next character to have a turn`;
-            } else {
-                return " Phase Start!";
+            if (team == undefined) {
+                Debug.LogError(`[getPhaseStartMessage] No team found at index ${state.WuxConflictManager.activeTeamIndex}.` + 
+                    ` Current teams: ${JSON.stringify(state.WuxConflictManager.teams)}`);
+                return "Phase Start!";
             }
+            if (!team.isPlayer || team.lastActiveOwner == "") {
+                return `${team.name} Phase Start!`;
+            }
+            return `${team.name} Phase Start!\n${team.lastActiveOwner}, select the next character to have a turn`;
         },
 
         // Token State
