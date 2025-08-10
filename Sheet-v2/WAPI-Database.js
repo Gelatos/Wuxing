@@ -410,6 +410,33 @@ class TechniqueEffectDatabase extends Database {
     getBoostEffects() {
         return this.filter(new DatabaseFilterData("type", "Boost"));
     }
+
+    sanitizeSheetRollAction() {
+        let sheetRoll = JSON.stringify(this);
+        sheetRoll = sheetRoll.replace(/"/g, "%%");
+        sheetRoll = sheetRoll.replace(/:/g, "&&");
+        sheetRoll = sheetRoll.replace(/{/g, "<<");
+        sheetRoll = sheetRoll.replace(/}/g, ">>");
+        sheetRoll = sheetRoll.replace(/%/g, "&#37;");
+        sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
+        sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
+        sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
+        sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
+        sheetRoll = sheetRoll.replace(/@/g, "&#64;");
+        sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
+        sheetRoll = sheetRoll.replace(/]/g, "&#93;");
+        sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
+        sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
+        return sheetRoll;
+    }
+
+    unsanitizeSheetRollAction(jsonString) {
+        jsonString = jsonString.replace(/%%/g, '"');
+        jsonString = jsonString.replace(/&&/g, ":");
+        jsonString = jsonString.replace(/<</g, "{");
+        jsonString = jsonString.replace(/>>/g, "}");
+        return JSON.parse(jsonString);
+    }
 }
 
 class dbObj {

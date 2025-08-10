@@ -440,18 +440,29 @@ class InfoMessage extends SimpleMessage {
     }
     
     setMessage(msg) {
-        let msgArray = msg.split("//");
+        let msgArray = [];
+        if (Array.isArray(msg)) {
+            msgArray = msg;
+        }
+        else {
+            msgArray = msg.split("//");
+        }
+        
         this.message = msgArray[0].trim();
         if (msgArray.length > 1) {
             let messageIndex = 1;
             let messageMaxCount = 8;
             this.extendedMessages = [];
             while (messageIndex < msgArray.length) {
-                this.extendedMessages.push(msgArray[messageIndex]);
-                messageIndex++;
-                if (messageIndex >= messageMaxCount) {
+                let tempMessage = msgArray[messageIndex].trim();
+                if (tempMessage != "") {
+                    Debug.Log(`Adding extended message: ${tempMessage}`);
+                    this.extendedMessages.push(tempMessage);
+                }
+                if (this.extendedMessages.length >= messageMaxCount) {
                     break;
                 }
+                messageIndex++;
             }
             if (msgArray.length >= messageMaxCount) {
                 let tempMessage = "";
@@ -480,8 +491,10 @@ class InfoMessage extends SimpleMessage {
     printTemplateData() {
         let options = "";
         for (let i = 0; i < this.extendedMessages.length; i++) {
-            options += ` {{message${i + 1}=${this.extendedMessages[i]}}}`
+            let msgIndex = i + 1;
+            options += ` {{message${msgIndex}=${this.extendedMessages[i]}}}`
         }
+        Debug.Log(options);
         
         return `{{message=${this.message}}}${options}`;
     }

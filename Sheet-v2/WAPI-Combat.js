@@ -222,6 +222,225 @@ var WuxConflictManager = WuxConflictManager || (function () {
 
 }());
 
+class TechniqueResolverData {
+    constructor(msg, content) {
+        this.createEmpty();
+        this.msg = msg;
+        this.content = content;
+        this.splitContent(content);
+    }
+    
+    createEmpty() {
+        this.msg = {};
+        this.content = "";
+        this.sourceSheetName = "";
+        this.senderTokenTargetData = {};
+        this.messages = [];
+    }
+    
+    splitContent(content) {
+        let splitContent = content.split("$$");
+        if (splitContent.length < 2) {
+            Debug.LogError(`[TechniqueResolverData] Invalid content format. Requires $$ in string. Received: ${content}`);
+            return;
+        }
+        this.initializeData(splitContent);
+    }
+    
+    initializeData(contentData) {
+        this.initializeTechniqueData(contentData[0]);
+        this.sourceSheetName = contentData[1];
+        this.senderTokenTargetData = TargetReference.GetTokenTargetDataByName(this.sourceSheetName);
+    }
+    
+    initializeTechniqueData(data) {
+        
+    }
+
+    run() {}
+
+    addMessage(message) {
+        if (message != undefined && message != "") {
+            this.messages.push(message);
+        }
+    }
+
+    getMessageObject() {
+        let systemMessage = new SystemInfoMessage(this.messages);
+        systemMessage.setSender("System");
+        return systemMessage;
+    }
+}
+
+class TechniqueConsumptionResolver extends TechniqueResolverData {
+    constructor(msg, content) {
+        super(msg, content);
+    }
+    
+    createEmpty() {
+        super.createEmpty();
+        this.techniqueName = "";
+        this.tokenEffect = {};
+        this.resources = {};
+        this.newResourceValues = {};
+    }
+    
+    initializeData(contentData) {
+        super.initializeData(contentData);
+        this.tokenEffect = new TokenTargetEffectsData(this.senderTokenTargetData);
+        this.addInitialMessage();
+    }
+
+    initializeTechniqueData(data) {
+        let techniqueData = new TechniqueResources();
+        techniqueData.importSandboxJson(data);
+        this.techniqueName = techniqueData.name;
+        
+        let resourceNames = techniqueData.resourceCost.split(";");
+        for (let i = 0; i < resourceNames.length; i++) {
+            let resource = resourceNames[i].trim().split(" ", 2);
+            this.resources[resource[1]] = parseInt(resource[0]);
+        }
+    }
+    
+    addInitialMessage() {
+        this.addMessage(`${this.senderTokenTargetData.displayName} consumes resources for ${this.techniqueName}`);
+    }
+    
+    run() {
+        let attributeHandler = new SandboxAttributeHandler(this.tokenEffect.tokenTargetData.charId);
+        let techniqueConsumptionResolver = this;
+        this.checkIfResourcesAvailable(techniqueConsumptionResolver, attributeHandler);
+        this.tryConsumeResources(techniqueConsumptionResolver, attributeHandler);
+        attributeHandler.run();
+    }
+    
+    checkIfResourcesAvailable(techniqueConsumptionResolver, attributeHandler) {
+
+        this.iterateResources((resourceName, resourceValue) => {
+            switch (resourceName) {
+                case "EN":
+                    this.checkConsumeEnergy(techniqueConsumptionResolver, attributeHandler, resourceName, resourceValue);
+                    break;
+                case "WILL":
+                    this.checkConsumeWill(techniqueConsumptionResolver, attributeHandler, resourceName, resourceValue);
+                    break;
+            }
+        });
+    }
+    
+    checkConsumeEnergy(techniqueConsumptionResolver, attributeHandler, resourceName, resourceValue) {
+        this.tokenEffect.tokenTargetData.addEnergy(attributeHandler, resourceValue * -1, function (results, attrHandler, attributeVar) {
+            if (results.remainder < 0) {
+                techniqueConsumptionResolver.newResourceValues[resourceName] = techniqueConsumptionResolver.getResourceObject(false);
+                return;
+            }
+
+            techniqueConsumptionResolver.newResourceValues[resourceName] = techniqueConsumptionResolver.getResourceObject(
+                true, resourceName, resourceValue, attributeVar, results, techniqueConsumptionResolver.consumeEnergy);
+        });
+    }
+    
+    consumeEnergy(techniqueConsumptionResolver, attrHandler, resourceObject) {
+        let message = `Consumed ${resourceObject.resourceValue} ${WuxDef.GetTitle(resourceObject.resourceName)}`;
+        techniqueConsumptionResolver.tokenEffect.addMessage(message);
+        
+        attrHandler.addMod(resourceObject.attributeVar);
+        techniqueConsumptionResolver.tokenEffect.tokenTargetData.applyResultsToEnergy(
+            resourceObject.results, attrHandler, resourceObject.attributeVar, techniqueConsumptionResolver.tokenEffect.tokenTargetData);
+    }
+    
+    checkConsumeWill(techniqueConsumptionResolver, attributeHandler, resourceName, resourceValue) {
+        this.tokenEffect.tokenTargetData.addWill(attributeHandler, resourceValue * -1, function (results, attrHandler, attributeVar) {
+            techniqueConsumptionResolver.newResourceValues[resourceName] = techniqueConsumptionResolver.getResourceObject(
+                true, resourceName, resourceValue, attributeVar, results, techniqueConsumptionResolver.consumeWill);
+        });
+    }
+    
+    consumeWill(techniqueConsumptionResolver, attrHandler, resourceObject) {
+        let techniqueEffect = new TechniqueEffect();
+        techniqueEffect.name = "T1";
+        techniqueEffect.type = "HP";
+        techniqueEffect.forumla = 5 + (attrHandler.parseInt(WuxDef.GetVariable("CR")) * 5);
+        techniqueEffect.effect = "Tension";
+        techniqueEffect.traits = "AP";
+        let effectDatabase = new TechniqueEffectDatabase();
+        effectDatabase.add(techniqueEffect.name, techniqueEffect);
+        
+        let willBreakEffect = `!uwillbreak ${effectDatabase.sanitizeSheetRollAction()}` +
+            `$$${techniqueConsumptionResolver.sourceSheetName}$$${techniqueConsumptionResolver.tokenEffect.tokenTargetData.charId}`;
+        
+        techniqueConsumptionResolver.tokenEffect.takeWillDamage(attrHandler, resourceObject.resourceValue, willBreakEffect);
+    }
+
+    tryConsumeResources(techniqueConsumptionResolver, attributeHandler) {
+        attributeHandler.addFinishCallback(function () {
+            if (techniqueConsumptionResolver.checkIfCanConsumeResources(techniqueConsumptionResolver)) {
+                techniqueConsumptionResolver.consumeResources(techniqueConsumptionResolver);
+            }
+            else {
+                techniqueConsumptionResolver.printPrivateMessages();
+            }
+        });
+    }
+
+    checkIfCanConsumeResources(techniqueConsumptionResolver) {
+        let success = true;
+        this.iterateResources((resourceName) => {
+            if (!techniqueConsumptionResolver.newResourceValues[resourceName].isConsumable) {
+                success = false;
+                techniqueConsumptionResolver.addMessage(`Not enough ${WuxDef.GetTitle(resourceName)} to use this technique`);
+            }
+        });
+        return success;
+    }
+    
+    consumeResources(techniqueConsumptionResolver) {
+        let attributeHandler = new SandboxAttributeHandler(this.tokenEffect.tokenTargetData.charId);
+        let crVar = WuxDef.GetVariable("CR");
+        attributeHandler.addMod(crVar, 0);
+        
+        techniqueConsumptionResolver.iterateResources((resourceName) => {
+            Debug.Log(`Consuming resources for ${resourceName}`);
+            if (techniqueConsumptionResolver.newResourceValues.hasOwnProperty(resourceName)) {
+                let resourceObject = techniqueConsumptionResolver.newResourceValues[resourceName];
+                resourceObject.callback(techniqueConsumptionResolver, attributeHandler, resourceObject);
+            }
+        });
+
+        attributeHandler.addFinishCallback(function () {
+            techniqueConsumptionResolver.printPrivateMessages();
+        });
+
+        attributeHandler.run();
+    }
+    
+    printPrivateMessages() {
+        this.messages = this.messages.concat(this.tokenEffect.effectMessages);
+        let systemMessage = this.getMessageObject();
+        WuxMessage.SendToSenderAndGM(systemMessage, this.msg);
+    }
+    
+    getResourceObject(isConsumable, resourceName, resourceValue, attributeVar, results, callback) {
+        return {
+            isConsumable: isConsumable,
+            resourceName: resourceName,
+            resourceValue: resourceValue,
+            attributeVar: attributeVar,
+            results: results,
+            callback: callback
+        }
+    }
+    
+    iterateResources(callback) {
+        for (let resourceName in this.resources) {
+            if (this.resources.hasOwnProperty(resourceName)) {
+                callback(resourceName, this.resources[resourceName]);
+            }
+        }
+    }
+}
+
 var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
     'use strict';
 
@@ -256,7 +475,8 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
         },
 
         commandConsumeTechnique = function (msg, content) {
-            ResourceConsumption.Use(msg, content);
+            let techniqueConsumptionResolver = new TechniqueConsumptionResolver(msg, content);
+            techniqueConsumptionResolver.run();
         },
         commandUseTechnique = function (msg, content) {
             CheckTechnique.Use(msg, content);
@@ -266,147 +486,6 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
         commandRollSkillCheck = function (msg, content) {
             rollSkillCheck(msg, ParseIntValue(content));
         },
-
-        ResourceConsumption = ResourceConsumption || (function () {
-
-            var resourceData = undefined,
-                tokenTargetData = undefined,
-                resources = {},
-                messages = [],
-
-                use = function (msg, content) {
-                    Debug.Log(`[ResourceConsumption] content: ${content}`);
-                    initializeData(content);
-                    if (resourceData.name == "") {
-                        Debug.LogError(`[ResourceConsumption] resourceData not found`);
-                        return;
-                    }
-                    if (tokenTargetData == undefined) {
-                        Debug.LogError(`[ResourceConsumption] ${resourceData.sheetname} tokenData not found`);
-                        return;
-                    }
-                    
-                    setResources();
-                    consumeResources();
-                    printMessages(msg);
-                },
-
-                initializeData = function (content) {
-                    let splitContent = content.split("$$");
-                    if (splitContent.length < 2) {
-                        Debug.LogError(`[ResourceConsumption] Invalid content format. Requires $$ in string. Received: ${content}`);
-                        return;
-                    }
-                    resourceData = new TechniqueResources();
-                    resourceData.importSandboxJson(splitContent[0]);
-                    tokenTargetData = TargetReference.GetTokenTargetDataByName(splitContent[1]);
-                    messages = [];
-                },
-
-                setResources = function () {
-                    resources = {};
-                    let resourceNames = resourceData.resourceCost.split(";");
-                    for (let i = 0; i < resourceNames.length; i++) {
-                        let resource = resourceNames[i].trim().split(" ", 2);
-                        resources[resource[1]] = parseInt(resource[0]);
-                    }
-                },
-
-                consumeResources = function () {
-                    let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                    let cannotConsumeResources = false;
-                    let newValues = {};
-                    let crVar = WuxDef.GetVariable("CR");
-                    attributeHandler.addMod(crVar, 0); 
-
-                    let resourceNames = Object.keys(resources);
-                    for (let i = 0; i < resourceNames.length; i++) {
-                        let resourceName = resourceNames[i];
-                        Debug.Log(`[ResourceConsumption] Consuming ${resourceName} with value ${resources[resourceName]}`);
-                        
-                        let resourceValue = resources[resourceName];
-                        let resourceTitle = WuxDef.GetTitle(resourceName);
-                        switch (resourceName) {
-                            case undefined:
-                                break;
-                            case "EN":
-                                tokenTargetData.addEnergy(attributeHandler, resourceValue * -1, function (results, attrHandler, attributeVar) {
-                                    if (cannotConsumeResources) {
-                                        return;
-                                    }
-                                    if (results.remainder < 0) {
-                                        cannotConsumeResources = true;
-                                        messages = [];
-                                        messages.push(`Not enough ${resourceTitle} to use this technique`);
-                                    } else {
-                                        messages.push(`Consumed ${resourceValue} ${resourceTitle}`);
-                                        attrHandler.addUpdate(attributeVar, results.newValue, false);
-                                        tokenTargetData.setEnergy(results.newValue);
-                                    }
-                                });
-                                break;
-                            case "WILL":
-                                tokenTargetData.addWill(attributeHandler, resourceValue * -1, function (results, attrHandler, attributeVar) {
-                                    if (cannotConsumeResources) {
-                                        return;
-                                    }
-                                    messages.push(`Consumed ${resourceValue} ${resourceTitle}`);
-                                    if (results.remainder < 0) {
-                                        results.newValue = results.max + results.remainder;
-                                        tokenTargetData.addMod("Cmb_Chakra", attrHandler, -1);
-                                        let hpDamage = 5 + (attrHandler.parseInt(crVar) * 5);
-                                        let attributeHandler2 = new SandboxAttributeHandler(tokenTargetData.charId);
-                                        tokenTargetData.addHp(attributeHandler2, hpDamage * -1);
-                                        attributeHandler2.run();
-                                        
-                                        messages.push(`WillBreak incurred!`);
-                                        messages.push(`${tokenTargetData.displayName} took ${hpDamage} tension damage`);
-                                    }
-                                    attrHandler.addUpdate(attributeVar, results.newValue, false);
-                                    tokenTargetData.setBarValue(2, results.newValue);
-                                });
-                                break;
-                            case "Boon":
-                                messages.push(`! You must manually consume a boon to use this technique !`);
-                                break;
-                            default:
-                                tokenTargetData.modifyResourceAttribute(attributeHandler, resourceName, resourceValue * -1, tokenTargetData.addModifierToAttribute,
-                                    function (results, attrHandler, attributeVar) {
-                                        if (cannotConsumeResources) {
-                                            return;
-                                        }
-                                        if (results.remainder < 0) {
-                                            cannotConsumeResources = true;
-                                            messages = [];
-                                            messages.push(`Not enough ${resourceTitle} to use this technique`);
-                                        } else {
-                                            messages.push(`Consumed ${resourceValue} ${resourceTitle}`);
-                                            attrHandler.addUpdate(attributeVar, results.newValue, false);
-                                        }
-                                        return results;
-                                    }
-                                );
-                                break;
-                        }
-                    }
-                    attributeHandler.run();
-                },
-
-                printMessages = function (msg) {
-                    let message = `${tokenTargetData.displayName} uses ${resourceData.name}`;
-                    for (let i = 0; i < messages.length; i++) {
-                        message += "//" + messages[i];
-                    }
-
-                    let systemMessage = new SystemInfoMessage(message);
-                    systemMessage.setSender("System");
-                    WuxMessage.SendToSenderAndGM(systemMessage, msg);
-                }
-
-            return {
-                Use: use
-            }
-        }()),
 
         CheckTechnique = CheckTechnique || (function () {
             var techniqueData = {},

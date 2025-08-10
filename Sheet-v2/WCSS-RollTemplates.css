@@ -1372,7 +1372,7 @@
     letter-spacing: 0.1ch;
     color: white;
 
-    display: inline-block;
+    display: block;
     background: #313235;
 } 
 

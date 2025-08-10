@@ -481,6 +481,69 @@ class TokenTargetData extends TargetData {
     }
 }
 
+class TokenTargetEffectsData {
+    constructor(tokenTargetData) {
+        this.tokenTargetData = tokenTargetData;
+        this.effectMessages = [];
+    }
+    
+    addMessage(message) {
+        if (message != undefined && message != "") {
+            this.effectMessages.push(message);
+        }
+    }
+    
+    takeHpDamage(attributeHandler, damage, damageType) {
+        let targetEffect = this;
+        
+        this.tokenTargetData.addHp(attributeHandler, -1 * damage, 
+            function (results, attrHandler, attributeVar, tokenTargetData) {
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${damage} ${damageType} damage.`);
+                if (results.remainder < 0) {
+                    let vitalityDamage = 0;
+                    while (results.remainder < 0) {
+                        vitalityDamage++;
+                        results.remainder += results.max;
+                    }
+                    let newAttributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                    targetEffect.takeVitalityDamage(targetEffect, newAttributeHandler, vitalityDamage);
+                    newAttributeHandler.run();
+                    results.newValue = results.remainder;
+                }
+                tokenTargetData.applyResultsToHp(results, attrHandler, attributeVar, tokenTargetData);
+        });
+    }
+    
+    takeVitalityDamage(targetEffect, attributeHandler, damage) {
+        targetEffect.effectMessages.push(`${targetEffect.tokenTargetData.displayName} loses ${damage} Vitality.`);
+        
+        let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
+        targetEffect.tokenTargetData.modifyResourceAttribute(attributeHandler, "Cmb_Vitality", damage, targetEffect.tokenTargetData.addModifierToAttribute,
+            function (results, attrHandler, attributeVar, tokenTargetData) {
+                attrHandler.addUpdate(attributeVar, results.newValue, false);
+                combatDetailsHandler.onUpdateVitality(attrHandler, results.newValue);
+                if (combatDetailsHandler.hasDisplayStyle()) {
+                    tokenTargetData.setTooltip(combatDetailsHandler.printTooltip(attrHandler));
+                }
+            });
+    }
+
+    takeWillDamage(attributeHandler, damage, willBreakEffect) {
+        let targetEffect = this;
+
+        this.tokenTargetData.addWill(attributeHandler, -1 * damage,
+            function (results, attrHandler, attributeVar, tokenTargetData) {
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${damage} will damage.`);
+                if (results.remainder < 0) {
+                    // the target can take a will break
+                    willBreakEffect += `$$${results.remainder}`;
+                    targetEffect.effectMessages.push(`<span class="sheet-wuxInlineRow">[Use Will Break Effect](!${willBreakEffect})</span> `)
+                }
+                tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
+            });
+    }
+}
+
 var TargetReference = TargetReference || (function () {
     'use strict';
 

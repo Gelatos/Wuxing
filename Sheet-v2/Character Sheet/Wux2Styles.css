@@ -4936,7 +4936,7 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
     letter-spacing: 0.1ch;
     color: white;
 
-    display: inline-block;
+    display: block;
     background: #313235;
 } 
 
