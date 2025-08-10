@@ -441,6 +441,41 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
     }
 }
 
+class TechniqueUseResolver extends TechniqueResolverData
+{
+    constructor(msg, content) {
+        super(msg, content);
+    }
+    
+    createEmpty() {
+        super.createEmpty();
+        this.technique = {};
+        this.senderTokenEffect = {};
+        this.targetTokenEffect = {};
+    }
+
+    initializeData(contentData) {
+        super.initializeData(contentData);
+        this.senderTokenEffect = new TokenTargetEffectsData(this.senderTokenTargetData);
+        this.targetTokenEffect = new TokenTargetEffectsData(TargetReference.GetTokenTargetData(contentData[2]));
+        Debug.Log(`[TechniqueUseResolver] targeting ${this.targetTokenEffect.tokenTargetData.displayName} with technique ${this.technique.name}\n${JSON.stringify(this.technique)}`);
+        this.addInitialMessage();
+    }
+
+    initializeTechniqueData(data) {
+        this.technique = new TechniqueData();
+        this.technique.importSandboxJson(data);
+    }
+
+    addInitialMessage() {
+        this.addMessage(`${this.senderTokenTargetData.displayName} uses ${this.technique.name}`);
+    }
+    
+    run() {
+        
+    }
+}
+
 var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
     'use strict';
 
@@ -479,7 +514,8 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
             techniqueConsumptionResolver.run();
         },
         commandUseTechnique = function (msg, content) {
-            CheckTechnique.Use(msg, content);
+            let techUseResolver = new TechniqueUseResolver(msg, content);
+            techUseResolver.run();
         },
         commandResolveTechnique = function (msg, content) {
         },

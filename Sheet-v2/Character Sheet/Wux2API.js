@@ -1166,7 +1166,6 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
                 techniqueConsumptionResolver.consumeResources(techniqueConsumptionResolver);
             }
             else {
-                Debug.Log(`messages 2: ${JSON.stringify(techniqueConsumptionResolver.messages)}`);
                 techniqueConsumptionResolver.printPrivateMessages();
             }
         });
@@ -1178,7 +1177,6 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
             if (!techniqueConsumptionResolver.newResourceValues[resourceName].isConsumable) {
                 success = false;
                 techniqueConsumptionResolver.addMessage(`Not enough ${WuxDef.GetTitle(resourceName)} to use this technique`);
-                Debug.Log(`messages 1: ${JSON.stringify(techniqueConsumptionResolver.messages)}`);
             }
         });
         return success;
@@ -1205,9 +1203,7 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
     }
     
     printPrivateMessages() {
-        Debug.Log(`messages 3: ${JSON.stringify(this.messages)}`)
         this.messages = this.messages.concat(this.tokenEffect.effectMessages);
-        Debug.Log(`messages 4: ${JSON.stringify(this.messages)}`)
         let systemMessage = this.getMessageObject();
         WuxMessage.SendToSenderAndGM(systemMessage, this.msg);
     }
@@ -1229,6 +1225,41 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
                 callback(resourceName, this.resources[resourceName]);
             }
         }
+    }
+}
+
+class TechniqueUseResolver extends TechniqueResolverData
+{
+    constructor(msg, content) {
+        super(msg, content);
+    }
+    
+    createEmpty() {
+        super.createEmpty();
+        this.technique = {};
+        this.senderTokenEffect = {};
+        this.targetTokenEffect = {};
+    }
+
+    initializeData(contentData) {
+        super.initializeData(contentData);
+        this.senderTokenEffect = new TokenTargetEffectsData(this.senderTokenTargetData);
+        this.targetTokenEffect = new TokenTargetEffectsData(TargetReference.GetTokenTargetData(contentData[2]));
+        Debug.Log(`[TechniqueUseResolver] targeting ${this.targetTokenEffect.tokenTargetData.displayName} with technique ${this.technique.name}\n${JSON.stringify(this.technique)}`);
+        this.addInitialMessage();
+    }
+
+    initializeTechniqueData(data) {
+        this.technique = new TechniqueData();
+        this.technique.importSandboxJson(data);
+    }
+
+    addInitialMessage() {
+        this.addMessage(`${this.senderTokenTargetData.displayName} uses ${this.technique.name}`);
+    }
+    
+    run() {
+        
     }
 }
 
@@ -1270,7 +1301,8 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
             techniqueConsumptionResolver.run();
         },
         commandUseTechnique = function (msg, content) {
-            CheckTechnique.Use(msg, content);
+            let techUseResolver = new TechniqueUseResolver(msg, content);
+            techUseResolver.run();
         },
         commandResolveTechnique = function (msg, content) {
         },
