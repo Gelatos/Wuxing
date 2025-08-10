@@ -259,294 +259,161 @@ class TokenTargetData extends TargetData {
         });
         attributeHandler.run();
     }
-    setImpatience(attributeHandler, value) {
-        let patienceVar = WuxDef.GetVariable("Soc_Impatience");
-        attributeHandler.addUpdate(patienceVar);
-        attributeHandler.addUpdate(patienceVar, value, false);
-        attributeHandler.addUpdate(patienceVar, value, true);
-
-        this.token.set(`bar1_value`, value);
-        this.token.set(`bar1_max`, value);
+    addMod(modDefinitionName, attributeHandler, value) {
+        this.modifyResourceAttribute(attributeHandler,
+            modDefinitionName,
+            value,
+            this.addModifierToAttribute,
+            function (results, attrHandler, attributeVar) {
+                attrHandler.addUpdate(attributeVar, results.newValue, false);
+            }
+        );
     }
-    addImpatience(attributeHandler, value) {
-        let tokenTargetData = this;
-        this.modifyResourceAttribute(attributeHandler, "Soc_Impatience", value, this.addModifierToAttribute, function (results, attrHandler, attributeVar) {
-            attrHandler.addUpdate(attributeVar, results.newValue, false);
-            tokenTargetData.setBarValue(1, results.newValue);
-            return results;
-        });
+    setMod(modDefinitionName, attributeHandler, value) {
+        this.modifyResourceAttribute(attributeHandler,
+            modDefinitionName,
+            value,
+            this.setModifierToAttribute,
+            function (results, attrHandler, attributeVar) {
+                attrHandler.addUpdate(attributeVar, results.newValue, false);
+            }
+        );
+    }
+
+    // Social Modifiers
+    addImpatience(attributeHandler, value, resultsCallback) {
+        resultsCallback = resultsCallback == undefined ? this.applyResultsToImpatience : resultsCallback;
+        this.modifyResourceAttribute(attributeHandler, "Soc_Impatience", value,
+            this.addModifierToAttribute, resultsCallback);
+    }
+    applyResultsToImpatience(results, attrHandler, attributeVar, tokenTargetData) {
+        attrHandler.addUpdate(attributeVar, results.newValue, false);
+        tokenTargetData.setBarValue(1, results.newValue);
+        return results;
     }
     setMaxFavor(attributeHandler, value) {
         let favorMaxVar = WuxDef.GetVariable("Soc_Favor", WuxDef._max);
-        attributeHandler.addUpdate(favorMaxVar);
         attributeHandler.addUpdate(favorMaxVar, value, true);
         this.token.set(`bar3_max`, value);
     }
-    addFavor(attributeHandler, value) {
-        let tokenTargetData = this;
-        this.modifyResourceAttribute(attributeHandler, "Soc_Favor", value, this.addModifierToAttribute, function (results, attrHandler, attributeVar) {
-            attrHandler.addUpdate(attributeVar, results.newValue, false);
-            tokenTargetData.setBarValue(3, results.newValue);
-            return results;
-        });
+    addFavor(attributeHandler, value, resultsCallback) {
+        resultsCallback = resultsCallback == undefined ? this.applyResultsToFavor : resultsCallback;
+        this.modifyResourceAttribute(attributeHandler, "Soc_Favor", value,
+            this.addModifierToAttribute, resultsCallback);
     }
-    emptyFavor(attributeHandler) {
-        let tokenTargetData = this;
+    emptyFavor(attributeHandler, resultsCallback) {
+        resultsCallback = resultsCallback == undefined ? this.applyResultsToFavor : resultsCallback;
         this.modifyResourceAttribute(attributeHandler, "Soc_Favor", 0,
-            function (results) {
-                tokenTargetData.setModifierToAttribute(results, 0);
-            },
-            function (results, attrHandler, attributeVar) {
-                attrHandler.addUpdate(attributeVar, results.newValue, false);
-                tokenTargetData.setBarValue(3, results.newValue);
-                return results;
-            }
-        );
+            this.setModifierToAttribute, resultsCallback);
     }
-    addHp(attributeHandler, value) {
-        let tokenTargetData = this;
+    applyResultsToFavor(results, attrHandler, attributeVar, tokenTargetData) {
+        attrHandler.addUpdate(attributeVar, results.newValue, false);
+        tokenTargetData.setBarValue(3, results.newValue);
+        return results;
+    }
+    
+    // Combat Modifiers
+    addHp(attributeHandler, value, resultsCallback) {
+        resultsCallback = resultsCallback == undefined ? this.applyResultsToHp : resultsCallback;
         this.modifyResourceAttribute(attributeHandler, "HP", value,
-            function (results, value) {
-                tokenTargetData.addModifierToAttribute(results, value);
-                // if (!isNaN(parseInt(value)) && parseInt(value) < 0 && results.remainder < 0) {
-                //     while (results.remainder < 0) {
-                //         results.current = results.max;
-                //         tokenTargetData.addVitality(attributeHandler, -1);
-                //         tokenTargetData.addModifierToAttribute(results, results.remainder);
-                //         results.remainder -= results.max;
-                //     }
-                // }
-            },
-            function (results, attrHandler, attributeVar) {
-                attrHandler.addUpdate(attributeVar, results.newValue, false);
-                tokenTargetData.setBarValue(1, results.newValue);
-                return results;
-            }
-        );
+            this.addModifierToAttribute, resultsCallback);
     }
-    setHpToFull(attributeHandler) {
-        let tokenTargetData = this;
-        this.modifyResourceAttribute(attributeHandler, "HP", 0,
-            function (results) {
-                tokenTargetData.setModifierToAttribute(results, "max");
-            },
-            function (results, attrHandler, attributeVar) {
-                attrHandler.addUpdate(attributeVar, results.newValue, false);
-                tokenTargetData.setBarValue(1, results.newValue);
-                return results;
-            }
-        );
+    setHpToFull(attributeHandler, resultsCallback) {
+        resultsCallback = resultsCallback == undefined ? this.applyResultsToHp : resultsCallback;
+        this.modifyResourceAttribute(attributeHandler, "HP", "max",
+            this.setModifierToAttribute, resultsCallback);
+    }
+    applyResultsToHp(results, attrHandler, attributeVar, tokenTargetData) {
+        attrHandler.addUpdate(attributeVar, results.newValue, false);
+        tokenTargetData.setBarValue(1, results.newValue);
+        return results;
     }
     addWill(attributeHandler, value, resultsCallback) {
-        let tokenTargetData = this;
+        resultsCallback = resultsCallback == undefined ? this.applyResultsToWill : resultsCallback;
         this.modifyResourceAttribute(attributeHandler, "WILL", value,
-            function (results, value, attrHandler) {
-                tokenTargetData.addModifierToAttribute(results, value);
-            },
-            function (results, attrHandler, attributeVar) {
-                if (resultsCallback != undefined) {
-                    resultsCallback(results, attrHandler, attributeVar);
-                }
-                else {
-                    attrHandler.addUpdate(attributeVar, results.newValue, false);
-                    tokenTargetData.setBarValue(2, results.newValue);
-                }
-                return results;
-            }
-        );
+            this.addModifierToAttribute, resultsCallback);
     }
-    setWillToFull(attributeHandler) {
-        let tokenTargetData = this;
-        this.modifyResourceAttribute(attributeHandler, "WILL", 0,
-            function (results) {
-                tokenTargetData.setModifierToAttribute(results, "max");
-            },
-            function (results, attrHandler, attributeVar) {
-                attrHandler.addUpdate(attributeVar, results.newValue, false);
-                tokenTargetData.setBarValue(2, results.newValue);
-                return results;
-            }
-        );
+    setWillToFull(attributeHandler, resultsCallback) {
+        resultsCallback = resultsCallback == undefined ? this.applyResultsToWill : resultsCallback;
+        this.modifyResourceAttribute(attributeHandler, "WILL", "max",
+            this.setModifierToAttribute, resultsCallback);
     }
-    addVitality(attributeHandler, value) {
-        this.modifyResourceAttribute(attributeHandler,
-            "Cmb_Vitality",
-            value,
-            this.addModifierToAttribute,
-            function (results, attrHandler, attributeVar) {
-                attrHandler.addUpdate(attributeVar, results.newValue, false);
-                if (results <= 0) {
-                    // TODO: Add the Downed status
-                }
-            }
-        );
-    }
-    addChakra(attributeHandler, value) {
-        this.modifyResourceAttribute(attributeHandler,
-            "Cmb_Chakra",
-            value,
-            this.addModifierToAttribute,
-            function (results, attrHandler, attributeVar) {
-                attrHandler.addUpdate(attributeVar, results.newValue, false);
-            }
-        );
+    applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData) {
+        attrHandler.addUpdate(attributeVar, results.newValue, false);
+        tokenTargetData.setBarValue(2, results.newValue);
+        return results;
     }
     addEnergy(attributeHandler, value, resultsCallback) {
-        let tokenTargetData = this;
+        resultsCallback = resultsCallback == undefined ? this.applyResultsToEnergy : resultsCallback;
         this.modifyResourceAttribute(attributeHandler, "EN", value,
-            tokenTargetData.addModifierToAttribute,
-            function (results, attrHandler, attributeVar) {
-                if (resultsCallback != undefined) {
-                    resultsCallback(results, attrHandler, attributeVar);
-                }
-                else {
-                    attrHandler.addUpdate(attributeVar, results.newValue, false);
-                    tokenTargetData.setEnergy(results.newValue);
-                }
-                return results;
-            }
-        );
+            this.addModifierToAttribute, resultsCallback);
     }
     setEnergyToStart(attributeHandler, resultsCallback) {
-        let tokenTargetData = this;
         let startEnVar = WuxDef.GetVariable("StartEN");
         attributeHandler.addMod(startEnVar);
-        this.modifyResourceAttribute(attributeHandler, "EN", 0,
-            function (results, value, attrHandler) {
-                tokenTargetData.setModifierToAttribute(results, attrHandler.parseInt(startEnVar));
-            },
-            function (results, attrHandler, attributeVar) {
-                if (resultsCallback != undefined) {
-                    resultsCallback(results, attrHandler, attributeVar);
-                }
-                else {
-                    attrHandler.addUpdate(attributeVar, results.newValue, false);
-                    tokenTargetData.setEnergy(results.newValue);
-                }
-                return results;
-            }
-        );
+        resultsCallback = resultsCallback == undefined ? this.applyResultsToEnergy : resultsCallback;
+        
+        this.modifyResourceAttribute(attributeHandler, "EN", startEnVar,
+            this.setModifierToAttribute, resultsCallback);
     }
     addStartRoundEnergy(attributeHandler, resultsCallback) {
-        let tokenTargetData = this;
         let roundEnVar = WuxDef.GetVariable("RoundEN");
         attributeHandler.addMod(roundEnVar);
-        this.modifyResourceAttribute(attributeHandler, "EN", 0,
-            function (results, value, attrHandler) {
-                tokenTargetData.addModifierToAttribute(results, attrHandler.parseInt(roundEnVar));
-            },
-            function (results, attrHandler, attributeVar) {
-                if (resultsCallback != undefined) {
-                    resultsCallback(results, attrHandler, attributeVar);
-                }
-                else {
-                    attrHandler.addUpdate(attributeVar, results.newValue, false);
-                    tokenTargetData.setEnergy(results.newValue);
-                }
-                return results;
-            }
-        );
+        resultsCallback = resultsCallback == undefined ? this.applyResultsToEnergy : resultsCallback;
+        
+        this.modifyResourceAttribute(attributeHandler, "EN", roundEnVar,
+            this.addModifierToAttribute, resultsCallback);
     }
-    addMoveCharge(attributeHandler, value) {
+    applyResultsToEnergy(results, attrHandler, attributeVar, tokenTargetData) {
+        attrHandler.addUpdate(attributeVar, results.newValue, false);
+        tokenTargetData.setEnergy(results.newValue);
+        return results;
+    }
+    addMoveCharge(attributeHandler, value, resultsCallback) {
         let tokenTargetData = this
         value = parseInt(value);
+        resultsCallback = resultsCallback == undefined ? tokenTargetData.applyResultsMoveCharge : resultsCallback;
         this.modifyResourceAttribute(attributeHandler, "MvCharge", value,
-            function (results, value) {
-                results.newValue = parseInt(results.current) + value;
-            },
-            function (results, attrHandler, attributeVar) {
-                attrHandler.addUpdate(attributeVar, results.newValue, false);
-                tokenTargetData.setTurnIcon(results.newValue);
-                return results;
-            }
-        );
+            tokenTargetData.addModifierToAttributeNoCap, resultsCallback);
     }
-    setDash(attributeHandler) {
-        let tokenTargetData = this;
-        let baseSpeedVar = WuxDef.GetVariable("Cmb_Mv");
-        let maxSpeedVar = WuxDef.GetVariable("Cmb_MvPotency");
-        let moveChargeVar = WuxDef.GetVariable("MvCharge");
-        attributeHandler.addMod([baseSpeedVar, maxSpeedVar, moveChargeVar]);
+    setDash(attributeHandler, resultsCallback) {
+        this.addDashModifiers(attributeHandler);
+        resultsCallback = resultsCallback == undefined ? this.applyResultsMoveCharge : resultsCallback;
         
         this.modifyResourceAttribute(attributeHandler, "MvCharge", 0,
-            function (results, value, attrHandler) {
-                let baseMoveSpeed = attrHandler.parseInt(baseSpeedVar, 0, false);
-                let maxMoveSpeed = attrHandler.parseInt(maxSpeedVar, 0, false);
-                if (baseMoveSpeed > maxMoveSpeed) {
-                    baseMoveSpeed = maxMoveSpeed;
-                }
-                let dieRoll = new DieRoll();
-                dieRoll.rollDice(1, maxMoveSpeed);
-                results.newValue = Math.max(baseMoveSpeed, dieRoll.total);
+            function (results, value, attrHandler, tokenTargetData) {
+                results.newValue = tokenTargetData.performDash(attrHandler);
             },
-            function (results, attrHandler, attributeVar) {
-                // Update the attribute and set the turn icon
-                Debug.Log(`Setting MvCharge to ${results.newValue} for ${tokenTargetData.displayName}`);
-                attrHandler.addUpdate(attributeVar, results.newValue, false);
-                tokenTargetData.setTurnIcon(results.newValue);
-                return results;
-            }
-        );
+            resultsCallback);
     }
     addDash(attributeHandler, resultsCallback) {
-        let tokenTargetData = this;
-        let baseSpeedVar = WuxDef.GetVariable("Cmb_Mv");
-        let maxSpeedVar = WuxDef.GetVariable("Cmb_MvPotency");
-        attributeHandler.addMod([baseSpeedVar, maxSpeedVar]);
+        this.addDashModifiers(attributeHandler);
+        resultsCallback = resultsCallback == undefined ? this.applyResultsMoveCharge : resultsCallback;
 
         this.modifyResourceAttribute(attributeHandler, "MvCharge", 0,
-            function (results, value, attrHandler) {
-                let baseMoveSpeed = attrHandler.parseInt(baseSpeedVar, 0, false);
-                let maxMoveSpeed = attrHandler.parseInt(maxSpeedVar, 0, false);
-                if (baseMoveSpeed > maxMoveSpeed) {
-                    baseMoveSpeed = maxMoveSpeed;
-                }
-                let dieRoll = new DieRoll();
-                dieRoll.rollDice(1, maxMoveSpeed);
-                results.newValue = results.current + Math.max(baseMoveSpeed, dieRoll.total);
-            },
-            function (results, attrHandler, attributeVar) {
-                if (resultsCallback != undefined) {
-                    resultsCallback(results, attrHandler, attributeVar);
-                }
-                else {
-                    attrHandler.addUpdate(attributeVar, results.newValue, false);
-                    tokenTargetData.setTurnIcon(results.newValue);
-                }
-                return results;
-            }
-        );
+            function (results, value, attrHandler, tokenTargetData) {
+                results.newValue = results.current + tokenTargetData.performDash(attrHandler);
+            }, 
+            resultsCallback);
     }
-    resetBattleTracks(attributeHandler) {
-        let hpVar = WuxDef.GetVariable("HP");
-        let willpowerVar = WuxDef.GetVariable("WILL");
-        let enVar = WuxDef.GetVariable("EN");
-        attributeHandler.addAttribute(hpVar);
-        attributeHandler.addAttribute(willpowerVar);
-        attributeHandler.addAttribute(enVar);
-        attributeHandler.addFinishCallback(function (attrHandler) {
-            attrHandler.addUpdate(hpVar, attrHandler.parseInt(hpVar, 0, true), false);
-            attrHandler.addUpdate(willpowerVar, attrHandler.parseInt(willpowerVar, 0, true), false);
-            attrHandler.addUpdate(enVar, 0, true);
-        });
+    addDashModifiers(attributeHandler) {
+        attributeHandler.addMod([ WuxDef.GetVariable("Cmb_Mv"), WuxDef.GetVariable("Cmb_MvPotency")]);
     }
-    resetSocialTracks(attributeHandler, patienceVal) {
-        let favorVar = WuxDef.GetVariable("Soc_Favor");
-        let patienceVar = WuxDef.GetVariable("Soc_Impatience");
-        let willpowerVar = WuxDef.GetVariable("WILL");
-        let enVar = WuxDef.GetVariable("EN");
-        attributeHandler.addAttribute(favorVar);
-        attributeHandler.addAttribute(patienceVar);
-        attributeHandler.addAttribute(willpowerVar);
-        attributeHandler.addAttribute(enVar);
-        attributeHandler.addFinishCallback(function (attrHandler) {
-            attrHandler.addUpdate(favorVar, 0, false);
-            attrHandler.addUpdate(willpowerVar, attrHandler.parseInt(willpowerVar, 0, true), false);
-            attrHandler.addUpdate(patienceVal, patienceVal, false);
-            attrHandler.addUpdate(enVar, 0, true);
-        });
+    performDash(attrHandler) {
+        let baseMoveSpeed = attrHandler.parseInt(WuxDef.GetVariable("Cmb_Mv"), 0, false);
+        let maxMoveSpeed = attrHandler.parseInt(WuxDef.GetVariable("Cmb_MvPotency"), 0, false);
+        if (baseMoveSpeed > maxMoveSpeed) {
+            baseMoveSpeed = maxMoveSpeed;
+        }
+        let dieRoll = new DieRoll();
+        dieRoll.rollDice(1, maxMoveSpeed);
+        return Math.max(dieRoll.total, baseMoveSpeed)
     }
-
+    applyResultsMoveCharge(results, attrHandler, attributeVar, tokenTargetData) {
+        attrHandler.addUpdate(attributeVar, results.newValue, false);
+        tokenTargetData.setTurnIcon(results.newValue);
+        return results;
+    }
     modifyResourceAttribute(attributeHandler, attributeName, value, modCallback, finishCallback) {
         let results = {
             name: attributeName,
@@ -555,45 +422,61 @@ class TokenTargetData extends TargetData {
             newValue: 0,
             remainder: 0
         };
+        let tokenTargetData = this;
         let attributeVar = WuxDef.GetVariable(attributeName);
         attributeHandler.addAttribute(attributeVar);
         attributeHandler.addGetAttrCallback(function (attrHandler) {
             results.current = attrHandler.parseInt(attributeVar, 0, false);
             results.max = attrHandler.parseInt(attributeVar, 0, true);
-            modCallback(results, value, attrHandler);
-            finishCallback(results, attrHandler, attributeVar);
+            modCallback(results, value, attrHandler, tokenTargetData);
+            finishCallback(results, attrHandler, attributeVar, tokenTargetData);
         });
     }
-    addModifierToAttribute(results, value) {
-        if (value == "max") {
+    addModifierToAttribute(results, value, attrHandler, tokenTargetData) {
+        tokenTargetData.addModifierToAttributeNoCap(results, value, attrHandler, tokenTargetData);
+        if (results.newValue > results.max) {
+            results.remainder = results.newValue - results.max;
             results.newValue = results.max;
         }
-        else {
-            results.newValue = results.current + parseInt(value);
-            if (results.newValue < 0) {
-                results.remainder = results.newValue;
-                results.newValue = 0;
-            }
-            else if (results.newValue > results.max) {
-                results.remainder = results.newValue - results.max;
-                results.newValue = results.max;
-            }
+        return results;
+    }
+    addModifierToAttributeNoCap(results, value, attrHandler) {
+        if (value == "max") {
+            results.newValue = results.max;
+            return;
+        }
+
+        value = parseInt(value);
+        if (isNaN(value)) {
+            // likely a variable. Look it up
+            value = attrHandler.parseInt(value, 0, false);
+        }
+
+        results.newValue = results.current + value;
+        if (results.newValue < 0) {
+            results.remainder = results.newValue;
+            results.newValue = 0;
         }
     }
-    setModifierToAttribute(results, value) {
+    setModifierToAttribute(results, value, attrHandler) {
         if (value == "max") {
             results.newValue = results.max;
+            return;
         }
-        else {
-            results.newValue = parseInt(value);
-            if (results.newValue < 0) {
-                results.remainder = results.newValue;
-                results.newValue = 0;
-            }
-            else if (results.newValue > results.max) {
-                results.remainder = results.newValue - results.max;
-                results.newValue = results.max;
-            }
+        value = parseInt(value);
+        if (isNaN(value)) {
+            // likely a variable. Look it up
+            value = attrHandler.parseInt(value, 0, false);
+        }
+        
+        results.newValue = value;
+        if (results.newValue < 0) {
+            results.remainder = results.newValue;
+            results.newValue = 0;
+        }
+        else if (results.newValue > results.max) {
+            results.remainder = results.newValue - results.max;
+            results.newValue = results.max;
         }
     }
 }

@@ -253,7 +253,6 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                     commandRollSkillCheck(msg, content);
                     break;
             }
-            ;
         },
 
         commandConsumeTechnique = function (msg, content) {
@@ -354,7 +353,7 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                                     messages.push(`Consumed ${resourceValue} ${resourceTitle}`);
                                     if (results.remainder < 0) {
                                         results.newValue = results.max + results.remainder;
-                                        tokenTargetData.addChakra(attrHandler, -1);
+                                        tokenTargetData.addMod("Cmb_Chakra", attrHandler, -1);
                                         let hpDamage = 5 + (attrHandler.parseInt(crVar) * 5);
                                         let attributeHandler2 = new SandboxAttributeHandler(tokenTargetData.charId);
                                         tokenTargetData.addHp(attributeHandler2, hpDamage * -1);
@@ -477,103 +476,7 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
 
 }());
 
-var TechniqueConsume = TechniqueConsume || (function () {
-    'use strict';
 
-    var
-        consumeTechnique = function (msg, targetData, technique, weaponData) {
-
-            // consume resources
-            if (consumeTechniqueResources(targetData, technique)) {
-                displayTechnique(msg, technique, weaponData);
-            } else {
-                WuxingMessages.SendSystemMessage(`${targetData.displayName} does not have the resources to use ${technique.name}`);
-            }
-        },
-
-        consumeTechniqueResources = function (targetData, technique) {
-
-            let resourceDatas = iterateOverResources(targetData, technique);
-            if (resourceDatas == undefined) {
-                return false;
-            }
-            consumeResourceData(targetData, resourceDatas);
-            return true;
-        },
-
-        iterateOverResources = function (targetData, technique) {
-
-            let resources = technique.resourceCost.split(";");
-            let resource, resourceData;
-            let resourceDatas = [];
-            for (let i = 0; i < resources.length; i++) {
-                resource = resources[i].trim().split(" ");
-                if (resource.length > 1) {
-                    resourceData = createResourceDataObj(targetData, resource);
-                    if (resourceData == undefined) {
-                        return undefined;
-                    } else {
-                        resourceDatas.push(resourceData);
-                    }
-                }
-            }
-            return resourceDatas;
-        },
-
-        createResourceDataObj = function (targetData, resource) {
-            let resourceData = {
-                cost: ParseIntValue(resource[0]),
-                resourceName: resource[1].toLowerCase(),
-                resource: {},
-                newVal: 0
-            }
-            resourceData = setResourceDataObjResource(targetData, resourceData);
-
-            resourceData.newVal = ParseIntValue(resourceData.resource.get("current"));
-            if (resourceData.newVal >= resourceData.cost) {
-                resourceData.newVal -= resourceData.cost;
-                return resourceData;
-            }
-
-            return undefined;
-        },
-
-        setResourceDataObjResource = function (targetData, resourceData) {
-            resourceData.resource = GetCharacterAttribute(targetData.charId, resourceData.resourceName);
-            return resourceData;
-        },
-
-        consumeResourceData = function (targetData, resourceDatas) {
-            _.each(resourceDatas, function (obj) {
-                if (obj.resourceName == "ki") {
-                    TokenReference.AddEnergy(targetData, obj.cost * -1, false);
-                } else {
-                    obj.resource.set("current", obj.newVal);
-                }
-            });
-        },
-
-        displayTechnique = function (msg, technique, weapon) {
-
-            let output = FeatureService.GetRollTemplateFromTechnique(technique);
-
-            technique.target = "@{target||token_id}";
-            let useTech = SanitizeSheetRollAction(JSON.stringify(technique));
-
-            if (weapon != undefined) {
-                output += ItemHandler.GetTechniqueWeaponRollTemplate(weapon);
-                useTech += `##${SanitizeSheetRollAction(JSON.stringify(weapon))}`;
-            }
-            output += `{{targetData=!utech ${useTech}}}`;
-            WuxingMessages.SendMessage(output, "", msg.who);
-
-        }
-    ;
-    return {
-        ConsumeTechnique: consumeTechnique
-    };
-
-}());
 
 var TechniqueUseResults = TechniqueUseResults || (function () {
     'use strict';
