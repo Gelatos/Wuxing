@@ -308,13 +308,14 @@ class TokenTargetData extends TargetData {
         this.modifyResourceAttribute(attributeHandler, "HP", value,
             function (results, value) {
                 tokenTargetData.addModifierToAttribute(results, value);
-                if (!isNaN(parseInt(value)) && parseInt(value) < 0 && results.remainder < 0) {
-                    while (results.remainder < 0) {
-                        results.current = results.max;
-                        tokenTargetData.addVitality(attributeHandler, -1);
-                        tokenTargetData.addModifierToAttribute(results, results.remainder);
-                    }
-                }
+                // if (!isNaN(parseInt(value)) && parseInt(value) < 0 && results.remainder < 0) {
+                //     while (results.remainder < 0) {
+                //         results.current = results.max;
+                //         tokenTargetData.addVitality(attributeHandler, -1);
+                //         tokenTargetData.addModifierToAttribute(results, results.remainder);
+                //         results.remainder -= results.max;
+                //     }
+                // }
             },
             function (results, attrHandler, attributeVar) {
                 attrHandler.addUpdate(attributeVar, results.newValue, false);
@@ -341,18 +342,15 @@ class TokenTargetData extends TargetData {
         this.modifyResourceAttribute(attributeHandler, "WILL", value,
             function (results, value, attrHandler) {
                 tokenTargetData.addModifierToAttribute(results, value);
-                if (!isNaN(parseInt(value)) && parseInt(value) < 0 && results.remainder < 0) {
-                    while (results.remainder < 0) {
-                        results.current = results.max;
-                        tokenTargetData.addChakra(attrHandler, -1);
-                        tokenTargetData.addModifierToAttribute(results, results.remainder);
-                    }
-                }
-                resultsCallback(results, value, attrHandler);
             },
             function (results, attrHandler, attributeVar) {
-                attrHandler.addUpdate(attributeVar, results.newValue, false);
-                tokenTargetData.setBarValue(1, results.newValue);
+                if (resultsCallback != undefined) {
+                    resultsCallback(results, attrHandler, attributeVar);
+                }
+                else {
+                    attrHandler.addUpdate(attributeVar, results.newValue, false);
+                    tokenTargetData.setBarValue(2, results.newValue);
+                }
                 return results;
             }
         );
@@ -450,9 +448,12 @@ class TokenTargetData extends TargetData {
         );
     }
     addMoveCharge(attributeHandler, value) {
-        let tokenTargetData = this;
+        let tokenTargetData = this
+        value = parseInt(value);
         this.modifyResourceAttribute(attributeHandler, "MvCharge", value,
-            tokenTargetData.addModifierToAttribute,
+            function (results, value) {
+                results.newValue = parseInt(results.current) + value;
+            },
             function (results, attrHandler, attributeVar) {
                 attrHandler.addUpdate(attributeVar, results.newValue, false);
                 tokenTargetData.setTurnIcon(results.newValue);
@@ -487,7 +488,7 @@ class TokenTargetData extends TargetData {
             }
         );
     }
-    addDash(attributeHandler) {
+    addDash(attributeHandler, resultsCallback) {
         let tokenTargetData = this;
         let baseSpeedVar = WuxDef.GetVariable("Cmb_Mv");
         let maxSpeedVar = WuxDef.GetVariable("Cmb_MvPotency");
@@ -505,8 +506,13 @@ class TokenTargetData extends TargetData {
                 results.newValue = results.current + Math.max(baseMoveSpeed, dieRoll.total);
             },
             function (results, attrHandler, attributeVar) {
-                attrHandler.addUpdate(attributeVar, results.newValue, false);
-                tokenTargetData.setTurnIcon(results.newValue);
+                if (resultsCallback != undefined) {
+                    resultsCallback(results, attrHandler, attributeVar);
+                }
+                else {
+                    attrHandler.addUpdate(attributeVar, results.newValue, false);
+                    tokenTargetData.setTurnIcon(results.newValue);
+                }
                 return results;
             }
         );
@@ -551,7 +557,7 @@ class TokenTargetData extends TargetData {
         };
         let attributeVar = WuxDef.GetVariable(attributeName);
         attributeHandler.addAttribute(attributeVar);
-        attributeHandler.addFinishCallback(function (attrHandler) {
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
             results.current = attrHandler.parseInt(attributeVar, 0, false);
             results.max = attrHandler.parseInt(attributeVar, 0, true);
             modCallback(results, value, attrHandler);
@@ -595,7 +601,7 @@ class TokenTargetData extends TargetData {
 var TargetReference = TargetReference || (function () {
     'use strict';
 
-    var schemaVersion = "0.1.3",
+    var schemaVersion = "0.1.4",
 
         checkInstall = function () {
             if (!state.hasOwnProperty('TargetReference') || state.TargetReference.version != schemaVersion) {
@@ -613,7 +619,7 @@ var TargetReference = TargetReference || (function () {
         handleInput = function (msg, tag, content) {
             switch (tag) {
                 case "!actadd":
-                    commandAddCharacter(msg, content);
+                    commandAddCharacter(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
                 case "!actrem":
                     commandRemoveCharacter(msg);
@@ -635,6 +641,9 @@ var TargetReference = TargetReference || (function () {
                     break;
                 case "!tmove":
                     commandAddMoveCharge(msg, TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
+                case "!tdash":
+                    commandAddDash(msg, TokenReference.GetTokenTargetDataArray(msg));
                     break;
                 case "!tfullheal":
                     commandFullHeal(msg, TokenReference.GetTokenTargetDataArray(msg));
@@ -677,28 +686,13 @@ var TargetReference = TargetReference || (function () {
             }
         },
 
-        commandAddCharacter = function (msg, teamIndex) {
-            let message = "";
-            TokenReference.IterateOverSelectedTokens(msg, function (tokenTargetData) {
-                if (tokenTargetData != undefined) {
-                    tokenTargetData.setTeamIndex(teamIndex);
-                    addToActiveCharacters(tokenTargetData);
-                    if (message != "") {
-                        message += ", ";
-                    }
-                    message += `${tokenTargetData.displayName}`;
-                }
+        commandAddCharacter = function (msg, targets, content) {
+            _.each(targets, function (tokenTargetData) {
+                tokenTargetData.setTeamIndex(content);
+                addToActiveCharacters(tokenTargetData);
             });
-            if (message == "") {
-                message = "No characters selected";
-            }
-            else {
-                message = `${message} added as ${state.WuxConflictManager.teams[teamIndex].name} unit(s)`;
-            }
-            let systemMessage = new SystemInfoMessage(message);
-            systemMessage.setSender("System");
-            WuxMessage.Send(systemMessage, "GM");
 
+            sendTokenUpdateMessage(msg, targets, ` added as ${state.WuxConflictManager.teams[content].name} unit(s)`);
         },
 
         commandRemoveCharacter = function (msg) {
@@ -743,10 +737,11 @@ var TargetReference = TargetReference || (function () {
                 output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@0`);
             }
             else {
-                output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@?{Set team index|0`);
+                output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@?{Set team index|0}`);
             }
             output += tokenOptionButton("Add Energy", "ten ?{How much energy to add?|1}");
             output += tokenOptionButton("Add Move Charge", "tmove ?{How much move charge to add?|1}");
+            output += tokenOptionButton("Add Dash", "tdash");
             output += tokenOptionButton("Add Surge", "thealsurge ?{How much surge to add?|1}");
             output += tokenOptionButton("Add Vitality", "thealvit ?{How much vitality to add?|1}");
 
@@ -760,7 +755,7 @@ var TargetReference = TargetReference || (function () {
                 output += tokenOptionButton("Prep4 Social", `tconflictstate Social@0`);
             }
             else {
-                output += tokenOptionButton("Prep4 Social", `tconflictstate Social@?{Set team index|0`);
+                output += tokenOptionButton("Prep4 Social", `tconflictstate Social@?{Set team index|0}`);
                 output += tokenOptionButton("Reset Social", "tresetSocial");
                 output += tokenOptionButton("Request Threshold", "tss ?{Set the difficulty of the request|" +
                     "Simple DC 15|Inconvenient DC 30|Disruptive DC 40|Serious DC 50|Life-Changing DC 60}");
@@ -784,7 +779,19 @@ var TargetReference = TargetReference || (function () {
         },
 
         commandSetConflictState = function (msg, targets, content) {
+            let contentSplit = content.split("@");
+            let conflictState = contentSplit[0];
+            let teamIndex = contentSplit.length > 1 && !isNaN(parseInt(contentSplit[1])) ? parseInt(contentSplit[1]) : 0;
+            
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.setTeamIndex(teamIndex);
+                addToActiveCharacters(tokenTargetData);
+                TokenReference.SetTokenForConflict(conflictState, tokenTargetData, attributeHandler);
+                attributeHandler.run();
+            });
 
+            sendTokenUpdateMessage(msg, targets, ` set to ${conflictState} state as ${state.WuxConflictManager.teams[teamIndex].name} unit(s)`);
         },
 
         commandSetRequestCheck = function (msg, targets, content) {
@@ -834,6 +841,18 @@ var TargetReference = TargetReference || (function () {
             });
             
             sendTokenUpdateMessage(msg, targets, `: ${content} Move Charge`);
+        },
+
+        commandAddDash = function (msg, targets) {
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.addDash(attributeHandler, function (results, attrHandler, attributeVar) {
+                    attrHandler.addUpdate(attributeVar, results.newValue, false);
+                    tokenTargetData.setTurnIcon(results.newValue);
+                    sendTokenUpdateMessage(msg, [tokenTargetData], ` dashes for ${results.newValue}`);
+                });
+                attributeHandler.run();
+            });
         },
 
         commandFullHeal = function (msg, targets) {
@@ -904,7 +923,7 @@ var TargetReference = TargetReference || (function () {
                 attributeHandler.run();
             });
             
-            sendTokenUpdateMessage(msg, targets, ` have their tooltip updated`);
+            sendTokenUpdateMessage(msg, targets, `: tooltip updated`);
         },
 
         commandResetToken = function (msg, targets) {
@@ -912,7 +931,7 @@ var TargetReference = TargetReference || (function () {
                 TokenReference.ResetTokenDisplay(tokenTargetData);
             });
 
-            sendTokenUpdateMessage(msg, targets, ` have their token reset`);
+            sendTokenUpdateMessage(msg, targets, `: token reset`);
         },
 
         commandShowGroup = function (sender, targets, content) {
@@ -1043,12 +1062,7 @@ var TargetReference = TargetReference || (function () {
         
             let messageObject = new SystemInfoMessage(targetNames + message);
             messageObject.setSender("System");
-            
-            let senderTargets = ["GM"];
-            if (!playerIsGM(msg.playerid)) {
-                senderTargets.push(msg.who.split(" ")[0]); // Send to the player who sent the command
-            }
-            WuxMessage.Send(messageObject, senderTargets);
+            WuxMessage.SendToSenderAndGM(messageObject, msg);
         },
 
         // Data Checkers
@@ -1233,7 +1247,7 @@ var TargetReference = TargetReference || (function () {
 var TokenReference = TokenReference || (function () {
     'use strict';
 
-    var schemaVersion = "0.1.0",
+    var schemaVersion = "0.1.1",
 
         checkInstall = function () {
             if (!state.hasOwnProperty('TokenReference') || state.TokenReference.version !== schemaVersion) {
@@ -1385,6 +1399,7 @@ var TokenReference = TokenReference || (function () {
             }
         },
         setTokenForBattle = function (tokenTargetData, attributeHandler) {
+            Debug.Log(`[TokenReference][setTokenForBattle] Setting token for battle: ${tokenTargetData.charName}`);
             let hpVar = WuxDef.GetVariable("HP");
             let willpowerVar = WuxDef.GetVariable("WILL");
             let enVar = WuxDef.GetVariable("EN");
@@ -1394,12 +1409,12 @@ var TokenReference = TokenReference || (function () {
             let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
+                Debug.Log(`[TokenReference][setTokenForBattle] Setting token for battle: ${tokenTargetData.charName}`);
                 tokenTargetData.setBar(1, attrHandler.getAttribute(hpVar), true, true);
                 tokenTargetData.setBar(2, attrHandler.getAttribute(willpowerVar), true, true);
                 tokenTargetData.setEnergy(attrHandler.parseInt(enVar, 0, false));
                 combatDetailsHandler.onUpdateDisplayStyle(attrHandler, "Battle");
                 tokenTargetData.setTooltip(combatDetailsHandler.printTooltip(attrHandler));
-                Debug.Log(`Combat Details: ${JSON.stringify(combatDetailsHandler.combatDetails)}`);
             });
         },
         setTokenForSocialBattle = function (tokenTargetData, attributeHandler) {

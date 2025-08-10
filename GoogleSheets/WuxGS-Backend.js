@@ -511,6 +511,10 @@ var ActionBuilder = ActionBuilder || (function () {
                 output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Forme_AdvancedSlot", i)}${WuxDef._refresh}`],
                     `WuxWorkerActions.RefreshAdvancedStyleActions(${i})`, false)}`;
             }
+            for (let i = 3; i <= 9; i++) {
+                output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Forme_StyleSlot", i)}${WuxDef._refresh}`],
+                    `WuxWorkerActions.RefreshAdvancedStyleActions(${i})`, false)}`;
+            }
             return output;
         }
     return {
@@ -557,6 +561,8 @@ var PopupBuilder = PopupBuilder || (function () {
             
             for (let i = 1; i <= 3; i++) {
                 groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingJobTech", i)}:${WuxDef.GetVariable("Action_Actions")}`]);
+            }
+            for (let i = 1; i <= 9; i++) {
                 groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingAdvTech", i)}:${WuxDef.GetVariable("Action_Actions")}`]);
             }
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingGearTech")}:${WuxDef.GetVariable("Action_Actions")}`]);

@@ -785,15 +785,12 @@ class TechniqueEffect extends dbObj {
 
 class TechniqueResources extends dbObj {
     importJson(json) {
-        this.sheetname = json.sheetname;
         this.name = json.name;
         this.resourceCost = json.resourceCost;
     }
 
     importSheets(dataArray) {
         let i = 0;
-        this.sheetname = "" + dataArray[i];
-        i++;
         this.name = "" + dataArray[i];
         i++;
         this.resourceCost = "" + dataArray[i];
@@ -802,7 +799,6 @@ class TechniqueResources extends dbObj {
 
     createEmpty() {
         super.createEmpty();
-        this.sheetname = "";
         this.name = "";
         this.resourceCost = "";
     }
@@ -1948,7 +1944,6 @@ class TechniqueDisplayData {
         this.name = "";
         this.actionType = "";
         this.displayname = "";
-        this.sheetname = "";
         this.definition = {};
         this.fieldName = "";
         this.isFree = false;
@@ -1999,8 +1994,8 @@ class TechniqueDisplayData {
         }
         if (addTechnique) {
             if (this.technique.resourceCost != "") {
-                let consumeData = new TechniqueResources([this.technique.sheetname, this.technique.name, this.technique.resourceCost]);
-                output += `{{consumeData=!ctech ${consumeData.sanitizeSheetRollAction(JSON.stringify(consumeData))}}}`;
+                let consumeData = new TechniqueResources([this.technique.name, this.technique.resourceCost]);
+                output += `{{consumeData=!ctech ${consumeData.sanitizeSheetRollAction(JSON.stringify(consumeData))}$$@{${WuxDef.GetVariable("SheetName")}}}}`;
             }
             output += `{{targetData=${this.technique.getUseTech()}}}`;
         }
@@ -3476,7 +3471,9 @@ class SandboxAttributeHandler extends AttributeHandler {
         attributeHandler.mods.forEach((property) => {
             attributeHandler.current[property] = getAttrByName(this.characterId, property);
         });
-
+        attributeHandler.getCallbacks.forEach((callback) => {
+            callback(attributeHandler);
+        });
         attributeHandler.finishCallbacks.forEach((callback) => {
             callback(attributeHandler);
         });

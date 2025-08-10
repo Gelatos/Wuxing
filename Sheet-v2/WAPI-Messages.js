@@ -152,6 +152,14 @@ var WuxMessage = WuxMessage || (function () {
             else {
                 sendChat(sender, message, null, { noarchive: true });
             }
+        },
+        
+        sendToSenderAndGM = function (messageObject, msg, archive) {
+            let senderTargets = ["GM"];
+            if (!playerIsGM(msg.playerid)) {
+                senderTargets.push(msg.who.split(" ")[0]); // Send to the player who sent the command
+            }
+            send(messageObject, senderTargets, archive);
         }
 
     return {
@@ -159,7 +167,8 @@ var WuxMessage = WuxMessage || (function () {
         ParseInput: parseInput,
         ParseType: parseType,
         HandleMessageInput: handleMessageInput,
-        Send: send
+        Send: send,
+        SendToSenderAndGM: sendToSenderAndGM
     };
 }());
 
@@ -433,7 +442,7 @@ class InfoMessage extends SimpleMessage {
     }
     
     setMessage(msg) {
-        let msgArray = msg.split("\\");
+        let msgArray = msg.split("//");
         this.message = msgArray[0].trim();
         if (msgArray.length > 1) {
             this.message2 = msgArray[1].trim();
