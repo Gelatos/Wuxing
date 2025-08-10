@@ -436,34 +436,33 @@ class InfoMessage extends SimpleMessage {
     createEmpty() {
         super.createEmpty();
         this.template = "infoBox";
-        this.message2 = "";
-        this.message3 = "";
-        this.message4 = "";
+        this.extendedMessages = [];
     }
     
     setMessage(msg) {
         let msgArray = msg.split("//");
         this.message = msgArray[0].trim();
         if (msgArray.length > 1) {
-            this.message2 = msgArray[1].trim();
-        } else {
-            this.message2 = "";
-        }
-        if (msgArray.length > 2) {
-            this.message3 = msgArray[2].trim();
-        } else {
-            this.message3 = "";
-        }
-        if (msgArray.length > 3) {
-            this.message4 = "";
-            for (let i = 3; i < msgArray.length; i++) {
-                if (this.message4 != "") {
-                    this.message4 += " ";
+            let messageIndex = 1;
+            let messageMaxCount = 8;
+            this.extendedMessages = [];
+            while (messageIndex < msgArray.length) {
+                this.extendedMessages.push(msgArray[messageIndex]);
+                messageIndex++;
+                if (messageIndex >= messageMaxCount) {
+                    break;
                 }
-                this.message4 += msgArray[i].trim();
             }
-        } else {
-            this.message4 = "";
+            if (msgArray.length >= messageMaxCount) {
+                let tempMessage = "";
+                for (let i = messageMaxCount; i < msgArray.length; i++) {
+                    if (tempMessage != "") {
+                        tempMessage += " ";
+                    }
+                    tempMessage += msgArray[i].trim();
+                }
+                this.extendedMessages.push(tempMessage);
+            }
         }
     }
 
@@ -479,9 +478,10 @@ class InfoMessage extends SimpleMessage {
     }
 
     printTemplateData() {
-        let options = this.message2 != "" ? ` {{message2=${this.message2}}}` : "";
-        options += this.message3 != "" ? ` {{message3=${this.message3}}}` : "";
-        options += this.message4 != "" ? ` {{message4=${this.message4}}}` : "";
+        let options = "";
+        for (let i = 0; i < this.extendedMessages.length; i++) {
+            options += ` {{message${i + 1}=${this.extendedMessages[i]}}}`
+        }
         
         return `{{message=${this.message}}}${options}`;
     }
