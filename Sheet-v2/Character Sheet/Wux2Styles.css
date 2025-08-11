@@ -2407,7 +2407,11 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 .wuxFeatureFunctionBlock,
 .sheet-rolltemplate-technique .sheet-wuxFeatureFunctionBlock,
 .wuxFeatureEffectsBlock,
-.sheet-rolltemplate-technique .sheet-wuxFeatureEffectsBlock
+.sheet-rolltemplate-technique .sheet-wuxFeatureEffectsBlock,
+.wuxFeatureSecondaryEffectsBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureSecondaryEffectsBlock,
+.wuxFeatureEndEffectsBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureEndEffectsBlock
 {
     position: relative;
     display: block;
@@ -2433,6 +2437,18 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
     background: #fdfbde;
 }
 
+.wuxFeatureSecondaryEffectsBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureSecondaryEffectsBlock
+{
+    background: #fffccc;
+}
+
+.wuxFeatureEndEffectsBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureEndEffectsBlock
+{
+    background: #fffab4;
+}
+
 .wuxFeatureFunctionBlock .wuxFeatureFunctionBlockRow,
 .sheet-rolltemplate-technique .sheet-wuxFeatureFunctionBlock .sheet-wuxFeatureFunctionBlockRow,
 .wuxFeatureFunctionBlock .wuxFeatureFunctionBlockFlavorText,
@@ -2449,8 +2465,11 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 }
 
 .wuxFeatureCheckHeader,
+.wuxFeatureMajorEffectHeader,
 .sheet-rolltemplate-technique .sheet-wuxFeatureCheckHeader,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureCheckHeader
+.sheet-rolltemplate-technique .sheet-wuxFeatureMajorEffectHeader,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureCheckHeader,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureMajorEffectHeader
 {
     position: relative;
     display: block; 
@@ -2458,6 +2477,26 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 
     font-size: 11px;
     font-weight: bold;
+}
+
+.wuxFeatureMajorEffectHeader,
+.sheet-rolltemplate-technique .sheet-wuxFeatureMajorEffectHeader,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureMajorEffectHeader
+{
+    border-bottom: 1px solid #4a4a4a;
+}
+
+.wuxFeatureMajorEffectBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureMajorEffectBlock,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureMajorEffectBlock
+{
+    position: relative;
+    width: calc(100% - 30px);
+    padding: 5px 5px;
+    margin: 0px 10px;
+
+    line-height: 14px;
+    font-size: 11px;
 }
 
 .wuxFeatureCheckBlock,
