@@ -310,14 +310,12 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         });
     };
     
-    const refreshStyleActions = function (repeatingSectionName, styleVarName, repeatingSectionIndex, styleWorkerType) {
+    const refreshStyleActions = function (repeatingSectionName, styleNameVar, repeatingSectionIndex, styleWorkerType) {
         Debug.Log("Update Style Stats");
         let attributeHandler = new WorkerAttributeHandler();
         let styleWorker = new WuxBasicWorkerBuild(styleWorkerType);
-        let styleNameVar = WuxDef.GetVariable(styleVarName, repeatingSectionIndex);
         Debug.Log(`Style Worker Type: ${styleWorkerType}, with draft: ${styleWorker.attrBuildDraft} and Style Name Var: ${styleNameVar}`);
         attributeHandler.addMod([styleWorker.attrBuildDraft, styleNameVar]);
-        Debug.Log("Repeated Inspection Elements");
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
             Debug.Log("Refreshing Style Actions");
@@ -447,11 +445,18 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         },
         refreshJobStyleActions = function (repeatingSectionIndex) {
             Debug.Log(`Refreshing Job Style Actions in slot ${repeatingSectionIndex}`);
-            refreshStyleActions("RepeatingJobTech", "Forme_JobSlot", repeatingSectionIndex, "Job");
+            refreshStyleActions("RepeatingJobTech", 
+                WuxDef.GetVariable("Forme_JobSlot", repeatingSectionIndex), repeatingSectionIndex, "Job");
         },
         refreshAdvancedStyleActions = function (repeatingSectionIndex) {
             Debug.Log(`Refreshing Advanced Style Actions in slot ${repeatingSectionIndex}`);
-            refreshStyleActions("RepeatingAdvTech", "Forme_AdvancedSlot", repeatingSectionIndex, "Style");
+            refreshStyleActions("RepeatingAdvTech",
+                WuxDef.GetVariable("Forme_AdvancedSlot", repeatingSectionIndex), repeatingSectionIndex, "Style");
+        },
+        refreshStandardStyleActions = function (repeatingSectionIndex) {
+            Debug.Log(`Refreshing Standard Style Actions in slot ${repeatingSectionIndex}`);
+            refreshStyleActions("RepeatingAdvTech",
+                WuxDef.GetVariable("Forme_StyleSlot", parseInt(repeatingSectionIndex)-3), repeatingSectionIndex, "Style");
         },
         populateGearActions = function () {
             let actionsRepeatingWorker = new WorkerRepeatingSectionHandler("RepeatingGearTech");
@@ -527,6 +532,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         PopulateStyleActions: populateStyleActions,
         RefreshJobStyleActions: refreshJobStyleActions,
         RefreshAdvancedStyleActions: refreshAdvancedStyleActions,
+        RefreshStandardStyleActions: refreshStandardStyleActions,
         PopulateGearActions: populateGearActions,
         RemoveStyleActions: removeStyleActions,
         SetCustomTechnique: setCustomTechnique,

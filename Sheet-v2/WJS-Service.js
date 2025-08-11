@@ -679,7 +679,26 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.attrHandler.addUpdate(this.getVariable("TechFlavorText"), displayData.flavorText);
 		}
 		if (displayData.effects.length > 0) {
-			this.addTechniqueEffects(displayData.effects);
+			this.addTechniqueEffects(displayData.effects, "TechEffect");
+		}
+		if (displayData.secondaryEffectName != "") {
+			let def = WuxDef.Get(displayData.secondaryEffectName);
+			this.attrHandler.addUpdate(this.getVariable("TechSEffectTitle", "name"), def.getTitle());
+			this.attrHandler.addUpdate(this.getVariable("TechSEffectTitle", "desc"), def.getDescription());
+		}
+		if (displayData.secondaryEffectDesc != "") {
+			this.attrHandler.addUpdate(this.getVariable("TechSEffectTitle"), displayData.secondaryEffectDesc);
+		}
+		if (displayData.secondaryEffects.length > 0) {
+			this.addTechniqueEffects(displayData.secondaryEffects, "TechSEffect");
+		}
+		if (displayData.endEffectName != "") {
+			let def = WuxDef.Get(displayData.endEffectName);
+			this.attrHandler.addUpdate(this.getVariable("TechEEffectTitle", "name"), def.getTitle());
+			this.attrHandler.addUpdate(this.getVariable("TechEEffectTitle", "desc"), def.getDescription());
+		}
+		if (displayData.endEffectDesc != "") {
+			this.attrHandler.addUpdate(this.getVariable("TechEEffectTitle"), displayData.endEffectDesc);
 		}
 		if (displayData.definitions.length > 0) {
 			this.addDefinitions(displayData.definitions, this.getVariable("TechDef"), 3);
@@ -692,18 +711,18 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.attrHandler.addUpdate(this.getVariableWithoutBase("Action_Use"), displayData.getRollTemplate(true));
 		}
 	}
-	addTechniqueEffects (effects) {
+	addTechniqueEffects (effects, attribute) {
 		let incrementer = 0;
 		let attrSetter = this;
 		effects.forEach(function (effect) {
 			if (effect.check != undefined) {
-				attrSetter.attrHandler.addUpdate(attrSetter.getVariable(`TechEffect`, `${incrementer}name`), effect.check);
-				attrSetter.attrHandler.addUpdate(attrSetter.getVariable(`TechEffect`, `${incrementer}desc`), effect.checkDescription);
+				attrSetter.attrHandler.addUpdate(attrSetter.getVariable(attribute, `${incrementer}name`), effect.check);
+				attrSetter.attrHandler.addUpdate(attrSetter.getVariable(attribute, `${incrementer}desc`), effect.checkDescription);
 
 				if (effect.effects != undefined) {
 					effect.effects.forEach(function (desc) {
 						if (desc != undefined) {
-							attrSetter.attrHandler.addUpdate(attrSetter.getVariable(`TechEffect`, `${incrementer}`), desc);
+							attrSetter.attrHandler.addUpdate(attrSetter.getVariable(attribute, `${incrementer}`), desc);
 							incrementer++;
 						}
 					});

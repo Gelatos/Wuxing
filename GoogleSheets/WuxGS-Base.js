@@ -1444,20 +1444,29 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         </div>
                     </div>
                     
-                    <div class="wuxFeatureEffectsBlock">
-                        ${addTechEffect(0)}
-                        ${addTechEffect(1)}
-                        ${addTechEffect(2)}
-                        ${addTechEffect(3)}
-                        ${addTechEffect(4)}
-                        ${addTechEffect(5)}
-                        ${addTechEffect(6)}
-                        ${addTechEffect(7)}
-                        ${addTechEffect(8)}
-                        ${addTechEffect(9)}
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechEffect", 0)}" value="0" />
+                    <div class="wuxHiddenField">
+                        <div class="wuxFeatureEffectsBlock">
+                            ${addBasicTechEffects()}
+                        </div>
                     </div>
                     
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechDef", 0)}" value="0" />
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechSEffectTitle", "")}" value="0" />
+                    <div class="wuxHiddenField">
+                        <div class="wuxFeatureSecondaryEffectsBlock">
+                            ${addTechEffect("TechSEffectTitle", "", "wuxFeatureMajorEffectHeader", "wuxFeatureMajorEffectBlock")}
+                            ${addSecondaryTechEffects()}
+                        </div>
+                    <div
+                    
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechEEffectTitle", "")}" value="0" />
+                    <div class="wuxHiddenField">
+                        <div class="wuxFeatureEndEffectsBlock">
+                            ${addTechEffect("TechEEffectTitle", "", "wuxFeatureMajorEffectHeader", "wuxFeatureMajorEffectBlock")}
+                        </div>
+                    <div
+                    
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("Tech", 0)}" value="0" />
                     <div class="wuxHiddenField">
                                 <div class="wuxFeatureFunctionBlock">
                                     <div class="wuxFeatureFunctionBlockRow">
@@ -1494,24 +1503,46 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     </div>`;
                 },
 
-                addTechEffect = function (index) {
-                    return `<input type="hidden" name="${getActionTypeAttribute("TechEffect", `${index}desc`)}" value="0" />
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechEffect", `${index}name`)}" value="0" />
+                addBasicTechEffects = function () {
+                    let contents = "";
+                    for (let i = 0; i < 10; i++) {
+                        contents += addTechEffect("TechEffect", i);
+                    }
+                    return contents;
+                },
+
+                addSecondaryTechEffects = function () {
+                    let contents = "";
+                    for (let i = 0; i < 10; i++) {
+                        contents += addTechEffect("TechSEffect", i);
+                    }
+                    return contents;
+                },
+
+                addTechEffect = function (attribute, index, headerClass, descriptionClass) {
+                    if (headerClass === undefined) {
+                        headerClass = "wuxFeatureCheckHeader";
+                    }
+                    if (descriptionClass === undefined) {
+                        descriptionClass = "wuxFeatureCheckBlock";
+                    }
+                    return `<input type="hidden" name="${getActionTypeAttribute(attribute, `${index}desc`)}" value="0" />
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute(attribute, `${index}name`)}" value="0" />
                     <div class="wuxHiddenField">
-                        <div class="wuxFeatureCheckHeader">
+                        <div class="${headerClass}">
                             <span class="wuxTooltip">
-                                <span class="wuxTooltipText" name="${getActionTypeAttribute("TechEffect", `${index}name`)}">Name</span>
+                                <span class="wuxTooltipText" name="${getActionTypeAttribute(attribute, `${index}name`)}">Name</span>
                                 <div class="wuxTooltipContent">
-                                    <div class="wuxHeader2"><span name="${getActionTypeAttribute("TechEffect", `${index}name`)}">Name</span></div>
-                                    <span class="wuxDescription" name="${getActionTypeAttribute("TechEffect", `${index}desc`)}"></span>
+                                    <div class="wuxHeader2"><span name="${getActionTypeAttribute(attribute, `${index}name`)}">Name</span></div>
+                                    <span class="wuxDescription" name="${getActionTypeAttribute(attribute, `${index}desc`)}"></span>
                                 </div>
                             </span>
                         </div>
                     </div>
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechEffect", index)}" value="0" />
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute(attribute, index)}" value="0" />
                     <div class="wuxHiddenField">
-                        <div class="wuxFeatureCheckBlock">
-                            <span class="wuxFeatureCheckBlockRow" name="${getActionTypeAttribute("TechEffect", index)}">Effect</span>
+                        <div class="${descriptionClass}">
+                            <span class="wuxFeatureCheckBlockRow" name="${getActionTypeAttribute(attribute, index)}">Effect</span>
                         </div>
                     </div>`;
                 },
@@ -1725,19 +1756,28 @@ var DisplayPopups = DisplayPopups || (function () {
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="wuxFeatureEffectsBlock">
-                                ${addTechEffect(0)}
-                                ${addTechEffect(1)}
-                                ${addTechEffect(2)}
-                                ${addTechEffect(3)}
-                                ${addTechEffect(4)}
-                                ${addTechEffect(5)}
-                                ${addTechEffect(6)}
-                                ${addTechEffect(7)}
-                                ${addTechEffect(8)}
-                                ${addTechEffect(9)}
+                    
+                            <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechEffect", 0)}" value="0" />
+                            <div class="wuxHiddenField">
+                                <div class="wuxFeatureEffectsBlock">
+                                    ${addBasicTechEffects()}
+                                </div>
                             </div>
+                            
+                            <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechSEffectTitle", "")}" value="0" />
+                            <div class="wuxHiddenField">
+                                <div class="wuxFeatureSecondaryEffectsBlock">
+                                    ${addTechEffect("TechSEffectTitle", "", "wuxFeatureMajorEffectHeader", "wuxFeatureMajorEffectBlock")}
+                                    ${addSecondaryTechEffects()}
+                                </div>
+                            <div
+                            
+                            <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechEEffectTitle", "")}" value="0" />
+                            <div class="wuxHiddenField">
+                                <div class="wuxFeatureEndEffectsBlock">
+                                    ${addTechEffect("TechEEffectTitle", "", "wuxFeatureMajorEffectHeader", "wuxFeatureMajorEffectBlock")}
+                                </div>
+                            <div>
                             
                             <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechDef", 0)}" value="0" />
                             <div class="wuxHiddenField">
@@ -1778,24 +1818,46 @@ var DisplayPopups = DisplayPopups || (function () {
                     </div>`;
                 },
 
-                addTechEffect = function (index) {
-                    return `<input type="hidden" name="${getPopupAttribute("TechEffect", `${index}desc`)}" value="0" />
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechEffect", `${index}name`)}" value="0" />
+                addBasicTechEffects = function () {
+                    let contents = "";
+                    for (let i = 0; i < 10; i++) {
+                        contents += addTechEffect("TechEffect", i);
+                    }
+                    return contents;
+                },
+
+                addSecondaryTechEffects = function () {
+                    let contents = "";
+                    for (let i = 0; i < 10; i++) {
+                        contents += addTechEffect("TechSEffect", i);
+                    }
+                    return contents;
+                },
+
+                addTechEffect = function (attribute, index, headerClass, descriptionClass) {
+                    if (headerClass === undefined) {
+                        headerClass = "wuxFeatureCheckHeader";
+                    }
+                    if (descriptionClass === undefined) {
+                        descriptionClass = "wuxFeatureCheckBlock";
+                    }
+                    return `<input type="hidden" name="${getPopupAttribute(attribute, `${index}desc`)}" value="0" />
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute(attribute, `${index}name`)}" value="0" />
                     <div class="wuxHiddenField">
-                        <div class="wuxFeatureCheckHeader">
+                        <div class="${headerClass}">
                             <span class="wuxTooltip">
-                                <span class="wuxTooltipText" name="${getPopupAttribute("TechEffect", `${index}name`)}">Name</span>
+                                <span class="wuxTooltipText" name="${getPopupAttribute(attribute, `${index}name`)}">Name</span>
                                 <div class="wuxTooltipContent">
-                                    <div class="wuxHeader2"><span name="${getPopupAttribute("TechEffect", `${index}name`)}">Name</span></div>
-                                    <span class="wuxDescription" name="${getPopupAttribute("TechEffect", `${index}desc`)}"></span>
+                                    <div class="wuxHeader2"><span name="${getPopupAttribute(attribute, `${index}name`)}">Name</span></div>
+                                    <span class="wuxDescription" name="${getPopupAttribute(attribute, `${index}desc`)}"></span>
                                 </div>
                             </span>
                         </div>
                     </div>
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechEffect", index)}" value="0" />
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute(attribute, index)}" value="0" />
                     <div class="wuxHiddenField">
-                        <div class="wuxFeatureCheckBlock">
-                            <span class="wuxFeatureCheckBlockRow" name="${getPopupAttribute("TechEffect", index)}">Effect</span>
+                        <div class="${descriptionClass}">
+                            <span class="wuxFeatureCheckBlockRow" name="${getPopupAttribute(attribute, index)}">Effect</span>
                         </div>
                     </div>`;
                 },
@@ -1856,7 +1918,7 @@ var DisplayLoadingScreen = DisplayLoadingScreen || (function () {
             let popupActiveAttr = WuxDef.GetAttribute("Loading");
             let contents = `<div class="wuxPopupOverlay">
                 <div class="wuxLoading">
-                    Loading&nbsp;<img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif" height="100px" width="100px">
+                    Loading&nbsp;<img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif" height="100px" width="100px" alt="Loading...">
                 </div>
             </div>`;
 
@@ -2089,18 +2151,27 @@ var DisplayNpcSheet = DisplayNpcSheet || (function () {
                         </div>
                     </div>
                     
-                    <div class="wuxFeatureEffectsBlock">
-                        ${addTechEffect(0)}
-                        ${addTechEffect(1)}
-                        ${addTechEffect(2)}
-                        ${addTechEffect(3)}
-                        ${addTechEffect(4)}
-                        ${addTechEffect(5)}
-                        ${addTechEffect(6)}
-                        ${addTechEffect(7)}
-                        ${addTechEffect(8)}
-                        ${addTechEffect(9)}
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechEffect", 0)}" value="0" />
+                    <div class="wuxHiddenField">
+                        <div class="wuxFeatureEffectsBlock">
+                            ${addBasicTechEffects()}
+                        </div>
                     </div>
+                    
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechSEffectTitle", "")}" value="0" />
+                    <div class="wuxHiddenField">
+                        <div class="wuxFeatureSecondaryEffectsBlock">
+                            ${addTechEffect("TechSEffectTitle", "", "wuxFeatureMajorEffectHeader", "wuxFeatureMajorEffectBlock")}
+                            ${addSecondaryTechEffects()}
+                        </div>
+                    <div
+                    
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechEEffectTitle", "")}" value="0" />
+                    <div class="wuxHiddenField">
+                        <div class="wuxFeatureEndEffectsBlock">
+                            ${addTechEffect("TechEEffectTitle", "", "wuxFeatureMajorEffectHeader", "wuxFeatureMajorEffectBlock")}
+                        </div>
+                    <div>
                     
                     <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechDef", 0)}" value="0" />
                     <div class="wuxHiddenField">
@@ -2139,24 +2210,46 @@ var DisplayNpcSheet = DisplayNpcSheet || (function () {
                     </div>`;
                 },
 
-                addTechEffect = function (index) {
-                    return `<input type="hidden" name="${getActionTypeAttribute("TechEffect", `${index}desc`)}" value="0" />
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechEffect", `${index}name`)}" value="0" />
+                addBasicTechEffects = function () {
+                    let contents = "";
+                    for (let i = 0; i < 10; i++) {
+                        contents += addTechEffect("TechEffect", i);
+                    }
+                    return contents;
+                },
+
+                addSecondaryTechEffects = function () {
+                    let contents = "";
+                    for (let i = 0; i < 10; i++) {
+                        contents += addTechEffect("TechSEffect", i);
+                    }
+                    return contents;
+                },
+
+                addTechEffect = function (attribute, index, headerClass, descriptionClass) {
+                    if (headerClass === undefined) {
+                        headerClass = "wuxFeatureCheckHeader";
+                    }
+                    if (descriptionClass === undefined) {
+                        descriptionClass = "wuxFeatureCheckBlock";
+                    }
+                    return `<input type="hidden" name="${getActionTypeAttribute(attribute, `${index}desc`)}" value="0" />
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute(attribute, `${index}name`)}" value="0" />
                     <div class="wuxHiddenField">
-                        <div class="wuxFeatureCheckHeader">
+                        <div class="${headerClass}">
                             <span class="wuxTooltip">
-                                <span class="wuxTooltipText" name="${getActionTypeAttribute("TechEffect", `${index}name`)}">Name</span>
+                                <span class="wuxTooltipText" name="${getActionTypeAttribute(attribute, `${index}name`)}">Name</span>
                                 <div class="wuxTooltipContent">
-                                    <div class="wuxHeader2"><span name="${getActionTypeAttribute("TechEffect", `${index}name`)}">Name</span></div>
-                                    <span class="wuxDescription" name="${getActionTypeAttribute("TechEffect", `${index}desc`)}"></span>
+                                    <div class="wuxHeader2"><span name="${getActionTypeAttribute(attribute, `${index}name`)}">Name</span></div>
+                                    <span class="wuxDescription" name="${getActionTypeAttribute(attribute, `${index}desc`)}"></span>
                                 </div>
                             </span>
                         </div>
                     </div>
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechEffect", index)}" value="0" />
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute(attribute, index)}" value="0" />
                     <div class="wuxHiddenField">
-                        <div class="wuxFeatureCheckBlock">
-                            <span class="wuxFeatureCheckBlockRow" name="${getActionTypeAttribute("TechEffect", index)}">Effect</span>
+                        <div class="${descriptionClass}">
+                            <span class="wuxFeatureCheckBlockRow" name="${getActionTypeAttribute(attribute, index)}">Effect</span>
                         </div>
                     </div>`;
                 },

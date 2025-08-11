@@ -511,9 +511,9 @@ var ActionBuilder = ActionBuilder || (function () {
                 output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Forme_AdvancedSlot", i)}${WuxDef._refresh}`],
                     `WuxWorkerActions.RefreshAdvancedStyleActions(${i})`, false)}`;
             }
-            for (let i = 3; i <= 9; i++) {
+            for (let i = 1; i <= 9; i++) {
                 output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Forme_StyleSlot", i)}${WuxDef._refresh}`],
-                    `WuxWorkerActions.RefreshAdvancedStyleActions(${i})`, false)}`;
+                    `WuxWorkerActions.RefreshStandardStyleActions(${i+3})`, false)}`;
             }
             return output;
         }

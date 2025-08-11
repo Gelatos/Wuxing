@@ -544,6 +544,11 @@ class TechniqueData extends WuxDatabaseData {
         this.flavorText = json.flavorText;
         this.definitions = json.definitions;
         this.effects = new TechniqueEffectDatabase(json.effects);
+        this.secondEffectConditionName = json.secondEffectConditionName;
+        this.secondEffectConditionEffect = json.secondEffectConditionEffect;
+        this.secondaryEffects = new TechniqueEffectDatabase(json.secondaryEffects);
+        this.endEffectConditionName = json.endEffectConditionName;
+        this.endEffectConditionEffect = json.endEffectConditionEffect;
     }
 
     importSheets(dataArray) {
@@ -588,6 +593,11 @@ class TechniqueData extends WuxDatabaseData {
         i++;
         this.definitions = [];
         this.effects = new TechniqueEffectDatabase();
+        this.secondEffectConditionName = "";
+        this.secondEffectConditionEffect = "";
+        this.secondaryEffects = new TechniqueEffectDatabase();
+        this.endEffectConditionName = "";
+        this.endEffectConditionEffect = "";
         this.addEffect(new TechniqueEffect(dataArray.slice(i)));
     }
 
@@ -614,6 +624,12 @@ class TechniqueData extends WuxDatabaseData {
         this.flavorText = "";
         this.definitions = [];
         this.effects = new TechniqueEffectDatabase();
+        this.secondEffectConditionName = "";
+        this.secondEffectConditionEffect = "";
+        this.secondaryEffects = new TechniqueEffectDatabase();
+        this.endEffectConditionName = "";
+        this.endEffectConditionEffect = "";
+        
     }
 
     createDefinition(baseDefinition) {
@@ -640,6 +656,7 @@ class TechniqueData extends WuxDatabaseData {
     }
 
     addEffect(effect) {
+        
         switch (effect.type) {
             case "Definition":
                 effect.setName(`D${this.definitions.length}`);
@@ -647,14 +664,14 @@ class TechniqueData extends WuxDatabaseData {
                 break;
             case "Status":
                 effect.setName(`T${this.effects.keys.length}`);
-                this.effects.add(effect.name, effect);
+                this.addToEffectsDb(effect);
                 if (effect.effect != "") {
                     this.addDefinition(effect.effect);
                 }
                 break;
             case "Move":
-                effect.setName(`T${this.effects.keys.length}`);
-                this.effects.add(effect.name, effect);
+                effect.setName(`T${this.getEffectDbLength()}`);
+                this.addToEffectsDb(effect);
                 let moveTypes = ["Pushed", "Pulled", "ForceMove", "Fly", "Float", "FreeMove", "Teleport"];
                 if (!moveTypes.some(moveType => effect.subType.includes(moveType))) {
                     this.addDefinition(effect.subType);
@@ -663,17 +680,51 @@ class TechniqueData extends WuxDatabaseData {
                 moveDefs.forEach(moveDef => this.addDefinition(moveDef.name));
                 break;
             case "Terrain":
-                effect.setName(`T${this.effects.keys.length}`);
-                this.effects.add(effect.name, effect);
+                effect.setName(`T${this.getEffectDbLength()}`);
+                this.addToEffectsDb(effect);
                 this.addDefinition(effect.effect);
                 break;
             default:
-                effect.setName(`T${this.effects.keys.length}`);
-                this.effects.add(effect.name, effect);
+                effect.setName(`T${this.getEffectDbLength()}`);
+                switch (effect.defense) {
+                    case "TechOnEnter":
+                    case "TechNewTargets":
+                    case "TechNewOnEnter":
+                        this.secondEffectConditionName = effect.defense;
+                        this.secondEffectConditionEffect = effect.effect;
+                        break;
+                    case "TechOnRound":
+                    case "TechOnTurn":
+                    case "TechOnEndFocus":
+                        this.endEffectConditionName = effect.defense;
+                        this.endEffectConditionEffect = effect.effect;
+                        break;
+                    default:
+                        this.addToEffectsDb(effect);
+                        break;
+                }
                 break;
         }
         if (effect.traits != "") {
             this.addDefinition(`Trait_${effect.traits}`);
+        }
+    }
+    
+    getEffectDbLength() {
+        if (this.secondaryEffects != undefined && this.secondaryEffects != "") {
+            return this.secondaryEffects.keys.length;
+        }
+        else {
+            return this.effects.keys.length;
+        }
+    }
+    
+    addToEffectsDb(effect) {
+        if (this.secondaryEffects != "") {
+            this.secondaryEffects.add(effect.name, effect);
+        }
+        else {
+            this.effects.add(effect.name, effect);
         }
     }
 
@@ -681,10 +732,6 @@ class TechniqueData extends WuxDatabaseData {
         if (!this.definitions.includes(definition)) {
             this.definitions.push(definition);
         }
-    }
-
-    getUseTech() {
-        return `!utech ${this.formatTechniqueForSandbox()}`;
     }
 
     formatTechniqueForSandbox() {
@@ -828,6 +875,67 @@ class TechniqueResources extends dbObj {
         super.createEmpty();
         this.name = "";
         this.resourceCost = "";
+    }
+
+    sanitizeSheetRollAction(sheetRoll) {
+        sheetRoll = sheetRoll.replace(/"/g, "%%");
+        sheetRoll = sheetRoll.replace(/:/g, "&&");
+        sheetRoll = sheetRoll.replace(/%/g, "&#37;");
+        sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
+        sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
+        sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
+        sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
+        sheetRoll = sheetRoll.replace(/@/g, "&#64;");
+        sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
+        sheetRoll = sheetRoll.replace(/]/g, "&#93;");
+        sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
+        sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
+        return sheetRoll;
+    }
+
+    unsanitizeSheetRollAction(jsonString) {
+        jsonString = jsonString.replace(/%%/g, '"');
+        jsonString = jsonString.replace(/&&/g, ":");
+        return JSON.parse(jsonString);
+    }
+
+    importSandboxJson(jsonString) {
+        this.importJson(this.unsanitizeSheetRollAction(jsonString));
+    }
+}
+
+class TechniqueUseEffect extends dbObj {
+    importJson(json) {
+        this.name = json.name;
+        this.skill = json.skill;
+        this.effects = new TechniqueEffectDatabase(json.effects);
+    }
+    
+    importSheets(dataArray) {
+        this.createEmpty();
+        let i = 0;
+        this.name = "" + dataArray[i];
+        i++;
+        this.skill = "" + dataArray[i];
+        i++;
+        this.effects = new TechniqueEffectDatabase();
+    }
+    
+    import(name, skill, effects) {
+        this.name = name;
+        this.skill = skill;
+        if (effects != undefined) {
+            this.effects = effects;
+        } else {
+            this.effects = new TechniqueEffectDatabase();
+        }
+    }
+    
+    createEmpty() {
+        super.createEmpty();
+        this.name = "";
+        this.skill = "";
+        this.effects = new TechniqueEffectDatabase();
     }
 
     sanitizeSheetRollAction(sheetRoll) {
@@ -1944,17 +2052,31 @@ class TechniqueDisplayData {
     }
 
     setEffects(technique) {
-        this.effects = [];
         let techDisplayData = this;
+        techDisplayData.effects = [];
+        techDisplayData.iterateTechniqueEffects(technique.effects, function (effectData) {
+            techDisplayData.effects.push(effectData);
+        });
+        techDisplayData.secondaryEffectName = technique.secondEffectConditionName;
+        techDisplayData.secondaryEffectDesc = technique.secondEffectConditionEffect;
+        techDisplayData.secondaryEffects = [];
+        techDisplayData.iterateTechniqueEffects(technique.secondaryEffects, function (effectData) {
+            techDisplayData.secondaryEffects.push(effectData);
+        });
+        techDisplayData.endEffectName = technique.endEffectConditionName;
+        techDisplayData.endEffectDesc = technique.endEffectConditionEffect;
+    }
+    
+    iterateTechniqueEffects(effectDictionary, callback) {
         let filteredTechniqueEffects = [];
         let defense = "";
-        technique.effects.iterate(function (effect) {
+        effectDictionary.iterate(function (effect) {
             if (effect.defense == defense) {
                 filteredTechniqueEffects.push(effect);
             }
             else {
                 if (filteredTechniqueEffects.length > 0) {
-                    techDisplayData.effects.push(new TechniqueEffectDisplayData(filteredTechniqueEffects));
+                    callback(new TechniqueEffectDisplayData(filteredTechniqueEffects));
                     filteredTechniqueEffects = [];
                 }
                 filteredTechniqueEffects.push(effect);
@@ -1962,7 +2084,7 @@ class TechniqueDisplayData {
             }
         });
         if (filteredTechniqueEffects.length > 0) {
-            techDisplayData.effects.push(new TechniqueEffectDisplayData(filteredTechniqueEffects));
+            callback(new TechniqueEffectDisplayData(filteredTechniqueEffects));
         }
     }
 
@@ -1985,6 +2107,11 @@ class TechniqueDisplayData {
 
         this.flavorText = "";
         this.effects = [];
+        this.secondaryEffectName = "";
+        this.secondaryEffectDesc = "";
+        this.secondaryEffects = [];
+        this.endEffectName = "";
+        this.endEffectDesc = "";
         this.definitions = [];
     }
 
@@ -2024,7 +2151,19 @@ class TechniqueDisplayData {
                 let consumeData = new TechniqueResources([this.technique.name, this.technique.resourceCost]);
                 output += `{{consumeData=!ctech ${consumeData.sanitizeSheetRollAction(JSON.stringify(consumeData))}$$@{${WuxDef.GetVariable("SheetName")}}}}`;
             }
-            output += `{{targetData=${this.technique.getUseTech()}}}`;
+            if (this.technique.effects.keys.length > 0) {
+                let effectData = new TechniqueUseEffect();
+                effectData.import(this.technique.name, this.technique.skill, this.technique.effects);
+                output += `{{targetData=!utech ${effectData.sanitizeSheetRollAction(JSON.stringify(effectData))}$$@{${WuxDef.GetVariable("SheetName")}}}}`;
+            }
+            if (this.technique.secondaryEffects.keys.length > 0) {
+                let effectData = new TechniqueUseEffect();
+                effectData.import(this.technique.name, this.technique.skill, this.technique.secondaryEffects);
+                output += `{{targetData2=!utech ${effectData.sanitizeSheetRollAction(JSON.stringify(effectData))}$$@{${WuxDef.GetVariable("SheetName")}}}}`;
+            }
+            if (this.technique.skill != "") {
+                output += "{{hascheck=1}}";
+            }
         }
 
         return `&{template:technique} ${this.sanitizeSheetRollAction(output.trim())}`;
@@ -2040,13 +2179,34 @@ class TechniqueDisplayData {
 
     rollTemplateEffects() {
         let output = "";
+        output += this.iterateRollTemplateEffects(this.effects, "Effect");
+        if (this.secondaryEffectName != "") {
+            let def = WuxDef.Get(`Title_${this.secondaryEffectName}`);
+            output += `{{SEffectName=${def.getTitle()}}}{{SEffectDesc=${def.getDescription()}}}`;
+        }
+        if (this.secondaryEffectDesc != "") {
+            output += `{{SEffect=${this.secondaryEffectDesc}}}`;
+        }
+        output += this.iterateRollTemplateEffects(this.secondaryEffects, "SEffect");
+        if (this.endEffectName != "") {
+            let def = WuxDef.Get(`Title_${this.endEffectName}`);
+            output += `{{EEffectName=${def.getTitle()}}}{{EEffectDesc=${def.getDescription()}}}`;
+        }
+        if (this.endEffectDesc != "") {
+            output += `{{EEffect=${this.secondaryEffectDesc}}}`;
+        }
+        return output;
+    }
+    
+    iterateRollTemplateEffects(effectArray, prefix) {
+        let output = "";
         let incrementer = 0;
-        this.effects.forEach(function (effect) {
+        effectArray.forEach(function (effect) {
             if (effect.check != undefined) {
-                output += `{{Effect${incrementer}Name=${effect.check}}}{{Effect${incrementer}Desc=${effect.checkDescription}}}`;
+                output += `{{${prefix}${incrementer}Name=${effect.check}}}{{${prefix}${incrementer}Desc=${effect.checkDescription}}}`;
                 if (effect.effects != undefined) {
                     effect.effects.forEach(function (desc) {
-                        output += `{{Effect${incrementer}=${desc}}}`;
+                        output += `{{${prefix}${incrementer}=${desc}}}`;
                         incrementer++;
                     });
                 }
@@ -2112,6 +2272,11 @@ class TechniqueEffectDisplayData {
             }
             else if (defense == "TechNewTargets") {
                 definition = WuxDef.Get("Title_TechNewTargets");
+                this.check = definition.getTitle();
+                this.checkDescription = definition.getDescription();
+            }
+            else if (defense == "TechNewOnEnter") {
+                definition = WuxDef.Get("Title_TechNewOnEnter");
                 this.check = definition.getTitle();
                 this.checkDescription = definition.getDescription();
             }
@@ -4005,6 +4170,14 @@ var Format = Format || (function () {
                 roman = (key[+digits.pop() + (i * 10)] || "") + roman;
             return Array(+digits.join("") + 1).join("M") + roman;
         },
+        
+        getDefinitionName = function (baseDefinitionName, definitionName) {
+            if (baseDefinitionName == undefined || baseDefinitionName == "") {
+                return definitionName;
+            }
+            return `${WuxDef.GetAbbreviation(baseDefinitionName)}_${definitionName}`;
+
+        },
 
         // Array Formatting
         // ------------------------
@@ -4110,6 +4283,7 @@ var Format = Format || (function () {
         ToUpperCamelCase: toUpperCamelCase,
         ToFieldName: toFieldName,
         Romanize: romanize,
+        GetDefinitionName: getDefinitionName,
         StringToArray: stringToArray,
         ArrayToString: arrayToString,
         SortArrayDecrementing: sortArrayDecrementing,

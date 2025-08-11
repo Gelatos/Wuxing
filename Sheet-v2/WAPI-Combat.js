@@ -450,6 +450,8 @@ class TechniqueUseResolver extends TechniqueResolverData
     createEmpty() {
         super.createEmpty();
         this.technique = {};
+        this.skillCheck = 0;
+        this.advantage = 0;
         this.senderTokenEffect = {};
         this.targetTokenEffect = {};
     }
@@ -457,8 +459,8 @@ class TechniqueUseResolver extends TechniqueResolverData
     initializeData(contentData) {
         super.initializeData(contentData);
         this.senderTokenEffect = new TokenTargetEffectsData(this.senderTokenTargetData);
-        this.targetTokenEffect = new TokenTargetEffectsData(TargetReference.GetTokenTargetData(contentData[2]));
-        Debug.Log(`[TechniqueUseResolver] targeting ${this.targetTokenEffect.tokenTargetData.displayName} with technique ${this.technique.name}\n${JSON.stringify(this.technique)}`);
+        this.targetTokenEffect = new TokenTargetEffectsData(TargetReference.GetTokenTargetData(contentData[3]));
+        this.advantage = ParseIntValue(contentData[2]);
         this.addInitialMessage();
     }
 
@@ -472,7 +474,29 @@ class TechniqueUseResolver extends TechniqueResolverData
     }
     
     run() {
+        let techUseResolver = this;
+        let senderAttributeHandler = new SandboxAttributeHandler(this.senderTokenEffect.tokenTargetData.charId);
+        let targetAttributeHandler = new SandboxAttributeHandler(this.targetTokenEffect.tokenTargetData.charId);
+
+        techUseResolver.tryGetSkillCheck(techUseResolver, senderAttributeHandler);
+        senderAttributeHandler.run();
+        targetAttributeHandler.run();
+    }
+    
+    tryGetSkillCheck(techUseResolver, senderAttributeHandler) {
+        if (techUseResolver.technique.skill == "") {
+            return;
+        }
         
+        let skillCheckVar = WuxDef.GetVariable(Format.GetDefinitionName("Skill", techUseResolver.technique.skill));
+        senderAttributeHandler.addMod(skillCheckVar);
+        
+        senderAttributeHandler.addGetAttrCallback(function (attrHandler) {
+            let skillValue = attrHandler.parseInt(skillCheckVar);
+            techUseResolver.skillCheck = new DieRoll();
+            techUseResolver.skillCheck.rollCheck(techUseResolver.advantage);
+            techUseResolver.skillCheck.addModToRoll(skillValue);
+        });
     }
 }
 

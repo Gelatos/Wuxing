@@ -123,7 +123,8 @@
 			{{/Trait0}}
 		</div>
 		{{/type-FunctionBlock}}
-		
+
+        {{#Effect0}}
 		<div class="wuxFeatureEffectsBlock">
 			<div class="wuxFeatureCheckHeader">
                 <span class="wuxTooltip">
@@ -168,6 +169,74 @@
             <div class="wuxFeatureCheckBlock"><span class="wuxFeatureCheckBlockRow">{{Effect5}}</span></div>
             {{/Effect5}}
 		</div>
+        {{/Effect0}}
+        {{#SEffectName}}
+            <div class="wuxFeatureSecondaryEffectsBlock">
+                <div class="wuxFeatureMajorEffectHeader">
+                <span class="wuxTooltip">
+                    <span class="wuxTooltipText">{{SEffectName}}</span>
+                    <div class="wuxTooltipContent"><div class="wuxHeader2">{{SEffectName}}</div><span class="wuxDescription">{{SEffectDesc}}</span></div>
+                </span>
+                </div>
+                {{#SEffect}}
+                <div class="wuxFeatureMajorEffectBlock"><span>{{SEffect}}</span></div>
+                {{/SEffect}}
+                
+                <div class="wuxFeatureCheckHeader">
+                <span class="wuxTooltip">
+                    <span class="wuxTooltipText">{{SEffect0Name}}</span>
+                    <div class="wuxTooltipContent"><div class="wuxHeader2">{{SEffect0Name}}</div><span class="wuxDescription">{{SEffect0Desc}}</span></div>
+                </span>
+                </div>
+                <div class="wuxFeatureCheckBlock"><span class="wuxFeatureCheckBlockRow">{{SEffect0}}</span></div>
+                {{#SEffect1Name}}
+                <div class="wuxFeatureCheckHeader"><span class="wuxTooltip"><span class="wuxTooltipText">{{SEffect1Name}}</span>
+            <div class="wuxTooltipContent"><div class="wuxHeader2">{{SEffect1Name}}</div><span class="wuxDescription">{{SEffect1Desc}}</span></div></span></div>
+                {{/SEffect1Name}}
+                {{#SEffect1}}
+                <div class="wuxFeatureCheckBlock"><span class="wuxFeatureCheckBlockRow">{{SEffect1}}</span></div>
+                {{/SEffect1}}
+                {{#SEffect2Name}}
+                <div class="wuxFeatureCheckHeader"><span class="wuxTooltip"><span class="wuxTooltipText">{{SEffect2Name}}</span>
+            <div class="wuxTooltipContent"><div class="wuxHeader2">{{SEffect2Name}}</div><span class="wuxDescription">{{SEffect2Desc}}</span></div></span></div>
+                {{/SEffect2Name}}
+                {{#SEffect2}}
+                <div class="wuxFeatureCheckBlock"><span class="wuxFeatureCheckBlockRow">{{SEffect2}}</span></div>
+                {{/SEffect2}}
+                {{#SEffect3Name}}
+                <div class="wuxFeatureCheckHeader"><span class="wuxTooltip"><span class="wuxTooltipText">{{SEffect3Name}}</span>
+            <div class="wuxTooltipContent"><div class="wuxHeader2">{{SEffect3Name}}</div><span class="wuxDescription">{{SEffect3Desc}}</span></div></span></div>
+                {{/SEffect3Name}}
+                {{#SEffect3}}
+                <div class="wuxFeatureCheckBlock"><span class="wuxFeatureCheckBlockRow">{{SEffect3}}</span></div>
+                {{/SEffect3}}
+                {{#SEffect4Name}}
+                <div class="wuxFeatureCheckHeader"><span class="wuxTooltip"><span class="wuxTooltipText">{{SEffect4Name}}</span>
+            <div class="wuxTooltipContent"><div class="wuxHeader2">{{SEffect4Name}}</div><span class="wuxDescription">{{SEffect4Desc}}</span></div></span></div>
+                {{/SEffect4Name}}
+                {{#SEffect4}}
+                <div class="wuxFeatureCheckBlock"><span class="wuxFeatureCheckBlockRow">{{SEffect4}}</span></div>
+                {{/SEffect4}}
+                {{#SEffect5Name}}
+                <div class="wuxFeatureCheckHeader"><span class="wuxTooltip"><span class="wuxTooltipText">{{SEffect5Name}}</span>
+            <div class="wuxTooltipContent"><div class="wuxHeader2">{{SEffect5Name}}</div><span class="wuxDescription">{{SEffect5Desc}}</span></div></span></div>
+                {{/SEffect5Name}}
+                {{#SEffect5}}
+                <div class="wuxFeatureCheckBlock"><span class="wuxFeatureCheckBlockRow">{{SEffect5}}</span></div>
+                {{/SEffect5}}
+            </div>
+        {{/SEffectName}}
+        {{#EEffect}}
+            <div class="wuxFeatureEndEffectsBlock">
+                <div class="wuxFeatureMajorEffectHeader">
+                <span class="wuxTooltip">
+                    <span class="wuxTooltipText">{{EEffectName}}</span>
+                    <div class="wuxTooltipContent"><div class="wuxHeader2">{{EEffectName}}</div><span class="wuxDescription">{{EEffectDesc}}</span></div>
+                </span>
+                </div>
+                <div class="wuxFeatureMajorEffectBlock"><span>{{EEffect}}</span></div>
+            </div>
+        {{/EEffect}}
         {{#Def0}}
 		<div class="wuxFeatureFunctionBlock">
             <div class="wuxFeatureFunctionBlockRow">
@@ -190,12 +259,11 @@
             </div>
         </div>
         {{/Def0}}
-		{{#targetData}}
         <div>
             {{#consumeData}}[Consume Resources]({{consumeData}}){{/consumeData}}
-            [Choose Targets]({{targetData}}$$@{target||token_id})
+            {{#targetData}}[Target Effects]({{targetData}}$${{^hascheck}}0{{/hascheck}}{{#hascheck}}?{Advantage|0}{{/hascheck}}$$@{target||token_id}){{/targetData}}
+            {{#targetData2}}[2nd Target Effects]({{targetData2}}$${{^hascheck}}0{{/hascheck}}{{#hascheck}}?{Advantage|0}{{/hascheck}}$$@{target||token_id}){{/targetData2}}
         </div>
-        {{/targetData}}
 
 
 	</rolltemplate>
