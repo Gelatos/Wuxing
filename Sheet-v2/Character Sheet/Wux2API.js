@@ -5849,6 +5849,10 @@ class Dictionary {
         this.keys = keys;
         this.values = values;
     }
+    
+    length() {
+        return this.keys.length;
+    }
 }
 
 class DatabaseFilterData {
@@ -6346,14 +6350,9 @@ class TechniqueData extends WuxDatabaseData {
         i++;
         this.flavorText = "" + dataArray[i];
         i++;
-        this.definitions = [];
-        this.effects = new TechniqueEffectDatabase();
-        this.secondEffectConditionName = "";
-        this.secondEffectConditionEffect = "";
-        this.secondaryEffects = new TechniqueEffectDatabase();
-        this.endEffectConditionName = "";
-        this.endEffectConditionEffect = "";
-        this.addEffect(new TechniqueEffect(dataArray.slice(i)));
+        
+        this.techniqueEffect = new TechniqueEffect(dataArray.slice(i));
+        this.addEffect(this.techniqueEffect);
     }
 
     createEmpty() {
@@ -6384,7 +6383,7 @@ class TechniqueData extends WuxDatabaseData {
         this.secondaryEffects = new TechniqueEffectDatabase();
         this.endEffectConditionName = "";
         this.endEffectConditionEffect = "";
-        
+        this.techniqueEffect = {};
     }
 
     createDefinition(baseDefinition) {
@@ -6401,13 +6400,7 @@ class TechniqueData extends WuxDatabaseData {
     }
 
     importEffectsFromTechnique(technique) {
-        let baseTechnique = this;
-        technique.effects.iterate(function (effect) {
-            baseTechnique.addEffect(effect);
-        });
-        technique.definitions.forEach(function (definition) {
-            baseTechnique.addDefinition(definition);
-        });
+        this.addEffect(technique.techniqueEffect);
     }
 
     addEffect(effect) {
@@ -6416,14 +6409,14 @@ class TechniqueData extends WuxDatabaseData {
             case "Definition":
                 effect.setName(`D${this.definitions.length}`);
                 this.addDefinition(effect.effect);
-                break;
+                return;
             case "Status":
-                effect.setName(`T${this.effects.keys.length}`);
+                effect.setName(`T${this.getEffectDbLength()}`);
                 this.addToEffectsDb(effect);
                 if (effect.effect != "") {
                     this.addDefinition(effect.effect);
                 }
-                break;
+                return;
             case "Move":
                 effect.setName(`T${this.getEffectDbLength()}`);
                 this.addToEffectsDb(effect);
@@ -6433,49 +6426,48 @@ class TechniqueData extends WuxDatabaseData {
                 }
                 let moveDefs = effect.formula.getDefinitions();
                 moveDefs.forEach(moveDef => this.addDefinition(moveDef.name));
-                break;
+                return;
             case "Terrain":
                 effect.setName(`T${this.getEffectDbLength()}`);
                 this.addToEffectsDb(effect);
                 this.addDefinition(effect.effect);
-                break;
+                return;
+        }
+
+        switch (effect.defense) {
+            case "TechOnEnter":
+            case "TechNewTargets":
+            case "TechNewOnEnter":
+                this.secondEffectConditionName = effect.defense;
+                this.secondEffectConditionEffect = effect.effect;
+                return;
+            case "TechOnRound":
+            case "TechOnTurn":
+            case "TechOnEndFocus":
+                this.endEffectConditionName = effect.defense;
+                this.endEffectConditionEffect = effect.effect;
+                return;
             default:
                 effect.setName(`T${this.getEffectDbLength()}`);
-                switch (effect.defense) {
-                    case "TechOnEnter":
-                    case "TechNewTargets":
-                    case "TechNewOnEnter":
-                        this.secondEffectConditionName = effect.defense;
-                        this.secondEffectConditionEffect = effect.effect;
-                        break;
-                    case "TechOnRound":
-                    case "TechOnTurn":
-                    case "TechOnEndFocus":
-                        this.endEffectConditionName = effect.defense;
-                        this.endEffectConditionEffect = effect.effect;
-                        break;
-                    default:
-                        this.addToEffectsDb(effect);
-                        break;
+                this.addToEffectsDb(effect);
+                if (effect.traits != "") {
+                    this.addDefinition(`Trait_${effect.traits}`);
                 }
-                break;
-        }
-        if (effect.traits != "") {
-            this.addDefinition(`Trait_${effect.traits}`);
+                return;
         }
     }
     
     getEffectDbLength() {
-        if (this.secondaryEffects != undefined && this.secondaryEffects != "") {
-            return this.secondaryEffects.keys.length;
+        if (this.secondEffectConditionName != "") {
+            return this.secondaryEffects.length();
         }
         else {
-            return this.effects.keys.length;
+            return this.effects.length();
         }
     }
     
     addToEffectsDb(effect) {
-        if (this.secondaryEffects != "") {
+        if (this.secondEffectConditionName != "") {
             this.secondaryEffects.add(effect.name, effect);
         }
         else {
@@ -6487,30 +6479,6 @@ class TechniqueData extends WuxDatabaseData {
         if (!this.definitions.includes(definition)) {
             this.definitions.push(definition);
         }
-    }
-
-    formatTechniqueForSandbox() {
-        this.displayname = ``;
-        this.sheetname = ``;
-        return `${this.sanitizeSheetRollAction(JSON.stringify(this))}$$@{${WuxDef.GetVariable("SheetName")}}`;
-    }
-
-    sanitizeSheetRollAction(sheetRoll) {
-        sheetRoll = sheetRoll.replace(/"/g, "%%");
-        sheetRoll = sheetRoll.replace(/:/g, "&&");
-        sheetRoll = sheetRoll.replace(/{/g, "<<");
-        sheetRoll = sheetRoll.replace(/}/g, ">>");
-        sheetRoll = sheetRoll.replace(/%/g, "&#37;");
-        sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
-        sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
-        sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
-        sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
-        sheetRoll = sheetRoll.replace(/@/g, "&#64;");
-        sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
-        sheetRoll = sheetRoll.replace(/]/g, "&#93;");
-        sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
-        sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
-        return sheetRoll;
     }
 
     unsanitizeSheetRollAction(jsonString) {
@@ -7936,19 +7904,20 @@ class TechniqueDisplayData {
         let output = "";
         output += this.iterateRollTemplateEffects(this.effects, "Effect");
         if (this.secondaryEffectName != "") {
-            let def = WuxDef.Get(`Title_${this.secondaryEffectName}`);
+            let def = WuxDef.Get(Format.GetDefinitionName("Title", this.secondaryEffectName));
             output += `{{SEffectName=${def.getTitle()}}}{{SEffectDesc=${def.getDescription()}}}`;
         }
         if (this.secondaryEffectDesc != "") {
             output += `{{SEffect=${this.secondaryEffectDesc}}}`;
         }
         output += this.iterateRollTemplateEffects(this.secondaryEffects, "SEffect");
+        
         if (this.endEffectName != "") {
             let def = WuxDef.Get(`Title_${this.endEffectName}`);
             output += `{{EEffectName=${def.getTitle()}}}{{EEffectDesc=${def.getDescription()}}}`;
         }
         if (this.endEffectDesc != "") {
-            output += `{{EEffect=${this.secondaryEffectDesc}}}`;
+            output += `{{EEffect=${this.endEffectDesc}}}`;
         }
         return output;
     }
@@ -11929,7 +11898,7 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Trait_Resonator":{"name":"Trait_Resonator","fieldName":"resonator","group":"Trait","description":"","variable":"trt-resonator{0}","title":"Kinesis","subGroup":"Technique Trait","descriptions":["You must have an elemental aspect to use this technique. This technique requires a material source, usually required to be an object. This technique imparts ether into the target, allowing you to manipulate it in some way. Usually this means it can be moved or activated. ","You grant the target the Resonant trait with you as a source. Other characters are prevented from using a resonating technique on the target while you are the source. If the object is in your space or adjacent to you, you are treated as if you are holding the object. The Resonant trait is removed at the start of the next round unless you maintain focus, or if you dismiss it freely. ","In order to affect a material with this technique, you must have an affinity to the material."],
+            "Trait_Resonator":{"name":"Trait_Resonator","fieldName":"resonator","group":"Trait","description":"","variable":"trt-resonator{0}","title":"Resonator","subGroup":"Technique Trait","descriptions":["You must have an elemental aspect to use this technique. This technique requires a material source, usually required to be an object. This technique imparts ether into the target, allowing you to manipulate it in some way. Usually this means it can be moved or activated. ","You grant the target the Resonant trait with you as a source. Other characters are prevented from using a resonating technique on the target while you are the source. If the object is in your space or adjacent to you, you are treated as if you are holding the object. The Resonant trait is removed at the start of the next round unless you maintain focus, or if you dismiss it freely. ","In order to affect a material with this technique, you must have an affinity to the material."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
@@ -14453,7 +14422,7 @@ var WuxDef = WuxDef || (function() {
             "Job_Bard":{"name":"Job_Bard","fieldName":"job_bard","group":"Job","description":"","variable":"job-bard{0}","title":"Bard","subGroup":"Waymaker","descriptions":["Bards are amazing performers that inspire their allies. They have many abilities that grant advantage on skill checks allowing their allies to act at their best capabilities. They also have a great ability to heal Will.\nA bard works best when it can inspire others, so having additional ways to grant advantages is usually a boon for the bard. Unlike many Advocate jobs, a bard can function well in a battlefield but you may want to find ways to bolster its survivability when doing this.\nA bard benefits from having training in the Inspire skill as many of its techniques unlock additional effects with a good check. As such, bards tend to appreciate a high conviction attribute."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","requirements":"None","defenses":"Defs:Warding(+).Reflex(+) Sens:Resolve(++).Guile(+)"},
+                "isResource":"","requirements":"None","defenses":"Defs:Warding(++).Reflex(+) Sens:Resolve(++).Guile(+)"},
             "Job_Medic":{"name":"Job_Medic","fieldName":"job_medic","group":"Job","description":"","variable":"job-medic{0}","title":"Medic","subGroup":"Waymaker","descriptions":["The medic is a medical practitioner and expert healer. They provide action efficient healing with Medkits and can remove conditions easily.\nWhile the medic can heal with its own techniques, it lacks any kind of range with its skills. Longer range healing or methods to increase their movement can help with this constraint.\nMedics benefit from having training in the fortify skill as they can provide extra effects with this skill. As such, the intuition attribute can help bolster their heal checks. As with all waymakers, medics also appreciate a good conviction score to improve their willpower."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
@@ -14461,7 +14430,7 @@ var WuxDef = WuxDef || (function() {
             "Job_Spellwright":{"name":"Job_Spellwright","fieldName":"job_spellwright","group":"Job","description":"","variable":"job-spellwright{0}","title":"Spellwright","subGroup":"Waymaker","descriptions":["A spellwright is a master of shaping magic which allows one to transmute material quickly into objects and structures. \nWhile a spellwright is able to perform marvelous feats to objects, they innately lack any techniques to create them. A spellwright needs access to techniques that will allow them to create objects and structures to make full use of their skills.\nThe shape skill is required to make full use of a spellwright's abilities. Naturally, they also enjoy a high body attribute to further bolster their shape skill. Otherwise, like many Waymakers, conviction is also a strong attribute."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","requirements":"None","defenses":"Defs:Brace(+).Warding(+) Sens:Resolve(++).Guile(+)"},
+                "isResource":"","requirements":"None","defenses":"Defs:Brace(++).Warding(+) Sens:Resolve(+).Guile(+)"},
             "Job_Empath":{"name":"Job_Empath","fieldName":"job_empath","group":"Job","description":"","variable":"job-empath{0}","title":"Empath","subGroup":"Advocate","descriptions":["An empath is an expert in helping others reduce the tension in their lives. They can help calm negative emotions and reduce damage against will, even stepping in when times are tough.\nWhile an empath can reduce the amount of incoming Will damage, they lack much to progress in a social conflict. Treat them as a defensive tool against aggressive will attacks.\nAs their name suggests, an empath benefits from the empathy skill as many of their techniques become more powerful with successful checks. Similarly, an empath enjoys a high intuition attribute to bolster their empathy skill."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
@@ -14565,7 +14534,7 @@ var WuxDef = WuxDef || (function() {
             "JStyle_Bard":{"name":"JStyle_Bard","fieldName":"jstyle_bard","group":"JobStyle","description":"","variable":"jbs-bard{0}","title":"Bard","subGroup":"Waymaker","descriptions":["Bards are amazing performers that inspire their allies. They have many abilities that grant advantage on skill checks allowing their allies to act at their best capabilities. They also have a great ability to heal Will.\nA bard works best when it can inspire others, so having additional ways to grant advantages is usually a boon for the bard. Unlike many Advocate jobs, a bard can function well in a battlefield but you may want to find ways to bolster its survivability when doing this.\nA bard benefits from having training in the Inspire skill as many of its techniques unlock additional effects with a good check. As such, bards tend to appreciate a high conviction attribute."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","requirements":"None","defenses":"Defs:Warding(+).Reflex(+) Sens:Resolve(++).Guile(+)"},
+                "isResource":"","requirements":"None","defenses":"Defs:Warding(++).Reflex(+) Sens:Resolve(++).Guile(+)"},
             "JStyle_Medic":{"name":"JStyle_Medic","fieldName":"jstyle_medic","group":"JobStyle","description":"","variable":"jbs-medic{0}","title":"Medic","subGroup":"Waymaker","descriptions":["The medic is a medical practitioner and expert healer. They provide action efficient healing with Medkits and can remove conditions easily.\nWhile the medic can heal with its own techniques, it lacks any kind of range with its skills. Longer range healing or methods to increase their movement can help with this constraint.\nMedics benefit from having training in the fortify skill as they can provide extra effects with this skill. As such, the intuition attribute can help bolster their heal checks. As with all waymakers, medics also appreciate a good conviction score to improve their willpower."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[]
@@ -14574,7 +14543,7 @@ var WuxDef = WuxDef || (function() {
             "JStyle_Spellwright":{"name":"JStyle_Spellwright","fieldName":"jstyle_spellwright","group":"JobStyle","description":"","variable":"jbs-spellwright{0}","title":"Spellwright","subGroup":"Waymaker","descriptions":["A spellwright is a master of shaping magic which allows one to transmute material quickly into objects and structures. \nWhile a spellwright is able to perform marvelous feats to objects, they innately lack any techniques to create them. A spellwright needs access to techniques that will allow them to create objects and structures to make full use of their skills.\nThe shape skill is required to make full use of a spellwright's abilities. Naturally, they also enjoy a high body attribute to further bolster their shape skill. Otherwise, like many Waymakers, conviction is also a strong attribute."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","requirements":"None","defenses":"Defs:Brace(+).Warding(+) Sens:Resolve(++).Guile(+)"},
+                "isResource":"","requirements":"None","defenses":"Defs:Brace(++).Warding(+) Sens:Resolve(+).Guile(+)"},
             "JStyle_Empath":{"name":"JStyle_Empath","fieldName":"jstyle_empath","group":"JobStyle","description":"","variable":"jbs-empath{0}","title":"Empath","subGroup":"Advocate","descriptions":["An empath is an expert in helping others reduce the tension in their lives. They can help calm negative emotions and reduce damage against will, even stepping in when times are tough.\nWhile an empath can reduce the amount of incoming Will damage, they lack much to progress in a social conflict. Treat them as a defensive tool against aggressive will attacks.\nAs their name suggests, an empath benefits from the empathy skill as many of their techniques become more powerful with successful checks. Similarly, an empath enjoys a high intuition attribute to bolster their empathy skill."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],

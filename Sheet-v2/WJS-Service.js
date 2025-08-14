@@ -681,8 +681,9 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		if (displayData.effects.length > 0) {
 			this.addTechniqueEffects(displayData.effects, "TechEffect");
 		}
-		if (displayData.secondaryEffectName != "") {
-			let def = WuxDef.Get(displayData.secondaryEffectName);
+		if (displayData.secondaryEffectName.trim() != "") {
+			let defName = Format.GetDefinitionName("Title", displayData.secondaryEffectName);
+			let def = WuxDef.Get(defName);
 			this.attrHandler.addUpdate(this.getVariable("TechSEffectTitle", "name"), def.getTitle());
 			this.attrHandler.addUpdate(this.getVariable("TechSEffectTitle", "desc"), def.getDescription());
 		}
@@ -692,8 +693,9 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		if (displayData.secondaryEffects.length > 0) {
 			this.addTechniqueEffects(displayData.secondaryEffects, "TechSEffect");
 		}
-		if (displayData.endEffectName != "") {
-			let def = WuxDef.Get(displayData.endEffectName);
+		if (displayData.endEffectName.trim() != "") {
+			let defName = Format.GetDefinitionName("Title", displayData.endEffectName);
+			let def = WuxDef.Get(defName);
 			this.attrHandler.addUpdate(this.getVariable("TechEEffectTitle", "name"), def.getTitle());
 			this.attrHandler.addUpdate(this.getVariable("TechEEffectTitle", "desc"), def.getDescription());
 		}
@@ -752,12 +754,21 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.clearDefinition("TechDef", 1);
 		this.clearDefinition("TechDef", 2);
 		this.clearDefinition("TechDef", 3);
+		this.attrHandler.addUpdate(this.getVariable("TechSEffectTitle", "name"), 0);
+		this.attrHandler.addUpdate(this.getVariable("TechSEffectTitle", "desc"), 0);
+		this.attrHandler.addUpdate(this.getVariable("TechSEffectTitle", ""), 0);
+		this.attrHandler.addUpdate(this.getVariable("TechEEffectTitle", "name"), 0);
+		this.attrHandler.addUpdate(this.getVariable("TechEEffectTitle", "desc"), 0);
+		this.attrHandler.addUpdate(this.getVariable("TechEEffectTitle", ""), 0);
 	}
 	clearTechEffects () {
 		for (let i = 0; i < 10; i++) {
 			this.attrHandler.addUpdate(this.getVariable("TechEffect", i), 0);
 			this.attrHandler.addUpdate(this.getVariable("TechEffect", `${i}name`), 0);
 			this.attrHandler.addUpdate(this.getVariable("TechEffect", `${i}desc`), "");
+			this.attrHandler.addUpdate(this.getVariable("TechSEffect", i), 0);
+			this.attrHandler.addUpdate(this.getVariable("TechSEffect", `${i}name`), 0);
+			this.attrHandler.addUpdate(this.getVariable("TechSEffect", `${i}desc`), "");
 		}
 	}
 }

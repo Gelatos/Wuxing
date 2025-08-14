@@ -546,11 +546,11 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150 wuxFlexTableItemGroup2");
                         },
-                        
+
                         addOpenedNotebookDisplay = function () {
                             let nameDef = WuxDef.Get("Note_OpenNotebook");
                             let actionDef = WuxDef.Get("Note_OpenNotebookActions");
-                            
+
                             return `${WuxSheetMain.Header(`${nameDef.getTitle()}`)}
                             <div class="wuxEquipableSubMenu">
                                 ${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), addSubmenuContentsOpenedNotebook())}
@@ -569,7 +569,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                                 ${WuxSheetMain.SubMenuOptionButton(reloadDef.getAttribute(), `<span>${reloadDef.getTitle()}</span>`)}
                             `;
                         },
-                        
+
                         addNotebookPagesDisplay = function () {
                             let repeatingDef = WuxDef.Get("NotebookPages");
                             return `
@@ -587,7 +587,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents += WuxSheetMain.Row("&nbsp;");
                             return contents;
                         },
-                        
+
                         addNotebookPageHeader = function () {
                             let deleteDef = WuxDef.Get("Note_PageDelete");
                             let templateDataDef = WuxDef.Get("Note_PageTemplateData");
@@ -599,7 +599,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                                     false,
                                     "wuxInfluenceType") +
                                 addPostButton() +
-                                WuxSheetMain.Button(deleteDef.getAttribute(), deleteDef.getTitle(), "wuxSmallButton wuxNotebookButton") + 
+                                WuxSheetMain.Button(deleteDef.getAttribute(), deleteDef.getTitle(), "wuxSmallButton wuxNotebookButton") +
                                 WuxSheetMain.CustomInput(
                                     "text",
                                     templateDataDef.getAttribute(),
@@ -615,11 +615,11 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                                 <span>${postDef.getTitle()}</span>
                             </button>`;
                         },
-                        
+
                         addNotebookPageContents = function () {
                             let contents = "";
                             let displayDef = WuxDef.Get("Note_PageDisplay");
-                            
+
                             contents += WuxSheet.PageDisplayInput(displayDef.getAttribute(), "0");
                             contents += WuxSheet.PageDisplay("0", addNotebookPageBasic());
                             contents += WuxSheet.PageDisplay("Character", addNotebookPageCharacter());
@@ -642,11 +642,11 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             for (let i = 0; i < languageFilters.length; i++) {
                                 languageFilters[i].variable = languageFilters[i].title;
                             }
-                            
+
                             let contentsDef = WuxDef.Get("Note_PageContents");
-                            
+
                             return `${WuxSheetMain.MultiRow(
-                                `${WuxSheetMain.CustomInput("text", charNameDef.getAttribute(), 
+                                `${WuxSheetMain.CustomInput("text", charNameDef.getAttribute(),
                                     "wuxInput wuxInlineBlock wuxWidth120", `placeholder="${charNameDef.getTitle()}"`)}
                                     ${WuxSheetMain.CustomInput("text", charEmoteDef.getAttribute(),
                                     "wuxInput wuxInlineBlock wuxWidth70", `placeholder="${charEmoteDef.getTitle()}"`)}
@@ -656,14 +656,14 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                                 `)}
                                 ${WuxSheetMain.Textarea(contentsDef.getAttribute(), "wuxInput wuxHeight30", contentsDef.getTitle())}`;
                         },
-                        
+
                         addNotebookPageLocation = function () {
                             let locationDef = WuxDef.Get("Note_PageLocation");
                             let areaDef = WuxDef.Get("Note_PageArea");
                             let dateDef = WuxDef.Get("Note_PageDate");
                             let timeDef = WuxDef.Get("Note_PageTime");
                             let timeFilters = WuxDef.Filter([new DatabaseFilterData("group", "TimeType")]);
-                            
+
                             return `${WuxSheetMain.Input("text", locationDef.getAttribute(), "", locationDef.getTitle())}
                             ${WuxSheetMain.Input("text", areaDef.getAttribute(), "", areaDef.getTitle())}
                             ${WuxSheetMain.MultiRow(
@@ -672,7 +672,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                                     ${WuxSheetMain.Select(timeDef.getAttribute(), timeFilters, false, "wuxInput wuxInlineBlock wuxWidth120")}
                                 `)}`;
                         },
-                        
+
                         addNotebookPageChapter = function () {
                             let questNameDef = WuxDef.Get("Note_PageQuestName");
                             let chapterDef = WuxDef.Get("Note_PageChapter");
@@ -916,13 +916,13 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let definition = WuxDef.Get("Page_GearCurrency");
                     return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                 },
-                
+
                 currencyContent = function () {
                     let output = [];
                     let resourceDefs = WuxDef.Filter([new DatabaseFilterData("group", "Currency")]);
 
                     for (let i = 0; i < resourceDefs.length; i++) {
-                        let contents = WuxDefinition.BuildHeader(resourceDefs[i]) + 
+                        let contents = WuxDefinition.BuildHeader(resourceDefs[i]) +
                             WuxSheetMain.CustomInput("number", resourceDefs[i].getAttribute(), "wuxInput wuxMinWidth100");
                         output.push(WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150"));
                     }
@@ -969,7 +969,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         <div class="wuxEquipableSubMenu">${WuxSheetMain.SubMenuButton(actionFieldName, addSubmenuContentsItem())}</div>
                         ${WuxSheetMain.CustomInput("number", countFieldName, "wuxInput wuxWidth25")}
                         <div class="wuxEquipableName"><span class="wuxDescription" name="${nameFieldName}"></span></div>`
-                    ;
+                        ;
                 },
 
                 addSubmenuContentsEquipment = function () {
@@ -1077,7 +1077,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let footPopupDef = WuxDef.Get("Page_AddFootGear");
                     let miscGearPopupDef = WuxDef.Get("Page_AddMiscGear");
                     return addItemGenerationButtons([
-                        weaponsPopupDef, rangedPopupDef, toolPopupDef, 
+                        weaponsPopupDef, rangedPopupDef, toolPopupDef,
                         // commsPopupDef, lightPopupDef, bindingsPopupDef, miscPopupDef, 
                         headPopupDef, facePopupDef, chestPopupDef, armPopupDef, legPopupDef,
                         footPopupDef, miscGearPopupDef
@@ -1113,7 +1113,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     </div>`)}
                     ${WuxSheetMain.HiddenAuxField(definition.getAttribute(index), WuxSheetMain.Desc(`<span>${emptyName}</span>`))}`;
                 },
-                
+
                 buildWeaponDamage = function () {
                     let damageDefField = WuxDef.GetAttribute("WeaponDamage");
                     let damageValField = WuxDef.GetAttribute("WeaponDamageVal");
@@ -1186,7 +1186,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         WuxDef.Get("Page_AddFruit"), WuxDef.Get("Page_AddVegetable"), WuxDef.Get("Page_AddStarch")
                     ], 2);
                 },
-                
+
                 addItemGenerationButtons = function (definitions, rowSize) {
                     let contents = [];
                     for (let i = 0; i < definitions.length; i++) {
@@ -1278,7 +1278,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     contents += repeatingBasicTechniquesSection("RepeatingBasicRecovery");
                     contents += repeatingBasicTechniquesSection("RepeatingBasicAttack");
                     contents += repeatingBasicTechniquesSection("RepeatingBasicSocial");
-                    contents += WuxSheetMain.HiddenAncestryField("Spirit", 
+                    contents += WuxSheetMain.HiddenAncestryField("Spirit",
                         repeatingBasicTechniquesSection("RepeatingBasicSpirit"));
                     contents += repeatingCustomTechniquesSection();
                     contents = WuxSheetMain.TabBlock(contents);
@@ -1293,7 +1293,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     for (let i = 1; i <= repeaterData.max; i++) {
                         let repeatingFieldName = WuxDef.GetVariable(repeaterData.repeater, i + repeaterData.slotMod);
                         let slotFieldName = WuxDef.GetAttribute(repeaterData.slot, i);
-                        let header = WuxSheetMain.Button(slotFieldName + WuxDef._refresh, "1", "wuxStyleRefreshButton") + 
+                        let header = WuxSheetMain.Button(slotFieldName + WuxDef._refresh, "1", "wuxStyleRefreshButton") +
                             `<span name="${slotFieldName}"></span>`;
                         contents += WuxSheetMain.HiddenField(slotFieldName,
                             repeatingTechniquesSection(header, repeatingFieldName)
@@ -1336,10 +1336,10 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let baseDefinition = WuxDef.Get("Action");
                     return baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
                 },
-                
+
                 addRepeaterContentsStyles = function (isCustom) {
                     let submenuFieldName = WuxDef.GetAttribute("Action_Actions");
-                    
+
                     return `
                     <div class="wuxFeature wuxMinWidth220">
                         <input type="hidden" class="wuxFeatureHeader-flag" name="${getActionTypeAttribute("TechActionType")}">
@@ -1443,30 +1443,27 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                             </div>
                         </div>
                     </div>
-                    
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechEffect", 0)}" value="0" />
-                    <div class="wuxHiddenField">
-                        <div class="wuxFeatureEffectsBlock">
-                            ${addBasicTechEffects()}
-                        </div>
+                            
+                    <div class="wuxFeatureEffectsBlock">
+                        ${addTechEffects()}
                     </div>
                     
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechSEffectTitle", "")}" value="0" />
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechSEffectTitle", "name")}" value="0" />
                     <div class="wuxHiddenField">
                         <div class="wuxFeatureSecondaryEffectsBlock">
                             ${addTechEffect("TechSEffectTitle", "", "wuxFeatureMajorEffectHeader", "wuxFeatureMajorEffectBlock")}
                             ${addSecondaryTechEffects()}
                         </div>
-                    <div
+                    </div>
                     
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechEEffectTitle", "")}" value="0" />
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechEEffectTitle", "name")}" value="0" />
                     <div class="wuxHiddenField">
                         <div class="wuxFeatureEndEffectsBlock">
                             ${addTechEffect("TechEEffectTitle", "", "wuxFeatureMajorEffectHeader", "wuxFeatureMajorEffectBlock")}
                         </div>
-                    <div
+                    </div>
                     
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("Tech", 0)}" value="0" />
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechDef", 0)}" value="0" />
                     <div class="wuxHiddenField">
                                 <div class="wuxFeatureFunctionBlock">
                                     <div class="wuxFeatureFunctionBlockRow">
@@ -1502,47 +1499,47 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         </span>
                     </div>`;
                 },
-
-                addBasicTechEffects = function () {
-                    let contents = "";
+                
+                addTechEffects = function () {
+                    let effects = [];
                     for (let i = 0; i < 10; i++) {
-                        contents += addTechEffect("TechEffect", i);
+                        effects.push(addTechEffect("TechEffect", i));
                     }
-                    return contents;
+                    return effects.join("\n");
                 },
 
                 addSecondaryTechEffects = function () {
-                    let contents = "";
+                    let effects = [];
                     for (let i = 0; i < 10; i++) {
-                        contents += addTechEffect("TechSEffect", i);
+                        effects.push(addTechEffect("TechSEffect", i));
                     }
-                    return contents;
+                    return effects.join("\n");
                 },
 
-                addTechEffect = function (attribute, index, headerClass, descriptionClass) {
-                    if (headerClass === undefined) {
-                        headerClass = "wuxFeatureCheckHeader";
+                addTechEffect = function (attrName, index, headerName, blockName) {
+                    if (headerName === undefined) {
+                        headerName = "wuxFeatureCheckHeader";
                     }
-                    if (descriptionClass === undefined) {
-                        descriptionClass = "wuxFeatureCheckBlock";
+                    if (blockName === undefined) {
+                        blockName = "wuxFeatureCheckBlock";
                     }
-                    return `<input type="hidden" name="${getActionTypeAttribute(attribute, `${index}desc`)}" value="0" />
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute(attribute, `${index}name`)}" value="0" />
+                    return `<input type="hidden" name="${getActionTypeAttribute(attrName, `${index}desc`)}" value="0" />
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute(attrName, `${index}name`)}" value="0" />
                     <div class="wuxHiddenField">
-                        <div class="${headerClass}">
+                        <div class="${headerName}">
                             <span class="wuxTooltip">
-                                <span class="wuxTooltipText" name="${getActionTypeAttribute(attribute, `${index}name`)}">Name</span>
+                                <span class="wuxTooltipText" name="${getActionTypeAttribute(attrName, `${index}name`)}">Name</span>
                                 <div class="wuxTooltipContent">
-                                    <div class="wuxHeader2"><span name="${getActionTypeAttribute(attribute, `${index}name`)}">Name</span></div>
-                                    <span class="wuxDescription" name="${getActionTypeAttribute(attribute, `${index}desc`)}"></span>
+                                    <div class="wuxHeader2"><span name="${getActionTypeAttribute(attrName, `${index}name`)}">Name</span></div>
+                                    <span class="wuxDescription" name="${getActionTypeAttribute(attrName, `${index}desc`)}"></span>
                                 </div>
                             </span>
                         </div>
                     </div>
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute(attribute, index)}" value="0" />
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute(attrName, index)}" value="0" />
                     <div class="wuxHiddenField">
-                        <div class="${descriptionClass}">
-                            <span class="wuxFeatureCheckBlockRow" name="${getActionTypeAttribute(attribute, index)}">Effect</span>
+                        <div class="${blockName}">
+                            <span class="wuxFeatureCheckBlockRow" name="${getActionTypeAttribute(attrName, index)}">Effect</span>
                         </div>
                     </div>`;
                 },
@@ -1756,28 +1753,25 @@ var DisplayPopups = DisplayPopups || (function () {
                                     </div>
                                 </div>
                             </div>
-                    
-                            <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechEffect", 0)}" value="0" />
-                            <div class="wuxHiddenField">
-                                <div class="wuxFeatureEffectsBlock">
-                                    ${addBasicTechEffects()}
-                                </div>
+                            
+                            <div class="wuxFeatureEffectsBlock">
+                                ${addTechEffects()}
                             </div>
                             
-                            <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechSEffectTitle", "")}" value="0" />
+                            <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechSEffectTitle", "name")}" value="0" />
                             <div class="wuxHiddenField">
                                 <div class="wuxFeatureSecondaryEffectsBlock">
                                     ${addTechEffect("TechSEffectTitle", "", "wuxFeatureMajorEffectHeader", "wuxFeatureMajorEffectBlock")}
                                     ${addSecondaryTechEffects()}
                                 </div>
-                            <div
+                            </div>
                             
-                            <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechEEffectTitle", "")}" value="0" />
+                            <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechEEffectTitle", "name")}" value="0" />
                             <div class="wuxHiddenField">
                                 <div class="wuxFeatureEndEffectsBlock">
                                     ${addTechEffect("TechEEffectTitle", "", "wuxFeatureMajorEffectHeader", "wuxFeatureMajorEffectBlock")}
                                 </div>
-                            <div>
+                            </div>
                             
                             <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechDef", 0)}" value="0" />
                             <div class="wuxHiddenField">
@@ -1818,46 +1812,46 @@ var DisplayPopups = DisplayPopups || (function () {
                     </div>`;
                 },
 
-                addBasicTechEffects = function () {
-                    let contents = "";
+                addTechEffects = function () {
+                    let effects = [];
                     for (let i = 0; i < 10; i++) {
-                        contents += addTechEffect("TechEffect", i);
+                        effects.push(addTechEffect("TechEffect", i));
                     }
-                    return contents;
+                    return effects.join("\n");
                 },
 
                 addSecondaryTechEffects = function () {
-                    let contents = "";
+                    let effects = [];
                     for (let i = 0; i < 10; i++) {
-                        contents += addTechEffect("TechSEffect", i);
+                        effects.push(addTechEffect("TechSEffect", i));
                     }
-                    return contents;
+                    return effects.join("\n");
                 },
 
-                addTechEffect = function (attribute, index, headerClass, descriptionClass) {
-                    if (headerClass === undefined) {
-                        headerClass = "wuxFeatureCheckHeader";
+                addTechEffect = function (attrName, index, headerName, blockName) {
+                    if (headerName == undefined) {
+                        headerName = "wuxFeatureCheckHeader";
                     }
-                    if (descriptionClass === undefined) {
-                        descriptionClass = "wuxFeatureCheckBlock";
+                    if (blockName == undefined) {
+                        blockName = "wuxFeatureCheckBlock";
                     }
-                    return `<input type="hidden" name="${getPopupAttribute(attribute, `${index}desc`)}" value="0" />
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute(attribute, `${index}name`)}" value="0" />
+                    return `<input type="hidden" name="${getPopupAttribute(attrName, `${index}desc`)}" value="0" />
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute(attrName, `${index}name`)}" value="0" />
                     <div class="wuxHiddenField">
-                        <div class="${headerClass}">
+                        <div class="${headerName}">
                             <span class="wuxTooltip">
-                                <span class="wuxTooltipText" name="${getPopupAttribute(attribute, `${index}name`)}">Name</span>
+                                <span class="wuxTooltipText" name="${getPopupAttribute(attrName, `${index}name`)}">Name</span>
                                 <div class="wuxTooltipContent">
-                                    <div class="wuxHeader2"><span name="${getPopupAttribute(attribute, `${index}name`)}">Name</span></div>
-                                    <span class="wuxDescription" name="${getPopupAttribute(attribute, `${index}desc`)}"></span>
+                                    <div class="wuxHeader2"><span name="${getPopupAttribute(attrName, `${index}name`)}">Name</span></div>
+                                    <span class="wuxDescription" name="${getPopupAttribute(attrName, `${index}desc`)}"></span>
                                 </div>
                             </span>
                         </div>
                     </div>
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute(attribute, index)}" value="0" />
+                    <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute(attrName, index)}" value="0" />
                     <div class="wuxHiddenField">
-                        <div class="${descriptionClass}">
-                            <span class="wuxFeatureCheckBlockRow" name="${getPopupAttribute(attribute, index)}">Effect</span>
+                        <div class="${blockName}">
+                            <span class="wuxFeatureCheckBlockRow" name="${getPopupAttribute(attrName, index)}">Effect</span>
                         </div>
                     </div>`;
                 },
@@ -1918,7 +1912,7 @@ var DisplayLoadingScreen = DisplayLoadingScreen || (function () {
             let popupActiveAttr = WuxDef.GetAttribute("Loading");
             let contents = `<div class="wuxPopupOverlay">
                 <div class="wuxLoading">
-                    Loading&nbsp;<img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif" height="100px" width="100px" alt="Loading...">
+                    Loading&nbsp;<img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif" height="100px" width="100px">
                 </div>
             </div>`;
 
@@ -1929,4 +1923,3 @@ var DisplayLoadingScreen = DisplayLoadingScreen || (function () {
         Print: print
     };
 }());
-

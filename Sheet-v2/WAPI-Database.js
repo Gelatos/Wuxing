@@ -94,6 +94,10 @@ class Dictionary {
         this.keys = keys;
         this.values = values;
     }
+    
+    length() {
+        return this.keys.length;
+    }
 }
 
 class DatabaseFilterData {
@@ -591,14 +595,9 @@ class TechniqueData extends WuxDatabaseData {
         i++;
         this.flavorText = "" + dataArray[i];
         i++;
-        this.definitions = [];
-        this.effects = new TechniqueEffectDatabase();
-        this.secondEffectConditionName = "";
-        this.secondEffectConditionEffect = "";
-        this.secondaryEffects = new TechniqueEffectDatabase();
-        this.endEffectConditionName = "";
-        this.endEffectConditionEffect = "";
-        this.addEffect(new TechniqueEffect(dataArray.slice(i)));
+        
+        this.techniqueEffect = new TechniqueEffect(dataArray.slice(i));
+        this.addEffect(this.techniqueEffect);
     }
 
     createEmpty() {
@@ -629,7 +628,7 @@ class TechniqueData extends WuxDatabaseData {
         this.secondaryEffects = new TechniqueEffectDatabase();
         this.endEffectConditionName = "";
         this.endEffectConditionEffect = "";
-        
+        this.techniqueEffect = {};
     }
 
     createDefinition(baseDefinition) {
@@ -646,13 +645,7 @@ class TechniqueData extends WuxDatabaseData {
     }
 
     importEffectsFromTechnique(technique) {
-        let baseTechnique = this;
-        technique.effects.iterate(function (effect) {
-            baseTechnique.addEffect(effect);
-        });
-        technique.definitions.forEach(function (definition) {
-            baseTechnique.addDefinition(definition);
-        });
+        this.addEffect(technique.techniqueEffect);
     }
 
     addEffect(effect) {
@@ -661,14 +654,14 @@ class TechniqueData extends WuxDatabaseData {
             case "Definition":
                 effect.setName(`D${this.definitions.length}`);
                 this.addDefinition(effect.effect);
-                break;
+                return;
             case "Status":
-                effect.setName(`T${this.effects.keys.length}`);
+                effect.setName(`T${this.getEffectDbLength()}`);
                 this.addToEffectsDb(effect);
                 if (effect.effect != "") {
                     this.addDefinition(effect.effect);
                 }
-                break;
+                return;
             case "Move":
                 effect.setName(`T${this.getEffectDbLength()}`);
                 this.addToEffectsDb(effect);
@@ -678,49 +671,48 @@ class TechniqueData extends WuxDatabaseData {
                 }
                 let moveDefs = effect.formula.getDefinitions();
                 moveDefs.forEach(moveDef => this.addDefinition(moveDef.name));
-                break;
+                return;
             case "Terrain":
                 effect.setName(`T${this.getEffectDbLength()}`);
                 this.addToEffectsDb(effect);
                 this.addDefinition(effect.effect);
-                break;
+                return;
+        }
+
+        switch (effect.defense) {
+            case "TechOnEnter":
+            case "TechNewTargets":
+            case "TechNewOnEnter":
+                this.secondEffectConditionName = effect.defense;
+                this.secondEffectConditionEffect = effect.effect;
+                return;
+            case "TechOnRound":
+            case "TechOnTurn":
+            case "TechOnEndFocus":
+                this.endEffectConditionName = effect.defense;
+                this.endEffectConditionEffect = effect.effect;
+                return;
             default:
                 effect.setName(`T${this.getEffectDbLength()}`);
-                switch (effect.defense) {
-                    case "TechOnEnter":
-                    case "TechNewTargets":
-                    case "TechNewOnEnter":
-                        this.secondEffectConditionName = effect.defense;
-                        this.secondEffectConditionEffect = effect.effect;
-                        break;
-                    case "TechOnRound":
-                    case "TechOnTurn":
-                    case "TechOnEndFocus":
-                        this.endEffectConditionName = effect.defense;
-                        this.endEffectConditionEffect = effect.effect;
-                        break;
-                    default:
-                        this.addToEffectsDb(effect);
-                        break;
+                this.addToEffectsDb(effect);
+                if (effect.traits != "") {
+                    this.addDefinition(`Trait_${effect.traits}`);
                 }
-                break;
-        }
-        if (effect.traits != "") {
-            this.addDefinition(`Trait_${effect.traits}`);
+                return;
         }
     }
     
     getEffectDbLength() {
-        if (this.secondaryEffects != undefined && this.secondaryEffects != "") {
-            return this.secondaryEffects.keys.length;
+        if (this.secondEffectConditionName != "") {
+            return this.secondaryEffects.length();
         }
         else {
-            return this.effects.keys.length;
+            return this.effects.length();
         }
     }
     
     addToEffectsDb(effect) {
-        if (this.secondaryEffects != "") {
+        if (this.secondEffectConditionName != "") {
             this.secondaryEffects.add(effect.name, effect);
         }
         else {
@@ -732,30 +724,6 @@ class TechniqueData extends WuxDatabaseData {
         if (!this.definitions.includes(definition)) {
             this.definitions.push(definition);
         }
-    }
-
-    formatTechniqueForSandbox() {
-        this.displayname = ``;
-        this.sheetname = ``;
-        return `${this.sanitizeSheetRollAction(JSON.stringify(this))}$$@{${WuxDef.GetVariable("SheetName")}}`;
-    }
-
-    sanitizeSheetRollAction(sheetRoll) {
-        sheetRoll = sheetRoll.replace(/"/g, "%%");
-        sheetRoll = sheetRoll.replace(/:/g, "&&");
-        sheetRoll = sheetRoll.replace(/{/g, "<<");
-        sheetRoll = sheetRoll.replace(/}/g, ">>");
-        sheetRoll = sheetRoll.replace(/%/g, "&#37;");
-        sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
-        sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
-        sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
-        sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
-        sheetRoll = sheetRoll.replace(/@/g, "&#64;");
-        sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
-        sheetRoll = sheetRoll.replace(/]/g, "&#93;");
-        sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
-        sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
-        return sheetRoll;
     }
 
     unsanitizeSheetRollAction(jsonString) {
@@ -2181,19 +2149,20 @@ class TechniqueDisplayData {
         let output = "";
         output += this.iterateRollTemplateEffects(this.effects, "Effect");
         if (this.secondaryEffectName != "") {
-            let def = WuxDef.Get(`Title_${this.secondaryEffectName}`);
+            let def = WuxDef.Get(Format.GetDefinitionName("Title", this.secondaryEffectName));
             output += `{{SEffectName=${def.getTitle()}}}{{SEffectDesc=${def.getDescription()}}}`;
         }
         if (this.secondaryEffectDesc != "") {
             output += `{{SEffect=${this.secondaryEffectDesc}}}`;
         }
         output += this.iterateRollTemplateEffects(this.secondaryEffects, "SEffect");
+        
         if (this.endEffectName != "") {
             let def = WuxDef.Get(`Title_${this.endEffectName}`);
             output += `{{EEffectName=${def.getTitle()}}}{{EEffectDesc=${def.getDescription()}}}`;
         }
         if (this.endEffectDesc != "") {
-            output += `{{EEffect=${this.secondaryEffectDesc}}}`;
+            output += `{{EEffect=${this.endEffectDesc}}}`;
         }
         return output;
     }

@@ -37,6 +37,32 @@
 					<span>{{Targeting}}</span>
 				</div>
 				{{/Targeting}}
+                {{#Trait0}}
+                <div class="wuxFeatureFunctionBlockRow">
+                    <span><strong>Traits: </strong></span>
+                    <span class="wuxTooltip"><span class="wuxTooltipText">{{Trait0}}</span>
+                        <span class="wuxTooltipContent">
+                            <div class="wuxHeader2">{{Trait0}}</div>
+                            <span class="wuxDescription">{{Trait0Desc}}</span>
+                        </span>
+                    </span>
+                    {{#Trait1}}
+                    <span>, </span><span class="wuxTooltip"><span class="wuxTooltipText">{{Trait1}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{Trait1}}</div><span class="wuxDescription">{{Trait1Desc}}</span></span></span>
+                    {{/Trait1}}
+                    {{#Trait2}}
+                    <span>, </span><span class="wuxTooltip"><span class="wuxTooltipText">{{Trait2}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{Trait2}}</div><span class="wuxDescription">{{Trait2Desc}}</span></span></span>
+                    {{/Trait2}}
+                    {{#Trait3}}
+                    <span>, </span><span class="wuxTooltip"><span class="wuxTooltipText">{{Trait3}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{Trait3}}</div><span class="wuxDescription">{{Trait3Desc}}</span></span></span>
+                    {{/Trait3}}
+                    {{#Trait4}}
+                    <span>, </span><span class="wuxTooltip"><span class="wuxTooltipText">{{Trait4}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{Trait4}}</div><span class="wuxDescription">{{Trait4Desc}}</span></span></span>
+                    {{/Trait4}}
+                    {{#Trait5}}
+                    <span>, </span><span class="wuxTooltip"><span class="wuxTooltipText">{{Trait5}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{Trait5}}</div><span class="wuxDescription">{{Trait5Desc}}</span></span></span>
+                    {{/Trait5}}
+                </div>
+                {{/Trait0}}
 			</div>
 		</div>
         {{#Trigger}}
@@ -54,33 +80,20 @@
         {{#ItemTrait0}}
         <div class="wuxFeatureHeaderInfoReq">
             <span><strong>Item Traits: </strong></span>
-            
-            {{#ItemTrait0}}
-            <div class="wuxTrait wuxTooltip">
-                <span class="wuxTooltipText">{{ItemTrait0}}</span>
-                <span class="wuxTooltipContent">{{ItemTrait0Desc}}</span>
-            </div>
-            {{/ItemTrait0}}
+            <span class="wuxTooltip"><span class="wuxTooltipText">{{ItemTrait0}}</span>
+                        <span class="wuxTooltipContent">
+                            <div class="wuxHeader2">{{ItemTrait0}}</div>
+                            <span class="wuxDescription">{{ItemTrait0Desc}}</span>
+                        </span>
+                    </span>
             {{#ItemTrait1}}
-            <span>; or </span>
-            <div class="wuxTrait wuxTooltip">
-                <span class="wuxTooltipText">{{ItemTrait1}}</span>
-                <span class="wuxTooltipContent">{{ItemTrait1Desc}}</span>
-            </div>
+            <span>; or </span><span class="wuxTooltip"><span class="wuxTooltipText">{{ItemTrait1}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{ItemTrait1}}</div><span class="wuxDescription">{{ItemTrait1Desc}}</span></span></span>
             {{/ItemTrait1}}
             {{#ItemTrait2}}
-            <span>; or </span>
-            <div class="wuxTrait wuxTooltip">
-                <span class="wuxTooltipText">{{ItemTrait2}}</span>
-                <span class="wuxTooltipContent">{{ItemTrait2Desc}}</span>
-            </div>
+            <span>; or </span><span class="wuxTooltip"><span class="wuxTooltipText">{{ItemTrait2}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{ItemTrait2}}</div><span class="wuxDescription">{{ItemTrait2Desc}}</span></span></span>
             {{/ItemTrait2}}
             {{#ItemTrait3}}
-            <span> or </span>
-            <div class="wuxTrait wuxTooltip">
-                <span class="wuxTooltipText">{{ItemTrait3}}</span>
-                <span class="wuxTooltipContent">{{ItemTrait3Desc}}</span>
-            </div>
+            <span>; or </span><span class="wuxTooltip"><span class="wuxTooltipText">{{ItemTrait3}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{ItemTrait3}}</div><span class="wuxDescription">{{ItemTrait3Desc}}</span></span></span>
             {{/ItemTrait3}}
         </div>
         {{/ItemTrait0}}
@@ -91,36 +104,6 @@
 				<span>{{FlavorText}}</span>
 			</div>
 			{{/FlavorText}}
-			{{#Trait0}}
-			<div class="wuxFeatureFunctionBlockRow">
-				<span><strong>Traits: </strong></span>
-				
-				{{#Trait0}}
-				<div class="wuxTrait wuxTooltip">
-					<span class="wuxTraitText">{{Trait0}}</span>
-					<span class="wuxTooltipContent">{{Trait0Desc}}</span>
-				</div>
-				{{/Trait0}}
-				{{#Trait1}}
-				<div class="wuxTrait wuxTooltip">
-					<span class="wuxTraitText">{{Trait1}}</span>
-					<span class="wuxTooltipContent">{{Trait1Desc}}</span>
-				</div>
-				{{/Trait1}}
-				{{#Trait2}}
-				<div class="wuxTrait wuxTooltip">
-					<span class="wuxTraitText">{{Trait2}}</span>
-					<span class="wuxTooltipContent">{{Trait2Desc}}</span>
-				</div>
-				{{/Trait2}}
-				{{#Trait3}}
-				<div class="wuxTrait wuxTooltip">
-					<span class="wuxTraitText">{{Trait3}}</span>
-					<span class="wuxTooltipContent">{{Trait3Desc}}</span>
-				</div>
-				{{/Trait3}}
-			</div>
-			{{/Trait0}}
 		</div>
 		{{/type-FunctionBlock}}
 
@@ -226,7 +209,7 @@
                 {{/SEffect5}}
             </div>
         {{/SEffectName}}
-        {{#EEffect}}
+        {{#EEffectName}}
             <div class="wuxFeatureEndEffectsBlock">
                 <div class="wuxFeatureMajorEffectHeader">
                 <span class="wuxTooltip">
@@ -236,7 +219,7 @@
                 </div>
                 <div class="wuxFeatureMajorEffectBlock"><span>{{EEffect}}</span></div>
             </div>
-        {{/EEffect}}
+        {{/EEffectName}}
         {{#Def0}}
 		<div class="wuxFeatureFunctionBlock">
             <div class="wuxFeatureFunctionBlockRow">
