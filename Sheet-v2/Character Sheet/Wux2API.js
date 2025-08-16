@@ -1,5 +1,4 @@
 on("chat:message", function (msg) {
-    Debug.Log(`msg: ${msg.content}`);
     if (msg.type == "api" && msg.content != null) {
 
         let firstSpace = msg.content.indexOf(" ");
@@ -1080,7 +1079,6 @@ class TechniqueResolverData {
     }
     
     initializeData(contentData) {
-        Debug.Log(`[TechniqueResolverData] Initializing data with content: ${contentData[0]}`);
         this.initializeTechniqueData(contentData[0]);
         this.sourceSheetName = contentData[1];
         this.senderTokenTargetData = TargetReference.GetTokenTargetDataByName(this.sourceSheetName);
@@ -1304,7 +1302,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
     }
 
     addInitialMessage() {
-        this.addMessage(`${this.senderTokenEffect.displayName} uses ${this.technique.name} on ${this.targetTokenEffect.displayName}`);
+        this.addMessage(`${this.senderTokenEffect.tokenTargetData.displayName} uses ${this.technique.name} on ${this.targetTokenEffect.tokenTargetData.displayName}`);
     }
     
     run() {
@@ -1376,7 +1374,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
     
     getTargetData(techUseResolver, senderAttributeHandler) {
         senderAttributeHandler.addFinishCallback(function (senderAttrHandler) {
-            let targetAttributeHandler = new SandboxAttributeHandler(this.targetTokenEffect.tokenTargetData.charId);
+            let targetAttributeHandler = new SandboxAttributeHandler(techUseResolver.targetTokenEffect.tokenTargetData.charId);
             techUseResolver.tryGetDefensesAndAttributes(techUseResolver, targetAttributeHandler);
             techUseResolver.performEffects(techUseResolver, senderAttrHandler, targetAttributeHandler);
             targetAttributeHandler.run();
@@ -1401,7 +1399,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
             let passCheck = true;
             let willBreakEffects = new TechniqueEffectDatabase();
             let techDisplayData = new TechniqueEffectDisplayUseData("", 
-                techUseResolver.senderTokenEffect.displayName, techUseResolver.targetTokenEffect.displayName);
+                techUseResolver.senderTokenEffect.tokenTargetData.displayName, techUseResolver.targetTokenEffect.tokenTargetData.displayName);
             techUseResolver.technique.effects.iterate(function (techniqueEffect) {
                 if (techniqueEffect.defense != currentCheck) {
                     currentCheck = techniqueEffect.defense;
@@ -1482,7 +1480,8 @@ class TechniqueUseResolver extends TechniqueResolverData {
     }
 
     printMessages() {
-        this.messages = this.messages.concat(this.tokenEffect.effectMessages);
+        this.messages = this.messages.concat(this.senderTokenEffect.effectMessages);
+        this.messages = this.messages.concat(this.targetTokenEffect.effectMessages);
         let systemMessage = this.getMessageObject();
         WuxMessage.Send(systemMessage);
     }
@@ -2253,7 +2252,6 @@ class InfoMessage extends SimpleMessage {
             while (messageIndex < msgArray.length) {
                 let tempMessage = msgArray[messageIndex].trim();
                 if (tempMessage != "") {
-                    Debug.Log(`Adding extended message: ${tempMessage}`);
                     this.extendedMessages.push(tempMessage);
                 }
                 if (this.extendedMessages.length >= messageMaxCount) {
@@ -2291,7 +2289,6 @@ class InfoMessage extends SimpleMessage {
             let msgIndex = i + 1;
             options += ` {{message${msgIndex}=${this.extendedMessages[i]}}}`
         }
-        Debug.Log(options);
         
         return `{{message=${this.message}}}${options}`;
     }
@@ -6756,6 +6753,8 @@ class TechniqueUseEffect extends dbObj {
     sanitizeSheetRollAction(sheetRoll) {
         sheetRoll = sheetRoll.replace(/"/g, "%%");
         sheetRoll = sheetRoll.replace(/:/g, "&&");
+        sheetRoll = sheetRoll.replace(/{/g, "<<");
+        sheetRoll = sheetRoll.replace(/}/g, ">>");
         sheetRoll = sheetRoll.replace(/%/g, "&#37;");
         sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
         sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
@@ -6770,11 +6769,10 @@ class TechniqueUseEffect extends dbObj {
     }
 
     unsanitizeSheetRollAction(jsonString) {
-        Debug.Log(`Unsanitized JSON start: ${jsonString}`);
-        jsonString = jsonString.replace(/&&|%%/g, match => {
-            if (match === "&&") return ":";
-            if (match === "%%") return '"';
-        });
+        jsonString = jsonString.replace(/%%/g, '"');
+        jsonString = jsonString.replace(/&&/g, ":");
+        jsonString = jsonString.replace(/<</g, "{");
+        jsonString = jsonString.replace(/>>/g, "}");
         return JSON.parse(jsonString);
     }
 
@@ -8541,6 +8539,27 @@ class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
             return `${this.senderName}${selfSuffix}`;
         }
         return `${this.targetName}${targetSuffix}`;
+    }
+
+    formatCalcBonus(effect) {
+        let output = this.formatEffectDice(effect);
+        let formulaString;
+        try {
+            formulaString = effect.formula.getString();
+        } catch (e) {
+            formulaString = `Something went wrong: ${JSON.stringify(effect.formula)}`;
+        }
+        if (formulaString != "" && output != "") {
+            output += " + ";
+        }
+        return output + formulaString;
+    }
+
+    formatEffectDice(effect) {
+        if (effect.dVal != "" && effect.dVal > 0) {
+            return `${effect.dVal}d${effect.dType}`;
+        }
+        return "";
     }
 }
 

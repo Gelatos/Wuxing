@@ -292,7 +292,6 @@ class TechniqueResolverData {
     }
     
     initializeData(contentData) {
-        Debug.Log(`[TechniqueResolverData] Initializing data with content: ${contentData[0]}`);
         this.initializeTechniqueData(contentData[0]);
         this.sourceSheetName = contentData[1];
         this.senderTokenTargetData = TargetReference.GetTokenTargetDataByName(this.sourceSheetName);
@@ -516,7 +515,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
     }
 
     addInitialMessage() {
-        this.addMessage(`${this.senderTokenEffect.displayName} uses ${this.technique.name} on ${this.targetTokenEffect.displayName}`);
+        this.addMessage(`${this.senderTokenEffect.tokenTargetData.displayName} uses ${this.technique.name} on ${this.targetTokenEffect.tokenTargetData.displayName}`);
     }
     
     run() {
@@ -588,7 +587,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
     
     getTargetData(techUseResolver, senderAttributeHandler) {
         senderAttributeHandler.addFinishCallback(function (senderAttrHandler) {
-            let targetAttributeHandler = new SandboxAttributeHandler(this.targetTokenEffect.tokenTargetData.charId);
+            let targetAttributeHandler = new SandboxAttributeHandler(techUseResolver.targetTokenEffect.tokenTargetData.charId);
             techUseResolver.tryGetDefensesAndAttributes(techUseResolver, targetAttributeHandler);
             techUseResolver.performEffects(techUseResolver, senderAttrHandler, targetAttributeHandler);
             targetAttributeHandler.run();
@@ -613,7 +612,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
             let passCheck = true;
             let willBreakEffects = new TechniqueEffectDatabase();
             let techDisplayData = new TechniqueEffectDisplayUseData("", 
-                techUseResolver.senderTokenEffect.displayName, techUseResolver.targetTokenEffect.displayName);
+                techUseResolver.senderTokenEffect.tokenTargetData.displayName, techUseResolver.targetTokenEffect.tokenTargetData.displayName);
             techUseResolver.technique.effects.iterate(function (techniqueEffect) {
                 if (techniqueEffect.defense != currentCheck) {
                     currentCheck = techniqueEffect.defense;
@@ -694,7 +693,8 @@ class TechniqueUseResolver extends TechniqueResolverData {
     }
 
     printMessages() {
-        this.messages = this.messages.concat(this.tokenEffect.effectMessages);
+        this.messages = this.messages.concat(this.senderTokenEffect.effectMessages);
+        this.messages = this.messages.concat(this.targetTokenEffect.effectMessages);
         let systemMessage = this.getMessageObject();
         WuxMessage.Send(systemMessage);
     }

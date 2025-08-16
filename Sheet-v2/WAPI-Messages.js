@@ -456,7 +456,6 @@ class InfoMessage extends SimpleMessage {
             while (messageIndex < msgArray.length) {
                 let tempMessage = msgArray[messageIndex].trim();
                 if (tempMessage != "") {
-                    Debug.Log(`Adding extended message: ${tempMessage}`);
                     this.extendedMessages.push(tempMessage);
                 }
                 if (this.extendedMessages.length >= messageMaxCount) {
@@ -494,7 +493,6 @@ class InfoMessage extends SimpleMessage {
             let msgIndex = i + 1;
             options += ` {{message${msgIndex}=${this.extendedMessages[i]}}}`
         }
-        Debug.Log(options);
         
         return `{{message=${this.message}}}${options}`;
     }

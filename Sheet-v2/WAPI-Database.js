@@ -901,6 +901,8 @@ class TechniqueUseEffect extends dbObj {
     sanitizeSheetRollAction(sheetRoll) {
         sheetRoll = sheetRoll.replace(/"/g, "%%");
         sheetRoll = sheetRoll.replace(/:/g, "&&");
+        sheetRoll = sheetRoll.replace(/{/g, "<<");
+        sheetRoll = sheetRoll.replace(/}/g, ">>");
         sheetRoll = sheetRoll.replace(/%/g, "&#37;");
         sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
         sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
@@ -915,11 +917,10 @@ class TechniqueUseEffect extends dbObj {
     }
 
     unsanitizeSheetRollAction(jsonString) {
-        Debug.Log(`Unsanitized JSON start: ${jsonString}`);
-        jsonString = jsonString.replace(/&&|%%/g, match => {
-            if (match === "&&") return ":";
-            if (match === "%%") return '"';
-        });
+        jsonString = jsonString.replace(/%%/g, '"');
+        jsonString = jsonString.replace(/&&/g, ":");
+        jsonString = jsonString.replace(/<</g, "{");
+        jsonString = jsonString.replace(/>>/g, "}");
         return JSON.parse(jsonString);
     }
 
@@ -2686,6 +2687,27 @@ class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
             return `${this.senderName}${selfSuffix}`;
         }
         return `${this.targetName}${targetSuffix}`;
+    }
+
+    formatCalcBonus(effect) {
+        let output = this.formatEffectDice(effect);
+        let formulaString;
+        try {
+            formulaString = effect.formula.getString();
+        } catch (e) {
+            formulaString = `Something went wrong: ${JSON.stringify(effect.formula)}`;
+        }
+        if (formulaString != "" && output != "") {
+            output += " + ";
+        }
+        return output + formulaString;
+    }
+
+    formatEffectDice(effect) {
+        if (effect.dVal != "" && effect.dVal > 0) {
+            return `${effect.dVal}d${effect.dType}`;
+        }
+        return "";
     }
 }
 
