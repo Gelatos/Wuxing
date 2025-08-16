@@ -2929,6 +2929,15 @@ class FormulaData {
     hasFormula() {
         return this.workers.length > 0;
     }
+    
+    hasWorker(variableName) {
+        for (let i = 0; i < this.workers.length; i++) {
+            if (this.workers[i].variableName == variableName) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     getValue(attributeHandler, printName) {
         let output = 0;
@@ -3104,14 +3113,27 @@ class DieRoll {
         this.dropRollDice(dieCount, dieType, 2, advantages >= 0);
     }
 
-    addModToRoll(mod) {
+    addModToRoll(mod, modName) {
+        if (modName == undefined) {
+            modName = "Mod";
+        }
         this.total += mod;
-        this.message += ` + Mod[${mod}]`;
+        this.message += ` + ${modName}[${mod}]`;
     }
 
     rollSkillCheck(advantages, mod) {
         this.rollCheck(advantages);
         this.addModToRoll(mod);
+    }
+    
+    addDieRoll(dieRoll) {
+        this.rolls = this.rolls.concat(dieRoll.rolls);
+        this.keeps = this.keeps.concat(dieRoll.keeps);
+        if (this.message != "") {
+            this.message += " + ";
+        }
+        this.message += dieRoll.message;
+        this.total += dieRoll.total;
     }
 }
 

@@ -485,7 +485,9 @@ class TokenTargetEffectsData {
     constructor(tokenTargetData) {
         this.tokenTargetData = tokenTargetData;
         this.effectMessages = [];
-        this.storedValues = {};
+        this.storedDieRolls = {};
+        this.spentSurge = false;
+        this.isArmorPiercing = false;
     }
     
     addMessage(message) {
@@ -494,18 +496,29 @@ class TokenTargetEffectsData {
         }
     }
     
-    getStoredValue(variableName) {
-        if (this.storedValues[variableName] == undefined) {
-            return 0;
+    tryGetStoredDieRolls(variableName) {
+        return this.storedDieRolls[variableName];
+    }
+
+    addStoredDieRolls(variableName, value) {
+        if (this.storedDieRolls[variableName] == undefined) {
+            this.storedDieRolls[variableName] = value;
+            return;
         }
-        return this.storedValues[variableName];
+        Debug.Log(`[TokenTargetEffectsData] Adding to existing stored die rolls for ${variableName} with value ${value.total}`);
+        this.storedDieRolls[variableName].addDieRoll(value);
     }
     
-    setStoredValue(variableName, value) {
-        if (value == undefined) {
-            value = 0;
-        }
-        this.storedValues[variableName] = value;
+    hasSurged() {
+        return this.spentSurge;
+    }
+    
+    spendSurge() {
+        this.spentSurge = true;
+    }
+    
+    setArmorPiercing() {
+        this.isArmorPiercing = true;
     }
     
     takeHpDamage(attributeHandler, damage, damageType) {

@@ -487,6 +487,22 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
     }
 }
 
+class TechniqueTargetObjectCollection {
+    constructor (sender, target) {
+        this.sender = sender;
+        this.target = target;
+    }
+    
+    getObjByTarget(techniqueEffect) {
+        if (techniqueEffect.target == "Self") {
+            return this.sender;
+        }
+        else {
+            return this.target;
+        }
+    }
+}
+
 class TechniqueUseResolver extends TechniqueResolverData {
     constructor(msg, content) {
         super(msg, content);
@@ -557,30 +573,31 @@ class TechniqueUseResolver extends TechniqueResolverData {
     tryGetAttributesFromTechniqueEffect(techniqueEffect, attributeHandler) {
         switch (techniqueEffect.type) {
             case "HP":
-                attributeHandler.addMod("HP");
+                attributeHandler.addMod(WuxDef.GetVariable("HP"));
                 switch (techniqueEffect.subType) {
                     case "Surge":
-                        attributeHandler.addMod("Cmb_Surge");
+                        attributeHandler.addMod(WuxDef.GetVariable("Cmb_Surge"));
                         break;
                     case "":
-                        attributeHandler.addMod("Cmb_Armor");
+                        attributeHandler.addMod(WuxDef.GetVariable("Cmb_Armor"));
                         break;
                 }
                 break;
             case "WILL":
-                attributeHandler.addMod("WILL");
+                attributeHandler.addMod(WuxDef.GetVariable("WILL"));
                 break;
             case "Vitality":
-                attributeHandler.addMod("Cmb_Vitality");
+                attributeHandler.addMod(WuxDef.GetVariable("Cmb_Vitality"));
                 break;
             case "Impatience":
-                attributeHandler.addMod("Soc_Impatience");
+                attributeHandler.addMod(WuxDef.GetVariable("Soc_Impatience"));
                 break;
             case "Favor":
-                attributeHandler.addMod("Soc_Favor");
+            case "Request":
+                attributeHandler.addMod(WuxDef.GetVariable("Soc_Favor"));
                 break;
             case "EN":
-                attributeHandler.addMod("EN");
+                attributeHandler.addMod(WuxDef.GetVariable("EN"));
                 break;
         }
     }
@@ -613,6 +630,11 @@ class TechniqueUseResolver extends TechniqueResolverData {
             let willBreakEffects = new TechniqueEffectDatabase();
             let techDisplayData = new TechniqueEffectDisplayUseData("", 
                 techUseResolver.senderTokenEffect.tokenTargetData.displayName, techUseResolver.targetTokenEffect.tokenTargetData.displayName);
+
+            let attrGetters = new TechniqueTargetObjectCollection(senderAttrHandler, targetAttrHandler);
+            let attrSetters = new TechniqueTargetObjectCollection(
+                new SandboxAttributeHandler(techUseResolver.senderTokenEffect.tokenTargetData.charId),
+                new SandboxAttributeHandler(techUseResolver.targetTokenEffect.tokenTargetData.charId));
             techUseResolver.technique.effects.iterate(function (techniqueEffect) {
                 if (techniqueEffect.defense != currentCheck) {
                     currentCheck = techniqueEffect.defense;
@@ -625,10 +647,15 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 }
                 
                 if (passCheck) {
-                    techUseResolver.addEffects(techniqueEffect, techUseResolver, senderAttrHandler, targetAttrHandler, techDisplayData);
+                    techUseResolver.addEffects(techniqueEffect, techUseResolver, attrGetters, attrSetters, techDisplayData);
                 }
             });
+
+            techUseResolver.tryApplyHpDamage(techUseResolver.senderTokenEffect, attrGetters.sender, attrSetters.sender);
+            techUseResolver.tryApplyHpDamage(techUseResolver.targetTokenEffect, attrGetters.target, attrSetters.target);
             
+            attrSetters.sender.run();
+            attrSetters.target.run();
             techUseResolver.printMessages();
         });
     }
@@ -643,7 +670,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
         if (isNaN(dcValue)) {
             let defenseDef = WuxDef.Get(techniqueEffect.defense);
             dcValue = targetAttrHandler.parseInt(defenseDef.getVariable());
-            message = `Vs. ${defenseDef.getTitle()} (DC ${dcValue}): `;
+            message = `Vs. ${defenseDef.getTitle()}: `;
         }
         else {
             message = `Vs. DC ${dcValue}: `;
@@ -655,40 +682,149 @@ class TechniqueUseResolver extends TechniqueResolverData {
         return pass;
     }
     
-    addEffects(techniqueEffect, techUseResolver, senderAttrHandler, targetAttrHandler, techDisplayData) {
+    addEffects(techniqueEffect, techUseResolver, attrGetters, attrSetters, techDisplayData) {
 
         switch (techniqueEffect.type) {
             case "HP":
+                techUseResolver.addHPEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters);
+                break;
             case "WILL":
+                techUseResolver.addWillEffect(techniqueEffect, techUseResolver, attrGetters);
+                break;
+            case "EN":
+                techUseResolver.addEnergyEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters);
+                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
+                break;
             case "Favor":
-                return;
+                techUseResolver.addFavorEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters);
+                break;
             case "Vitality":
+                techUseResolver.addAttributeValue(techniqueEffect, "Cmb_Vitality", techUseResolver, attrGetters, attrSetters);
                 techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
                 break;
             case "Impatience":
-                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
-                break;
-            case "Influence":
+                techUseResolver.addAttributeValue(techniqueEffect, "Soc_Impatience", techUseResolver, attrGetters, attrSetters);
                 techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
                 break;
             case "Request":
-                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
+                techUseResolver.addRequestCheck(techniqueEffect, techUseResolver, attrGetters);
                 break;
             case "Status":
-                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
+                techUseResolver.addStatusEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters);
                 break;
+            case "Influence":
             case "Resistance":
-                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
-                break;
             case "Advantage":
-                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
-                break;
             case "Move":
                 techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
                 break;
-            case "EN":
-                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
+        }
+    }
+    
+    addHPEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
+        let roll = "";
+        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
+        
+        switch (techniqueEffect.subType) {
+            case "Surge":
+                let surgeValue = attrGetters.getObjByTarget(techniqueEffect).parseInt("Cmb_Surge");
+                if (surgeValue <= 0) {
+                    if(!tokenEffect.hasSurged()) {
+                        techUseResolver.addMessage("Cannot Surge, no Surge available");
+                    }
+                    tokenEffect.spendSurge();
+                    return;
+                }
+                if(!tokenEffect.hasSurged()) {
+                    attrSetters.getObjByTarget(techniqueEffect).addUpdate("Cmb_Surge", surgeValue - 1);
+                    tokenEffect.spendSurge();
+                }
+                
+                roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
+                tokenEffect.addStoredDieRolls("HP Heal", roll);
                 break;
+            case "Heal":
+                roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
+                tokenEffect.addStoredDieRolls("HP Heal", roll);
+                break;
+            default:
+                if (techniqueEffect.traits == "AP") {
+                    tokenEffect.setArmorPiercing();
+                }
+                roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
+                tokenEffect.addStoredDieRolls("HP Damage", roll);
+        }
+    }
+    
+    tryApplyHpDamage(tokenEffect, attrGetter, attrSetter) {
+        let storedDieRolls = tokenEffect.tryGetStoredDieRolls("HP Damage");
+        if (storedDieRolls == undefined) {
+            return;
+        }
+        
+        if (!tokenEffect.isArmorPiercing) {
+            let armorTotal = attrGetter.parseInt(WuxDef.GetVariable("Cmb_Armor"));
+            if (armorTotal > storedDieRolls.total / 2) {
+                armorTotal = Math.floor(storedDieRolls.total / 2);
+            }
+            storedDieRolls.addModToRoll(-1 * armorTotal, "Armor");
+        }
+        tokenEffect.takeHpDamage(attrSetter, storedDieRolls.total, "HP");
+    }
+
+    addWillEffect(techniqueEffect, techUseResolver, attrGetters) {
+        let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
+        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
+        tokenEffect.addStoredDieRolls("Will", roll);
+    }
+    
+    addEnergyEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
+        let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
+        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
+        tokenEffect.tokenTargetData.addEnergy(attrSetters.getObjByTarget(techniqueEffect), roll.total);
+    }
+
+    addFavorEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
+        let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
+        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
+        tokenEffect.tokenTargetData.addFavor(attrSetters.getObjByTarget(techniqueEffect), roll.total);
+    }
+
+    addRequestCheck(techniqueEffect, techUseResolver, attrGetters) {
+        let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
+        if (techniqueEffect.formula.hasWorker("TargetFavor")) {
+            let favorValue = attrGetters.getObjByTarget(techniqueEffect).parseInt("Soc_Favor");
+            roll.addModToRoll(favorValue);
+        }
+        let message = `Request Check: ${Format.ShowTooltip(roll.total, roll.message)}`;
+        techUseResolver.addMessage(message);
+    }
+    
+    addStatusEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
+        // do nothing for now
+    }
+    
+    addAttributeValue(techniqueEffect, attrName, techUseResolver, attrGetters, attrSetters) {
+        let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
+        let attrValue = attrGetters.getObjByTarget(techniqueEffect).parseInt(attrName);
+        attrSetters.getObjByTarget(techniqueEffect).addUpdate(attrName, attrValue + roll.total);
+    }
+    
+    calculateFormula(techniqueEffect, senderAttrHandler) {
+        let dVal = parseInt(techniqueEffect.dVal);
+        let dType = parseInt(techniqueEffect.dType);
+        let roll = new DieRoll();
+        roll.rollDice(isNaN(dVal) ? 0 : dVal, isNaN(dType) ? 0 : dType);
+        roll.addModToRoll(techniqueEffect.formula.getValue(senderAttrHandler));
+        return roll;
+    }
+    
+    getTargetTokenEffect(techniqueEffect, techUseResolver) {
+        if (techniqueEffect.target == "Self") {
+            return techUseResolver.senderTokenEffect;
+        }
+        else {
+            return techUseResolver.targetTokenEffect;
         }
     }
 
