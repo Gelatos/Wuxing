@@ -1384,7 +1384,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
     tryGetDefensesAndAttributes(techUseResolver, targetAttributeHandler) {
         techUseResolver.technique.effects.iterate(function (techniqueEffect) {
             if (techniqueEffect.defense.startsWith("Def_")) {
-                let defenseDef = WuxDef.get(techniqueEffect.defense);
+                let defenseDef = WuxDef.Get(techniqueEffect.defense);
                 targetAttributeHandler.addMod(defenseDef.getVariable());
             }
             if (techniqueEffect.target != "Self") {
@@ -1428,7 +1428,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
         let message = "";
         let dcValue = parseInt(techniqueEffect.defense);
         if (isNaN(dcValue)) {
-            let defenseDef = WuxDef.get(techniqueEffect.defense);
+            let defenseDef = WuxDef.Get(techniqueEffect.defense);
             dcValue = targetAttrHandler.parseInt(defenseDef.getVariable());
             message = `Vs. ${defenseDef.getTitle()} (DC ${dcValue}): `;
         }
