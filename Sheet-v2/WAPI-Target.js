@@ -485,12 +485,27 @@ class TokenTargetEffectsData {
     constructor(tokenTargetData) {
         this.tokenTargetData = tokenTargetData;
         this.effectMessages = [];
+        this.storedValues = {};
     }
     
     addMessage(message) {
         if (message != undefined && message != "") {
             this.effectMessages.push(message);
         }
+    }
+    
+    getStoredValue(variableName) {
+        if (this.storedValues[variableName] == undefined) {
+            return 0;
+        }
+        return this.storedValues[variableName];
+    }
+    
+    setStoredValue(variableName, value) {
+        if (value == undefined) {
+            value = 0;
+        }
+        this.storedValues[variableName] = value;
     }
     
     takeHpDamage(attributeHandler, damage, damageType) {

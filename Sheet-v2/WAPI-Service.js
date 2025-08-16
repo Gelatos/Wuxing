@@ -1,4 +1,5 @@
 on("chat:message", function (msg) {
+    Debug.Log(`msg: ${msg.content}`);
     if (msg.type == "api" && msg.content != null) {
 
         let firstSpace = msg.content.indexOf(" ");

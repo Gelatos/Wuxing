@@ -725,18 +725,6 @@ class TechniqueData extends WuxDatabaseData {
             this.definitions.push(definition);
         }
     }
-
-    unsanitizeSheetRollAction(jsonString) {
-        jsonString = jsonString.replace(/%%/g, '"');
-        jsonString = jsonString.replace(/&&/g, ":");
-        jsonString = jsonString.replace(/<</g, "{");
-        jsonString = jsonString.replace(/>>/g, "}");
-        return JSON.parse(jsonString);
-    }
-
-    importSandboxJson(jsonString) {
-        this.importJson(this.unsanitizeSheetRollAction(jsonString));
-    }
 }
 
 class TechniqueEffect extends dbObj {
@@ -905,6 +893,10 @@ class TechniqueUseEffect extends dbObj {
         this.skill = "";
         this.effects = new TechniqueEffectDatabase();
     }
+    
+    getUseTech(sheetName) {
+        return `!utech ${this.sanitizeSheetRollAction(JSON.stringify(this))}$$${sheetName}`;
+    }
 
     sanitizeSheetRollAction(sheetRoll) {
         sheetRoll = sheetRoll.replace(/"/g, "%%");
@@ -923,8 +915,11 @@ class TechniqueUseEffect extends dbObj {
     }
 
     unsanitizeSheetRollAction(jsonString) {
-        jsonString = jsonString.replace(/%%/g, '"');
-        jsonString = jsonString.replace(/&&/g, ":");
+        Debug.Log(`Unsanitized JSON start: ${jsonString}`);
+        jsonString = jsonString.replace(/&&|%%/g, match => {
+            if (match === "&&") return ":";
+            if (match === "%%") return '"';
+        });
         return JSON.parse(jsonString);
     }
 
@@ -1982,7 +1977,7 @@ class TechniqueDisplayData {
                 this.targetData += "; ";
             }
             if (technique.size > 0) {
-                if (technique.target.includes("Target")) {
+                if (technique.target.includes("Target") || technique.target.includes("Object")) {
                     this.targetData += `${technique.size} ${technique.target}`;
                 }
                 else {
@@ -2122,12 +2117,12 @@ class TechniqueDisplayData {
             if (this.technique.effects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
                 effectData.import(this.technique.name, this.technique.skill, this.technique.effects);
-                output += `{{targetData=!utech ${effectData.sanitizeSheetRollAction(JSON.stringify(effectData))}$$@{${WuxDef.GetVariable("SheetName")}}}}`;
+                output += `{{targetData=${effectData.getUseTech(`@{${WuxDef.GetVariable("SheetName")}}`)}}}`;
             }
             if (this.technique.secondaryEffects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
                 effectData.import(this.technique.name, this.technique.skill, this.technique.secondaryEffects);
-                output += `{{targetData2=!utech ${effectData.sanitizeSheetRollAction(JSON.stringify(effectData))}$$@{${WuxDef.GetVariable("SheetName")}}}}`;
+                output += `{{targetData2=${effectData.getUseTech(`@{${WuxDef.GetVariable("SheetName")}}`)}}}`;
             }
             if (this.technique.skill != "") {
                 output += "{{hascheck=1}}";
@@ -2203,9 +2198,321 @@ class TechniqueDisplayData {
     }
 }
 
-class TechniqueEffectDisplayData {
+class BaseTechniqueEffectDisplayData {
+    
+    constructor() {
+    }
+
+    formatEffect(effect) {
+        let output= this.formatTemporaryEffect(effect);
+        switch (effect.type) {
+            case "HP":
+                output += this.formatHpEffect(effect);
+                break;
+            case "WILL":
+                output += this.formatWillEffect(effect);
+                break;
+            case "Vitality":
+                output += this.formatVitalityEffect(effect);
+                break;
+            case "Impatience":
+                output += this.formatImpatienceMeterEffect(effect);
+                break;
+            case "Favor":
+                output += this.formatFavorEffect(effect);
+                break;
+            case "Influence":
+                output += this.formatInfluenceMeterEffect(effect);
+                break;
+            case "Request":
+                output += this.formatRequestEffect(effect);
+                break;
+            case "Status":
+                output += this.formatStatusEffect(effect);
+                break;
+            case "Resistance":
+                output += this.formatResistanceEffect(effect);
+                break;
+            case "Advantage":
+                output += this.formatAdvantageEffect(effect);
+                break;
+            case "Boost":
+                output += this.formatBoostEffect(effect);
+                break;
+            case "Terrain":
+                output += this.formatTerrainEffect(effect);
+                break;
+            case "Structure":
+                output += this.formatStructureEffect(effect);
+                break;
+            case "Move":
+                output += this.formatMoveEffect(effect);
+                break;
+            case "EN":
+                output += this.formatEnEffect(effect);
+                break;
+            case "Definition":
+                // Do nothing
+                break;
+            case "Desc":
+            case "":
+                output += this.formatDescriptionEffect(effect);
+                break;
+        }
+
+        return output;
+    }
+
+    formatTemporaryEffect(effect) {
+        switch (effect.duration) {
+            case "Trigger":
+                return "Against the triggering effect, ";
+            case "Turn":
+                return "Until the end of the turn, ";
+            case "Round":
+                return "Until the end of the round, ";
+            case "Focus":
+                return "Until you lose focus, ";
+            case "Conflict":
+                return "Until the end of the conflict, ";
+        }
+        return "";
+    }
+
+    formatHpEffect(effect) {
+        let hp = WuxDef.GetTitle("HP");
+        switch (effect.subType) {
+            case "Heal":
+                return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${hp}`;
+            case "Surge":
+                return `If ${this.formatTarget(effect)} has a surge, they must spend one and heal ${this.formatCalcBonus(effect)} ${hp}`;
+            default:
+                let traits = "";
+                if (effect.traits != "") {
+                    traits = `[${effect.traits}] `;
+                }
+                return `${traits}${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+        }
+    }
+
+    formatWillEffect(effect) {
+        let willpower = WuxDef.GetTitle("WILL");
+        switch (effect.subType) {
+            case "Heal":
+                return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${willpower}`;
+            default:
+                return `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${willpower} damage`;
+        }
+    }
+
+    formatVitalityEffect(effect) {
+        let vitality = WuxDef.GetTitle("Cmb_Vitality");
+        switch (effect.subType) {
+            case "Heal":
+                return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${vitality}`;
+            default:
+                return `${this.formatTargetLose(effect)} ${this.formatCalcBonus(effect)} ${vitality}`;
+        }
+    }
+
+    formatFavorEffect(effect) {
+        let favorTitle = WuxDef.GetTitle("Soc_Favor");
+        switch (effect.subType) {
+            case "Heal":
+                return `${this.formatTargetLose(effect)} ${this.formatCalcBonus(effect)} ${favorTitle}`;
+            default:
+                return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${favorTitle}`;
+        }
+    }
+
+    formatInfluenceMeterEffect(effect) {
+        let subTypes = effect.subType.split(":");
+        switch (subTypes[0]) {
+            case "Raise":
+                return `Raise the severity of an influence on your target.`;
+            case "Lower":
+                return `Lower the severity of an influence on your target.`;
+            case "Adjust":
+                return `Raise or lower the severity of an influence on your target.`;
+            case "Reveal":
+                return "A related influence to the statement is revealed to you. You learn whether the influence is supportive or oppositional.";
+            case "RevealNeg":
+                return "A related oppositional influence to the statement is revealed to you.";
+            case "RevealPos":
+                return "A related supportive influence to the statement is revealed to you.";
+            case "Add":
+                return `The target gains the influence, "${effect.effect}" which is at ${subTypes[1]} Severity. This influence is removed if the target becomes hostile towards you or the social conflict ends. `;
+        }
+    }
+
+    formatImpatienceMeterEffect(effect) {
+        let impatience = WuxDef.GetTitle("Soc_Impatience");
+        switch (effect.subType) {
+            case "Heal":
+                return `Reduce target's ${impatience} by ${this.formatCalcBonus(effect)}`;
+            default:
+                return `Increase target's ${impatience} by ${this.formatCalcBonus(effect)}`;
+        }
+    }
+
+    formatRequestEffect(effect) {
+        return `Make a request check on the target with ${this.formatCalcBonus(effect)}`;
+    }
+
+    formatStatusEffect(effect) {
+        let state = WuxDef.Get(effect.effect);
+
+        switch (effect.subType) {
+            case "Add":
+                return `${this.formatTargetGain(effect)} the ${state.title} ${state.group}`;
+            case "Remove":
+                return `${this.formatTargetLose(effect)} the ${state.title} ${state.group}`;
+            case "Remove Any":
+                return `${this.formatTargetLose(effect)} any condition of your choice`;
+            case "Remove All":
+                return `${this.formatTargetLose(effect)} all conditions of your choice`;
+            case "Remove Will":
+                return `${this.formatTargetLose(effect)} all emotions of their choice`;
+            case "Self":
+                return `${this.formatTargetGain(effect)} the ${state.title} ${state.group} targeted towards the caster`;
+            case "Choose":
+                return `${this.formatTargetGain(effect)} the ${state.title} ${state.group} targeted towards a character of your choice`;
+            default:
+                return `${this.formatTargetGain(effect)} the ${state.title} ${state.group}`;
+        }
+    }
+
+    formatResistanceEffect(effect) {
+        let resistance = WuxDef.GetTitle("Resistance");
+        let damageType = WuxDef.GetTitle(effect.effect);
+        return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${resistance} against ${damageType} damage`;
+    }
+
+    formatAdvantageEffect(effect) {
+        let owner = "their";
+        if (effect.target == "Self") {
+            owner = "your";
+        }
+        let formatCalc = this.formatCalcBonus(effect);
+
+        switch (effect.subType) {
+            case "Opponent":
+                return `The next ${effect.effect} made against ${this.formatTarget(effect)} gains +${Math.abs(formatCalc)} ${formatCalc > 0 ? "Advantage" : "Disadvantage"}`;
+            default:
+                return `${this.formatTargetGain(effect)} +${Math.abs(formatCalc)} ${formatCalc > 0 ? "Advantage" : "Disadvantage"} on ${owner} next ${effect.effect}`;
+        }
+    }
+
+    formatBoostEffect(effect) {
+        switch (effect.subType) {
+            case "Set":
+                return `${WuxDef.GetTitle(effect.effect)} is set to ${this.formatCalcBonus(effect)}`;
+            case "Penalty":
+                return `${WuxDef.GetTitle(effect.effect)} decreases by ${this.formatCalcBonus(effect)}`;
+            default:
+                return `${WuxDef.GetTitle(effect.effect)} increases by ${this.formatCalcBonus(effect)}`;
+        }
+    }
+
+    formatTerrainEffect(effect) {
+        let terrainType = WuxDef.GetTitle(effect.effect);
+        switch (effect.subType) {
+            case "Add":
+                return `The area is considered [${terrainType}].`;
+            case "Remove":
+                return `Any effects in the area considered [${terrainType}] are removed.`;
+        }
+    }
+
+    formatStructureEffect(effect) {
+        switch (effect.subType) {
+            case "Count":
+                return `You create ${this.formatCalcBonus(effect)} ${effect.effect} in the targeted spaces.`;
+            case "Height":
+                return `Each ${effect.effect} is ${this.formatCalcBonus(effect)} spaces high.`;
+            case "HP":
+                return `Each ${effect.effect} has ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle("HP")}.`;
+            default:
+                return effect.effect;
+        }
+    }
+
+    formatMoveEffect(effect) {
+        switch (effect.subType) {
+            case "Charge":
+                return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} Move Charge.`;
+            case "Pushed":
+                return `${this.formatTargetCopula(effect)} Pushed ${this.formatCalcBonus(effect)} spaces ${effect.effect == "" ? "from you." : effect.effect}`;
+            case "Pulled":
+                return `${this.formatTargetCopula(effect)} Pulled ${this.formatCalcBonus(effect)} spaces ${effect.effect == "" ? "towards you." : effect.effect}`;
+            case "ForceMove":
+                return `${this.formatTargetCopula(effect)} Force Moved ${this.formatCalcBonus(effect)} spaces${effect.effect == "" ? "." : " " + effect.effect}`;
+            case "Aloft":
+                return `${this.formatTarget(effect)} stays aloft and moves up to ${this.formatCalcBonus(effect)} spaces${effect.effect == "" ? "." : " " + effect.effect}`;
+            case "Float":
+                return `${this.formatTarget(effect, " Float", " Floats")}.`;
+            case "FreeMove":
+                return `${this.formatTarget(effect)} may Free Move up to ${this.formatCalcBonus(effect)} spaces${effect.effect == "" ? "." : " " + effect.effect}`;
+            case "Sneak":
+                return `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces. This movement does not break the hidden status.`;
+            case "Invis":
+                return `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces. This movement does not break the hidden or invisible status.`;
+            default:
+                return `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces.`;
+        }
+    }
+
+    formatEnEffect(effect) {
+        let effectTotal = this.formatCalcBonus(effect);
+        return `${this.formatTargetGain(effect)} ${effectTotal} ${WuxDef.GetTitle("EN")};`;
+    }
+
+    formatDescriptionEffect(effect) {
+        return effect.effect;
+    }
+
+    formatTargetTake(effect) {
+        return this.formatTarget(effect, " takes", " take");
+    }
+
+    formatTargetGain(effect) {
+        return this.formatTarget(effect, " gains", " gain");
+    }
+
+    formatTargetLose(effect) {
+        return this.formatTarget(effect, " loses", " lose");
+    }
+
+    formatTargetCopula(effect) {
+        return this.formatTarget(effect, " is", " are");
+    }
+
+    formatTarget(effect, targetSuffix, selfSuffix) {
+        if (targetSuffix == undefined) {
+            targetSuffix = "";
+        }
+        if (selfSuffix == undefined) {
+            selfSuffix = "";
+        }
+        
+        if (effect.target == "Self") {
+            return `You${selfSuffix}`;
+        }
+        return `Target${targetSuffix}`;
+    }
+
+    formatCalcBonus(effect) {
+    }
+}
+
+class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
 
     constructor(techniqueEffects) {
+        super();
+        if (techniqueEffects == undefined) {
+            return;
+        }
+        
         this.check = "";
         this.checkDescription = "";
         this.effects = [];
@@ -2276,318 +2583,6 @@ class TechniqueEffectDisplayData {
         }
     }
 
-    formatEffect(effect) {
-        let output= this.formatTemporaryEffect(effect);
-        switch (effect.type) {
-            case "HP":
-                output += this.formatHpEffect(effect);
-                break;
-            case "WILL":
-                output += this.formatWillEffect(effect);
-                break;
-            case "Vitality":
-                output += this.formatVitalityEffect(effect);
-                break;
-            case "Impatience":
-                output += this.formatImpatienceMeterEffect(effect);
-                break;
-            case "Favor":
-                output += this.formatSocialMeterEffect(effect, WuxDef.GetTitle("Soc_Favor"));
-                break;
-            case "Influence":
-                output += this.formatInfluenceMeterEffect(effect);
-                break;
-            case "Request":
-                output += this.formatRequestEffect(effect);
-                break;
-            case "Status":
-                output += this.formatStatusEffect(effect);
-                break;
-            case "Resistance":
-                output += this.formatResistanceEffect(effect);
-                break;
-            case "Advantage":
-                output += this.formatAdvantageEffect(effect);
-                break;
-            case "Boost":
-                output += this.formatBoostEffect(effect);
-                break;
-            case "Terrain":
-                output += this.formatTerrainEffect(effect);
-                break;
-            case "Structure":
-                output += this.formatStructureEffect(effect);
-                break;
-            case "Move":
-                output += this.formatMoveEffect(effect);
-                break;
-            case "EN":
-                output += this.formatEnEffect(effect);
-                break;
-            case "Definition":
-                // Do nothing
-                break;
-            case "Desc":
-            case "":
-                output += this.formatDescriptionEffect(effect);
-                break;
-        }
-
-        return output;
-    }
-
-    formatTemporaryEffect(effect) {
-        switch (effect.duration) {
-            case "Trigger":
-                return "Against the triggering effect, ";
-            case "Turn":
-                return "Until the end of the turn, ";
-            case "Round":
-                return "Until the end of the round, ";
-            case "Focus":
-                return "Until you lose focus, ";
-            case "Conflict":
-                return "Until the end of the conflict, ";
-        }
-        return "";
-    }
-
-    formatHpEffect(effect) {
-        let hp = WuxDef.GetTitle("HP");
-        switch (effect.subType) {
-            case "Heal":
-                return `Heal ${this.formatCalcBonus(effect)} ${hp}`;
-            case "Surge":
-                return `If target has a surge, they must spend one and heal ${this.formatCalcBonus(effect)} ${hp}`;
-            default:
-                let traits = "";
-                if (effect.traits != "") {
-                    traits = `[${effect.traits}] `;
-                }
-                return `${traits}${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
-        }
-    }
-
-    formatWillEffect(effect) {
-        let willpower = WuxDef.GetTitle("WILL");
-        switch (effect.subType) {
-            case "Heal":
-                return `Heal ${this.formatCalcBonus(effect)} ${willpower}`;
-            default:
-                return `${this.formatCalcBonus(effect)} ${willpower} damage`;
-        }
-    }
-
-    formatVitalityEffect(effect) {
-        let vitality = WuxDef.GetTitle("Cmb_Vitality");
-        switch (effect.subType) {
-            case "Heal":
-                return `Gain ${this.formatCalcBonus(effect)} ${vitality}`;
-            default:
-                return `Lose ${this.formatCalcBonus(effect)} ${vitality}`;
-        }
-    }
-
-    formatSocialMeterEffect(effect, type) {
-        switch (effect.subType) {
-            case "Heal":
-                return `Reduce target's ${type} by ${this.formatCalcBonus(effect)}`;
-            default:
-                return `Increase target's ${type} by ${this.formatCalcBonus(effect)}`;
-        }
-    }
-
-    formatInfluenceMeterEffect(effect) {
-        let subTypes = effect.subType.split(":");
-        switch (subTypes[0]) {
-            case "Raise":
-                return `You raise the severity of an influence on your target.`;
-            case "Lower":
-                return `You lower the severity of an influence on your target.`;
-            case "Adjust":
-                return `You raise or lower the severity of an influence on your target.`;
-            case "Reveal":
-                return "A related influence to the statement is revealed to you. You learn whether the influence is supportive or oppositional.";
-            case "RevealNeg":
-                return "A related oppositional influence to the statement is revealed to you.";
-            case "RevealPos":
-                return "A related supportive influence to the statement is revealed to you.";
-            case "Add":
-                return `The target gains the influence, "${effect.effect}" which is at ${subTypes[1]} Severity. This influence is removed if the target becomes hostile towards you or the social conflict ends. `;
-        }
-    }
-
-    formatImpatienceMeterEffect(effect) {
-        let impatience = WuxDef.GetTitle("Soc_Impatience");
-        switch (effect.subType) {
-            case "Heal":
-                return `Reduce target's ${impatience} by ${this.formatCalcBonus(effect)}`;
-            default:
-                return `Increase target's ${impatience} by ${this.formatCalcBonus(effect)}`;
-        }
-    }
-
-    formatRequestEffect(effect) {
-        return `Make a request check on the target with ${this.formatCalcBonus(effect)}`;
-    }
-
-    formatStatusEffect(effect) {
-        let state = WuxDef.Get(effect.effect);
-        let target = "Target";
-        let plural = "s";
-        if (effect.target == "Self") {
-            target = "You";
-            plural = "";
-        }
-
-        switch (effect.subType) {
-            case "Add":
-                return `${target} gain${plural} the ${state.title} ${state.group}`;
-            case "Remove":
-                return `${target} lose${plural} the ${state.title} ${state.group}`;
-            case "Remove Any":
-                return `${target} lose${plural} any condition of your choice`;
-            case "Remove All":
-                return `${target} lose${plural} all conditions of your choice`;
-            case "Remove Will":
-                return `${target} lose${plural} all emotions of their choice`;
-            case "Self":
-                return `${target} gain${plural} the ${state.title} ${state.group} targeted towards the caster`;
-            case "Choose":
-                return `${target} gain${plural} the ${state.title} ${state.group} targeted towards a character of your choice`;
-            default:
-                return `${target} gain${plural} the ${state.title} ${state.group}`;
-        }
-    }
-    
-    formatResistanceEffect(effect) {
-        let target = "Target";
-        let plural = "s";
-        let copulas = "is";
-        if (effect.target == "Self") {
-            target = "You";
-            plural = "";
-        }
-        let resistance = WuxDef.GetTitle("Resistance");
-        let damageType = WuxDef.GetTitle(effect.effect);
-        return `${target} gain${plural} ${this.formatCalcBonus(effect)} ${resistance} against ${damageType} damage`;
-    }
-
-    formatAdvantageEffect(effect) {
-        let target = "The Target";
-        let plural = "s";
-        let owner = "their";
-        if (effect.target == "Self") {
-            target = "You";
-            plural = "";
-            owner = "your";
-        }
-        let formatCalc = this.formatCalcBonus(effect);
-
-        switch (effect.subType) {
-            case "Opponent":
-                return `The next ${effect.effect} made against ${target} gains +${Math.abs(formatCalc)} ${formatCalc > 0 ? "Advantage" : "Disadvantage"}`;
-            default:
-                return `${target} gain${plural} +${Math.abs(formatCalc)} ${formatCalc > 0 ? "Advantage" : "Disadvantage"} on ${owner} next ${effect.effect}`;
-        }
-    }
-
-    formatBoostEffect(effect) {
-        switch (effect.subType) {
-            case "Set":
-                return `${WuxDef.GetTitle(effect.effect)} is set to ${this.formatCalcBonus(effect)}`;
-            case "Penalty":
-                return `${WuxDef.GetTitle(effect.effect)} decreases by ${this.formatCalcBonus(effect)}`;
-            default:
-                return `${WuxDef.GetTitle(effect.effect)} increases by ${this.formatCalcBonus(effect)}`;
-        }
-    }
-
-    formatTerrainEffect(effect) {
-        let terrainType = WuxDef.GetTitle(effect.effect);
-        switch (effect.subType) {
-            case "Add":
-                return `The area is considered [${terrainType}].`;
-            case "Remove":
-                return `Any effects in the area considered [${terrainType}] are removed.`;
-        }
-    }
-
-    formatStructureEffect(effect) {
-        switch (effect.subType) {
-            case "Count":
-                return `You create ${this.formatCalcBonus(effect)} ${effect.effect} in the targeted spaces.`;
-            case "Height":
-                return `Each ${effect.effect} is ${this.formatCalcBonus(effect)} spaces high.`;
-            case "HP":
-                return `Each ${effect.effect} has ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle("HP")}.`;
-            default:
-                return effect.effect;
-        }
-    }
-
-    formatMoveEffect(effect) {
-        let target = "Target";
-        let plural = "s";
-        let copulas = "is";
-        if (effect.target == "Self") {
-            target = "You";
-            plural = "";
-            copulas = "are";
-        }
-        
-        switch (effect.subType) {
-            case "Charge":
-                return `${target} gain${plural} ${this.formatCalcBonus(effect)} Move Charge.`;
-            case "Pushed":
-                return `${target} ${copulas} Pushed ${this.formatCalcBonus(effect)} spaces ${effect.effect == "" ? "from you." : effect.effect}`;
-            case "Pulled":
-                return `${target} ${copulas} Pulled ${this.formatCalcBonus(effect)} spaces ${effect.effect == "" ? "towards you." : effect.effect}`;
-            case "ForceMove":
-                return `${target} ${copulas} Force Moved ${this.formatCalcBonus(effect)} spaces${effect.effect == "" ? "." : " " + effect.effect}`;
-            case "Aloft":
-                return `${target} stays aloft and moves up to ${this.formatCalcBonus(effect)} spaces${effect.effect == "" ? "." : " " + effect.effect}`;
-            case "Float":
-                return `${target} Float${plural}.`;
-            case "FreeMove":
-                return `${target} may Free Move up to ${this.formatCalcBonus(effect)} spaces${effect.effect == "" ? "." : " " + effect.effect}`;
-            case "Sneak":
-                return `${target} may Move up to ${this.formatCalcBonus(effect)} spaces. Your movement does not break your hidden status.`;
-            case "Invis":
-                return `${target} may Move up to ${this.formatCalcBonus(effect)} spaces. Your movement does not break your hidden or invisible status.`;
-            default:
-                return `${target} may Move up to ${this.formatCalcBonus(effect)} spaces.`;
-        }
-    }
-
-    formatEnEffect(effect) {
-        let effectTotal = this.formatCalcBonus(effect);
-        if (effect.target == "Self") {
-            return `You gain ${effectTotal} ${WuxDef.GetTitle("EN")}`;
-        } else {
-            return `Target gains ${effectTotal} ${WuxDef.GetTitle("EN")}`;
-        }
-    }
-
-    formatDescriptionEffect(effect) {
-        return effect.effect;
-    }
-
-    getTargetString(effect, plural) {
-        let output = {
-            target: "",
-            plural: ""
-        };
-        if (effect.target == "Self") {
-            output.target = "You";
-            output.plural = "";
-        } else {
-            output.target = "Target";
-            output.plural = plural;
-        }
-        return output;
-    }
-
     formatCalcBonus(effect) {
         let output = this.formatEffectDice(effect);
         let formulaString;
@@ -2607,6 +2602,90 @@ class TechniqueEffectDisplayData {
             return `${effect.dVal}d${effect.dType}`;
         }
         return "";
+    }
+}
+
+class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
+
+    constructor(props, senderName, targetName) {
+        super(props);
+        this.senderName = senderName;
+        this.targetName = targetName;
+    }
+
+    formatEffect(effect) {
+        let output= this.formatTemporaryEffect(effect);
+        switch (effect.type) {
+            case "HP":
+            case "WILL":
+            case "Favor":
+                return;
+            case "Vitality":
+                output += this.formatVitalityEffect(effect);
+                break;
+            case "Impatience":
+                output += this.formatImpatienceMeterEffect(effect);
+                break;
+            case "Influence":
+                output += this.formatInfluenceMeterEffect(effect);
+                break;
+            case "Request":
+                output += this.formatRequestEffect(effect);
+                break;
+            case "Status":
+                output += this.formatStatusEffect(effect);
+                break;
+            case "Resistance":
+                output += this.formatResistanceEffect(effect);
+                break;
+            case "Advantage":
+                output += this.formatAdvantageEffect(effect);
+                break;
+            case "Terrain":
+                output += this.formatTerrainEffect(effect);
+                break;
+            case "Move":
+                output += this.formatMoveEffect(effect);
+                break;
+            case "EN":
+                output += this.formatEnEffect(effect);
+                break;
+            case "Desc":
+                output += this.formatDescriptionEffect(effect);
+                break;
+        }
+
+        return output;
+    }
+
+    formatTargetTake(effect) {
+        return this.formatTarget(effect, " takes", " takes");
+    }
+
+    formatTargetGain(effect) {
+        return this.formatTarget(effect, " gains", " gains");
+    }
+
+    formatTargetLose(effect) {
+        return this.formatTarget(effect, " loses", " loses");
+    }
+
+    formatTargetCopula(effect) {
+        return this.formatTarget(effect, " is", " is");
+    }
+
+    formatTarget(effect, targetSuffix, selfSuffix) {
+        if (targetSuffix == undefined) {
+            targetSuffix = "";
+        }
+        if (selfSuffix == undefined) {
+            selfSuffix = "";
+        }
+
+        if (effect.target == "Self") {
+            return `${this.senderName}${selfSuffix}`;
+        }
+        return `${this.targetName}${targetSuffix}`;
     }
 }
 

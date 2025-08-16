@@ -222,6 +222,50 @@ var WuxConflictManager = WuxConflictManager || (function () {
 
 }());
 
+var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
+    'use strict';
+
+    var schemaVersion = "0.1.1",
+
+        checkInstall = function () {
+            if (!state.hasOwnProperty('WuxTechniqueResolver') || state.WuxTechniqueResolver.version !== schemaVersion) {
+                state.WuxTechniqueResolver = {
+                    version: schemaVersion
+                };
+            }
+        },
+
+        // Input Commands
+        // ---------------------------
+
+        handleInput = function (msg, tag, content) {
+            switch (tag) {
+                case "!ctech":
+                    commandConsumeTechnique(msg, content);
+                    break;
+                case "!utech":
+                    commandUseTechnique(msg, content);
+                    break;
+            }
+        },
+
+        commandConsumeTechnique = function (msg, content) {
+            let techniqueConsumptionResolver = new TechniqueConsumptionResolver(msg, content);
+            techniqueConsumptionResolver.run();
+        },
+        commandUseTechnique = function (msg, content) {
+            let techUseResolver = new TechniqueUseResolver(msg, content);
+            techUseResolver.run();
+        }
+    ;
+
+    return {
+        CheckInstall: checkInstall,
+        HandleInput: handleInput
+    };
+
+}());
+
 class TechniqueResolverData {
     constructor(msg, content) {
         this.createEmpty();
@@ -248,6 +292,7 @@ class TechniqueResolverData {
     }
     
     initializeData(contentData) {
+        Debug.Log(`[TechniqueResolverData] Initializing data with content: ${contentData[0]}`);
         this.initializeTechniqueData(contentData[0]);
         this.sourceSheetName = contentData[1];
         this.senderTokenTargetData = TargetReference.GetTokenTargetDataByName(this.sourceSheetName);
@@ -359,7 +404,8 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
     
     consumeWill(techniqueConsumptionResolver, attrHandler, resourceObject) {
         let techniqueEffect = new TechniqueEffect();
-        techniqueEffect.name = "T1";
+        techniqueEffect.name = "T0";
+        techniqueEffect.target = "Self";
         techniqueEffect.type = "HP";
         techniqueEffect.forumla = 5 + (attrHandler.parseInt(WuxDef.GetVariable("CR")) * 5);
         techniqueEffect.effect = "Tension";
@@ -367,10 +413,11 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
         let effectDatabase = new TechniqueEffectDatabase();
         effectDatabase.add(techniqueEffect.name, techniqueEffect);
         
-        let willBreakEffect = `!uwillbreak ${effectDatabase.sanitizeSheetRollAction()}` +
-            `$$${techniqueConsumptionResolver.sourceSheetName}$$${techniqueConsumptionResolver.tokenEffect.tokenTargetData.charId}`;
-        
-        techniqueConsumptionResolver.tokenEffect.takeWillDamage(attrHandler, resourceObject.resourceValue, willBreakEffect);
+        let willBreakEffect = new TechniqueUseEffect();
+        willBreakEffect.name = "Magic Will Break";
+        willBreakEffect.effects = effectDatabase;
+        let willBreakEffectString = willBreakEffect.getUseTech(techniqueConsumptionResolver.sourceSheetName);
+        techniqueConsumptionResolver.tokenEffect.takeWillDamage(attrHandler, resourceObject.resourceValue, willBreakEffectString);
     }
 
     tryConsumeResources(techniqueConsumptionResolver, attributeHandler) {
@@ -441,8 +488,7 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
     }
 }
 
-class TechniqueUseResolver extends TechniqueResolverData
-{
+class TechniqueUseResolver extends TechniqueResolverData {
     constructor(msg, content) {
         super(msg, content);
     }
@@ -465,25 +511,24 @@ class TechniqueUseResolver extends TechniqueResolverData
     }
 
     initializeTechniqueData(data) {
-        this.technique = new TechniqueData();
+        this.technique = new TechniqueUseEffect();
         this.technique.importSandboxJson(data);
     }
 
     addInitialMessage() {
-        this.addMessage(`${this.senderTokenTargetData.displayName} uses ${this.technique.name}`);
+        this.addMessage(`${this.senderTokenEffect.displayName} uses ${this.technique.name} on ${this.targetTokenEffect.displayName}`);
     }
     
     run() {
         let techUseResolver = this;
         let senderAttributeHandler = new SandboxAttributeHandler(this.senderTokenEffect.tokenTargetData.charId);
-        let targetAttributeHandler = new SandboxAttributeHandler(this.targetTokenEffect.tokenTargetData.charId);
-
-        techUseResolver.tryGetSkillCheck(techUseResolver, senderAttributeHandler);
+        techUseResolver.tryGetSenderSkillCheck(techUseResolver, senderAttributeHandler);
+        techUseResolver.tryGetSenderAttributes(techUseResolver, senderAttributeHandler);
+        techUseResolver.getTargetData(techUseResolver, senderAttributeHandler);
         senderAttributeHandler.run();
-        targetAttributeHandler.run();
     }
     
-    tryGetSkillCheck(techUseResolver, senderAttributeHandler) {
+    tryGetSenderSkillCheck(techUseResolver, senderAttributeHandler) {
         if (techUseResolver.technique.skill == "") {
             return;
         }
@@ -496,125 +541,164 @@ class TechniqueUseResolver extends TechniqueResolverData
             techUseResolver.skillCheck = new DieRoll();
             techUseResolver.skillCheck.rollCheck(techUseResolver.advantage);
             techUseResolver.skillCheck.addModToRoll(skillValue);
+            techUseResolver.addMessage(`${techUseResolver.technique.skill} Check: ` + 
+                Format.ShowTooltip(`${techUseResolver.skillCheck.total}`, techUseResolver.skillCheck.message));
         });
     }
-}
 
-var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
-    'use strict';
-
-    var schemaVersion = "0.1.1",
-
-        checkInstall = function () {
-            if (!state.hasOwnProperty('WuxTechniqueResolver') || state.WuxTechniqueResolver.version !== schemaVersion) {
-                state.WuxTechniqueResolver = {
-                    version: schemaVersion
-                };
+    tryGetSenderAttributes(techUseResolver, senderAttributeHandler) {
+        techUseResolver.technique.effects.iterate(function (techniqueEffect) {
+            if (techniqueEffect.target == "Self") {
+                techUseResolver.tryGetAttributesFromTechniqueEffect(techniqueEffect, senderAttributeHandler);
             }
-        },
+            senderAttributeHandler.addMod(techniqueEffect.formula.getAttributes());
+        });
+    }
+    
+    tryGetAttributesFromTechniqueEffect(techniqueEffect, attributeHandler) {
+        switch (techniqueEffect.type) {
+            case "HP":
+                attributeHandler.addMod("HP");
+                switch (techniqueEffect.subType) {
+                    case "Surge":
+                        attributeHandler.addMod("Cmb_Surge");
+                        break;
+                    case "":
+                        attributeHandler.addMod("Cmb_Armor");
+                        break;
+                }
+                break;
+            case "WILL":
+                attributeHandler.addMod("WILL");
+                break;
+            case "Vitality":
+                attributeHandler.addMod("Cmb_Vitality");
+                break;
+            case "Impatience":
+                attributeHandler.addMod("Soc_Impatience");
+                break;
+            case "Favor":
+                attributeHandler.addMod("Soc_Favor");
+                break;
+            case "EN":
+                attributeHandler.addMod("EN");
+                break;
+        }
+    }
+    
+    getTargetData(techUseResolver, senderAttributeHandler) {
+        senderAttributeHandler.addFinishCallback(function (senderAttrHandler) {
+            let targetAttributeHandler = new SandboxAttributeHandler(this.targetTokenEffect.tokenTargetData.charId);
+            techUseResolver.tryGetDefensesAndAttributes(techUseResolver, targetAttributeHandler);
+            techUseResolver.performEffects(techUseResolver, senderAttrHandler, targetAttributeHandler);
+            targetAttributeHandler.run();
+        })
+    }
 
-        // Input Commands
-        // ---------------------------
-
-        handleInput = function (msg, tag, content) {
-            switch (tag) {
-                case "!ctech":
-                    commandConsumeTechnique(msg, content);
-                    break;
-                case "!utech":
-                    commandUseTechnique(msg, content);
-                    break;
-                case "!rtech":
-                    commandResolveTechnique(msg, content);
-                    break;
-                case "!roll":
-                    commandRollSkillCheck(msg, content);
-                    break;
+    tryGetDefensesAndAttributes(techUseResolver, targetAttributeHandler) {
+        techUseResolver.technique.effects.iterate(function (techniqueEffect) {
+            if (techniqueEffect.defense.startsWith("Def_")) {
+                let defenseDef = WuxDef.get(techniqueEffect.defense);
+                targetAttributeHandler.addMod(defenseDef.getVariable());
             }
-        },
-
-        commandConsumeTechnique = function (msg, content) {
-            let techniqueConsumptionResolver = new TechniqueConsumptionResolver(msg, content);
-            techniqueConsumptionResolver.run();
-        },
-        commandUseTechnique = function (msg, content) {
-            let techUseResolver = new TechniqueUseResolver(msg, content);
-            techUseResolver.run();
-        },
-        commandResolveTechnique = function (msg, content) {
-        },
-        commandRollSkillCheck = function (msg, content) {
-            rollSkillCheck(msg, ParseIntValue(content));
-        },
-
-        CheckTechnique = CheckTechnique || (function () {
-            var techniqueData = {},
-                userTokenTargetData = {},
-                targetTokenTargetData = {},
-                messages = [],
-
-                use = function (msg, content) {
-                    initializeData(content);
-                    if (userTokenTargetData == undefined || targetTokenTargetData == undefined) {
-                        Debug.LogError(`[CheckTechnique] tokenData not found`);
+            if (techniqueEffect.target != "Self") {
+                techUseResolver.tryGetAttributesFromTechniqueEffect(techniqueEffect, targetAttributeHandler);
+            }
+        });
+    }
+    
+    performEffects(techUseResolver, senderAttrHandler, targetAttributeHandler) {
+        targetAttributeHandler.addFinishCallback(function (targetAttrHandler) {
+            let currentCheck = "";
+            let passCheck = true;
+            let willBreakEffects = new TechniqueEffectDatabase();
+            let techDisplayData = new TechniqueEffectDisplayUseData("", 
+                techUseResolver.senderTokenEffect.displayName, techUseResolver.targetTokenEffect.displayName);
+            techUseResolver.technique.effects.iterate(function (techniqueEffect) {
+                if (techniqueEffect.defense != currentCheck) {
+                    currentCheck = techniqueEffect.defense;
+                    if (currentCheck == "WillBreak") {
+                        willBreakEffects.add(techniqueEffect.name, techniqueEffect);
                         return;
                     }
-                    Debug.Log(`[CheckTechnique] got ${JSON.stringify(techniqueData)}`);
-                },
-
-                initializeData = function (content) {
-                    let contentData = content.split("$$");
-                    if (contentData.length < 3) {
-                        Debug.LogError(`[CheckTechnique] Invalid content format: ${content}`);
-                    }
-                    techniqueData = new TechniqueData();
-                    techniqueData.importSandboxJson(contentData[0]);
-                    userTokenTargetData = TargetReference.GetTokenTargetDataByName(contentData[1]);
-                    targetTokenTargetData = TargetReference.GetTokenTargetData(contentData[2]);
-                    messages = [];
-                },
-
-                printMessages = function () {
-                    let message = `${resourceData.sheetname} uses ${resourceData.name}`;
-                    for (let i = 0; i < messages.length; i++) {
-                        message += `\n${messages[i]}`;
-                    }
-
-                    let systemMessage = new SystemInfoMessage(message);
-                    systemMessage.setSender("System");
-                    WuxMessage.Send(systemMessage, "GM");
+                    
+                    passCheck = techUseResolver.checkPassDc(techniqueEffect, techUseResolver, targetAttrHandler);
                 }
-
-            return {
-                Use: use
-            }
-        }()),
-
-
-        // Technique Handling
-        getUserTargetDataFromTechnique = function (technique) {
-            return TargetReference.GetTokenTargetDataByName(technique.sheetname);
-        },
-        getDefenderTargetDataFromTechnique = function (technique) {
-            return TargetReference.GetTokenTargetData(technique.target);
-        },
-
-        // Math
-        rollSkillCheck = function (msg, count) {
-            let results = new DieRoll();
-            results.rollSkillCheck(count, 0);
-            let message = `${Format.ShowTooltip(`Rolling Skill Check ${results.total}`, results.message)}`;
-            WuxingMessages.SendSystemMessage(message, "", msg.who);
+                
+                if (passCheck) {
+                    techUseResolver.addEffects(techniqueEffect, techUseResolver, senderAttrHandler, targetAttrHandler, techDisplayData);
+                }
+            });
+            
+            techUseResolver.printMessages();
+        });
+    }
+    
+    checkPassDc(techniqueEffect, techUseResolver, targetAttrHandler) {
+        if (techniqueEffect.defense == "") {
+            return true;
         }
-    ;
+        
+        let message = "";
+        let dcValue = parseInt(techniqueEffect.defense);
+        if (isNaN(dcValue)) {
+            let defenseDef = WuxDef.get(techniqueEffect.defense);
+            dcValue = targetAttrHandler.parseInt(defenseDef.getVariable());
+            message = `Vs. ${defenseDef.getTitle()} (DC ${dcValue}): `;
+        }
+        else {
+            message = `Vs. DC ${dcValue}: `;
+        }
+        
+        let pass = techUseResolver.skillCheck.total >= dcValue;
+        message += pass ? "Success!" : "Failure!";
+        techUseResolver.addMessage(message);
+        return pass;
+    }
+    
+    addEffects(techniqueEffect, techUseResolver, senderAttrHandler, targetAttrHandler, techDisplayData) {
 
-    return {
-        CheckInstall: checkInstall,
-        HandleInput: handleInput
-    };
+        switch (techniqueEffect.type) {
+            case "HP":
+            case "WILL":
+            case "Favor":
+                return;
+            case "Vitality":
+                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
+                break;
+            case "Impatience":
+                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
+                break;
+            case "Influence":
+                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
+                break;
+            case "Request":
+                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
+                break;
+            case "Status":
+                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
+                break;
+            case "Resistance":
+                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
+                break;
+            case "Advantage":
+                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
+                break;
+            case "Move":
+                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
+                break;
+            case "EN":
+                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
+                break;
+        }
+    }
 
-}());
-
+    printMessages() {
+        this.messages = this.messages.concat(this.tokenEffect.effectMessages);
+        let systemMessage = this.getMessageObject();
+        WuxMessage.Send(systemMessage);
+    }
+}
 
 
 var TechniqueUseResults = TechniqueUseResults || (function () {
