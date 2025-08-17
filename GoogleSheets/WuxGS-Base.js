@@ -442,6 +442,8 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents += WuxDefinition.InfoHeader(titleDefinition);
                             contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_SetId"));
                             contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Emotes"));
+                            contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_PostName"));
+                            contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_PostURL"));
 
                             let outfitNameDef = WuxDef.Get("Chat_OutfitName");
                             let emoteContents = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(outfitNameDef.getAttribute(WuxDef._expand))}
