@@ -2342,7 +2342,7 @@ class BaseTechniqueEffectDisplayData {
             case "RevealPos":
                 return "A related supportive influence to the statement is revealed to you.";
             case "Add":
-                return `The target gains the influence, "${effect.effect}" which is at ${subTypes[1]} Severity. This influence is removed if the target becomes hostile towards you or the social conflict ends. `;
+                return `${this.formatTargetGain(effect)} the influence, "${effect.effect}" which is at ${subTypes[1]} Severity. This influence is removed if the target becomes hostile towards you or the social conflict ends. `;
         }
     }
 
@@ -2350,9 +2350,9 @@ class BaseTechniqueEffectDisplayData {
         let impatience = WuxDef.GetTitle("Soc_Impatience");
         switch (effect.subType) {
             case "Heal":
-                return `Reduce target's ${impatience} by ${this.formatCalcBonus(effect)}`;
+                return `${this.formatTargetLose(effect)} ${impatience} by ${this.formatCalcBonus(effect)}`;
             default:
-                return `Increase target's ${impatience} by ${this.formatCalcBonus(effect)}`;
+                return `${this.formatTargetGain(effect)} ${impatience} by ${this.formatCalcBonus(effect)}`;
         }
     }
 

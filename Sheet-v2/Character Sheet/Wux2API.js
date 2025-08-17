@@ -1053,6 +1053,41 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
 
 }());
 
+class TechniqueWillBreakEffects {
+    constructor(techniqueName, sourceSheetName, targetTokenId) {
+        this.techniqueName = techniqueName;
+        this.sourceSheetName = sourceSheetName;
+        this.targetTokenId = targetTokenId;
+        this.willBreakEffects = new TechniqueEffectDatabase();
+    }
+
+    add(techniqueEffect) {
+        techniqueEffect.defense = "";
+        this.willBreakEffects.add(techniqueEffect.name, techniqueEffect);
+    }
+    
+    addWillResetEffect(willDamage) {
+        let willResetEffect = new TechniqueEffect();
+        willResetEffect.name = "Will Overflow";
+        willResetEffect.type = "WILL";
+        willResetEffect.subType = "Overflow";
+        willResetEffect.formula = new FormulaData(willDamage);
+        this.add(willResetEffect);
+    }
+
+    getTechUseEffect() {
+        let willBreakEffect = new TechniqueUseEffect();
+        willBreakEffect.name = `${this.techniqueName} WillBreak`;
+        willBreakEffect.effects = this.willBreakEffects;
+        return willBreakEffect;
+    }
+
+    printWillBreakString() {
+        let techUseEffect = this.getTechUseEffect();
+        return techUseEffect.getUseTech(this.sourceSheetName) + `$$0$$${this.targetTokenId}`;
+    }
+}
+
 class TechniqueResolverData {
     constructor(msg, content) {
         this.createEmpty();
@@ -1196,14 +1231,11 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
         techniqueEffect.forumla = 5 + (attrHandler.parseInt(WuxDef.GetVariable("CR")) * 5);
         techniqueEffect.effect = "Tension";
         techniqueEffect.traits = "AP";
-        let effectDatabase = new TechniqueEffectDatabase();
-        effectDatabase.add(techniqueEffect.name, techniqueEffect);
         
-        let willBreakEffect = new TechniqueUseEffect();
-        willBreakEffect.name = "Magic Will Break";
-        willBreakEffect.effects = effectDatabase;
-        let willBreakEffectString = willBreakEffect.getUseTech(techniqueConsumptionResolver.sourceSheetName);
-        techniqueConsumptionResolver.tokenEffect.takeWillDamage(attrHandler, resourceObject.resourceValue, willBreakEffectString);
+        let willBreakEffect = new TechniqueWillBreakEffects("Magic", 
+            techniqueConsumptionResolver.sourceSheetName, techniqueConsumptionResolver.tokenEffect.tokenTargetData.tokenId);
+        willBreakEffect.add(techniqueEffect);
+        techniqueConsumptionResolver.tokenEffect.takeWillDamage(attrHandler, resourceObject.resourceValue, willBreakEffect);
     }
 
     tryConsumeResources(techniqueConsumptionResolver, attributeHandler) {
@@ -1414,7 +1446,8 @@ class TechniqueUseResolver extends TechniqueResolverData {
         targetAttributeHandler.addFinishCallback(function (targetAttrHandler) {
             let currentCheck = "";
             let passCheck = true;
-            let willBreakEffects = new TechniqueEffectDatabase();
+            let willBreakEffect = new TechniqueWillBreakEffects(techUseResolver.technique.name,
+                techUseResolver.sourceSheetName, techUseResolver.targetTokenEffect.tokenTargetData.tokenId);
             let techDisplayData = new TechniqueEffectDisplayUseData("", 
                 techUseResolver.senderTokenEffect.tokenTargetData.displayName, techUseResolver.targetTokenEffect.tokenTargetData.displayName);
 
@@ -1426,7 +1459,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 if (techniqueEffect.defense != currentCheck) {
                     currentCheck = techniqueEffect.defense;
                     if (currentCheck == "WillBreak") {
-                        willBreakEffects.add(techniqueEffect.name, techniqueEffect);
+                        willBreakEffect.add(techniqueEffect);
                         return;
                     }
                     
@@ -1438,12 +1471,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 }
             });
 
-            techUseResolver.tryApplyHpDamage(techUseResolver.senderTokenEffect, attrGetters.sender, attrSetters.sender);
-            techUseResolver.tryApplyHpDamage(techUseResolver.targetTokenEffect, attrGetters.target, attrSetters.target);
-            
-            attrSetters.sender.run();
-            attrSetters.target.run();
-            techUseResolver.printMessages();
+            techUseResolver.applySetters(techUseResolver, attrGetters, attrSetters, willBreakEffect);
         });
     }
     
@@ -1508,6 +1536,21 @@ class TechniqueUseResolver extends TechniqueResolverData {
         }
     }
     
+    applySetters(techUseResolver, attrGetters, attrSetters, willBreakEffect) {
+        techUseResolver.tryApplyNumberEffects(techUseResolver, techUseResolver.senderTokenEffect, attrGetters.sender, attrSetters.sender, willBreakEffect);
+        techUseResolver.tryApplyNumberEffects(techUseResolver, techUseResolver.targetTokenEffect, attrGetters.target, attrSetters.target, willBreakEffect);
+        attrSetters.sender.run();
+        attrSetters.target.run();
+        techUseResolver.printMessages();
+    }
+    
+    tryApplyNumberEffects(techUseResolver, tokenEffect, attrGetter, attrSetter, willBreakEffect) {
+        techUseResolver.tryApplyHpHealing(tokenEffect, attrGetter, attrSetter);
+        techUseResolver.tryApplyWillHealing(tokenEffect, attrGetter, attrSetter);
+        techUseResolver.tryApplyHpDamage(tokenEffect, attrGetter, attrSetter);
+        techUseResolver.tryApplyWillDamage(tokenEffect, attrGetter, attrSetter, willBreakEffect);
+    }
+    
     addHPEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
         let roll = "";
         let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
@@ -1556,13 +1599,63 @@ class TechniqueUseResolver extends TechniqueResolverData {
             }
             storedDieRolls.addModToRoll(-1 * armorTotal, "Armor");
         }
-        tokenEffect.takeHpDamage(attrSetter, storedDieRolls.total, "HP");
+        tokenEffect.takeHpDamage(attrSetter, storedDieRolls, "HP");
+    }
+
+    tryApplyHpHealing(tokenEffect, attrGetter, attrSetter) {
+        let storedDieRolls = tokenEffect.tryGetStoredDieRolls("HP Heal");
+        if (storedDieRolls == undefined) {
+            return;
+        }
+        tokenEffect.takeHpHealing(attrSetter, storedDieRolls);
     }
 
     addWillEffect(techniqueEffect, techUseResolver, attrGetters) {
         let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
         let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
-        tokenEffect.addStoredDieRolls("Will", roll);
+
+        switch (techniqueEffect.subType) {
+            case "Heal":
+                tokenEffect.addStoredDieRolls("Will Heal", roll);
+                return;
+            case "Full":
+                tokenEffect.addStoredDieRolls("Will Full Heal", new DieRoll());
+                return;
+            case "Overflow":
+                tokenEffect.addStoredDieRolls("Will Overflow", roll);
+                return;
+            default:
+                tokenEffect.addStoredDieRolls("Will Damage", roll);
+                return;
+        }
+    }
+
+    tryApplyWillDamage(tokenEffect, attrGetter, attrSetter, willBreakEffect) {
+        let storedDieRolls = tokenEffect.tryGetStoredDieRolls("Will Overflow");
+        if (storedDieRolls != undefined) {
+            tokenEffect.takeWillOverflowDamage(attrSetter, storedDieRolls);
+            return;
+        }
+
+        storedDieRolls = tokenEffect.tryGetStoredDieRolls("Will Damage");
+        if (storedDieRolls == undefined) {
+            return;
+        }
+        tokenEffect.takeWillDamage(attrSetter, storedDieRolls, willBreakEffect);
+    }
+
+    tryApplyWillHealing(tokenEffect, attrGetter, attrSetter) {
+        let storedDieRolls = tokenEffect.tryGetStoredDieRolls("Will Full Heal");
+        if (storedDieRolls != undefined) {
+            tokenEffect.takeWillFullHealing(attrSetter);
+            return;
+        }
+        
+        storedDieRolls = tokenEffect.tryGetStoredDieRolls("Will Heal");
+        if (storedDieRolls == undefined) {
+            return;
+        }
+        tokenEffect.takeWillHealing(attrSetter, storedDieRolls);
     }
     
     addEnergyEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
@@ -1574,7 +1667,17 @@ class TechniqueUseResolver extends TechniqueResolverData {
     addFavorEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
         let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
         let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
-        tokenEffect.tokenTargetData.addFavor(attrSetters.getObjByTarget(techniqueEffect), roll.total);
+
+        switch (techniqueEffect.subType) {
+            case "Heal":
+                tokenEffect.tokenTargetData.addFavor(attrSetters.getObjByTarget(techniqueEffect), roll.total * -1);
+                techUseResolver.addMessage(`${tokenEffect.tokenTargetData.displayName} loses ${Format.ShowTooltip(roll.total, roll.message)} Favor`);
+                break;
+            default:
+                tokenEffect.tokenTargetData.addFavor(attrSetters.getObjByTarget(techniqueEffect), roll.total);
+                techUseResolver.addMessage(`${tokenEffect.tokenTargetData.displayName} gains ${Format.ShowTooltip(roll.total, roll.message)} Favor`);
+                break;
+        }
     }
 
     addRequestCheck(techniqueEffect, techUseResolver, attrGetters) {
@@ -2773,10 +2876,11 @@ class TokenTargetData extends TargetData {
         tokenTargetData.setBarValue(1, results.newValue);
         return results;
     }
-    addWill(attributeHandler, value, resultsCallback) {
+    addWill(attributeHandler, value, resultsCallback, modifyCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToWill : resultsCallback;
+        modifyCallback = modifyCallback == undefined ? this.addModifierToAttribute : modifyCallback;
         this.modifyResourceAttribute(attributeHandler, "WILL", value,
-            this.addModifierToAttribute, resultsCallback);
+            modifyCallback, resultsCallback);
     }
     setWillToFull(attributeHandler, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToWill : resultsCallback;
@@ -2966,12 +3070,12 @@ class TokenTargetEffectsData {
         this.isArmorPiercing = true;
     }
     
-    takeHpDamage(attributeHandler, damage, damageType) {
+    takeHpDamage(attributeHandler, damageRoll, damageType) {
         let targetEffect = this;
         
-        this.tokenTargetData.addHp(attributeHandler, -1 * damage, 
+        this.tokenTargetData.addHp(attributeHandler, -1 * damageRoll.total, 
             function (results, attrHandler, attributeVar, tokenTargetData) {
-                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${damage} ${damageType} damage.`);
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} ${damageType} damage.`);
                 if (results.remainder < 0) {
                     let vitalityDamage = 0;
                     while (results.remainder < 0) {
@@ -2983,6 +3087,16 @@ class TokenTargetEffectsData {
                     newAttributeHandler.run();
                     results.newValue = results.remainder;
                 }
+                tokenTargetData.applyResultsToHp(results, attrHandler, attributeVar, tokenTargetData);
+        });
+    }
+    
+    takeHpHealing(attributeHandler, healRoll) {
+        let targetEffect = this;
+        
+        this.tokenTargetData.addHp(attributeHandler, healRoll.total,
+            function (results, attrHandler, attributeVar, tokenTargetData) {
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} heals ${Format.ShowTooltip(healRoll.total, healRoll.message)} HP.`);
                 tokenTargetData.applyResultsToHp(results, attrHandler, attributeVar, tokenTargetData);
         });
     }
@@ -3001,17 +3115,52 @@ class TokenTargetEffectsData {
             });
     }
 
-    takeWillDamage(attributeHandler, damage, willBreakEffect) {
+    takeWillDamage(attributeHandler, damageRoll, willBreakEffect) {
         let targetEffect = this;
 
-        this.tokenTargetData.addWill(attributeHandler, -1 * damage,
+        this.tokenTargetData.addWill(attributeHandler, -1 * damageRoll.total,
             function (results, attrHandler, attributeVar, tokenTargetData) {
-                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${damage} will damage.`);
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} will damage.`);
                 if (results.remainder < 0) {
                     // the target can take a will break
-                    willBreakEffect += `$$${results.remainder}`;
-                    targetEffect.effectMessages.push(`<span class="sheet-wuxInlineRow">[Use Will Break Effect](!${willBreakEffect})</span> `)
+                    willBreakEffect.addWillResetEffect(results.remainder * -1);
+                    targetEffect.effectMessages.push(`<span class="sheet-wuxInlineRow">[Use Will Break Effect](${willBreakEffect.printWillBreakString()})</span> `)
                 }
+                tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
+            });
+    }
+
+    takeWillOverflowDamage(attributeHandler, damageRoll) {
+        let targetEffect = this;
+
+        this.tokenTargetData.addWill(attributeHandler, -1 * damageRoll.total,
+            function (results, attrHandler, attributeVar, tokenTargetData) {
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} fully heals Will then takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} damage.`);
+                tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
+            }, function (results, value) {
+                // set the will to max first
+                results.newValue = results.max + value;
+                return results;
+            });
+
+    }
+    
+    takeWillHealing(attributeHandler, healRoll) {
+        let targetEffect = this;
+
+        this.tokenTargetData.addWill(attributeHandler, healRoll.total,
+            function (results, attrHandler, attributeVar, tokenTargetData) {
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} heals ${Format.ShowTooltip(healRoll.total, healRoll.message)} Will.`);
+                tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
+            });
+    }
+
+    takeWillFullHealing(attributeHandler) {
+        let targetEffect = this;
+
+        this.tokenTargetData.setWillToFull(attributeHandler, 
+            function (results, attrHandler, attributeVar, tokenTargetData) {
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} has their Will fully healed.`);
                 tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
             });
     }
@@ -8043,7 +8192,7 @@ class BaseTechniqueEffectDisplayData {
             case "RevealPos":
                 return "A related supportive influence to the statement is revealed to you.";
             case "Add":
-                return `The target gains the influence, "${effect.effect}" which is at ${subTypes[1]} Severity. This influence is removed if the target becomes hostile towards you or the social conflict ends. `;
+                return `${this.formatTargetGain(effect)} the influence, "${effect.effect}" which is at ${subTypes[1]} Severity. This influence is removed if the target becomes hostile towards you or the social conflict ends. `;
         }
     }
 
@@ -8051,9 +8200,9 @@ class BaseTechniqueEffectDisplayData {
         let impatience = WuxDef.GetTitle("Soc_Impatience");
         switch (effect.subType) {
             case "Heal":
-                return `Reduce target's ${impatience} by ${this.formatCalcBonus(effect)}`;
+                return `${this.formatTargetLose(effect)} ${impatience} by ${this.formatCalcBonus(effect)}`;
             default:
-                return `Increase target's ${impatience} by ${this.formatCalcBonus(effect)}`;
+                return `${this.formatTargetGain(effect)} ${impatience} by ${this.formatCalcBonus(effect)}`;
         }
     }
 

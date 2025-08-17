@@ -328,10 +328,11 @@ class TokenTargetData extends TargetData {
         tokenTargetData.setBarValue(1, results.newValue);
         return results;
     }
-    addWill(attributeHandler, value, resultsCallback) {
+    addWill(attributeHandler, value, resultsCallback, modifyCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToWill : resultsCallback;
+        modifyCallback = modifyCallback == undefined ? this.addModifierToAttribute : modifyCallback;
         this.modifyResourceAttribute(attributeHandler, "WILL", value,
-            this.addModifierToAttribute, resultsCallback);
+            modifyCallback, resultsCallback);
     }
     setWillToFull(attributeHandler, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToWill : resultsCallback;
@@ -521,12 +522,12 @@ class TokenTargetEffectsData {
         this.isArmorPiercing = true;
     }
     
-    takeHpDamage(attributeHandler, damage, damageType) {
+    takeHpDamage(attributeHandler, damageRoll, damageType) {
         let targetEffect = this;
         
-        this.tokenTargetData.addHp(attributeHandler, -1 * damage, 
+        this.tokenTargetData.addHp(attributeHandler, -1 * damageRoll.total, 
             function (results, attrHandler, attributeVar, tokenTargetData) {
-                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${damage} ${damageType} damage.`);
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} ${damageType} damage.`);
                 if (results.remainder < 0) {
                     let vitalityDamage = 0;
                     while (results.remainder < 0) {
@@ -538,6 +539,16 @@ class TokenTargetEffectsData {
                     newAttributeHandler.run();
                     results.newValue = results.remainder;
                 }
+                tokenTargetData.applyResultsToHp(results, attrHandler, attributeVar, tokenTargetData);
+        });
+    }
+    
+    takeHpHealing(attributeHandler, healRoll) {
+        let targetEffect = this;
+        
+        this.tokenTargetData.addHp(attributeHandler, healRoll.total,
+            function (results, attrHandler, attributeVar, tokenTargetData) {
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} heals ${Format.ShowTooltip(healRoll.total, healRoll.message)} HP.`);
                 tokenTargetData.applyResultsToHp(results, attrHandler, attributeVar, tokenTargetData);
         });
     }
@@ -556,17 +567,52 @@ class TokenTargetEffectsData {
             });
     }
 
-    takeWillDamage(attributeHandler, damage, willBreakEffect) {
+    takeWillDamage(attributeHandler, damageRoll, willBreakEffect) {
         let targetEffect = this;
 
-        this.tokenTargetData.addWill(attributeHandler, -1 * damage,
+        this.tokenTargetData.addWill(attributeHandler, -1 * damageRoll.total,
             function (results, attrHandler, attributeVar, tokenTargetData) {
-                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${damage} will damage.`);
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} will damage.`);
                 if (results.remainder < 0) {
                     // the target can take a will break
-                    willBreakEffect += `$$${results.remainder}`;
-                    targetEffect.effectMessages.push(`<span class="sheet-wuxInlineRow">[Use Will Break Effect](!${willBreakEffect})</span> `)
+                    willBreakEffect.addWillResetEffect(results.remainder * -1);
+                    targetEffect.effectMessages.push(`<span class="sheet-wuxInlineRow">[Use Will Break Effect](${willBreakEffect.printWillBreakString()})</span> `)
                 }
+                tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
+            });
+    }
+
+    takeWillOverflowDamage(attributeHandler, damageRoll) {
+        let targetEffect = this;
+
+        this.tokenTargetData.addWill(attributeHandler, -1 * damageRoll.total,
+            function (results, attrHandler, attributeVar, tokenTargetData) {
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} fully heals Will then takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} damage.`);
+                tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
+            }, function (results, value) {
+                // set the will to max first
+                results.newValue = results.max + value;
+                return results;
+            });
+
+    }
+    
+    takeWillHealing(attributeHandler, healRoll) {
+        let targetEffect = this;
+
+        this.tokenTargetData.addWill(attributeHandler, healRoll.total,
+            function (results, attrHandler, attributeVar, tokenTargetData) {
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} heals ${Format.ShowTooltip(healRoll.total, healRoll.message)} Will.`);
+                tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
+            });
+    }
+
+    takeWillFullHealing(attributeHandler) {
+        let targetEffect = this;
+
+        this.tokenTargetData.setWillToFull(attributeHandler, 
+            function (results, attrHandler, attributeVar, tokenTargetData) {
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} has their Will fully healed.`);
                 tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
             });
     }
