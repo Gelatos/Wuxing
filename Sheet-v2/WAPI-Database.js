@@ -2875,6 +2875,16 @@ class FormulaData {
                 let split = definitionName.split("*");
                 definitionName = split[0];
                 multiplier = split[1];
+                if (isNaN(parseFloat(multiplier))) {
+                    if (multiplier.trim() == "") {
+                        multiplier = 1.0;
+                    }
+                    else {
+                        multiplier = WuxDef.GetVariable(multiplier);
+                    }
+                } else {
+                    multiplier = parseFloat(multiplier);
+                }
             }
 
             definitionNameModifier = "";
@@ -2901,7 +2911,7 @@ class FormulaData {
             variableName: variableName,
             definitionName: definitionName,
             value: isNaN(parseInt(value)) ? 0 : parseInt(value),
-            multiplier: isNaN(parseFloat(multiplier)) ? 1 : parseFloat(multiplier),
+            multiplier: isNaN(parseFloat(multiplier)) ? multiplier : parseFloat(multiplier),
             max: max
         }
     }
@@ -2911,6 +2921,9 @@ class FormulaData {
         for (let i = 0; i < this.workers.length; i++) {
             if (this.workers[i].variableName != "") {
                 attributes.push(this.workers[i].variableName);
+            }
+            if (isNaN(this.workers[i].multiplier)) {
+                attributes.push(this.workers[i].multiplier);
             }
         }
         return attributes;
@@ -2944,15 +2957,19 @@ class FormulaData {
         let mod = 0;
         let printOutput = "";
         this.workers.forEach((worker) => {
+            let multiplier = parseFloat(worker.multiplier);
+            if (isNaN(multiplier)) {
+                multiplier = attributeHandler.parseInt(worker.multiplier);
+            }
             if (worker.variableName != "") {
                 worker.value = attributeHandler.parseInt(worker.variableName);
                 if (printName != undefined) {
-                    printOutput = this.addPrintModifier(printOutput, `${worker.variableName}(${worker.value})`, worker.multiplier);
+                    printOutput = this.addPrintModifier(printOutput, `${worker.variableName}(${worker.value})`, multiplier);
                 }
             } else if (printName != undefined) {
-                printOutput = this.addPrintModifier(printOutput, `${worker.value}`, worker.multiplier);
+                printOutput = this.addPrintModifier(printOutput, `${worker.value}`, multiplier);
             }
-            mod = worker.value * worker.multiplier;
+            mod = worker.value * multiplier;
             if (worker.max > 0 && mod > worker.max) {
                 mod = worker.max;
             }

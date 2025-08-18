@@ -377,6 +377,13 @@ class TokenTargetData extends TargetData {
         this.modifyResourceAttribute(attributeHandler, "MvCharge", value,
             tokenTargetData.addModifierToAttributeNoCap, resultsCallback);
     }
+    setMoveCharge(attributeHandler, value, resultsCallback) {
+        let tokenTargetData = this
+        value = parseInt(value);
+        resultsCallback = resultsCallback == undefined ? tokenTargetData.applyResultsMoveCharge : resultsCallback;
+        this.modifyResourceAttribute(attributeHandler, "MvCharge", value,
+            tokenTargetData.setModifierToAttribute, resultsCallback);
+    }
     setDash(attributeHandler, resultsCallback) {
         this.addDashModifiers(attributeHandler);
         resultsCallback = resultsCallback == undefined ? this.applyResultsMoveCharge : resultsCallback;
@@ -659,6 +666,9 @@ var TargetReference = TargetReference || (function () {
                 case "!ten":
                     commandAddEnergy(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
+                case "tmovereset":
+                    commandResetMoveCharge(msg, TokenReference.GetTokenTargetDataArray(msg));
+                    break;
                 case "!tmove":
                     commandAddMoveCharge(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
@@ -752,25 +762,26 @@ var TargetReference = TargetReference || (function () {
             }
 
             output += tokenOptionSpacer();
-            output += tokenOptionTitle("Combat Options");
+            output += tokenOptionTitle("Combat Stat Options");
             if (!playerIsGM(msg.playerid)) {
                 output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@0`);
+                output += tokenOptionButton("Full Heal", "tfullheal");
             }
             else {
                 output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@?{Set team index|0}`);
             }
             output += tokenOptionButton("Add Energy", "ten ?{How much energy to add?|1}");
-            output += tokenOptionButton("Add Move Charge", "tmove ?{How much move charge to add?|1}");
-            output += tokenOptionButton("Add Dash", "tdash");
             output += tokenOptionButton("Add Surge", "thealsurge ?{How much surge to add?|1}");
             output += tokenOptionButton("Add Vitality", "thealvit ?{How much vitality to add?|1}");
 
-            if (playerIsGM(msg.playerid)) {
-                output += tokenOptionButton("Full Heal", "tfullheal");
-            }
+            output += tokenOptionSpacer();
+            output += tokenOptionTitle("Combat Move Options");
+            output += tokenOptionButton("Reset Move", "tmovereset");
+            output += tokenOptionButton("Add Move Charge", "tmove ?{How much move charge to add?|1}");
+            output += tokenOptionButton("Add Dash", "tdash");
 
             output += tokenOptionSpacer();
-            output += tokenOptionTitle("Social Options");
+            output += tokenOptionTitle("Social Stat Options");
             if (!playerIsGM(msg.playerid)) {
                 output += tokenOptionButton("Prep4 Social", `tconflictstate Social@0`);
             }
@@ -851,6 +862,16 @@ var TargetReference = TargetReference || (function () {
             });
             
             sendTokenUpdateMessage(msg, targets, ` ${content} EN`);
+        },
+
+        commandResetMoveCharge = function (msg, targets) {
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.setMoveCharge(attributeHandler, 0);
+                attributeHandler.run();
+            });
+            
+            sendTokenUpdateMessage(msg, targets, `: Move Charge reset`);
         },
 
         commandAddMoveCharge = function (msg, targets, content) {
