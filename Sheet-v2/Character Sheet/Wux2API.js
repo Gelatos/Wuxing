@@ -1,3 +1,11 @@
+on("add:pathv2", function(obj) {
+    log("A new freehand drawing was added.");
+    if (obj.get("layer") === "objects") { // "objects" = token layer
+        toBack(obj);
+        log(`Pushed drawing "${obj.get("_id")}" to back`);
+    }
+});
+
 on("chat:message", function (msg) {
     if (msg.type == "api" && msg.content != null) {
 
@@ -17,6 +25,9 @@ on("chat:message", function (msg) {
         TargetReference.HandleInput(msg, tag, content);
 
         switch (tag) {
+            case "!fixdrawings":
+                pushFreehandDrawingsToBack(msg);
+                return;
             case "!markernames":
                 let tokenMarkers = JSON.parse(Campaign().get("token_markers"));
                 let chatMessage = '';
@@ -1116,7 +1127,18 @@ class TechniqueResolverData {
     initializeData(contentData) {
         this.initializeTechniqueData(contentData[0]);
         this.sourceSheetName = contentData[1];
-        this.senderTokenTargetData = TargetReference.GetTokenTargetDataByName(this.sourceSheetName);
+        if (this.sourceSheetName.startsWith("-")) {
+            // this is a token id, not a name
+            this.senderTokenTargetData = TargetReference.GetTokenTargetData(this.sourceSheetName);
+            if (this.senderTokenTargetData == undefined) {
+                Debug.LogError(`[TechniqueResolverData] No sender token target data found for token id: ${this.sourceSheetName}`);
+                return;
+            }
+            this.sourceSheetName = this.senderTokenTargetData.charName;
+        }
+        else {
+            this.senderTokenTargetData = TargetReference.GetTokenTargetDataByName(this.sourceSheetName);
+        }
     }
     
     initializeTechniqueData(data) {
@@ -1153,6 +1175,10 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
     
     initializeData(contentData) {
         super.initializeData(contentData);
+        if (this.senderTokenTargetData == undefined) {
+            Debug.LogError(`[TechniqueConsumptionResolver] No sender token target data found for content: ${contentData}`);
+            return;
+        }
         this.tokenEffect = new TokenTargetEffectsData(this.senderTokenTargetData);
         this.addInitialMessage();
     }
@@ -1338,8 +1364,17 @@ class TechniqueUseResolver extends TechniqueResolverData {
 
     initializeData(contentData) {
         super.initializeData(contentData);
+        if (this.senderTokenTargetData == undefined) {
+            Debug.LogError(`[TechniqueUseResolver] No sender token target data found for content: ${contentData}`);
+            return;
+        }
         this.senderTokenEffect = new TokenTargetEffectsData(this.senderTokenTargetData);
-        this.targetTokenEffect = new TokenTargetEffectsData(TargetReference.GetTokenTargetData(contentData[3]));
+        
+        let targetToken = TargetReference.GetTokenTargetData(contentData[3]);
+        if (targetToken == undefined) {
+            return;
+        }
+        this.targetTokenEffect = new TokenTargetEffectsData(targetToken);
         this.advantage = ParseIntValue(contentData[2]);
         this.addInitialMessage();
     }
@@ -1354,6 +1389,9 @@ class TechniqueUseResolver extends TechniqueResolverData {
     }
     
     run() {
+        if (this.senderTokenTargetData == undefined || this.targetTokenEffect.tokenTargetData == undefined) {
+            return;
+        }
         let techUseResolver = this;
         let senderAttributeHandler = new SandboxAttributeHandler(this.senderTokenEffect.tokenTargetData.charId);
         techUseResolver.tryGetSenderSkillCheck(techUseResolver, senderAttributeHandler);
@@ -2925,6 +2963,13 @@ class TokenTargetData extends TargetData {
         this.modifyResourceAttribute(attributeHandler, "MvCharge", value,
             tokenTargetData.addModifierToAttributeNoCap, resultsCallback);
     }
+    setMoveCharge(attributeHandler, value, resultsCallback) {
+        let tokenTargetData = this
+        value = parseInt(value);
+        resultsCallback = resultsCallback == undefined ? tokenTargetData.applyResultsMoveCharge : resultsCallback;
+        this.modifyResourceAttribute(attributeHandler, "MvCharge", value,
+            tokenTargetData.setModifierToAttribute, resultsCallback);
+    }
     setDash(attributeHandler, resultsCallback) {
         this.addDashModifiers(attributeHandler);
         resultsCallback = resultsCallback == undefined ? this.applyResultsMoveCharge : resultsCallback;
@@ -3207,6 +3252,9 @@ var TargetReference = TargetReference || (function () {
                 case "!ten":
                     commandAddEnergy(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
+                case "tmovereset":
+                    commandResetMoveCharge(msg, TokenReference.GetTokenTargetDataArray(msg));
+                    break;
                 case "!tmove":
                     commandAddMoveCharge(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
@@ -3300,25 +3348,26 @@ var TargetReference = TargetReference || (function () {
             }
 
             output += tokenOptionSpacer();
-            output += tokenOptionTitle("Combat Options");
+            output += tokenOptionTitle("Combat Stat Options");
             if (!playerIsGM(msg.playerid)) {
                 output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@0`);
+                output += tokenOptionButton("Full Heal", "tfullheal");
             }
             else {
                 output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@?{Set team index|0}`);
             }
             output += tokenOptionButton("Add Energy", "ten ?{How much energy to add?|1}");
-            output += tokenOptionButton("Add Move Charge", "tmove ?{How much move charge to add?|1}");
-            output += tokenOptionButton("Add Dash", "tdash");
             output += tokenOptionButton("Add Surge", "thealsurge ?{How much surge to add?|1}");
             output += tokenOptionButton("Add Vitality", "thealvit ?{How much vitality to add?|1}");
 
-            if (playerIsGM(msg.playerid)) {
-                output += tokenOptionButton("Full Heal", "tfullheal");
-            }
+            output += tokenOptionSpacer();
+            output += tokenOptionTitle("Combat Move Options");
+            output += tokenOptionButton("Reset Move", "tmovereset");
+            output += tokenOptionButton("Add Move Charge", "tmove ?{How much move charge to add?|1}");
+            output += tokenOptionButton("Add Dash", "tdash");
 
             output += tokenOptionSpacer();
-            output += tokenOptionTitle("Social Options");
+            output += tokenOptionTitle("Social Stat Options");
             if (!playerIsGM(msg.playerid)) {
                 output += tokenOptionButton("Prep4 Social", `tconflictstate Social@0`);
             }
@@ -3399,6 +3448,16 @@ var TargetReference = TargetReference || (function () {
             });
             
             sendTokenUpdateMessage(msg, targets, ` ${content} EN`);
+        },
+
+        commandResetMoveCharge = function (msg, targets) {
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.setMoveCharge(attributeHandler, 0);
+                attributeHandler.run();
+            });
+            
+            sendTokenUpdateMessage(msg, targets, `: Move Charge reset`);
         },
 
         commandAddMoveCharge = function (msg, targets, content) {
@@ -7963,17 +8022,17 @@ class TechniqueDisplayData {
         if (addTechnique) {
             if (this.technique.resourceCost != "") {
                 let consumeData = new TechniqueResources([this.technique.name, this.technique.resourceCost]);
-                output += `{{consumeData=!ctech ${consumeData.sanitizeSheetRollAction(JSON.stringify(consumeData))}$$@{${WuxDef.GetVariable("SheetName")}}}}`;
+                output += `{{consumeData=!ctech ${consumeData.sanitizeSheetRollAction(JSON.stringify(consumeData))}$$${this.sheetname}}}`;
             }
             if (this.technique.effects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
                 effectData.import(this.technique.name, this.technique.skill, this.technique.effects);
-                output += `{{targetData=${effectData.getUseTech(`@{${WuxDef.GetVariable("SheetName")}}`)}}}`;
+                output += `{{targetData=${effectData.getUseTech(this.sheetname)}}}`;
             }
             if (this.technique.secondaryEffects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
                 effectData.import(this.technique.name, this.technique.skill, this.technique.secondaryEffects);
-                output += `{{targetData2=${effectData.getUseTech(`@{${WuxDef.GetVariable("SheetName")}}`)}}}`;
+                output += `{{targetData2=${effectData.getUseTech(this.sheetname)}}}`;
             }
             if (this.technique.skill != "") {
                 output += "{{hascheck=1}}";
@@ -8725,6 +8784,16 @@ class FormulaData {
                 let split = definitionName.split("*");
                 definitionName = split[0];
                 multiplier = split[1];
+                if (isNaN(parseFloat(multiplier))) {
+                    if (multiplier.trim() == "") {
+                        multiplier = 1.0;
+                    }
+                    else {
+                        multiplier = WuxDef.GetVariable(multiplier);
+                    }
+                } else {
+                    multiplier = parseFloat(multiplier);
+                }
             }
 
             definitionNameModifier = "";
@@ -8751,7 +8820,7 @@ class FormulaData {
             variableName: variableName,
             definitionName: definitionName,
             value: isNaN(parseInt(value)) ? 0 : parseInt(value),
-            multiplier: isNaN(parseFloat(multiplier)) ? 1 : parseFloat(multiplier),
+            multiplier: isNaN(parseFloat(multiplier)) ? multiplier : parseFloat(multiplier),
             max: max
         }
     }
@@ -8761,6 +8830,9 @@ class FormulaData {
         for (let i = 0; i < this.workers.length; i++) {
             if (this.workers[i].variableName != "") {
                 attributes.push(this.workers[i].variableName);
+            }
+            if (isNaN(this.workers[i].multiplier)) {
+                attributes.push(this.workers[i].multiplier);
             }
         }
         return attributes;
@@ -8794,15 +8866,19 @@ class FormulaData {
         let mod = 0;
         let printOutput = "";
         this.workers.forEach((worker) => {
+            let multiplier = parseFloat(worker.multiplier);
+            if (isNaN(multiplier)) {
+                multiplier = attributeHandler.parseInt(worker.multiplier);
+            }
             if (worker.variableName != "") {
                 worker.value = attributeHandler.parseInt(worker.variableName);
                 if (printName != undefined) {
-                    printOutput = this.addPrintModifier(printOutput, `${worker.variableName}(${worker.value})`, worker.multiplier);
+                    printOutput = this.addPrintModifier(printOutput, `${worker.variableName}(${worker.value})`, multiplier);
                 }
             } else if (printName != undefined) {
-                printOutput = this.addPrintModifier(printOutput, `${worker.value}`, worker.multiplier);
+                printOutput = this.addPrintModifier(printOutput, `${worker.value}`, multiplier);
             }
-            mod = worker.value * worker.multiplier;
+            mod = worker.value * multiplier;
             if (worker.max > 0 && mod > worker.max) {
                 mod = worker.max;
             }
@@ -11927,22 +12003,22 @@ var WuxDef = WuxDef || (function() {
                 "linkedGroups":[],
                 "isResource":""},
             "Power":{"name":"Power","fieldName":"power","group":"General","description":"","variable":"gen-power{0}","title":"Power","subGroup":"","descriptions":["Power is used as a potency bonus for some techniques reliant on physical force. "],
-                "abbreviation":"","baseFormula":"","modifiers":"_techset","formula":{"workers":[{"variableName":"atr-bod","definitionName":"Attr_BOD","value":0,"multiplier":1,"max":0},
+                "abbreviation":"","baseFormula":"","modifiers":"_techset","formula":{"workers":[{"variableName":"atr-bod","definitionName":"Attr_BOD","value":0,"multiplier":"adv-cr","max":0},
                         {"variableName":"gen-power_techset","definitionName":"","value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
             "Accuracy":{"name":"Accuracy","fieldName":"accuracy","group":"General","description":"","variable":"gen-accuracy{0}","title":"Accuracy","subGroup":"","descriptions":["Accuracy is used as a potency bonus for some techniques reliant on precision. "],
-                "abbreviation":"","baseFormula":"","modifiers":"_techset","formula":{"workers":[{"variableName":"atr-prc","definitionName":"Attr_PRC","value":0,"multiplier":1,"max":0},
+                "abbreviation":"","baseFormula":"","modifiers":"_techset","formula":{"workers":[{"variableName":"atr-prc","definitionName":"Attr_PRC","value":0,"multiplier":"adv-cr","max":0},
                         {"variableName":"gen-accuracy_techset","definitionName":"","value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
             "Artistry":{"name":"Artistry","fieldName":"artistry","group":"General","description":"","variable":"gen-artistry{0}","title":"Artistry","subGroup":"","descriptions":["Artistry is your attention to the details that would impact one's emotions. It is used as a potency bonus when creating crafted items or creating a performance. "],
-                "abbreviation":"","baseFormula":"","modifiers":"_techset","formula":{"workers":[{"variableName":"atr-int","definitionName":"Attr_INT","value":0,"multiplier":1,"max":0},
+                "abbreviation":"","baseFormula":"","modifiers":"_techset","formula":{"workers":[{"variableName":"atr-int","definitionName":"Attr_INT","value":0,"multiplier":"adv-cr","max":0},
                         {"variableName":"gen-artistry_techset","definitionName":"","value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
             "Charisma":{"name":"Charisma","fieldName":"charisma","group":"General","description":"","variable":"gen-charisma{0}","title":"Charisma","subGroup":"","descriptions":["Charisma is used as a potency bonus for some techniques reliant on communication. "],
-                "abbreviation":"","baseFormula":"","modifiers":"_techset","formula":{"workers":[{"variableName":"atr-cnv","definitionName":"Attr_CNV","value":0,"multiplier":1,"max":0},
+                "abbreviation":"","baseFormula":"","modifiers":"_techset","formula":{"workers":[{"variableName":"atr-cnv","definitionName":"Attr_CNV","value":0,"multiplier":"adv-cr","max":0},
                         {"variableName":"gen-charisma_techset","definitionName":"","value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},

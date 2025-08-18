@@ -179,6 +179,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
     const addBoosterVariables = function (attrHandler) {
         attrHandler.addMod([WuxDef.GetVariable("BoostStyleTech"), WuxDef.GetVariable("BoostGearTech"), WuxDef.GetVariable("BoostPerkTech")]);
     };
+    const addNameVariables = function (attrHandler) {
+        attrHandler.addMod([WuxDef.GetVariable("FullName")]);
+    };
     const getAffinities = function (attrHandler) {
         return [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
             attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
@@ -256,6 +259,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
 
         addAffinityVariables(attributeHandler);
         addBoosterVariables(attributeHandler);
+        addNameVariables(attributeHandler);
         let crFieldName = WuxDef.GetVariable("CR");
         attributeHandler.addMod(crFieldName);
 
@@ -373,6 +377,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
 
             let boosterFieldName = WuxDef.GetVariable("BoostPerkTech");
             addBoosterVariables(attributeHandler);
+            addNameVariables(attributeHandler);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 
                 let perkBoosters = [];
@@ -427,6 +432,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
 
                 addAffinityVariables(attributeHandler);
                 addBoosterVariables(attributeHandler);
+                addNameVariables(attributeHandler);
                 let crFieldName = WuxDef.GetVariable("CR");
                 attributeHandler.addMod(crFieldName);
 
@@ -472,6 +478,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 }
     
                 addBoosterVariables(attributeHandler);
+                addNameVariables(attributeHandler);
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
     
                     let hasRemovedPassives = removeOldTechniqueActions(attrHandler, actionsRepeater, WuxDef.GetVariable("BoostGearTech"));

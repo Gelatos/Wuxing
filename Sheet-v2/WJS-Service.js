@@ -708,8 +708,16 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		
 		if (setUse) {
 			displayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
-			displayData.technique.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
 			displayData.technique.displayname = displayData.displayname;
+			
+			if (this.attrHandler.parseString(WuxDef.GetVariable("FullName")) == "GenericOverride") {
+				displayData.sheetname = `@{target|Pick a token|token_id}`;
+				Debug.Log(`Setting ${displayData.name} sheetname to the generic override`);
+			}
+			else {
+				displayData.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
+			}
+			
 			this.attrHandler.addUpdate(this.getVariableWithoutBase("Action_Use"), displayData.getRollTemplate(true));
 		}
 	}

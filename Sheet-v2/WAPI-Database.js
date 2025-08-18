@@ -2113,17 +2113,17 @@ class TechniqueDisplayData {
         if (addTechnique) {
             if (this.technique.resourceCost != "") {
                 let consumeData = new TechniqueResources([this.technique.name, this.technique.resourceCost]);
-                output += `{{consumeData=!ctech ${consumeData.sanitizeSheetRollAction(JSON.stringify(consumeData))}$$@{${WuxDef.GetVariable("SheetName")}}}}`;
+                output += `{{consumeData=!ctech ${consumeData.sanitizeSheetRollAction(JSON.stringify(consumeData))}$$${this.sheetname}}}`;
             }
             if (this.technique.effects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
                 effectData.import(this.technique.name, this.technique.skill, this.technique.effects);
-                output += `{{targetData=${effectData.getUseTech(`@{${WuxDef.GetVariable("SheetName")}}`)}}}`;
+                output += `{{targetData=${effectData.getUseTech(this.sheetname)}}}`;
             }
             if (this.technique.secondaryEffects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
                 effectData.import(this.technique.name, this.technique.skill, this.technique.secondaryEffects);
-                output += `{{targetData2=${effectData.getUseTech(`@{${WuxDef.GetVariable("SheetName")}}`)}}}`;
+                output += `{{targetData2=${effectData.getUseTech(this.sheetname)}}}`;
             }
             if (this.technique.skill != "") {
                 output += "{{hascheck=1}}";

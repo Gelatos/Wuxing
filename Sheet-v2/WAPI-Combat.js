@@ -329,7 +329,18 @@ class TechniqueResolverData {
     initializeData(contentData) {
         this.initializeTechniqueData(contentData[0]);
         this.sourceSheetName = contentData[1];
-        this.senderTokenTargetData = TargetReference.GetTokenTargetDataByName(this.sourceSheetName);
+        if (this.sourceSheetName.startsWith("-")) {
+            // this is a token id, not a name
+            this.senderTokenTargetData = TargetReference.GetTokenTargetData(this.sourceSheetName);
+            if (this.senderTokenTargetData == undefined) {
+                Debug.LogError(`[TechniqueResolverData] No sender token target data found for token id: ${this.sourceSheetName}`);
+                return;
+            }
+            this.sourceSheetName = this.senderTokenTargetData.charName;
+        }
+        else {
+            this.senderTokenTargetData = TargetReference.GetTokenTargetDataByName(this.sourceSheetName);
+        }
     }
     
     initializeTechniqueData(data) {
@@ -366,6 +377,10 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
     
     initializeData(contentData) {
         super.initializeData(contentData);
+        if (this.senderTokenTargetData == undefined) {
+            Debug.LogError(`[TechniqueConsumptionResolver] No sender token target data found for content: ${contentData}`);
+            return;
+        }
         this.tokenEffect = new TokenTargetEffectsData(this.senderTokenTargetData);
         this.addInitialMessage();
     }
@@ -551,8 +566,17 @@ class TechniqueUseResolver extends TechniqueResolverData {
 
     initializeData(contentData) {
         super.initializeData(contentData);
+        if (this.senderTokenTargetData == undefined) {
+            Debug.LogError(`[TechniqueUseResolver] No sender token target data found for content: ${contentData}`);
+            return;
+        }
         this.senderTokenEffect = new TokenTargetEffectsData(this.senderTokenTargetData);
-        this.targetTokenEffect = new TokenTargetEffectsData(TargetReference.GetTokenTargetData(contentData[3]));
+        
+        let targetToken = TargetReference.GetTokenTargetData(contentData[3]);
+        if (targetToken == undefined) {
+            return;
+        }
+        this.targetTokenEffect = new TokenTargetEffectsData(targetToken);
         this.advantage = ParseIntValue(contentData[2]);
         this.addInitialMessage();
     }
@@ -567,6 +591,9 @@ class TechniqueUseResolver extends TechniqueResolverData {
     }
     
     run() {
+        if (this.senderTokenTargetData == undefined || this.targetTokenEffect.tokenTargetData == undefined) {
+            return;
+        }
         let techUseResolver = this;
         let senderAttributeHandler = new SandboxAttributeHandler(this.senderTokenEffect.tokenTargetData.charId);
         techUseResolver.tryGetSenderSkillCheck(techUseResolver, senderAttributeHandler);

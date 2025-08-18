@@ -241,8 +241,9 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         addSelectedInspectElement = function () {
             let attributeHandler = new WorkerAttributeHandler();
 
-            attributeHandler.addMod(WuxDef.GetVariable("Popup_InspectAddType"));
-            attributeHandler.addMod(WuxDef.GetUntypedVariable("Popup", "ItemName"));
+            attributeHandler.addMod([WuxDef.GetVariable("Popup_InspectAddType"), 
+                WuxDef.GetUntypedVariable("Popup", "ItemName"),
+                WuxDef.GetVariable("FullName")]);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 clearInspectionVariables(attrHandler);
