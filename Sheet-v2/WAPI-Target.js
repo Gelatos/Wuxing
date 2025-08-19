@@ -1196,6 +1196,7 @@ var TargetReference = TargetReference || (function () {
                     generator.character.homeRegion = attrHandler.parseString(homeRegionVar);
                     generator.generateCharacter();
                     tokenTargetData.token.set("name", generator.character.firstName);
+                    tokenTargetData.displayName = generator.character.firstName;
                     
                     let outputMessage = `Generated Name: ${generator.character.fullName}. ` + 
                         `\They have a ${generator.character.motivation} Motivation and a ${generator.character.personality} Personality.`;

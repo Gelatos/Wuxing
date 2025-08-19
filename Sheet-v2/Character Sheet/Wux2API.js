@@ -3164,7 +3164,6 @@ class TokenTargetData extends TargetData {
         if (isNaN(newValue)) {
             // likely a variable. Look it up
             newValue = attrHandler.parseInt(value, 0, false);
-            Debug.Log(`[TokenTargetData] Adding modifier ${value} to attribute ${results.name} with value ${newValue}`);
         }
 
         results.newValue = results.current + newValue;
@@ -3182,7 +3181,6 @@ class TokenTargetData extends TargetData {
         if (isNaN(results.newValue)) {
             // likely a variable. Look it up
             results.newValue = attrHandler.parseInt(value, 0, false);
-            Debug.Log(`[TokenTargetData] Setting modifier ${value} to attribute ${results.name} with value ${results.newValue}`);
         }
         
         if (results.newValue < 0) {
@@ -3783,6 +3781,7 @@ var TargetReference = TargetReference || (function () {
                     generator.character.homeRegion = attrHandler.parseString(homeRegionVar);
                     generator.generateCharacter();
                     tokenTargetData.token.set("name", generator.character.firstName);
+                    tokenTargetData.displayName = generator.character.firstName;
                     
                     let outputMessage = `Generated Name: ${generator.character.fullName}. ` + 
                         `\They have a ${generator.character.motivation} Motivation and a ${generator.character.personality} Personality.`;
