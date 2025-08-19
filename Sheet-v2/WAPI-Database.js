@@ -3736,12 +3736,19 @@ class SandboxAttributeHandler extends AttributeHandler {
         return output;
     }
 
-    addAttribute(attr) {
-        if (this.attributes.hasOwnProperty(attr)) {
-            return;
+    addAttribute(attrs) {
+        if (Array.isArray(attrs)) {
+            for (let i = 0; i < attrs.length; i++) {
+                if (!this.attributes.hasOwnProperty(attrs[i])) {
+                    this.attributes[attrs[i]] = this.getCharacterAttribute(attrs[i]);
+                }
+            }
+        } else {
+            if (this.attributes.hasOwnProperty(attrs)) {
+                return;
+            }
+            this.attributes[attrs] = this.getCharacterAttribute(attrs);
         }
-        Debug.Log(`[SandboxAttributeHandler][addAttribute] Adding attribute ${attr}`);
-        this.attributes[attr] = this.getCharacterAttribute(attr);
     }
 
     getAttribute(attr) {

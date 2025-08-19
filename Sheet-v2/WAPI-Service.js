@@ -1,8 +1,6 @@
 on("add:pathv2", function(obj) {
-    log("A new freehand drawing was added.");
     if (obj.get("layer") === "objects") { // "objects" = token layer
         toBack(obj);
-        log(`Pushed drawing "${obj.get("_id")}" to back`);
     }
 });
 

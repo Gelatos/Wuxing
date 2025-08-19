@@ -653,7 +653,9 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 break;
             case "Favor":
             case "Request":
-                attributeHandler.addMod(WuxDef.GetVariable("Soc_Favor"));
+                let favorDef = WuxDef.Get("Soc_Favor");
+                attributeHandler.addMod(favorDef.getVariable());
+                attributeHandler.addMod(favorDef.getVariable(WuxDef._max));
                 break;
             case "EN":
                 attributeHandler.addMod(WuxDef.GetVariable("EN"));
@@ -923,8 +925,10 @@ class TechniqueUseResolver extends TechniqueResolverData {
     addRequestCheck(techniqueEffect, techUseResolver, attrGetters) {
         let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
         if (techniqueEffect.formula.hasWorker("TargetFavor")) {
-            let favorValue = attrGetters.getObjByTarget(techniqueEffect).parseInt("Soc_Favor");
-            roll.addModToRoll(favorValue);
+            let favorDef = WuxDef.Get("Soc_Favor");
+            let favorValue = attrGetters.getObjByTarget(techniqueEffect).parseInt(favorDef.getVariable());
+            let favorMax = attrGetters.getObjByTarget(techniqueEffect).parseInt(favorDef.getVariable(WuxDef._max));
+            roll.addModToRoll(Math.min(favorValue, favorMax));
         }
         let message = `Request Check: ${Format.ShowTooltip(roll.total, roll.message)}`;
         techUseResolver.addMessage(message);
