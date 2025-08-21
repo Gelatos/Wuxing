@@ -460,10 +460,13 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
         techniqueEffect.effect = "Tension";
         techniqueEffect.traits = "AP";
         
+        let willDamageRoll = new DieRoll();
+        willDamageRoll.addModToRoll(resourceObject.resourceValue);
+        
         let willBreakEffect = new TechniqueWillBreakEffects("Magic", 
             techniqueConsumptionResolver.sourceSheetName, techniqueConsumptionResolver.tokenEffect.tokenTargetData.tokenId);
         willBreakEffect.add(techniqueEffect);
-        techniqueConsumptionResolver.tokenEffect.takeWillDamage(attrHandler, resourceObject.resourceValue, willBreakEffect);
+        techniqueConsumptionResolver.tokenEffect.takeWillDamage(attrHandler, willDamageRoll, willBreakEffect);
     }
 
     tryConsumeResources(techniqueConsumptionResolver, attributeHandler) {

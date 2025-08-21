@@ -415,7 +415,10 @@ function GenerateRowID() {
 
 // Sanitization
 function SanitizeSheetRoll(roll) {
-    var sheetRoll = roll;
+    if (roll == undefined || roll == "") {
+        return "";
+    }
+    let sheetRoll = roll;
     sheetRoll = sheetRoll.replace(/%/g, "&#37;");
     sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
     sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
@@ -1253,10 +1256,13 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
         techniqueEffect.effect = "Tension";
         techniqueEffect.traits = "AP";
         
+        let willDamageRoll = new DieRoll();
+        willDamageRoll.addModToRoll(resourceObject.resourceValue);
+        
         let willBreakEffect = new TechniqueWillBreakEffects("Magic", 
             techniqueConsumptionResolver.sourceSheetName, techniqueConsumptionResolver.tokenEffect.tokenTargetData.tokenId);
         willBreakEffect.add(techniqueEffect);
-        techniqueConsumptionResolver.tokenEffect.takeWillDamage(attrHandler, resourceObject.resourceValue, willBreakEffect);
+        techniqueConsumptionResolver.tokenEffect.takeWillDamage(attrHandler, willDamageRoll, willBreakEffect);
     }
 
     tryConsumeResources(techniqueConsumptionResolver, attributeHandler) {

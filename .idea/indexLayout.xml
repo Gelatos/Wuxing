@@ -4,6 +4,7 @@
     <attachedFolders />
     <explicitIncludes />
     <explicitExcludes>
+      <Path>Sheet</Path>
       <Path>Sheet-v2/Character Sheet</Path>
     </explicitExcludes>
   </component>

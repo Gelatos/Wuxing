@@ -415,7 +415,10 @@ function GenerateRowID() {
 
 // Sanitization
 function SanitizeSheetRoll(roll) {
-    var sheetRoll = roll;
+    if (roll == undefined || roll == "") {
+        return "";
+    }
+    let sheetRoll = roll;
     sheetRoll = sheetRoll.replace(/%/g, "&#37;");
     sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
     sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
