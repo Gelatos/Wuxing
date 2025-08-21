@@ -3154,6 +3154,27 @@ class DieRoll {
     }
 }
 
+class DamageRoll extends DieRoll {
+    createEmpty() {
+        super.createEmpty();
+        this.damageType = "";
+        this.traits = "";
+    }
+    
+    setDamageType(damageType) {
+        this.damageType = damageType;
+    }
+    
+    setTraits(traits) {
+        this.traits = traits;
+    }
+    
+    isSame(damageRoll) {
+        return this.damageType == damageRoll.damageType &&
+        this.traits == damageRoll.traits;
+    }
+}
+
 class ResistanceData {
     constructor(json) {
         if (json != undefined) {
