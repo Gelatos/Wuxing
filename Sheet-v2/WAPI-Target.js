@@ -613,6 +613,7 @@ class TokenTargetEffectsData {
     constructor(tokenTargetData) {
         this.tokenTargetData = tokenTargetData;
         this.effectMessages = [];
+        this.damageRolls = [];
         this.storedDieRolls = {};
         this.spentSurge = false;
         this.isArmorPiercing = false;
@@ -624,10 +625,10 @@ class TokenTargetEffectsData {
         }
     }
     
+    // Remove Later
     tryGetStoredDieRolls(variableName) {
         return this.storedDieRolls[variableName];
     }
-
     addStoredDieRolls(variableName, value) {
         if (this.storedDieRolls[variableName] == undefined) {
             this.storedDieRolls[variableName] = value;
@@ -635,6 +636,29 @@ class TokenTargetEffectsData {
         }
         Debug.Log(`[TokenTargetEffectsData] Adding to existing stored die rolls for ${variableName} with value ${value.total}`);
         this.storedDieRolls[variableName].addDieRoll(value);
+    }
+    
+    tryGetDamageRoll(damageType, trait) {
+        let tempDamageRoll = new DamageRoll();
+        tempDamageRoll.setDamageType(damageType);
+        tempDamageRoll.setTraits(trait);
+        for(let i = 0; i < this.damageRolls.length; i++) {
+            if (this.damageRolls[i].isSame(tempDamageRoll)) {
+                return this.damageRolls[i];
+            }
+        }
+        
+        return undefined;
+    }
+    addDamageRoll(damageRoll) {
+        for(let i = 0; i < this.damageRolls.length; i++) {
+            if (this.damageRolls[i].isSame(damageRoll)) {
+                this.damageRolls[i].addDieRoll(damageRoll);
+                return;
+            }
+        }
+        
+        this.damageRolls.push(damageRoll);
     }
     
     hasSurged() {
