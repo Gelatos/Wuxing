@@ -460,7 +460,7 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
         techniqueEffect.effect = "Tension";
         techniqueEffect.traits = "AP";
         
-        let willDamageRoll = new DieRoll();
+        let willDamageRoll = new DamageRoll();
         willDamageRoll.addModToRoll(resourceObject.resourceValue);
         
         let willBreakEffect = new TechniqueWillBreakEffects("Magic", 
@@ -816,18 +816,19 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 }
                 
                 roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
-                tokenEffect.addStoredDieRolls("HP Heal", roll);
+                roll.setDamageType("HP Heal");
+                tokenEffect.addDamageRoll(roll);
                 break;
             case "Heal":
                 roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
-                tokenEffect.addStoredDieRolls("HP Heal", roll);
+                roll.setDamageType("HP Heal");
+                tokenEffect.addDamageRoll(roll);
                 break;
             default:
-                if (techniqueEffect.traits == "AP") {
-                    tokenEffect.setArmorPiercing();
-                }
-                roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
-                tokenEffect.addStoredDieRolls("HP Damage", roll);
+                roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender)
+                roll.setDamageType(techniqueEffect.damageType);
+                roll.setTraits(techniqueEffect.traits);
+                tokenEffect.addDamageRoll(roll);
         }
     }
     
@@ -861,18 +862,19 @@ class TechniqueUseResolver extends TechniqueResolverData {
 
         switch (techniqueEffect.subType) {
             case "Heal":
-                tokenEffect.addStoredDieRolls("Will Heal", roll);
+                roll.setDamageType("Will Heal");
                 return;
             case "Full":
-                tokenEffect.addStoredDieRolls("Will Full Heal", new DieRoll());
+                roll.setDamageType("Will Full Heal");
                 return;
             case "Overflow":
-                tokenEffect.addStoredDieRolls("Will Overflow", roll);
+                roll.setDamageType("Will Overflow");
                 return;
             default:
-                tokenEffect.addStoredDieRolls("Will Damage", roll);
+                roll.setDamageType("Will");
                 return;
         }
+        tokenEffect.addDamageRoll(roll);
     }
 
     tryApplyWillDamage(tokenEffect, attrGetter, attrSetter, willBreakEffect) {
@@ -950,7 +952,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
     calculateFormula(techniqueEffect, senderAttrHandler) {
         let dVal = parseInt(techniqueEffect.dVal);
         let dType = parseInt(techniqueEffect.dType);
-        let roll = new DieRoll();
+        let roll = new DamageRoll();
         roll.rollDice(isNaN(dVal) ? 0 : dVal, isNaN(dType) ? 0 : dType);
         roll.addModToRoll(techniqueEffect.formula.getValue(senderAttrHandler));
         return roll;
