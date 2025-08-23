@@ -798,7 +798,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
         
         switch (techniqueEffect.subType) {
             case "Surge":
-                let surgeValue = attrGetters.getObjByTarget(techniqueEffect).parseInt("Cmb_Surge");
+                let surgeValue = attrGetters.getObjByTarget(techniqueEffect).parseInt(WuxDef.GetVariable("Cmb_Surge"));
                 if (surgeValue <= 0) {
                     if(!tokenEffect.hasSurged()) {
                         techUseResolver.addMessage("Cannot Surge, no Surge available");
@@ -807,7 +807,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
                     return;
                 }
                 if(!tokenEffect.hasSurged()) {
-                    attrSetters.getObjByTarget(techniqueEffect).addUpdate("Cmb_Surge", surgeValue - 1);
+                    attrSetters.getObjByTarget(techniqueEffect).addUpdate(WuxDef.GetVariable("Cmb_Surge"), surgeValue - 1);
                     tokenEffect.spendSurge();
                 }
                 

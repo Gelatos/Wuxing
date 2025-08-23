@@ -614,9 +614,7 @@ class TokenTargetEffectsData {
         this.tokenTargetData = tokenTargetData;
         this.effectMessages = [];
         this.damageRolls = [];
-        this.storedDieRolls = {};
         this.spentSurge = false;
-        this.isArmorPiercing = false;
     }
     
     addMessage(message) {
