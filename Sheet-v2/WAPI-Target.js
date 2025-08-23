@@ -63,7 +63,6 @@ class TargetData {
         }
         this.tokenId = token.get("_id");
         this.displayName = token.get("name");
-        Debug.Log(`[TargetData] Importing token data for ${this.displayName} (${this.charId})`);
 
         let character = getObj('character', this.charId);
         this.charName = character.get("name");
@@ -423,7 +422,6 @@ class TokenTargetData extends TargetData {
         }
     }
     applyResultsToEnergy(results, attrHandler, attributeVar, tokenTargetData) {
-        Debug.Log(`[TokenTargetData] Applying results to energy: ${results.newValue}`);
         if (tokenTargetData.isBarLinked(1)) {
             attrHandler.addUpdate(attributeVar, results.newValue, false);
         }
@@ -441,7 +439,7 @@ class TokenTargetData extends TargetData {
         }
         else {
             this.modifyIconAttribute(attributeHandler, "status_yellow", value,
-                tokenTargetData.addModifierToAttribute, resultsCallback);
+                tokenTargetData.addModifierToAttributeNoCap, resultsCallback);
         }
     }
     setMoveCharge(attributeHandler, value, resultsCallback) {
@@ -542,7 +540,7 @@ class TokenTargetData extends TargetData {
         let results = tokenTargetData.getModifyResults(iconName);
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
-            results.current = tokenTargetData.getIcon(iconName);
+            results.current = parseInt(tokenTargetData.getIcon(iconName));
             results.max = 99;
             modCallback(results, value, attrHandler, tokenTargetData);
             finishCallback(results, attrHandler, "", tokenTargetData);
@@ -811,7 +809,7 @@ var TargetReference = TargetReference || (function () {
                 case "!ten":
                     commandAddEnergy(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
-                case "tmovereset":
+                case "!tmovereset":
                     commandResetMoveCharge(msg, TokenReference.GetTokenTargetDataArray(msg));
                     break;
                 case "!tmove":
@@ -1007,7 +1005,7 @@ var TargetReference = TargetReference || (function () {
                 attributeHandler.run();
             });
             
-            sendTokenUpdateMessage(msg, targets, ` ${content} EN`);
+            sendTokenUpdateMessage(msg, targets, `: ${content} EN`);
         },
 
         commandResetMoveCharge = function (msg, targets) {
@@ -1547,19 +1545,6 @@ var TokenReference = TokenReference || (function () {
             });
         },
 
-        getFirstSelectedToken = function (msg) {
-            if (msg.selected.length == 0) {
-                Debug.Log(`[TokenReference][commandShowDefenses] No token selected`);
-                return undefined;
-            }
-            let tokenId = msg.selected[0]._id;
-            if (tokenId == undefined) {
-                Debug.Log(`[TokenReference][commandShowDefenses] No token selected`);
-                return undefined;
-            }
-            return getTokenData(msg.selected[0]);
-        },
-
         getTokenTargetDataArray = function (msg) {
             let tokenTargetDataArray = [];
             iterateOverSelectedTokens(msg, function (tokenTargetData) {
@@ -1587,7 +1572,6 @@ var TokenReference = TokenReference || (function () {
             }
         },
         setTokenForBattle = function (tokenTargetData, attributeHandler) {
-            Debug.Log(`[TokenReference][setTokenForBattle] Setting token for battle: ${tokenTargetData.charName}`);
             let hpVar = WuxDef.GetVariable("HP");
             let willpowerVar = WuxDef.GetVariable("WILL");
             let enVar = WuxDef.GetVariable("EN");
@@ -1596,7 +1580,6 @@ var TokenReference = TokenReference || (function () {
             let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
-                Debug.Log(`[TokenReference][setTokenForBattle] Setting token for battle: ${tokenTargetData.charName}`);
                 tokenTargetData.setBar(1, attrHandler.getAttribute(hpVar), true, true);
                 tokenTargetData.setBar(2, attrHandler.getAttribute(willpowerVar), true, true);
                 

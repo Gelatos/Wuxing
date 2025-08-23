@@ -2990,7 +2990,7 @@ class TokenTargetData extends TargetData {
         }
         else {
             this.modifyIconAttribute(attributeHandler, "status_yellow", value,
-                tokenTargetData.addModifierToAttribute, resultsCallback);
+                tokenTargetData.addModifierToAttributeNoCap, resultsCallback);
         }
     }
     setMoveCharge(attributeHandler, value, resultsCallback) {
@@ -3091,7 +3091,7 @@ class TokenTargetData extends TargetData {
         let results = tokenTargetData.getModifyResults(iconName);
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
-            results.current = tokenTargetData.getIcon(iconName);
+            results.current = parseInt(tokenTargetData.getIcon(iconName));
             results.max = 99;
             modCallback(results, value, attrHandler, tokenTargetData);
             finishCallback(results, attrHandler, "", tokenTargetData);
@@ -3338,6 +3338,7 @@ var TargetReference = TargetReference || (function () {
         // ---------------------------
 
         handleInput = function (msg, tag, content) {
+            Debug.Log(`[TargetReference] handleInput: ${tag} ${content}`);
             switch (tag) {
                 case "!actadd":
                     commandAddCharacter(msg, TokenReference.GetTokenTargetDataArray(msg), content);
@@ -3360,7 +3361,7 @@ var TargetReference = TargetReference || (function () {
                 case "!ten":
                     commandAddEnergy(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
-                case "tmovereset":
+                case "!tmovereset":
                     commandResetMoveCharge(msg, TokenReference.GetTokenTargetDataArray(msg));
                     break;
                 case "!tmove":
@@ -3556,7 +3557,7 @@ var TargetReference = TargetReference || (function () {
                 attributeHandler.run();
             });
             
-            sendTokenUpdateMessage(msg, targets, ` ${content} EN`);
+            sendTokenUpdateMessage(msg, targets, `: ${content} EN`);
         },
 
         commandResetMoveCharge = function (msg, targets) {
