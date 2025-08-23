@@ -170,14 +170,14 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 let techEffect = item.technique.effects.get(item.technique.effects.keys[i]);
                 if (techEffect.type == "HP" && techEffect.subType == "") {
                     attrHandler.addUpdate(WuxDef.GetVariable("WeaponDamage"), techEffect.effect);
-                    attrHandler.addUpdate(WuxDef.GetVariable("WeaponDamageVal"), `${WuxDef.GetTitle(techEffect.effect)} Damage`);
+                    attrHandler.addUpdate(WuxDef.GetVariable("WeaponDamageVal"), `${WuxDef.GetTitle(techEffect.effect)}`);
                     return;
                 }
             }
         }
 
         attrHandler.addUpdate(WuxDef.GetVariable("WeaponDamage"), "0");
-        attrHandler.addUpdate(WuxDef.GetVariable("WeaponDamageVal"), "Force Damage");
+        attrHandler.addUpdate(WuxDef.GetVariable("WeaponDamageVal"), "Force");
     }
     const unequipItem = function (eventinfo, countFieldNames, slotNames, maxSlots) {
         let actionFieldName = "RepeatingGearTech";

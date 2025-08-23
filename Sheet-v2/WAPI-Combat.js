@@ -628,6 +628,9 @@ class TechniqueUseResolver extends TechniqueResolverData {
             if (techniqueEffect.target == "Self") {
                 techUseResolver.tryGetAttributesFromTechniqueEffect(techniqueEffect, senderAttributeHandler);
             }
+            if (techniqueEffect.effect == "Dmg_Weapon") {
+                senderAttributeHandler.addMod(WuxDef.GetVariable("WeaponDamage"));
+            }
             senderAttributeHandler.addMod(techniqueEffect.formula.getAttributes());
         });
     }
@@ -782,18 +785,11 @@ class TechniqueUseResolver extends TechniqueResolverData {
     }
     
     applySetters(techUseResolver, attrGetters, attrSetters, willBreakEffect) {
-        techUseResolver.tryApplyNumberEffects(techUseResolver, techUseResolver.senderTokenEffect, attrGetters.sender, attrSetters.sender, willBreakEffect);
-        techUseResolver.tryApplyNumberEffects(techUseResolver, techUseResolver.targetTokenEffect, attrGetters.target, attrSetters.target, willBreakEffect);
+        techUseResolver.senderTokenEffect.performDamageRolls(attrGetters.sender, attrSetters.sender, willBreakEffect);
+        techUseResolver.targetTokenEffect.performDamageRolls(attrGetters.target, attrSetters.target, willBreakEffect);
         attrSetters.sender.run();
         attrSetters.target.run();
         techUseResolver.printMessages();
-    }
-    
-    tryApplyNumberEffects(techUseResolver, tokenEffect, attrGetter, attrSetter, willBreakEffect) {
-        techUseResolver.tryApplyHpHealing(tokenEffect, attrGetter, attrSetter);
-        techUseResolver.tryApplyWillHealing(tokenEffect, attrGetter, attrSetter);
-        techUseResolver.tryApplyHpDamage(tokenEffect, attrGetter, attrSetter);
-        techUseResolver.tryApplyWillDamage(tokenEffect, attrGetter, attrSetter, willBreakEffect);
     }
     
     addHPEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
@@ -817,43 +813,31 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 
                 roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
                 roll.setDamageType("HP Heal");
+                roll.setTraits(techniqueEffect.traits);
                 tokenEffect.addDamageRoll(roll);
                 break;
             case "Heal":
                 roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
                 roll.setDamageType("HP Heal");
+                roll.setTraits(techniqueEffect.traits);
                 tokenEffect.addDamageRoll(roll);
                 break;
             default:
-                roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender)
-                roll.setDamageType(techniqueEffect.damageType);
+                roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
+                let damageType = WuxDef.GetTitle(techniqueEffect.effect);
+                if (damageType == "Weapon") {
+                    damageType = attrGetters.sender.parseString(WuxDef.GetVariable("WeaponDamage"));
+                    if (damageType == "" || damageType == 0) {
+                        damageType = WuxDef.GetTitle("Dmg_Force");
+                    }
+                    else {
+                        damageType = WuxDef.GetTitle(damageType);
+                    }
+                }
+                roll.setDamageType(damageType);
                 roll.setTraits(techniqueEffect.traits);
                 tokenEffect.addDamageRoll(roll);
         }
-    }
-    
-    tryApplyHpDamage(tokenEffect, attrGetter, attrSetter) {
-        let storedDieRolls = tokenEffect.tryGetStoredDieRolls("HP Damage");
-        if (storedDieRolls == undefined) {
-            return;
-        }
-        
-        if (!tokenEffect.isArmorPiercing) {
-            let armorTotal = attrGetter.parseInt(WuxDef.GetVariable("Cmb_Armor"));
-            if (armorTotal > storedDieRolls.total / 2) {
-                armorTotal = Math.floor(storedDieRolls.total / 2);
-            }
-            storedDieRolls.addModToRoll(-1 * armorTotal, "Armor");
-        }
-        tokenEffect.takeHpDamage(attrSetter, storedDieRolls, "HP");
-    }
-
-    tryApplyHpHealing(tokenEffect, attrGetter, attrSetter) {
-        let storedDieRolls = tokenEffect.tryGetStoredDieRolls("HP Heal");
-        if (storedDieRolls == undefined) {
-            return;
-        }
-        tokenEffect.takeHpHealing(attrSetter, storedDieRolls);
     }
 
     addWillEffect(techniqueEffect, techUseResolver, attrGetters) {
@@ -863,46 +847,18 @@ class TechniqueUseResolver extends TechniqueResolverData {
         switch (techniqueEffect.subType) {
             case "Heal":
                 roll.setDamageType("Will Heal");
-                return;
+                break;
             case "Full":
                 roll.setDamageType("Will Full Heal");
-                return;
+                break;
             case "Overflow":
                 roll.setDamageType("Will Overflow");
-                return;
+                break;
             default:
                 roll.setDamageType("Will");
-                return;
+                break;
         }
         tokenEffect.addDamageRoll(roll);
-    }
-
-    tryApplyWillDamage(tokenEffect, attrGetter, attrSetter, willBreakEffect) {
-        let storedDieRolls = tokenEffect.tryGetStoredDieRolls("Will Overflow");
-        if (storedDieRolls != undefined) {
-            tokenEffect.takeWillOverflowDamage(attrSetter, storedDieRolls);
-            return;
-        }
-
-        storedDieRolls = tokenEffect.tryGetStoredDieRolls("Will Damage");
-        if (storedDieRolls == undefined) {
-            return;
-        }
-        tokenEffect.takeWillDamage(attrSetter, storedDieRolls, willBreakEffect);
-    }
-
-    tryApplyWillHealing(tokenEffect, attrGetter, attrSetter) {
-        let storedDieRolls = tokenEffect.tryGetStoredDieRolls("Will Full Heal");
-        if (storedDieRolls != undefined) {
-            tokenEffect.takeWillFullHealing(attrSetter);
-            return;
-        }
-        
-        storedDieRolls = tokenEffect.tryGetStoredDieRolls("Will Heal");
-        if (storedDieRolls == undefined) {
-            return;
-        }
-        tokenEffect.takeWillHealing(attrSetter, storedDieRolls);
     }
     
     addEnergyEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {

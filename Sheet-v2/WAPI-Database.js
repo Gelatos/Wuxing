@@ -2350,9 +2350,9 @@ class BaseTechniqueEffectDisplayData {
         let impatience = WuxDef.GetTitle("Soc_Impatience");
         switch (effect.subType) {
             case "Heal":
-                return `${this.formatTargetLose(effect)} ${impatience} by ${this.formatCalcBonus(effect)}`;
+                return `${this.formatTargetLose(effect)} ${this.formatCalcBonus(effect)} ${impatience}`;
             default:
-                return `${this.formatTargetGain(effect)} ${impatience} by ${this.formatCalcBonus(effect)}`;
+                return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${impatience}`;
         }
     }
 

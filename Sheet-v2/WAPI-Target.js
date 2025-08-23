@@ -625,31 +625,6 @@ class TokenTargetEffectsData {
         }
     }
     
-    // Remove Later
-    tryGetStoredDieRolls(variableName) {
-        return this.storedDieRolls[variableName];
-    }
-    addStoredDieRolls(variableName, value) {
-        if (this.storedDieRolls[variableName] == undefined) {
-            this.storedDieRolls[variableName] = value;
-            return;
-        }
-        Debug.Log(`[TokenTargetEffectsData] Adding to existing stored die rolls for ${variableName} with value ${value.total}`);
-        this.storedDieRolls[variableName].addDieRoll(value);
-    }
-    
-    tryGetDamageRoll(damageType, trait) {
-        let tempDamageRoll = new DamageRoll();
-        tempDamageRoll.setDamageType(damageType);
-        tempDamageRoll.setTraits(trait);
-        for(let i = 0; i < this.damageRolls.length; i++) {
-            if (this.damageRolls[i].isSame(tempDamageRoll)) {
-                return this.damageRolls[i];
-            }
-        }
-        
-        return undefined;
-    }
     addDamageRoll(damageRoll) {
         for(let i = 0; i < this.damageRolls.length; i++) {
             if (this.damageRolls[i].isSame(damageRoll)) {
@@ -660,6 +635,38 @@ class TokenTargetEffectsData {
         
         this.damageRolls.push(damageRoll);
     }
+    performDamageRolls(attrGetter, attrSetter, willBreakEffect) {
+        let tokenTargetEffect = this;
+        this.damageRolls.forEach(function (damageRoll) {
+            switch(damageRoll.damageType) {
+                case "HP Heal":
+                    tokenTargetEffect.takeHpHealing(attrSetter, damageRoll);
+                    break;
+                case "Will":
+                    tokenTargetEffect.takeWillDamage(attrSetter, damageRoll, willBreakEffect);
+                    break;
+                case "Will Overflow":
+                    tokenTargetEffect.takeWillOverflowDamage(attrSetter, damageRoll);
+                    break;
+                case "Will Heal":
+                    tokenTargetEffect.takeWillHealing(attrSetter, damageRoll);
+                    break;
+                case "Will Full Heal":
+                    tokenTargetEffect.takeWillFullHealing(attrSetter);
+                    break;
+                default:
+                    if (damageRoll.traits != "AP") {
+                        let armorTotal = attrGetter.parseInt(WuxDef.GetVariable("Cmb_Armor"));
+                        if (armorTotal > damageRoll.total / 2) {
+                            armorTotal = Math.floor(damageRoll.total / 2);
+                        }
+                        damageRoll.addModToRoll(-1 * armorTotal, "Armor");
+                    }
+                    tokenTargetEffect.takeHpDamage(attrSetter, damageRoll);
+            }
+        });
+    }
+    
     
     hasSurged() {
         return this.spentSurge;
@@ -669,16 +676,12 @@ class TokenTargetEffectsData {
         this.spentSurge = true;
     }
     
-    setArmorPiercing() {
-        this.isArmorPiercing = true;
-    }
-    
-    takeHpDamage(attributeHandler, damageRoll, damageType) {
+    takeHpDamage(attributeHandler, damageRoll) {
         let targetEffect = this;
         
         this.tokenTargetData.addHp(attributeHandler, -1 * damageRoll.total, 
             function (results, attrHandler, attributeVar, tokenTargetData) {
-                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} ${damageType} damage.`);
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} ${damageRoll.damageType} damage.`);
                 if (results.remainder < 0) {
                     let vitalityDamage = 0;
                     while (results.remainder < 0) {
