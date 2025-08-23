@@ -1426,7 +1426,6 @@ class TechniqueUseResolver extends TechniqueResolverData {
             }
             if (techniqueEffect.effect == "Dmg_Weapon") {
                 senderAttributeHandler.addMod(WuxDef.GetVariable("WeaponDamage"));
-                Debug.Log(`Weapon Damage: Adding Weapon Damage variable to Sender`);
             }
             senderAttributeHandler.addMod(techniqueEffect.formula.getAttributes());
         });
@@ -1624,7 +1623,6 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 let damageType = WuxDef.GetTitle(techniqueEffect.effect);
                 if (damageType == "Weapon") {
                     damageType = attrGetters.sender.parseString(WuxDef.GetVariable("WeaponDamage"));
-                    Debug.Log(`Weapon Damage Type: ${damageType}`);
                     if (damageType == "" || damageType == 0) {
                         damageType = WuxDef.GetTitle("Dmg_Force");
                     }

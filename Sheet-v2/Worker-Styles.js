@@ -158,7 +158,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 
                 if (restrictToAffinities) {
                     if (affinity.includes(";")) {
-                        let affinityParts = affinity.split(";");
+                        let affinityParts = affinity.split(";").map(s => s.trim());
                         if (affinity != "" && !affinityParts.some(part => affinities.includes(part))) {
                             return;
                         }

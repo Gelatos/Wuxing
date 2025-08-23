@@ -200,10 +200,11 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                     return;
                 }
                 if (affinity.includes(";")) {
-                    let affinityParts = affinity.split(";");
+                    let affinityParts = affinity.split(";").map(s => s.trim());
                     if (affinity != "" && !affinityParts.some(part => affinities.includes(part))) {
                         return;
                     }
+                    
                 }
                 else if (affinity != "" && !affinities.includes(affinity)) {
                     return;
