@@ -4358,7 +4358,7 @@ var Format = Format || (function () {
         // ------------------------
 
         showTooltip = function (message, tooltip) {
-            return `[${message}](#" class="showtip" title="${SanitizeSheetRoll(tooltip)})`;
+            return `[${message}](#" class="showtip" title="${sanitizeSheetRoll(tooltip)})`;
         },
 
 

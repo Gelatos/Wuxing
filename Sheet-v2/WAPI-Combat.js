@@ -580,7 +580,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
             return;
         }
         this.targetTokenEffect = new TokenTargetEffectsData(targetToken);
-        this.advantage = ParseIntValue(contentData[2]);
+        this.advantage = parseInt(contentData[2]);
         this.addInitialMessage();
     }
 
