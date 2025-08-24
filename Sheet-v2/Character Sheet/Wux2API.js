@@ -846,12 +846,11 @@ class TechniqueUseResolver extends TechniqueResolverData {
                     if(!tokenEffect.hasSurged()) {
                         techUseResolver.addMessage("Cannot Surge, no Surge available");
                     }
-                    tokenEffect.spendSurge();
+                    tokenEffect.setSpendSurge();
                     return;
                 }
                 if(!tokenEffect.hasSurged()) {
-                    attrSetters.getObjByTarget(techniqueEffect).addUpdate(WuxDef.GetVariable("Cmb_Surge"), surgeValue - 1);
-                    tokenEffect.spendSurge();
+                    tokenEffect.spendSurge(attrSetters.getObjByTarget(techniqueEffect));
                 }
                 
                 roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
@@ -2121,6 +2120,8 @@ class TokenTargetData extends TargetData {
             Debug.LogError(`[TokenTargetData] No combat details exist for ${this.charName}`);
             return;
         }
+
+        this.combatDetails.setData(attrHandler);
         
         if (this.combatDetails.hasDisplayStyle()) {
             if (!this.isBarLinked(1)) {
@@ -2597,9 +2598,18 @@ class TokenTargetEffectsData {
     hasSurged() {
         return this.spentSurge;
     }
-    
-    spendSurge() {
+    setSpendSurge() {
         this.spentSurge = true;
+    }
+    spendSurge(attributeHandler) {
+        this.spentSurge = true;
+        
+        let targetEffect = this;
+        this.tokenTargetData.addSurge(attributeHandler, -1,
+            function (results, attrHandler, attributeVar, tokenTargetData) {
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} spends a Surge.`);
+                tokenTargetData.applyResultsSurge(results, attrHandler, attributeVar, tokenTargetData);
+            });
     }
     
     takeHpDamage(attributeHandler, damageRoll) {
@@ -3037,7 +3047,7 @@ var TargetReference = TargetReference || (function () {
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
                 tokenTargetData.refreshCombatDetails(attributeHandler);
-                attributeHandler.addFinishCallback(function (attrHandler) {
+                attributeHandler.addGetAttrCallback(function (attrHandler) {
                     tokenTargetData.setCombatDetails(attrHandler);
                 });
                 attributeHandler.run();
@@ -7023,9 +7033,7 @@ class CombatDetailsHandler {
     }
 
     printTooltip(attrHandler, displayname) {
-        if (this.combatDetails.cr == 0) {
-            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
-        }
+        this.setData(attrHandler);
         this.combatDetails.displayName = displayname;
         return this.combatDetails.printTooltip();
     }
@@ -7035,102 +7043,78 @@ class CombatDetailsHandler {
     }
 
     onUpdateDisplayStyle(attrHandler, value) {
-        if (this.combatDetails.cr == 0) {
-            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
-        }
+        this.setData(attrHandler);
         this.combatDetails.displayStyle = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateDisplayName(attrHandler, value) {
-        if (this.combatDetails.cr == 0) {
-            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
-        }
+        this.setData(attrHandler);
         this.combatDetails.displayName = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateCR(attrHandler, value) {
-        if (this.combatDetails.cr == 0) {
-            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
-        }
+        this.setData(attrHandler);
         this.combatDetails.cr = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateJob(attrHandler, jobName) {
+        this.setData(attrHandler);
         let jobCatDef = WuxDef.Get("Job");
         let jobDefinitionName = `${jobCatDef.abbreviation}_${jobName}`;
         let jobDef = WuxDef.Get(jobDefinitionName);
-        
-        if (this.combatDetails.cr == 0) {
-            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
-        }
+
         this.combatDetails.job = jobDef.title;
         this.combatDetails.jobDefenses = jobDef.defenses;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateHealValue(attrHandler, healValue) {
-        if (this.combatDetails.cr == 0) {
-            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
-        }
+        this.setData(attrHandler);
         this.combatDetails.healvalue = healValue;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
     
     onUpdateArmorValue(attrHandler, armorValue) {
-        if (this.combatDetails.cr == 0) {
-            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
-        }
+        this.setData(attrHandler);
         this.combatDetails.armorvalue = armorValue;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateStatus(attrHandler, value) {
-        if (this.combatDetails.cr == 0) {
-            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
-        }
+        this.setData(attrHandler);
         this.combatDetails.status = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateSurges(attrHandler, value) {
-        if (this.combatDetails.cr == 0) {
-            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
-        }
+        this.setData(attrHandler);
         this.combatDetails.surges = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateMaxSurges(attrHandler, value) {
-        if (this.combatDetails.cr == 0) {
-            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
-        }
+        this.setData(attrHandler);
         this.combatDetails.maxsurges = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateVitality(attrHandler, value) {
-        if (this.combatDetails.cr == 0) {
-            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
-        }
+        this.setData(attrHandler);
         this.combatDetails.vitality = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
     onUpdateMaxVitality(attrHandler, value) {
-        if (this.combatDetails.cr == 0) {
-            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
-        }
+        this.setData(attrHandler);
         this.combatDetails.maxvitality = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
     
     onUpdateNoteStats(attrHandler, tokenNoteReference) {
-        if (this.combatDetails.cr == 0) {
-            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
-        }
+        this.setData(attrHandler);
         this.combatDetails.surges = tokenNoteReference.surges.current;
         this.combatDetails.maxsurges = tokenNoteReference.surges.max;
         this.combatDetails.vitality = tokenNoteReference.vitality.current;
@@ -7139,12 +7123,16 @@ class CombatDetailsHandler {
     }
 
     onUpdateInfluences(attrHandler, support, oppose) {
-        if (this.combatDetails.cr == 0) {
-            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
-        }
+        this.setData(attrHandler);
         this.combatDetails.supportiveInfluence = support;
         this.combatDetails.opposingInfluence = oppose;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+    
+    setData(attrHandler) {
+        if (this.combatDetails.cr == 0) {
+            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        }
     }
 }
 

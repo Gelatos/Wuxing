@@ -803,12 +803,11 @@ class TechniqueUseResolver extends TechniqueResolverData {
                     if(!tokenEffect.hasSurged()) {
                         techUseResolver.addMessage("Cannot Surge, no Surge available");
                     }
-                    tokenEffect.spendSurge();
+                    tokenEffect.setSpendSurge();
                     return;
                 }
                 if(!tokenEffect.hasSurged()) {
-                    attrSetters.getObjByTarget(techniqueEffect).addUpdate(WuxDef.GetVariable("Cmb_Surge"), surgeValue - 1);
-                    tokenEffect.spendSurge();
+                    tokenEffect.spendSurge(attrSetters.getObjByTarget(techniqueEffect));
                 }
                 
                 roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);

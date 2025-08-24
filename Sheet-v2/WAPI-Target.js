@@ -325,6 +325,8 @@ class TokenTargetData extends TargetData {
             Debug.LogError(`[TokenTargetData] No combat details exist for ${this.charName}`);
             return;
         }
+
+        this.combatDetails.setData(attrHandler);
         
         if (this.combatDetails.hasDisplayStyle()) {
             if (!this.isBarLinked(1)) {
@@ -801,9 +803,18 @@ class TokenTargetEffectsData {
     hasSurged() {
         return this.spentSurge;
     }
-    
-    spendSurge() {
+    setSpendSurge() {
         this.spentSurge = true;
+    }
+    spendSurge(attributeHandler) {
+        this.spentSurge = true;
+        
+        let targetEffect = this;
+        this.tokenTargetData.addSurge(attributeHandler, -1,
+            function (results, attrHandler, attributeVar, tokenTargetData) {
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} spends a Surge.`);
+                tokenTargetData.applyResultsSurge(results, attrHandler, attributeVar, tokenTargetData);
+            });
     }
     
     takeHpDamage(attributeHandler, damageRoll) {
@@ -1241,7 +1252,7 @@ var TargetReference = TargetReference || (function () {
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
                 tokenTargetData.refreshCombatDetails(attributeHandler);
-                attributeHandler.addFinishCallback(function (attrHandler) {
+                attributeHandler.addGetAttrCallback(function (attrHandler) {
                     tokenTargetData.setCombatDetails(attrHandler);
                 });
                 attributeHandler.run();
