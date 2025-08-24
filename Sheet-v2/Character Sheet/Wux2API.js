@@ -957,10 +957,17 @@ class TechniqueUseResolver extends TechniqueResolverData {
     
     calculateFormula(techniqueEffect, senderAttrHandler) {
         let dVal = parseInt(techniqueEffect.dVal);
+        dVal = isNaN(dVal) ? 0 : dVal;
         let dType = parseInt(techniqueEffect.dType);
+        dType = isNaN(dType) ? 0 : dType;
         let roll = new DamageRoll();
-        roll.rollDice(isNaN(dVal) ? 0 : dVal, isNaN(dType) ? 0 : dType);
-        roll.addModToRoll(techniqueEffect.formula.getValue(senderAttrHandler));
+        if (techniqueEffect.traits.includes("Brutal")) {
+            roll.dropRollDice(dVal * 2, dType, dVal, true);
+        }
+        else {
+            roll.rollDice(dVal, dType);
+        }
+        roll.addModToRoll(techniqueEffect.formula.getValue(senderAttrHandler), "Base Mod");
         return roll;
     }
     
