@@ -3254,49 +3254,52 @@ class ResistanceData {
 }
 
 class StatusHandler {
-    constructor(attributeHandler) {
-        this.attributeHandler = attributeHandler;
-        this.statusDef = WuxDef.Get("Status");
-        this.attributeHandler.addMod(this.statusDef.getVariable());
-        this.combatDetailsHandler = new CombatDetailsHandler(this.attributeHandler);
+    constructor(data, attributeHandler) {
+        this.createEmpty();
+        if (attributeHandler != undefined) {
+            this.importTokenTargetData(data, attributeHandler);
+        }
+        else if (data != undefined) {
+            if (typeof data == "string") {
+                this.importStringifiedJson(data);
+            } else {
+                this.importJson(data);
+            }
+        }
     }
 
-    changeStatus(statusName, newValue) {
-        let statusHandler = this;
-        let status = WuxDef.Get(statusName);
-        if (status == undefined) {
-            Debug.LogError(`[StatusHandler][addStatus] Tried to add incorrect status ${statusName}`);
+    importStringifiedJson(stringifiedJSON) {
+        if (stringifiedJSON == undefined || stringifiedJSON == "") {
             return;
         }
-        this.attributeHandler.addUpdate(status.getVariable(), newValue);
-        this.attributeHandler.addMod(this.statusDef.getVariable());
-        
-        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
-            let statuses = attrHandler.parseJSON(statusHandler.statusDef.getVariable());
-            if (statuses == undefined || statuses == "" || statuses == "0") {
-                statuses = [];
-            }
-            if (!Array.isArray(statuses)) {
-                statuses = [statuses];
-            }
-            if (newValue == "on") {
-                if (statuses.includes(statusName)) {
-                    return;
-                }
-                statuses.push(statusName);
-                attrHandler.addUpdate(statusHandler.statusDef.getVariable(), JSON.stringify(statuses));
-            } else if (newValue == 0) {
-                let statusIndex = statuses.indexOf(statusName);
-                if (statusIndex == -1) {
-                    return;
-                }
-                statuses.splice(statusIndex, 1);
-                attrHandler.addUpdate(statusHandler.statusDef.getVariable(), JSON.stringify(statuses));
-            }
+        let json = JSON.parse(stringifiedJSON);
+        this.importJson(json);
+    }
+    createEmpty() {
+        this.statusEffects = {};
+    }
+    importJson(json) {
+        this.statusEffects = json.statusEffects != undefined ? json.statusEffects : {};
+    }
+}
+class StatusHandlerStatusData {
+    constructor(statusEffects) {
+        this.createEmpty();
+        if (statusEffects != undefined) {
+            this.importStatusEffects(statusEffects);
+        }
+    }
 
-            statusHandler.combatDetailsHandler.onUpdateStatus(attrHandler, statuses);
-        });
-        this.attributeHandler.run();
+    createEmpty() {
+        this.name = "";
+        this.definitionName = "";
+        this.quickDesc = "";
+    }
+
+    importStatusEffects(json) {
+        this.name = json.name != undefined ? json.name : "";
+        this.definitionName = json.definitionName != undefined ? json.definitionName : "";
+        this.quickDesc = json.quickDesc != undefined ? json.quickDesc : "";
     }
 }
 
@@ -3525,6 +3528,17 @@ class CombatDetailsHandler {
             this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
         }
         this.combatDetails.maxvitality = value;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+    
+    onUpdateNoteStats(attrHandler, tokenNoteReference) {
+        if (this.combatDetails.cr == 0) {
+            this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        }
+        this.combatDetails.surges = tokenNoteReference.surges.current;
+        this.combatDetails.maxsurges = tokenNoteReference.surges.max;
+        this.combatDetails.vitality = tokenNoteReference.vitality.current;
+        this.combatDetails.maxvitality = tokenNoteReference.vitality.max;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
@@ -3779,10 +3793,11 @@ class SandboxAttributeHandler extends AttributeHandler {
         return this.attributes[attr];
     }
 
-    addUpdate(attr, value, isMax) {
-        Debug.Log(`Adding update ${attr} with value ${value}`);
+    addUpdate(attr, value, isMax, showDebug) {
+        if (showDebug) {
+            Debug.Log(`Adding update ${attr} with value ${value}`);
+        }
         if (this.attributes[attr] == undefined) {
-            Debug.Log(`Adding the attribute ${attr}`);
             this.addAttribute(attr);
         }
 
