@@ -647,6 +647,9 @@ class TechniqueUseResolver extends TechniqueResolverData {
                         attributeHandler.addMod(WuxDef.GetVariable("Cmb_Armor"));
                         break;
                 }
+                if (techniqueEffect.formula.hasWorker(WuxDef.GetVariable("TargetHV"))) {
+                    attributeHandler.addMod(WuxDef.GetVariable("Cmb_HV"));
+                }
                 break;
             case "WILL":
                 attributeHandler.addMod(WuxDef.GetVariable("WILL"));
@@ -811,6 +814,11 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 }
                 
                 roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
+                if (techniqueEffect.formula.hasWorker(WuxDef.GetVariable("TargetHV"))) {
+                    let hvValue = attrGetters.getObjByTarget(techniqueEffect).parseInt(WuxDef.GetVariable("Cmb_HV"));
+                    Debug.Log(`Adding HV Value of ${hvValue} to Surge Heal`);
+                    roll.addModToRoll(hvValue, "HV");
+                }
                 roll.setDamageType("HP Heal");
                 roll.setTraits(techniqueEffect.traits);
                 tokenEffect.addDamageRoll(roll);
@@ -884,7 +892,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
 
     addRequestCheck(techniqueEffect, techUseResolver, attrGetters) {
         let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
-        if (techniqueEffect.formula.hasWorker("TargetFavor")) {
+        if (techniqueEffect.formula.hasWorker(WuxDef.GetVariable("TargetFavor"))) {
             let favorDef = WuxDef.Get("Soc_Favor");
             let favorValue = attrGetters.getObjByTarget(techniqueEffect).parseInt(favorDef.getVariable());
             let favorMax = attrGetters.getObjByTarget(techniqueEffect).parseInt(favorDef.getVariable(WuxDef._max));

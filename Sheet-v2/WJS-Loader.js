@@ -1,4 +1,4 @@
-var wuxCurrentVersion = "1.0.3";
+var wuxCurrentVersion = "1.0.2";
 var upgrade_to_1_0_3 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.3");
 	attributeHandler.addUpdate(WuxDef.GetVariable("Status", JSON.stringify({})));
