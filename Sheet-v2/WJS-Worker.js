@@ -87,16 +87,16 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             let attributeHandler = new WorkerAttributeHandler();
             let nameVar = WuxDef.GetVariable("DisplayName");
             let fullNameVar = WuxDef.GetVariable("FullName");
-            let raceVar = WuxDef.GetVariable("Ethnicity");
+            let ethnicityVar = WuxDef.GetVariable("Ethnicity");
             let genderVar = WuxDef.GetVariable("Gender");
             let homeRegionVar = WuxDef.GetVariable("HomeRegion");
-            attributeHandler.addMod([nameVar, fullNameVar, genderVar, homeRegionVar]);
+            attributeHandler.addMod([nameVar, fullNameVar, ethnicityVar, genderVar, homeRegionVar]);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let generator = new WuxingHumanCharacterGenerator();
                 generator.character.firstName = attrHandler.parseString(nameVar);
                 generator.character.fullName = attrHandler.parseString(fullNameVar);
-                generator.character.ancestry = attrHandler.parseString(raceVar);
+                generator.character.ancestry = attrHandler.parseString(ethnicityVar);
                 generator.character.gender = attrHandler.parseString(genderVar);
                 generator.character.homeRegion = attrHandler.parseString(homeRegionVar);
                 generator.generateCharacter();
@@ -118,7 +118,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             let genderVar = WuxDef.GetVariable("Note_GenGender");
             let homeRegionVar = WuxDef.GetVariable("Note_GenHomeRegion");
             let raceVar = WuxDef.GetVariable("Note_GenRace");
-            attributeHandler.addMod([nameVar, fullNameVar, genderVar, homeRegionVar]);
+            attributeHandler.addMod([nameVar, fullNameVar, genderVar, homeRegionVar, raceVar]);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 attrHandler.addUpdate("character_name", attrHandler.parseString(nameVar));
                 attrHandler.addUpdate(WuxDef.GetVariable("SheetName"), attrHandler.parseString(nameVar));

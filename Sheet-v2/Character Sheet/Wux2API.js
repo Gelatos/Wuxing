@@ -8146,7 +8146,7 @@ class WuxingHumanCharacterGenerator {
     }
     
     generateCharacter() {
-        if (this.character.ancestry == "") {
+        if (this.character.ancestry == "" || this.character.ancestry == "0") {
             if (this.character.homeRegion == "" || this.character.homeRegion == "0") {
                 this.generateRandomHomeRegion();
             }
@@ -8155,7 +8155,7 @@ class WuxingHumanCharacterGenerator {
         else if (this.character.homeRegion == "" || this.character.homeRegion == "0") {
             this.generateHomeRegionFromAncestry();
         }
-        if (this.character.gender == "") {
+        if (this.character.gender == "" || this.character.gender == "0") {
             this.generateGender();
         }
         if (this.character.firstName == "" || this.character.fullName == "") {

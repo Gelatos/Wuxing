@@ -1,9 +1,4 @@
 var wuxCurrentVersion = "1.0.2";
-var upgrade_to_1_0_3 = function (currentVersion) {
-	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.3");
-	attributeHandler.addUpdate(WuxDef.GetVariable("Status", JSON.stringify({})));
-	attributeHandler.run();
-}
 var upgrade_to_1_0_2 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.2");
 	let statBonusFilter = WuxDef.Filter([new DatabaseFilterData("group", "StatBonus")]);
