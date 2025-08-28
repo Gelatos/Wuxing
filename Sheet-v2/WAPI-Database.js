@@ -3254,12 +3254,9 @@ class ResistanceData {
 }
 
 class StatusHandler {
-    constructor(data, attributeHandler) {
+    constructor(data) {
         this.createEmpty();
-        if (attributeHandler != undefined) {
-            this.importTokenTargetData(data, attributeHandler);
-        }
-        else if (data != undefined) {
+        if (data != undefined) {
             if (typeof data == "string") {
                 this.importStringifiedJson(data);
             } else {
@@ -3277,9 +3274,112 @@ class StatusHandler {
     }
     createEmpty() {
         this.statusEffects = {};
+        this.conditions = {};
+        this.emotions = {};
     }
     importJson(json) {
         this.statusEffects = json.statusEffects != undefined ? json.statusEffects : {};
+    }
+    
+    addStatus(defName) {
+        let definition = new StatusHandlerStatusData(WuxDef.Get(defName));
+        switch(definition.subGroup) {
+            case "Status":
+                if (this.statusEffects[defName] == undefined) {
+                    this.statusEffects[defName] = definition;
+                }
+                break;
+            case "Condition":
+                if (this.conditions[defName] == undefined) {
+                    this.conditions[defName] = definition;
+                }
+                break;
+            case "Emotion":
+                if (this.emotions[defName] == undefined) {
+                    this.emotions[defName] = definition;
+                }
+                break;
+        }
+    }
+    removeStatus(defName) {
+        let definition = new StatusHandlerStatusData(WuxDef.Get(defName));
+        switch(definition.subGroup) {
+            case "Status":
+                delete this.statusEffects[defName];
+                break;
+            case "Condition":
+                delete this.conditions[defName];
+                break;
+            case "Emotion":
+                delete this.emotions[defName];
+                break;
+        }
+    }
+    
+    saveStatusesToCharacterSheet(attributeHandler) {
+        attributeHandler.addUpdate(WuxDef.GetVariable("Status"), JSON.stringify(this));
+    }
+    
+    printStatusSummary() {
+        let output = "";
+        let statuses = Object.values(this.statusEffects);
+        let conditions = Object.values(this.conditions);
+        let emotions = Object.values(this.emotions);
+        if (statuses.length == 0 && conditions.length == 0 && emotions.length == 0) {
+            return "None";
+        }
+        if (statuses.length > 0) {
+            output += "Statuses: ";
+            for (let i = 0; i < statuses.length; i++) {
+                output += statuses[i].title;
+                if (i < statuses.length - 1) {
+                    output += "; ";
+                }
+            }
+        }
+        if (conditions.length > 0) {
+            if (output != "") {
+                output += " | ";
+            }
+            output += "Conditions: ";
+            for (let i = 0; i < conditions.length; i++) {
+                output += conditions[i].title;
+                if (i < conditions.length - 1) {
+                    output += "; ";
+                }
+            }
+        }
+        if (emotions.length > 0) {
+            if (output != "") {
+                output += " | ";
+            }
+            output += "Emotions: ";
+            for (let i = 0; i < emotions.length; i++) {
+                output += emotions[i].title;
+                if (i < emotions.length - 1) {
+                    output += "; ";
+                }
+            }
+        }
+        return output;
+    }
+
+    getStatusDetailsMessage(statusType, showAddOption) {
+        let output = "";
+
+        return new SystemInfoMessage(output);
+    }
+
+    statusDetailsTitle(title) {
+        return `<div style='font-weight: bold'>${title}</div>`;
+    }
+
+    statusDetailsSpacer() {
+        return `<div>&nbsp</div>`;
+    }
+
+    statusDetailsButton(name, message) {
+        return `<span class="sheet-wuxInlineRow">[${name}](!${message})</span> `;
     }
 }
 class StatusHandlerStatusData {
@@ -3292,14 +3392,16 @@ class StatusHandlerStatusData {
 
     createEmpty() {
         this.name = "";
-        this.definitionName = "";
-        this.quickDesc = "";
+        this.title = "";
+        this.subGroup = "";
+        this.shortDescription = "";
     }
 
     importStatusEffects(json) {
         this.name = json.name != undefined ? json.name : "";
-        this.definitionName = json.definitionName != undefined ? json.definitionName : "";
-        this.quickDesc = json.quickDesc != undefined ? json.quickDesc : "";
+        this.title = json.title != undefined ? json.title : "";
+        this.subGroup = json.subGroup != undefined ? json.subGroup : "";
+        this.shortDescription = json.shortDescription != undefined ? json.shortDescription : "";
     }
 }
 
@@ -3477,10 +3579,9 @@ class CombatDetailsHandler {
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
-    onUpdateStatus(attrHandler, value) {
+    onUpdateStatus(attrHandler, statusHandler) {
         this.setData(attrHandler);
-        this.combatDetails.status = value;
-        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+        this.combatDetails.status = statusHandler.printStatusSummary();
     }
 
     onUpdateSurges(attrHandler, value) {

@@ -319,6 +319,7 @@ class TokenTargetData extends TargetData {
     // Combat Details
     refreshCombatDetails(attributeHandler) {
         this.combatDetails = new CombatDetailsHandler(attributeHandler);
+        this.refreshStatus(attributeHandler);
     }
     setCombatDetails(attrHandler, tokenNoteReference) {
         if (this.combatDetails == undefined) {
@@ -329,11 +330,16 @@ class TokenTargetData extends TargetData {
         this.combatDetails.setData(attrHandler);
         
         if (this.combatDetails.hasDisplayStyle()) {
-            if (!this.isBarLinked(1)) {
+            if (this.isBarLinked(1)) {
+                let statusObj = new StatusHandler(attrHandler.parseJSON(WuxDef.GetVariable("Status")));
+                this.combatDetails.onUpdateStatus(attrHandler, statusObj);
+            }
+            else {
                 if (tokenNoteReference == undefined) {
                     tokenNoteReference = new TokenNoteReference(this.getTokenNote());
                 }
                 this.combatDetails.onUpdateNoteStats(attrHandler, tokenNoteReference);
+                this.combatDetails.onUpdateStatus(attrHandler, tokenNoteReference.statusHandler);
             }
             this.setTooltip(this.combatDetails.printTooltip(attrHandler, this.displayName));
             this.showTooltip(true);
@@ -629,7 +635,6 @@ class TokenTargetData extends TargetData {
             tokenTargetData.setCombatDetails(attrHandler);
         }
         else {
-            Debug.Log(`Updating vitality in token note to ${results.newValue}`);
             let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
             tokenNoteReference.vitality.current = results.newValue;
             tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
@@ -638,6 +643,50 @@ class TokenTargetData extends TargetData {
 
         return results;
     }
+
+    // Status
+    addStatus(attributeHandler, statusDefinitionName) {
+        this.modifyStatus(attributeHandler, statusDefinitionName, true);
+    }
+    removeStatus(attributeHandler, statusDefinitionName) {
+        this.modifyStatus(attributeHandler, statusDefinitionName, false);
+    }
+    refreshStatus(attributeHandler) {
+        let statusVar = WuxDef.GetVariable("Status");
+        attributeHandler.addAttribute(statusVar);
+    }
+    modifyStatus(attributeHandler, statusDefinitionName, isAdded) {
+        let tokenTargetData = this;
+        tokenTargetData.refreshCombatDetails(attributeHandler);
+        let statusVar = WuxDef.GetVariable("Status");
+        attributeHandler.addAttribute(statusVar);
+
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            if (tokenTargetData.isBarLinked(1)) {
+                let statusObj = new StatusHandler(attrHandler.parseJSON(statusVar));
+                if (isAdded) {
+                    statusObj.addStatus(statusDefinitionName);
+                }
+                else {
+                    statusObj.removeStatus(statusDefinitionName);
+                }
+                statusObj.saveStatusesToCharacterSheet(attrHandler);
+                tokenTargetData.setCombatDetails(attrHandler);
+            }
+            else {
+                let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
+                if (isAdded) {
+                    tokenNoteReference.statusHandler.addStatus(statusDefinitionName);
+                }
+                else {
+                    tokenNoteReference.statusHandler.removeStatus(statusDefinitionName);
+                }
+                tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
+                tokenTargetData.setCombatDetails(attrHandler, tokenNoteReference);
+            }
+        });
+    }
+    
     
     getModifyResults(name) {
         return {
@@ -749,6 +798,7 @@ class TokenTargetEffectsData {
         this.effectMessages = [];
         this.damageRolls = [];
         this.spentSurge = false;
+        this.removeStatusType = "";
     }
     
     addMessage(message) {
@@ -815,6 +865,10 @@ class TokenTargetEffectsData {
                 targetEffect.effectMessages.push(`${tokenTargetData.displayName} spends a Surge.`);
                 tokenTargetData.applyResultsSurge(results, attrHandler, attributeVar, tokenTargetData);
             });
+    }
+    
+    setRemoveStatusType(statusType) {
+        this.removeStatusType = statusType;
     }
     
     takeHpDamage(attributeHandler, damageRoll) {
@@ -923,12 +977,17 @@ class TokenNoteReference {
         this.importJson(json);
     }
     createEmpty() {
-        this.status = {};
+        this.statusHandler = {};
         this.surges = {current: 0, max: 0};
         this.vitality = {current: 0, max: 0};
     }
     importJson(json) {
-        this.status = json.status == undefined ? {} : json.status;
+        if (json.statusHandler == undefined) {
+            this.statusHandler = new StatusHandler();
+        }
+        else {
+            this.statusHandler = new StatusHandler(json.statusHandler);
+        }
         this.surges = json.surges == undefined ? {current: 0, max: 0} : json.surges;
         this.vitality = json.vitality == undefined ? {current: 0, max: 0} : json.vitality;
     }

@@ -667,6 +667,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
     }
 
     tryGetSenderAttributes(techUseResolver, senderAttributeHandler) {
+        senderAttributeHandler.addMod(WuxDef.GetVariable("Status"));
         techUseResolver.technique.effects.iterate(function (techniqueEffect) {
             if (techniqueEffect.target == "Self") {
                 techUseResolver.tryGetAttributesFromTechniqueEffect(techniqueEffect, senderAttributeHandler);
@@ -725,6 +726,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
     }
 
     tryGetDefensesAndAttributes(techUseResolver, targetAttributeHandler) {
+        targetAttributeHandler.addMod(WuxDef.GetVariable("Status"));
         techUseResolver.technique.effects.iterate(function (techniqueEffect) {
             if (techniqueEffect.defense.startsWith("Def_")) {
                 let defenseDef = WuxDef.Get(techniqueEffect.defense);
@@ -820,6 +822,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 break;
             case "Status":
                 techUseResolver.addStatusEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters);
+                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
                 break;
             case "Influence":
             case "Resistance":
@@ -946,7 +949,26 @@ class TechniqueUseResolver extends TechniqueResolverData {
     }
     
     addStatusEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
-        // do nothing for now
+        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
+
+        switch (techniqueEffect.subType) {
+            case "Add":
+            case "Self":
+            case "Choose":
+                tokenEffect.tokenTargetData.addStatus(attrSetters.getObjByTarget(techniqueEffect), techniqueEffect.effect);
+                break;
+            case "Remove":
+                tokenEffect.tokenTargetData.removeStatus(attrSetters.getObjByTarget(techniqueEffect), techniqueEffect.effect);
+                break;
+            case "Remove Any":
+            case "Remove All":
+                tokenEffect.setRemoveStatusType("Condition");
+                break;
+            case "Remove Will":
+                tokenEffect.setRemoveStatusType("Emotion");
+                break;
+        }
+        
     }
     
     addAttributeValue(techniqueEffect, attrName, techUseResolver, attrGetters, attrSetters) {
@@ -2439,7 +2461,6 @@ class TokenTargetData extends TargetData {
             tokenTargetData.setCombatDetails(attrHandler);
         }
         else {
-            Debug.Log(`Updating vitality in token note to ${results.newValue}`);
             let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
             tokenNoteReference.vitality.current = results.newValue;
             tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
@@ -2447,6 +2468,45 @@ class TokenTargetData extends TargetData {
         }
 
         return results;
+    }
+
+    // Status
+    addStatus(attributeHandler, statusDefinitionName) {
+        this.modifyStatus(attributeHandler, statusDefinitionName, true);
+    }
+    removeStatus(attributeHandler, statusDefinitionName) {
+        this.modifyStatus(attributeHandler, statusDefinitionName, false);
+    }
+    modifyStatus(attributeHandler, statusDefinitionName, isAdded) {
+        let tokenTargetData = this;
+        tokenTargetData.refreshCombatDetails(attributeHandler);
+        let statusVar = WuxDef.GetVariable("Status");
+        attributeHandler.addAttribute(statusVar);
+
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            if (tokenTargetData.isBarLinked(1)) {
+                let statusObj = new StatusHandler(attrHandler.parseJSON(statusVar));
+                if (isAdded) {
+                    statusObj.addStatus(statusDefinitionName);
+                }
+                else {
+                    statusObj.removeStatus(statusDefinitionName);
+                }
+                statusObj.saveStatusesToCharacterSheet(attrHandler);
+                tokenTargetData.setCombatDetails(attrHandler);
+            }
+            else {
+                let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
+                if (isAdded) {
+                    tokenNoteReference.statusHandler.addStatus(statusDefinitionName);
+                }
+                else {
+                    tokenNoteReference.statusHandler.removeStatus(statusDefinitionName);
+                }
+                tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
+                tokenTargetData.setCombatDetails(attrHandler, tokenNoteReference);
+            }
+        });
     }
     
     getModifyResults(name) {
@@ -2559,6 +2619,7 @@ class TokenTargetEffectsData {
         this.effectMessages = [];
         this.damageRolls = [];
         this.spentSurge = false;
+        this.removeStatusType = "";
     }
     
     addMessage(message) {
@@ -2625,6 +2686,10 @@ class TokenTargetEffectsData {
                 targetEffect.effectMessages.push(`${tokenTargetData.displayName} spends a Surge.`);
                 tokenTargetData.applyResultsSurge(results, attrHandler, attributeVar, tokenTargetData);
             });
+    }
+    
+    setRemoveStatusType(statusType) {
+        this.removeStatusType = statusType;
     }
     
     takeHpDamage(attributeHandler, damageRoll) {
@@ -2733,12 +2798,17 @@ class TokenNoteReference {
         this.importJson(json);
     }
     createEmpty() {
-        this.status = {};
+        this.statusHandler = {};
         this.surges = {current: 0, max: 0};
         this.vitality = {current: 0, max: 0};
     }
     importJson(json) {
-        this.status = json.status == undefined ? {} : json.status;
+        if (json.statusHandler == undefined) {
+            this.statusHandler = new StatusHandler();
+        }
+        else {
+            this.statusHandler = new StatusHandler(json.statusHandler);
+        }
         this.surges = json.surges == undefined ? {current: 0, max: 0} : json.surges;
         this.vitality = json.vitality == undefined ? {current: 0, max: 0} : json.vitality;
     }
@@ -6875,12 +6945,9 @@ class ResistanceData {
 }
 
 class StatusHandler {
-    constructor(data, attributeHandler) {
+    constructor(data) {
         this.createEmpty();
-        if (attributeHandler != undefined) {
-            this.importTokenTargetData(data, attributeHandler);
-        }
-        else if (data != undefined) {
+        if (data != undefined) {
             if (typeof data == "string") {
                 this.importStringifiedJson(data);
             } else {
@@ -6898,9 +6965,50 @@ class StatusHandler {
     }
     createEmpty() {
         this.statusEffects = {};
+        this.conditions = {};
+        this.emotions = {};
     }
     importJson(json) {
         this.statusEffects = json.statusEffects != undefined ? json.statusEffects : {};
+    }
+    
+    addStatus(defName) {
+        let definition = new StatusHandlerStatusData(WuxDef.Get(defName));
+        switch(definition.subGroup) {
+            case "Status":
+                if (this.statusEffects[defName] == undefined) {
+                    this.statusEffects[defName] = definition;
+                }
+                break;
+            case "Condition":
+                if (this.conditions[defName] == undefined) {
+                    this.conditions[defName] = definition;
+                }
+                break;
+            case "Emotion":
+                if (this.emotions[defName] == undefined) {
+                    this.emotions[defName] = definition;
+                }
+                break;
+        }
+    }
+    removeStatus(defName) {
+        let definition = new StatusHandlerStatusData(WuxDef.Get(defName));
+        switch(definition.subGroup) {
+            case "Status":
+                delete this.statusEffects[defName];
+                break;
+            case "Condition":
+                delete this.conditions[defName];
+                break;
+            case "Emotion":
+                delete this.emotions[defName];
+                break;
+        }
+    }
+    
+    saveStatusesToCharacterSheet(attributeHandler) {
+        attributeHandler.addUpdate(WuxDef.GetVariable("Status"), JSON.stringify(this));
     }
 }
 class StatusHandlerStatusData {
@@ -6913,14 +7021,16 @@ class StatusHandlerStatusData {
 
     createEmpty() {
         this.name = "";
-        this.definitionName = "";
-        this.quickDesc = "";
+        this.title = "";
+        this.subGroup = "";
+        this.shortDescription = "";
     }
 
     importStatusEffects(json) {
         this.name = json.name != undefined ? json.name : "";
-        this.definitionName = json.definitionName != undefined ? json.definitionName : "";
-        this.quickDesc = json.quickDesc != undefined ? json.quickDesc : "";
+        this.title = json.title != undefined ? json.title : "";
+        this.subGroup = json.subGroup != undefined ? json.subGroup : "";
+        this.shortDescription = json.shortDescription != undefined ? json.shortDescription : "";
     }
 }
 

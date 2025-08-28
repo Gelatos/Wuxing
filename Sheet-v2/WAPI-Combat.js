@@ -624,6 +624,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
     }
 
     tryGetSenderAttributes(techUseResolver, senderAttributeHandler) {
+        senderAttributeHandler.addMod(WuxDef.GetVariable("Status"));
         techUseResolver.technique.effects.iterate(function (techniqueEffect) {
             if (techniqueEffect.target == "Self") {
                 techUseResolver.tryGetAttributesFromTechniqueEffect(techniqueEffect, senderAttributeHandler);
@@ -682,6 +683,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
     }
 
     tryGetDefensesAndAttributes(techUseResolver, targetAttributeHandler) {
+        targetAttributeHandler.addMod(WuxDef.GetVariable("Status"));
         techUseResolver.technique.effects.iterate(function (techniqueEffect) {
             if (techniqueEffect.defense.startsWith("Def_")) {
                 let defenseDef = WuxDef.Get(techniqueEffect.defense);
@@ -777,6 +779,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 break;
             case "Status":
                 techUseResolver.addStatusEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters);
+                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
                 break;
             case "Influence":
             case "Resistance":
@@ -903,7 +906,26 @@ class TechniqueUseResolver extends TechniqueResolverData {
     }
     
     addStatusEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
-        // do nothing for now
+        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
+
+        switch (techniqueEffect.subType) {
+            case "Add":
+            case "Self":
+            case "Choose":
+                tokenEffect.tokenTargetData.addStatus(attrSetters.getObjByTarget(techniqueEffect), techniqueEffect.effect);
+                break;
+            case "Remove":
+                tokenEffect.tokenTargetData.removeStatus(attrSetters.getObjByTarget(techniqueEffect), techniqueEffect.effect);
+                break;
+            case "Remove Any":
+            case "Remove All":
+                tokenEffect.setRemoveStatusType("Condition");
+                break;
+            case "Remove Will":
+                tokenEffect.setRemoveStatusType("Emotion");
+                break;
+        }
+        
     }
     
     addAttributeValue(techniqueEffect, attrName, techUseResolver, attrGetters, attrSetters) {
