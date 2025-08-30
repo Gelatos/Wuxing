@@ -47,16 +47,14 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         let perkBoosters = attrHandler.parseJSON(WuxDef.GetVariable("BoostPerkTech"));
         let healValueVar = WuxDef.GetVariable("Cmb_HV");
         let armorDefVar = WuxDef.GetVariable("Cmb_Armor");
-        let surgeDef = WuxDef.Get("Cmb_Surge");
+        let surgeDef = WuxDef.Get("Surge");
         let vitalityDef = WuxDef.Get("Cmb_Vitality");
-        let chakraDef = WuxDef.Get("Cmb_Chakra");
         Debug.Log(`Boost Perk Tech: ${perkBoosters}`);
 
         let attributeHandler = new WorkerAttributeHandler();
         attributeHandler.addMod([healValueVar, armorDefVar,
             surgeDef.getVariable(), surgeDef.getVariable(WuxDef._max),
-            vitalityDef.getVariable(), vitalityDef.getVariable(WuxDef._max),
-            chakraDef.getVariable(), chakraDef.getVariable(WuxDef._max)]);
+            vitalityDef.getVariable(), vitalityDef.getVariable(WuxDef._max)]);
         let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
         // grab all formulas that get modified based on techniques (_tech)
         let techniqueModifierDefs = WuxDef.Filter(new DatabaseFilterData("techMods", WuxDef._tech));
@@ -99,8 +97,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             combatDetailsHandler.onUpdateMaxSurges(attrHandler, attrHandler.parseInt(surgeDef.getVariable(WuxDef._max)));
             combatDetailsHandler.onUpdateVitality(attrHandler, attrHandler.parseInt(vitalityDef.getVariable()));
             combatDetailsHandler.onUpdateMaxVitality(attrHandler, attrHandler.parseInt(vitalityDef.getVariable(WuxDef._max)));
-            combatDetailsHandler.onUpdateChakra(attrHandler, attrHandler.parseInt(chakraDef.getVariable()));
-            combatDetailsHandler.onUpdateMaxChakra(attrHandler, attrHandler.parseInt(chakraDef.getVariable(WuxDef._max)));
             combatDetailsHandler.onUpdateArmorValue(attrHandler, attrHandler.parseInt(armorDefVar));
         });
         attributeHandler.run();

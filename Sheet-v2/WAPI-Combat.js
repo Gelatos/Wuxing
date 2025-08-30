@@ -642,7 +642,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 attributeHandler.addMod(WuxDef.GetVariable("HP"));
                 switch (techniqueEffect.subType) {
                     case "Surge":
-                        attributeHandler.addMod(WuxDef.GetVariable("Cmb_Surge"));
+                        attributeHandler.addMod(WuxDef.GetVariable("Surge"));
                         break;
                     case "":
                         attributeHandler.addMod(WuxDef.GetVariable("Cmb_Armor"));
@@ -804,7 +804,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
         
         switch (techniqueEffect.subType) {
             case "Surge":
-                let surgeValue = attrGetters.getObjByTarget(techniqueEffect).parseInt(WuxDef.GetVariable("Cmb_Surge"));
+                let surgeValue = attrGetters.getObjByTarget(techniqueEffect).parseInt(WuxDef.GetVariable("Surge"));
                 if (surgeValue <= 0) {
                     if(!tokenEffect.hasSurged()) {
                         techUseResolver.addMessage("Cannot Surge, no Surge available");

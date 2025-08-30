@@ -20,7 +20,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
 
             let healValueVar = WuxDef.GetVariable("Cmb_HV");
             let armorDefVar = WuxDef.GetVariable("Cmb_Armor");
-            let surgeDef = WuxDef.Get("Cmb_Surge");
+            let surgeDef = WuxDef.Get("Surge");
             let vitalityDef = WuxDef.Get("Cmb_Vitality");
             attributeHandler.addMod([healValueVar, armorDefVar, 
                 surgeDef.getVariable(), surgeDef.getVariable(WuxDef._max),
@@ -179,13 +179,6 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             combatDetailsHandler.onUpdateVitality(attributeHandler, value);
             attributeHandler.run();
         },
-        updateChakra = function (eventinfo) {
-            let attributeHandler = new WorkerAttributeHandler();
-            let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
-            let value = parseInt(eventinfo.newValue);
-            combatDetailsHandler.onUpdateChakra(attributeHandler, value);
-            attributeHandler.run();
-        },
         openSubMenu = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "on");
@@ -230,7 +223,6 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
         UpdateCR: updateCR,
         UpdateSurge: updateSurge,
         UpdateVitality: updateVitality,
-        UpdateChakra: updateChakra,
         OpenSubMenu: openSubMenu,
         CloseSubMenu: closeSubMenu,
         ClosePopup: closePopup

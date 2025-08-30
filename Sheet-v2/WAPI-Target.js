@@ -182,6 +182,10 @@ class TokenTargetData extends TargetData {
         this.token = tokens[0];
         this.tokenId = this.token.get("_id");
     }
+    
+    isCharacter() {
+        return this.isBarLinked(1);
+    }
 
     // token bar
     initToken() {
@@ -337,7 +341,7 @@ class TokenTargetData extends TargetData {
         this.combatDetails.setData(attrHandler);
         
         if (this.combatDetails.hasDisplayStyle()) {
-            if (this.isBarLinked(1)) {
+            if (this.isCharacter()) {
                 let statusObj = new StatusHandler(attrHandler.parseJSON(WuxDef.GetVariable("Status")));
                 this.combatDetails.onUpdateStatus(attrHandler, statusObj);
             }
@@ -360,7 +364,7 @@ class TokenTargetData extends TargetData {
     // Note Reference
     importTokenNoteReferenceData(attributeHandler) {
         let tokenTargetData = this;
-        let surgeDef = WuxDef.GetVariable("Cmb_Surge");
+        let surgeDef = WuxDef.GetVariable("Surge");
         let vitalityDef = WuxDef.GetVariable("Cmb_Vitality");
         attributeHandler.addAttribute(surgeDef, vitalityDef);
 
@@ -446,7 +450,7 @@ class TokenTargetData extends TargetData {
     addEnergy(attributeHandler, value, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToEnergy : resultsCallback;
         
-        if (this.isBarLinked(1)) {
+        if (this.isCharacter()) {
             this.modifyResourceAttribute(attributeHandler, "EN", value,
                 this.addModifierToAttribute, resultsCallback);
         }
@@ -463,7 +467,7 @@ class TokenTargetData extends TargetData {
         attributeHandler.addMod(startEnVar);
         resultsCallback = resultsCallback == undefined ? this.applyResultsToEnergy : resultsCallback;
 
-        if (this.isBarLinked(1)) {
+        if (this.isCharacter()) {
             this.modifyResourceAttribute(attributeHandler, "EN", startEnVar,
                 this.setModifierToAttribute, resultsCallback);
         }
@@ -480,7 +484,7 @@ class TokenTargetData extends TargetData {
         attributeHandler.addMod(roundEnVar);
         resultsCallback = resultsCallback == undefined ? this.applyResultsToEnergy : resultsCallback;
 
-        if (this.isBarLinked(1)) {
+        if (this.isCharacter()) {
             this.modifyResourceAttribute(attributeHandler, "EN", roundEnVar,
                 this.addModifierToAttribute, resultsCallback);
         }
@@ -533,7 +537,7 @@ class TokenTargetData extends TargetData {
         this.addDashModifiers(attributeHandler);
         resultsCallback = resultsCallback == undefined ? this.applyResultsMoveCharge : resultsCallback;
 
-        if (this.isBarLinked(1)) {
+        if (this.isCharacter()) {
             this.modifyResourceAttribute(attributeHandler, "MvCharge", 0,
                 function (results, value, attrHandler, tokenTargetData) {
                     results.newValue = tokenTargetData.performDash(attrHandler);
@@ -552,7 +556,7 @@ class TokenTargetData extends TargetData {
         this.addDashModifiers(attributeHandler);
         resultsCallback = resultsCallback == undefined ? this.applyResultsMoveCharge : resultsCallback;
 
-        if (this.isBarLinked(1)) {
+        if (this.isCharacter()) {
             this.modifyResourceAttribute(attributeHandler, "MvCharge", 0,
                 function (results, value, attrHandler, tokenTargetData) {
                     results.newValue = results.current + tokenTargetData.performDash(attrHandler);
@@ -596,7 +600,7 @@ class TokenTargetData extends TargetData {
         tokenTargetData.refreshCombatDetails(attributeHandler);
 
         if (tokenTargetData.isBarLinked(1)) {
-            this.modifyResourceAttribute(attributeHandler, "Cmb_Surge", value,
+            this.modifyResourceAttribute(attributeHandler, "Surge", value,
                 tokenTargetData.addModifierToAttribute, resultsCallback);
         }
         else {
@@ -644,38 +648,6 @@ class TokenTargetData extends TargetData {
         else {
             let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
             tokenNoteReference.vitality.current = results.newValue;
-            tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
-            tokenTargetData.setCombatDetails(attrHandler, tokenNoteReference);
-        }
-
-        return results;
-    }
-
-    // Chakra
-    addChakra(attributeHandler, value, resultsCallback) {
-        let tokenTargetData = this
-        value = parseInt(value);
-        resultsCallback = resultsCallback == undefined ? tokenTargetData.applyResultsChakra : resultsCallback;
-        tokenTargetData.refreshCombatDetails(attributeHandler);
-
-        if (tokenTargetData.isBarLinked(1)) {
-            this.modifyResourceAttribute(attributeHandler, "Cmb_Chakra", value,
-                tokenTargetData.addModifierToAttribute, resultsCallback);
-        }
-        else {
-            this.modifyNoteAttribute(attributeHandler, "chakra", value,
-                tokenTargetData.addModifierToAttribute, resultsCallback);
-        }
-    }
-    applyResultsChakra(results, attrHandler, attributeVar, tokenTargetData) {
-        if (tokenTargetData.isBarLinked(1)) {
-            attrHandler.addUpdate(attributeVar, results.newValue, false);
-            tokenTargetData.combatDetails.onUpdateChakra(attrHandler, results.newValue);
-            tokenTargetData.setCombatDetails(attrHandler);
-        }
-        else {
-            let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
-            tokenNoteReference.chakra.current = results.newValue;
             tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
             tokenTargetData.setCombatDetails(attrHandler, tokenNoteReference);
         }
@@ -970,13 +942,50 @@ class TokenTargetEffectsData {
     takeWillOverflowDamage(attributeHandler, damageRoll) {
         let targetEffect = this;
 
+        let surgeVar = WuxDef.GetVariable("Surge");
+        let surgeResults = this.tokenTargetData.getModifyResults(surgeVar);
+        this.tokenTargetData.refreshCombatDetails(attributeHandler);
+        let tokenNoteReference = {};
+        if (targetEffect.tokenTargetData.isCharacter()) {
+            attributeHandler.addAttribute(surgeVar);
+        }
+        else {
+            tokenNoteReference = new TokenNoteReference(this.tokenTargetData.getTokenNote());
+        }
+        
         this.tokenTargetData.addWill(attributeHandler, -1 * damageRoll.total,
             function (results, attrHandler, attributeVar, tokenTargetData) {
-                targetEffect.effectMessages.push(`${tokenTargetData.displayName} fully heals Will then takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} damage.`);
                 tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
-            }, function (results, value) {
+                tokenTargetData.applyResultsSurge(surgeResults, attrHandler, surgeVar, tokenTargetData);
+            }, 
+            function (results, value, attrHandler) {
+                if (targetEffect.tokenTargetData.isCharacter()) {
+                    surgeResults.current = attrHandler.parseInt(surgeVar, 0, false);
+                    surgeResults.max = attrHandler.parseInt(surgeVar, 0, true);
+                }
+                else {
+                    surgeResults.current = parseInt(tokenNoteReference["surges"].current);
+                    surgeResults.max = parseInt(tokenNoteReference["surges"].max);
+                    Debug.Log(`Current surges for ${targetEffect.tokenTargetData.displayName} is ${surgeResults.current}/${surgeResults.max}`);
+                }
+                
+                if (surgeResults.current > 0) {
+                    surgeResults.newValue = surgeResults.current - 1;
+                    results.newValue = results.max + value;
+                    if (results.newValue <= 0) {
+                        results.newValue = 1; // we do not allow multiple will Breaks to occur. Willpower always restores to at least 1
+                    }
+                    targetEffect.effectMessages.push(`${targetEffect.tokenTargetData.displayName} consumes a Surge. ` +
+                        `${targetEffect.tokenTargetData.displayName} fully heals Will ` +
+                        `then takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} damage.`);
+                }
+                else {
+                    surgeResults.newValue = 0;
+                    results.newValue = 0;
+                    targetEffect.effectMessages.push(`${targetEffect.tokenTargetData.displayName} has no Surges remaining. Will remains at zero.`);
+                }
+                
                 // set the will to max first
-                results.newValue = results.max + value;
                 return results;
             });
 
@@ -1001,11 +1010,6 @@ class TokenTargetEffectsData {
                 tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
             });
     }
-
-    takeChakraDamage(targetEffect, attributeHandler, damage) {
-        targetEffect.effectMessages.push(`${targetEffect.tokenTargetData.displayName} loses ${damage} Chakra.`);
-        this.tokenTargetData.addChakra(attributeHandler, -1 * damage);
-    }
 }
 class TokenNoteReference {
     constructor(data) {
@@ -1023,14 +1027,18 @@ class TokenNoteReference {
         if (stringifiedJSON == undefined || stringifiedJSON == "") {
             return;
         }
-        let json = JSON.parse(stringifiedJSON);
-        this.importJson(json);
+        try {
+            let json = JSON.parse(stringifiedJSON);
+            this.importJson(json);
+        }
+        catch {
+            Debug.LogError("[TokenNoteReference] Unable to parse token note JSON");
+        }
     }
     createEmpty() {
         this.statusHandler = {};
         this.surges = {current: 0, max: 0};
         this.vitality = {current: 0, max: 0};
-        this.chakra = {current: 0, max: 0};
     }
     importJson(json) {
         if (json.statusHandler == undefined) {
@@ -1041,7 +1049,6 @@ class TokenNoteReference {
         }
         this.surges = json.surges == undefined ? {current: 0, max: 0} : json.surges;
         this.vitality = json.vitality == undefined ? {current: 0, max: 0} : json.vitality;
-        this.chakra = json.chakra == undefined ? {current: 0, max: 0} : json.chakra;
     }
 }
 
@@ -1103,9 +1110,6 @@ var TargetReference = TargetReference || (function () {
                     break;
                 case "!thealvit":
                     commandHealVitality(msg, TokenReference.GetTokenTargetDataArray(msg), content);
-                    break;
-                case "!thealchakra":
-                    commandHealChakra(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
                 case "!tresetSocial":
                     commandResetSocial(msg, TokenReference.GetTokenTargetDataArray(msg));
@@ -1201,7 +1205,6 @@ var TargetReference = TargetReference || (function () {
             output += tokenOptionButton("Add Energy", "ten ?{How much energy to add?|1}");
             output += tokenOptionButton("Add Surge", "thealsurge ?{How much surge to add?|1}");
             output += tokenOptionButton("Add Vitality", "thealvit ?{How much vitality to add?|1}");
-            output += tokenOptionButton("Add Chakra", "thealchakra ?{How much chakra to add?|1}");
 
             output += tokenOptionSpacer();
             output += tokenOptionTitle("Combat Move Options");
@@ -1356,16 +1359,6 @@ var TargetReference = TargetReference || (function () {
             sendTokenUpdateMessage(msg, targets,`: ${content} Vitality`);
         },
 
-        commandHealChakra = function (msg, targets, content) {
-            _.each(targets, function (tokenTargetData) {
-                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                tokenTargetData.addChakra(attributeHandler, content);
-                attributeHandler.run();
-            });
-
-            sendTokenUpdateMessage(msg, targets,`: ${content} Chakra`);
-        },
-
         commandResetSocial = function (msg, targets) {
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
@@ -1397,12 +1390,11 @@ var TargetReference = TargetReference || (function () {
 
                 let crVar = WuxDef.GetVariable("CR");
                 let jobVar = WuxDef.GetVariable("Forme_JobSlot", 1);
-                let surgeVar = WuxDef.GetVariable("Cmb_Surge");
+                let surgeVar = WuxDef.GetVariable("Surge");
                 let vitalityVar = WuxDef.GetVariable("Cmb_Vitality");
-                let chakraVar = WuxDef.GetVariable("Cmb_Chakra");
                 let hvVar = WuxDef.GetVariable("Cmb_HV");
                 let armorVar = WuxDef.GetVariable("Cmb_Armor");
-                attributeHandler.addAttribute([crVar, jobVar, surgeVar, vitalityVar, chakraVar, hvVar, armorVar]);
+                attributeHandler.addAttribute([crVar, jobVar, surgeVar, vitalityVar, hvVar, armorVar]);
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
                     tokenTargetData.combatDetails.onUpdateCR(attrHandler, attrHandler.parseInt(crVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateJob(attrHandler, attrHandler.parseString(jobVar, 0, false));
@@ -1410,8 +1402,6 @@ var TargetReference = TargetReference || (function () {
                     tokenTargetData.combatDetails.onUpdateMaxSurges(attrHandler, attrHandler.parseInt(surgeVar, 0, true));
                     tokenTargetData.combatDetails.onUpdateVitality(attrHandler, attrHandler.parseInt(vitalityVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateMaxVitality(attrHandler, attrHandler.parseInt(vitalityVar, 0, true));
-                    tokenTargetData.combatDetails.onUpdateChakra(attrHandler, attrHandler.parseInt(chakraVar, 0, false));
-                    tokenTargetData.combatDetails.onUpdateMaxChakra(attrHandler, attrHandler.parseInt(chakraVar, 0, true));
                     tokenTargetData.combatDetails.onUpdateHealValue(attrHandler, attrHandler.parseInt(hvVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateArmorValue(attrHandler, attrHandler.parseInt(armorVar, 0, false));
                     tokenTargetData.setCombatDetails(attrHandler);

@@ -24,7 +24,13 @@ class Dictionary {
         if (stringifiedJSON == undefined || stringifiedJSON == "") {
             return;
         }
-        this.importJson(JSON.parse(stringifiedJSON), dataCreationCallback);
+
+        try {
+            this.importJson(JSON.parse(stringifiedJSON), dataCreationCallback);
+        }
+        catch {
+            Debug.LogError(`[Dictionary] Unable to parse JSON: ${stringifiedJSON}`);
+        }
     }
 
     importJson(json, dataCreationCallback) {
@@ -461,8 +467,14 @@ class dbObj {
         if (stringifiedJSON == undefined || stringifiedJSON == "") {
             return;
         }
-        let json = JSON.parse(stringifiedJSON);
-        this.importJson(json);
+        
+        try {
+            let json = JSON.parse(stringifiedJSON);
+            this.importJson(json);
+        }
+        catch {
+            Debug.LogError(`[dbObj] Unable to parse JSON: ${stringifiedJSON}`);
+        }
     }
 
     importJson(json) {
@@ -3269,8 +3281,14 @@ class StatusHandler {
         if (stringifiedJSON == undefined || stringifiedJSON == "") {
             return;
         }
-        let json = JSON.parse(stringifiedJSON);
-        this.importJson(json);
+
+        try {
+            let json = JSON.parse(stringifiedJSON);
+            this.importJson(json);
+        }
+        catch {
+            Debug.LogError(`[StatusHandler] Unable to parse JSON: ${stringifiedJSON}`);
+        }
     }
     createEmpty() {
         this.statusEffects = {};
@@ -3424,8 +3442,6 @@ class CombatDetails {
         this.maxsurges = 2;
         this.vitality = 1;
         this.maxvitality = 1;
-        this.chakra = 0;
-        this.maxchakra = 0;
         this.healvalue = 0;
         this.armorvalue = 0;
         this.supportiveInfluence = 0;
@@ -3456,7 +3472,7 @@ class CombatDetails {
 
         switch (this.displayStyle) {
             case "Battle":
-                output += `.Vit:`;
+                output += `Vit:`;
                 if (this.maxvitality == 0) {
                     output += `♡`;
                 }
@@ -3465,16 +3481,7 @@ class CombatDetails {
                         output += i < this.vitality ? `♥` : `♡`;
                     }
                 }
-                output += `.Chk:`;
-                if (this.maxchakra == 0) {
-                    output += `♡`;
-                }
-                else {
-                    for (let i = 0; i < this.maxchakra; i++) {
-                        output += i < this.chakra ? `♥` : `♡`;
-                    }
-                }
-                output += ` Surges:`;
+                output += `.Surges:`;
                 if (this.maxsurges == 0) {
                     output += `⛉`;
                 }
@@ -3483,11 +3490,20 @@ class CombatDetails {
                         output += i < this.surges ? `⛊` : `⛉`;
                     }
                 }
-                output += `.HV:${this.healvalue}`;
+                output += ` HV:${this.healvalue}`;
                 output += `.Armor:${this.armorvalue}`;
                 break;
             case "Social":
-                output += `Influences:`;
+                output += `Surges:`;
+                if (this.maxsurges == 0) {
+                    output += `⛉`;
+                }
+                else {
+                    for (let i = 0; i < this.maxsurges; i++) {
+                        output += i < this.surges ? `⛊` : `⛉`;
+                    }
+                }
+                output += ` Influences:`;
                 for (let i = 0; i < 3; i++) {
                     output += i < this.supportiveInfluence ? `▲` : `△`;
                 }
@@ -3601,6 +3617,7 @@ class CombatDetailsHandler {
     }
 
     onUpdateStatus(attrHandler, statusHandler) {
+        return;
         this.setData(attrHandler);
         this.combatDetails.status = statusHandler.printStatusSummary();
     }
@@ -3626,18 +3643,6 @@ class CombatDetailsHandler {
     onUpdateMaxVitality(attrHandler, value) {
         this.setData(attrHandler);
         this.combatDetails.maxvitality = value;
-        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
-    }
-
-    onUpdateChakra(attrHandler, value) {
-        this.setData(attrHandler);
-        this.combatDetails.chakra = value;
-        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
-    }
-
-    onUpdateMaxChakra(attrHandler, value) {
-        this.setData(attrHandler);
-        this.combatDetails.maxchakra = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
     
