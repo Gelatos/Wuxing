@@ -906,6 +906,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
     }
     
     addStatusEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
+        return;
         let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
 
         switch (techniqueEffect.subType) {
