@@ -2112,6 +2112,13 @@ class TokenTargetData extends TargetData {
         }
         return value;
     }
+    setDowned(value) {
+        if (this.token == undefined) {
+            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
+            return;
+        }
+        this.token.set("status_dead", value);
+    }
 
     // Modifiers
     setDisplayName() {
@@ -2769,7 +2776,13 @@ class TokenTargetEffectsData {
     
     takeVitalityDamage(targetEffect, attributeHandler, damage) {
         targetEffect.effectMessages.push(`${targetEffect.tokenTargetData.displayName} loses ${damage} Vitality.`);
-        this.tokenTargetData.addVitality(attributeHandler, -1 * damage);
+        this.tokenTargetData.addVitality(attributeHandler, -1 * damage, 
+            function (results, attrHandler, attributeVar, tokenTargetData) {
+                if (results.newValue <= 0) {
+                    tokenTargetData.setDowned(true);
+                }
+                tokenTargetData.applyResultsVitality(results, attrHandler, attributeVar, tokenTargetData);
+            });
     }
 
     takeWillDamage(attributeHandler, damageRoll, willBreakEffect) {
@@ -3759,6 +3772,7 @@ var TokenReference = TokenReference || (function () {
             tokenTargetData.showTooltip(false);
             tokenTargetData.setEnergyIcon(false);
             tokenTargetData.setTurnIcon(false);
+            tokenTargetData.setDowned(false);
 
             let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
             tokenTargetData.refreshCombatDetails(attributeHandler);
