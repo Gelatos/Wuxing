@@ -3424,6 +3424,8 @@ class CombatDetails {
         this.maxsurges = 2;
         this.vitality = 1;
         this.maxvitality = 1;
+        this.chakra = 0;
+        this.maxchakra = 0;
         this.healvalue = 0;
         this.armorvalue = 0;
         this.supportiveInfluence = 0;
@@ -3454,15 +3456,34 @@ class CombatDetails {
 
         switch (this.displayStyle) {
             case "Battle":
-                output += `Surges:`;
-                for (let i = 0; i < this.maxsurges; i++) {
-                    output += i < this.surges ? `⛊` : `⛉`;
-                }
                 output += `.Vit:`;
-                for (let i = 0; i < this.maxvitality; i++) {
-                    output += i < this.vitality ? `♥` : `♡`;
+                if (this.maxvitality == 0) {
+                    output += `♡`;
                 }
-                output += ` HV:${this.healvalue}`;
+                else {
+                    for (let i = 0; i < this.maxvitality; i++) {
+                        output += i < this.vitality ? `♥` : `♡`;
+                    }
+                }
+                output += `.Chk:`;
+                if (this.maxchakra == 0) {
+                    output += `♡`;
+                }
+                else {
+                    for (let i = 0; i < this.maxchakra; i++) {
+                        output += i < this.chakra ? `♥` : `♡`;
+                    }
+                }
+                output += ` Surges:`;
+                if (this.maxsurges == 0) {
+                    output += `⛉`;
+                }
+                else {
+                    for (let i = 0; i < this.maxsurges; i++) {
+                        output += i < this.surges ? `⛊` : `⛉`;
+                    }
+                }
+                output += `.HV:${this.healvalue}`;
                 output += `.Armor:${this.armorvalue}`;
                 break;
             case "Social":
@@ -3605,6 +3626,18 @@ class CombatDetailsHandler {
     onUpdateMaxVitality(attrHandler, value) {
         this.setData(attrHandler);
         this.combatDetails.maxvitality = value;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+
+    onUpdateChakra(attrHandler, value) {
+        this.setData(attrHandler);
+        this.combatDetails.chakra = value;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+
+    onUpdateMaxChakra(attrHandler, value) {
+        this.setData(attrHandler);
+        this.combatDetails.maxchakra = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
     
@@ -3845,7 +3878,12 @@ class SandboxAttributeHandler extends AttributeHandler {
     databaseParseJSON(fieldName) {
         let output = super.databaseParseJSON(fieldName);
         if (output == undefined && this.attributes[fieldName] != undefined) {
-            return JSON.parse(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+            try {
+                return JSON.parse(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+            }
+            catch {
+                return undefined;
+            }
         }
         return output;
     }

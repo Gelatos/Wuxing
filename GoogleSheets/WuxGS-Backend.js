@@ -247,6 +247,7 @@ var OverviewBuilder = OverviewBuilder || (function () {
             output += listenerUpdateCR();
             output += listenerUpdateSurge();
             output += listenerUpdateVitality();
+            output += listenerUpdateChakra();
             return output;
         },
         listenerUpdateDisplayName = function () {
@@ -310,6 +311,12 @@ var OverviewBuilder = OverviewBuilder || (function () {
         listenerUpdateVitality = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Cmb_Vitality")}`];
             let output = `WuxWorkerGeneral.UpdateVitality(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerUpdateChakra = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Cmb_Chakra")}`];
+            let output = `WuxWorkerGeneral.UpdateChakra(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         }

@@ -179,6 +179,13 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             combatDetailsHandler.onUpdateVitality(attributeHandler, value);
             attributeHandler.run();
         },
+        updateChakra = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+            let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
+            let value = parseInt(eventinfo.newValue);
+            combatDetailsHandler.onUpdateChakra(attributeHandler, value);
+            attributeHandler.run();
+        },
         openSubMenu = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "on");
@@ -223,6 +230,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
         UpdateCR: updateCR,
         UpdateSurge: updateSurge,
         UpdateVitality: updateVitality,
+        UpdateChakra: updateChakra,
         OpenSubMenu: openSubMenu,
         CloseSubMenu: closeSubMenu,
         ClosePopup: closePopup

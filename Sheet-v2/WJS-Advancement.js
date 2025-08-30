@@ -14,7 +14,8 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 
 			let advancementWorker = new WuxAdvancementWorkerBuild();
 			advancementWorker.commitChanges(attributeHandler);
-
+			
+			WuxWorkerActions.RemoveAllBoosters(attributeHandler);
 			WuxWorkerAttributes.UpdateStats(attributeHandler);
 			WuxWorkerPerks.UpdateStats(attributeHandler);
 			WuxWorkerSkills.UpdateStats(attributeHandler);
@@ -223,6 +224,7 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
 			let trainingWorker = new WuxTrainingWorkerBuild();
 			trainingWorker.commitChanges(attributeHandler);
 
+			WuxWorkerActions.RemoveAllBoosters(attributeHandler);
 			WuxWorkerKnowledges.UpdateStats(attributeHandler);
 			WuxWorkerStyles.UpdateStats(attributeHandler);
 
@@ -241,6 +243,7 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
 			let trainingWorker = new WuxTrainingWorkerBuild();
 			trainingWorker.resetChanges(attributeHandler);
 
+			WuxWorkerActions.RemoveAllBoosters(attributeHandler);
 			WuxWorkerKnowledges.UpdateStats(attributeHandler);
 			WuxWorkerJobs.UpdateStats(attributeHandler);
 			WuxWorkerStyles.UpdateStats(attributeHandler);
@@ -322,6 +325,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			let advancementWorker = new WuxAdvancementWorkerBuild();
 			advancementWorker.commitChanges(attributeHandler);
 
+			WuxWorkerActions.RemoveAllBoosters(attributeHandler);
 			WuxWorkerAttributes.UpdateStats(attributeHandler);
 			WuxWorkerPerks.UpdateStats(attributeHandler);
 			WuxWorkerSkills.UpdateStats(attributeHandler);
@@ -344,6 +348,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			let advancementWorker = new WuxAdvancementWorkerBuild();
 			advancementWorker.resetChanges(attributeHandler);
 
+			WuxWorkerActions.RemoveAllBoosters(attributeHandler);
 			WuxWorkerAttributes.UpdateStats(attributeHandler);
 			WuxWorkerPerks.UpdateStats(attributeHandler);
 			WuxWorkerSkills.UpdateStats(attributeHandler);

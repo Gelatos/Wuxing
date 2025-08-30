@@ -644,6 +644,38 @@ class TokenTargetData extends TargetData {
         return results;
     }
 
+    // Chakra
+    addChakra(attributeHandler, value, resultsCallback) {
+        let tokenTargetData = this
+        value = parseInt(value);
+        resultsCallback = resultsCallback == undefined ? tokenTargetData.applyResultsChakra : resultsCallback;
+        tokenTargetData.refreshCombatDetails(attributeHandler);
+
+        if (tokenTargetData.isBarLinked(1)) {
+            this.modifyResourceAttribute(attributeHandler, "Cmb_Chakra", value,
+                tokenTargetData.addModifierToAttribute, resultsCallback);
+        }
+        else {
+            this.modifyNoteAttribute(attributeHandler, "chakra", value,
+                tokenTargetData.addModifierToAttribute, resultsCallback);
+        }
+    }
+    applyResultsChakra(results, attrHandler, attributeVar, tokenTargetData) {
+        if (tokenTargetData.isBarLinked(1)) {
+            attrHandler.addUpdate(attributeVar, results.newValue, false);
+            tokenTargetData.combatDetails.onUpdateChakra(attrHandler, results.newValue);
+            tokenTargetData.setCombatDetails(attrHandler);
+        }
+        else {
+            let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
+            tokenNoteReference.chakra.current = results.newValue;
+            tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
+            tokenTargetData.setCombatDetails(attrHandler, tokenNoteReference);
+        }
+
+        return results;
+    }
+
     // Status
     addStatus(attributeHandler, statusDefinitionName) {
         this.modifyStatus(attributeHandler, statusDefinitionName, true);
@@ -956,6 +988,11 @@ class TokenTargetEffectsData {
                 tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
             });
     }
+
+    takeChakraDamage(targetEffect, attributeHandler, damage) {
+        targetEffect.effectMessages.push(`${targetEffect.tokenTargetData.displayName} loses ${damage} Chakra.`);
+        this.tokenTargetData.addChakra(attributeHandler, -1 * damage);
+    }
 }
 class TokenNoteReference {
     constructor(data) {
@@ -980,6 +1017,7 @@ class TokenNoteReference {
         this.statusHandler = {};
         this.surges = {current: 0, max: 0};
         this.vitality = {current: 0, max: 0};
+        this.chakra = {current: 0, max: 0};
     }
     importJson(json) {
         if (json.statusHandler == undefined) {
@@ -990,6 +1028,7 @@ class TokenNoteReference {
         }
         this.surges = json.surges == undefined ? {current: 0, max: 0} : json.surges;
         this.vitality = json.vitality == undefined ? {current: 0, max: 0} : json.vitality;
+        this.chakra = json.chakra == undefined ? {current: 0, max: 0} : json.chakra;
     }
 }
 
@@ -1052,11 +1091,17 @@ var TargetReference = TargetReference || (function () {
                 case "!thealvit":
                     commandHealVitality(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
+                case "!thealchakra":
+                    commandHealChakra(msg, TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
                 case "!tresetSocial":
                     commandResetSocial(msg, TokenReference.GetTokenTargetDataArray(msg));
                     break;
                 case "!tdetails":
                     commandUpdateCombatDetails(msg, TokenReference.GetTokenTargetDataArray(msg));
+                    break;
+                case "!tharddetails":
+                    commandUpdateCombatDetailsHard(msg, TokenReference.GetTokenTargetDataArray(msg));
                     break;
                 case "!treset":
                     commandResetToken(msg, TokenReference.GetTokenTargetDataArray(msg));
@@ -1126,6 +1171,7 @@ var TargetReference = TargetReference || (function () {
             output += tokenOptionTitle("Token State");
             output += tokenOptionButton("Update Tooltip", "tdetails");
             if (playerIsGM(msg.playerid)) {
+                output += tokenOptionButton("Hard Update", "tharddetails");
                 output += tokenOptionButton("Gen Name", "tgenname");
                 output += tokenOptionButton("Reset Token", "treset");
             }
@@ -1142,6 +1188,7 @@ var TargetReference = TargetReference || (function () {
             output += tokenOptionButton("Add Energy", "ten ?{How much energy to add?|1}");
             output += tokenOptionButton("Add Surge", "thealsurge ?{How much surge to add?|1}");
             output += tokenOptionButton("Add Vitality", "thealvit ?{How much vitality to add?|1}");
+            output += tokenOptionButton("Add Chakra", "thealchakra ?{How much chakra to add?|1}");
 
             output += tokenOptionSpacer();
             output += tokenOptionTitle("Combat Move Options");
@@ -1296,6 +1343,16 @@ var TargetReference = TargetReference || (function () {
             sendTokenUpdateMessage(msg, targets,`: ${content} Vitality`);
         },
 
+        commandHealChakra = function (msg, targets, content) {
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.addChakra(attributeHandler, content);
+                attributeHandler.run();
+            });
+
+            sendTokenUpdateMessage(msg, targets,`: ${content} Chakra`);
+        },
+
         commandResetSocial = function (msg, targets) {
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
@@ -1316,7 +1373,39 @@ var TargetReference = TargetReference || (function () {
                 });
                 attributeHandler.run();
             });
-            
+
+            sendTokenUpdateMessage(msg, targets, `: tooltip updated`);
+        },
+
+        commandUpdateCombatDetailsHard = function (msg, targets) {
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.refreshCombatDetails(attributeHandler);
+
+                let crVar = WuxDef.GetVariable("CR");
+                let jobVar = WuxDef.GetVariable("Forme_JobSlot", 1);
+                let surgeVar = WuxDef.GetVariable("Cmb_Surge");
+                let vitalityVar = WuxDef.GetVariable("Cmb_Vitality");
+                let chakraVar = WuxDef.GetVariable("Cmb_Chakra");
+                let hvVar = WuxDef.GetVariable("Cmb_HV");
+                let armorVar = WuxDef.GetVariable("Cmb_Armor");
+                attributeHandler.addAttribute([crVar, jobVar, surgeVar, vitalityVar, chakraVar, hvVar, armorVar]);
+                attributeHandler.addGetAttrCallback(function (attrHandler) {
+                    tokenTargetData.combatDetails.onUpdateCR(attrHandler, attrHandler.parseInt(crVar, 0, false));
+                    tokenTargetData.combatDetails.onUpdateJob(attrHandler, attrHandler.parseString(jobVar, 0, false));
+                    tokenTargetData.combatDetails.onUpdateSurges(attrHandler, attrHandler.parseInt(surgeVar, 0, false));
+                    tokenTargetData.combatDetails.onUpdateMaxSurges(attrHandler, attrHandler.parseInt(surgeVar, 0, true));
+                    tokenTargetData.combatDetails.onUpdateVitality(attrHandler, attrHandler.parseInt(vitalityVar, 0, false));
+                    tokenTargetData.combatDetails.onUpdateMaxVitality(attrHandler, attrHandler.parseInt(vitalityVar, 0, true));
+                    tokenTargetData.combatDetails.onUpdateChakra(attrHandler, attrHandler.parseInt(chakraVar, 0, false));
+                    tokenTargetData.combatDetails.onUpdateMaxChakra(attrHandler, attrHandler.parseInt(chakraVar, 0, true));
+                    tokenTargetData.combatDetails.onUpdateHealValue(attrHandler, attrHandler.parseInt(hvVar, 0, false));
+                    tokenTargetData.combatDetails.onUpdateArmorValue(attrHandler, attrHandler.parseInt(armorVar, 0, false));
+                    tokenTargetData.setCombatDetails(attrHandler);
+                });
+                attributeHandler.run();
+            });
+
             sendTokenUpdateMessage(msg, targets, `: tooltip updated`);
         },
 
