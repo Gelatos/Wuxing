@@ -513,10 +513,8 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 attributeHandler.run();
             });
         },
-        removeAllBoosters = function (attrHandler) {
+        removeAllStyleBoosters = function (attrHandler) {
             attrHandler.addUpdate(WuxDef.GetVariable("BoostStyleTech"), "[]");
-            attrHandler.addUpdate(WuxDef.GetVariable("BoostGearTech"), "[]");
-            attrHandler.addUpdate(WuxDef.GetVariable("BoostPerkTech"), "[]");
         },
 
         setCustomTechnique = function (eventinfo) {
@@ -551,7 +549,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         RefreshStandardStyleActions: refreshStandardStyleActions,
         PopulateGearActions: populateGearActions,
         RemoveStyleActions: removeStyleActions,
-        RemoveAllBoosters: removeAllBoosters,
+        RemoveAllStyleBoosters: removeAllStyleBoosters,
         SetCustomTechnique: setCustomTechnique,
     };
 }());
