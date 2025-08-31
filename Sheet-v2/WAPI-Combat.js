@@ -149,7 +149,12 @@ var WuxConflictManager = WuxConflictManager || (function () {
                 
                 switch (state.WuxConflictManager.conflictType) {
                     case "Battle":
-                        tokenTargetData.setDash(attributeHandler);
+                        if (tokenTargetData.getDowned()) {
+                            tokenTargetData.setMoveCharge(attributeHandler, 0);
+                        }
+                        else {
+                            tokenTargetData.setDash(attributeHandler);
+                        }
                         break;
                     case "Social":
                         tokenTargetData.addImpatience(attributeHandler, 1);
@@ -737,8 +742,16 @@ class TechniqueUseResolver extends TechniqueResolverData {
         let dcValue = parseInt(techniqueEffect.defense);
         if (isNaN(dcValue)) {
             let defenseDef = WuxDef.Get(techniqueEffect.defense);
+            message = `Vs. ${defenseDef.getTitle()}`;
             dcValue = targetAttrHandler.parseInt(defenseDef.getVariable());
-            message = `Vs. ${defenseDef.getTitle()}: `;
+            if (techUseResolver.targetTokenEffect.tokenTargetData.getDowned()) {
+                message += " (Downed -5)";
+                dcValue -= 5;
+            }
+            if (dcValue < 0) {
+                dcValue = 0;
+            }
+            message += `: `;
         }
         else {
             message = `Vs. DC ${dcValue}: `;

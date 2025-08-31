@@ -265,13 +265,6 @@ class TokenTargetData extends TargetData {
     setTurnIcon(value) {
         this.setIcon("status_yellow", value);
     }
-    setIcon(iconName, value) {
-        if (this.token == undefined) {
-            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
-            return;
-        }
-        this.token.set(iconName, value);
-    }
     getIcon(iconName) {
         if (this.token == undefined) {
             Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
@@ -282,6 +275,20 @@ class TokenTargetData extends TargetData {
             return 0;
         }
         return value;
+    }
+    setIcon(iconName, value) {
+        if (this.token == undefined) {
+            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
+            return;
+        }
+        this.token.set(iconName, value);
+    }
+    getDowned() {
+        if (this.token == undefined) {
+            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
+            return;
+        }
+        return this.token.get("status_dead");
     }
     setDowned(value) {
         if (this.token == undefined) {

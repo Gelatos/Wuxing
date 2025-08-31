@@ -192,7 +192,12 @@ var WuxConflictManager = WuxConflictManager || (function () {
                 
                 switch (state.WuxConflictManager.conflictType) {
                     case "Battle":
-                        tokenTargetData.setDash(attributeHandler);
+                        if (tokenTargetData.getDowned()) {
+                            tokenTargetData.setMoveCharge(attributeHandler, 0);
+                        }
+                        else {
+                            tokenTargetData.setDash(attributeHandler);
+                        }
                         break;
                     case "Social":
                         tokenTargetData.addImpatience(attributeHandler, 1);
@@ -780,8 +785,16 @@ class TechniqueUseResolver extends TechniqueResolverData {
         let dcValue = parseInt(techniqueEffect.defense);
         if (isNaN(dcValue)) {
             let defenseDef = WuxDef.Get(techniqueEffect.defense);
+            message = `Vs. ${defenseDef.getTitle()}`;
             dcValue = targetAttrHandler.parseInt(defenseDef.getVariable());
-            message = `Vs. ${defenseDef.getTitle()}: `;
+            if (techUseResolver.targetTokenEffect.tokenTargetData.getDowned()) {
+                message += " (Downed -5)";
+                dcValue -= 5;
+            }
+            if (dcValue < 0) {
+                dcValue = 0;
+            }
+            message += `: `;
         }
         else {
             message = `Vs. DC ${dcValue}: `;
@@ -2098,13 +2111,6 @@ class TokenTargetData extends TargetData {
     setTurnIcon(value) {
         this.setIcon("status_yellow", value);
     }
-    setIcon(iconName, value) {
-        if (this.token == undefined) {
-            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
-            return;
-        }
-        this.token.set(iconName, value);
-    }
     getIcon(iconName) {
         if (this.token == undefined) {
             Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
@@ -2115,6 +2121,16 @@ class TokenTargetData extends TargetData {
             return 0;
         }
         return value;
+    }
+    setIcon(iconName, value) {
+        if (this.token == undefined) {
+            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
+            return;
+        }
+        this.token.set(iconName, value);
+    }
+    getDowned() {
+        return this.token.get("status_dead");
     }
     setDowned(value) {
         if (this.token == undefined) {
@@ -2917,6 +2933,9 @@ var TargetReference = TargetReference || (function () {
                 case "!tokenoptions":
                     commandShowTokenOptions(msg);
                     break;
+                case "!partyoptions":
+                    commandShowPartyOptions(msg);
+                    break;
                 case "!tconflictstate":
                     commandSetConflictState(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
@@ -3057,6 +3076,50 @@ var TargetReference = TargetReference || (function () {
                     "Simple DC 15|Inconvenient DC 30|Disruptive DC 40|Serious DC 50|Life-Changing DC 60}");
             }
             
+            let senderMessage = new SystemInfoMessage(output);
+            senderMessage.setSender(sender);
+            WuxMessage.Send(senderMessage, sender);
+        },
+
+        commandShowPartyOptions = function (msg) {
+            let sender = msg.who;
+
+            let output = "";
+            output += tokenOptionTitle("Token State");
+            output += tokenOptionButton("Check", "!actcheck");
+            output += tokenOptionButton("Clear All", "!actclr");
+
+            output += tokenOptionSpacer();
+            output += tokenOptionTitle("Combat Stat Options");
+            output += tokenOptionButton("Full Heal", "pfullheal@?{Team index|0}");
+            output += tokenOptionButton("Add Battle XP", "pxp");
+            if (!playerIsGM(msg.playerid)) {
+                output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@0`);
+            }
+            else {
+                output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle`);
+            }
+            output += tokenOptionButton("Add Surge", "thealsurge ?{How much surge to add?|1}");
+            output += tokenOptionButton("Add Vitality", "thealvit ?{How much vitality to add?|1}");
+
+            output += tokenOptionSpacer();
+            output += tokenOptionTitle("Combat Move Options");
+            output += tokenOptionButton("Reset Move", "tmovereset");
+            output += tokenOptionButton("Add Move Charge", "tmove ?{How much move charge to add?|1}");
+            output += tokenOptionButton("Add Dash", "tdash");
+
+            output += tokenOptionSpacer();
+            output += tokenOptionTitle("Social Stat Options");
+            if (!playerIsGM(msg.playerid)) {
+                output += tokenOptionButton("Prep4 Social", `tconflictstate Social@0`);
+            }
+            else {
+                output += tokenOptionButton("Prep4 Social", `tconflictstate Social@?{Set team index|0}`);
+                output += tokenOptionButton("Reset Social", "tresetSocial");
+                output += tokenOptionButton("Request Threshold", "tss ?{Set the difficulty of the request|" +
+                    "Simple DC 15|Inconvenient DC 30|Disruptive DC 40|Serious DC 50|Life-Changing DC 60}");
+            }
+
             let senderMessage = new SystemInfoMessage(output);
             senderMessage.setSender(sender);
             WuxMessage.Send(senderMessage, sender);
@@ -3341,11 +3404,13 @@ var TargetReference = TargetReference || (function () {
             let raceVar = WuxDef.GetVariable("Ethnicity");
             let genderVar = WuxDef.GetVariable("Gender");
             let homeRegionVar = WuxDef.GetVariable("HomeRegion");
+            let sheetNameVar = WuxDef.GetVariable("SheetName");
+            let outputMessage = [];
 
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
 
-                attributeHandler.addMod([raceVar, genderVar, homeRegionVar]);
+                attributeHandler.addMod([raceVar, genderVar, homeRegionVar, sheetNameVar]);
                 attributeHandler.addFinishCallback(function (attrHandler) {
                     let generator = new WuxingHumanCharacterGenerator();
                     generator.character.ancestry = attrHandler.parseString(raceVar);
@@ -3355,13 +3420,14 @@ var TargetReference = TargetReference || (function () {
                     tokenTargetData.token.set("name", generator.character.firstName);
                     tokenTargetData.displayName = generator.character.firstName;
                     
-                    let outputMessage = `Generated Name: ${generator.character.fullName}. ` + 
-                        `\They have a ${generator.character.motivation} Motivation and a ${generator.character.personality} Personality.`;
-                    let messageObject = new SystemInfoMessage(outputMessage);
-                    messageObject.setSender("System");
-                    WuxMessage.Send(messageObject, "GM");
+                    outputMessage.push(`${attrHandler.parseString(sheetNameVar)} Name: ${generator.character.fullName}. ` + 
+                        `\They have a ${generator.character.motivation} Motivation and a ${generator.character.personality} Personality.`);
                 });
                 attributeHandler.run();
+
+                let messageObject = new SystemInfoMessage(outputMessage);
+                messageObject.setSender("System");
+                WuxMessage.Send(messageObject, "GM");
             });
         
         },
