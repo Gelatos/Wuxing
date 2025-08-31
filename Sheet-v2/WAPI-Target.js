@@ -17,8 +17,7 @@ class TargetData {
                 if (dataType == "graphic") {
                     this.importTokenData(data);
                 }
-            }
-            else if (data.charId != undefined) {
+            } else if (data.charId != undefined) {
                 this.importJSON(data);
             }
         }
@@ -91,12 +90,12 @@ class TargetData {
         let characters = findObjs({
             _type: 'character',
             name: characterName
-        }, { caseInsensitive: true });
+        }, {caseInsensitive: true});
         if (characters.length > 0) {
             return characters[0];
         }
 
-        characters = findObjs({ _type: 'character' });
+        characters = findObjs({_type: 'character'});
         characters.forEach(function (chr) {
             if (chr.get('name') == characterName) {
                 return chr;
@@ -124,27 +123,37 @@ class TargetData {
             this.owner = getObj("player", ownerId).get("_displayname");
         }
     }
+
     setCharacterData() {
         let attributeHandler = new SandboxAttributeHandler(this.charId);
         let targetData = this;
         let displayNameVar = WuxDef.GetVariable("DisplayName");
         let affinityVar = WuxDef.GetVariable("Affinity");
-        attributeHandler.addMod(displayNameVar);
-        attributeHandler.addMod(affinityVar);
+        let teamIndexVar = WuxDef.GetVariable("TeamIndex");
+        attributeHandler.addMod([displayNameVar, affinityVar, teamIndexVar]);
         attributeHandler.addFinishCallback(function (attrHandler) {
             let targetDisplayName = attrHandler.parseString(displayNameVar);
             if (targetDisplayName.trim() != "") {
                 targetData.displayName = targetDisplayName;
             }
             targetData.elem = targetData.getElementStatus(attrHandler.parseString(affinityVar));
+            targetData.teamIndex = attrHandler.parseInt(teamIndexVar);
         });
         attributeHandler.run();
     }
 
     setTeamIndex(index) {
         this.teamIndex = index;
+        let attributeHandler = new SandboxAttributeHandler(this.charId);
+        let teamIndexVar = WuxDef.GetVariable("TeamIndex");
+        attributeHandler.addAttribute(teamIndexVar);
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            attrHandler.addUpdate(teamIndexVar, index, false);
+        });
+        attributeHandler.run();
     }
 }
+
 class TokenTargetData extends TargetData {
     constructor(token, targetData) {
         super(undefined);
@@ -155,16 +164,17 @@ class TokenTargetData extends TargetData {
         if (targetData != undefined) {
             this.importJSON(targetData);
             this.token = token;
-        }
-        else {
+        } else {
             this.baseConstructor(token);
         }
     }
+
     createEmpty() {
         super.createEmpty();
         this.token = undefined;
         this.combatDetails = undefined;
     }
+
     importTokenData(token) {
         this.token = token;
         super.importTokenData(token);
@@ -182,27 +192,36 @@ class TokenTargetData extends TargetData {
         this.token = tokens[0];
         this.tokenId = this.token.get("_id");
     }
-    
+
     isCharacter() {
         return this.isBarLinked(1);
+    }
+    validateToken() {
+        if (this.token == undefined) {
+            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
+            return false;
+        }
+        return true;
     }
 
     // token bar
     initToken() {
-        if (this.token == undefined) {
-            Debug.Log (`[TokenTargetData] No token data exists for ${this.charName}`);
+        if (!this.validateToken()) {
             return false;
         }
         this.token.set("bar_location", "overlap_bottom");
         return true;
     }
+
     setBar(barIndex, variableObj, showBar, showText) {
+        if (!this.validateToken()) {
+            return false;
+        }
         if (variableObj == undefined) {
             this.token.set(`bar${barIndex}_link`, "");
             this.token.set(`bar${barIndex}_value`, "");
             this.token.set(`bar${barIndex}_max`, "");
-        }
-        else {
+        } else {
             this.token.set(`bar${barIndex}_link`, variableObj.get("_id"));
             this.token.set(`bar${barIndex}_value`, variableObj.get("current"));
             this.token.set(`bar${barIndex}_max`, variableObj.get("max"));
@@ -210,51 +229,72 @@ class TokenTargetData extends TargetData {
         this.token.set(`showplayers_bar${barIndex}`, showBar);
         this.token.set(`showplayers_bar${barIndex}text`, showText ? "2" : "0");
     }
+
     unlinkBar(barIndex) {
-        if (this.token == undefined) {
-            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
-            return;
+        if (!this.validateToken()) {
+            return false;
         }
         this.token.set(`bar${barIndex}_link`, "");
     }
+
     isBarLinked(barIndex) {
-        if (this.token == undefined) {
-            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
+        if (!this.validateToken()) {
             return false;
         }
         let barLink = this.token.get(`bar${barIndex}_link`);
         return barLink != undefined && barLink != "";
     }
+
     setBarValue(barIndex, value) {
+        if (!this.validateToken()) {
+            return false;
+        }
         this.token.set(`bar${barIndex}_value`, value);
     }
 
     // nameplate
     showTokenName(isShown) {
+        if (!this.validateToken()) {
+            return false;
+        }
         if (isShown) {
             this.token.set("name", this.displayName);
             this.token.set("showname", true);
             this.token.set("showplayers_name", true);
-        }
-        else {
+        } else {
             this.token.set("showname", false);
         }
     }
 
     // tooltip
     showTooltip(isShown) {
+        if (!this.validateToken()) {
+            return false;
+        }
         this.token.set("show_tooltip", isShown);
         if (!isShown) {
             this.setTooltip("");
         }
     }
+
     setTooltip(value) {
+        if (!this.validateToken()) {
+            return false;
+        }
         this.token.set("tooltip", value);
     }
+
     getTokenNote() {
+        if (!this.validateToken()) {
+            return false;
+        }
         return this.token.get("gmnotes");
     }
+
     setTokenNote(value) {
+        if (!this.validateToken()) {
+            return false;
+        }
         this.token.set("gmnotes", value);
     }
 
@@ -262,13 +302,14 @@ class TokenTargetData extends TargetData {
     setEnergyIcon(value) {
         this.setIcon(this.elem, value);
     }
+
     setTurnIcon(value) {
         this.setIcon("status_yellow", value);
     }
+
     getIcon(iconName) {
-        if (this.token == undefined) {
-            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
-            return "";
+        if (!this.validateToken()) {
+            return false;
         }
         let value = this.token.get(iconName);
         if (value == undefined || value == "") {
@@ -276,24 +317,24 @@ class TokenTargetData extends TargetData {
         }
         return value;
     }
+
     setIcon(iconName, value) {
-        if (this.token == undefined) {
-            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
-            return;
+        if (!this.validateToken()) {
+            return false;
         }
         this.token.set(iconName, value);
     }
+
     getDowned() {
-        if (this.token == undefined) {
-            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
-            return;
+        if (!this.validateToken()) {
+            return false;
         }
         return this.token.get("status_dead");
     }
+
     setDowned(value) {
-        if (this.token == undefined) {
-            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
-            return;
+        if (!this.validateToken()) {
+            return false;
         }
         this.token.set("status_dead", value);
     }
@@ -313,16 +354,31 @@ class TokenTargetData extends TargetData {
         });
         attributeHandler.run();
     }
-    addMod(modDefinitionName, attributeHandler, value) {
+
+    addMod(modDefinitionName, attributeHandler, value, finishCallback) {
+        finishCallback = finishCallback == undefined ? function (results, attrHandler, attributeVar) {
+            attrHandler.addUpdate(attributeVar, results.newValue, false);
+        } : finishCallback;
+        
         this.modifyResourceAttribute(attributeHandler,
             modDefinitionName,
             value,
             this.addModifierToAttribute,
+            finishCallback
+        );
+    }
+
+    addModNoCap(modDefinitionName, attributeHandler, value) {
+        this.modifyResourceAttribute(attributeHandler,
+            modDefinitionName,
+            value,
+            this.addModifierToAttributeNoCap,
             function (results, attrHandler, attributeVar) {
                 attrHandler.addUpdate(attributeVar, results.newValue, false);
             }
         );
     }
+
     setMod(modDefinitionName, attributeHandler, value) {
         this.modifyResourceAttribute(attributeHandler,
             modDefinitionName,
@@ -333,12 +389,13 @@ class TokenTargetData extends TargetData {
             }
         );
     }
-    
+
     // Combat Details
     refreshCombatDetails(attributeHandler) {
         this.combatDetails = new CombatDetailsHandler(attributeHandler);
         this.refreshStatus(attributeHandler);
     }
+
     setCombatDetails(attrHandler, tokenNoteReference) {
         if (this.combatDetails == undefined) {
             Debug.LogError(`[TokenTargetData] No combat details exist for ${this.charName}`);
@@ -346,13 +403,12 @@ class TokenTargetData extends TargetData {
         }
 
         this.combatDetails.setData(attrHandler);
-        
+
         if (this.combatDetails.hasDisplayStyle()) {
             if (this.isCharacter()) {
                 let statusObj = new StatusHandler(attrHandler.parseJSON(WuxDef.GetVariable("Status")));
                 this.combatDetails.onUpdateStatus(attrHandler, statusObj);
-            }
-            else {
+            } else {
                 if (tokenNoteReference == undefined) {
                     tokenNoteReference = new TokenNoteReference(this.getTokenNote());
                 }
@@ -361,8 +417,7 @@ class TokenTargetData extends TargetData {
             }
             this.setTooltip(this.combatDetails.printTooltip(attrHandler, this.displayName));
             this.showTooltip(true);
-        }
-        else {
+        } else {
             this.setTooltip("");
             this.showTooltip(false);
         }
@@ -385,7 +440,7 @@ class TokenTargetData extends TargetData {
             tokenTargetData.setTokenNote(JSON.stringify(tokenNoteRef));
         });
     }
-    
+
 
     // Social Modifiers
     addImpatience(attributeHandler, value, resultsCallback) {
@@ -393,49 +448,57 @@ class TokenTargetData extends TargetData {
         this.modifyBarAttribute(attributeHandler, 1, value,
             this.addModifierToAttribute, resultsCallback);
     }
+
     emptyImpatience(attributeHandler, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToImpatience : resultsCallback;
         this.modifyBarAttribute(attributeHandler, 1, 0,
             this.setModifierToAttribute, resultsCallback);
     }
+
     applyResultsToImpatience(results, attrHandler, attributeVar, tokenTargetData) {
         tokenTargetData.setBarValue(1, results.newValue);
         return results;
     }
+
     setMaxFavor(attributeHandler, value) {
         this.token.set(`bar3_max`, value);
     }
+
     addFavor(attributeHandler, value, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToFavor : resultsCallback;
         this.modifyBarAttribute(attributeHandler, 3, value,
             this.addModifierToAttributeNoCap, resultsCallback);
     }
+
     emptyFavor(attributeHandler, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToFavor : resultsCallback;
         this.modifyBarAttribute(attributeHandler, 3, 0,
             this.setModifierToAttribute, resultsCallback);
     }
+
     applyResultsToFavor(results, attrHandler, attributeVar, tokenTargetData) {
         tokenTargetData.setBarValue(3, results.newValue);
         return results;
     }
-    
+
     // HP
     addHp(attributeHandler, value, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToHp : resultsCallback;
         this.modifyBarAttribute(attributeHandler, 1, value,
             this.addModifierToAttribute, resultsCallback);
     }
+
     setHpToFull(attributeHandler, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToHp : resultsCallback;
         this.modifyBarAttribute(attributeHandler, 1, "max",
             this.setModifierToAttribute, resultsCallback);
     }
+
     applyResultsToHp(results, attrHandler, attributeVar, tokenTargetData) {
         tokenTargetData.setBarValue(1, results.newValue);
         return results;
     }
-    
+
     // Will
     addWill(attributeHandler, value, resultsCallback, modifyCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToWill : resultsCallback;
@@ -443,32 +506,34 @@ class TokenTargetData extends TargetData {
         this.modifyBarAttribute(attributeHandler, 2, value,
             modifyCallback, resultsCallback);
     }
+
     setWillToFull(attributeHandler, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToWill : resultsCallback;
         this.modifyBarAttribute(attributeHandler, 2, "max",
             this.setModifierToAttribute, resultsCallback);
     }
+
     applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData) {
         tokenTargetData.setBarValue(2, results.newValue);
         return results;
     }
-    
+
     // Energy
     addEnergy(attributeHandler, value, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToEnergy : resultsCallback;
-        
+
         if (this.isCharacter()) {
             this.modifyResourceAttribute(attributeHandler, "EN", value,
                 this.addModifierToAttribute, resultsCallback);
-        }
-        else {
-            this.modifyIconAttribute(attributeHandler, this.elem, value, 
+        } else {
+            this.modifyIconAttribute(attributeHandler, this.elem, value,
                 function (results, value, attributeHandler, tokenTargetData) {
                     results.max = 9;
                     return tokenTargetData.addModifierToAttribute(results, value, attributeHandler, tokenTargetData);
                 }, resultsCallback);
         }
     }
+
     setEnergyToStart(attributeHandler, resultsCallback) {
         let startEnVar = WuxDef.GetVariable("StartEN");
         attributeHandler.addMod(startEnVar);
@@ -477,8 +542,7 @@ class TokenTargetData extends TargetData {
         if (this.isCharacter()) {
             this.modifyResourceAttribute(attributeHandler, "EN", startEnVar,
                 this.setModifierToAttribute, resultsCallback);
-        }
-        else {
+        } else {
             this.modifyIconAttribute(attributeHandler, this.elem, startEnVar,
                 function (results, value, attributeHandler, tokenTargetData) {
                     results.max = 9;
@@ -486,6 +550,7 @@ class TokenTargetData extends TargetData {
                 }, resultsCallback);
         }
     }
+
     addStartRoundEnergy(attributeHandler, resultsCallback) {
         let roundEnVar = WuxDef.GetVariable("RoundEN");
         attributeHandler.addMod(roundEnVar);
@@ -494,8 +559,7 @@ class TokenTargetData extends TargetData {
         if (this.isCharacter()) {
             this.modifyResourceAttribute(attributeHandler, "EN", roundEnVar,
                 this.addModifierToAttribute, resultsCallback);
-        }
-        else {
+        } else {
             this.modifyIconAttribute(attributeHandler, this.elem, roundEnVar,
                 function (results, value, attributeHandler, tokenTargetData) {
                     results.max = 9;
@@ -503,6 +567,7 @@ class TokenTargetData extends TargetData {
                 }, resultsCallback);
         }
     }
+
     applyResultsToEnergy(results, attrHandler, attributeVar, tokenTargetData) {
         if (tokenTargetData.isBarLinked(1)) {
             attrHandler.addUpdate(attributeVar, results.newValue, false);
@@ -510,36 +575,36 @@ class TokenTargetData extends TargetData {
         tokenTargetData.setEnergyIcon(results.newValue);
         return results;
     }
-    
+
     // Move Charge
     addMoveCharge(attributeHandler, value, resultsCallback) {
         let tokenTargetData = this
         value = parseInt(value);
         resultsCallback = resultsCallback == undefined ? tokenTargetData.applyResultsMoveCharge : resultsCallback;
-        
+
         if (tokenTargetData.isBarLinked(1)) {
             this.modifyResourceAttribute(attributeHandler, "MvCharge", value,
                 tokenTargetData.addModifierToAttributeNoCap, resultsCallback);
-        }
-        else {
+        } else {
             this.modifyIconAttribute(attributeHandler, "status_yellow", value,
                 tokenTargetData.addModifierToAttributeNoCap, resultsCallback);
         }
     }
+
     setMoveCharge(attributeHandler, value, resultsCallback) {
         let tokenTargetData = this
         value = parseInt(value);
         resultsCallback = resultsCallback == undefined ? tokenTargetData.applyResultsMoveCharge : resultsCallback;
-        
+
         if (tokenTargetData.isBarLinked(1)) {
             this.modifyResourceAttribute(attributeHandler, "MvCharge", value,
                 tokenTargetData.setModifierToAttribute, resultsCallback);
-        }
-        else {
+        } else {
             this.modifyIconAttribute(attributeHandler, "status_yellow", value,
                 tokenTargetData.setModifierToAttribute, resultsCallback);
         }
     }
+
     setDash(attributeHandler, resultsCallback) {
         this.addDashModifiers(attributeHandler);
         resultsCallback = resultsCallback == undefined ? this.applyResultsMoveCharge : resultsCallback;
@@ -550,8 +615,7 @@ class TokenTargetData extends TargetData {
                     results.newValue = tokenTargetData.performDash(attrHandler);
                 },
                 resultsCallback);
-        }
-        else {
+        } else {
             this.modifyIconAttribute(attributeHandler, "status_yellow", 0,
                 function (results, value, attrHandler, tokenTargetData) {
                     results.newValue = tokenTargetData.performDash(attrHandler);
@@ -559,6 +623,7 @@ class TokenTargetData extends TargetData {
                 resultsCallback);
         }
     }
+
     addDash(attributeHandler, resultsCallback) {
         this.addDashModifiers(attributeHandler);
         resultsCallback = resultsCallback == undefined ? this.applyResultsMoveCharge : resultsCallback;
@@ -569,8 +634,7 @@ class TokenTargetData extends TargetData {
                     results.newValue = results.current + tokenTargetData.performDash(attrHandler);
                 },
                 resultsCallback);
-        }
-        else {
+        } else {
             this.modifyIconAttribute(attributeHandler, "status_yellow", 0,
                 function (results, value, attrHandler, tokenTargetData) {
                     results.newValue = results.current + tokenTargetData.performDash(attrHandler);
@@ -578,9 +642,11 @@ class TokenTargetData extends TargetData {
                 resultsCallback);
         }
     }
+
     addDashModifiers(attributeHandler) {
-        attributeHandler.addMod([ WuxDef.GetVariable("Cmb_Mv"), WuxDef.GetVariable("Cmb_MvPotency")]);
+        attributeHandler.addMod([WuxDef.GetVariable("Cmb_Mv"), WuxDef.GetVariable("Cmb_MvPotency")]);
     }
+
     performDash(attrHandler) {
         let baseMoveSpeed = attrHandler.parseInt(WuxDef.GetVariable("Cmb_Mv"), 0, false);
         let maxMoveSpeed = attrHandler.parseInt(WuxDef.GetVariable("Cmb_MvPotency"), 0, false);
@@ -591,6 +657,7 @@ class TokenTargetData extends TargetData {
         dieRoll.rollDice(1, maxMoveSpeed);
         return Math.max(dieRoll.total, baseMoveSpeed)
     }
+
     applyResultsMoveCharge(results, attrHandler, attributeVar, tokenTargetData) {
         if (tokenTargetData.isBarLinked(1)) {
             attrHandler.addUpdate(attributeVar, results.newValue, false);
@@ -609,19 +676,18 @@ class TokenTargetData extends TargetData {
         if (tokenTargetData.isBarLinked(1)) {
             this.modifyResourceAttribute(attributeHandler, "Surge", value,
                 tokenTargetData.addModifierToAttribute, resultsCallback);
-        }
-        else {
+        } else {
             this.modifyNoteAttribute(attributeHandler, "surges", value,
                 tokenTargetData.addModifierToAttribute, resultsCallback);
         }
     }
+
     applyResultsSurge(results, attrHandler, attributeVar, tokenTargetData) {
         if (tokenTargetData.isBarLinked(1)) {
             attrHandler.addUpdate(attributeVar, results.newValue, false);
             tokenTargetData.combatDetails.onUpdateSurges(attrHandler, results.newValue);
             tokenTargetData.setCombatDetails(attrHandler);
-        }
-        else {
+        } else {
             Debug.Log(`Updating vitality in token note to ${results.newValue}`);
             let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
             tokenNoteReference.surges.current = results.newValue;
@@ -640,19 +706,18 @@ class TokenTargetData extends TargetData {
         if (tokenTargetData.isBarLinked(1)) {
             this.modifyResourceAttribute(attributeHandler, "Cmb_Vitality", value,
                 tokenTargetData.addModifierToAttribute, resultsCallback);
-        }
-        else {
+        } else {
             this.modifyNoteAttribute(attributeHandler, "vitality", value,
                 tokenTargetData.addModifierToAttribute, resultsCallback);
         }
     }
+
     applyResultsVitality(results, attrHandler, attributeVar, tokenTargetData) {
         if (tokenTargetData.isBarLinked(1)) {
             attrHandler.addUpdate(attributeVar, results.newValue, false);
             tokenTargetData.combatDetails.onUpdateVitality(attrHandler, results.newValue);
             tokenTargetData.setCombatDetails(attrHandler);
-        }
-        else {
+        } else {
             let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
             tokenNoteReference.vitality.current = results.newValue;
             tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
@@ -666,13 +731,16 @@ class TokenTargetData extends TargetData {
     addStatus(attributeHandler, statusDefinitionName) {
         this.modifyStatus(attributeHandler, statusDefinitionName, true);
     }
+
     removeStatus(attributeHandler, statusDefinitionName) {
         this.modifyStatus(attributeHandler, statusDefinitionName, false);
     }
+
     refreshStatus(attributeHandler) {
         let statusVar = WuxDef.GetVariable("Status");
         attributeHandler.addAttribute(statusVar);
     }
+
     modifyStatus(attributeHandler, statusDefinitionName, isAdded) {
         let tokenTargetData = this;
         tokenTargetData.refreshCombatDetails(attributeHandler);
@@ -684,19 +752,16 @@ class TokenTargetData extends TargetData {
                 let statusObj = new StatusHandler(attrHandler.parseJSON(statusVar));
                 if (isAdded) {
                     statusObj.addStatus(statusDefinitionName);
-                }
-                else {
+                } else {
                     statusObj.removeStatus(statusDefinitionName);
                 }
                 statusObj.saveStatusesToCharacterSheet(attrHandler);
                 tokenTargetData.setCombatDetails(attrHandler);
-            }
-            else {
+            } else {
                 let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
                 if (isAdded) {
                     tokenNoteReference.statusHandler.addStatus(statusDefinitionName);
-                }
-                else {
+                } else {
                     tokenNoteReference.statusHandler.removeStatus(statusDefinitionName);
                 }
                 tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
@@ -704,8 +769,8 @@ class TokenTargetData extends TargetData {
             }
         });
     }
-    
-    
+
+
     getModifyResults(name) {
         return {
             name: name,
@@ -715,6 +780,7 @@ class TokenTargetData extends TargetData {
             remainder: 0
         };
     }
+
     modifyBarAttribute(attributeHandler, barIndex, value, modCallback, finishCallback) {
         let tokenTargetData = this;
         let results = tokenTargetData.getModifyResults(barIndex);
@@ -726,6 +792,7 @@ class TokenTargetData extends TargetData {
             finishCallback(results, attrHandler, "", tokenTargetData);
         });
     }
+
     modifyIconAttribute(attributeHandler, iconName, value, modCallback, finishCallback) {
         let tokenTargetData = this;
         let results = tokenTargetData.getModifyResults(iconName);
@@ -737,6 +804,7 @@ class TokenTargetData extends TargetData {
             finishCallback(results, attrHandler, "", tokenTargetData);
         });
     }
+
     modifyNoteAttribute(attributeHandler, attrName, value, modCallback, finishCallback) {
         let tokenTargetData = this;
         let results = tokenTargetData.getModifyResults(attrName);
@@ -749,10 +817,11 @@ class TokenTargetData extends TargetData {
             finishCallback(results, attrHandler, "", tokenTargetData);
         });
     }
+
     modifyResourceAttribute(attributeHandler, attributeName, value, modCallback, finishCallback) {
         let tokenTargetData = this;
         let results = tokenTargetData.getModifyResults(attributeName);
-        
+
         let attributeVar = WuxDef.GetVariable(attributeName);
         attributeHandler.addAttribute(attributeVar);
         attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -762,6 +831,7 @@ class TokenTargetData extends TargetData {
             finishCallback(results, attrHandler, attributeVar, tokenTargetData);
         });
     }
+
     addModifierToAttribute(results, value, attrHandler, tokenTargetData) {
         tokenTargetData.addModifierToAttributeNoCap(results, value, attrHandler, tokenTargetData);
         if (results.newValue > results.max) {
@@ -770,6 +840,7 @@ class TokenTargetData extends TargetData {
         }
         return results;
     }
+
     addModifierToAttributeNoCap(results, value, attrHandler) {
         if (value == "max") {
             results.newValue = results.max;
@@ -788,6 +859,7 @@ class TokenTargetData extends TargetData {
             results.newValue = 0;
         }
     }
+
     setModifierToAttribute(results, value, attrHandler) {
         if (value == "max") {
             results.newValue = results.max;
@@ -798,12 +870,11 @@ class TokenTargetData extends TargetData {
             // likely a variable. Look it up
             results.newValue = attrHandler.parseInt(value, 0, false);
         }
-        
+
         if (results.newValue < 0) {
             results.remainder = results.newValue;
             results.newValue = 0;
-        }
-        else if (results.newValue > results.max) {
+        } else if (results.newValue > results.max) {
             results.remainder = results.newValue - results.max;
             results.newValue = results.max;
         }
@@ -818,27 +889,28 @@ class TokenTargetEffectsData {
         this.spentSurge = false;
         this.removeStatusType = "";
     }
-    
+
     addMessage(message) {
         if (message != undefined && message != "") {
             this.effectMessages.push(message);
         }
     }
-    
+
     addDamageRoll(damageRoll) {
-        for(let i = 0; i < this.damageRolls.length; i++) {
+        for (let i = 0; i < this.damageRolls.length; i++) {
             if (this.damageRolls[i].isSame(damageRoll)) {
                 this.damageRolls[i].addDieRoll(damageRoll);
                 return;
             }
         }
-        
+
         this.damageRolls.push(damageRoll);
     }
+
     performDamageRolls(attrGetter, attrSetter, willBreakEffect) {
         let tokenTargetEffect = this;
         this.damageRolls.forEach(function (damageRoll) {
-            switch(damageRoll.damageType) {
+            switch (damageRoll.damageType) {
                 case "HP Heal":
                     tokenTargetEffect.takeHpHealing(attrSetter, damageRoll);
                     break;
@@ -866,17 +938,19 @@ class TokenTargetEffectsData {
             }
         });
     }
-    
-    
+
+
     hasSurged() {
         return this.spentSurge;
     }
+
     setSpendSurge() {
         this.spentSurge = true;
     }
+
     spendSurge(attributeHandler) {
         this.spentSurge = true;
-        
+
         let targetEffect = this;
         this.tokenTargetData.addSurge(attributeHandler, -1,
             function (results, attrHandler, attributeVar, tokenTargetData) {
@@ -884,15 +958,15 @@ class TokenTargetEffectsData {
                 tokenTargetData.applyResultsSurge(results, attrHandler, attributeVar, tokenTargetData);
             });
     }
-    
+
     setRemoveStatusType(statusType) {
         this.removeStatusType = statusType;
     }
-    
+
     takeHpDamage(attributeHandler, damageRoll) {
         let targetEffect = this;
-        
-        this.tokenTargetData.addHp(attributeHandler, -1 * damageRoll.total, 
+
+        this.tokenTargetData.addHp(attributeHandler, -1 * damageRoll.total,
             function (results, attrHandler, attributeVar, tokenTargetData) {
                 targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} ${damageRoll.damageType} damage.`);
                 if (results.remainder < 0) {
@@ -907,22 +981,22 @@ class TokenTargetEffectsData {
                     results.newValue = results.remainder;
                 }
                 tokenTargetData.applyResultsToHp(results, attrHandler, attributeVar, tokenTargetData);
-        });
+            });
     }
-    
+
     takeHpHealing(attributeHandler, healRoll) {
         let targetEffect = this;
-        
+
         this.tokenTargetData.addHp(attributeHandler, healRoll.total,
             function (results, attrHandler, attributeVar, tokenTargetData) {
                 targetEffect.effectMessages.push(`${tokenTargetData.displayName} heals ${Format.ShowTooltip(healRoll.total, healRoll.message)} HP.`);
                 tokenTargetData.applyResultsToHp(results, attrHandler, attributeVar, tokenTargetData);
-        });
+            });
     }
-    
+
     takeVitalityDamage(targetEffect, attributeHandler, damage) {
         targetEffect.effectMessages.push(`${targetEffect.tokenTargetData.displayName} loses ${damage} Vitality.`);
-        this.tokenTargetData.addVitality(attributeHandler, -1 * damage, 
+        this.tokenTargetData.addVitality(attributeHandler, -1 * damage,
             function (results, attrHandler, attributeVar, tokenTargetData) {
                 if (results.newValue <= 0) {
                     tokenTargetData.setDowned(true);
@@ -955,27 +1029,25 @@ class TokenTargetEffectsData {
         let tokenNoteReference = {};
         if (targetEffect.tokenTargetData.isCharacter()) {
             attributeHandler.addAttribute(surgeVar);
-        }
-        else {
+        } else {
             tokenNoteReference = new TokenNoteReference(this.tokenTargetData.getTokenNote());
         }
-        
+
         this.tokenTargetData.addWill(attributeHandler, -1 * damageRoll.total,
             function (results, attrHandler, attributeVar, tokenTargetData) {
                 tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
                 tokenTargetData.applyResultsSurge(surgeResults, attrHandler, surgeVar, tokenTargetData);
-            }, 
+            },
             function (results, value, attrHandler) {
                 if (targetEffect.tokenTargetData.isCharacter()) {
                     surgeResults.current = attrHandler.parseInt(surgeVar, 0, false);
                     surgeResults.max = attrHandler.parseInt(surgeVar, 0, true);
-                }
-                else {
+                } else {
                     surgeResults.current = parseInt(tokenNoteReference["surges"].current);
                     surgeResults.max = parseInt(tokenNoteReference["surges"].max);
                     Debug.Log(`Current surges for ${targetEffect.tokenTargetData.displayName} is ${surgeResults.current}/${surgeResults.max}`);
                 }
-                
+
                 if (surgeResults.current > 0) {
                     surgeResults.newValue = surgeResults.current - 1;
                     results.newValue = results.max + value;
@@ -985,19 +1057,18 @@ class TokenTargetEffectsData {
                     targetEffect.effectMessages.push(`${targetEffect.tokenTargetData.displayName} consumes a Surge. ` +
                         `${targetEffect.tokenTargetData.displayName} fully heals Will ` +
                         `then takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} damage.`);
-                }
-                else {
+                } else {
                     surgeResults.newValue = 0;
                     results.newValue = 0;
                     targetEffect.effectMessages.push(`${targetEffect.tokenTargetData.displayName} has no Surges remaining. Will remains at zero.`);
                 }
-                
+
                 // set the will to max first
                 return results;
             });
 
     }
-    
+
     takeWillHealing(attributeHandler, healRoll) {
         let targetEffect = this;
 
@@ -1011,13 +1082,14 @@ class TokenTargetEffectsData {
     takeWillFullHealing(attributeHandler) {
         let targetEffect = this;
 
-        this.tokenTargetData.setWillToFull(attributeHandler, 
+        this.tokenTargetData.setWillToFull(attributeHandler,
             function (results, attrHandler, attributeVar, tokenTargetData) {
                 targetEffect.effectMessages.push(`${tokenTargetData.displayName} has their Will fully healed.`);
                 tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
             });
     }
 }
+
 class TokenNoteReference {
     constructor(data) {
         this.createEmpty();
@@ -1037,21 +1109,21 @@ class TokenNoteReference {
         try {
             let json = JSON.parse(stringifiedJSON);
             this.importJson(json);
-        }
-        catch {
+        } catch {
             Debug.LogError("[TokenNoteReference] Unable to parse token note JSON");
         }
     }
+
     createEmpty() {
         this.statusHandler = {};
         this.surges = {current: 0, max: 0};
         this.vitality = {current: 0, max: 0};
     }
+
     importJson(json) {
         if (json.statusHandler == undefined) {
             this.statusHandler = new StatusHandler();
-        }
-        else {
+        } else {
             this.statusHandler = new StatusHandler(json.statusHandler);
         }
         this.surges = json.surges == undefined ? {current: 0, max: 0} : json.surges;
@@ -1079,17 +1151,23 @@ var TargetReference = TargetReference || (function () {
 
         handleInput = function (msg, tag, content) {
             switch (tag) {
+                case "!actcheck":
+                    commandCheckActiveTargets(msg);
+                    break;
                 case "!actadd":
                     commandAddCharacter(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
                 case "!actrem":
-                    commandRemoveCharacter(msg);
+                    commandRemoveCharacter(msg, TokenReference.GetTokenTargetDataArray(msg));
                     break;
                 case "!actclr":
                     commandClearActiveTargets();
                     break;
                 case "!tokenoptions":
                     commandShowTokenOptions(msg);
+                    break;
+                case "!partyoptions":
+                    commandShowPartyOptions(msg);
                     break;
                 case "!tconflictstate":
                     commandSetConflictState(msg, TokenReference.GetTokenTargetDataArray(msg), content);
@@ -1112,11 +1190,23 @@ var TargetReference = TargetReference || (function () {
                 case "!tfullheal":
                     commandFullHeal(msg, TokenReference.GetTokenTargetDataArray(msg));
                     break;
+                case "!pfullheal":
+                    content = getTeamTargets(content);
+                    commandFullHeal(msg, content.targets);
+                    break;
                 case "!thealsurge":
                     commandHealSurge(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
+                case "!phealsurge":
+                    content = getTeamTargets(content);
+                    commandHealSurge(msg, content.targets, content.content);
+                    break;
                 case "!thealvit":
                     commandHealVitality(msg, TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
+                case "!phealvit":
+                    content = getTeamTargets(content);
+                    commandHealVitality(msg, content.targets, content.content);
                     break;
                 case "!tresetSocial":
                     commandResetSocial(msg, TokenReference.GetTokenTargetDataArray(msg));
@@ -1153,19 +1243,46 @@ var TargetReference = TargetReference || (function () {
             }
         },
 
-        commandAddCharacter = function (msg, targets, content) {
+        commandCheckActiveTargets = function (msg) {
+            if (state.WuxConflictManager == undefined || state.WuxConflictManager.teams == undefined) {
+                let messageObject = new SystemInfoMessage("No active conflict.");
+                messageObject.setSender("System");
+                WuxMessage.SendToSenderAndGM(messageObject, msg);
+                return;
+            }
+
+            if (state.TargetReference.activeCharacters.length == 0) {
+                let messageObject = new SystemInfoMessage("No active characters.");
+                messageObject.setSender("System");
+                WuxMessage.SendToSenderAndGM(messageObject, msg);
+                return;
+            }
+
+            let allyTeam = getActiveTargetsOnTeam(0);
+            let enemyTeam = getActiveTargetsOnTeam(1);
+            let outputMessage = [];
+            outputMessage.push(`Ally Team: ${getTargetListNames(allyTeam, true)}`);
+            outputMessage.push(`Enemy Team: ${getTargetListNames(enemyTeam, true)}`);
+
+            let messageObject = new SystemInfoMessage(outputMessage);
+            messageObject.setSender("System");
+            WuxMessage.SendToSenderAndGM(messageObject, msg);
+        },
+
+        commandAddCharacter = function (msg, targets, teamIndex) {
             _.each(targets, function (tokenTargetData) {
-                tokenTargetData.setTeamIndex(content);
+                tokenTargetData.setTeamIndex(teamIndex);
                 addToActiveCharacters(tokenTargetData);
             });
 
-            sendTokenUpdateMessage(msg, targets, ` added as ${state.WuxConflictManager.teams[content].name} unit(s)`);
+            sendTokenUpdateMessage(msg, targets, ` added as ${state.WuxConflictManager.teams[teamIndex].name} unit(s)`);
         },
 
-        commandRemoveCharacter = function (msg) {
-            TokenReference.IterateOverSelectedTokens(msg, function (tokenTargetData) {
+        commandRemoveCharacter = function (msg, targets) {
+            _.each(targets, function (tokenTargetData) {
                 removeActiveTargetData(tokenTargetData.tokenId);
             });
+            sendTokenUpdateMessage(msg, targets, " removed from active characters");
         },
 
         commandClearActiveTargets = function () {
@@ -1188,6 +1305,22 @@ var TargetReference = TargetReference || (function () {
             return output;
         },
 
+        getTeamTargets = function (content) {
+            let output = {
+                content: "",
+                targets: []
+            }
+            let contentSplit = content.split("@@@");
+            output.content = contentSplit[1];
+
+            let target = getActiveTargetsOnTeam(contentSplit[0]);
+            if (target != undefined) {
+                output.targets.push(target);
+            }
+
+            return output;
+        },
+
         commandShowTokenOptions = function (msg) {
             let sender = msg.who;
 
@@ -1198,14 +1331,14 @@ var TargetReference = TargetReference || (function () {
                 output += tokenOptionButton("Hard Update", "tharddetails");
                 output += tokenOptionButton("Gen Name", "tgenname");
                 output += tokenOptionButton("Reset Token", "treset");
+                output += tokenOptionButton("Remove From Conflict", "actrem");
             }
 
             output += tokenOptionSpacer();
             output += tokenOptionTitle("Combat Stat Options");
             if (!playerIsGM(msg.playerid)) {
                 output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@0`);
-            }
-            else {
+            } else {
                 output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@?{Set team index|0}`);
                 output += tokenOptionButton("Full Heal", "tfullheal");
             }
@@ -1223,14 +1356,41 @@ var TargetReference = TargetReference || (function () {
             output += tokenOptionTitle("Social Stat Options");
             if (!playerIsGM(msg.playerid)) {
                 output += tokenOptionButton("Prep4 Social", `tconflictstate Social@0`);
-            }
-            else {
+            } else {
                 output += tokenOptionButton("Prep4 Social", `tconflictstate Social@?{Set team index|0}`);
                 output += tokenOptionButton("Reset Social", "tresetSocial");
                 output += tokenOptionButton("Request Threshold", "tss ?{Set the difficulty of the request|" +
                     "Simple DC 15|Inconvenient DC 30|Disruptive DC 40|Serious DC 50|Life-Changing DC 60}");
             }
-            
+
+            let senderMessage = new SystemInfoMessage(output);
+            senderMessage.setSender(sender);
+            WuxMessage.Send(senderMessage, sender);
+        },
+
+        commandShowPartyOptions = function (msg) {
+            let sender = msg.who;
+
+            let output = "";
+            output += tokenOptionTitle("Party State");
+            output += tokenOptionButton("Check", "actcheck");
+            output += tokenOptionButton("Clear All", "actclr");
+
+            output += tokenOptionSpacer();
+            output += tokenOptionTitle("Conflict Options");
+            output += tokenOptionButton("Start Battle", "cmbstartbattle");
+            output += tokenOptionButton("Start Social", "cmbstartsocial");
+            output += tokenOptionButton("Round", "startround");
+            output += tokenOptionSpacer();
+            output += tokenOptionButton("Conflict XP", "conflictxp");
+            output += tokenOptionButton("End", "endcombat");
+
+            output += tokenOptionSpacer();
+            output += tokenOptionTitle("Combat Stat Options");
+            output += tokenOptionButton("Full Heal", "pfullheal ?{Team index|0}@@@");
+            output += tokenOptionButton("Add Surge", "phealsurge ?{Team index|0}@@@?{How much surge to add?|1}");
+            output += tokenOptionButton("Add Vitality", "phealvit ?{Team index|0}@@@?{How much vitality to add?|1}");
+
             let senderMessage = new SystemInfoMessage(output);
             senderMessage.setSender(sender);
             WuxMessage.Send(senderMessage, sender);
@@ -1243,16 +1403,16 @@ var TargetReference = TargetReference || (function () {
         tokenOptionSpacer = function () {
             return `<div>&nbsp</div>`;
         },
-        
+
         tokenOptionButton = function (name, message) {
-             return `<span class="sheet-wuxInlineRow">[${name}](!${message})</span> `;
+            return `<span class="sheet-wuxInlineRow">[${name}](!${message})</span> `;
         },
 
         commandSetConflictState = function (msg, targets, content) {
             let contentSplit = content.split("@");
             let conflictState = contentSplit[0];
             let teamIndex = contentSplit.length > 1 && !isNaN(parseInt(contentSplit[1])) ? parseInt(contentSplit[1]) : 0;
-            
+
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
                 tokenTargetData.setTeamIndex(teamIndex);
@@ -1288,7 +1448,7 @@ var TargetReference = TargetReference || (function () {
                 let senderMessage = new SystemInfoMessage(`This request has been set as ${content}.`);
                 senderMessage.setSender(sender);
                 WuxMessage.Send(senderMessage);
-                
+
                 attributeHandler.run();
             });
         },
@@ -1299,7 +1459,7 @@ var TargetReference = TargetReference || (function () {
                 tokenTargetData.addEnergy(attributeHandler, content);
                 attributeHandler.run();
             });
-            
+
             sendTokenUpdateMessage(msg, targets, `: ${content} EN`);
         },
 
@@ -1309,7 +1469,7 @@ var TargetReference = TargetReference || (function () {
                 tokenTargetData.setMoveCharge(attributeHandler, 0);
                 attributeHandler.run();
             });
-            
+
             sendTokenUpdateMessage(msg, targets, `: Move Charge reset`);
         },
 
@@ -1319,7 +1479,7 @@ var TargetReference = TargetReference || (function () {
                 tokenTargetData.addMoveCharge(attributeHandler, content);
                 attributeHandler.run();
             });
-            
+
             sendTokenUpdateMessage(msg, targets, `: ${content} Move Charge`);
         },
 
@@ -1342,7 +1502,7 @@ var TargetReference = TargetReference || (function () {
                 tokenTargetData.setWillToFull(attributeHandler);
                 attributeHandler.run();
             });
-            
+
             sendTokenUpdateMessage(msg, targets, `: fully healed`);
         },
 
@@ -1352,7 +1512,7 @@ var TargetReference = TargetReference || (function () {
                 tokenTargetData.addSurge(attributeHandler, content);
                 attributeHandler.run();
             });
-            
+
             sendTokenUpdateMessage(msg, targets, `: ${content} Surge`);
         },
 
@@ -1363,7 +1523,7 @@ var TargetReference = TargetReference || (function () {
                 attributeHandler.run();
             });
 
-            sendTokenUpdateMessage(msg, targets,`: ${content} Vitality`);
+            sendTokenUpdateMessage(msg, targets, `: ${content} Vitality`);
         },
 
         commandResetSocial = function (msg, targets) {
@@ -1373,7 +1533,7 @@ var TargetReference = TargetReference || (function () {
                 tokenTargetData.setWillToFull(attributeHandler);
                 attributeHandler.run();
             });
-            
+
             sendTokenUpdateMessage(msg, targets, `: social data reset`);
         },
 
@@ -1433,16 +1593,23 @@ var TargetReference = TargetReference || (function () {
             let advantage = content.length > 1 ? content[1] : 0;
             let tableName = "";
             switch (group) {
-                case "Defenses": group = "Defense"; tableName = "Defenses"; break;
-                case "Senses": group = "Sense"; tableName = "Senses"; break;
-                default: tableName = content; break;
+                case "Defenses":
+                    group = "Defense";
+                    tableName = "Defenses";
+                    break;
+                case "Senses":
+                    group = "Sense";
+                    tableName = "Senses";
+                    break;
+                default:
+                    tableName = content;
+                    break;
             }
 
             let groupArray = WuxDef.Filter(new DatabaseFilterData("group", group));
             if (groupArray.length == 0) {
                 Debug.LogError(`[commandShowGroup] The group (${group}) is empty!`);
-            }
-            else {
+            } else {
                 _.each(targets, function (tokenTargetData) {
                     checkModifiers(sender, tableName, tokenTargetData, groupArray, false, advantage);
                 });
@@ -1459,15 +1626,14 @@ var TargetReference = TargetReference || (function () {
                 _.each(targets, function (tokenTargetData) {
                     checkLore(sender, tokenTargetData, advantage);
                 });
-            }
-            else {
+            } else {
                 let groupArray = WuxDef.Filter(new DatabaseFilterData("subGroup", subGroup));
                 _.each(targets, function (tokenTargetData) {
                     checkModifiers(sender, tableName, tokenTargetData, groupArray, true, advantage);
                 });
             }
         },
-        
+
         commandIntroduce = function (msg, targets) {
             let characters, charObj = {};
             let sender = msg.who;
@@ -1480,7 +1646,7 @@ var TargetReference = TargetReference || (function () {
 
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-    
+
                 attributeHandler.addMod([introNameVar, emotesVar, titleVar, ageVar, genderVar, quickDescVar]);
                 attributeHandler.addFinishCallback(function (attrHandler) {
                     let outfitEmoteSetData = new EmoteSetData(attrHandler.parseJSON(emotesVar));
@@ -1490,13 +1656,13 @@ var TargetReference = TargetReference || (function () {
                     messageObject.url = outfitEmoteSetData.defaultEmote;
                     messageObject.setSender(sender);
                     WuxMessage.Send(messageObject);
-    
+
                     // set character data
                     characters = findObjs({
                         _id: tokenTargetData.charId,
                         _type: "character"
                     }, {caseInsensitive: true});
-    
+
                     if (characters.length > 0) {
                         charObj = characters[0];
                         let bio = `<p><b>${attrHandler.parseString(introNameVar)}</b><br><i>${attrHandler.parseString(titleVar)}</i></p>`;
@@ -1515,11 +1681,13 @@ var TargetReference = TargetReference || (function () {
             let raceVar = WuxDef.GetVariable("Ethnicity");
             let genderVar = WuxDef.GetVariable("Gender");
             let homeRegionVar = WuxDef.GetVariable("HomeRegion");
+            let sheetNameVar = WuxDef.GetVariable("SheetName");
+            let outputMessage = [];
 
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
 
-                attributeHandler.addMod([raceVar, genderVar, homeRegionVar]);
+                attributeHandler.addMod([raceVar, genderVar, homeRegionVar, sheetNameVar]);
                 attributeHandler.addFinishCallback(function (attrHandler) {
                     let generator = new WuxingHumanCharacterGenerator();
                     generator.character.ancestry = attrHandler.parseString(raceVar);
@@ -1528,35 +1696,42 @@ var TargetReference = TargetReference || (function () {
                     generator.generateCharacter();
                     tokenTargetData.token.set("name", generator.character.firstName);
                     tokenTargetData.displayName = generator.character.firstName;
-                    
-                    let outputMessage = `Generated Name: ${generator.character.fullName}. ` + 
-                        `\They have a ${generator.character.motivation} Motivation and a ${generator.character.personality} Personality.`;
-                    let messageObject = new SystemInfoMessage(outputMessage);
-                    messageObject.setSender("System");
-                    WuxMessage.Send(messageObject, "GM");
+
+                    outputMessage.push(`${attrHandler.parseString(sheetNameVar)} Name: ${generator.character.fullName}. ` +
+                        `\They have a ${generator.character.motivation} Motivation and a ${generator.character.personality} Personality.`);
                 });
                 attributeHandler.run();
+
+                let messageObject = new SystemInfoMessage(outputMessage);
+                messageObject.setSender("System");
+                WuxMessage.Send(messageObject, "GM");
             });
-        
+
+        },
+
+        sendTokenUpdateMessage = function (msg, targets, message) {
+            let outputMessage = `${getTargetListNames(targets)} ${message}`;
+            let messageObject = new SystemInfoMessage(outputMessage);
+            messageObject.setSender("System");
+            WuxMessage.SendToSenderAndGM(messageObject, msg);
         },
         
-        sendTokenUpdateMessage = function (msg, targets, message) {
+        getTargetListNames = function(targets, includeSheetName) {
             let targetNames = "";
             for (let i = 0; i < targets.length; i++) {
                 if (targets.length > 1) {
                     if (i == targets.length - 1) {
                         targetNames += " and ";
-                    }
-                    else if (targetNames != "") {
+                    } else if (targetNames != "") {
                         targetNames += ", ";
                     }
                 }
                 targetNames += `${targets[i].displayName}`;
+                if (includeSheetName && targets[i].charName != targets[i].displayName) {
+                    targetNames += `[${targets[i].charName}]`;
+                }
             }
-        
-            let messageObject = new SystemInfoMessage(targetNames + message);
-            messageObject.setSender("System");
-            WuxMessage.SendToSenderAndGM(messageObject, msg);
+            return targetNames;
         },
 
         // Data Checkers
@@ -1568,7 +1743,7 @@ var TargetReference = TargetReference || (function () {
             let recallVar = WuxDef.GetVariable("Recall");
             let knowledgeBuildVar = WuxDef.GetVariable("Knowledge", WuxDef._build);
             attributeHandler.addMod([recallVar, knowledgeBuildVar]);
-            
+
             let dieRoll = new DieRoll();
             dieRoll.rollCheck(advantage);
             let recallResults = new DieRoll(dieRoll);
@@ -1580,7 +1755,7 @@ var TargetReference = TargetReference || (function () {
 
                 let knowledges = new WorkerBuildStats();
                 knowledges.import(attrHandler.parseJSON(knowledgeBuildVar));
-                
+
                 knowledges.iterate(function (buildStat) {
                     let parts = buildStat.name.split("-");
                     let title = parts[1].split("_")[0];
@@ -1589,8 +1764,7 @@ var TargetReference = TargetReference || (function () {
                         let value = parseInt(buildStat.value) + recallValue;
                         results.addModToRoll(value);
                         tableData.addRow([title, `${Format.ShowTooltip(`${results.total}`, results.message)}`]);
-                    }
-                    else if (parts[0] == "lrc") {
+                    } else if (parts[0] == "lrc") {
                         tableData.addRow([title, `${Format.ShowTooltip(`${recallResults.total}`, recallResults.message)}`]);
                     }
                 });
@@ -1622,8 +1796,7 @@ var TargetReference = TargetReference || (function () {
                         let results = new DieRoll(dieRoll);
                         results.addModToRoll(value);
                         tableData.addRow([modDefinition.title, `${Format.ShowTooltip(`${results.total}`, results.message)}`]);
-                    }
-                    else {
+                    } else {
                         tableData.addRow([modDefinition.title, value]);
                     }
                 });
@@ -1645,8 +1818,18 @@ var TargetReference = TargetReference || (function () {
             };
         },
 
-        hasActiveTargets = function() {
+        hasActiveTargets = function () {
             return Object.keys(state.TargetReference.activeCharacters.targetData).length > 0;
+        },
+
+        getActiveTargetsOnTeam = function (teamIndex) {
+            let tokenTargetDataArray = [];
+            iterateOverActiveTargetData(function (tokenTargetData) {
+                if (tokenTargetData.teamIndex == teamIndex) {
+                    tokenTargetDataArray.push(tokenTargetData);
+                }
+            });
+            return tokenTargetDataArray;
         },
 
         iterateOverActiveTargetData = function (callback) {
@@ -1665,8 +1848,7 @@ var TargetReference = TargetReference || (function () {
             }
             if (state.TargetReference.activeCharacters.targetData.hasOwnProperty(tokenTargetData.tokenId)) {
                 state.TargetReference.activeCharacters.targetData[tokenTargetData.tokenId] = tokenTargetData;
-            }
-            else {
+            } else {
                 state.TargetReference.activeCharacters.targetData[tokenTargetData.tokenId] = tokenTargetData;
                 state.TargetReference.activeCharacters.nameDatabase[tokenTargetData.charName] = tokenTargetData.tokenId;
             }
@@ -1724,11 +1906,12 @@ var TargetReference = TargetReference || (function () {
             }
             return TokenReference.GetTokenData(state.TargetReference.activeCharacters.targetData[state.TargetReference.activeCharacters.nameDatabase[characterName]]);
         }
-        ;
+    ;
     return {
         CheckInstall: checkInstall,
         HandleInput: handleInput,
         HasActiveTargets: hasActiveTargets,
+        GetActiveTargetsOnTeam: getActiveTargetsOnTeam,
         IterateOverActiveTargetData: iterateOverActiveTargetData,
         ClearActiveTargetData: clearActiveTargetData,
         GetTokenTargetData: getTokenTargetData,
@@ -1767,12 +1950,11 @@ var TokenReference = TokenReference || (function () {
         getTokenData = function (data) {
             if (data.tokenId != undefined) {
                 return getTokenDataFromTargetData(data);
-            }
-            else {
+            } else {
                 return getTokenDataFromId(data);
             }
         },
-        
+
         getTokenDataFromTargetData = function (targetData) {
             if (state.TokenReference.tokens[targetData.tokenId] == undefined) {
                 let token = getToken(targetData.tokenId);
@@ -1788,8 +1970,7 @@ var TokenReference = TokenReference || (function () {
                 tokenData.setDisplayName();
                 addToken(tokenData, targetData.tokenId);
                 return tokenData;
-            }
-            else {
+            } else {
                 let tokenData = state.TokenReference.tokens[targetData.tokenId];
                 if (tokenData == undefined) {
                     Debug.LogError(`[TokenReference][getToken] Something went wrong. Tokendata for ${targetData.charName} is undefined`);
@@ -1803,7 +1984,7 @@ var TokenReference = TokenReference || (function () {
                 return tokenData;
             }
         },
-        
+
         getTokenDataFromId = function (tokenId) {
             if (state.TokenReference.tokens[tokenId] == undefined) {
                 let token = getToken(tokenId);
@@ -1819,8 +2000,7 @@ var TokenReference = TokenReference || (function () {
                 tokenData.setDisplayName();
                 addToken(tokenData, tokenId);
                 return tokenData;
-            }
-            else {
+            } else {
                 let tokenData = state.TokenReference.tokens[tokenId];
                 if (tokenData == undefined) {
                     Debug.LogError(`[TokenReference][getToken] Something went wrong. Tokendata for ${tokenId} is undefined`);
@@ -1833,7 +2013,7 @@ var TokenReference = TokenReference || (function () {
                 tokenData.setDisplayName();
                 return tokenData;
             }
-        
+
         },
 
         addToken = function (tokenData, tokenId) {
@@ -1865,7 +2045,7 @@ var TokenReference = TokenReference || (function () {
         // ---------------------------
 
         setTokenForConflict = function (conflictType, tokenTargetData, attributeHandler) {
-            if(tokenTargetData.initToken()) {
+            if (tokenTargetData.initToken()) {
                 tokenTargetData.showTokenName(true);
                 tokenTargetData.showTooltip(true);
 
@@ -1891,12 +2071,12 @@ var TokenReference = TokenReference || (function () {
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 tokenTargetData.setBar(1, attrHandler.getAttribute(hpVar), true, true);
                 tokenTargetData.setBar(2, attrHandler.getAttribute(willpowerVar), true, true);
-                
+
                 if (attrHandler.parseString(fullNameVar) == "GenericOverride") {
                     tokenTargetData.unlinkBar(1);
                     tokenTargetData.unlinkBar(2);
                 }
-                
+
                 tokenTargetData.setEnergyIcon(attrHandler.parseInt(enVar, 0, false));
                 tokenTargetData.combatDetails.onUpdateDisplayStyle(attrHandler, "Battle");
                 tokenTargetData.setCombatDetails(attrHandler);
@@ -1916,13 +2096,13 @@ var TokenReference = TokenReference || (function () {
                 tokenTargetData.setBar(1, attrHandler.getAttribute(patienceVar), true, true);
                 tokenTargetData.setBar(2, attrHandler.getAttribute(willpowerVar), true, true);
                 tokenTargetData.setBar(3, attrHandler.getAttribute(favorVar), true, true);
-                
+
                 if (attrHandler.parseString(fullNameVar) == "GenericOverride") {
                     tokenTargetData.unlinkBar(1);
                     tokenTargetData.unlinkBar(2);
                     tokenTargetData.unlinkBar(3);
                 }
-                
+
                 tokenTargetData.setEnergyIcon(attrHandler.parseInt(enVar, 0, false));
                 tokenTargetData.combatDetails.onUpdateDisplayStyle(attrHandler, "Social");
                 tokenTargetData.setCombatDetails(attrHandler);
@@ -1947,7 +2127,7 @@ var TokenReference = TokenReference || (function () {
             attributeHandler.run();
         }
 
-        ;
+    ;
     return {
         CheckInstall: checkInstall,
         IterateOverSelectedTokens: iterateOverSelectedTokens,
@@ -1967,4 +2147,5 @@ on("ready", function () {
     TargetReference.CheckInstall();
     TokenReference.CheckInstall();
 });
+
 

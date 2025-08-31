@@ -85,6 +85,9 @@ var WuxConflictManager = WuxConflictManager || (function () {
                 case "!endcombat":
                     commandEndConflict();
                     break;
+                case "!conflictxp":
+                    commandGainConflictXP();
+                    break;
             }
             ;
         },
@@ -105,6 +108,87 @@ var WuxConflictManager = WuxConflictManager || (function () {
         },
         commandEndConflict = function () {
             endConflict();
+        },
+        commandGainConflictXP = function () {
+            let levelVar = WuxDef.GetVariable("Level");
+            let crVar = WuxDef.GetVariable("CR");
+            let xpDefinition = WuxDef.Get("XP");
+            let ppDefinition = WuxDef.Get("PP");
+
+            let allyTeam = TargetReference.GetActiveTargetsOnTeam(0);
+            let allyTeamXp = [];
+            let enemyTeam = TargetReference.GetActiveTargetsOnTeam(1);
+            if (allyTeam.length == 0 || enemyTeam.length == 0) {
+                Debug.LogError(`[commandGainConflictXP] Not enough teams to grant XP. Ally Team: ${allyTeam.length}, Enemy Team: ${enemyTeam.length}`);
+                return;
+            }
+            for (let i = 0; i < allyTeam.length; i++) {
+                allyTeamXp.push({level: 0, cr: 0, xp: 0.0, pp: 0.0});
+                let attributeHandler = new SandboxAttributeHandler(allyTeam[i].charId);
+                attributeHandler.addMod([levelVar, crVar, xpDefinition.getVariable(), ppDefinition.getVariable()]);
+                attributeHandler.addGetAttrCallback(function (attrHandler) {
+                    allyTeamXp[i].level = attrHandler.parseInt(levelVar);
+                    allyTeamXp[i].cr = attrHandler.parseInt(crVar);
+                });
+                attributeHandler.run();
+            }
+            
+            for (let i = 0; i < enemyTeam.length; i++) {
+                let attributeHandler = new SandboxAttributeHandler(enemyTeam[i].charId);
+                attributeHandler.addMod([levelVar, crVar]);
+                attributeHandler.addGetAttrCallback(function (attrHandler) {
+                    let enemyLevel = attrHandler.parseInt(levelVar);
+                    let enemyCR = attrHandler.parseInt(crVar);
+                    
+                    for (let j = 0; j < allyTeamXp.length; j++) {
+                        // base xp is 5, base pp is 2
+                        // each level above the ally is +0.5 xp, +0.25 pp (rounded down)
+                        // each level below the ally is -0.5 xp, -0.25 pp (rounded down)
+                        // each cr above the ally is +3 xp, +2.5 pp
+                        // each cr below the ally is -3 xp, -2.5 pp
+                        // minimum xp is 0, minimum pp is 1
+                        // example: enemy is 2 levels above ally -> 7 xp, 3 pp
+                        // example: enemy is 3 levels below ally -> 2 xp, 1 pp
+                        // example: enemy is 10 levels below ally -> 0 xp, 1 pp
+                        // example: enemy is same level as ally -> 5 xp, 2 pp
+                        
+                        let levelDiff = enemyLevel - allyTeamXp[j].level;
+                        levelDiff = Math.floor(levelDiff / 2);
+                        let crDiff = enemyCR - allyTeamXp[j].cr;
+                        
+                        let xpGain = Math.max(0, 5 + levelDiff + (crDiff * 3));
+                        let ppGain = Math.max(1, 2 + Math.floor(levelDiff / 2));
+                        allyTeamXp[j].xp += xpGain;
+                        allyTeamXp[j].pp += ppGain;
+                    }
+                });
+                attributeHandler.run();
+            }
+            
+            let message = "";
+            let messages = [];
+            messages.push("Conflict XP Results:");
+            for (let i = 0; i < allyTeam.length; i++) {
+                // modify the xp values by party size
+                allyTeamXp[i].xp = Math.ceil(allyTeamXp[i].xp / allyTeam.length);
+                
+                let attributeHandler = new SandboxAttributeHandler(allyTeam[i].charId);
+                message = `${allyTeam[i].displayName} gains ${Math.floor(allyTeamXp[i].xp)} XP and ${Math.floor(allyTeamXp[i].pp)} PP`;
+                allyTeam[i].addModNoCap("XP", attributeHandler, allyTeamXp[i].xp, 
+                    function (results, attrHandler, attributeVar) {
+                        attrHandler.addUpdate(attributeVar, results.newValue, false);
+                    });
+                allyTeam[i].addModNoCap("PP", attributeHandler, allyTeamXp[i].pp,
+                    function (results, attrHandler, attributeVar) {
+                        attrHandler.addUpdate(attributeVar, results.newValue, false);
+                    });
+                attributeHandler.run();
+                messages.push(message);
+            }
+
+            let systemMessage = new SystemInfoMessage(messages);
+            systemMessage.setSender("System");
+            WuxMessage.Send(systemMessage);
         },
 
         setDefaultTeams = function () {
@@ -1863,8 +1947,7 @@ class ChapterMessage extends QuestMessage {
                 if (dataType == "graphic") {
                     this.importTokenData(data);
                 }
-            }
-            else if (data.charId != undefined) {
+            } else if (data.charId != undefined) {
                 this.importJSON(data);
             }
         }
@@ -1937,12 +2020,12 @@ class ChapterMessage extends QuestMessage {
         let characters = findObjs({
             _type: 'character',
             name: characterName
-        }, { caseInsensitive: true });
+        }, {caseInsensitive: true});
         if (characters.length > 0) {
             return characters[0];
         }
 
-        characters = findObjs({ _type: 'character' });
+        characters = findObjs({_type: 'character'});
         characters.forEach(function (chr) {
             if (chr.get('name') == characterName) {
                 return chr;
@@ -1970,27 +2053,37 @@ class ChapterMessage extends QuestMessage {
             this.owner = getObj("player", ownerId).get("_displayname");
         }
     }
+
     setCharacterData() {
         let attributeHandler = new SandboxAttributeHandler(this.charId);
         let targetData = this;
         let displayNameVar = WuxDef.GetVariable("DisplayName");
         let affinityVar = WuxDef.GetVariable("Affinity");
-        attributeHandler.addMod(displayNameVar);
-        attributeHandler.addMod(affinityVar);
+        let teamIndexVar = WuxDef.GetVariable("TeamIndex");
+        attributeHandler.addMod([displayNameVar, affinityVar, teamIndexVar]);
         attributeHandler.addFinishCallback(function (attrHandler) {
             let targetDisplayName = attrHandler.parseString(displayNameVar);
             if (targetDisplayName.trim() != "") {
                 targetData.displayName = targetDisplayName;
             }
             targetData.elem = targetData.getElementStatus(attrHandler.parseString(affinityVar));
+            targetData.teamIndex = attrHandler.parseInt(teamIndexVar);
         });
         attributeHandler.run();
     }
 
     setTeamIndex(index) {
         this.teamIndex = index;
+        let attributeHandler = new SandboxAttributeHandler(this.charId);
+        let teamIndexVar = WuxDef.GetVariable("TeamIndex");
+        attributeHandler.addAttribute(teamIndexVar);
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            attrHandler.addUpdate(teamIndexVar, index, false);
+        });
+        attributeHandler.run();
     }
 }
+
 class TokenTargetData extends TargetData {
     constructor(token, targetData) {
         super(undefined);
@@ -2001,16 +2094,17 @@ class TokenTargetData extends TargetData {
         if (targetData != undefined) {
             this.importJSON(targetData);
             this.token = token;
-        }
-        else {
+        } else {
             this.baseConstructor(token);
         }
     }
+
     createEmpty() {
         super.createEmpty();
         this.token = undefined;
         this.combatDetails = undefined;
     }
+
     importTokenData(token) {
         this.token = token;
         super.importTokenData(token);
@@ -2028,27 +2122,36 @@ class TokenTargetData extends TargetData {
         this.token = tokens[0];
         this.tokenId = this.token.get("_id");
     }
-    
+
     isCharacter() {
         return this.isBarLinked(1);
+    }
+    validateToken() {
+        if (this.token == undefined) {
+            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
+            return false;
+        }
+        return true;
     }
 
     // token bar
     initToken() {
-        if (this.token == undefined) {
-            Debug.Log (`[TokenTargetData] No token data exists for ${this.charName}`);
+        if (!this.validateToken()) {
             return false;
         }
         this.token.set("bar_location", "overlap_bottom");
         return true;
     }
+
     setBar(barIndex, variableObj, showBar, showText) {
+        if (!this.validateToken()) {
+            return false;
+        }
         if (variableObj == undefined) {
             this.token.set(`bar${barIndex}_link`, "");
             this.token.set(`bar${barIndex}_value`, "");
             this.token.set(`bar${barIndex}_max`, "");
-        }
-        else {
+        } else {
             this.token.set(`bar${barIndex}_link`, variableObj.get("_id"));
             this.token.set(`bar${barIndex}_value`, variableObj.get("current"));
             this.token.set(`bar${barIndex}_max`, variableObj.get("max"));
@@ -2056,51 +2159,72 @@ class TokenTargetData extends TargetData {
         this.token.set(`showplayers_bar${barIndex}`, showBar);
         this.token.set(`showplayers_bar${barIndex}text`, showText ? "2" : "0");
     }
+
     unlinkBar(barIndex) {
-        if (this.token == undefined) {
-            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
-            return;
+        if (!this.validateToken()) {
+            return false;
         }
         this.token.set(`bar${barIndex}_link`, "");
     }
+
     isBarLinked(barIndex) {
-        if (this.token == undefined) {
-            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
+        if (!this.validateToken()) {
             return false;
         }
         let barLink = this.token.get(`bar${barIndex}_link`);
         return barLink != undefined && barLink != "";
     }
+
     setBarValue(barIndex, value) {
+        if (!this.validateToken()) {
+            return false;
+        }
         this.token.set(`bar${barIndex}_value`, value);
     }
 
     // nameplate
     showTokenName(isShown) {
+        if (!this.validateToken()) {
+            return false;
+        }
         if (isShown) {
             this.token.set("name", this.displayName);
             this.token.set("showname", true);
             this.token.set("showplayers_name", true);
-        }
-        else {
+        } else {
             this.token.set("showname", false);
         }
     }
 
     // tooltip
     showTooltip(isShown) {
+        if (!this.validateToken()) {
+            return false;
+        }
         this.token.set("show_tooltip", isShown);
         if (!isShown) {
             this.setTooltip("");
         }
     }
+
     setTooltip(value) {
+        if (!this.validateToken()) {
+            return false;
+        }
         this.token.set("tooltip", value);
     }
+
     getTokenNote() {
+        if (!this.validateToken()) {
+            return false;
+        }
         return this.token.get("gmnotes");
     }
+
     setTokenNote(value) {
+        if (!this.validateToken()) {
+            return false;
+        }
         this.token.set("gmnotes", value);
     }
 
@@ -2108,13 +2232,14 @@ class TokenTargetData extends TargetData {
     setEnergyIcon(value) {
         this.setIcon(this.elem, value);
     }
+
     setTurnIcon(value) {
         this.setIcon("status_yellow", value);
     }
+
     getIcon(iconName) {
-        if (this.token == undefined) {
-            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
-            return "";
+        if (!this.validateToken()) {
+            return false;
         }
         let value = this.token.get(iconName);
         if (value == undefined || value == "") {
@@ -2122,20 +2247,24 @@ class TokenTargetData extends TargetData {
         }
         return value;
     }
+
     setIcon(iconName, value) {
-        if (this.token == undefined) {
-            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
-            return;
+        if (!this.validateToken()) {
+            return false;
         }
         this.token.set(iconName, value);
     }
+
     getDowned() {
+        if (!this.validateToken()) {
+            return false;
+        }
         return this.token.get("status_dead");
     }
+
     setDowned(value) {
-        if (this.token == undefined) {
-            Debug.LogError(`[TokenTargetData] No token data exists for ${this.charName}`);
-            return;
+        if (!this.validateToken()) {
+            return false;
         }
         this.token.set("status_dead", value);
     }
@@ -2155,16 +2284,31 @@ class TokenTargetData extends TargetData {
         });
         attributeHandler.run();
     }
-    addMod(modDefinitionName, attributeHandler, value) {
+
+    addMod(modDefinitionName, attributeHandler, value, finishCallback) {
+        finishCallback = finishCallback == undefined ? function (results, attrHandler, attributeVar) {
+            attrHandler.addUpdate(attributeVar, results.newValue, false);
+        } : finishCallback;
+        
         this.modifyResourceAttribute(attributeHandler,
             modDefinitionName,
             value,
             this.addModifierToAttribute,
+            finishCallback
+        );
+    }
+
+    addModNoCap(modDefinitionName, attributeHandler, value) {
+        this.modifyResourceAttribute(attributeHandler,
+            modDefinitionName,
+            value,
+            this.addModifierToAttributeNoCap,
             function (results, attrHandler, attributeVar) {
                 attrHandler.addUpdate(attributeVar, results.newValue, false);
             }
         );
     }
+
     setMod(modDefinitionName, attributeHandler, value) {
         this.modifyResourceAttribute(attributeHandler,
             modDefinitionName,
@@ -2175,12 +2319,13 @@ class TokenTargetData extends TargetData {
             }
         );
     }
-    
+
     // Combat Details
     refreshCombatDetails(attributeHandler) {
         this.combatDetails = new CombatDetailsHandler(attributeHandler);
         this.refreshStatus(attributeHandler);
     }
+
     setCombatDetails(attrHandler, tokenNoteReference) {
         if (this.combatDetails == undefined) {
             Debug.LogError(`[TokenTargetData] No combat details exist for ${this.charName}`);
@@ -2188,13 +2333,12 @@ class TokenTargetData extends TargetData {
         }
 
         this.combatDetails.setData(attrHandler);
-        
+
         if (this.combatDetails.hasDisplayStyle()) {
             if (this.isCharacter()) {
                 let statusObj = new StatusHandler(attrHandler.parseJSON(WuxDef.GetVariable("Status")));
                 this.combatDetails.onUpdateStatus(attrHandler, statusObj);
-            }
-            else {
+            } else {
                 if (tokenNoteReference == undefined) {
                     tokenNoteReference = new TokenNoteReference(this.getTokenNote());
                 }
@@ -2203,8 +2347,7 @@ class TokenTargetData extends TargetData {
             }
             this.setTooltip(this.combatDetails.printTooltip(attrHandler, this.displayName));
             this.showTooltip(true);
-        }
-        else {
+        } else {
             this.setTooltip("");
             this.showTooltip(false);
         }
@@ -2227,7 +2370,7 @@ class TokenTargetData extends TargetData {
             tokenTargetData.setTokenNote(JSON.stringify(tokenNoteRef));
         });
     }
-    
+
 
     // Social Modifiers
     addImpatience(attributeHandler, value, resultsCallback) {
@@ -2235,49 +2378,57 @@ class TokenTargetData extends TargetData {
         this.modifyBarAttribute(attributeHandler, 1, value,
             this.addModifierToAttribute, resultsCallback);
     }
+
     emptyImpatience(attributeHandler, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToImpatience : resultsCallback;
         this.modifyBarAttribute(attributeHandler, 1, 0,
             this.setModifierToAttribute, resultsCallback);
     }
+
     applyResultsToImpatience(results, attrHandler, attributeVar, tokenTargetData) {
         tokenTargetData.setBarValue(1, results.newValue);
         return results;
     }
+
     setMaxFavor(attributeHandler, value) {
         this.token.set(`bar3_max`, value);
     }
+
     addFavor(attributeHandler, value, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToFavor : resultsCallback;
         this.modifyBarAttribute(attributeHandler, 3, value,
             this.addModifierToAttributeNoCap, resultsCallback);
     }
+
     emptyFavor(attributeHandler, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToFavor : resultsCallback;
         this.modifyBarAttribute(attributeHandler, 3, 0,
             this.setModifierToAttribute, resultsCallback);
     }
+
     applyResultsToFavor(results, attrHandler, attributeVar, tokenTargetData) {
         tokenTargetData.setBarValue(3, results.newValue);
         return results;
     }
-    
+
     // HP
     addHp(attributeHandler, value, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToHp : resultsCallback;
         this.modifyBarAttribute(attributeHandler, 1, value,
             this.addModifierToAttribute, resultsCallback);
     }
+
     setHpToFull(attributeHandler, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToHp : resultsCallback;
         this.modifyBarAttribute(attributeHandler, 1, "max",
             this.setModifierToAttribute, resultsCallback);
     }
+
     applyResultsToHp(results, attrHandler, attributeVar, tokenTargetData) {
         tokenTargetData.setBarValue(1, results.newValue);
         return results;
     }
-    
+
     // Will
     addWill(attributeHandler, value, resultsCallback, modifyCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToWill : resultsCallback;
@@ -2285,32 +2436,34 @@ class TokenTargetData extends TargetData {
         this.modifyBarAttribute(attributeHandler, 2, value,
             modifyCallback, resultsCallback);
     }
+
     setWillToFull(attributeHandler, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToWill : resultsCallback;
         this.modifyBarAttribute(attributeHandler, 2, "max",
             this.setModifierToAttribute, resultsCallback);
     }
+
     applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData) {
         tokenTargetData.setBarValue(2, results.newValue);
         return results;
     }
-    
+
     // Energy
     addEnergy(attributeHandler, value, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToEnergy : resultsCallback;
-        
+
         if (this.isCharacter()) {
             this.modifyResourceAttribute(attributeHandler, "EN", value,
                 this.addModifierToAttribute, resultsCallback);
-        }
-        else {
-            this.modifyIconAttribute(attributeHandler, this.elem, value, 
+        } else {
+            this.modifyIconAttribute(attributeHandler, this.elem, value,
                 function (results, value, attributeHandler, tokenTargetData) {
                     results.max = 9;
                     return tokenTargetData.addModifierToAttribute(results, value, attributeHandler, tokenTargetData);
                 }, resultsCallback);
         }
     }
+
     setEnergyToStart(attributeHandler, resultsCallback) {
         let startEnVar = WuxDef.GetVariable("StartEN");
         attributeHandler.addMod(startEnVar);
@@ -2319,8 +2472,7 @@ class TokenTargetData extends TargetData {
         if (this.isCharacter()) {
             this.modifyResourceAttribute(attributeHandler, "EN", startEnVar,
                 this.setModifierToAttribute, resultsCallback);
-        }
-        else {
+        } else {
             this.modifyIconAttribute(attributeHandler, this.elem, startEnVar,
                 function (results, value, attributeHandler, tokenTargetData) {
                     results.max = 9;
@@ -2328,6 +2480,7 @@ class TokenTargetData extends TargetData {
                 }, resultsCallback);
         }
     }
+
     addStartRoundEnergy(attributeHandler, resultsCallback) {
         let roundEnVar = WuxDef.GetVariable("RoundEN");
         attributeHandler.addMod(roundEnVar);
@@ -2336,8 +2489,7 @@ class TokenTargetData extends TargetData {
         if (this.isCharacter()) {
             this.modifyResourceAttribute(attributeHandler, "EN", roundEnVar,
                 this.addModifierToAttribute, resultsCallback);
-        }
-        else {
+        } else {
             this.modifyIconAttribute(attributeHandler, this.elem, roundEnVar,
                 function (results, value, attributeHandler, tokenTargetData) {
                     results.max = 9;
@@ -2345,6 +2497,7 @@ class TokenTargetData extends TargetData {
                 }, resultsCallback);
         }
     }
+
     applyResultsToEnergy(results, attrHandler, attributeVar, tokenTargetData) {
         if (tokenTargetData.isBarLinked(1)) {
             attrHandler.addUpdate(attributeVar, results.newValue, false);
@@ -2352,36 +2505,36 @@ class TokenTargetData extends TargetData {
         tokenTargetData.setEnergyIcon(results.newValue);
         return results;
     }
-    
+
     // Move Charge
     addMoveCharge(attributeHandler, value, resultsCallback) {
         let tokenTargetData = this
         value = parseInt(value);
         resultsCallback = resultsCallback == undefined ? tokenTargetData.applyResultsMoveCharge : resultsCallback;
-        
+
         if (tokenTargetData.isBarLinked(1)) {
             this.modifyResourceAttribute(attributeHandler, "MvCharge", value,
                 tokenTargetData.addModifierToAttributeNoCap, resultsCallback);
-        }
-        else {
+        } else {
             this.modifyIconAttribute(attributeHandler, "status_yellow", value,
                 tokenTargetData.addModifierToAttributeNoCap, resultsCallback);
         }
     }
+
     setMoveCharge(attributeHandler, value, resultsCallback) {
         let tokenTargetData = this
         value = parseInt(value);
         resultsCallback = resultsCallback == undefined ? tokenTargetData.applyResultsMoveCharge : resultsCallback;
-        
+
         if (tokenTargetData.isBarLinked(1)) {
             this.modifyResourceAttribute(attributeHandler, "MvCharge", value,
                 tokenTargetData.setModifierToAttribute, resultsCallback);
-        }
-        else {
+        } else {
             this.modifyIconAttribute(attributeHandler, "status_yellow", value,
                 tokenTargetData.setModifierToAttribute, resultsCallback);
         }
     }
+
     setDash(attributeHandler, resultsCallback) {
         this.addDashModifiers(attributeHandler);
         resultsCallback = resultsCallback == undefined ? this.applyResultsMoveCharge : resultsCallback;
@@ -2392,8 +2545,7 @@ class TokenTargetData extends TargetData {
                     results.newValue = tokenTargetData.performDash(attrHandler);
                 },
                 resultsCallback);
-        }
-        else {
+        } else {
             this.modifyIconAttribute(attributeHandler, "status_yellow", 0,
                 function (results, value, attrHandler, tokenTargetData) {
                     results.newValue = tokenTargetData.performDash(attrHandler);
@@ -2401,6 +2553,7 @@ class TokenTargetData extends TargetData {
                 resultsCallback);
         }
     }
+
     addDash(attributeHandler, resultsCallback) {
         this.addDashModifiers(attributeHandler);
         resultsCallback = resultsCallback == undefined ? this.applyResultsMoveCharge : resultsCallback;
@@ -2411,8 +2564,7 @@ class TokenTargetData extends TargetData {
                     results.newValue = results.current + tokenTargetData.performDash(attrHandler);
                 },
                 resultsCallback);
-        }
-        else {
+        } else {
             this.modifyIconAttribute(attributeHandler, "status_yellow", 0,
                 function (results, value, attrHandler, tokenTargetData) {
                     results.newValue = results.current + tokenTargetData.performDash(attrHandler);
@@ -2420,9 +2572,11 @@ class TokenTargetData extends TargetData {
                 resultsCallback);
         }
     }
+
     addDashModifiers(attributeHandler) {
-        attributeHandler.addMod([ WuxDef.GetVariable("Cmb_Mv"), WuxDef.GetVariable("Cmb_MvPotency")]);
+        attributeHandler.addMod([WuxDef.GetVariable("Cmb_Mv"), WuxDef.GetVariable("Cmb_MvPotency")]);
     }
+
     performDash(attrHandler) {
         let baseMoveSpeed = attrHandler.parseInt(WuxDef.GetVariable("Cmb_Mv"), 0, false);
         let maxMoveSpeed = attrHandler.parseInt(WuxDef.GetVariable("Cmb_MvPotency"), 0, false);
@@ -2433,6 +2587,7 @@ class TokenTargetData extends TargetData {
         dieRoll.rollDice(1, maxMoveSpeed);
         return Math.max(dieRoll.total, baseMoveSpeed)
     }
+
     applyResultsMoveCharge(results, attrHandler, attributeVar, tokenTargetData) {
         if (tokenTargetData.isBarLinked(1)) {
             attrHandler.addUpdate(attributeVar, results.newValue, false);
@@ -2451,19 +2606,18 @@ class TokenTargetData extends TargetData {
         if (tokenTargetData.isBarLinked(1)) {
             this.modifyResourceAttribute(attributeHandler, "Surge", value,
                 tokenTargetData.addModifierToAttribute, resultsCallback);
-        }
-        else {
+        } else {
             this.modifyNoteAttribute(attributeHandler, "surges", value,
                 tokenTargetData.addModifierToAttribute, resultsCallback);
         }
     }
+
     applyResultsSurge(results, attrHandler, attributeVar, tokenTargetData) {
         if (tokenTargetData.isBarLinked(1)) {
             attrHandler.addUpdate(attributeVar, results.newValue, false);
             tokenTargetData.combatDetails.onUpdateSurges(attrHandler, results.newValue);
             tokenTargetData.setCombatDetails(attrHandler);
-        }
-        else {
+        } else {
             Debug.Log(`Updating vitality in token note to ${results.newValue}`);
             let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
             tokenNoteReference.surges.current = results.newValue;
@@ -2482,19 +2636,18 @@ class TokenTargetData extends TargetData {
         if (tokenTargetData.isBarLinked(1)) {
             this.modifyResourceAttribute(attributeHandler, "Cmb_Vitality", value,
                 tokenTargetData.addModifierToAttribute, resultsCallback);
-        }
-        else {
+        } else {
             this.modifyNoteAttribute(attributeHandler, "vitality", value,
                 tokenTargetData.addModifierToAttribute, resultsCallback);
         }
     }
+
     applyResultsVitality(results, attrHandler, attributeVar, tokenTargetData) {
         if (tokenTargetData.isBarLinked(1)) {
             attrHandler.addUpdate(attributeVar, results.newValue, false);
             tokenTargetData.combatDetails.onUpdateVitality(attrHandler, results.newValue);
             tokenTargetData.setCombatDetails(attrHandler);
-        }
-        else {
+        } else {
             let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
             tokenNoteReference.vitality.current = results.newValue;
             tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
@@ -2508,13 +2661,16 @@ class TokenTargetData extends TargetData {
     addStatus(attributeHandler, statusDefinitionName) {
         this.modifyStatus(attributeHandler, statusDefinitionName, true);
     }
+
     removeStatus(attributeHandler, statusDefinitionName) {
         this.modifyStatus(attributeHandler, statusDefinitionName, false);
     }
+
     refreshStatus(attributeHandler) {
         let statusVar = WuxDef.GetVariable("Status");
         attributeHandler.addAttribute(statusVar);
     }
+
     modifyStatus(attributeHandler, statusDefinitionName, isAdded) {
         let tokenTargetData = this;
         tokenTargetData.refreshCombatDetails(attributeHandler);
@@ -2526,19 +2682,16 @@ class TokenTargetData extends TargetData {
                 let statusObj = new StatusHandler(attrHandler.parseJSON(statusVar));
                 if (isAdded) {
                     statusObj.addStatus(statusDefinitionName);
-                }
-                else {
+                } else {
                     statusObj.removeStatus(statusDefinitionName);
                 }
                 statusObj.saveStatusesToCharacterSheet(attrHandler);
                 tokenTargetData.setCombatDetails(attrHandler);
-            }
-            else {
+            } else {
                 let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
                 if (isAdded) {
                     tokenNoteReference.statusHandler.addStatus(statusDefinitionName);
-                }
-                else {
+                } else {
                     tokenNoteReference.statusHandler.removeStatus(statusDefinitionName);
                 }
                 tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
@@ -2546,8 +2699,8 @@ class TokenTargetData extends TargetData {
             }
         });
     }
-    
-    
+
+
     getModifyResults(name) {
         return {
             name: name,
@@ -2557,6 +2710,7 @@ class TokenTargetData extends TargetData {
             remainder: 0
         };
     }
+
     modifyBarAttribute(attributeHandler, barIndex, value, modCallback, finishCallback) {
         let tokenTargetData = this;
         let results = tokenTargetData.getModifyResults(barIndex);
@@ -2568,6 +2722,7 @@ class TokenTargetData extends TargetData {
             finishCallback(results, attrHandler, "", tokenTargetData);
         });
     }
+
     modifyIconAttribute(attributeHandler, iconName, value, modCallback, finishCallback) {
         let tokenTargetData = this;
         let results = tokenTargetData.getModifyResults(iconName);
@@ -2579,6 +2734,7 @@ class TokenTargetData extends TargetData {
             finishCallback(results, attrHandler, "", tokenTargetData);
         });
     }
+
     modifyNoteAttribute(attributeHandler, attrName, value, modCallback, finishCallback) {
         let tokenTargetData = this;
         let results = tokenTargetData.getModifyResults(attrName);
@@ -2591,10 +2747,11 @@ class TokenTargetData extends TargetData {
             finishCallback(results, attrHandler, "", tokenTargetData);
         });
     }
+
     modifyResourceAttribute(attributeHandler, attributeName, value, modCallback, finishCallback) {
         let tokenTargetData = this;
         let results = tokenTargetData.getModifyResults(attributeName);
-        
+
         let attributeVar = WuxDef.GetVariable(attributeName);
         attributeHandler.addAttribute(attributeVar);
         attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -2604,6 +2761,7 @@ class TokenTargetData extends TargetData {
             finishCallback(results, attrHandler, attributeVar, tokenTargetData);
         });
     }
+
     addModifierToAttribute(results, value, attrHandler, tokenTargetData) {
         tokenTargetData.addModifierToAttributeNoCap(results, value, attrHandler, tokenTargetData);
         if (results.newValue > results.max) {
@@ -2612,6 +2770,7 @@ class TokenTargetData extends TargetData {
         }
         return results;
     }
+
     addModifierToAttributeNoCap(results, value, attrHandler) {
         if (value == "max") {
             results.newValue = results.max;
@@ -2630,6 +2789,7 @@ class TokenTargetData extends TargetData {
             results.newValue = 0;
         }
     }
+
     setModifierToAttribute(results, value, attrHandler) {
         if (value == "max") {
             results.newValue = results.max;
@@ -2640,12 +2800,11 @@ class TokenTargetData extends TargetData {
             // likely a variable. Look it up
             results.newValue = attrHandler.parseInt(value, 0, false);
         }
-        
+
         if (results.newValue < 0) {
             results.remainder = results.newValue;
             results.newValue = 0;
-        }
-        else if (results.newValue > results.max) {
+        } else if (results.newValue > results.max) {
             results.remainder = results.newValue - results.max;
             results.newValue = results.max;
         }
@@ -2660,27 +2819,28 @@ class TokenTargetEffectsData {
         this.spentSurge = false;
         this.removeStatusType = "";
     }
-    
+
     addMessage(message) {
         if (message != undefined && message != "") {
             this.effectMessages.push(message);
         }
     }
-    
+
     addDamageRoll(damageRoll) {
-        for(let i = 0; i < this.damageRolls.length; i++) {
+        for (let i = 0; i < this.damageRolls.length; i++) {
             if (this.damageRolls[i].isSame(damageRoll)) {
                 this.damageRolls[i].addDieRoll(damageRoll);
                 return;
             }
         }
-        
+
         this.damageRolls.push(damageRoll);
     }
+
     performDamageRolls(attrGetter, attrSetter, willBreakEffect) {
         let tokenTargetEffect = this;
         this.damageRolls.forEach(function (damageRoll) {
-            switch(damageRoll.damageType) {
+            switch (damageRoll.damageType) {
                 case "HP Heal":
                     tokenTargetEffect.takeHpHealing(attrSetter, damageRoll);
                     break;
@@ -2708,17 +2868,19 @@ class TokenTargetEffectsData {
             }
         });
     }
-    
-    
+
+
     hasSurged() {
         return this.spentSurge;
     }
+
     setSpendSurge() {
         this.spentSurge = true;
     }
+
     spendSurge(attributeHandler) {
         this.spentSurge = true;
-        
+
         let targetEffect = this;
         this.tokenTargetData.addSurge(attributeHandler, -1,
             function (results, attrHandler, attributeVar, tokenTargetData) {
@@ -2726,15 +2888,15 @@ class TokenTargetEffectsData {
                 tokenTargetData.applyResultsSurge(results, attrHandler, attributeVar, tokenTargetData);
             });
     }
-    
+
     setRemoveStatusType(statusType) {
         this.removeStatusType = statusType;
     }
-    
+
     takeHpDamage(attributeHandler, damageRoll) {
         let targetEffect = this;
-        
-        this.tokenTargetData.addHp(attributeHandler, -1 * damageRoll.total, 
+
+        this.tokenTargetData.addHp(attributeHandler, -1 * damageRoll.total,
             function (results, attrHandler, attributeVar, tokenTargetData) {
                 targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} ${damageRoll.damageType} damage.`);
                 if (results.remainder < 0) {
@@ -2749,22 +2911,22 @@ class TokenTargetEffectsData {
                     results.newValue = results.remainder;
                 }
                 tokenTargetData.applyResultsToHp(results, attrHandler, attributeVar, tokenTargetData);
-        });
+            });
     }
-    
+
     takeHpHealing(attributeHandler, healRoll) {
         let targetEffect = this;
-        
+
         this.tokenTargetData.addHp(attributeHandler, healRoll.total,
             function (results, attrHandler, attributeVar, tokenTargetData) {
                 targetEffect.effectMessages.push(`${tokenTargetData.displayName} heals ${Format.ShowTooltip(healRoll.total, healRoll.message)} HP.`);
                 tokenTargetData.applyResultsToHp(results, attrHandler, attributeVar, tokenTargetData);
-        });
+            });
     }
-    
+
     takeVitalityDamage(targetEffect, attributeHandler, damage) {
         targetEffect.effectMessages.push(`${targetEffect.tokenTargetData.displayName} loses ${damage} Vitality.`);
-        this.tokenTargetData.addVitality(attributeHandler, -1 * damage, 
+        this.tokenTargetData.addVitality(attributeHandler, -1 * damage,
             function (results, attrHandler, attributeVar, tokenTargetData) {
                 if (results.newValue <= 0) {
                     tokenTargetData.setDowned(true);
@@ -2797,27 +2959,25 @@ class TokenTargetEffectsData {
         let tokenNoteReference = {};
         if (targetEffect.tokenTargetData.isCharacter()) {
             attributeHandler.addAttribute(surgeVar);
-        }
-        else {
+        } else {
             tokenNoteReference = new TokenNoteReference(this.tokenTargetData.getTokenNote());
         }
-        
+
         this.tokenTargetData.addWill(attributeHandler, -1 * damageRoll.total,
             function (results, attrHandler, attributeVar, tokenTargetData) {
                 tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
                 tokenTargetData.applyResultsSurge(surgeResults, attrHandler, surgeVar, tokenTargetData);
-            }, 
+            },
             function (results, value, attrHandler) {
                 if (targetEffect.tokenTargetData.isCharacter()) {
                     surgeResults.current = attrHandler.parseInt(surgeVar, 0, false);
                     surgeResults.max = attrHandler.parseInt(surgeVar, 0, true);
-                }
-                else {
+                } else {
                     surgeResults.current = parseInt(tokenNoteReference["surges"].current);
                     surgeResults.max = parseInt(tokenNoteReference["surges"].max);
                     Debug.Log(`Current surges for ${targetEffect.tokenTargetData.displayName} is ${surgeResults.current}/${surgeResults.max}`);
                 }
-                
+
                 if (surgeResults.current > 0) {
                     surgeResults.newValue = surgeResults.current - 1;
                     results.newValue = results.max + value;
@@ -2827,19 +2987,18 @@ class TokenTargetEffectsData {
                     targetEffect.effectMessages.push(`${targetEffect.tokenTargetData.displayName} consumes a Surge. ` +
                         `${targetEffect.tokenTargetData.displayName} fully heals Will ` +
                         `then takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} damage.`);
-                }
-                else {
+                } else {
                     surgeResults.newValue = 0;
                     results.newValue = 0;
                     targetEffect.effectMessages.push(`${targetEffect.tokenTargetData.displayName} has no Surges remaining. Will remains at zero.`);
                 }
-                
+
                 // set the will to max first
                 return results;
             });
 
     }
-    
+
     takeWillHealing(attributeHandler, healRoll) {
         let targetEffect = this;
 
@@ -2853,13 +3012,14 @@ class TokenTargetEffectsData {
     takeWillFullHealing(attributeHandler) {
         let targetEffect = this;
 
-        this.tokenTargetData.setWillToFull(attributeHandler, 
+        this.tokenTargetData.setWillToFull(attributeHandler,
             function (results, attrHandler, attributeVar, tokenTargetData) {
                 targetEffect.effectMessages.push(`${tokenTargetData.displayName} has their Will fully healed.`);
                 tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
             });
     }
 }
+
 class TokenNoteReference {
     constructor(data) {
         this.createEmpty();
@@ -2879,21 +3039,21 @@ class TokenNoteReference {
         try {
             let json = JSON.parse(stringifiedJSON);
             this.importJson(json);
-        }
-        catch {
+        } catch {
             Debug.LogError("[TokenNoteReference] Unable to parse token note JSON");
         }
     }
+
     createEmpty() {
         this.statusHandler = {};
         this.surges = {current: 0, max: 0};
         this.vitality = {current: 0, max: 0};
     }
+
     importJson(json) {
         if (json.statusHandler == undefined) {
             this.statusHandler = new StatusHandler();
-        }
-        else {
+        } else {
             this.statusHandler = new StatusHandler(json.statusHandler);
         }
         this.surges = json.surges == undefined ? {current: 0, max: 0} : json.surges;
@@ -2921,11 +3081,14 @@ var TargetReference = TargetReference || (function () {
 
         handleInput = function (msg, tag, content) {
             switch (tag) {
+                case "!actcheck":
+                    commandCheckActiveTargets(msg);
+                    break;
                 case "!actadd":
                     commandAddCharacter(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
                 case "!actrem":
-                    commandRemoveCharacter(msg);
+                    commandRemoveCharacter(msg, TokenReference.GetTokenTargetDataArray(msg));
                     break;
                 case "!actclr":
                     commandClearActiveTargets();
@@ -2957,11 +3120,23 @@ var TargetReference = TargetReference || (function () {
                 case "!tfullheal":
                     commandFullHeal(msg, TokenReference.GetTokenTargetDataArray(msg));
                     break;
+                case "!pfullheal":
+                    content = getTeamTargets(content);
+                    commandFullHeal(msg, content.targets);
+                    break;
                 case "!thealsurge":
                     commandHealSurge(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
+                case "!phealsurge":
+                    content = getTeamTargets(content);
+                    commandHealSurge(msg, content.targets, content.content);
+                    break;
                 case "!thealvit":
                     commandHealVitality(msg, TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
+                case "!phealvit":
+                    content = getTeamTargets(content);
+                    commandHealVitality(msg, content.targets, content.content);
                     break;
                 case "!tresetSocial":
                     commandResetSocial(msg, TokenReference.GetTokenTargetDataArray(msg));
@@ -2998,19 +3173,46 @@ var TargetReference = TargetReference || (function () {
             }
         },
 
-        commandAddCharacter = function (msg, targets, content) {
+        commandCheckActiveTargets = function (msg) {
+            if (state.WuxConflictManager == undefined || state.WuxConflictManager.teams == undefined) {
+                let messageObject = new SystemInfoMessage("No active conflict.");
+                messageObject.setSender("System");
+                WuxMessage.SendToSenderAndGM(messageObject, msg);
+                return;
+            }
+
+            if (state.TargetReference.activeCharacters.length == 0) {
+                let messageObject = new SystemInfoMessage("No active characters.");
+                messageObject.setSender("System");
+                WuxMessage.SendToSenderAndGM(messageObject, msg);
+                return;
+            }
+
+            let allyTeam = getActiveTargetsOnTeam(0);
+            let enemyTeam = getActiveTargetsOnTeam(1);
+            let outputMessage = [];
+            outputMessage.push(`Ally Team: ${getTargetListNames(allyTeam, true)}`);
+            outputMessage.push(`Enemy Team: ${getTargetListNames(enemyTeam, true)}`);
+
+            let messageObject = new SystemInfoMessage(outputMessage);
+            messageObject.setSender("System");
+            WuxMessage.SendToSenderAndGM(messageObject, msg);
+        },
+
+        commandAddCharacter = function (msg, targets, teamIndex) {
             _.each(targets, function (tokenTargetData) {
-                tokenTargetData.setTeamIndex(content);
+                tokenTargetData.setTeamIndex(teamIndex);
                 addToActiveCharacters(tokenTargetData);
             });
 
-            sendTokenUpdateMessage(msg, targets, ` added as ${state.WuxConflictManager.teams[content].name} unit(s)`);
+            sendTokenUpdateMessage(msg, targets, ` added as ${state.WuxConflictManager.teams[teamIndex].name} unit(s)`);
         },
 
-        commandRemoveCharacter = function (msg) {
-            TokenReference.IterateOverSelectedTokens(msg, function (tokenTargetData) {
+        commandRemoveCharacter = function (msg, targets) {
+            _.each(targets, function (tokenTargetData) {
                 removeActiveTargetData(tokenTargetData.tokenId);
             });
+            sendTokenUpdateMessage(msg, targets, " removed from active characters");
         },
 
         commandClearActiveTargets = function () {
@@ -3033,6 +3235,22 @@ var TargetReference = TargetReference || (function () {
             return output;
         },
 
+        getTeamTargets = function (content) {
+            let output = {
+                content: "",
+                targets: []
+            }
+            let contentSplit = content.split("@@@");
+            output.content = contentSplit[1];
+
+            let target = getActiveTargetsOnTeam(contentSplit[0]);
+            if (target != undefined) {
+                output.targets.push(target);
+            }
+
+            return output;
+        },
+
         commandShowTokenOptions = function (msg) {
             let sender = msg.who;
 
@@ -3043,14 +3261,14 @@ var TargetReference = TargetReference || (function () {
                 output += tokenOptionButton("Hard Update", "tharddetails");
                 output += tokenOptionButton("Gen Name", "tgenname");
                 output += tokenOptionButton("Reset Token", "treset");
+                output += tokenOptionButton("Remove From Conflict", "actrem");
             }
 
             output += tokenOptionSpacer();
             output += tokenOptionTitle("Combat Stat Options");
             if (!playerIsGM(msg.playerid)) {
                 output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@0`);
-            }
-            else {
+            } else {
                 output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@?{Set team index|0}`);
                 output += tokenOptionButton("Full Heal", "tfullheal");
             }
@@ -3068,14 +3286,13 @@ var TargetReference = TargetReference || (function () {
             output += tokenOptionTitle("Social Stat Options");
             if (!playerIsGM(msg.playerid)) {
                 output += tokenOptionButton("Prep4 Social", `tconflictstate Social@0`);
-            }
-            else {
+            } else {
                 output += tokenOptionButton("Prep4 Social", `tconflictstate Social@?{Set team index|0}`);
                 output += tokenOptionButton("Reset Social", "tresetSocial");
                 output += tokenOptionButton("Request Threshold", "tss ?{Set the difficulty of the request|" +
                     "Simple DC 15|Inconvenient DC 30|Disruptive DC 40|Serious DC 50|Life-Changing DC 60}");
             }
-            
+
             let senderMessage = new SystemInfoMessage(output);
             senderMessage.setSender(sender);
             WuxMessage.Send(senderMessage, sender);
@@ -3085,40 +3302,24 @@ var TargetReference = TargetReference || (function () {
             let sender = msg.who;
 
             let output = "";
-            output += tokenOptionTitle("Token State");
-            output += tokenOptionButton("Check", "!actcheck");
-            output += tokenOptionButton("Clear All", "!actclr");
+            output += tokenOptionTitle("Party State");
+            output += tokenOptionButton("Check", "actcheck");
+            output += tokenOptionButton("Clear All", "actclr");
+
+            output += tokenOptionSpacer();
+            output += tokenOptionTitle("Conflict Options");
+            output += tokenOptionButton("Start Battle", "cmbstartbattle");
+            output += tokenOptionButton("Start Social", "cmbstartsocial");
+            output += tokenOptionButton("Round", "startround");
+            output += tokenOptionSpacer();
+            output += tokenOptionButton("Conflict XP", "conflictxp");
+            output += tokenOptionButton("End", "endcombat");
 
             output += tokenOptionSpacer();
             output += tokenOptionTitle("Combat Stat Options");
-            output += tokenOptionButton("Full Heal", "pfullheal@?{Team index|0}");
-            output += tokenOptionButton("Add Battle XP", "pxp");
-            if (!playerIsGM(msg.playerid)) {
-                output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@0`);
-            }
-            else {
-                output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle`);
-            }
-            output += tokenOptionButton("Add Surge", "thealsurge ?{How much surge to add?|1}");
-            output += tokenOptionButton("Add Vitality", "thealvit ?{How much vitality to add?|1}");
-
-            output += tokenOptionSpacer();
-            output += tokenOptionTitle("Combat Move Options");
-            output += tokenOptionButton("Reset Move", "tmovereset");
-            output += tokenOptionButton("Add Move Charge", "tmove ?{How much move charge to add?|1}");
-            output += tokenOptionButton("Add Dash", "tdash");
-
-            output += tokenOptionSpacer();
-            output += tokenOptionTitle("Social Stat Options");
-            if (!playerIsGM(msg.playerid)) {
-                output += tokenOptionButton("Prep4 Social", `tconflictstate Social@0`);
-            }
-            else {
-                output += tokenOptionButton("Prep4 Social", `tconflictstate Social@?{Set team index|0}`);
-                output += tokenOptionButton("Reset Social", "tresetSocial");
-                output += tokenOptionButton("Request Threshold", "tss ?{Set the difficulty of the request|" +
-                    "Simple DC 15|Inconvenient DC 30|Disruptive DC 40|Serious DC 50|Life-Changing DC 60}");
-            }
+            output += tokenOptionButton("Full Heal", "pfullheal ?{Team index|0}@@@");
+            output += tokenOptionButton("Add Surge", "phealsurge ?{Team index|0}@@@?{How much surge to add?|1}");
+            output += tokenOptionButton("Add Vitality", "phealvit ?{Team index|0}@@@?{How much vitality to add?|1}");
 
             let senderMessage = new SystemInfoMessage(output);
             senderMessage.setSender(sender);
@@ -3132,16 +3333,16 @@ var TargetReference = TargetReference || (function () {
         tokenOptionSpacer = function () {
             return `<div>&nbsp</div>`;
         },
-        
+
         tokenOptionButton = function (name, message) {
-             return `<span class="sheet-wuxInlineRow">[${name}](!${message})</span> `;
+            return `<span class="sheet-wuxInlineRow">[${name}](!${message})</span> `;
         },
 
         commandSetConflictState = function (msg, targets, content) {
             let contentSplit = content.split("@");
             let conflictState = contentSplit[0];
             let teamIndex = contentSplit.length > 1 && !isNaN(parseInt(contentSplit[1])) ? parseInt(contentSplit[1]) : 0;
-            
+
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
                 tokenTargetData.setTeamIndex(teamIndex);
@@ -3177,7 +3378,7 @@ var TargetReference = TargetReference || (function () {
                 let senderMessage = new SystemInfoMessage(`This request has been set as ${content}.`);
                 senderMessage.setSender(sender);
                 WuxMessage.Send(senderMessage);
-                
+
                 attributeHandler.run();
             });
         },
@@ -3188,7 +3389,7 @@ var TargetReference = TargetReference || (function () {
                 tokenTargetData.addEnergy(attributeHandler, content);
                 attributeHandler.run();
             });
-            
+
             sendTokenUpdateMessage(msg, targets, `: ${content} EN`);
         },
 
@@ -3198,7 +3399,7 @@ var TargetReference = TargetReference || (function () {
                 tokenTargetData.setMoveCharge(attributeHandler, 0);
                 attributeHandler.run();
             });
-            
+
             sendTokenUpdateMessage(msg, targets, `: Move Charge reset`);
         },
 
@@ -3208,7 +3409,7 @@ var TargetReference = TargetReference || (function () {
                 tokenTargetData.addMoveCharge(attributeHandler, content);
                 attributeHandler.run();
             });
-            
+
             sendTokenUpdateMessage(msg, targets, `: ${content} Move Charge`);
         },
 
@@ -3231,7 +3432,7 @@ var TargetReference = TargetReference || (function () {
                 tokenTargetData.setWillToFull(attributeHandler);
                 attributeHandler.run();
             });
-            
+
             sendTokenUpdateMessage(msg, targets, `: fully healed`);
         },
 
@@ -3241,7 +3442,7 @@ var TargetReference = TargetReference || (function () {
                 tokenTargetData.addSurge(attributeHandler, content);
                 attributeHandler.run();
             });
-            
+
             sendTokenUpdateMessage(msg, targets, `: ${content} Surge`);
         },
 
@@ -3252,7 +3453,7 @@ var TargetReference = TargetReference || (function () {
                 attributeHandler.run();
             });
 
-            sendTokenUpdateMessage(msg, targets,`: ${content} Vitality`);
+            sendTokenUpdateMessage(msg, targets, `: ${content} Vitality`);
         },
 
         commandResetSocial = function (msg, targets) {
@@ -3262,7 +3463,7 @@ var TargetReference = TargetReference || (function () {
                 tokenTargetData.setWillToFull(attributeHandler);
                 attributeHandler.run();
             });
-            
+
             sendTokenUpdateMessage(msg, targets, `: social data reset`);
         },
 
@@ -3322,16 +3523,23 @@ var TargetReference = TargetReference || (function () {
             let advantage = content.length > 1 ? content[1] : 0;
             let tableName = "";
             switch (group) {
-                case "Defenses": group = "Defense"; tableName = "Defenses"; break;
-                case "Senses": group = "Sense"; tableName = "Senses"; break;
-                default: tableName = content; break;
+                case "Defenses":
+                    group = "Defense";
+                    tableName = "Defenses";
+                    break;
+                case "Senses":
+                    group = "Sense";
+                    tableName = "Senses";
+                    break;
+                default:
+                    tableName = content;
+                    break;
             }
 
             let groupArray = WuxDef.Filter(new DatabaseFilterData("group", group));
             if (groupArray.length == 0) {
                 Debug.LogError(`[commandShowGroup] The group (${group}) is empty!`);
-            }
-            else {
+            } else {
                 _.each(targets, function (tokenTargetData) {
                     checkModifiers(sender, tableName, tokenTargetData, groupArray, false, advantage);
                 });
@@ -3348,15 +3556,14 @@ var TargetReference = TargetReference || (function () {
                 _.each(targets, function (tokenTargetData) {
                     checkLore(sender, tokenTargetData, advantage);
                 });
-            }
-            else {
+            } else {
                 let groupArray = WuxDef.Filter(new DatabaseFilterData("subGroup", subGroup));
                 _.each(targets, function (tokenTargetData) {
                     checkModifiers(sender, tableName, tokenTargetData, groupArray, true, advantage);
                 });
             }
         },
-        
+
         commandIntroduce = function (msg, targets) {
             let characters, charObj = {};
             let sender = msg.who;
@@ -3369,7 +3576,7 @@ var TargetReference = TargetReference || (function () {
 
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-    
+
                 attributeHandler.addMod([introNameVar, emotesVar, titleVar, ageVar, genderVar, quickDescVar]);
                 attributeHandler.addFinishCallback(function (attrHandler) {
                     let outfitEmoteSetData = new EmoteSetData(attrHandler.parseJSON(emotesVar));
@@ -3379,13 +3586,13 @@ var TargetReference = TargetReference || (function () {
                     messageObject.url = outfitEmoteSetData.defaultEmote;
                     messageObject.setSender(sender);
                     WuxMessage.Send(messageObject);
-    
+
                     // set character data
                     characters = findObjs({
                         _id: tokenTargetData.charId,
                         _type: "character"
                     }, {caseInsensitive: true});
-    
+
                     if (characters.length > 0) {
                         charObj = characters[0];
                         let bio = `<p><b>${attrHandler.parseString(introNameVar)}</b><br><i>${attrHandler.parseString(titleVar)}</i></p>`;
@@ -3419,8 +3626,8 @@ var TargetReference = TargetReference || (function () {
                     generator.generateCharacter();
                     tokenTargetData.token.set("name", generator.character.firstName);
                     tokenTargetData.displayName = generator.character.firstName;
-                    
-                    outputMessage.push(`${attrHandler.parseString(sheetNameVar)} Name: ${generator.character.fullName}. ` + 
+
+                    outputMessage.push(`${attrHandler.parseString(sheetNameVar)} Name: ${generator.character.fullName}. ` +
                         `\They have a ${generator.character.motivation} Motivation and a ${generator.character.personality} Personality.`);
                 });
                 attributeHandler.run();
@@ -3429,26 +3636,32 @@ var TargetReference = TargetReference || (function () {
                 messageObject.setSender("System");
                 WuxMessage.Send(messageObject, "GM");
             });
-        
+
+        },
+
+        sendTokenUpdateMessage = function (msg, targets, message) {
+            let outputMessage = `${getTargetListNames(targets)} ${message}`;
+            let messageObject = new SystemInfoMessage(outputMessage);
+            messageObject.setSender("System");
+            WuxMessage.SendToSenderAndGM(messageObject, msg);
         },
         
-        sendTokenUpdateMessage = function (msg, targets, message) {
+        getTargetListNames = function(targets, includeSheetName) {
             let targetNames = "";
             for (let i = 0; i < targets.length; i++) {
                 if (targets.length > 1) {
                     if (i == targets.length - 1) {
                         targetNames += " and ";
-                    }
-                    else if (targetNames != "") {
+                    } else if (targetNames != "") {
                         targetNames += ", ";
                     }
                 }
                 targetNames += `${targets[i].displayName}`;
+                if (includeSheetName && targets[i].charName != targets[i].displayName) {
+                    targetNames += `[${targets[i].charName}]`;
+                }
             }
-        
-            let messageObject = new SystemInfoMessage(targetNames + message);
-            messageObject.setSender("System");
-            WuxMessage.SendToSenderAndGM(messageObject, msg);
+            return targetNames;
         },
 
         // Data Checkers
@@ -3460,7 +3673,7 @@ var TargetReference = TargetReference || (function () {
             let recallVar = WuxDef.GetVariable("Recall");
             let knowledgeBuildVar = WuxDef.GetVariable("Knowledge", WuxDef._build);
             attributeHandler.addMod([recallVar, knowledgeBuildVar]);
-            
+
             let dieRoll = new DieRoll();
             dieRoll.rollCheck(advantage);
             let recallResults = new DieRoll(dieRoll);
@@ -3472,7 +3685,7 @@ var TargetReference = TargetReference || (function () {
 
                 let knowledges = new WorkerBuildStats();
                 knowledges.import(attrHandler.parseJSON(knowledgeBuildVar));
-                
+
                 knowledges.iterate(function (buildStat) {
                     let parts = buildStat.name.split("-");
                     let title = parts[1].split("_")[0];
@@ -3481,8 +3694,7 @@ var TargetReference = TargetReference || (function () {
                         let value = parseInt(buildStat.value) + recallValue;
                         results.addModToRoll(value);
                         tableData.addRow([title, `${Format.ShowTooltip(`${results.total}`, results.message)}`]);
-                    }
-                    else if (parts[0] == "lrc") {
+                    } else if (parts[0] == "lrc") {
                         tableData.addRow([title, `${Format.ShowTooltip(`${recallResults.total}`, recallResults.message)}`]);
                     }
                 });
@@ -3514,8 +3726,7 @@ var TargetReference = TargetReference || (function () {
                         let results = new DieRoll(dieRoll);
                         results.addModToRoll(value);
                         tableData.addRow([modDefinition.title, `${Format.ShowTooltip(`${results.total}`, results.message)}`]);
-                    }
-                    else {
+                    } else {
                         tableData.addRow([modDefinition.title, value]);
                     }
                 });
@@ -3537,8 +3748,18 @@ var TargetReference = TargetReference || (function () {
             };
         },
 
-        hasActiveTargets = function() {
+        hasActiveTargets = function () {
             return Object.keys(state.TargetReference.activeCharacters.targetData).length > 0;
+        },
+
+        getActiveTargetsOnTeam = function (teamIndex) {
+            let tokenTargetDataArray = [];
+            iterateOverActiveTargetData(function (tokenTargetData) {
+                if (tokenTargetData.teamIndex == teamIndex) {
+                    tokenTargetDataArray.push(tokenTargetData);
+                }
+            });
+            return tokenTargetDataArray;
         },
 
         iterateOverActiveTargetData = function (callback) {
@@ -3557,8 +3778,7 @@ var TargetReference = TargetReference || (function () {
             }
             if (state.TargetReference.activeCharacters.targetData.hasOwnProperty(tokenTargetData.tokenId)) {
                 state.TargetReference.activeCharacters.targetData[tokenTargetData.tokenId] = tokenTargetData;
-            }
-            else {
+            } else {
                 state.TargetReference.activeCharacters.targetData[tokenTargetData.tokenId] = tokenTargetData;
                 state.TargetReference.activeCharacters.nameDatabase[tokenTargetData.charName] = tokenTargetData.tokenId;
             }
@@ -3616,11 +3836,12 @@ var TargetReference = TargetReference || (function () {
             }
             return TokenReference.GetTokenData(state.TargetReference.activeCharacters.targetData[state.TargetReference.activeCharacters.nameDatabase[characterName]]);
         }
-        ;
+    ;
     return {
         CheckInstall: checkInstall,
         HandleInput: handleInput,
         HasActiveTargets: hasActiveTargets,
+        GetActiveTargetsOnTeam: getActiveTargetsOnTeam,
         IterateOverActiveTargetData: iterateOverActiveTargetData,
         ClearActiveTargetData: clearActiveTargetData,
         GetTokenTargetData: getTokenTargetData,
@@ -3659,12 +3880,11 @@ var TokenReference = TokenReference || (function () {
         getTokenData = function (data) {
             if (data.tokenId != undefined) {
                 return getTokenDataFromTargetData(data);
-            }
-            else {
+            } else {
                 return getTokenDataFromId(data);
             }
         },
-        
+
         getTokenDataFromTargetData = function (targetData) {
             if (state.TokenReference.tokens[targetData.tokenId] == undefined) {
                 let token = getToken(targetData.tokenId);
@@ -3680,8 +3900,7 @@ var TokenReference = TokenReference || (function () {
                 tokenData.setDisplayName();
                 addToken(tokenData, targetData.tokenId);
                 return tokenData;
-            }
-            else {
+            } else {
                 let tokenData = state.TokenReference.tokens[targetData.tokenId];
                 if (tokenData == undefined) {
                     Debug.LogError(`[TokenReference][getToken] Something went wrong. Tokendata for ${targetData.charName} is undefined`);
@@ -3695,7 +3914,7 @@ var TokenReference = TokenReference || (function () {
                 return tokenData;
             }
         },
-        
+
         getTokenDataFromId = function (tokenId) {
             if (state.TokenReference.tokens[tokenId] == undefined) {
                 let token = getToken(tokenId);
@@ -3711,8 +3930,7 @@ var TokenReference = TokenReference || (function () {
                 tokenData.setDisplayName();
                 addToken(tokenData, tokenId);
                 return tokenData;
-            }
-            else {
+            } else {
                 let tokenData = state.TokenReference.tokens[tokenId];
                 if (tokenData == undefined) {
                     Debug.LogError(`[TokenReference][getToken] Something went wrong. Tokendata for ${tokenId} is undefined`);
@@ -3725,7 +3943,7 @@ var TokenReference = TokenReference || (function () {
                 tokenData.setDisplayName();
                 return tokenData;
             }
-        
+
         },
 
         addToken = function (tokenData, tokenId) {
@@ -3757,7 +3975,7 @@ var TokenReference = TokenReference || (function () {
         // ---------------------------
 
         setTokenForConflict = function (conflictType, tokenTargetData, attributeHandler) {
-            if(tokenTargetData.initToken()) {
+            if (tokenTargetData.initToken()) {
                 tokenTargetData.showTokenName(true);
                 tokenTargetData.showTooltip(true);
 
@@ -3783,12 +4001,12 @@ var TokenReference = TokenReference || (function () {
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 tokenTargetData.setBar(1, attrHandler.getAttribute(hpVar), true, true);
                 tokenTargetData.setBar(2, attrHandler.getAttribute(willpowerVar), true, true);
-                
+
                 if (attrHandler.parseString(fullNameVar) == "GenericOverride") {
                     tokenTargetData.unlinkBar(1);
                     tokenTargetData.unlinkBar(2);
                 }
-                
+
                 tokenTargetData.setEnergyIcon(attrHandler.parseInt(enVar, 0, false));
                 tokenTargetData.combatDetails.onUpdateDisplayStyle(attrHandler, "Battle");
                 tokenTargetData.setCombatDetails(attrHandler);
@@ -3808,13 +4026,13 @@ var TokenReference = TokenReference || (function () {
                 tokenTargetData.setBar(1, attrHandler.getAttribute(patienceVar), true, true);
                 tokenTargetData.setBar(2, attrHandler.getAttribute(willpowerVar), true, true);
                 tokenTargetData.setBar(3, attrHandler.getAttribute(favorVar), true, true);
-                
+
                 if (attrHandler.parseString(fullNameVar) == "GenericOverride") {
                     tokenTargetData.unlinkBar(1);
                     tokenTargetData.unlinkBar(2);
                     tokenTargetData.unlinkBar(3);
                 }
-                
+
                 tokenTargetData.setEnergyIcon(attrHandler.parseInt(enVar, 0, false));
                 tokenTargetData.combatDetails.onUpdateDisplayStyle(attrHandler, "Social");
                 tokenTargetData.setCombatDetails(attrHandler);
@@ -3839,7 +4057,7 @@ var TokenReference = TokenReference || (function () {
             attributeHandler.run();
         }
 
-        ;
+    ;
     return {
         CheckInstall: checkInstall,
         IterateOverSelectedTokens: iterateOverSelectedTokens,
@@ -3859,6 +4077,7 @@ on("ready", function () {
     TargetReference.CheckInstall();
     TokenReference.CheckInstall();
 });
+
 
 // ====== Classes
 // noinspection JSUnusedGlobalSymbols,JSUnresolvedReference,SpellCheckingInspection,ES6ConvertVarToLetConst
@@ -8607,7 +8826,7 @@ var WuxDef = WuxDef || (function() {
     'use strict';
 
     var
-        keys = ["Attribute","Skill","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","InnateDefenseType","InnateSenseType","StatBonus","General","Chat","Combat","Social","Influence","SeverityRank","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobGroup","StyleGroup","StyleSubGroup","AdvancedGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Currency","ToolSlot","ConsumableSlot","Note","PersonalityType","MotivationType","_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_expertise","_gear","_affinity","_error","_refresh","Human","Spirit","Wood","WoodF","Fire","FireF","Earth","EarthF","Metal","MetalF","Water","WaterF","Def_BOD","Def_PRC","Def_QCK","Def_CNV","Def_INT","Def_RSN","SB_MAX","SB_MedDef","SB_GoodDef","SB_GreatDef","SB_ExcellentDef","AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad","JobTier0","JobTier1","JobTier2","JobTier3","JobTier4","JobTier5","JobTier6","LoreTier0","LoreTier1","LoreTier2","LoreTier3","GeneralLoreTier0","GeneralLoreTier1","LoreCat_Academics","LoreCat_Profession","LoreCat_Craftmanship","LoreCat_Geography","LoreCat_History","LoreCat_Culture","LoreCat_Religion","Walthair","EastSea","Khem","Aridsha","Ceres","Colswei","Dowfeng","Wayling","Novus","Coastborne","Suntouched","Sandfolk","Plains-kin","Frostcloaked","Earthblood","Other","Male","Female","NonBinary","Notebook","Category","post-Notes","post-Info","post-Location","post-System","post-Chapter","post-History","post-Speak","post-Whisper","post-Yell","post-Think","post-Describe","Speak","Whisper","Yell","Think","Describe","PostToChat","PostToNotebook","Dawn","Morning","Midday","Evening","Night","Deepnight","Boon_Rest","Boon_Savor","Boon_Truth","InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal","Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity","Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Fire","Dmg_Force","Dmg_Piercing","Dmg_Shock","Dmg_Tension","Dmg_Weapon","Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden","PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks","PerkGroup_Slot Perks","JobGroup_Vanguard","JobGroup_Operator","JobGroup_Athlete","JobGroup_Strategist","JobGroup_Waymaker","JobGroup_Advocate","JobGroup_Esper","StyleGroup_Melee Weaponry","StyleGroup_Ranged Weaponry","StyleGroup_Martial Arts","StyleGroup_Arcanification Magic","StyleGroup_Fluctuation Magic","StyleGroup_Materialization Magic","StyleGroup_Transformation Magic","StyleGroup_Athletics","StyleGroup_Speechcraft","StyleSubGroup_Mighty Weapons","StyleSubGroup_Skirmish Weapons","StyleSubGroup_Finesse Weapons","StyleSubGroup_Shoot Weapons","StyleSubGroup_Throw Weapons","StyleSubGroup_Martial Arts","StyleSubGroup_Kinetics","StyleSubGroup_Evocation","StyleSubGroup_Channelling","StyleSubGroup_Enchantment","StyleSubGroup_Fluctuation","StyleSubGroup_Battlesmithing","StyleSubGroup_Conjury","StyleSubGroup_Transmutation","StyleSubGroup_Physiomancy","StyleSubGroup_Brawn","StyleSubGroup_Stealth","StyleSubGroup_Acrobatics","StyleSubGroup_Favor Building","StyleSubGroup_Disruption","StyleSubGroup_Emotional Support","GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear","Personality_Stoic","Personality_Charmer","Personality_Idealist","Personality_Cynic","Personality_Loner","Personality_Leader","Personality_Rebel","Personality_Thinker","Personality_Caregiver","Personality_Dreamer","Personality_Realist","Personality_Mediator","Personality_Strategist","Personality_Joker","Personality_Visionary","Personality_Survivor","Personality_Guardian","Personality_Tactician","Personality_Pacifist","Personality_Zealot","Motivation_Power","Motivation_Justice","Motivation_Freedom","Motivation_Revenge","Motivation_Survival","Motivation_Glory","Motivation_Knowledge","Motivation_Redemption","Motivation_Belonging","Motivation_Wealth","Motivation_Truth","Motivation_Peace","Motivation_Control","Motivation_Chaos","Motivation_Duty","Motivation_Fame","Motivation_Discovery","Motivation_Legacy","Motivation_Love","Motivation_Escape","Attr_BOD","Attr_PRC","Attr_QCK","Attr_CNV","Attr_INT","Attr_RSN","Check","CombatDetails","FlatDC","Title_Boon","BoostStyleTech","BoostGearTech","BoostPerkTech","Level","CR","MaxCR","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","JobTier","JobTechniques","LearnStyle","StyleTechniques","TrainingKnowledge","TrainingTechniques","PP","BonusTraining","Def_Brace","Def_Fortitude","Def_Warding","Def_Hide","Def_Reflex","Def_Evasion","Def_Resolve","Def_Freewill","Def_Insight","Def_Notice","Def_Guile","Def_Scrutiny","WillBreak","CharSheetName","SheetName","FullName","DisplayName","QuickDescription","Backstory","Age","Gender","HomeRegion","Homeland","Ethnicity","Ancestry","Affinity","AdvancedAffinity","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","WeaponSlots","EquipmentSlots","Currency_Jin","Currency_Gold","Currency_CP","HP","WILL","Surge","EN","StartEN","RoundEN","Power","Accuracy","Artistry","Charisma","Recall","Initiative","CarryingCapacity","Cmb_Vitality","Cmb_HV","TargetHV","Cmb_Armor","Cmb_Hardness","Resistance","Weakness","Cmb_ResistanceDesc","Cmb_WeaknessDesc","Cmb_Mv","Cmb_MvPotency","MvCharge","Soc_Favor","TargetFavor","RepeatingInfluences","Soc_Influence","Title_UsingInfluences","Soc_InfluenceDesc","Soc_Severity","Severity","Soc_RequestCheck","Soc_SupportInfluence","Soc_OpposeInfluence","Soc_Impatience","Trait_Arcanify","Trait_Arcing","Trait_Attack","Trait_Break","Trait_Delayed","Trait_Envoke","Trait_Focus","Trait_Holdfast","Trait_Illusion","Trait_Materialize","Trait_Permanent","Trait_Resonator","Trait_Seeking","Trait_Transmute","Trait_AP","Trait_Brutal","Trait_Optional","Trait_Ammunition","Trait_Axe","Trait_Bow","Trait_Ingested","Trait_Hammer","Trait_Handgun","Trait_Inhalent","Trait_Knife","Trait_Longshot","Trait_Loud","Trait_Magitech","Trait_MaxBulk15","Trait_MaxBulk60","Trait_MaxBulk120","Trait_MaxBulk250","Trait_Medkit","Trait_MinBulk15","Trait_MinBulk60","Trait_MinBulk120","Trait_MinBulk250","Trait_MinDust15","Trait_MinDust60","Trait_MinDust120","Trait_Polearm","Trait_Resonant","Trait_Scattershot","Trait_Sharp","Trait_Sturdy","Trait_Sword","Trait_Whip","Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Transparent","PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training","Page_Origin","Page_Jobs","Page_Skills","Page_ActiveSkills","Fight","Cast","Athletics","Page_SocialSkills","Persuade","Cunning","Page_TechnicalSkills","Craft","Device","Investigate","Page_Knowledge","Page_Attributes","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Post","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar","Page_NPC","Page_Notes","Title_Origin","Title_Background","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_Chat","Title_Emotes","Title_LanguageSelect","Title_Skills","Title_Outfits","Title_EquippedGear","Title_Notebook","Loading","Popup_PopupActive","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_InspectPopupName","Popup_ItemInspectionName","Popup_TechniqueInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","TechPopupValues","ItemPopupValues","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectType","Popup_ItemSelectDesc","Popup_ItemSelectIsOn","Chat_Type","Chat_PostTarget","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","RepeatingActiveEmotes","RepeatingActiveEmotesNotes","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_PostEmoteNote","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","RepeatingOutfits","Chat_OutfitDefault","Chat_OutfitDefaultURL","Forme_SeeTechniques","RepeatingJobStyles","RepeatingStyles","Forme_Name","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_JobSlot","Forme_AdvancedSlot","Forme_StyleSlot","Action_Use","Action_Inspect","Action_Actions","Action_SetData","Action_Techniques","RepeatingPermaTech","RepeatingJobTech","RepeatingAdvTech","RepeatingPassiveTech","RepeatingGearTech","RepeatingBasicActions","RepeatingBasicRecovery","RepeatingBasicAttack","RepeatingBasicSocial","RepeatingBasicSpirit","RepeatingCustomTech","TechActionType","TechName","TechDisplayName","TechResourceData","TechTargetingData","TechTrait","TechTrigger","TechRequirements","TechItemReq","TechFlavorText","TechEffect","TechSEffectTitle","TechSEffect","TechEEffectTitle","TechDef","ItemName","ItemAction","ItemCount","ItemGroup","ItemStats","ItemTrait","ItemDescription","ItemCraftSkill","ItemCraftMats","ItemCraft","Gear_Equip","Gear_EquipHead","Gear_EquipFace","Gear_EquipChest","Gear_EquipArm","Gear_EquipLeg","Gear_EquipFoot","Gear_Unequip","Gear_Purchase","Gear_Delete","Gear_Inspect","Gear_EquipmentSlot","RepeatingEquipment","RepeatingConsumables","RepeatingGoods","Gear_ItemName","Gear_ItemActions","Gear_ItemType","Gear_EquipWeapon","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_WeaponSlot","WeaponDamage","WeaponDamageVal","System_Crafting","System_CraftingComponent","CraftBulk","CraftResources","CraftSkill","CraftDC","CraftTime","System_Cooking","System_HighQualityMeals","Title_ResourceCost","Title_Targetting","Title_Range","Title_Patterns","Line","Cone","Blast","Burst","Zone","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnEnter","Title_TechNewTargets","Title_TechNewOnEnter","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEndFocus","Move","Adjacency","Obstruction","StrideRoll","MaxStride","FreeMove","Pulled","Pushed","ForceMove","Jump","Fly","Lifting","Falling","Teleport","Bulk","Note_GenName","Note_GenFullName","Note_GenGender","Note_GenHomeRegion","Note_GenRace","Note_GenPersonality","Note_GenMotivation","Note_GenerateCharacter","Note_UseGeneration","Note_ClearBackground","Notebooks","Note_NotebookActions","Note_NotebookName","Note_NotebookContents","Note_NotebookOpen","Note_NotebookDelete","Note_NotebookReload","Note_NotebookClose","Note_NotebookSave","Note_NotebookIsDirty","Note_OpenNotebook","Note_OpenNotebookActions","NotebookPages","Note_PageType","Note_PageDisplay","Note_PagePost","Note_PageDelete","Note_PageTemplateData","Note_PageContents","Note_PageLocation","Note_PageArea","Note_PageDate","Note_PageTime","Note_PageCharName","Note_PageCharURL","Note_PageCharEmote","Note_PageCharLanguage","Note_PageQuestName","Note_PageChapter","Note_PagePart","Style_Basic Action","Style_Basic Recovery","Style_Basic Attack","Style_Basic Social","Style_Basic Spirit","Style_Hammering Arte","Style_Cleaving Arte","Style_Battering Arte","Style_Berserker Arte","Style_Mauler Arte","Style_Avenger Arte","Style_Chargestrike Arte","Style_Overwhelming Arte","Style_Arcanestrike Arte","Style_Duelist Arte","Style_Swashbuckling Arte","Style_Phalanx Arte","Style_Jumpspear Arte","Style_Spellblade Arte","Style_Fencer Arte","Style_Sky Pike Arte","Style_Finesse Blade Arte","Style_Whip Arte","Style_Flashcut Arte","Style_Trickster Arte","Style_Forceful Fist Arte","Style_Stepflow Arte","Style_Aerial Arte","Style_Wrestling Arte","Style_Galegrip Arte","Style_Powerarm Arte","Style_Swaying Palm Arte","Style_Skyfall Arte","Style_Ironhold Arte","Style_Heaven's Reach Arte","Style_Rapid Strikes Arte","Style_Disruption Form Arte","Style_Archery Arte","Style_Trick Arrow Arte","Style_Gunslinger Arte","Style_Sentry Arte","Style_Longsight Arte","Style_Scatterpoint Arte","Style_Bowmaster Arte","Style_Pistolero Arte","Style_Bomber Arte","Style_Daggerthrow Arte","Style_Blasting Flames","Style_Shock Bomb","Style_Arcane Spellshot","Style_Flaming Sphere","Style_Lightning Shot","Style_Area Spark","Style_Binding Cold","Style_Chilling Blast","Style_Hellfire","Style_Storm Caller","Style_Sheer Cold","Style_Whispering Wind","Style_Bursting Fire","Style_Fire Field","Style_Close Circuit","Style_Ice Storm","Style_Manification","Style_Light Control","Style_Darkness Weaving","Style_Sound Control","Style_Arcane Conduit","Style_Freeform Flight","Style_Ether Magic","Style_Time Control","Style_Levitation","Style_Kinetic Assault","Style_Surging Dust","Style_Dust Impact","Style_Propelling Force","Style_Binding Winds","Style_Windsweep","Style_Gravity Force","Style_Telekinesis","Style_Surging Water","Style_Throwcraft","Style_Conjure Blades","Style_Conjure Skyfall","Style_Warsmith","Style_Structural Magic","Style_Clouded Shroud","Style_Arbormaking","Style_Floral Shroud","Style_Smoke Field","Style_Stonemaking","Style_Iron Walls","Style_Glacial Walls","Style_Misty Terrtain","Style_Structural Mastery","Style_Poison Spore","Style_Dust Shaping","Style_Unshaping","Style_Plant Growth","Style_Calming Blooms","Style_Verdant Armory","Style_Terrain Molding","Style_Ground Splitter","Style_Earthen Armory","Style_Water Shape","Style_Icy Terrain","Style_Frozen Armory","Style_Geomancy","Style_Cryomancy","Style_Healing Hands","Style_Earthen Endurance","Style_Propelling Motion","Style_Soul Surge","Style_Blood Flux","Style_Powerwake","Style_Enduring Body","Style_Traversal","Style_Hidden Footing","Style_Remotion","Style_Evasive Maneuvers","Style_Unbeatable Brawn","Style_Unrelenting Motion","Style_Shadow Walking","Style_Reactive Defense","Style_Loyalty Appeal","Style_Social Grace","Style_Flattery","Style_Deft Negotiator","Style_Sales Tactics","Style_Fluster Point","Style_Provoking Anger","Style_Intimidating Fear","Style_Beguiling Instinct","Style_Taunting Wit","Style_Invigorating Rally","Style_Underminer","Style_Stillheart","Style_Connecting Bond","Skill_Agility","Skill_Alchemy","Skill_Analyze","Skill_Build","Skill_Channel","Skill_Charm","Skill_Conjure","Skill_Cook","Skill_Demoralize","Skill_Empathy","Skill_Enchant","Skill_Finesse","Skill_Glyphwork","Skill_Grappling","Skill_Heal","Skill_Inspire","Skill_Kinesis","Skill_Might","Skill_Misdirect","Skill_Physique","Skill_Pilot","Skill_Rationalize","Skill_Resonance","Skill_Search","Skill_Shape","Skill_Shoot","Skill_Skirmish","Skill_Sneak","Skill_Throw","Skill_Tinker","Lang_Minere","Lang_Junal","Lang_Apollen","Lang_Lib","Lang_Cert","Lang_Byric","Lang_Dustell","Lang_Muralic","Lang_Shira","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq","Lang_Kleikan","Lang_Crinere","Lang_Palmic","Lang_Shorespeak","Lang_Verdeni","Lang_Vulca","Lang_Emotion","Lang_Empathy","Lang_Wolfwarg","Lang_Jovean","Lang_Mytikan","Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon","Job_Fighter","Job_Sentinel","Job_Warden","Job_Bulwark","Job_Hunter","Job_Sniper","Job_Trooper","Job_Warmage","Job_Alchemist","Job_Brawler","Job_Kineticist","Job_Rogue","Job_Labourer","Job_Tactician","Job_Magus","Job_Scholar","Job_Inquisitor","Job_Detective","Job_Culinarian","Job_Bard","Job_Medic","Job_Spellwright","Job_Empath","Job_Merchant","Job_Orator","Job_Hardliner","Job_Etherealist","Job_Shade","JStyle_Fighter","JStyle_Sentinel","JStyle_Warden","JStyle_Bulwark","JStyle_Hunter","JStyle_Sniper","JStyle_Trooper","JStyle_Warmage","JStyle_Alchemist","JStyle_Brawler","JStyle_Kineticist","JStyle_Rogue","JStyle_Labourer","JStyle_Tactician","JStyle_Magus","JStyle_Scholar","JStyle_Inquisitor","JStyle_Detective","JStyle_Culinarian","JStyle_Bard","JStyle_Medic","JStyle_Spellwright","JStyle_Empath","JStyle_Merchant","JStyle_Orator","JStyle_Hardliner","JStyle_Etherealist","JStyle_Shade","Stat_Blinded","Stat_Downed","Stat_Dying","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious","Stat_Aflame","Stat_Armored","Stat_Bleeding","Stat_Chilled","Stat_Dodge","Stat_Encumbered","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Impaired","Stat_Jolted","Stat_Prone","Stat_Quickened","Stat_Shielded","Stat_Sickened","Stat_Stunned","Stat_Angered","Stat_Calmed","Stat_Doubt","Stat_Encouraged","Stat_Frightened","Stat_Flustered","Stat_Overjoyed","Stat_Persevering","Stat_Receptive","Stat_Surprised","Stat_Steadfast"],
+        keys = ["Attribute","Skill","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","InnateDefenseType","InnateSenseType","StatBonus","General","Chat","Combat","Social","Influence","SeverityRank","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobGroup","StyleGroup","StyleSubGroup","AdvancedGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Currency","ToolSlot","ConsumableSlot","Note","PersonalityType","MotivationType","_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_expertise","_gear","_affinity","_error","_refresh","Human","Spirit","Wood","WoodF","Fire","FireF","Earth","EarthF","Metal","MetalF","Water","WaterF","Def_BOD","Def_PRC","Def_QCK","Def_CNV","Def_INT","Def_RSN","SB_MAX","SB_MedDef","SB_GoodDef","SB_GreatDef","SB_ExcellentDef","AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad","JobTier0","JobTier1","JobTier2","JobTier3","JobTier4","JobTier5","JobTier6","LoreTier0","LoreTier1","LoreTier2","LoreTier3","GeneralLoreTier0","GeneralLoreTier1","LoreCat_Academics","LoreCat_Profession","LoreCat_Craftmanship","LoreCat_Geography","LoreCat_History","LoreCat_Culture","LoreCat_Religion","Walthair","EastSea","Khem","Aridsha","Ceres","Colswei","Dowfeng","Wayling","Novus","Coastborne","Suntouched","Sandfolk","Plains-kin","Frostcloaked","Earthblood","Other","Male","Female","NonBinary","Notebook","Category","post-Notes","post-Info","post-Location","post-System","post-Chapter","post-History","post-Speak","post-Whisper","post-Yell","post-Think","post-Describe","Speak","Whisper","Yell","Think","Describe","PostToChat","PostToNotebook","Dawn","Morning","Midday","Evening","Night","Deepnight","Boon_Rest","Boon_Savor","Boon_Truth","InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal","Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity","Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Fire","Dmg_Force","Dmg_Piercing","Dmg_Shock","Dmg_Tension","Dmg_Weapon","Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden","PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks","PerkGroup_Slot Perks","JobGroup_Vanguard","JobGroup_Operator","JobGroup_Athlete","JobGroup_Strategist","JobGroup_Waymaker","JobGroup_Advocate","JobGroup_Esper","StyleGroup_Melee Weaponry","StyleGroup_Ranged Weaponry","StyleGroup_Martial Arts","StyleGroup_Arcanification Magic","StyleGroup_Fluctuation Magic","StyleGroup_Materialization Magic","StyleGroup_Transformation Magic","StyleGroup_Athletics","StyleGroup_Speechcraft","StyleSubGroup_Mighty Weapons","StyleSubGroup_Skirmish Weapons","StyleSubGroup_Finesse Weapons","StyleSubGroup_Shoot Weapons","StyleSubGroup_Throw Weapons","StyleSubGroup_Martial Arts","StyleSubGroup_Kinetics","StyleSubGroup_Evocation","StyleSubGroup_Channelling","StyleSubGroup_Enchantment","StyleSubGroup_Fluctuation","StyleSubGroup_Battlesmithing","StyleSubGroup_Conjury","StyleSubGroup_Transmutation","StyleSubGroup_Physiomancy","StyleSubGroup_Brawn","StyleSubGroup_Stealth","StyleSubGroup_Acrobatics","StyleSubGroup_Favor Building","StyleSubGroup_Disruption","StyleSubGroup_Emotional Support","GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear","Personality_Stoic","Personality_Charmer","Personality_Idealist","Personality_Cynic","Personality_Loner","Personality_Leader","Personality_Rebel","Personality_Thinker","Personality_Caregiver","Personality_Dreamer","Personality_Realist","Personality_Mediator","Personality_Strategist","Personality_Joker","Personality_Visionary","Personality_Survivor","Personality_Guardian","Personality_Tactician","Personality_Pacifist","Personality_Zealot","Motivation_Power","Motivation_Justice","Motivation_Freedom","Motivation_Revenge","Motivation_Survival","Motivation_Glory","Motivation_Knowledge","Motivation_Redemption","Motivation_Belonging","Motivation_Wealth","Motivation_Truth","Motivation_Peace","Motivation_Control","Motivation_Chaos","Motivation_Duty","Motivation_Fame","Motivation_Discovery","Motivation_Legacy","Motivation_Love","Motivation_Escape","Attr_BOD","Attr_PRC","Attr_QCK","Attr_CNV","Attr_INT","Attr_RSN","Check","CombatDetails","FlatDC","Title_Boon","BoostStyleTech","BoostGearTech","BoostPerkTech","Level","CR","MaxCR","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","JobTier","JobTechniques","LearnStyle","StyleTechniques","TrainingKnowledge","TrainingTechniques","PP","BonusTraining","Def_Brace","Def_Fortitude","Def_Warding","Def_Hide","Def_Reflex","Def_Evasion","Def_Resolve","Def_Freewill","Def_Insight","Def_Notice","Def_Guile","Def_Scrutiny","WillBreak","CharSheetName","SheetName","FullName","DisplayName","QuickDescription","Backstory","Age","Gender","HomeRegion","Homeland","Ethnicity","Ancestry","Affinity","AdvancedAffinity","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","WeaponSlots","EquipmentSlots","Currency_Jin","Currency_Gold","Currency_CP","HP","WILL","Surge","EN","StartEN","RoundEN","Power","Accuracy","Artistry","Charisma","Recall","Initiative","CarryingCapacity","TeamIndex","Cmb_Vitality","Cmb_HV","TargetHV","Cmb_Armor","Cmb_Hardness","Resistance","Weakness","Cmb_ResistanceDesc","Cmb_WeaknessDesc","Cmb_Mv","Cmb_MvPotency","MvCharge","Soc_Favor","TargetFavor","RepeatingInfluences","Soc_Influence","Title_UsingInfluences","Soc_InfluenceDesc","Soc_Severity","Severity","Soc_RequestCheck","Soc_SupportInfluence","Soc_OpposeInfluence","Soc_Impatience","Trait_Arcanify","Trait_Arcing","Trait_Attack","Trait_Break","Trait_Delayed","Trait_Envoke","Trait_Focus","Trait_Holdfast","Trait_Illusion","Trait_Materialize","Trait_Permanent","Trait_Resonator","Trait_Seeking","Trait_Transmute","Trait_AP","Trait_Brutal","Trait_Optional","Trait_Ammunition","Trait_Axe","Trait_Bow","Trait_Ingested","Trait_Hammer","Trait_Handgun","Trait_Inhalent","Trait_Knife","Trait_Longshot","Trait_Loud","Trait_Magitech","Trait_MaxBulk15","Trait_MaxBulk60","Trait_MaxBulk120","Trait_MaxBulk250","Trait_Medkit","Trait_MinBulk15","Trait_MinBulk60","Trait_MinBulk120","Trait_MinBulk250","Trait_MinDust15","Trait_MinDust60","Trait_MinDust120","Trait_Polearm","Trait_Resonant","Trait_Scattershot","Trait_Sharp","Trait_Sturdy","Trait_Sword","Trait_Whip","Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Transparent","PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training","Page_Origin","Page_Jobs","Page_Skills","Page_ActiveSkills","Fight","Cast","Athletics","Page_SocialSkills","Persuade","Cunning","Page_TechnicalSkills","Craft","Device","Investigate","Page_Knowledge","Page_Attributes","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Post","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar","Page_NPC","Page_Notes","Title_Origin","Title_Background","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_Chat","Title_Emotes","Title_LanguageSelect","Title_Skills","Title_Outfits","Title_EquippedGear","Title_Notebook","Loading","Popup_PopupActive","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_InspectPopupName","Popup_ItemInspectionName","Popup_TechniqueInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","TechPopupValues","ItemPopupValues","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectType","Popup_ItemSelectDesc","Popup_ItemSelectIsOn","Chat_Type","Chat_PostTarget","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","RepeatingActiveEmotes","RepeatingActiveEmotesNotes","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_PostEmoteNote","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","RepeatingOutfits","Chat_OutfitDefault","Chat_OutfitDefaultURL","Forme_SeeTechniques","RepeatingJobStyles","RepeatingStyles","Forme_Name","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_JobSlot","Forme_AdvancedSlot","Forme_StyleSlot","Action_Use","Action_Inspect","Action_Actions","Action_SetData","Action_Techniques","RepeatingPermaTech","RepeatingJobTech","RepeatingAdvTech","RepeatingPassiveTech","RepeatingGearTech","RepeatingBasicActions","RepeatingBasicRecovery","RepeatingBasicAttack","RepeatingBasicSocial","RepeatingBasicSpirit","RepeatingCustomTech","TechActionType","TechName","TechDisplayName","TechResourceData","TechTargetingData","TechTrait","TechTrigger","TechRequirements","TechItemReq","TechFlavorText","TechEffect","TechSEffectTitle","TechSEffect","TechEEffectTitle","TechDef","ItemName","ItemAction","ItemCount","ItemGroup","ItemStats","ItemTrait","ItemDescription","ItemCraftSkill","ItemCraftMats","ItemCraft","Gear_Equip","Gear_EquipHead","Gear_EquipFace","Gear_EquipChest","Gear_EquipArm","Gear_EquipLeg","Gear_EquipFoot","Gear_Unequip","Gear_Purchase","Gear_Delete","Gear_Inspect","Gear_EquipmentSlot","RepeatingEquipment","RepeatingConsumables","RepeatingGoods","Gear_ItemName","Gear_ItemActions","Gear_ItemType","Gear_EquipWeapon","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_WeaponSlot","WeaponDamage","WeaponDamageVal","System_Crafting","System_CraftingComponent","CraftBulk","CraftResources","CraftSkill","CraftDC","CraftTime","System_Cooking","System_HighQualityMeals","Title_ResourceCost","Title_Targetting","Title_Range","Title_Patterns","Line","Cone","Blast","Burst","Zone","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnEnter","Title_TechNewTargets","Title_TechNewOnEnter","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEndFocus","Move","Adjacency","Obstruction","StrideRoll","MaxStride","FreeMove","Pulled","Pushed","ForceMove","Jump","Fly","Lifting","Falling","Teleport","Bulk","Note_GenName","Note_GenFullName","Note_GenGender","Note_GenHomeRegion","Note_GenRace","Note_GenPersonality","Note_GenMotivation","Note_GenerateCharacter","Note_UseGeneration","Note_ClearBackground","Notebooks","Note_NotebookActions","Note_NotebookName","Note_NotebookContents","Note_NotebookOpen","Note_NotebookDelete","Note_NotebookReload","Note_NotebookClose","Note_NotebookSave","Note_NotebookIsDirty","Note_OpenNotebook","Note_OpenNotebookActions","NotebookPages","Note_PageType","Note_PageDisplay","Note_PagePost","Note_PageDelete","Note_PageTemplateData","Note_PageContents","Note_PageLocation","Note_PageArea","Note_PageDate","Note_PageTime","Note_PageCharName","Note_PageCharURL","Note_PageCharEmote","Note_PageCharLanguage","Note_PageQuestName","Note_PageChapter","Note_PagePart","Style_Basic Action","Style_Basic Recovery","Style_Basic Attack","Style_Basic Social","Style_Basic Spirit","Style_Hammering Arte","Style_Cleaving Arte","Style_Battering Arte","Style_Berserker Arte","Style_Mauler Arte","Style_Avenger Arte","Style_Chargestrike Arte","Style_Overwhelming Arte","Style_Arcanestrike Arte","Style_Duelist Arte","Style_Swashbuckling Arte","Style_Phalanx Arte","Style_Jumpspear Arte","Style_Spellblade Arte","Style_Fencer Arte","Style_Sky Pike Arte","Style_Finesse Blade Arte","Style_Whip Arte","Style_Flashcut Arte","Style_Trickster Arte","Style_Forceful Fist Arte","Style_Stepflow Arte","Style_Aerial Arte","Style_Wrestling Arte","Style_Galegrip Arte","Style_Powerarm Arte","Style_Swaying Palm Arte","Style_Skyfall Arte","Style_Ironhold Arte","Style_Heaven's Reach Arte","Style_Rapid Strikes Arte","Style_Disruption Form Arte","Style_Archery Arte","Style_Trick Arrow Arte","Style_Gunslinger Arte","Style_Sentry Arte","Style_Longsight Arte","Style_Scatterpoint Arte","Style_Bowmaster Arte","Style_Pistolero Arte","Style_Bomber Arte","Style_Daggerthrow Arte","Style_Blasting Flames","Style_Shock Bomb","Style_Arcane Spellshot","Style_Flaming Sphere","Style_Lightning Shot","Style_Area Spark","Style_Binding Cold","Style_Chilling Blast","Style_Hellfire","Style_Storm Caller","Style_Sheer Cold","Style_Whispering Wind","Style_Bursting Fire","Style_Fire Field","Style_Close Circuit","Style_Ice Storm","Style_Manification","Style_Light Control","Style_Darkness Weaving","Style_Sound Control","Style_Arcane Conduit","Style_Freeform Flight","Style_Ether Magic","Style_Time Control","Style_Levitation","Style_Kinetic Assault","Style_Surging Dust","Style_Dust Impact","Style_Propelling Force","Style_Binding Winds","Style_Windsweep","Style_Gravity Force","Style_Telekinesis","Style_Surging Water","Style_Throwcraft","Style_Conjure Blades","Style_Conjure Skyfall","Style_Warsmith","Style_Structural Magic","Style_Clouded Shroud","Style_Arbormaking","Style_Floral Shroud","Style_Smoke Field","Style_Stonemaking","Style_Iron Walls","Style_Glacial Walls","Style_Misty Terrtain","Style_Structural Mastery","Style_Poison Spore","Style_Dust Shaping","Style_Unshaping","Style_Plant Growth","Style_Calming Blooms","Style_Verdant Armory","Style_Terrain Molding","Style_Ground Splitter","Style_Earthen Armory","Style_Water Shape","Style_Icy Terrain","Style_Frozen Armory","Style_Geomancy","Style_Cryomancy","Style_Healing Hands","Style_Earthen Endurance","Style_Propelling Motion","Style_Soul Surge","Style_Blood Flux","Style_Powerwake","Style_Enduring Body","Style_Traversal","Style_Hidden Footing","Style_Remotion","Style_Evasive Maneuvers","Style_Unbeatable Brawn","Style_Unrelenting Motion","Style_Shadow Walking","Style_Reactive Defense","Style_Loyalty Appeal","Style_Social Grace","Style_Flattery","Style_Deft Negotiator","Style_Sales Tactics","Style_Fluster Point","Style_Provoking Anger","Style_Intimidating Fear","Style_Beguiling Instinct","Style_Taunting Wit","Style_Invigorating Rally","Style_Underminer","Style_Stillheart","Style_Connecting Bond","Skill_Agility","Skill_Alchemy","Skill_Analyze","Skill_Build","Skill_Channel","Skill_Charm","Skill_Conjure","Skill_Cook","Skill_Demoralize","Skill_Empathy","Skill_Enchant","Skill_Finesse","Skill_Glyphwork","Skill_Grappling","Skill_Heal","Skill_Inspire","Skill_Kinesis","Skill_Might","Skill_Misdirect","Skill_Physique","Skill_Pilot","Skill_Rationalize","Skill_Resonance","Skill_Search","Skill_Shape","Skill_Shoot","Skill_Skirmish","Skill_Sneak","Skill_Throw","Skill_Tinker","Lang_Minere","Lang_Junal","Lang_Apollen","Lang_Lib","Lang_Cert","Lang_Byric","Lang_Dustell","Lang_Muralic","Lang_Shira","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq","Lang_Kleikan","Lang_Crinere","Lang_Palmic","Lang_Shorespeak","Lang_Verdeni","Lang_Vulca","Lang_Emotion","Lang_Empathy","Lang_Wolfwarg","Lang_Jovean","Lang_Mytikan","Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon","Job_Fighter","Job_Sentinel","Job_Warden","Job_Bulwark","Job_Hunter","Job_Sniper","Job_Trooper","Job_Warmage","Job_Alchemist","Job_Brawler","Job_Kineticist","Job_Rogue","Job_Labourer","Job_Tactician","Job_Magus","Job_Scholar","Job_Inquisitor","Job_Detective","Job_Culinarian","Job_Bard","Job_Medic","Job_Spellwright","Job_Empath","Job_Merchant","Job_Orator","Job_Hardliner","Job_Etherealist","Job_Shade","JStyle_Fighter","JStyle_Sentinel","JStyle_Warden","JStyle_Bulwark","JStyle_Hunter","JStyle_Sniper","JStyle_Trooper","JStyle_Warmage","JStyle_Alchemist","JStyle_Brawler","JStyle_Kineticist","JStyle_Rogue","JStyle_Labourer","JStyle_Tactician","JStyle_Magus","JStyle_Scholar","JStyle_Inquisitor","JStyle_Detective","JStyle_Culinarian","JStyle_Bard","JStyle_Medic","JStyle_Spellwright","JStyle_Empath","JStyle_Merchant","JStyle_Orator","JStyle_Hardliner","JStyle_Etherealist","JStyle_Shade","Stat_Blinded","Stat_Downed","Stat_Dying","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious","Stat_Aflame","Stat_Armored","Stat_Bleeding","Stat_Chilled","Stat_Dodge","Stat_Encumbered","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Impaired","Stat_Jolted","Stat_Prone","Stat_Quickened","Stat_Shielded","Stat_Sickened","Stat_Stunned","Stat_Angered","Stat_Calmed","Stat_Doubt","Stat_Encouraged","Stat_Frightened","Stat_Flustered","Stat_Overjoyed","Stat_Persevering","Stat_Receptive","Stat_Surprised","Stat_Steadfast"],
         values = {"Attribute":{"name":"Attribute","fieldName":"attribute","group":"Type","description":"","variable":"atr{0}{1}","title":"Attributes","subGroup":"","descriptions":[""],
                 "abbreviation":"Attr","baseFormula":"6;CR:_max;BonusAttributePoints","modifiers":"","formula":{"workers":[{"variableName":"","definitionName":"","value":6,"multiplier":1,"max":0},
                         {"variableName":"adv-cr_max","definitionName":"CR","value":0,"multiplier":1,"max":0},
@@ -10161,6 +10380,10 @@ var WuxDef = WuxDef || (function() {
                         {"variableName":"gen-capacity_tech","definitionName":"","value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
+            "TeamIndex":{"name":"TeamIndex","fieldName":"teamindex","group":"Untyped","description":"","variable":"teamindex","title":"Team Index","subGroup":"","descriptions":[""],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
             "Cmb_Vitality":{"name":"Cmb_Vitality","fieldName":"vitality","group":"Combat","description":"","variable":"cmb-vitality{0}","title":"Vitality","subGroup":"Life","descriptions":["Whenever you are reduced to zero HP, your HP restores to full and you lose one vitality. Unlike most resources, vitality can be reduced below 0.","Whenever vitality is lost check if it is below 1. If it is, you gain the Downed status. If the character already had the Downed status, they also gain the Dying and Unconscious statuses which may ultimately kill them.","Most characters will have a max vitality of 1. Player characters will usually start with 3 while special characters can have any amount.","After completing a full rest, 1 vitality is healed."],
                 "abbreviation":"","baseFormula":"","modifiers":"_tech","formula":{"workers":[{"variableName":"","definitionName":"","value":1,"multiplier":1,"max":0},
                         {"variableName":"cmb-vitality_tech","definitionName":"","value":0,"multiplier":1,"max":0}]},
@@ -10470,12 +10693,12 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "Trait_Frozen":{"name":"Trait_Frozen","fieldName":"frozen","group":"Trait","description":"","variable":"trt-frozen{0}","title":"Frozen","subGroup":"Goods Trait","descriptions":["Frozen items in temperatures between 32°F (0°C) and 70°F (21°C) melt, losing 10 lb. of material within 4 hours - becoming worthless. In temperatures above 70°F they melt within 1 hour."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[],
+                "linkedGroups":[]
+                ,
                 "isResource":""},
             "Trait_Transparent":{"name":"Trait_Transparent","fieldName":"transparent","group":"Trait","description":"","variable":"trt-transparent{0}","title":"Transparent","subGroup":"Goods Trait","descriptions":["A transparent material can be seen through due to its translucency. "],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[]
-                ,
+                "linkedGroups":[],
                 "isResource":""},
             "PageSet_Character Creator":{"name":"PageSet_Character Creator","fieldName":"character_creator","group":"PageSet","description":"","variable":"pgs-character_creator{0}","title":"Character Creator","subGroup":"","descriptions":[""],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
@@ -10983,12 +11206,12 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "Chat_PostEmoteNote":{"name":"Chat_PostEmoteNote","fieldName":"postemotenote","group":"Chat","description":"","variable":"chat-post_emotenote{0}","title":"PostEmoteNote","subGroup":"","descriptions":[""],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[],
+                "linkedGroups":[]
+                ,
                 "isResource":""},
             "Chat_OutfitName":{"name":"Chat_OutfitName","fieldName":"outfitname","group":"Chat","description":"","variable":"chat-outfit_name{0}","title":"Outfit Name","subGroup":"","descriptions":["This is the name of the outfit or emote set. Give it a name to differentiate it from other emote sets."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[]
-                ,
+                "linkedGroups":[],
                 "isResource":""},
             "Chat_OutfitEmotes":{"name":"Chat_OutfitEmotes","fieldName":"outfitemotes","group":"Chat","description":"","variable":"chat-outfit_emotes{0}","title":"Outfit Emotes","subGroup":"","descriptions":["This is a JSON file of the emote set. This is used to populate chat data. You can either replace the text here with data containing the emote set's data or you may fill in each emote individually below."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
@@ -11472,12 +11695,12 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "Move":{"name":"Move","fieldName":"move","group":"Untyped","description":"","variable":"","title":"Move","subGroup":"Movement","descriptions":["When a character moves, that character can move into any adjacent space, as long as the space isn’t occupied by an obstruction and is one that they would be able to move in. For example, characters can't move straight up unless they can fly.","Each space you move consumes 1 space of your movement on conpletion of the move. When moving diagonally, you must consume 1 additional space of movement upon entering the space. You are unable to move any more spaces once you are at 0 movement.","Sometimes a character will be required to swim to enter a large body of liquid or climb when moving across a terrain vertically. These are special forms of movement done as part of any Move action.","When swimming or climbing you must consume 1 additional space of movement upon entering the space. A successful DC 10 Physique skill check may be required before entering a space if it is especially difficult to swim or climb."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[],
+                "linkedGroups":[]
+                ,
                 "isResource":""},
             "Adjacency":{"name":"Adjacency","fieldName":"adjacency","group":"Untyped","description":"","variable":"","title":"Adjacency","subGroup":"Movement","descriptions":["Characters are considered adjacent to another character or object when they are within one space of it vertically, horizontally, or diagonally."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[]
-                ,
+                "linkedGroups":[],
                 "isResource":""},
             "Obstruction":{"name":"Obstruction","fieldName":"obstruction","group":"Untyped","description":"","variable":"","title":"Obstruction","subGroup":"Movement","descriptions":["An obstruction is anything that blocks passage, preventing movement into its space entirely. Obstructions are typically environmental but other characters can also be obstructions. Characters are obstructed by any solid objects or characters that are the same Size as them or larger.","Characters can freely pass through spaces occupied by obstructions smaller than them, including other characters; however, they can’t end a movement in a space that is occupied by another character or object unless specified. This means that a Size 2 character, for example, could move through the space of a Size 1 character or object, but could not finish its move in the same space.","Allied characters never cause obstruction, but characters still can’t end moves in their space."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
@@ -11925,10 +12148,10 @@ var WuxDef = WuxDef || (function() {
                 "isResource":"","mainGroup":"Advanced","affinity":"","requirements":"None","tier":null},
             "Style_Whispering Wind":{"name":"Style_Whispering Wind","fieldName":"style_whispering_wind","group":"Style","description":"","variable":"sty-whispering_wind{0}","title":"Whispering Wind","subGroup":"Channelling","descriptions":["Wood. A style that allows one to communicate over long distances with the wind."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
-                "linkedGroups":[],
-                "isResource":"","mainGroup":"Style","affinity":"","requirements":"None","tier":null},
-            "Style_Bursting Fire":{"name":"Style_Bursting Fire","fieldName":"style_bursting_fire","group":"Style","description":"","variable":"sty-bursting_fire{0}","title":"Bursting Fire","subGroup":"Channelling","descriptions":["Fire. A Channel-focused style that explodes flames around the caster."]
+                "linkedGroups":[]
                 ,
+                "isResource":"","mainGroup":"Style","affinity":"","requirements":"None","tier":null},
+            "Style_Bursting Fire":{"name":"Style_Bursting Fire","fieldName":"style_bursting_fire","group":"Style","description":"","variable":"sty-bursting_fire{0}","title":"Bursting Fire","subGroup":"Channelling","descriptions":["Fire. A Channel-focused style that explodes flames around the caster."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":"","mainGroup":"Style","affinity":"","requirements":"None","tier":null},
@@ -12776,7 +12999,7 @@ var WuxDef = WuxDef || (function() {
             "Job_Warden":{"name":"Job_Warden","fieldName":"job_warden","group":"Job","description":"","variable":"job-warden{0}","title":"Warden","subGroup":"Vanguard","descriptions":["The warden is a master of the ethereal, able to weave it into armor to protect themselves and their allies. By providing temporary shields, a warden is a fluid defender prioritizing charging into battle.\nThe warden has a few ways to defend themselves but especially in melee combat does the full arsenal unlock. As such, learning additional techniques to improve their melee combat is beneficial to the warden.\nAs their mantles are based on the enchant skill, wardens often do well with the skill trained. Like all vanguards, wardens want a high body attribute along with a high quickness for their enchant."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","requirements":"None","defenses":"Defs:Brace(++).Warding(+).Reflex(+) Sens:Resolve(+)"},
+                "isResource":"","requirements":"None","defenses":"Defs:Brace(+).Warding(+).Reflex(++) Sens:Resolve(+)"},
             "Job_Bulwark":{"name":"Job_Bulwark","fieldName":"job_bulwark","group":"Job","description":"","variable":"job-bulwark{0}","title":"Bulwark","subGroup":"Vanguard","descriptions":["Bulwarks are masters of conjury as they use their skills to instantly materialize structures. With this skill they create blockades to funnel foes and shield their allies.\nThe Bulwark can gain many benefits when using techniques that use the Materialize trait, however lacks any techniques to do so naturally. The job is created with walls in mind and providing structures for cover.\nConjure is a very useful skill for Bulwark as it allows them to provide bonuses to the objects they create. Body is also a great attribute to have as it bolsters their own HP and provides bonuses to the conjure skill."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
@@ -12784,7 +13007,7 @@ var WuxDef = WuxDef || (function() {
             "Job_Hunter":{"name":"Job_Hunter","fieldName":"job_hunter","group":"Job","description":"","variable":"job-hunter{0}","title":"Hunter","subGroup":"Operator","descriptions":["Stalking their prey, a hunter is a focused predator of their enemies. By assigning a creature as their quarry, a hunter can track them easily and strike with pinpoint accuracy through any armor they possess.\nA hunter is best utilized as a ranged attacker and benefits from attacks that keep them at a distance. They also fair very well against heavily armored characters due to their ability to add armor-piercing to their ranged attacks.\nGiving the hunter training in the shoot skill will always be beneficial as many of its abilities require its use. As such, hunters appreciate a high precision attribute to help support their techniques."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","requirements":"None","defenses":"Defs:Warding(++).Reflex(++) Sens:Guile(+)"},
+                "isResource":"","requirements":"None","defenses":"Defs:Warding(+).Reflex(++) Sens:Guile(+)"},
             "Job_Sniper":{"name":"Job_Sniper","fieldName":"job_sniper","group":"Job","description":"","variable":"job-sniper{0}","title":"Sniper","subGroup":"Operator","descriptions":["The sniper is a damage focused job that protects itself by keeping its distance. It is known for its accuracy, even allowing it to see through soft cover allowing it to counter those who may try to hide in mist or fog on a battlefield.\nA Sniper benefits from using techniques from a long range. Styles that allow a sniper to maintain distance are to its benefit. While distance will allow a Sniper some amount of protection, having ways to maintain cover or create it are always beneficial to a Sniper.\nSnipers like to have a high Precision attribute to allow it to use its Shoot-based techniques accurately. Likewise, a Sniper benefits from having training in the Shoot skill."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
@@ -12796,7 +13019,7 @@ var WuxDef = WuxDef || (function() {
             "Job_Warmage":{"name":"Job_Warmage","fieldName":"job_warmage","group":"Job","description":"","variable":"job-warmage{0}","title":"Warmage","subGroup":"Operator","descriptions":["By covering the field in explosions, the warmage intends to level groups. They provide methods to improve area attacks allowing them to shield their allies from their attacks.\nWith a lot of emphasis on area attacks, techniques that target bursts, blasts, and cones are always useful to the warmage - but especially any blast abilities.\nThere are a variety of techniques that can create area effects, but damaging ones typically are keyed off of shoot or throw skills. As with all operators, the warmage enjoys some benefit from a high precion attribute."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","requirements":"None","defenses":"Defs:Warding(++).Reflex(++) Sens:Guile(+)"},
+                "isResource":"","requirements":"None","defenses":"Defs:Warding(+).Reflex(++) Sens:Guile(+)"},
             "Job_Alchemist":{"name":"Job_Alchemist","fieldName":"job_alchemist","group":"Job","description":"","variable":"job-alchemist{0}","title":"Alchemist","subGroup":"Operator","descriptions":[""],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
@@ -12816,7 +13039,7 @@ var WuxDef = WuxDef || (function() {
             "Job_Labourer":{"name":"Job_Labourer","fieldName":"job_labourer","group":"Job","description":"","variable":"job-labourer{0}","title":"Labourer","subGroup":"Athlete","descriptions":["Some tasks simply require sustained effort and the labourer is keenly built to retain their endurance for such situations. With many techniques that allow them to maintain energy, the labourer can keep energy high and hold out to the end of a task.\nA labourer appreciates training in the endurance skill as it allows them to make full use of all of their techniques, however this is far from a mandatory skill. Much like all athletes, the quickness attribute will help a labourer maintain sustained and fast movement."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","requirements":"None","defenses":"Defs:Brace(+).Refex(++) Sens:Insight(+)"},
+                "isResource":"","requirements":"None","defenses":"Defs:Brace(++).Warding(+).Reflex(+) Sens:Insight(+)"},
             "Job_Tactician":{"name":"Job_Tactician","fieldName":"job_tactician","group":"Job","description":"","variable":"job-tactician{0}","title":"Tactician","subGroup":"Strategist","descriptions":["Tacticians are masters of controlling a battlefield. Their techniques emphasize positioning and allow them to move their allies and grant them bonus actions. \nA tactician's techniques require them to be close to their allies with a slight lean towards being in melee so anything to help defend them in this position is helpful. \nA tactician benefits from training in the Analyze skill as some of its techniques require it to unlock their full potential. As such, tacticians also appreciate a high Reason attribute to bolster their skill to the fullest. "],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
@@ -12888,7 +13111,7 @@ var WuxDef = WuxDef || (function() {
             "JStyle_Warden":{"name":"JStyle_Warden","fieldName":"jstyle_warden","group":"JobStyle","description":"","variable":"jbs-warden{0}","title":"Warden","subGroup":"Vanguard","descriptions":["The warden is a master of the ethereal, able to weave it into armor to protect themselves and their allies. By providing temporary shields, a warden is a fluid defender prioritizing charging into battle.\nThe warden has a few ways to defend themselves but especially in melee combat does the full arsenal unlock. As such, learning additional techniques to improve their melee combat is beneficial to the warden.\nAs their mantles are based on the enchant skill, wardens often do well with the skill trained. Like all vanguards, wardens want a high body attribute along with a high quickness for their enchant."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","requirements":"None","defenses":"Defs:Brace(++).Warding(+).Reflex(+) Sens:Resolve(+)"},
+                "isResource":"","requirements":"None","defenses":"Defs:Brace(+).Warding(+).Reflex(++) Sens:Resolve(+)"},
             "JStyle_Bulwark":{"name":"JStyle_Bulwark","fieldName":"jstyle_bulwark","group":"JobStyle","description":"","variable":"jbs-bulwark{0}","title":"Bulwark","subGroup":"Vanguard","descriptions":["Bulwarks are masters of conjury as they use their skills to instantly materialize structures. With this skill they create blockades to funnel foes and shield their allies.\nThe Bulwark can gain many benefits when using techniques that use the Materialize trait, however lacks any techniques to do so naturally. The job is created with walls in mind and providing structures for cover.\nConjure is a very useful skill for Bulwark as it allows them to provide bonuses to the objects they create. Body is also a great attribute to have as it bolsters their own HP and provides bonuses to the conjure skill."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
@@ -12896,7 +13119,7 @@ var WuxDef = WuxDef || (function() {
             "JStyle_Hunter":{"name":"JStyle_Hunter","fieldName":"jstyle_hunter","group":"JobStyle","description":"","variable":"jbs-hunter{0}","title":"Hunter","subGroup":"Operator","descriptions":["Stalking their prey, a hunter is a focused predator of their enemies. By assigning a creature as their quarry, a hunter can track them easily and strike with pinpoint accuracy through any armor they possess.\nA hunter is best utilized as a ranged attacker and benefits from attacks that keep them at a distance. They also fair very well against heavily armored characters due to their ability to add armor-piercing to their ranged attacks.\nGiving the hunter training in the shoot skill will always be beneficial as many of its abilities require its use. As such, hunters appreciate a high precision attribute to help support their techniques."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","requirements":"None","defenses":"Defs:Warding(++).Reflex(++) Sens:Guile(+)"},
+                "isResource":"","requirements":"None","defenses":"Defs:Warding(+).Reflex(++) Sens:Guile(+)"},
             "JStyle_Sniper":{"name":"JStyle_Sniper","fieldName":"jstyle_sniper","group":"JobStyle","description":"","variable":"jbs-sniper{0}","title":"Sniper","subGroup":"Operator","descriptions":["The sniper is a damage focused job that protects itself by keeping its distance. It is known for its accuracy, even allowing it to see through soft cover allowing it to counter those who may try to hide in mist or fog on a battlefield.\nA Sniper benefits from using techniques from a long range. Styles that allow a sniper to maintain distance are to its benefit. While distance will allow a Sniper some amount of protection, having ways to maintain cover or create it are always beneficial to a Sniper.\nSnipers like to have a high Precision attribute to allow it to use its Shoot-based techniques accurately. Likewise, a Sniper benefits from having training in the Shoot skill."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
@@ -12908,7 +13131,7 @@ var WuxDef = WuxDef || (function() {
             "JStyle_Warmage":{"name":"JStyle_Warmage","fieldName":"jstyle_warmage","group":"JobStyle","description":"","variable":"jbs-warmage{0}","title":"Warmage","subGroup":"Operator","descriptions":["By covering the field in explosions, the warmage intends to level groups. They provide methods to improve area attacks allowing them to shield their allies from their attacks.\nWith a lot of emphasis on area attacks, techniques that target bursts, blasts, and cones are always useful to the warmage - but especially any blast abilities.\nThere are a variety of techniques that can create area effects, but damaging ones typically are keyed off of shoot or throw skills. As with all operators, the warmage enjoys some benefit from a high precion attribute."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","requirements":"None","defenses":"Defs:Warding(++).Reflex(++) Sens:Guile(+)"},
+                "isResource":"","requirements":"None","defenses":"Defs:Warding(+).Reflex(++) Sens:Guile(+)"},
             "JStyle_Alchemist":{"name":"JStyle_Alchemist","fieldName":"jstyle_alchemist","group":"JobStyle","description":"","variable":"jbs-alchemist{0}","title":"Alchemist","subGroup":"Operator","descriptions":[""],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
@@ -12928,7 +13151,7 @@ var WuxDef = WuxDef || (function() {
             "JStyle_Labourer":{"name":"JStyle_Labourer","fieldName":"jstyle_labourer","group":"JobStyle","description":"","variable":"jbs-labourer{0}","title":"Labourer","subGroup":"Athlete","descriptions":["Some tasks simply require sustained effort and the labourer is keenly built to retain their endurance for such situations. With many techniques that allow them to maintain energy, the labourer can keep energy high and hold out to the end of a task.\nA labourer appreciates training in the endurance skill as it allows them to make full use of all of their techniques, however this is far from a mandatory skill. Much like all athletes, the quickness attribute will help a labourer maintain sustained and fast movement."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","requirements":"None","defenses":"Defs:Brace(+).Refex(++) Sens:Insight(+)"},
+                "isResource":"","requirements":"None","defenses":"Defs:Brace(++).Warding(+).Reflex(+) Sens:Insight(+)"},
             "JStyle_Tactician":{"name":"JStyle_Tactician","fieldName":"jstyle_tactician","group":"JobStyle","description":"","variable":"jbs-tactician{0}","title":"Tactician","subGroup":"Strategist","descriptions":["Tacticians are masters of controlling a battlefield. Their techniques emphasize positioning and allow them to move their allies and grant them bonus actions. \nA tactician's techniques require them to be close to their allies with a slight lean towards being in melee so anything to help defend them in this position is helpful. \nA tactician benefits from training in the Analyze skill as some of its techniques require it to unlock their full potential. As such, tacticians also appreciate a high Reason attribute to bolster their skill to the fullest. "],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
@@ -12994,7 +13217,7 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":"","shortDescription":"","points":"15","endsOnRoundStart":false,"endsOnTrigger":false},
-            "Stat_Downed":{"name":"Stat_Downed","fieldName":"stat_downed","group":"Status","description":"","variable":"sts-downed{0}","title":"Downed","subGroup":"Status","descriptions":["A downed character is severely injured. You automatically fail all skill checks from the active category. All attacks against this character have +1 Advantage and they receive no Move Charge at the start of a round. \nThis condition ends automatically after 1 hour of rest."],
+            "Stat_Downed":{"name":"Stat_Downed","fieldName":"stat_downed","group":"Status","description":"","variable":"sts-downed{0}","title":"Downed","subGroup":"Status","descriptions":["A downed character is severely injured. You automatically fail all skill checks from the active category. All of your defenses and senses are reduced by 5. Finally, you receive no Move Charge at the start of a round. \nThis condition ends automatically after 1 hour of rest."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":"","shortDescription":"Cannot use Attack or Activity Techniques\nIncoming attacks +1 Adv.\nNo Start of Round Move Charge.","points":"5","endsOnRoundStart":false,"endsOnTrigger":false},
@@ -13154,8 +13377,8 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":"","shortDescription":"","points":"12","endsOnRoundStart":false,"endsOnTrigger":true}},
-        sortingGroups = {"group":{"Type":["Attribute","Skill","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","InnateDefenseType","InnateSenseType","StatBonus","General","Chat","Combat","Social","Influence","SeverityRank","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobGroup","StyleGroup","StyleSubGroup","AdvancedGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Currency","ToolSlot","ConsumableSlot","Note","PersonalityType","MotivationType"],"VariableMod":["_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_expertise","_gear","_affinity","_error","_refresh"],"AncestryType":["Human","Spirit"],"AffinityType":["Wood","Fire","Earth","Metal","Water"],"AffinityTypeDesc":["WoodF","FireF","EarthF","MetalF","WaterF"],"InnateDefenseType":["Def_BOD","Def_PRC","Def_QCK"],"InnateSenseType":["Def_CNV","Def_INT","Def_RSN"],"StatBonus":["SB_MAX","SB_MedDef","SB_GoodDef","SB_GreatDef","SB_ExcellentDef"],"AttributeValue":["AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad"],"JobTier":["JobTier0","JobTier1","JobTier2","JobTier3","JobTier4","JobTier5","JobTier6"],"LoreTier":["LoreTier0","LoreTier1","LoreTier2","LoreTier3"],"GeneralLoreTier":["GeneralLoreTier0","GeneralLoreTier1"],"LoreCategory":["LoreCat_Academics","LoreCat_Profession","LoreCat_Craftmanship","LoreCat_Geography","LoreCat_History","LoreCat_Culture","LoreCat_Religion"],"RegionType":["Walthair","EastSea","Khem","Aridsha","Ceres","Colswei","Dowfeng","Wayling","Novus"],"RaceType":["Coastborne","Suntouched","Sandfolk","Plains-kin","Frostcloaked","Earthblood","Other"],"GenderType":["Male","Female","NonBinary"],"NotebookType":["Notebook","Category"],"PostType":["post-Notes","post-Info","post-Location","post-System","post-Chapter","post-History","post-Speak","post-Whisper","post-Yell","post-Think","post-Describe"],"ChatType":["Speak","Whisper","Yell","Think","Describe"],"EmotePostType":["PostToChat","PostToNotebook"],"TimeType":["Dawn","Morning","Midday","Evening","Night","Deepnight"],"Boon":["Boon_Rest","Boon_Savor","Boon_Truth"],"InfluenceType":["InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal"],"SeverityRank":["Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity"],"DamageType":["Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Fire","Dmg_Force","Dmg_Piercing","Dmg_Shock","Dmg_Tension","Dmg_Weapon"],"TerrainFxType":["Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden"],"PerkGroup":["PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks","PerkGroup_Slot Perks"],"JobGroup":["JobGroup_Vanguard","JobGroup_Operator","JobGroup_Athlete","JobGroup_Strategist","JobGroup_Waymaker","JobGroup_Advocate","JobGroup_Esper"],"StyleGroup":["StyleGroup_Melee Weaponry","StyleGroup_Ranged Weaponry","StyleGroup_Martial Arts","StyleGroup_Arcanification Magic","StyleGroup_Fluctuation Magic","StyleGroup_Materialization Magic","StyleGroup_Transformation Magic","StyleGroup_Athletics","StyleGroup_Speechcraft"],"StyleSubGroup":["StyleSubGroup_Mighty Weapons","StyleSubGroup_Skirmish Weapons","StyleSubGroup_Finesse Weapons","StyleSubGroup_Shoot Weapons","StyleSubGroup_Throw Weapons","StyleSubGroup_Martial Arts","StyleSubGroup_Kinetics","StyleSubGroup_Evocation","StyleSubGroup_Channelling","StyleSubGroup_Enchantment","StyleSubGroup_Fluctuation","StyleSubGroup_Battlesmithing","StyleSubGroup_Conjury","StyleSubGroup_Transmutation","StyleSubGroup_Physiomancy","StyleSubGroup_Brawn","StyleSubGroup_Stealth","StyleSubGroup_Acrobatics","StyleSubGroup_Favor Building","StyleSubGroup_Disruption","StyleSubGroup_Emotional Support"],"GearGroup":["GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear"],"PersonalityType":["Personality_Stoic","Personality_Charmer","Personality_Idealist","Personality_Cynic","Personality_Loner","Personality_Leader","Personality_Rebel","Personality_Thinker","Personality_Caregiver","Personality_Dreamer","Personality_Realist","Personality_Mediator","Personality_Strategist","Personality_Joker","Personality_Visionary","Personality_Survivor","Personality_Guardian","Personality_Tactician","Personality_Pacifist","Personality_Zealot"],"MotivationType":["Motivation_Power","Motivation_Justice","Motivation_Freedom","Motivation_Revenge","Motivation_Survival","Motivation_Glory","Motivation_Knowledge","Motivation_Redemption","Motivation_Belonging","Motivation_Wealth","Motivation_Truth","Motivation_Peace","Motivation_Control","Motivation_Chaos","Motivation_Duty","Motivation_Fame","Motivation_Discovery","Motivation_Legacy","Motivation_Love","Motivation_Escape"],"Attribute":["Attr_BOD","Attr_PRC","Attr_QCK","Attr_CNV","Attr_INT","Attr_RSN"],"Untyped":["Check","CombatDetails","FlatDC","BoostStyleTech","BoostGearTech","BoostPerkTech","Ancestry","Affinity","AdvancedAffinity","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","WeaponSlots","EquipmentSlots","TargetHV","Resistance","Weakness","MvCharge","TargetFavor","RepeatingInfluences","Loading","TechPopupValues","ItemPopupValues","RepeatingActiveEmotes","RepeatingActiveEmotesNotes","RepeatingOutfits","RepeatingJobStyles","RepeatingStyles","RepeatingPermaTech","RepeatingJobTech","RepeatingAdvTech","RepeatingPassiveTech","RepeatingGearTech","RepeatingBasicActions","RepeatingBasicRecovery","RepeatingBasicAttack","RepeatingBasicSocial","RepeatingBasicSpirit","RepeatingCustomTech","TechActionType","TechName","TechDisplayName","TechResourceData","TechTargetingData","TechTrait","TechTrigger","TechRequirements","TechItemReq","TechFlavorText","TechEffect","TechSEffectTitle","TechSEffect","TechEEffectTitle","TechDef","ItemName","ItemAction","ItemCount","ItemGroup","ItemStats","ItemTrait","ItemDescription","ItemCraftSkill","ItemCraftMats","ItemCraft","RepeatingEquipment","RepeatingConsumables","RepeatingGoods","WeaponDamage","WeaponDamageVal","Move","Adjacency","Obstruction","StrideRoll","MaxStride","FreeMove","Pulled","Pushed","ForceMove","Jump","Fly","Lifting","Falling","Teleport","Notebooks","NotebookPages"],"Title":["Title_Boon","Title_UsingInfluences","Title_Origin","Title_Background","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_Chat","Title_Emotes","Title_LanguageSelect","Title_Skills","Title_Outfits","Title_EquippedGear","Title_Notebook","Title_ResourceCost","Title_Targetting","Title_Range","Title_Patterns","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnEnter","Title_TechNewTargets","Title_TechNewOnEnter","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEndFocus"],"Advancement":["Level","CR","MaxCR","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","JobTier","JobTechniques","LearnStyle","StyleTechniques"],"Training":["TrainingKnowledge","TrainingTechniques","PP","BonusTraining"],"Defense":["Def_Brace","Def_Fortitude","Def_Warding","Def_Hide","Def_Reflex","Def_Evasion"],"Sense":["Def_Resolve","Def_Freewill","Def_Insight","Def_Notice","Def_Guile","Def_Scrutiny"],"Result":["WillBreak"],"Origin":["CharSheetName","SheetName","FullName","DisplayName","QuickDescription","Backstory","Age","Gender","HomeRegion","Homeland","Ethnicity"],"Currency":["Currency_Jin","Currency_Gold","Currency_CP"],"General":["HP","WILL","Surge","EN","StartEN","RoundEN","Power","Accuracy","Artistry","Charisma","Recall","Initiative","CarryingCapacity"],"Combat":["Cmb_Vitality","Cmb_HV","Cmb_Armor","Cmb_Hardness","Cmb_ResistanceDesc","Cmb_WeaknessDesc","Cmb_Mv","Cmb_MvPotency"],"Social":["Soc_Favor","Soc_Influence","Soc_InfluenceDesc","Soc_Severity","Soc_RequestCheck","Soc_SupportInfluence","Soc_OpposeInfluence","Soc_Impatience"],"":["Severity"],"Trait":["Trait_Arcanify","Trait_Arcing","Trait_Attack","Trait_Break","Trait_Delayed","Trait_Envoke","Trait_Focus","Trait_Holdfast","Trait_Illusion","Trait_Materialize","Trait_Permanent","Trait_Resonator","Trait_Seeking","Trait_Transmute","Trait_AP","Trait_Brutal","Trait_Optional","Trait_Ammunition","Trait_Axe","Trait_Bow","Trait_Ingested","Trait_Hammer","Trait_Handgun","Trait_Inhalent","Trait_Knife","Trait_Longshot","Trait_Loud","Trait_Magitech","Trait_MaxBulk15","Trait_MaxBulk60","Trait_MaxBulk120","Trait_MaxBulk250","Trait_Medkit","Trait_MinBulk15","Trait_MinBulk60","Trait_MinBulk120","Trait_MinBulk250","Trait_MinDust15","Trait_MinDust60","Trait_MinDust120","Trait_Polearm","Trait_Resonant","Trait_Scattershot","Trait_Sharp","Trait_Sturdy","Trait_Sword","Trait_Whip","Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Transparent"],"PageSet":["PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training"],"Page":["Page_Origin","Page_Jobs","Page_Skills","Page_ActiveSkills","Page_SocialSkills","Page_TechnicalSkills","Page_Knowledge","Page_Attributes","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Post","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar","Page_NPC","Page_Notes"],"ActiveSkills":["Fight","Cast","Athletics"],"SocialSkills":["Persuade","Cunning"],"TechnicalSkills":["Craft","Device","Investigate"],"Popup":["Popup_PopupActive","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_InspectPopupName","Popup_ItemInspectionName","Popup_TechniqueInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectType","Popup_ItemSelectDesc","Popup_ItemSelectIsOn"],"Chat":["Chat_Type","Chat_PostTarget","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_PostEmoteNote","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","Chat_OutfitDefault","Chat_OutfitDefaultURL"],"Forme":["Forme_SeeTechniques","Forme_Name","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_JobSlot","Forme_AdvancedSlot","Forme_StyleSlot"],"Action":["Action_Use","Action_Inspect","Action_Actions","Action_SetData","Action_Techniques"],"Gear":["Gear_Equip","Gear_EquipHead","Gear_EquipFace","Gear_EquipChest","Gear_EquipArm","Gear_EquipLeg","Gear_EquipFoot","Gear_Unequip","Gear_Purchase","Gear_Delete","Gear_Inspect","Gear_EquipmentSlot","Gear_ItemName","Gear_ItemActions","Gear_ItemType","Gear_EquipWeapon","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_WeaponSlot"],"System":["System_Crafting","System_CraftingComponent","System_Cooking","System_HighQualityMeals"],"CraftingComp":["CraftBulk","CraftResources","CraftSkill","CraftDC","CraftTime"],"PatternType":["Line","Cone","Blast","Burst","Zone"],"Rules":["Bulk"],"Note":["Note_GenName","Note_GenFullName","Note_GenGender","Note_GenHomeRegion","Note_GenRace","Note_GenPersonality","Note_GenMotivation","Note_GenerateCharacter","Note_UseGeneration","Note_ClearBackground","Note_NotebookActions","Note_NotebookName","Note_NotebookContents","Note_NotebookOpen","Note_NotebookDelete","Note_NotebookReload","Note_NotebookClose","Note_NotebookSave","Note_NotebookIsDirty","Note_OpenNotebook","Note_OpenNotebookActions","Note_PageType","Note_PageDisplay","Note_PagePost","Note_PageDelete","Note_PageTemplateData","Note_PageContents","Note_PageLocation","Note_PageArea","Note_PageDate","Note_PageTime","Note_PageCharName","Note_PageCharURL","Note_PageCharEmote","Note_PageCharLanguage","Note_PageQuestName","Note_PageChapter","Note_PagePart"],"Style":["Style_Basic Action","Style_Basic Recovery","Style_Basic Attack","Style_Basic Social","Style_Basic Spirit","Style_Hammering Arte","Style_Cleaving Arte","Style_Battering Arte","Style_Berserker Arte","Style_Mauler Arte","Style_Avenger Arte","Style_Chargestrike Arte","Style_Overwhelming Arte","Style_Arcanestrike Arte","Style_Duelist Arte","Style_Swashbuckling Arte","Style_Phalanx Arte","Style_Jumpspear Arte","Style_Spellblade Arte","Style_Fencer Arte","Style_Sky Pike Arte","Style_Finesse Blade Arte","Style_Whip Arte","Style_Flashcut Arte","Style_Trickster Arte","Style_Forceful Fist Arte","Style_Stepflow Arte","Style_Aerial Arte","Style_Wrestling Arte","Style_Galegrip Arte","Style_Powerarm Arte","Style_Swaying Palm Arte","Style_Skyfall Arte","Style_Ironhold Arte","Style_Heaven's Reach Arte","Style_Rapid Strikes Arte","Style_Disruption Form Arte","Style_Archery Arte","Style_Trick Arrow Arte","Style_Gunslinger Arte","Style_Sentry Arte","Style_Longsight Arte","Style_Scatterpoint Arte","Style_Bowmaster Arte","Style_Pistolero Arte","Style_Bomber Arte","Style_Daggerthrow Arte","Style_Blasting Flames","Style_Shock Bomb","Style_Arcane Spellshot","Style_Flaming Sphere","Style_Lightning Shot","Style_Area Spark","Style_Binding Cold","Style_Chilling Blast","Style_Hellfire","Style_Storm Caller","Style_Sheer Cold","Style_Whispering Wind","Style_Bursting Fire","Style_Fire Field","Style_Close Circuit","Style_Ice Storm","Style_Manification","Style_Light Control","Style_Darkness Weaving","Style_Sound Control","Style_Arcane Conduit","Style_Freeform Flight","Style_Ether Magic","Style_Time Control","Style_Levitation","Style_Kinetic Assault","Style_Surging Dust","Style_Dust Impact","Style_Propelling Force","Style_Binding Winds","Style_Windsweep","Style_Gravity Force","Style_Telekinesis","Style_Surging Water","Style_Throwcraft","Style_Conjure Blades","Style_Conjure Skyfall","Style_Warsmith","Style_Structural Magic","Style_Clouded Shroud","Style_Arbormaking","Style_Floral Shroud","Style_Smoke Field","Style_Stonemaking","Style_Iron Walls","Style_Glacial Walls","Style_Misty Terrtain","Style_Structural Mastery","Style_Poison Spore","Style_Dust Shaping","Style_Unshaping","Style_Plant Growth","Style_Calming Blooms","Style_Verdant Armory","Style_Terrain Molding","Style_Ground Splitter","Style_Earthen Armory","Style_Water Shape","Style_Icy Terrain","Style_Frozen Armory","Style_Geomancy","Style_Cryomancy","Style_Healing Hands","Style_Earthen Endurance","Style_Propelling Motion","Style_Soul Surge","Style_Blood Flux","Style_Powerwake","Style_Enduring Body","Style_Traversal","Style_Hidden Footing","Style_Remotion","Style_Evasive Maneuvers","Style_Unbeatable Brawn","Style_Unrelenting Motion","Style_Shadow Walking","Style_Reactive Defense","Style_Loyalty Appeal","Style_Social Grace","Style_Flattery","Style_Deft Negotiator","Style_Sales Tactics","Style_Fluster Point","Style_Provoking Anger","Style_Intimidating Fear","Style_Beguiling Instinct","Style_Taunting Wit","Style_Invigorating Rally","Style_Underminer","Style_Stillheart","Style_Connecting Bond"],"Skill":["Skill_Agility","Skill_Alchemy","Skill_Analyze","Skill_Build","Skill_Channel","Skill_Charm","Skill_Conjure","Skill_Cook","Skill_Demoralize","Skill_Empathy","Skill_Enchant","Skill_Finesse","Skill_Glyphwork","Skill_Grappling","Skill_Heal","Skill_Inspire","Skill_Kinesis","Skill_Might","Skill_Misdirect","Skill_Physique","Skill_Pilot","Skill_Rationalize","Skill_Resonance","Skill_Search","Skill_Shape","Skill_Shoot","Skill_Skirmish","Skill_Sneak","Skill_Throw","Skill_Tinker"],"Language":["Lang_Minere","Lang_Junal","Lang_Apollen","Lang_Lib","Lang_Cert","Lang_Byric","Lang_Dustell","Lang_Muralic","Lang_Shira","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq","Lang_Kleikan","Lang_Crinere","Lang_Palmic","Lang_Shorespeak","Lang_Verdeni","Lang_Vulca","Lang_Emotion","Lang_Empathy","Lang_Wolfwarg","Lang_Jovean","Lang_Mytikan"]
-                ,"Lore":["Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"],"Job":["Job_Fighter","Job_Sentinel","Job_Warden","Job_Bulwark","Job_Hunter","Job_Sniper","Job_Trooper","Job_Warmage","Job_Alchemist","Job_Brawler","Job_Kineticist","Job_Rogue","Job_Labourer","Job_Tactician","Job_Magus","Job_Scholar","Job_Inquisitor","Job_Detective","Job_Culinarian","Job_Bard","Job_Medic","Job_Spellwright","Job_Empath","Job_Merchant","Job_Orator","Job_Hardliner","Job_Etherealist","Job_Shade"],"JobStyle":["JStyle_Fighter","JStyle_Sentinel","JStyle_Warden","JStyle_Bulwark","JStyle_Hunter","JStyle_Sniper","JStyle_Trooper","JStyle_Warmage","JStyle_Alchemist","JStyle_Brawler","JStyle_Kineticist","JStyle_Rogue","JStyle_Labourer","JStyle_Tactician","JStyle_Magus","JStyle_Scholar","JStyle_Inquisitor","JStyle_Detective","JStyle_Culinarian","JStyle_Bard","JStyle_Medic","JStyle_Spellwright","JStyle_Empath","JStyle_Merchant","JStyle_Orator","JStyle_Hardliner","JStyle_Etherealist","JStyle_Shade"],"Status":["Stat_Blinded","Stat_Downed","Stat_Dying","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious","Stat_Aflame","Stat_Armored","Stat_Bleeding","Stat_Chilled","Stat_Dodge","Stat_Encumbered","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Impaired","Stat_Jolted","Stat_Prone","Stat_Quickened","Stat_Shielded","Stat_Sickened","Stat_Stunned","Stat_Angered","Stat_Calmed","Stat_Doubt","Stat_Encouraged","Stat_Frightened","Stat_Flustered","Stat_Overjoyed","Stat_Persevering","Stat_Receptive","Stat_Surprised","Stat_Steadfast"]},"subGroup":{"":["Attribute","Skill","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","InnateDefenseType","InnateSenseType","StatBonus","General","Chat","Combat","Social","Influence","SeverityRank","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobGroup","StyleGroup","StyleSubGroup","AdvancedGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Currency","ToolSlot","ConsumableSlot","Note","PersonalityType","MotivationType","_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_expertise","_gear","_affinity","_error","_refresh","Human","Spirit","Wood","WoodF","Fire","FireF","Earth","EarthF","Metal","MetalF","Water","WaterF","Def_BOD","Def_PRC","Def_QCK","Def_CNV","Def_INT","Def_RSN","SB_MAX","SB_MedDef","SB_GoodDef","SB_GreatDef","SB_ExcellentDef","AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad","JobTier0","JobTier1","JobTier2","JobTier3","JobTier4","JobTier5","JobTier6","LoreTier0","LoreTier1","LoreTier2","LoreTier3","GeneralLoreTier0","GeneralLoreTier1","LoreCat_Academics","LoreCat_Profession","LoreCat_Craftmanship","LoreCat_Geography","LoreCat_History","LoreCat_Culture","LoreCat_Religion","Walthair","EastSea","Khem","Aridsha","Ceres","Colswei","Dowfeng","Wayling","Novus","Male","Female","NonBinary","Notebook","Category","post-Notes","post-Info","post-Location","post-System","post-Chapter","post-History","post-Speak","post-Whisper","post-Yell","post-Think","post-Describe","Speak","Whisper","Yell","Think","Describe","PostToChat","PostToNotebook","Dawn","Morning","Midday","Evening","Night","Deepnight","Boon_Rest","Boon_Savor","Boon_Truth","InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal","Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity","Dmg_Tension","Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden","PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks","PerkGroup_Slot Perks","JobGroup_Vanguard","JobGroup_Operator","JobGroup_Athlete","JobGroup_Strategist","JobGroup_Waymaker","JobGroup_Advocate","JobGroup_Esper","StyleGroup_Melee Weaponry","StyleGroup_Ranged Weaponry","StyleGroup_Martial Arts","StyleGroup_Arcanification Magic","StyleGroup_Fluctuation Magic","StyleGroup_Materialization Magic","StyleGroup_Transformation Magic","StyleGroup_Athletics","StyleGroup_Speechcraft","GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear","Personality_Stoic","Personality_Charmer","Personality_Idealist","Personality_Cynic","Personality_Loner","Personality_Leader","Personality_Rebel","Personality_Thinker","Personality_Caregiver","Personality_Dreamer","Personality_Realist","Personality_Mediator","Personality_Strategist","Personality_Joker","Personality_Visionary","Personality_Survivor","Personality_Guardian","Personality_Tactician","Personality_Pacifist","Personality_Zealot","Motivation_Power","Motivation_Justice","Motivation_Freedom","Motivation_Revenge","Motivation_Survival","Motivation_Glory","Motivation_Knowledge","Motivation_Redemption","Motivation_Belonging","Motivation_Wealth","Motivation_Truth","Motivation_Peace","Motivation_Control","Motivation_Chaos","Motivation_Duty","Motivation_Fame","Motivation_Discovery","Motivation_Legacy","Motivation_Love","Motivation_Escape","Attr_BOD","Attr_PRC","Attr_QCK","Attr_CNV","Attr_INT","Attr_RSN","Check","CombatDetails","FlatDC","Title_Boon","BoostStyleTech","BoostGearTech","BoostPerkTech","Level","CR","MaxCR","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","JobTier","JobTechniques","LearnStyle","StyleTechniques","TrainingKnowledge","TrainingTechniques","PP","BonusTraining","WillBreak","CharSheetName","SheetName","FullName","DisplayName","QuickDescription","Backstory","Age","Gender","HomeRegion","Homeland","Ethnicity","Ancestry","Affinity","AdvancedAffinity","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","WeaponSlots","EquipmentSlots","Currency_Jin","Currency_Gold","Currency_CP","HP","WILL","EN","StartEN","RoundEN","Power","Accuracy","Artistry","Charisma","Recall","Initiative","CarryingCapacity","TargetHV","Soc_Favor","TargetFavor","RepeatingInfluences","Soc_Influence","Title_UsingInfluences","Soc_InfluenceDesc","Soc_Severity","Severity","Soc_RequestCheck","Soc_SupportInfluence","Soc_OpposeInfluence","Soc_Impatience","PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training","Page_Origin","Page_Jobs","Page_Skills","Page_ActiveSkills","Fight","Cast","Athletics","Page_SocialSkills","Persuade","Cunning","Page_TechnicalSkills","Craft","Device","Investigate","Page_Knowledge","Page_Attributes","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Post","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar","Page_NPC","Page_Notes","Title_Origin","Title_Background","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_Chat","Title_Emotes","Title_LanguageSelect","Title_Skills","Title_Outfits","Title_EquippedGear","Title_Notebook","Loading","Popup_PopupActive","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_InspectPopupName","Popup_ItemInspectionName","Popup_TechniqueInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","TechPopupValues","ItemPopupValues","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectType","Popup_ItemSelectDesc","Popup_ItemSelectIsOn","Chat_Type","Chat_PostTarget","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","RepeatingActiveEmotes","RepeatingActiveEmotesNotes","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_PostEmoteNote","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","RepeatingOutfits","Chat_OutfitDefault","Chat_OutfitDefaultURL","Forme_SeeTechniques","RepeatingJobStyles","RepeatingStyles","Forme_Name","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_JobSlot","Forme_AdvancedSlot","Forme_StyleSlot","Action_Use","Action_Inspect","Action_Actions","Action_SetData","Action_Techniques","RepeatingPermaTech","RepeatingJobTech","RepeatingAdvTech","RepeatingPassiveTech","RepeatingGearTech","RepeatingBasicActions","RepeatingBasicRecovery","RepeatingBasicAttack","RepeatingBasicSocial","RepeatingBasicSpirit","RepeatingCustomTech","TechActionType","TechName","TechDisplayName","TechResourceData","TechTargetingData","TechTrait","TechTrigger","TechRequirements","TechItemReq","TechFlavorText","TechEffect","TechSEffectTitle","TechSEffect","TechEEffectTitle","TechDef","ItemName","ItemAction","ItemCount","ItemGroup","ItemStats","ItemTrait","ItemDescription","ItemCraftSkill","ItemCraftMats","ItemCraft","Gear_Equip","Gear_EquipHead","Gear_EquipFace","Gear_EquipChest","Gear_EquipArm","Gear_EquipLeg","Gear_EquipFoot","Gear_Unequip","Gear_Purchase","Gear_Delete","Gear_Inspect","Gear_EquipmentSlot","RepeatingEquipment","RepeatingConsumables","RepeatingGoods","Gear_ItemName","Gear_ItemActions","Gear_ItemType","Gear_EquipWeapon","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_WeaponSlot","System_Crafting","System_CraftingComponent","CraftBulk","CraftResources","CraftSkill","CraftDC","CraftTime","System_Cooking","System_HighQualityMeals","Line","Cone","Blast","Burst","Zone","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnEnter","Title_TechNewTargets","Title_TechNewOnEnter","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEndFocus","Teleport","Notebooks","Note_NotebookActions","Note_NotebookName","Note_NotebookContents","Note_NotebookOpen","Note_NotebookDelete","Note_NotebookReload","Note_NotebookClose","Note_NotebookSave","Note_NotebookIsDirty","Note_OpenNotebook","Note_OpenNotebookActions","NotebookPages","Note_PageType","Note_PageDisplay","Note_PagePost","Note_PageDelete","Note_PageTemplateData","Note_PageContents","Note_PageLocation","Note_PageArea","Note_PageDate","Note_PageTime","Note_PageCharName","Note_PageCharURL","Note_PageCharEmote","Note_PageCharLanguage","Note_PageQuestName","Note_PageChapter","Note_PagePart"],"Human":["Coastborne","Suntouched","Sandfolk","Plains-kin","Frostcloaked","Earthblood","Other"],"Energy":["Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Fire","Dmg_Shock"],"Physical":["Dmg_Force","Dmg_Piercing","Dmg_Weapon"],"Melee Weaponry":["StyleSubGroup_Mighty Weapons","StyleSubGroup_Skirmish Weapons","StyleSubGroup_Finesse Weapons"],"Ranged Weaponry":["StyleSubGroup_Shoot Weapons","StyleSubGroup_Throw Weapons"],"Martial Arts":["StyleSubGroup_Martial Arts","StyleSubGroup_Kinetics","Style_Forceful Fist Arte","Style_Stepflow Arte","Style_Aerial Arte","Style_Wrestling Arte","Style_Galegrip Arte","Style_Powerarm Arte","Style_Swaying Palm Arte","Style_Skyfall Arte","Style_Ironhold Arte","Style_Heaven's Reach Arte"],"Arcanification Magic":["StyleSubGroup_Evocation","StyleSubGroup_Channelling","StyleSubGroup_Enchantment"],"Fluctuation Magic":["StyleSubGroup_Fluctuation"],"Materialization Magic":["StyleSubGroup_Battlesmithing","StyleSubGroup_Conjury"],"Transformation Magic":["StyleSubGroup_Transmutation","StyleSubGroup_Physiomancy"],"Athletics":["StyleSubGroup_Brawn","StyleSubGroup_Stealth","StyleSubGroup_Acrobatics","Skill_Agility","Skill_Physique","Skill_Sneak"],"Speechcraft":["StyleSubGroup_Favor Building","StyleSubGroup_Disruption","StyleSubGroup_Emotional Support"],"Combat Defense":["Def_Brace","Def_Warding","Def_Reflex"],"Defense":["Def_Fortitude","Def_Hide","Def_Evasion"],"Social Sense":["Def_Resolve","Def_Insight","Def_Guile"],"Sense":["Def_Freewill","Def_Notice","Def_Scrutiny"],"Life":["Surge","Cmb_Vitality","Cmb_HV","Cmb_Armor","Cmb_Hardness","Resistance","Weakness","Cmb_ResistanceDesc","Cmb_WeaknessDesc"],"Movement":["Cmb_Mv","Cmb_MvPotency","MvCharge","Move","Adjacency","Obstruction","StrideRoll","MaxStride","FreeMove","Pulled","Pushed","ForceMove","Jump","Fly","Lifting","Falling"],"Technique Trait":["Trait_Arcanify","Trait_Arcing","Trait_Attack","Trait_Break","Trait_Delayed","Trait_Envoke","Trait_Focus","Trait_Holdfast","Trait_Illusion","Trait_Materialize","Trait_Permanent","Trait_Resonator","Trait_Seeking","Trait_Transmute"],"Effect Trait":["Trait_AP","Trait_Brutal","Trait_Optional"],"Item Trait":["Trait_Ammunition","Trait_Axe","Trait_Bow","Trait_Ingested","Trait_Hammer","Trait_Handgun","Trait_Inhalent","Trait_Knife","Trait_Longshot","Trait_Loud","Trait_Magitech","Trait_MaxBulk15","Trait_MaxBulk60","Trait_MaxBulk120","Trait_MaxBulk250","Trait_Medkit","Trait_MinBulk15","Trait_MinBulk60","Trait_MinBulk120","Trait_MinBulk250","Trait_MinDust15","Trait_MinDust60","Trait_MinDust120","Trait_Polearm","Trait_Resonant","Trait_Scattershot","Trait_Sharp","Trait_Sturdy","Trait_Sword","Trait_Whip"],"Goods Trait":["Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Transparent"],"Damage":["WeaponDamage","WeaponDamageVal"],"Technique":["Title_ResourceCost","Title_Targetting","Title_Range","Title_Patterns"],"Gear":["Bulk"],"Generator":["Note_GenName","Note_GenFullName","Note_GenGender","Note_GenHomeRegion","Note_GenRace","Note_GenPersonality","Note_GenMotivation","Note_GenerateCharacter","Note_UseGeneration","Note_ClearBackground"],"Basic":["Style_Basic Action","Style_Basic Recovery","Style_Basic Attack","Style_Basic Social","Style_Basic Spirit"],"Mighty Weapons":["Style_Hammering Arte","Style_Cleaving Arte","Style_Battering Arte","Style_Berserker Arte","Style_Mauler Arte","Style_Avenger Arte"],"Skirmish Weapons":["Style_Chargestrike Arte","Style_Overwhelming Arte","Style_Arcanestrike Arte","Style_Duelist Arte","Style_Swashbuckling Arte","Style_Phalanx Arte","Style_Jumpspear Arte","Style_Spellblade Arte","Style_Fencer Arte","Style_Sky Pike Arte"],"Finesse Weapons":["Style_Finesse Blade Arte","Style_Whip Arte","Style_Flashcut Arte","Style_Trickster Arte"],"Kinetics":["Style_Rapid Strikes Arte","Style_Disruption Form Arte"],"Shoot Weapons":["Style_Archery Arte","Style_Trick Arrow Arte","Style_Gunslinger Arte","Style_Sentry Arte","Style_Longsight Arte","Style_Scatterpoint Arte","Style_Bowmaster Arte","Style_Pistolero Arte"],"Throw Weapons":["Style_Bomber Arte","Style_Daggerthrow Arte"],"Evocation":["Style_Blasting Flames","Style_Shock Bomb","Style_Arcane Spellshot","Style_Flaming Sphere","Style_Lightning Shot","Style_Area Spark","Style_Binding Cold","Style_Chilling Blast","Style_Hellfire","Style_Storm Caller","Style_Sheer Cold"],"Channelling":["Style_Whispering Wind","Style_Bursting Fire","Style_Fire Field","Style_Close Circuit","Style_Ice Storm","Style_Manification","Style_Light Control","Style_Darkness Weaving","Style_Sound Control"],"Enchantment":["Style_Arcane Conduit","Style_Freeform Flight","Style_Ether Magic","Style_Time Control"],"Fluctuation":["Style_Levitation","Style_Kinetic Assault","Style_Surging Dust","Style_Dust Impact","Style_Propelling Force","Style_Binding Winds","Style_Windsweep","Style_Gravity Force","Style_Telekinesis","Style_Surging Water"],"Battlesmithing":["Style_Throwcraft","Style_Conjure Blades","Style_Conjure Skyfall","Style_Warsmith"],"Conjury":["Style_Structural Magic","Style_Clouded Shroud","Style_Arbormaking","Style_Floral Shroud","Style_Smoke Field","Style_Stonemaking","Style_Iron Walls","Style_Glacial Walls","Style_Misty Terrtain","Style_Structural Mastery","Style_Poison Spore"],"Transmutation":["Style_Dust Shaping","Style_Unshaping","Style_Plant Growth","Style_Calming Blooms","Style_Verdant Armory","Style_Terrain Molding","Style_Ground Splitter","Style_Earthen Armory","Style_Water Shape","Style_Icy Terrain","Style_Frozen Armory","Style_Geomancy","Style_Cryomancy"],"Physiomancy":["Style_Healing Hands","Style_Earthen Endurance","Style_Propelling Motion","Style_Soul Surge","Style_Blood Flux"],"Brawn":["Style_Powerwake","Style_Enduring Body","Style_Traversal","Style_Unbeatable Brawn","Style_Unrelenting Motion"],"Stealth":["Style_Hidden Footing","Style_Shadow Walking"],"Acrobatics":["Style_Remotion","Style_Evasive Maneuvers","Style_Reactive Defense"],"Favor Building":["Style_Loyalty Appeal","Style_Social Grace","Style_Flattery","Style_Deft Negotiator","Style_Sales Tactics"],"Disruption":["Style_Fluster Point","Style_Provoking Anger","Style_Intimidating Fear","Style_Beguiling Instinct","Style_Taunting Wit"],"Emotional Support":["Style_Invigorating Rally","Style_Underminer","Style_Stillheart","Style_Connecting Bond"],"Craft":["Skill_Alchemy","Skill_Build","Skill_Cook"],"Investigate":["Skill_Analyze","Skill_Resonance","Skill_Search"],"Cast":["Skill_Channel","Skill_Conjure","Skill_Enchant","Skill_Heal","Skill_Kinesis","Skill_Shape"],"Persuade":["Skill_Charm","Skill_Inspire","Skill_Rationalize"],"Cunning":["Skill_Demoralize","Skill_Empathy","Skill_Misdirect"],"Fight":["Skill_Finesse","Skill_Grappling","Skill_Might","Skill_Shoot","Skill_Skirmish","Skill_Throw"],"Device":["Skill_Glyphwork","Skill_Pilot","Skill_Tinker"],"Walthair":["Lang_Minere","Lang_Crinere","Lang_Palmic","Lang_Shorespeak","Lang_Verdeni","Lang_Vulca"],"Aridsha":["Lang_Junal","Lang_Byric","Lang_Dustell","Lang_Muralic","Lang_Shira"],"Khem":["Lang_Apollen","Lang_Kleikan"],"Colswei":["Lang_Lib"],"Ceres":["Lang_Cert","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq"],"Special":["Lang_Emotion","Lang_Empathy","Lang_Wolfwarg","Lang_Jovean","Lang_Mytikan"],"Academics":["Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology"],"Profession":["Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining"],"Craftmanship":["Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving"],"Geography":["Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane"],"History":["Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History"],"Culture":["Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater"],"Religion":["Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"],"Vanguard":["Job_Fighter","Job_Sentinel","Job_Warden","Job_Bulwark","JStyle_Fighter","JStyle_Sentinel","JStyle_Warden","JStyle_Bulwark"],"Operator":["Job_Hunter","Job_Sniper","Job_Trooper","Job_Warmage","Job_Alchemist","JStyle_Hunter","JStyle_Sniper","JStyle_Trooper","JStyle_Warmage","JStyle_Alchemist"],"Athlete":["Job_Brawler","Job_Kineticist","Job_Rogue","Job_Labourer","JStyle_Brawler","JStyle_Kineticist","JStyle_Rogue","JStyle_Labourer"],"Strategist":["Job_Tactician","Job_Magus","Job_Scholar","Job_Inquisitor","JStyle_Tactician","JStyle_Magus","JStyle_Scholar","JStyle_Inquisitor"],"Waymaker":["Job_Detective","Job_Culinarian","Job_Bard","Job_Medic","Job_Spellwright","JStyle_Detective","JStyle_Culinarian","JStyle_Bard","JStyle_Medic","JStyle_Spellwright"],"Advocate":["Job_Empath","Job_Merchant","Job_Orator","Job_Hardliner","JStyle_Empath","JStyle_Merchant","JStyle_Orator","JStyle_Hardliner"],"Esper":["Job_Etherealist","Job_Shade","JStyle_Etherealist","JStyle_Shade"],"Status":["Stat_Blinded","Stat_Downed","Stat_Dying","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious"],"Condition":["Stat_Aflame","Stat_Armored","Stat_Bleeding","Stat_Chilled","Stat_Dodge","Stat_Encumbered","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Impaired","Stat_Jolted","Stat_Prone","Stat_Quickened","Stat_Shielded","Stat_Sickened","Stat_Stunned"],"Emotion":["Stat_Angered","Stat_Calmed","Stat_Doubt","Stat_Encouraged","Stat_Frightened","Stat_Flustered","Stat_Overjoyed","Stat_Persevering","Stat_Receptive","Stat_Surprised","Stat_Steadfast"]},"mainGroup":{"Style":["Style_Basic Action","Style_Basic Recovery","Style_Basic Attack","Style_Basic Social","Style_Basic Spirit","Style_Hammering Arte","Style_Cleaving Arte","Style_Battering Arte","Style_Berserker Arte","Style_Chargestrike Arte","Style_Overwhelming Arte","Style_Arcanestrike Arte","Style_Duelist Arte","Style_Swashbuckling Arte","Style_Phalanx Arte","Style_Jumpspear Arte","Style_Finesse Blade Arte","Style_Whip Arte","Style_Forceful Fist Arte","Style_Stepflow Arte","Style_Aerial Arte","Style_Wrestling Arte","Style_Galegrip Arte","Style_Rapid Strikes Arte","Style_Disruption Form Arte","Style_Archery Arte","Style_Trick Arrow Arte","Style_Gunslinger Arte","Style_Sentry Arte","Style_Longsight Arte","Style_Scatterpoint Arte","Style_Bomber Arte","Style_Daggerthrow Arte","Style_Blasting Flames","Style_Shock Bomb","Style_Arcane Spellshot","Style_Flaming Sphere","Style_Lightning Shot","Style_Area Spark","Style_Binding Cold","Style_Chilling Blast","Style_Whispering Wind","Style_Bursting Fire","Style_Fire Field","Style_Close Circuit","Style_Ice Storm","Style_Arcane Conduit","Style_Freeform Flight","Style_Levitation","Style_Kinetic Assault","Style_Surging Dust","Style_Dust Impact","Style_Propelling Force","Style_Binding Winds","Style_Throwcraft","Style_Conjure Blades","Style_Conjure Skyfall","Style_Structural Magic","Style_Clouded Shroud","Style_Arbormaking","Style_Floral Shroud","Style_Smoke Field","Style_Stonemaking","Style_Iron Walls","Style_Glacial Walls","Style_Misty Terrtain","Style_Dust Shaping","Style_Unshaping","Style_Plant Growth","Style_Calming Blooms","Style_Verdant Armory","Style_Terrain Molding","Style_Ground Splitter","Style_Earthen Armory","Style_Water Shape","Style_Icy Terrain","Style_Frozen Armory","Style_Healing Hands","Style_Earthen Endurance","Style_Propelling Motion","Style_Powerwake","Style_Enduring Body","Style_Traversal","Style_Hidden Footing","Style_Remotion","Style_Evasive Maneuvers","Style_Loyalty Appeal","Style_Social Grace","Style_Flattery","Style_Deft Negotiator","Style_Sales Tactics","Style_Fluster Point","Style_Provoking Anger","Style_Intimidating Fear","Style_Beguiling Instinct","Style_Taunting Wit","Style_Invigorating Rally","Style_Underminer","Style_Stillheart","Style_Connecting Bond"],"Advanced":["Style_Mauler Arte","Style_Avenger Arte","Style_Spellblade Arte","Style_Fencer Arte","Style_Sky Pike Arte","Style_Flashcut Arte","Style_Trickster Arte","Style_Powerarm Arte","Style_Swaying Palm Arte","Style_Skyfall Arte","Style_Ironhold Arte","Style_Heaven's Reach Arte","Style_Bowmaster Arte","Style_Pistolero Arte","Style_Hellfire","Style_Storm Caller","Style_Sheer Cold","Style_Manification","Style_Light Control","Style_Darkness Weaving","Style_Sound Control","Style_Ether Magic","Style_Time Control","Style_Windsweep","Style_Gravity Force","Style_Telekinesis","Style_Surging Water","Style_Warsmith","Style_Structural Mastery","Style_Poison Spore","Style_Geomancy","Style_Cryomancy","Style_Soul Surge","Style_Blood Flux","Style_Unbeatable Brawn","Style_Unrelenting Motion","Style_Shadow Walking","Style_Reactive Defense"]},"formulaMods":{"CR":["Attribute","Skill","Job","Knowledge","Style","Perk","Influence","SB_MAX","Def_Brace","Def_Fortitude","Def_Warding","Def_Hide","Def_Reflex","Def_Evasion","Def_Resolve","Def_Freewill","Def_Insight","Def_Notice","Def_Guile","Def_Scrutiny","HP","WILL","Surge","Recall","Initiative","Cmb_HV"],"BonusAttributePoints":["Attribute"],"Level":["Skill","Advancement","Training","HP","WILL"],"AdvancementSkill":["Skill"],"AdvancementJob":["Job"],"TrainingKnowledge":["Knowledge"],"AdvancementTechnique":["Style"],"TrainingTechniques":["Style"],"BonusTraining":["Training"],"Attr_BOD":["Def_Brace","Def_Fortitude","HP","Power","CarryingCapacity","Skill_Conjure","Skill_Grappling","Skill_Might","Skill_Physique","Skill_Throw"],"Attr_PRC":["Def_Warding","Def_Hide","Accuracy","Skill_Kinesis","Skill_Shoot","Skill_Skirmish","Skill_Sneak","Skill_Tinker"],"Attr_QCK":["Def_Reflex","Def_Evasion","Initiative","Skill_Agility","Skill_Enchant","Skill_Finesse","Skill_Glyphwork","Skill_Pilot"],"Attr_CNV":["Def_Resolve","Def_Freewill","WILL","Charisma","Cmb_HV","Skill_Channel","Skill_Demoralize","Skill_Inspire","Skill_Misdirect","Skill_Resonance"],"Attr_INT":["Def_Insight","Def_Notice","Artistry","Skill_Charm","Skill_Cook","Skill_Empathy","Skill_Heal","Skill_Search"],"Attr_RSN":["Def_Guile","Def_Scrutiny","Recall","Skill_Alchemy","Skill_Analyze","Skill_Build","Skill_Rationalize","Skill_Shape"],"Recall":["Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"]},"techMods":{"_tech":["Influence","Def_Brace","Def_Fortitude","Def_Warding","Def_Hide","Def_Reflex","Def_Evasion","Def_Resolve","Def_Freewill","Def_Insight","Def_Notice","Def_Guile","Def_Scrutiny","JobSlots","AdvancedSlots","StyleSlots","WeaponSlots","EquipmentSlots","HP","WILL","Surge","EN","StartEN","RoundEN","Power","Accuracy","Artistry","Charisma","Recall","Initiative","CarryingCapacity","Cmb_Vitality","Cmb_HV","Cmb_Armor","Cmb_Mv","Cmb_MvPotency"],"_techset":["Power","Accuracy","Artistry","Charisma","Recall"]},"hasMax":{"true":["Data","Advancement","Training","General","CR","XP","BonusTraining","HP","WILL","Surge","EN","Cmb_Vitality","Soc_Favor"]}},
+        sortingGroups = {"group":{"Type":["Attribute","Skill","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","InnateDefenseType","InnateSenseType","StatBonus","General","Chat","Combat","Social","Influence","SeverityRank","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobGroup","StyleGroup","StyleSubGroup","AdvancedGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Currency","ToolSlot","ConsumableSlot","Note","PersonalityType","MotivationType"],"VariableMod":["_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_expertise","_gear","_affinity","_error","_refresh"],"AncestryType":["Human","Spirit"],"AffinityType":["Wood","Fire","Earth","Metal","Water"],"AffinityTypeDesc":["WoodF","FireF","EarthF","MetalF","WaterF"],"InnateDefenseType":["Def_BOD","Def_PRC","Def_QCK"],"InnateSenseType":["Def_CNV","Def_INT","Def_RSN"],"StatBonus":["SB_MAX","SB_MedDef","SB_GoodDef","SB_GreatDef","SB_ExcellentDef"],"AttributeValue":["AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad"],"JobTier":["JobTier0","JobTier1","JobTier2","JobTier3","JobTier4","JobTier5","JobTier6"],"LoreTier":["LoreTier0","LoreTier1","LoreTier2","LoreTier3"],"GeneralLoreTier":["GeneralLoreTier0","GeneralLoreTier1"],"LoreCategory":["LoreCat_Academics","LoreCat_Profession","LoreCat_Craftmanship","LoreCat_Geography","LoreCat_History","LoreCat_Culture","LoreCat_Religion"],"RegionType":["Walthair","EastSea","Khem","Aridsha","Ceres","Colswei","Dowfeng","Wayling","Novus"],"RaceType":["Coastborne","Suntouched","Sandfolk","Plains-kin","Frostcloaked","Earthblood","Other"],"GenderType":["Male","Female","NonBinary"],"NotebookType":["Notebook","Category"],"PostType":["post-Notes","post-Info","post-Location","post-System","post-Chapter","post-History","post-Speak","post-Whisper","post-Yell","post-Think","post-Describe"],"ChatType":["Speak","Whisper","Yell","Think","Describe"],"EmotePostType":["PostToChat","PostToNotebook"],"TimeType":["Dawn","Morning","Midday","Evening","Night","Deepnight"],"Boon":["Boon_Rest","Boon_Savor","Boon_Truth"],"InfluenceType":["InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal"],"SeverityRank":["Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity"],"DamageType":["Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Fire","Dmg_Force","Dmg_Piercing","Dmg_Shock","Dmg_Tension","Dmg_Weapon"],"TerrainFxType":["Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden"],"PerkGroup":["PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks","PerkGroup_Slot Perks"],"JobGroup":["JobGroup_Vanguard","JobGroup_Operator","JobGroup_Athlete","JobGroup_Strategist","JobGroup_Waymaker","JobGroup_Advocate","JobGroup_Esper"],"StyleGroup":["StyleGroup_Melee Weaponry","StyleGroup_Ranged Weaponry","StyleGroup_Martial Arts","StyleGroup_Arcanification Magic","StyleGroup_Fluctuation Magic","StyleGroup_Materialization Magic","StyleGroup_Transformation Magic","StyleGroup_Athletics","StyleGroup_Speechcraft"],"StyleSubGroup":["StyleSubGroup_Mighty Weapons","StyleSubGroup_Skirmish Weapons","StyleSubGroup_Finesse Weapons","StyleSubGroup_Shoot Weapons","StyleSubGroup_Throw Weapons","StyleSubGroup_Martial Arts","StyleSubGroup_Kinetics","StyleSubGroup_Evocation","StyleSubGroup_Channelling","StyleSubGroup_Enchantment","StyleSubGroup_Fluctuation","StyleSubGroup_Battlesmithing","StyleSubGroup_Conjury","StyleSubGroup_Transmutation","StyleSubGroup_Physiomancy","StyleSubGroup_Brawn","StyleSubGroup_Stealth","StyleSubGroup_Acrobatics","StyleSubGroup_Favor Building","StyleSubGroup_Disruption","StyleSubGroup_Emotional Support"],"GearGroup":["GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear"],"PersonalityType":["Personality_Stoic","Personality_Charmer","Personality_Idealist","Personality_Cynic","Personality_Loner","Personality_Leader","Personality_Rebel","Personality_Thinker","Personality_Caregiver","Personality_Dreamer","Personality_Realist","Personality_Mediator","Personality_Strategist","Personality_Joker","Personality_Visionary","Personality_Survivor","Personality_Guardian","Personality_Tactician","Personality_Pacifist","Personality_Zealot"],"MotivationType":["Motivation_Power","Motivation_Justice","Motivation_Freedom","Motivation_Revenge","Motivation_Survival","Motivation_Glory","Motivation_Knowledge","Motivation_Redemption","Motivation_Belonging","Motivation_Wealth","Motivation_Truth","Motivation_Peace","Motivation_Control","Motivation_Chaos","Motivation_Duty","Motivation_Fame","Motivation_Discovery","Motivation_Legacy","Motivation_Love","Motivation_Escape"],"Attribute":["Attr_BOD","Attr_PRC","Attr_QCK","Attr_CNV","Attr_INT","Attr_RSN"],"Untyped":["Check","CombatDetails","FlatDC","BoostStyleTech","BoostGearTech","BoostPerkTech","Ancestry","Affinity","AdvancedAffinity","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","WeaponSlots","EquipmentSlots","TeamIndex","TargetHV","Resistance","Weakness","MvCharge","TargetFavor","RepeatingInfluences","Loading","TechPopupValues","ItemPopupValues","RepeatingActiveEmotes","RepeatingActiveEmotesNotes","RepeatingOutfits","RepeatingJobStyles","RepeatingStyles","RepeatingPermaTech","RepeatingJobTech","RepeatingAdvTech","RepeatingPassiveTech","RepeatingGearTech","RepeatingBasicActions","RepeatingBasicRecovery","RepeatingBasicAttack","RepeatingBasicSocial","RepeatingBasicSpirit","RepeatingCustomTech","TechActionType","TechName","TechDisplayName","TechResourceData","TechTargetingData","TechTrait","TechTrigger","TechRequirements","TechItemReq","TechFlavorText","TechEffect","TechSEffectTitle","TechSEffect","TechEEffectTitle","TechDef","ItemName","ItemAction","ItemCount","ItemGroup","ItemStats","ItemTrait","ItemDescription","ItemCraftSkill","ItemCraftMats","ItemCraft","RepeatingEquipment","RepeatingConsumables","RepeatingGoods","WeaponDamage","WeaponDamageVal","Move","Adjacency","Obstruction","StrideRoll","MaxStride","FreeMove","Pulled","Pushed","ForceMove","Jump","Fly","Lifting","Falling","Teleport","Notebooks","NotebookPages"],"Title":["Title_Boon","Title_UsingInfluences","Title_Origin","Title_Background","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_Chat","Title_Emotes","Title_LanguageSelect","Title_Skills","Title_Outfits","Title_EquippedGear","Title_Notebook","Title_ResourceCost","Title_Targetting","Title_Range","Title_Patterns","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnEnter","Title_TechNewTargets","Title_TechNewOnEnter","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEndFocus"],"Advancement":["Level","CR","MaxCR","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","JobTier","JobTechniques","LearnStyle","StyleTechniques"],"Training":["TrainingKnowledge","TrainingTechniques","PP","BonusTraining"],"Defense":["Def_Brace","Def_Fortitude","Def_Warding","Def_Hide","Def_Reflex","Def_Evasion"],"Sense":["Def_Resolve","Def_Freewill","Def_Insight","Def_Notice","Def_Guile","Def_Scrutiny"],"Result":["WillBreak"],"Origin":["CharSheetName","SheetName","FullName","DisplayName","QuickDescription","Backstory","Age","Gender","HomeRegion","Homeland","Ethnicity"],"Currency":["Currency_Jin","Currency_Gold","Currency_CP"],"General":["HP","WILL","Surge","EN","StartEN","RoundEN","Power","Accuracy","Artistry","Charisma","Recall","Initiative","CarryingCapacity"],"Combat":["Cmb_Vitality","Cmb_HV","Cmb_Armor","Cmb_Hardness","Cmb_ResistanceDesc","Cmb_WeaknessDesc","Cmb_Mv","Cmb_MvPotency"],"Social":["Soc_Favor","Soc_Influence","Soc_InfluenceDesc","Soc_Severity","Soc_RequestCheck","Soc_SupportInfluence","Soc_OpposeInfluence","Soc_Impatience"],"":["Severity"],"Trait":["Trait_Arcanify","Trait_Arcing","Trait_Attack","Trait_Break","Trait_Delayed","Trait_Envoke","Trait_Focus","Trait_Holdfast","Trait_Illusion","Trait_Materialize","Trait_Permanent","Trait_Resonator","Trait_Seeking","Trait_Transmute","Trait_AP","Trait_Brutal","Trait_Optional","Trait_Ammunition","Trait_Axe","Trait_Bow","Trait_Ingested","Trait_Hammer","Trait_Handgun","Trait_Inhalent","Trait_Knife","Trait_Longshot","Trait_Loud","Trait_Magitech","Trait_MaxBulk15","Trait_MaxBulk60","Trait_MaxBulk120","Trait_MaxBulk250","Trait_Medkit","Trait_MinBulk15","Trait_MinBulk60","Trait_MinBulk120","Trait_MinBulk250","Trait_MinDust15","Trait_MinDust60","Trait_MinDust120","Trait_Polearm","Trait_Resonant","Trait_Scattershot","Trait_Sharp","Trait_Sturdy","Trait_Sword","Trait_Whip","Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Transparent"],"PageSet":["PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training"],"Page":["Page_Origin","Page_Jobs","Page_Skills","Page_ActiveSkills","Page_SocialSkills","Page_TechnicalSkills","Page_Knowledge","Page_Attributes","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Post","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar","Page_NPC","Page_Notes"],"ActiveSkills":["Fight","Cast","Athletics"],"SocialSkills":["Persuade","Cunning"],"TechnicalSkills":["Craft","Device","Investigate"],"Popup":["Popup_PopupActive","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_InspectPopupName","Popup_ItemInspectionName","Popup_TechniqueInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectType","Popup_ItemSelectDesc","Popup_ItemSelectIsOn"],"Chat":["Chat_Type","Chat_PostTarget","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_PostEmoteNote","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","Chat_OutfitDefault","Chat_OutfitDefaultURL"],"Forme":["Forme_SeeTechniques","Forme_Name","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_JobSlot","Forme_AdvancedSlot","Forme_StyleSlot"],"Action":["Action_Use","Action_Inspect","Action_Actions","Action_SetData","Action_Techniques"],"Gear":["Gear_Equip","Gear_EquipHead","Gear_EquipFace","Gear_EquipChest","Gear_EquipArm","Gear_EquipLeg","Gear_EquipFoot","Gear_Unequip","Gear_Purchase","Gear_Delete","Gear_Inspect","Gear_EquipmentSlot","Gear_ItemName","Gear_ItemActions","Gear_ItemType","Gear_EquipWeapon","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_WeaponSlot"],"System":["System_Crafting","System_CraftingComponent","System_Cooking","System_HighQualityMeals"],"CraftingComp":["CraftBulk","CraftResources","CraftSkill","CraftDC","CraftTime"],"PatternType":["Line","Cone","Blast","Burst","Zone"],"Rules":["Bulk"],"Note":["Note_GenName","Note_GenFullName","Note_GenGender","Note_GenHomeRegion","Note_GenRace","Note_GenPersonality","Note_GenMotivation","Note_GenerateCharacter","Note_UseGeneration","Note_ClearBackground","Note_NotebookActions","Note_NotebookName","Note_NotebookContents","Note_NotebookOpen","Note_NotebookDelete","Note_NotebookReload","Note_NotebookClose","Note_NotebookSave","Note_NotebookIsDirty","Note_OpenNotebook","Note_OpenNotebookActions","Note_PageType","Note_PageDisplay","Note_PagePost","Note_PageDelete","Note_PageTemplateData","Note_PageContents","Note_PageLocation","Note_PageArea","Note_PageDate","Note_PageTime","Note_PageCharName","Note_PageCharURL","Note_PageCharEmote","Note_PageCharLanguage","Note_PageQuestName","Note_PageChapter","Note_PagePart"],"Style":["Style_Basic Action","Style_Basic Recovery","Style_Basic Attack","Style_Basic Social","Style_Basic Spirit","Style_Hammering Arte","Style_Cleaving Arte","Style_Battering Arte","Style_Berserker Arte","Style_Mauler Arte","Style_Avenger Arte","Style_Chargestrike Arte","Style_Overwhelming Arte","Style_Arcanestrike Arte","Style_Duelist Arte","Style_Swashbuckling Arte","Style_Phalanx Arte","Style_Jumpspear Arte","Style_Spellblade Arte","Style_Fencer Arte","Style_Sky Pike Arte","Style_Finesse Blade Arte","Style_Whip Arte","Style_Flashcut Arte","Style_Trickster Arte","Style_Forceful Fist Arte","Style_Stepflow Arte","Style_Aerial Arte","Style_Wrestling Arte","Style_Galegrip Arte","Style_Powerarm Arte","Style_Swaying Palm Arte","Style_Skyfall Arte","Style_Ironhold Arte","Style_Heaven's Reach Arte","Style_Rapid Strikes Arte","Style_Disruption Form Arte","Style_Archery Arte","Style_Trick Arrow Arte","Style_Gunslinger Arte","Style_Sentry Arte","Style_Longsight Arte","Style_Scatterpoint Arte","Style_Bowmaster Arte","Style_Pistolero Arte","Style_Bomber Arte","Style_Daggerthrow Arte","Style_Blasting Flames","Style_Shock Bomb","Style_Arcane Spellshot","Style_Flaming Sphere","Style_Lightning Shot","Style_Area Spark","Style_Binding Cold","Style_Chilling Blast","Style_Hellfire","Style_Storm Caller","Style_Sheer Cold","Style_Whispering Wind","Style_Bursting Fire","Style_Fire Field","Style_Close Circuit","Style_Ice Storm","Style_Manification","Style_Light Control","Style_Darkness Weaving","Style_Sound Control","Style_Arcane Conduit","Style_Freeform Flight","Style_Ether Magic","Style_Time Control","Style_Levitation","Style_Kinetic Assault","Style_Surging Dust","Style_Dust Impact","Style_Propelling Force","Style_Binding Winds","Style_Windsweep","Style_Gravity Force","Style_Telekinesis","Style_Surging Water","Style_Throwcraft","Style_Conjure Blades","Style_Conjure Skyfall","Style_Warsmith","Style_Structural Magic","Style_Clouded Shroud","Style_Arbormaking","Style_Floral Shroud","Style_Smoke Field","Style_Stonemaking","Style_Iron Walls","Style_Glacial Walls","Style_Misty Terrtain","Style_Structural Mastery","Style_Poison Spore","Style_Dust Shaping","Style_Unshaping","Style_Plant Growth","Style_Calming Blooms","Style_Verdant Armory","Style_Terrain Molding","Style_Ground Splitter","Style_Earthen Armory","Style_Water Shape","Style_Icy Terrain","Style_Frozen Armory","Style_Geomancy","Style_Cryomancy","Style_Healing Hands","Style_Earthen Endurance","Style_Propelling Motion","Style_Soul Surge","Style_Blood Flux","Style_Powerwake","Style_Enduring Body","Style_Traversal","Style_Hidden Footing","Style_Remotion","Style_Evasive Maneuvers","Style_Unbeatable Brawn","Style_Unrelenting Motion","Style_Shadow Walking","Style_Reactive Defense","Style_Loyalty Appeal","Style_Social Grace","Style_Flattery","Style_Deft Negotiator","Style_Sales Tactics","Style_Fluster Point","Style_Provoking Anger","Style_Intimidating Fear","Style_Beguiling Instinct","Style_Taunting Wit","Style_Invigorating Rally","Style_Underminer","Style_Stillheart","Style_Connecting Bond"],"Skill":["Skill_Agility","Skill_Alchemy","Skill_Analyze","Skill_Build","Skill_Channel","Skill_Charm","Skill_Conjure","Skill_Cook","Skill_Demoralize","Skill_Empathy","Skill_Enchant","Skill_Finesse","Skill_Glyphwork","Skill_Grappling","Skill_Heal","Skill_Inspire","Skill_Kinesis","Skill_Might","Skill_Misdirect","Skill_Physique","Skill_Pilot","Skill_Rationalize","Skill_Resonance","Skill_Search","Skill_Shape","Skill_Shoot","Skill_Skirmish","Skill_Sneak","Skill_Throw","Skill_Tinker"],"Language":["Lang_Minere","Lang_Junal","Lang_Apollen","Lang_Lib","Lang_Cert","Lang_Byric","Lang_Dustell","Lang_Muralic","Lang_Shira","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq","Lang_Kleikan","Lang_Crinere","Lang_Palmic","Lang_Shorespeak","Lang_Verdeni","Lang_Vulca","Lang_Emotion","Lang_Empathy","Lang_Wolfwarg","Lang_Jovean","Lang_Mytikan"]
+                ,"Lore":["Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"],"Job":["Job_Fighter","Job_Sentinel","Job_Warden","Job_Bulwark","Job_Hunter","Job_Sniper","Job_Trooper","Job_Warmage","Job_Alchemist","Job_Brawler","Job_Kineticist","Job_Rogue","Job_Labourer","Job_Tactician","Job_Magus","Job_Scholar","Job_Inquisitor","Job_Detective","Job_Culinarian","Job_Bard","Job_Medic","Job_Spellwright","Job_Empath","Job_Merchant","Job_Orator","Job_Hardliner","Job_Etherealist","Job_Shade"],"JobStyle":["JStyle_Fighter","JStyle_Sentinel","JStyle_Warden","JStyle_Bulwark","JStyle_Hunter","JStyle_Sniper","JStyle_Trooper","JStyle_Warmage","JStyle_Alchemist","JStyle_Brawler","JStyle_Kineticist","JStyle_Rogue","JStyle_Labourer","JStyle_Tactician","JStyle_Magus","JStyle_Scholar","JStyle_Inquisitor","JStyle_Detective","JStyle_Culinarian","JStyle_Bard","JStyle_Medic","JStyle_Spellwright","JStyle_Empath","JStyle_Merchant","JStyle_Orator","JStyle_Hardliner","JStyle_Etherealist","JStyle_Shade"],"Status":["Stat_Blinded","Stat_Downed","Stat_Dying","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious","Stat_Aflame","Stat_Armored","Stat_Bleeding","Stat_Chilled","Stat_Dodge","Stat_Encumbered","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Impaired","Stat_Jolted","Stat_Prone","Stat_Quickened","Stat_Shielded","Stat_Sickened","Stat_Stunned","Stat_Angered","Stat_Calmed","Stat_Doubt","Stat_Encouraged","Stat_Frightened","Stat_Flustered","Stat_Overjoyed","Stat_Persevering","Stat_Receptive","Stat_Surprised","Stat_Steadfast"]},"subGroup":{"":["Attribute","Skill","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","InnateDefenseType","InnateSenseType","StatBonus","General","Chat","Combat","Social","Influence","SeverityRank","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobGroup","StyleGroup","StyleSubGroup","AdvancedGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Currency","ToolSlot","ConsumableSlot","Note","PersonalityType","MotivationType","_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_expertise","_gear","_affinity","_error","_refresh","Human","Spirit","Wood","WoodF","Fire","FireF","Earth","EarthF","Metal","MetalF","Water","WaterF","Def_BOD","Def_PRC","Def_QCK","Def_CNV","Def_INT","Def_RSN","SB_MAX","SB_MedDef","SB_GoodDef","SB_GreatDef","SB_ExcellentDef","AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad","JobTier0","JobTier1","JobTier2","JobTier3","JobTier4","JobTier5","JobTier6","LoreTier0","LoreTier1","LoreTier2","LoreTier3","GeneralLoreTier0","GeneralLoreTier1","LoreCat_Academics","LoreCat_Profession","LoreCat_Craftmanship","LoreCat_Geography","LoreCat_History","LoreCat_Culture","LoreCat_Religion","Walthair","EastSea","Khem","Aridsha","Ceres","Colswei","Dowfeng","Wayling","Novus","Male","Female","NonBinary","Notebook","Category","post-Notes","post-Info","post-Location","post-System","post-Chapter","post-History","post-Speak","post-Whisper","post-Yell","post-Think","post-Describe","Speak","Whisper","Yell","Think","Describe","PostToChat","PostToNotebook","Dawn","Morning","Midday","Evening","Night","Deepnight","Boon_Rest","Boon_Savor","Boon_Truth","InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal","Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity","Dmg_Tension","Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden","PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks","PerkGroup_Slot Perks","JobGroup_Vanguard","JobGroup_Operator","JobGroup_Athlete","JobGroup_Strategist","JobGroup_Waymaker","JobGroup_Advocate","JobGroup_Esper","StyleGroup_Melee Weaponry","StyleGroup_Ranged Weaponry","StyleGroup_Martial Arts","StyleGroup_Arcanification Magic","StyleGroup_Fluctuation Magic","StyleGroup_Materialization Magic","StyleGroup_Transformation Magic","StyleGroup_Athletics","StyleGroup_Speechcraft","GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear","Personality_Stoic","Personality_Charmer","Personality_Idealist","Personality_Cynic","Personality_Loner","Personality_Leader","Personality_Rebel","Personality_Thinker","Personality_Caregiver","Personality_Dreamer","Personality_Realist","Personality_Mediator","Personality_Strategist","Personality_Joker","Personality_Visionary","Personality_Survivor","Personality_Guardian","Personality_Tactician","Personality_Pacifist","Personality_Zealot","Motivation_Power","Motivation_Justice","Motivation_Freedom","Motivation_Revenge","Motivation_Survival","Motivation_Glory","Motivation_Knowledge","Motivation_Redemption","Motivation_Belonging","Motivation_Wealth","Motivation_Truth","Motivation_Peace","Motivation_Control","Motivation_Chaos","Motivation_Duty","Motivation_Fame","Motivation_Discovery","Motivation_Legacy","Motivation_Love","Motivation_Escape","Attr_BOD","Attr_PRC","Attr_QCK","Attr_CNV","Attr_INT","Attr_RSN","Check","CombatDetails","FlatDC","Title_Boon","BoostStyleTech","BoostGearTech","BoostPerkTech","Level","CR","MaxCR","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","JobTier","JobTechniques","LearnStyle","StyleTechniques","TrainingKnowledge","TrainingTechniques","PP","BonusTraining","WillBreak","CharSheetName","SheetName","FullName","DisplayName","QuickDescription","Backstory","Age","Gender","HomeRegion","Homeland","Ethnicity","Ancestry","Affinity","AdvancedAffinity","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","WeaponSlots","EquipmentSlots","Currency_Jin","Currency_Gold","Currency_CP","HP","WILL","EN","StartEN","RoundEN","Power","Accuracy","Artistry","Charisma","Recall","Initiative","CarryingCapacity","TeamIndex","TargetHV","Soc_Favor","TargetFavor","RepeatingInfluences","Soc_Influence","Title_UsingInfluences","Soc_InfluenceDesc","Soc_Severity","Severity","Soc_RequestCheck","Soc_SupportInfluence","Soc_OpposeInfluence","Soc_Impatience","PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training","Page_Origin","Page_Jobs","Page_Skills","Page_ActiveSkills","Fight","Cast","Athletics","Page_SocialSkills","Persuade","Cunning","Page_TechnicalSkills","Craft","Device","Investigate","Page_Knowledge","Page_Attributes","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Post","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar","Page_NPC","Page_Notes","Title_Origin","Title_Background","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_Chat","Title_Emotes","Title_LanguageSelect","Title_Skills","Title_Outfits","Title_EquippedGear","Title_Notebook","Loading","Popup_PopupActive","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_InspectPopupName","Popup_ItemInspectionName","Popup_TechniqueInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","TechPopupValues","ItemPopupValues","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectType","Popup_ItemSelectDesc","Popup_ItemSelectIsOn","Chat_Type","Chat_PostTarget","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","RepeatingActiveEmotes","RepeatingActiveEmotesNotes","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_PostEmoteNote","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","RepeatingOutfits","Chat_OutfitDefault","Chat_OutfitDefaultURL","Forme_SeeTechniques","RepeatingJobStyles","RepeatingStyles","Forme_Name","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_JobSlot","Forme_AdvancedSlot","Forme_StyleSlot","Action_Use","Action_Inspect","Action_Actions","Action_SetData","Action_Techniques","RepeatingPermaTech","RepeatingJobTech","RepeatingAdvTech","RepeatingPassiveTech","RepeatingGearTech","RepeatingBasicActions","RepeatingBasicRecovery","RepeatingBasicAttack","RepeatingBasicSocial","RepeatingBasicSpirit","RepeatingCustomTech","TechActionType","TechName","TechDisplayName","TechResourceData","TechTargetingData","TechTrait","TechTrigger","TechRequirements","TechItemReq","TechFlavorText","TechEffect","TechSEffectTitle","TechSEffect","TechEEffectTitle","TechDef","ItemName","ItemAction","ItemCount","ItemGroup","ItemStats","ItemTrait","ItemDescription","ItemCraftSkill","ItemCraftMats","ItemCraft","Gear_Equip","Gear_EquipHead","Gear_EquipFace","Gear_EquipChest","Gear_EquipArm","Gear_EquipLeg","Gear_EquipFoot","Gear_Unequip","Gear_Purchase","Gear_Delete","Gear_Inspect","Gear_EquipmentSlot","RepeatingEquipment","RepeatingConsumables","RepeatingGoods","Gear_ItemName","Gear_ItemActions","Gear_ItemType","Gear_EquipWeapon","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_WeaponSlot","System_Crafting","System_CraftingComponent","CraftBulk","CraftResources","CraftSkill","CraftDC","CraftTime","System_Cooking","System_HighQualityMeals","Line","Cone","Blast","Burst","Zone","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnEnter","Title_TechNewTargets","Title_TechNewOnEnter","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEndFocus","Teleport","Notebooks","Note_NotebookActions","Note_NotebookName","Note_NotebookContents","Note_NotebookOpen","Note_NotebookDelete","Note_NotebookReload","Note_NotebookClose","Note_NotebookSave","Note_NotebookIsDirty","Note_OpenNotebook","Note_OpenNotebookActions","NotebookPages","Note_PageType","Note_PageDisplay","Note_PagePost","Note_PageDelete","Note_PageTemplateData","Note_PageContents","Note_PageLocation","Note_PageArea","Note_PageDate","Note_PageTime","Note_PageCharName","Note_PageCharURL","Note_PageCharEmote","Note_PageCharLanguage","Note_PageQuestName","Note_PageChapter","Note_PagePart"],"Human":["Coastborne","Suntouched","Sandfolk","Plains-kin","Frostcloaked","Earthblood","Other"],"Energy":["Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Fire","Dmg_Shock"],"Physical":["Dmg_Force","Dmg_Piercing","Dmg_Weapon"],"Melee Weaponry":["StyleSubGroup_Mighty Weapons","StyleSubGroup_Skirmish Weapons","StyleSubGroup_Finesse Weapons"],"Ranged Weaponry":["StyleSubGroup_Shoot Weapons","StyleSubGroup_Throw Weapons"],"Martial Arts":["StyleSubGroup_Martial Arts","StyleSubGroup_Kinetics","Style_Forceful Fist Arte","Style_Stepflow Arte","Style_Aerial Arte","Style_Wrestling Arte","Style_Galegrip Arte","Style_Powerarm Arte","Style_Swaying Palm Arte","Style_Skyfall Arte","Style_Ironhold Arte","Style_Heaven's Reach Arte"],"Arcanification Magic":["StyleSubGroup_Evocation","StyleSubGroup_Channelling","StyleSubGroup_Enchantment"],"Fluctuation Magic":["StyleSubGroup_Fluctuation"],"Materialization Magic":["StyleSubGroup_Battlesmithing","StyleSubGroup_Conjury"],"Transformation Magic":["StyleSubGroup_Transmutation","StyleSubGroup_Physiomancy"],"Athletics":["StyleSubGroup_Brawn","StyleSubGroup_Stealth","StyleSubGroup_Acrobatics","Skill_Agility","Skill_Physique","Skill_Sneak"],"Speechcraft":["StyleSubGroup_Favor Building","StyleSubGroup_Disruption","StyleSubGroup_Emotional Support"],"Combat Defense":["Def_Brace","Def_Warding","Def_Reflex"],"Defense":["Def_Fortitude","Def_Hide","Def_Evasion"],"Social Sense":["Def_Resolve","Def_Insight","Def_Guile"],"Sense":["Def_Freewill","Def_Notice","Def_Scrutiny"],"Life":["Surge","Cmb_Vitality","Cmb_HV","Cmb_Armor","Cmb_Hardness","Resistance","Weakness","Cmb_ResistanceDesc","Cmb_WeaknessDesc"],"Movement":["Cmb_Mv","Cmb_MvPotency","MvCharge","Move","Adjacency","Obstruction","StrideRoll","MaxStride","FreeMove","Pulled","Pushed","ForceMove","Jump","Fly","Lifting","Falling"],"Technique Trait":["Trait_Arcanify","Trait_Arcing","Trait_Attack","Trait_Break","Trait_Delayed","Trait_Envoke","Trait_Focus","Trait_Holdfast","Trait_Illusion","Trait_Materialize","Trait_Permanent","Trait_Resonator","Trait_Seeking","Trait_Transmute"],"Effect Trait":["Trait_AP","Trait_Brutal","Trait_Optional"],"Item Trait":["Trait_Ammunition","Trait_Axe","Trait_Bow","Trait_Ingested","Trait_Hammer","Trait_Handgun","Trait_Inhalent","Trait_Knife","Trait_Longshot","Trait_Loud","Trait_Magitech","Trait_MaxBulk15","Trait_MaxBulk60","Trait_MaxBulk120","Trait_MaxBulk250","Trait_Medkit","Trait_MinBulk15","Trait_MinBulk60","Trait_MinBulk120","Trait_MinBulk250","Trait_MinDust15","Trait_MinDust60","Trait_MinDust120","Trait_Polearm","Trait_Resonant","Trait_Scattershot","Trait_Sharp","Trait_Sturdy","Trait_Sword","Trait_Whip"],"Goods Trait":["Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Transparent"],"Damage":["WeaponDamage","WeaponDamageVal"],"Technique":["Title_ResourceCost","Title_Targetting","Title_Range","Title_Patterns"],"Gear":["Bulk"],"Generator":["Note_GenName","Note_GenFullName","Note_GenGender","Note_GenHomeRegion","Note_GenRace","Note_GenPersonality","Note_GenMotivation","Note_GenerateCharacter","Note_UseGeneration","Note_ClearBackground"],"Basic":["Style_Basic Action","Style_Basic Recovery","Style_Basic Attack","Style_Basic Social","Style_Basic Spirit"],"Mighty Weapons":["Style_Hammering Arte","Style_Cleaving Arte","Style_Battering Arte","Style_Berserker Arte","Style_Mauler Arte","Style_Avenger Arte"],"Skirmish Weapons":["Style_Chargestrike Arte","Style_Overwhelming Arte","Style_Arcanestrike Arte","Style_Duelist Arte","Style_Swashbuckling Arte","Style_Phalanx Arte","Style_Jumpspear Arte","Style_Spellblade Arte","Style_Fencer Arte","Style_Sky Pike Arte"],"Finesse Weapons":["Style_Finesse Blade Arte","Style_Whip Arte","Style_Flashcut Arte","Style_Trickster Arte"],"Kinetics":["Style_Rapid Strikes Arte","Style_Disruption Form Arte"],"Shoot Weapons":["Style_Archery Arte","Style_Trick Arrow Arte","Style_Gunslinger Arte","Style_Sentry Arte","Style_Longsight Arte","Style_Scatterpoint Arte","Style_Bowmaster Arte","Style_Pistolero Arte"],"Throw Weapons":["Style_Bomber Arte","Style_Daggerthrow Arte"],"Evocation":["Style_Blasting Flames","Style_Shock Bomb","Style_Arcane Spellshot","Style_Flaming Sphere","Style_Lightning Shot","Style_Area Spark","Style_Binding Cold","Style_Chilling Blast","Style_Hellfire","Style_Storm Caller","Style_Sheer Cold"],"Channelling":["Style_Whispering Wind","Style_Bursting Fire","Style_Fire Field","Style_Close Circuit","Style_Ice Storm","Style_Manification","Style_Light Control","Style_Darkness Weaving","Style_Sound Control"],"Enchantment":["Style_Arcane Conduit","Style_Freeform Flight","Style_Ether Magic","Style_Time Control"],"Fluctuation":["Style_Levitation","Style_Kinetic Assault","Style_Surging Dust","Style_Dust Impact","Style_Propelling Force","Style_Binding Winds","Style_Windsweep","Style_Gravity Force","Style_Telekinesis","Style_Surging Water"],"Battlesmithing":["Style_Throwcraft","Style_Conjure Blades","Style_Conjure Skyfall","Style_Warsmith"],"Conjury":["Style_Structural Magic","Style_Clouded Shroud","Style_Arbormaking","Style_Floral Shroud","Style_Smoke Field","Style_Stonemaking","Style_Iron Walls","Style_Glacial Walls","Style_Misty Terrtain","Style_Structural Mastery","Style_Poison Spore"],"Transmutation":["Style_Dust Shaping","Style_Unshaping","Style_Plant Growth","Style_Calming Blooms","Style_Verdant Armory","Style_Terrain Molding","Style_Ground Splitter","Style_Earthen Armory","Style_Water Shape","Style_Icy Terrain","Style_Frozen Armory","Style_Geomancy","Style_Cryomancy"],"Physiomancy":["Style_Healing Hands","Style_Earthen Endurance","Style_Propelling Motion","Style_Soul Surge","Style_Blood Flux"],"Brawn":["Style_Powerwake","Style_Enduring Body","Style_Traversal","Style_Unbeatable Brawn","Style_Unrelenting Motion"],"Stealth":["Style_Hidden Footing","Style_Shadow Walking"],"Acrobatics":["Style_Remotion","Style_Evasive Maneuvers","Style_Reactive Defense"],"Favor Building":["Style_Loyalty Appeal","Style_Social Grace","Style_Flattery","Style_Deft Negotiator","Style_Sales Tactics"],"Disruption":["Style_Fluster Point","Style_Provoking Anger","Style_Intimidating Fear","Style_Beguiling Instinct","Style_Taunting Wit"],"Emotional Support":["Style_Invigorating Rally","Style_Underminer","Style_Stillheart","Style_Connecting Bond"],"Craft":["Skill_Alchemy","Skill_Build","Skill_Cook"],"Investigate":["Skill_Analyze","Skill_Resonance","Skill_Search"],"Cast":["Skill_Channel","Skill_Conjure","Skill_Enchant","Skill_Heal","Skill_Kinesis","Skill_Shape"],"Persuade":["Skill_Charm","Skill_Inspire","Skill_Rationalize"],"Cunning":["Skill_Demoralize","Skill_Empathy","Skill_Misdirect"],"Fight":["Skill_Finesse","Skill_Grappling","Skill_Might","Skill_Shoot","Skill_Skirmish","Skill_Throw"],"Device":["Skill_Glyphwork","Skill_Pilot","Skill_Tinker"],"Walthair":["Lang_Minere","Lang_Crinere","Lang_Palmic","Lang_Shorespeak","Lang_Verdeni","Lang_Vulca"],"Aridsha":["Lang_Junal","Lang_Byric","Lang_Dustell","Lang_Muralic","Lang_Shira"],"Khem":["Lang_Apollen","Lang_Kleikan"],"Colswei":["Lang_Lib"],"Ceres":["Lang_Cert","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq"],"Special":["Lang_Emotion","Lang_Empathy","Lang_Wolfwarg","Lang_Jovean","Lang_Mytikan"],"Academics":["Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology"],"Profession":["Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining"],"Craftmanship":["Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving"],"Geography":["Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane"],"History":["Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History"],"Culture":["Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater"],"Religion":["Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"],"Vanguard":["Job_Fighter","Job_Sentinel","Job_Warden","Job_Bulwark","JStyle_Fighter","JStyle_Sentinel","JStyle_Warden","JStyle_Bulwark"],"Operator":["Job_Hunter","Job_Sniper","Job_Trooper","Job_Warmage","Job_Alchemist","JStyle_Hunter","JStyle_Sniper","JStyle_Trooper","JStyle_Warmage","JStyle_Alchemist"],"Athlete":["Job_Brawler","Job_Kineticist","Job_Rogue","Job_Labourer","JStyle_Brawler","JStyle_Kineticist","JStyle_Rogue","JStyle_Labourer"],"Strategist":["Job_Tactician","Job_Magus","Job_Scholar","Job_Inquisitor","JStyle_Tactician","JStyle_Magus","JStyle_Scholar","JStyle_Inquisitor"],"Waymaker":["Job_Detective","Job_Culinarian","Job_Bard","Job_Medic","Job_Spellwright","JStyle_Detective","JStyle_Culinarian","JStyle_Bard","JStyle_Medic","JStyle_Spellwright"],"Advocate":["Job_Empath","Job_Merchant","Job_Orator","Job_Hardliner","JStyle_Empath","JStyle_Merchant","JStyle_Orator","JStyle_Hardliner"],"Esper":["Job_Etherealist","Job_Shade","JStyle_Etherealist","JStyle_Shade"],"Status":["Stat_Blinded","Stat_Downed","Stat_Dying","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious"],"Condition":["Stat_Aflame","Stat_Armored","Stat_Bleeding","Stat_Chilled","Stat_Dodge","Stat_Encumbered","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Impaired","Stat_Jolted","Stat_Prone","Stat_Quickened","Stat_Shielded","Stat_Sickened","Stat_Stunned"],"Emotion":["Stat_Angered","Stat_Calmed","Stat_Doubt","Stat_Encouraged","Stat_Frightened","Stat_Flustered","Stat_Overjoyed","Stat_Persevering","Stat_Receptive","Stat_Surprised","Stat_Steadfast"]},"mainGroup":{"Style":["Style_Basic Action","Style_Basic Recovery","Style_Basic Attack","Style_Basic Social","Style_Basic Spirit","Style_Hammering Arte","Style_Cleaving Arte","Style_Battering Arte","Style_Berserker Arte","Style_Chargestrike Arte","Style_Overwhelming Arte","Style_Arcanestrike Arte","Style_Duelist Arte","Style_Swashbuckling Arte","Style_Phalanx Arte","Style_Jumpspear Arte","Style_Finesse Blade Arte","Style_Whip Arte","Style_Forceful Fist Arte","Style_Stepflow Arte","Style_Aerial Arte","Style_Wrestling Arte","Style_Galegrip Arte","Style_Rapid Strikes Arte","Style_Disruption Form Arte","Style_Archery Arte","Style_Trick Arrow Arte","Style_Gunslinger Arte","Style_Sentry Arte","Style_Longsight Arte","Style_Scatterpoint Arte","Style_Bomber Arte","Style_Daggerthrow Arte","Style_Blasting Flames","Style_Shock Bomb","Style_Arcane Spellshot","Style_Flaming Sphere","Style_Lightning Shot","Style_Area Spark","Style_Binding Cold","Style_Chilling Blast","Style_Whispering Wind","Style_Bursting Fire","Style_Fire Field","Style_Close Circuit","Style_Ice Storm","Style_Arcane Conduit","Style_Freeform Flight","Style_Levitation","Style_Kinetic Assault","Style_Surging Dust","Style_Dust Impact","Style_Propelling Force","Style_Binding Winds","Style_Throwcraft","Style_Conjure Blades","Style_Conjure Skyfall","Style_Structural Magic","Style_Clouded Shroud","Style_Arbormaking","Style_Floral Shroud","Style_Smoke Field","Style_Stonemaking","Style_Iron Walls","Style_Glacial Walls","Style_Misty Terrtain","Style_Dust Shaping","Style_Unshaping","Style_Plant Growth","Style_Calming Blooms","Style_Verdant Armory","Style_Terrain Molding","Style_Ground Splitter","Style_Earthen Armory","Style_Water Shape","Style_Icy Terrain","Style_Frozen Armory","Style_Healing Hands","Style_Earthen Endurance","Style_Propelling Motion","Style_Powerwake","Style_Enduring Body","Style_Traversal","Style_Hidden Footing","Style_Remotion","Style_Evasive Maneuvers","Style_Loyalty Appeal","Style_Social Grace","Style_Flattery","Style_Deft Negotiator","Style_Sales Tactics","Style_Fluster Point","Style_Provoking Anger","Style_Intimidating Fear","Style_Beguiling Instinct","Style_Taunting Wit","Style_Invigorating Rally","Style_Underminer","Style_Stillheart","Style_Connecting Bond"],"Advanced":["Style_Mauler Arte","Style_Avenger Arte","Style_Spellblade Arte","Style_Fencer Arte","Style_Sky Pike Arte","Style_Flashcut Arte","Style_Trickster Arte","Style_Powerarm Arte","Style_Swaying Palm Arte","Style_Skyfall Arte","Style_Ironhold Arte","Style_Heaven's Reach Arte","Style_Bowmaster Arte","Style_Pistolero Arte","Style_Hellfire","Style_Storm Caller","Style_Sheer Cold","Style_Manification","Style_Light Control","Style_Darkness Weaving","Style_Sound Control","Style_Ether Magic","Style_Time Control","Style_Windsweep","Style_Gravity Force","Style_Telekinesis","Style_Surging Water","Style_Warsmith","Style_Structural Mastery","Style_Poison Spore","Style_Geomancy","Style_Cryomancy","Style_Soul Surge","Style_Blood Flux","Style_Unbeatable Brawn","Style_Unrelenting Motion","Style_Shadow Walking","Style_Reactive Defense"]},"formulaMods":{"CR":["Attribute","Skill","Job","Knowledge","Style","Perk","Influence","SB_MAX","Def_Brace","Def_Fortitude","Def_Warding","Def_Hide","Def_Reflex","Def_Evasion","Def_Resolve","Def_Freewill","Def_Insight","Def_Notice","Def_Guile","Def_Scrutiny","HP","WILL","Surge","Recall","Initiative","Cmb_HV"],"BonusAttributePoints":["Attribute"],"Level":["Skill","Advancement","Training","HP","WILL"],"AdvancementSkill":["Skill"],"AdvancementJob":["Job"],"TrainingKnowledge":["Knowledge"],"AdvancementTechnique":["Style"],"TrainingTechniques":["Style"],"BonusTraining":["Training"],"Attr_BOD":["Def_Brace","Def_Fortitude","HP","Power","CarryingCapacity","Skill_Conjure","Skill_Grappling","Skill_Might","Skill_Physique","Skill_Throw"],"Attr_PRC":["Def_Warding","Def_Hide","Accuracy","Skill_Kinesis","Skill_Shoot","Skill_Skirmish","Skill_Sneak","Skill_Tinker"],"Attr_QCK":["Def_Reflex","Def_Evasion","Initiative","Skill_Agility","Skill_Enchant","Skill_Finesse","Skill_Glyphwork","Skill_Pilot"],"Attr_CNV":["Def_Resolve","Def_Freewill","WILL","Charisma","Cmb_HV","Skill_Channel","Skill_Demoralize","Skill_Inspire","Skill_Misdirect","Skill_Resonance"],"Attr_INT":["Def_Insight","Def_Notice","Artistry","Skill_Charm","Skill_Cook","Skill_Empathy","Skill_Heal","Skill_Search"],"Attr_RSN":["Def_Guile","Def_Scrutiny","Recall","Skill_Alchemy","Skill_Analyze","Skill_Build","Skill_Rationalize","Skill_Shape"],"Recall":["Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"]},"techMods":{"_tech":["Influence","Def_Brace","Def_Fortitude","Def_Warding","Def_Hide","Def_Reflex","Def_Evasion","Def_Resolve","Def_Freewill","Def_Insight","Def_Notice","Def_Guile","Def_Scrutiny","JobSlots","AdvancedSlots","StyleSlots","WeaponSlots","EquipmentSlots","HP","WILL","Surge","EN","StartEN","RoundEN","Power","Accuracy","Artistry","Charisma","Recall","Initiative","CarryingCapacity","Cmb_Vitality","Cmb_HV","Cmb_Armor","Cmb_Mv","Cmb_MvPotency"],"_techset":["Power","Accuracy","Artistry","Charisma","Recall"]},"hasMax":{"true":["Data","Advancement","Training","General","CR","XP","BonusTraining","HP","WILL","Surge","EN","Cmb_Vitality","Soc_Favor"]}},
         _max = "_max",
         _true = "_true",
         _rank = "_rank",

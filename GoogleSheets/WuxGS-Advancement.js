@@ -53,6 +53,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("TargetFavor"), 0);
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("XP"), 0);
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("PP"), 0);
+            output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("TeamIndex"), 0);
 
             let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", "Social")]);
             for (let i = 0; i < filteredStats.length; i++) {

@@ -42,6 +42,9 @@ var WuxConflictManager = WuxConflictManager || (function () {
                 case "!endcombat":
                     commandEndConflict();
                     break;
+                case "!conflictxp":
+                    commandGainConflictXP();
+                    break;
             }
             ;
         },
@@ -62,6 +65,87 @@ var WuxConflictManager = WuxConflictManager || (function () {
         },
         commandEndConflict = function () {
             endConflict();
+        },
+        commandGainConflictXP = function () {
+            let levelVar = WuxDef.GetVariable("Level");
+            let crVar = WuxDef.GetVariable("CR");
+            let xpDefinition = WuxDef.Get("XP");
+            let ppDefinition = WuxDef.Get("PP");
+
+            let allyTeam = TargetReference.GetActiveTargetsOnTeam(0);
+            let allyTeamXp = [];
+            let enemyTeam = TargetReference.GetActiveTargetsOnTeam(1);
+            if (allyTeam.length == 0 || enemyTeam.length == 0) {
+                Debug.LogError(`[commandGainConflictXP] Not enough teams to grant XP. Ally Team: ${allyTeam.length}, Enemy Team: ${enemyTeam.length}`);
+                return;
+            }
+            for (let i = 0; i < allyTeam.length; i++) {
+                allyTeamXp.push({level: 0, cr: 0, xp: 0.0, pp: 0.0});
+                let attributeHandler = new SandboxAttributeHandler(allyTeam[i].charId);
+                attributeHandler.addMod([levelVar, crVar, xpDefinition.getVariable(), ppDefinition.getVariable()]);
+                attributeHandler.addGetAttrCallback(function (attrHandler) {
+                    allyTeamXp[i].level = attrHandler.parseInt(levelVar);
+                    allyTeamXp[i].cr = attrHandler.parseInt(crVar);
+                });
+                attributeHandler.run();
+            }
+            
+            for (let i = 0; i < enemyTeam.length; i++) {
+                let attributeHandler = new SandboxAttributeHandler(enemyTeam[i].charId);
+                attributeHandler.addMod([levelVar, crVar]);
+                attributeHandler.addGetAttrCallback(function (attrHandler) {
+                    let enemyLevel = attrHandler.parseInt(levelVar);
+                    let enemyCR = attrHandler.parseInt(crVar);
+                    
+                    for (let j = 0; j < allyTeamXp.length; j++) {
+                        // base xp is 5, base pp is 2
+                        // each level above the ally is +0.5 xp, +0.25 pp (rounded down)
+                        // each level below the ally is -0.5 xp, -0.25 pp (rounded down)
+                        // each cr above the ally is +3 xp, +2.5 pp
+                        // each cr below the ally is -3 xp, -2.5 pp
+                        // minimum xp is 0, minimum pp is 1
+                        // example: enemy is 2 levels above ally -> 7 xp, 3 pp
+                        // example: enemy is 3 levels below ally -> 2 xp, 1 pp
+                        // example: enemy is 10 levels below ally -> 0 xp, 1 pp
+                        // example: enemy is same level as ally -> 5 xp, 2 pp
+                        
+                        let levelDiff = enemyLevel - allyTeamXp[j].level;
+                        levelDiff = Math.floor(levelDiff / 2);
+                        let crDiff = enemyCR - allyTeamXp[j].cr;
+                        
+                        let xpGain = Math.max(0, 5 + levelDiff + (crDiff * 3));
+                        let ppGain = Math.max(1, 2 + Math.floor(levelDiff / 2));
+                        allyTeamXp[j].xp += xpGain;
+                        allyTeamXp[j].pp += ppGain;
+                    }
+                });
+                attributeHandler.run();
+            }
+            
+            let message = "";
+            let messages = [];
+            messages.push("Conflict XP Results:");
+            for (let i = 0; i < allyTeam.length; i++) {
+                // modify the xp values by party size
+                allyTeamXp[i].xp = Math.ceil(allyTeamXp[i].xp / allyTeam.length);
+                
+                let attributeHandler = new SandboxAttributeHandler(allyTeam[i].charId);
+                message = `${allyTeam[i].displayName} gains ${Math.floor(allyTeamXp[i].xp)} XP and ${Math.floor(allyTeamXp[i].pp)} PP`;
+                allyTeam[i].addModNoCap("XP", attributeHandler, allyTeamXp[i].xp, 
+                    function (results, attrHandler, attributeVar) {
+                        attrHandler.addUpdate(attributeVar, results.newValue, false);
+                    });
+                allyTeam[i].addModNoCap("PP", attributeHandler, allyTeamXp[i].pp,
+                    function (results, attrHandler, attributeVar) {
+                        attrHandler.addUpdate(attributeVar, results.newValue, false);
+                    });
+                attributeHandler.run();
+                messages.push(message);
+            }
+
+            let systemMessage = new SystemInfoMessage(messages);
+            systemMessage.setSender("System");
+            WuxMessage.Send(systemMessage);
         },
 
         setDefaultTeams = function () {
