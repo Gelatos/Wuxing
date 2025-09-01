@@ -586,7 +586,6 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
         attributeHandler.addMod(crVar, 0);
         
         techniqueConsumptionResolver.iterateResources((resourceName) => {
-            Debug.Log(`Consuming resources for ${resourceName}`);
             if (techniqueConsumptionResolver.newResourceValues.hasOwnProperty(resourceName)) {
                 let resourceObject = techniqueConsumptionResolver.newResourceValues[resourceName];
                 resourceObject.callback(techniqueConsumptionResolver, attributeHandler, resourceObject);

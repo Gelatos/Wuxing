@@ -786,8 +786,8 @@ class TokenTargetData extends TargetData {
         let results = tokenTargetData.getModifyResults(barIndex);
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
-            results.current = tokenTargetData.token.get(`bar${barIndex}_value`);
-            results.max = tokenTargetData.token.get(`bar${barIndex}_max`);
+            results.current = parseInt(tokenTargetData.token.get(`bar${barIndex}_value`));
+            results.max = parseInt(tokenTargetData.token.get(`bar${barIndex}_max`));
             modCallback(results, value, attrHandler, tokenTargetData);
             finishCallback(results, attrHandler, "", tokenTargetData);
         });
