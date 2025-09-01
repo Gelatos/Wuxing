@@ -801,6 +801,7 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 .sheet-rolltemplate-ctmsg .sheet-wuxInlineRow,
 .sheet-rolltemplate-ctwsp .sheet-wuxInlineRow,
 .sheet-rolltemplate-ctyell .sheet-wuxInlineRow,
+.sheet-rolltemplate-ctcomms .sheet-wuxInlineRow,
 .sheet-rolltemplate-ctthk .sheet-wuxInlineRow,
 .sheet-rolltemplate-ctdesc .sheet-wuxInlineRow,
 .sheet-rolltemplate-ctinteract .sheet-wuxInlineRow,

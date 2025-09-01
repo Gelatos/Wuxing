@@ -530,6 +530,7 @@
 .sheet-rolltemplate-ctmsg .sheet-chattable,
 .sheet-rolltemplate-ctwsp .sheet-chattable,
 .sheet-rolltemplate-ctyell .sheet-chattable,
+.sheet-rolltemplate-ctcomms .sheet-chattable,
 .sheet-rolltemplate-ctthk .sheet-chattable,
 .sheet-rolltemplate-ctdesc .sheet-chattable,
 .sheet-rolltemplate-ctinteract .sheet-chattable,
@@ -543,6 +544,7 @@
 .sheet-rolltemplate-ctmsg .sheet-chatimage,
 .sheet-rolltemplate-ctwsp .sheet-chatimage,
 .sheet-rolltemplate-ctyell .sheet-chatimage,
+.sheet-rolltemplate-ctcomms .sheet-chatimage,
 .sheet-rolltemplate-ctthk .sheet-chatimage,
 .sheet-rolltemplate-ctdesc .sheet-chatimage,
 .sheet-rolltemplate-ctinteract .sheet-chatimage,
@@ -556,103 +558,10 @@
     width: max-content;
 }
 
-.sheet-rolltemplate-ctmsg .sheet-chatimage.sheet-wuxSpiritRealm,
-.sheet-rolltemplate-ctwsp .sheet-chatimage.sheet-wuxSpiritRealm,
-.sheet-rolltemplate-ctyell .sheet-chatimage.sheet-wuxSpiritRealm,
-.sheet-rolltemplate-ctthk .sheet-chatimage.sheet-wuxSpiritRealm,
-.sheet-rolltemplate-ctdesc .sheet-chatimage.sheet-wuxSpiritRealm
-{
-    filter: 
-    sepia(80%)
-    drop-shadow(2px -2px 2px #f17f00)
-    contrast(110%) 
-    brightness(110%) 
-    saturate(2)
-    ;
-}
-
-.sheet-rolltemplate-ctmsg .sheet-chatimage.sheet-wuxElementwood,
-.sheet-rolltemplate-ctwsp .sheet-chatimage.sheet-wuxElementwood,
-.sheet-rolltemplate-ctyell .sheet-chatimage.sheet-wuxElementwood,
-.sheet-rolltemplate-ctthk .sheet-chatimage.sheet-wuxElementwood,
-.sheet-rolltemplate-ctdesc .sheet-chatimage.sheet-wuxElementwood
-{
-    filter: 
-    sepia(80%)
-    drop-shadow(2px -2px 2px #f17f00)
-    contrast(110%) 
-    brightness(110%) 
-    saturate(2)
-    hue-rotate(90deg)
-    ;
-}
-
-.sheet-rolltemplate-ctmsg .sheet-chatimage.sheet-wuxElementfire,
-.sheet-rolltemplate-ctwsp .sheet-chatimage.sheet-wuxElementfire,
-.sheet-rolltemplate-ctyell .sheet-chatimage.sheet-wuxElementfire,
-.sheet-rolltemplate-ctthk .sheet-chatimage.sheet-wuxElementfire,
-.sheet-rolltemplate-ctdesc .sheet-chatimage.sheet-wuxElementfire
-{
-    filter: 
-    sepia(90%)
-    drop-shadow(2px -2px 2px #f17f00)
-    contrast(110%) 
-    brightness(110%) 
-    saturate(2)
-    hue-rotate(330deg)
-    ;
-}
-
-.sheet-rolltemplate-ctmsg .sheet-chatimage.sheet-wuxElementearth,
-.sheet-rolltemplate-ctwsp .sheet-chatimage.sheet-wuxElementearth,
-.sheet-rolltemplate-ctyell .sheet-chatimage.sheet-wuxElementearth,
-.sheet-rolltemplate-ctthk .sheet-chatimage.sheet-wuxElementearth,
-.sheet-rolltemplate-ctdesc .sheet-chatimage.sheet-wuxElementearth
-{
-    filter: 
-    sepia(80%)
-    drop-shadow(2px -2px 2px #f17f00)
-    contrast(110%) 
-    brightness(110%) 
-    saturate(2)
-    ;
-}
-
-.sheet-rolltemplate-ctmsg .sheet-chatimage.sheet-wuxElementmetal,
-.sheet-rolltemplate-ctwsp .sheet-chatimage.sheet-wuxElementmetal,
-.sheet-rolltemplate-ctyell .sheet-chatimage.sheet-wuxElementmetal,
-.sheet-rolltemplate-ctthk .sheet-chatimage.sheet-wuxElementmetal,
-.sheet-rolltemplate-ctdesc .sheet-chatimage.sheet-wuxElementmetal
-{
-    filter: 
-    sepia(80%)
-    drop-shadow(2px -2px 2px #f17f00)
-    contrast(110%) 
-    brightness(80%) 
-    saturate(2)
-    hue-rotate(230deg)
-    ;
-}
-
-.sheet-rolltemplate-ctmsg .sheet-chatimage.sheet-wuxElementwater,
-.sheet-rolltemplate-ctwsp .sheet-chatimage.sheet-wuxElementwater,
-.sheet-rolltemplate-ctyell .sheet-chatimage.sheet-wuxElementwater,
-.sheet-rolltemplate-ctthk .sheet-chatimage.sheet-wuxElementwater,
-.sheet-rolltemplate-ctdesc .sheet-chatimage.sheet-wuxElementwater
-{
-    filter: 
-    sepia(80%)
-    drop-shadow(2px -2px 2px #f17f00)
-    contrast(110%) 
-    brightness(110%) 
-    saturate(2)
-    hue-rotate(180deg)
-    ;
-}
-
 .sheet-rolltemplate-ctmsg .sheet-chattd,
 .sheet-rolltemplate-ctwsp .sheet-chattd,
-.sheet-rolltemplate-ctyell .sheet-chattd, 
+.sheet-rolltemplate-ctyell .sheet-chattd,
+.sheet-rolltemplate-ctcomms .sheet-chattd,
 .sheet-rolltemplate-ctthk .sheet-chattd, 
 .sheet-rolltemplate-ctdesc .sheet-chattd,
 .sheet-rolltemplate-ctinteract .sheet-chattd,
@@ -668,7 +577,8 @@
 .sheet-rolltemplate-results .sheet-chatsub,
 .sheet-rolltemplate-ctmsg .sheet-chatsub,
 .sheet-rolltemplate-ctwsp .sheet-chatsub,
-.sheet-rolltemplate-ctyell .sheet-chatsub, 
+.sheet-rolltemplate-ctyell .sheet-chatsub,
+.sheet-rolltemplate-ctcomms .sheet-chatsub,
 .sheet-rolltemplate-ctthk .sheet-chatsub, 
 .sheet-rolltemplate-ctdesc .sheet-chatsub, 
 .sheet-rolltemplate-ctintro .sheet-chatsub
@@ -755,6 +665,7 @@
 .sheet-rolltemplate-ctmsg .sheet-chattitle,
 .sheet-rolltemplate-ctwsp .sheet-chattitle,
 .sheet-rolltemplate-ctyell .sheet-chattitle,
+.sheet-rolltemplate-ctcomms .sheet-chattitle,
 .sheet-rolltemplate-ctinteract .sheet-chattitle
 {
     display: inline-block; 
@@ -771,6 +682,7 @@
 .sheet-rolltemplate-ctmsg .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctwsp .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctyell .sheet-chatlanguageHeader,
+.sheet-rolltemplate-ctcomms .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctinteract .sheet-chatlanguageHeader
 {
     font-family: "Contrail One";
@@ -804,6 +716,7 @@
 .sheet-rolltemplate-ctmsg .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-message,
 .sheet-rolltemplate-ctyell .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-message,
 .sheet-rolltemplate-ctinteract .sheet-message
 {
     display: inline-block; 
@@ -883,11 +796,11 @@
 {
     padding: 8px;
 
-    font-weight: bold; 
+    font-weight: bold;
     font-size: 14px;
     text-transform: uppercase;
     line-height: 16px;
-    
+
     background:#fff;
     border: solid #000;
     border-width: 3px 4px 3px 6px;
@@ -898,9 +811,23 @@
     box-shadow:2px 2px 0 #222;
 }
 
+.sheet-rolltemplate-ctcomms .sheet-message
+{
+    padding: 8px;
+
+    font-size: 12px;
+    letter-spacing: 0.2ch;
+    line-height: 16px;
+
+    background: #d6d6d6;
+    border: 3px solid #000;
+    border-radius: 0;
+}
+
 .sheet-rolltemplate-ctmsg .sheet-ancientLanguage .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-ancientLanguage .sheet-message,
-.sheet-rolltemplate-ctyell .sheet-ancientLanguage .sheet-message
+.sheet-rolltemplate-ctyell .sheet-ancientLanguage .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-ancientLanguage .sheet-message
 {
     font-family: "Kaushan Script";
     font-style: italic;
@@ -908,7 +835,8 @@
 
 .sheet-rolltemplate-ctmsg .sheet-regionalLanguage .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-regionalLanguage .sheet-message,
-.sheet-rolltemplate-ctyell .sheet-regionalLanguage .sheet-message
+.sheet-rolltemplate-ctyell .sheet-regionalLanguage .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-regionalLanguage .sheet-message
 {
     font-family: "Della Respira";
     font-style: italic;
@@ -932,6 +860,12 @@
 .sheet-rolltemplate-ctyell .sheet-plainsLanguage,
 .sheet-rolltemplate-ctyell .sheet-rareLanguage,
 .sheet-rolltemplate-ctyell .sheet-specialLanguage,
+.sheet-rolltemplate-ctcomms .sheet-coastalLanguage,
+.sheet-rolltemplate-ctcomms .sheet-mountainLanguage,
+.sheet-rolltemplate-ctcomms .sheet-desertLanguage,
+.sheet-rolltemplate-ctcomms .sheet-plainsLanguage,
+.sheet-rolltemplate-ctcomms .sheet-rareLanguage,
+.sheet-rolltemplate-ctcomms .sheet-specialLanguage,
 .sheet-rolltemplate-ctinteract .sheet-coastalLanguage,
 .sheet-rolltemplate-ctinteract .sheet-mountainLanguage,
 .sheet-rolltemplate-ctinteract .sheet-desertLanguage,
@@ -945,9 +879,11 @@
 .sheet-rolltemplate-ctmsg .sheet-coastalLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctwsp .sheet-coastalLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctyell .sheet-coastalLanguage .sheet-chatlanguageHeader,
+.sheet-rolltemplate-ctcomms .sheet-coastalLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctmsg .sheet-coastalLanguage .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-coastalLanguage .sheet-message,
-.sheet-rolltemplate-ctyell .sheet-coastalLanguage .sheet-message
+.sheet-rolltemplate-ctyell .sheet-coastalLanguage .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-coastalLanguage .sheet-message
 {
     background-color: #ebf3fb;
 }
@@ -955,9 +891,11 @@
 .sheet-rolltemplate-ctmsg .sheet-mountainLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctwsp .sheet-mountainLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctyell .sheet-mountainLanguage .sheet-chatlanguageHeader,
+.sheet-rolltemplate-ctcomms .sheet-mountainLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctmsg .sheet-mountainLanguage .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-mountainLanguage .sheet-message,
-.sheet-rolltemplate-ctyell .sheet-mountainLanguage .sheet-message
+.sheet-rolltemplate-ctyell .sheet-mountainLanguage .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-mountainLanguage .sheet-message
 {
     background-color: #ffb4b4;
 }
@@ -965,9 +903,11 @@
 .sheet-rolltemplate-ctmsg .sheet-desertLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctwsp .sheet-desertLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctyell .sheet-desertLanguage .sheet-chatlanguageHeader,
+.sheet-rolltemplate-ctcomms .sheet-desertLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctmsg .sheet-desertLanguage .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-desertLanguage .sheet-message,
-.sheet-rolltemplate-ctyell .sheet-desertLanguage .sheet-message
+.sheet-rolltemplate-ctyell .sheet-desertLanguage .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-desertLanguage .sheet-message
 {
     background-color: #ffe3fe;
 }
@@ -975,9 +915,11 @@
 .sheet-rolltemplate-ctmsg .sheet-plainsLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctwsp .sheet-plainsLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctyell .sheet-plainsLanguage .sheet-chatlanguageHeader,
+.sheet-rolltemplate-ctcomms .sheet-plainsLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctmsg .sheet-plainsLanguage .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-plainsLanguage .sheet-message,
-.sheet-rolltemplate-ctyell .sheet-plainsLanguage .sheet-message
+.sheet-rolltemplate-ctyell .sheet-plainsLanguage .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-plainsLanguage .sheet-message
 {
     background-color: #fbf8db;
 }
@@ -985,9 +927,11 @@
 .sheet-rolltemplate-ctmsg .sheet-rareLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctwsp .sheet-rareLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctyell .sheet-rareLanguage .sheet-chatlanguageHeader,
+.sheet-rolltemplate-ctcomms .sheet-rareLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctmsg .sheet-rareLanguage .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-rareLanguage .sheet-message,
-.sheet-rolltemplate-ctyell .sheet-rareLanguage .sheet-message
+.sheet-rolltemplate-ctyell .sheet-rareLanguage .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-rareLanguage .sheet-message
 {
     background-color: #dbfbf3;
 }
@@ -995,9 +939,11 @@
 .sheet-rolltemplate-ctmsg .sheet-specialLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctwsp .sheet-specialLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctyell .sheet-specialLanguage .sheet-chatlanguageHeader,
+.sheet-rolltemplate-ctcomms .sheet-specialLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctmsg .sheet-specialLanguage .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-specialLanguage .sheet-message,
-.sheet-rolltemplate-ctyell .sheet-specialLanguage .sheet-message
+.sheet-rolltemplate-ctyell .sheet-specialLanguage .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-specialLanguage .sheet-message
 {
     background-color: #555; 
     color: #fff;

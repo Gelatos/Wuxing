@@ -801,6 +801,7 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 .sheet-rolltemplate-ctmsg .sheet-wuxInlineRow,
 .sheet-rolltemplate-ctwsp .sheet-wuxInlineRow,
 .sheet-rolltemplate-ctyell .sheet-wuxInlineRow,
+.sheet-rolltemplate-ctcomms .sheet-wuxInlineRow,
 .sheet-rolltemplate-ctthk .sheet-wuxInlineRow,
 .sheet-rolltemplate-ctdesc .sheet-wuxInlineRow,
 .sheet-rolltemplate-ctinteract .sheet-wuxInlineRow,
@@ -2689,6 +2690,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-ctmsg .sheet-wuxTooltipButton,
 .sheet-rolltemplate-ctwsp .sheet-wuxTooltipButton,
 .sheet-rolltemplate-ctyell .sheet-wuxTooltipButton,
+.sheet-rolltemplate-ctcomms .sheet-wuxTooltipButton,
 .sheet-rolltemplate-ctthk .sheet-wuxTooltipButton,
 .sheet-rolltemplate-ctdesc .sheet-wuxTooltipButton,
 .sheet-rolltemplate-ctinteract .sheet-wuxTooltipButton,
@@ -2742,6 +2744,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-ctmsg .sheet-wuxTooltipText,
 .sheet-rolltemplate-ctwsp .sheet-wuxTooltipText,
 .sheet-rolltemplate-ctyell .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctcomms .sheet-wuxTooltipText,
 .sheet-rolltemplate-ctthk .sheet-wuxTooltipText,
 .sheet-rolltemplate-ctdesc .sheet-wuxTooltipText,
 .sheet-rolltemplate-ctinteract .sheet-wuxTooltipText,
@@ -2756,6 +2759,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-ctmsg .sheet-wuxTooltipButton .sheet-wuxTooltipText,
 .sheet-rolltemplate-ctwsp .sheet-wuxTooltipButton .sheet-wuxTooltipText,
 .sheet-rolltemplate-ctyell .sheet-wuxTooltipButton .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctcomms .sheet-wuxTooltipButton .sheet-wuxTooltipText,
 .sheet-rolltemplate-ctthk .sheet-wuxTooltipButton .sheet-wuxTooltipText,
 .sheet-rolltemplate-ctdesc .sheet-wuxTooltipButton .sheet-wuxTooltipText,
 .sheet-rolltemplate-ctinteract .sheet-wuxTooltipButton .sheet-wuxTooltipText,
@@ -2780,6 +2784,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-ctmsg .sheet-wuxTooltipButton .sheet-wuxTooltipText,
 .sheet-rolltemplate-ctwsp .sheet-wuxTooltipButton .sheet-wuxTooltipText,
 .sheet-rolltemplate-ctyell .sheet-wuxTooltipButton .sheet-wuxTooltipText,
+.sheet-rolltemplate-ctcomms .sheet-wuxTooltipButton .sheet-wuxTooltipText,
 .sheet-rolltemplate-ctthk .sheet-wuxTooltipButton .sheet-wuxTooltipText,
 .sheet-rolltemplate-ctdesc .sheet-wuxTooltipButton .sheet-wuxTooltipText,
 .sheet-rolltemplate-ctinteract .sheet-wuxTooltipButton .sheet-wuxTooltipText,
@@ -2807,6 +2812,8 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-ctwsp .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctyell .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctyell .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctcomms .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctcomms .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctthk .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctthk .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctdesc .sheet-wuxTooltip .sheet-wuxTooltipContent,
@@ -2843,6 +2850,8 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-ctwsp .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctyell .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctyell .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctcomms .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctcomms .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctthk .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctthk .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctdesc .sheet-wuxTooltip .sheet-wuxTooltipContent,
@@ -2865,6 +2874,8 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-ctwsp .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctyell .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctyell .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctcomms .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctcomms .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctthk .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctthk .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctdesc .sheet-wuxTooltip .sheet-wuxTooltipContent,
@@ -2889,6 +2900,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-ctmsg .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctwsp .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctyell .sheet-wuxTooltip .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctcomms .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctthk .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctdesc .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctinteract .sheet-wuxTooltip .sheet-wuxTooltipContent,
@@ -2899,6 +2911,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-ctmsg .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxDescription,
 .sheet-rolltemplate-ctwsp .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxDescription,
 .sheet-rolltemplate-ctyell .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxDescription,
+.sheet-rolltemplate-ctcomms .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxDescription,
 .sheet-rolltemplate-ctthk .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxDescription,
 .sheet-rolltemplate-ctdesc .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxDescription,
 .sheet-rolltemplate-ctinteract .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxDescription,
@@ -2916,6 +2929,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-ctmsg .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxHeader2,
 .sheet-rolltemplate-ctwsp .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxHeader2,
 .sheet-rolltemplate-ctyell .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxHeader2,
+.sheet-rolltemplate-ctcomms .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxHeader2,
 .sheet-rolltemplate-ctthk .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxHeader2,
 .sheet-rolltemplate-ctdesc .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxHeader2,
 .sheet-rolltemplate-ctinteract .sheet-wuxTooltip .sheet-wuxTooltipContent .sheet-wuxHeader2,
@@ -2933,6 +2947,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-ctmsg .sheet-wuxTooltipButton .sheet-wuxTooltipImagePreview,
 .sheet-rolltemplate-ctwsp .sheet-wuxTooltipButton .sheet-wuxTooltipImagePreview,
 .sheet-rolltemplate-ctyell .sheet-wuxTooltipButton .sheet-wuxTooltipImagePreview,
+.sheet-rolltemplate-ctcomms .sheet-wuxTooltipButton .sheet-wuxTooltipImagePreview,
 .sheet-rolltemplate-ctthk .sheet-wuxTooltipButton .sheet-wuxTooltipImagePreview,
 .sheet-rolltemplate-ctdesc .sheet-wuxTooltipButton .sheet-wuxTooltipImagePreview,
 .sheet-rolltemplate-ctinteract .sheet-wuxTooltipButton .sheet-wuxTooltipImagePreview
@@ -2958,6 +2973,9 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-ctyell .sheet-wuxTooltip:hover .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctyell .sheet-wuxTooltipButton:hover .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctyell .sheet-wuxTooltipButton:hover .sheet-wuxTooltipImagePreview,
+.sheet-rolltemplate-ctcomms .sheet-wuxTooltip:hover .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctcomms .sheet-wuxTooltipButton:hover .sheet-wuxTooltipContent,
+.sheet-rolltemplate-ctcomms .sheet-wuxTooltipButton:hover .sheet-wuxTooltipImagePreview,
 .sheet-rolltemplate-ctthk .sheet-wuxTooltip:hover .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctthk .sheet-wuxTooltipButton:hover .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctthk .sheet-wuxTooltipButton:hover .sheet-wuxTooltipImagePreview,
@@ -2985,6 +3003,9 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-ctyell .wuxTooltip .sheet-wuxTooltipContent:hover,
 .sheet-rolltemplate-ctyell .wuxTooltipButton .sheet-wuxTooltipContent:hover,
 .sheet-rolltemplate-ctyell .wuxTooltipButton .sheet-wuxTooltipImagePreview:hover,
+.sheet-rolltemplate-ctcomms .wuxTooltip .sheet-wuxTooltipContent:hover,
+.sheet-rolltemplate-ctcomms .wuxTooltipButton .sheet-wuxTooltipContent:hover,
+.sheet-rolltemplate-ctcomms .wuxTooltipButton .sheet-wuxTooltipImagePreview:hover,
 .sheet-rolltemplate-ctthk .wuxTooltip .sheet-wuxTooltipContent:hover,
 .sheet-rolltemplate-ctthk .wuxTooltipButton .sheet-wuxTooltipContent:hover,
 .sheet-rolltemplate-ctthk .wuxTooltipButton .sheet-wuxTooltipImagePreview:hover,
@@ -4133,6 +4154,7 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 .sheet-rolltemplate-ctmsg .sheet-chattable,
 .sheet-rolltemplate-ctwsp .sheet-chattable,
 .sheet-rolltemplate-ctyell .sheet-chattable,
+.sheet-rolltemplate-ctcomms .sheet-chattable,
 .sheet-rolltemplate-ctthk .sheet-chattable,
 .sheet-rolltemplate-ctdesc .sheet-chattable,
 .sheet-rolltemplate-ctinteract .sheet-chattable,
@@ -4146,6 +4168,7 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 .sheet-rolltemplate-ctmsg .sheet-chatimage,
 .sheet-rolltemplate-ctwsp .sheet-chatimage,
 .sheet-rolltemplate-ctyell .sheet-chatimage,
+.sheet-rolltemplate-ctcomms .sheet-chatimage,
 .sheet-rolltemplate-ctthk .sheet-chatimage,
 .sheet-rolltemplate-ctdesc .sheet-chatimage,
 .sheet-rolltemplate-ctinteract .sheet-chatimage,
@@ -4159,103 +4182,10 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
     width: max-content;
 }
 
-.sheet-rolltemplate-ctmsg .sheet-chatimage.sheet-wuxSpiritRealm,
-.sheet-rolltemplate-ctwsp .sheet-chatimage.sheet-wuxSpiritRealm,
-.sheet-rolltemplate-ctyell .sheet-chatimage.sheet-wuxSpiritRealm,
-.sheet-rolltemplate-ctthk .sheet-chatimage.sheet-wuxSpiritRealm,
-.sheet-rolltemplate-ctdesc .sheet-chatimage.sheet-wuxSpiritRealm
-{
-    filter: 
-    sepia(80%)
-    drop-shadow(2px -2px 2px #f17f00)
-    contrast(110%) 
-    brightness(110%) 
-    saturate(2)
-    ;
-}
-
-.sheet-rolltemplate-ctmsg .sheet-chatimage.sheet-wuxElementwood,
-.sheet-rolltemplate-ctwsp .sheet-chatimage.sheet-wuxElementwood,
-.sheet-rolltemplate-ctyell .sheet-chatimage.sheet-wuxElementwood,
-.sheet-rolltemplate-ctthk .sheet-chatimage.sheet-wuxElementwood,
-.sheet-rolltemplate-ctdesc .sheet-chatimage.sheet-wuxElementwood
-{
-    filter: 
-    sepia(80%)
-    drop-shadow(2px -2px 2px #f17f00)
-    contrast(110%) 
-    brightness(110%) 
-    saturate(2)
-    hue-rotate(90deg)
-    ;
-}
-
-.sheet-rolltemplate-ctmsg .sheet-chatimage.sheet-wuxElementfire,
-.sheet-rolltemplate-ctwsp .sheet-chatimage.sheet-wuxElementfire,
-.sheet-rolltemplate-ctyell .sheet-chatimage.sheet-wuxElementfire,
-.sheet-rolltemplate-ctthk .sheet-chatimage.sheet-wuxElementfire,
-.sheet-rolltemplate-ctdesc .sheet-chatimage.sheet-wuxElementfire
-{
-    filter: 
-    sepia(90%)
-    drop-shadow(2px -2px 2px #f17f00)
-    contrast(110%) 
-    brightness(110%) 
-    saturate(2)
-    hue-rotate(330deg)
-    ;
-}
-
-.sheet-rolltemplate-ctmsg .sheet-chatimage.sheet-wuxElementearth,
-.sheet-rolltemplate-ctwsp .sheet-chatimage.sheet-wuxElementearth,
-.sheet-rolltemplate-ctyell .sheet-chatimage.sheet-wuxElementearth,
-.sheet-rolltemplate-ctthk .sheet-chatimage.sheet-wuxElementearth,
-.sheet-rolltemplate-ctdesc .sheet-chatimage.sheet-wuxElementearth
-{
-    filter: 
-    sepia(80%)
-    drop-shadow(2px -2px 2px #f17f00)
-    contrast(110%) 
-    brightness(110%) 
-    saturate(2)
-    ;
-}
-
-.sheet-rolltemplate-ctmsg .sheet-chatimage.sheet-wuxElementmetal,
-.sheet-rolltemplate-ctwsp .sheet-chatimage.sheet-wuxElementmetal,
-.sheet-rolltemplate-ctyell .sheet-chatimage.sheet-wuxElementmetal,
-.sheet-rolltemplate-ctthk .sheet-chatimage.sheet-wuxElementmetal,
-.sheet-rolltemplate-ctdesc .sheet-chatimage.sheet-wuxElementmetal
-{
-    filter: 
-    sepia(80%)
-    drop-shadow(2px -2px 2px #f17f00)
-    contrast(110%) 
-    brightness(80%) 
-    saturate(2)
-    hue-rotate(230deg)
-    ;
-}
-
-.sheet-rolltemplate-ctmsg .sheet-chatimage.sheet-wuxElementwater,
-.sheet-rolltemplate-ctwsp .sheet-chatimage.sheet-wuxElementwater,
-.sheet-rolltemplate-ctyell .sheet-chatimage.sheet-wuxElementwater,
-.sheet-rolltemplate-ctthk .sheet-chatimage.sheet-wuxElementwater,
-.sheet-rolltemplate-ctdesc .sheet-chatimage.sheet-wuxElementwater
-{
-    filter: 
-    sepia(80%)
-    drop-shadow(2px -2px 2px #f17f00)
-    contrast(110%) 
-    brightness(110%) 
-    saturate(2)
-    hue-rotate(180deg)
-    ;
-}
-
 .sheet-rolltemplate-ctmsg .sheet-chattd,
 .sheet-rolltemplate-ctwsp .sheet-chattd,
-.sheet-rolltemplate-ctyell .sheet-chattd, 
+.sheet-rolltemplate-ctyell .sheet-chattd,
+.sheet-rolltemplate-ctcomms .sheet-chattd,
 .sheet-rolltemplate-ctthk .sheet-chattd, 
 .sheet-rolltemplate-ctdesc .sheet-chattd,
 .sheet-rolltemplate-ctinteract .sheet-chattd,
@@ -4271,7 +4201,8 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 .sheet-rolltemplate-results .sheet-chatsub,
 .sheet-rolltemplate-ctmsg .sheet-chatsub,
 .sheet-rolltemplate-ctwsp .sheet-chatsub,
-.sheet-rolltemplate-ctyell .sheet-chatsub, 
+.sheet-rolltemplate-ctyell .sheet-chatsub,
+.sheet-rolltemplate-ctcomms .sheet-chatsub,
 .sheet-rolltemplate-ctthk .sheet-chatsub, 
 .sheet-rolltemplate-ctdesc .sheet-chatsub, 
 .sheet-rolltemplate-ctintro .sheet-chatsub
@@ -4358,6 +4289,7 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 .sheet-rolltemplate-ctmsg .sheet-chattitle,
 .sheet-rolltemplate-ctwsp .sheet-chattitle,
 .sheet-rolltemplate-ctyell .sheet-chattitle,
+.sheet-rolltemplate-ctcomms .sheet-chattitle,
 .sheet-rolltemplate-ctinteract .sheet-chattitle
 {
     display: inline-block; 
@@ -4374,6 +4306,7 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 .sheet-rolltemplate-ctmsg .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctwsp .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctyell .sheet-chatlanguageHeader,
+.sheet-rolltemplate-ctcomms .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctinteract .sheet-chatlanguageHeader
 {
     font-family: "Contrail One";
@@ -4407,6 +4340,7 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 .sheet-rolltemplate-ctmsg .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-message,
 .sheet-rolltemplate-ctyell .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-message,
 .sheet-rolltemplate-ctinteract .sheet-message
 {
     display: inline-block; 
@@ -4486,11 +4420,11 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 {
     padding: 8px;
 
-    font-weight: bold; 
+    font-weight: bold;
     font-size: 14px;
     text-transform: uppercase;
     line-height: 16px;
-    
+
     background:#fff;
     border: solid #000;
     border-width: 3px 4px 3px 6px;
@@ -4501,9 +4435,23 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
     box-shadow:2px 2px 0 #222;
 }
 
+.sheet-rolltemplate-ctcomms .sheet-message
+{
+    padding: 8px;
+
+    font-size: 12px;
+    letter-spacing: 0.2ch;
+    line-height: 16px;
+
+    background: #d6d6d6;
+    border: 3px solid #000;
+    border-radius: 0;
+}
+
 .sheet-rolltemplate-ctmsg .sheet-ancientLanguage .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-ancientLanguage .sheet-message,
-.sheet-rolltemplate-ctyell .sheet-ancientLanguage .sheet-message
+.sheet-rolltemplate-ctyell .sheet-ancientLanguage .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-ancientLanguage .sheet-message
 {
     font-family: "Kaushan Script";
     font-style: italic;
@@ -4511,7 +4459,8 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 
 .sheet-rolltemplate-ctmsg .sheet-regionalLanguage .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-regionalLanguage .sheet-message,
-.sheet-rolltemplate-ctyell .sheet-regionalLanguage .sheet-message
+.sheet-rolltemplate-ctyell .sheet-regionalLanguage .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-regionalLanguage .sheet-message
 {
     font-family: "Della Respira";
     font-style: italic;
@@ -4535,6 +4484,12 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 .sheet-rolltemplate-ctyell .sheet-plainsLanguage,
 .sheet-rolltemplate-ctyell .sheet-rareLanguage,
 .sheet-rolltemplate-ctyell .sheet-specialLanguage,
+.sheet-rolltemplate-ctcomms .sheet-coastalLanguage,
+.sheet-rolltemplate-ctcomms .sheet-mountainLanguage,
+.sheet-rolltemplate-ctcomms .sheet-desertLanguage,
+.sheet-rolltemplate-ctcomms .sheet-plainsLanguage,
+.sheet-rolltemplate-ctcomms .sheet-rareLanguage,
+.sheet-rolltemplate-ctcomms .sheet-specialLanguage,
 .sheet-rolltemplate-ctinteract .sheet-coastalLanguage,
 .sheet-rolltemplate-ctinteract .sheet-mountainLanguage,
 .sheet-rolltemplate-ctinteract .sheet-desertLanguage,
@@ -4548,9 +4503,11 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 .sheet-rolltemplate-ctmsg .sheet-coastalLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctwsp .sheet-coastalLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctyell .sheet-coastalLanguage .sheet-chatlanguageHeader,
+.sheet-rolltemplate-ctcomms .sheet-coastalLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctmsg .sheet-coastalLanguage .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-coastalLanguage .sheet-message,
-.sheet-rolltemplate-ctyell .sheet-coastalLanguage .sheet-message
+.sheet-rolltemplate-ctyell .sheet-coastalLanguage .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-coastalLanguage .sheet-message
 {
     background-color: #ebf3fb;
 }
@@ -4558,9 +4515,11 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 .sheet-rolltemplate-ctmsg .sheet-mountainLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctwsp .sheet-mountainLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctyell .sheet-mountainLanguage .sheet-chatlanguageHeader,
+.sheet-rolltemplate-ctcomms .sheet-mountainLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctmsg .sheet-mountainLanguage .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-mountainLanguage .sheet-message,
-.sheet-rolltemplate-ctyell .sheet-mountainLanguage .sheet-message
+.sheet-rolltemplate-ctyell .sheet-mountainLanguage .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-mountainLanguage .sheet-message
 {
     background-color: #ffb4b4;
 }
@@ -4568,9 +4527,11 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 .sheet-rolltemplate-ctmsg .sheet-desertLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctwsp .sheet-desertLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctyell .sheet-desertLanguage .sheet-chatlanguageHeader,
+.sheet-rolltemplate-ctcomms .sheet-desertLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctmsg .sheet-desertLanguage .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-desertLanguage .sheet-message,
-.sheet-rolltemplate-ctyell .sheet-desertLanguage .sheet-message
+.sheet-rolltemplate-ctyell .sheet-desertLanguage .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-desertLanguage .sheet-message
 {
     background-color: #ffe3fe;
 }
@@ -4578,9 +4539,11 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 .sheet-rolltemplate-ctmsg .sheet-plainsLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctwsp .sheet-plainsLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctyell .sheet-plainsLanguage .sheet-chatlanguageHeader,
+.sheet-rolltemplate-ctcomms .sheet-plainsLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctmsg .sheet-plainsLanguage .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-plainsLanguage .sheet-message,
-.sheet-rolltemplate-ctyell .sheet-plainsLanguage .sheet-message
+.sheet-rolltemplate-ctyell .sheet-plainsLanguage .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-plainsLanguage .sheet-message
 {
     background-color: #fbf8db;
 }
@@ -4588,9 +4551,11 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 .sheet-rolltemplate-ctmsg .sheet-rareLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctwsp .sheet-rareLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctyell .sheet-rareLanguage .sheet-chatlanguageHeader,
+.sheet-rolltemplate-ctcomms .sheet-rareLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctmsg .sheet-rareLanguage .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-rareLanguage .sheet-message,
-.sheet-rolltemplate-ctyell .sheet-rareLanguage .sheet-message
+.sheet-rolltemplate-ctyell .sheet-rareLanguage .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-rareLanguage .sheet-message
 {
     background-color: #dbfbf3;
 }
@@ -4598,9 +4563,11 @@ input[type=hidden].wuxTabButton.wuxTabGroup[value="Scene-Character"] ~ div.wuxJb
 .sheet-rolltemplate-ctmsg .sheet-specialLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctwsp .sheet-specialLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctyell .sheet-specialLanguage .sheet-chatlanguageHeader,
+.sheet-rolltemplate-ctcomms .sheet-specialLanguage .sheet-chatlanguageHeader,
 .sheet-rolltemplate-ctmsg .sheet-specialLanguage .sheet-message,
 .sheet-rolltemplate-ctwsp .sheet-specialLanguage .sheet-message,
-.sheet-rolltemplate-ctyell .sheet-specialLanguage .sheet-message
+.sheet-rolltemplate-ctyell .sheet-specialLanguage .sheet-message,
+.sheet-rolltemplate-ctcomms .sheet-specialLanguage .sheet-message
 {
     background-color: #555; 
     color: #fff;

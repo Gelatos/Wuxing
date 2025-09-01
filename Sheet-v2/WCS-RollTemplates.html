@@ -922,22 +922,56 @@
                 {{^spirit}}<td class='chatimage'> <span>[text]({{url}})</span></td>{{/spirit}}
                 <td class='chattd'>
                     {{#language-coastal}}<div class="coastalLanguage">{{/language-coastal}}
-                        {{#language-mountain}}<div class="mountainLanguage">{{/language-mountain}}
-                            {{#language-desert}}<div class="desertLanguage">{{/language-desert}}
-                                {{#language-plains}}<div class="plainsLanguage">{{/language-plains}}
-                                    {{#language-rare}}<div class="rareLanguage">{{/language-rare}}
-                                        {{#language-special}}<div class="specialLanguage">{{/language-special}}
-                                            {{#language-ancient}}<div class="ancientLanguage">{{/language-ancient}}
-                                                {{#language-regional}}<div class="regionalLanguage">{{/language-regional}}
-                                                    <div class="chattitle">
-                                                        <span>{{title}}</span>
-                                                        <div class='chatlanguageHeader'>&nbsp; {{language}} &nbsp;</div>
-                                                    </div>
-                                                    <div class='message'>{{message}}</div>
-                                                    {{#language-regional}}
-                                                </div>{{/language-regional}}
-                                                {{#language-ancient}}</div>{{/language-ancient}}
-                                        </div>
+                    {{#language-mountain}}<div class="mountainLanguage">{{/language-mountain}}
+                        {{#language-desert}}<div class="desertLanguage">{{/language-desert}}
+                            {{#language-plains}}<div class="plainsLanguage">{{/language-plains}}
+                                {{#language-rare}}<div class="rareLanguage">{{/language-rare}}
+                                    {{#language-special}}<div class="specialLanguage">{{/language-special}}
+                                        {{#language-ancient}}<div class="ancientLanguage">{{/language-ancient}}
+                                            {{#language-regional}}<div class="regionalLanguage">{{/language-regional}}
+                                                <div class="chattitle">
+                                                    <span>{{title}}</span>
+                                                    <div class='chatlanguageHeader'>&nbsp; {{language}} &nbsp;</div>
+                                                </div>
+                                                <div class='message'>{{message}}</div>
+                                                {{#language-regional}}
+                                            </div>{{/language-regional}}
+                                            {{#language-ancient}}</div>{{/language-ancient}}
+                                    </div>
+                </td>
+            </tr>
+        </table>
+        {{#sub}}<div class="chatsub">{{sub}}</div>{{/sub}}
+    </rolltemplate>
+
+    <rolltemplate class="sheet-rolltemplate-ctcomms">
+        <div>&nbsp;</div>
+        <table class='chattable'>
+            <tr>
+                {{#wood}}<td class='chatimage wuxSpiritRealm wuxElementwood'> <span>[text]({{url}})</span></td>{{/wood}}
+                {{#fire}}<td class='chatimage wuxSpiritRealm wuxElementfire'> <span>[text]({{url}})</span></td>{{/fire}}
+                {{#earth}}<td class='chatimage wuxSpiritRealm wuxElementearth'> <span>[text]({{url}})</span></td>{{/earth}}
+                {{#metal}}<td class='chatimage wuxSpiritRealm wuxElementmetal'> <span>[text]({{url}})</span></td>{{/metal}}
+                {{#water}}<td class='chatimage wuxSpiritRealm wuxElementwater'> <span>[text]({{url}})</span></td>{{/water}}
+                {{^spirit}}<td class='chatimage'> <span>[text]({{url}})</span></td>{{/spirit}}
+                <td class='chattd'>
+                    {{#language-coastal}}<div class="coastalLanguage">{{/language-coastal}}
+                    {{#language-mountain}}<div class="mountainLanguage">{{/language-mountain}}
+                        {{#language-desert}}<div class="desertLanguage">{{/language-desert}}
+                            {{#language-plains}}<div class="plainsLanguage">{{/language-plains}}
+                                {{#language-rare}}<div class="rareLanguage">{{/language-rare}}
+                                    {{#language-special}}<div class="specialLanguage">{{/language-special}}
+                                        {{#language-ancient}}<div class="ancientLanguage">{{/language-ancient}}
+                                            {{#language-regional}}<div class="regionalLanguage">{{/language-regional}}
+                                                <div class="chattitle">
+                                                    <span>{{title}}</span>
+                                                    <div class='chatlanguageHeader'>&nbsp; {{language}} &nbsp;</div>
+                                                </div>
+                                                <div class='message'>{{message}}</div>
+                                                {{#language-regional}}
+                                            </div>{{/language-regional}}
+                                            {{#language-ancient}}</div>{{/language-ancient}}
+                                    </div>
                 </td>
             </tr>
         </table>

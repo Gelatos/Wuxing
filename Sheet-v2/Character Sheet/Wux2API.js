@@ -1123,6 +1123,7 @@ var WuxMessage = WuxMessage || (function () {
                 case "!m": return new SpeakEmoteMessage(textMessage);
                 case "!w": return new WhisperEmoteMessage(textMessage);
                 case "!y": return new YellEmoteMessage(textMessage);
+                case "!c": return new CommsEmoteMessage(textMessage);
                 case "!t": return new ThinkEmoteMessage(textMessage);
                 case "!d":
                 case "!de": return new DescEmoteMessage(textMessage);
@@ -1155,6 +1156,7 @@ var WuxMessage = WuxMessage || (function () {
                 case "ctmsg": return new SpeakEmoteMessage(textMessage);
                 case "ctwsp": return new WhisperEmoteMessage(textMessage);
                 case "ctyell": return new YellEmoteMessage(textMessage);
+                case "ctcomms": return new CommsEmoteMessage(textMessage);
                 case "ctthk": return new ThinkEmoteMessage(textMessage);
                 case "ctdesc": return new DescEmoteMessage(textMessage);
                 case "ctintro": return new IntroEmoteMessage(textMessage);
@@ -1806,6 +1808,17 @@ class YellEmoteMessage extends EmoteMessage {
 
     setTitle(title) {
         super.setTitle(title + " yells");
+    }
+}
+
+class CommsEmoteMessage extends EmoteMessage {
+    createEmpty() {
+        super.createEmpty();
+        this.template = "ctcomms";
+    }
+
+    setTitle(title) {
+        super.setTitle(title + " over comms");
     }
 }
 
