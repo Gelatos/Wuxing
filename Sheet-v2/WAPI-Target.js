@@ -137,18 +137,6 @@ class TargetData {
                 targetData.displayName = targetDisplayName;
             }
             targetData.elem = targetData.getElementStatus(attrHandler.parseString(affinityVar));
-            targetData.teamIndex = attrHandler.parseInt(teamIndexVar);
-        });
-        attributeHandler.run();
-    }
-
-    setTeamIndex(index) {
-        this.teamIndex = index;
-        let attributeHandler = new SandboxAttributeHandler(this.charId);
-        let teamIndexVar = WuxDef.GetVariable("TeamIndex");
-        attributeHandler.addAttribute(teamIndexVar);
-        attributeHandler.addGetAttrCallback(function (attrHandler) {
-            attrHandler.addUpdate(teamIndexVar, index, false);
         });
         attributeHandler.run();
     }
@@ -290,7 +278,6 @@ class TokenTargetData extends TargetData {
         }
         return this.token.get("gmnotes");
     }
-
     setTokenNote(value) {
         if (!this.validateToken()) {
             return false;
@@ -302,7 +289,6 @@ class TokenTargetData extends TargetData {
     setEnergyIcon(value) {
         this.setIcon(this.elem, value);
     }
-
     setTurnIcon(value) {
         this.setIcon("status_yellow", value);
     }
@@ -317,7 +303,6 @@ class TokenTargetData extends TargetData {
         }
         return value;
     }
-
     setIcon(iconName, value) {
         if (!this.validateToken()) {
             return false;
@@ -331,7 +316,6 @@ class TokenTargetData extends TargetData {
         }
         return this.token.get("status_dead");
     }
-
     setDowned(value) {
         if (!this.validateToken()) {
             return false;
@@ -367,7 +351,6 @@ class TokenTargetData extends TargetData {
             finishCallback
         );
     }
-
     addModNoCap(modDefinitionName, attributeHandler, value) {
         this.modifyResourceAttribute(attributeHandler,
             modDefinitionName,
@@ -378,7 +361,6 @@ class TokenTargetData extends TargetData {
             }
         );
     }
-
     setMod(modDefinitionName, attributeHandler, value) {
         this.modifyResourceAttribute(attributeHandler,
             modDefinitionName,
@@ -440,7 +422,22 @@ class TokenTargetData extends TargetData {
             tokenTargetData.setTokenNote(JSON.stringify(tokenNoteRef));
         });
     }
-
+    
+    getTeamIndex(tokenNoteReference) {
+        if (tokenNoteReference == undefined) {
+            tokenNoteReference = new TokenNoteReference(this.getTokenNote());
+        }
+        
+        return tokenNoteReference.teamIndex;
+    }
+    setTeamIndex(index, tokenNoteReference) {
+        if (tokenNoteReference == undefined) {
+            tokenNoteReference = new TokenNoteReference(this.getTokenNote());
+        }
+        
+        tokenNoteReference.teamIndex = index;
+        this.setTokenNote(JSON.stringify(tokenNoteReference));
+    }
 
     // Social Modifiers
     addImpatience(attributeHandler, value, resultsCallback) {
@@ -1118,6 +1115,8 @@ class TokenNoteReference {
         this.statusHandler = {};
         this.surges = {current: 0, max: 0};
         this.vitality = {current: 0, max: 0};
+        this.teamIndex = 0;
+        
     }
 
     importJson(json) {
@@ -1128,6 +1127,7 @@ class TokenNoteReference {
         }
         this.surges = json.surges == undefined ? {current: 0, max: 0} : json.surges;
         this.vitality = json.vitality == undefined ? {current: 0, max: 0} : json.vitality;
+        this.teamIndex = json.teamIndex;
     }
 }
 
@@ -1825,7 +1825,7 @@ var TargetReference = TargetReference || (function () {
         getActiveTargetsOnTeam = function (teamIndex) {
             let tokenTargetDataArray = [];
             iterateOverActiveTargetData(function (tokenTargetData) {
-                if (tokenTargetData.teamIndex == teamIndex) {
+                if (tokenTargetData.getTeamIndex() == teamIndex) {
                     tokenTargetDataArray.push(tokenTargetData);
                 }
             });
