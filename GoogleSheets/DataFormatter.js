@@ -925,9 +925,7 @@ var WuxDefinition = WuxDefinition || (function () {
         },
         getTechnique = function (key) {
             if (values[key] == undefined) {
-                let itemData = new ItemData();
-                itemData.name = `${key} Not Found`;
-                return itemData;
+                return undefined;
             }
             return new TechniqueData(values[key]);
         },
@@ -2366,6 +2364,8 @@ function onOpen() {
         .createMenu('Assessment')
         .addItem('Assess All', 'AssessAllTechniques')
         .addItem('Assess All From Here', 'AssessAllTechniquesFromPosition')
+        .addItem('Set Job Defenses', 'SetJobDefenses')
+        .addItem('Set Job Defenses From Here', 'SetJobDefensesFromPosition')
         .addToUi();
 }
 
@@ -3500,6 +3500,118 @@ class GearValueAssessment {
             return Math.ceil(num / 250) * 250;
         }
     }
+}
+
+function SetJobDefenses() {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getActiveSheet();
+    if (sheet.getSheetName() == "Jobs") {
+        SetAllJobDefenses(sheet, 2);
+    }
+}
+
+function SetJobDefensesFromPosition() {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getActiveSheet();
+    if (sheet.getSheetName() == "Jobs") {
+        const range = sheet.getActiveRange();
+        let row = range.getRow();
+        SetAllJobDefenses(sheet, row);
+    }
+}
+
+function SetAllJobDefenses(sheet, startRow) {
+    const lastRow = sheet.getLastRow();
+    let defenseColumn = getNamedColumn(sheet, "Defenses");
+    let rowIndex = startRow;
+    while (rowIndex < lastRow) {
+        let defenseCell = sheet.getRange(rowIndex, defenseColumn, 1, 1);
+        defenseCell.setValue("Calculating...")
+        
+        let rowData = sheet.getRange(rowIndex, 1, 1, defenseColumn - 1).getValues()[0];
+        if (rowData[0] == "" || rowData[0].startsWith("#")) {
+            defenseCell.setValue("");
+            rowIndex++;
+            continue;
+        }
+
+        let techniqueName = `${rowData[0]} Discipline`;
+        
+        let techniqueData = WuxTechs.Get(techniqueName);
+        if (techniqueData == undefined) {
+            defenseCell.setValue("");
+        } else {
+            Debug.Log(`Assessing Job: ${rowData[0]}`);
+            defenseCell.setValue(PrintTechniqueEffectBoosterDefenses(techniqueData));
+        }
+        
+        rowIndex++;
+    }
+}
+
+function PrintTechniqueEffectBoosterDefenses(techniqueData) {
+    let definitionTitle;
+    let defenses = "";
+    let senses = "";
+    let defFilters = WuxDef.Filter([new DatabaseFilterData("group", "Defense")]);
+    let defNames = [];
+    for (let i = 0; i < defFilters.length; i++) {
+        defNames.push(defFilters[i].name);
+    }
+    let senseFilters = WuxDef.Filter([new DatabaseFilterData("group", "Sense")]);
+    let senseNames = [];
+    for (let i = 0; i < senseFilters.length; i++) {
+        senseNames.push(senseFilters[i].name);
+    }
+
+    techniqueData.effects.iterate(function(effect) {
+        if (effect.type == "Boost") {
+            if (defNames.includes(effect.effect)) {
+                definitionTitle = WuxDef.GetAbbreviation(effect.effect);
+                defenses += `${definitionTitle}${PrintTechniqueEffectBoostCount(effect)}.`;
+            }
+            if (senseNames.includes(effect.effect)) {
+                definitionTitle = WuxDef.GetAbbreviation(effect.effect);
+                senses += `${definitionTitle}${PrintTechniqueEffectBoostCount(effect)}.`;
+            }
+        }
+    });
+    if (defenses != "") {
+        defenses = `Defs:${defenses}`;
+    }
+    if (senses != "") {
+        senses = `Sens:${senses}`;
+    }
+    return `${defenses}${(defenses != "" && senses != "" ? " " : "")}${senses}`;
+}
+
+function PrintTechniqueEffectBoostCount(techniqueEffect) {
+    let output = "";
+    for(let i = 0; i < techniqueEffect.formula.workers.length; i++) {
+        let worker = techniqueEffect.formula.workers[i];
+        output += PrintDefenseStars(techniqueEffect, worker.variableName);
+    }
+    if (output != "") {
+        output = `(${output})`;
+    }
+    return output;
+}
+
+function PrintDefenseStars(techniqueEffect, variableName) {
+    let power = GetDefenseTypePowerCount(variableName);
+    return "+".repeat(power);
+}
+
+function GetDefenseTypePowerCount(variableName) {
+    switch(variableName) {
+        case "sb-gooddef":
+            return 1;
+        case "sb-greatdef":
+            return 2;
+        case "sb-excellentdef":
+            return 3;
+    }
+    return 0;
 }
 
 

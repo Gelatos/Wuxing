@@ -2454,6 +2454,8 @@ class BaseTechniqueEffectDisplayData {
         switch (effect.subType) {
             case "Charge":
                 return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} Move Charge.`;
+            case "Jump":
+                return `${this.formatTargetCopula(effect)} jumps ${this.formatCalcBonus(effect)} spaces ${effect.effect}`;
             case "Pushed":
                 return `${this.formatTargetCopula(effect)} Pushed ${this.formatCalcBonus(effect)} spaces ${effect.effect == "" ? "from you." : effect.effect}`;
             case "Pulled":
