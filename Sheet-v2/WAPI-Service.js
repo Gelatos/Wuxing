@@ -30,13 +30,13 @@ var Debug = Debug || (function () {
         logMessage = function (msg) {
             log(msg);
         },
-        logShout = function (msg) {
-            log(msg);
+        logShout = function (msg, logMessage) {
+            log(logMessage);
             
             if (!playerIsGM(msg.playerid)) {
-                sendChat("System", `/w ${msg.who.split(" ")[0]} ${msg}`, null, { noarchive: true });
+                sendChat("System", `/w ${msg.who.split(" ")[0]} ${logMessage}`, null, { noarchive: true });
             }
-            sendChat("System", `/w GM ${msg}`, null, { noarchive: true });
+            sendChat("System", `/w GM ${logMessage}`, null, { noarchive: true });
         },
         logError = function (msg) {
             log(`Error! ${msg}`);
