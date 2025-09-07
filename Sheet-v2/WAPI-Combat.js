@@ -644,6 +644,7 @@ class TechniqueTargetObjectCollection {
 class TechniqueUseResolver extends TechniqueResolverData {
     constructor(msg, content) {
         super(msg, content);
+        this.startTime = Date.now();
     }
     
     createEmpty() {
@@ -1061,6 +1062,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
         this.messages = this.messages.concat(this.targetTokenEffect.effectMessages);
         let systemMessage = this.getMessageObject();
         WuxMessage.Send(systemMessage);
+        Debug.LogShout(this.msg, `[TechniqueUseResolver] Finished with duration of ${Date.now() - this.startTime}`);
     }
 }
 

@@ -45,7 +45,7 @@ var Debug = Debug || (function () {
 
     return {
         Log: logMessage,
-        LogShout: LogShout,
+        LogShout: logShout,
         LogError: logError
     };
 }());
