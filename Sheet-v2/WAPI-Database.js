@@ -264,7 +264,7 @@ class ExtendedTechniqueDatabase extends Database {
 class ExtendedTechniqueStyleDatabase extends Database {
 
     constructor(data, techDb) {
-        let filters = ["group", "mainGroup", "subGroup", "cr"];
+        let filters = ["group", "mainGroup", "subGroup", "baseStyle"];
         let dataCreation = function (data) {
             return new TechniqueStyle(data);
         };
@@ -949,7 +949,7 @@ class TechniqueStyle extends WuxDatabaseData {
         this.group = json.group;
         this.subGroup = json.subGroup;
         this.description = json.description;
-        this.affinity = json.affinity;
+        this.baseStyle = json.baseStyle;
         this.cr = json.cr;
         this.maxTier = json.maxTier;
     }
@@ -966,7 +966,7 @@ class TechniqueStyle extends WuxDatabaseData {
         i++;
         this.description = "" + dataArray[i];
         i++;
-        this.affinity = "" + dataArray[i];
+        this.baseStyle = "" + dataArray[i];
         i++;
         this.cr = parseInt(dataArray[i]);
         i++;
@@ -979,7 +979,7 @@ class TechniqueStyle extends WuxDatabaseData {
         this.group = "";
         this.subGroup = "";
         this.description = "";
-        this.affinity = "";
+        this.baseStyle = "";
         this.cr = 0;
         this.maxTier = 0;
     }
@@ -989,46 +989,9 @@ class TechniqueStyle extends WuxDatabaseData {
         definition.mainGroup = this.group;
         definition.subGroup = this.subGroup;
         definition.tier = this.cr;
-        definition.affinity = this.affinity;
-        definition.requirements = this.getRequirements();
+        definition.baseStyle = this.baseStyle;
         definition.formula = new FormulaData();
         return definition;
-    }
-
-    getRequirements() {
-        let requirements = "";
-
-        if (this.cr > 1) {
-            requirements += `You must be at least Character Rank ${this.cr}`;
-        }
-        if (this.affinity != "") {
-            if (requirements != "") {
-                requirements += "\n";
-            }
-            if (this.affinity.includes(";")) {
-                let affinities = this.affinity.split(";");
-                let affinityOutput = "";
-                for (let i = 0; i < affinities.length; i++) {
-                    if (i == affinities.length - 1) {
-                        if (affinityOutput != "") {
-                            affinityOutput += " or ";
-                        }
-                    }
-                    else if (affinityOutput != "") {
-                        affinityOutput += ", ";
-                    }
-                    affinityOutput += affinities[i].trim();
-                }
-                requirements += `You must have ${affinityOutput} affinity`;
-            }
-            else {
-                requirements += `You must have ${this.affinity} affinity`;
-            }
-        }
-        if (requirements == "") {
-            requirements = "None";
-        }
-        return requirements;
     }
 }
 
@@ -1792,8 +1755,7 @@ class TechniqueStyleDefinitionData extends DefinitionData {
         super.importJson(json);
         this.mainGroup = json.mainGroup;
         this.cr = json.cr;
-        this.affinity = json.affinity;
-        this.requirements = json.requirements;
+        this.baseStyle = json.baseStyle;
     }
 
     setImportSheetExtraData(property, value) {
@@ -1801,11 +1763,8 @@ class TechniqueStyleDefinitionData extends DefinitionData {
             case "cr":
                 this.cr = parseInt(value);
                 break;
-            case "affinity":
-                this.affinity = value;
-                break;
-            case "requirements":
-                this.requirements = value;
+            case "baseStyle":
+                this.baseStyle = value;
                 break;
         }
     }
@@ -1814,8 +1773,7 @@ class TechniqueStyleDefinitionData extends DefinitionData {
         super.createEmpty();
         this.mainGroup = "";
         this.cr = 0;
-        this.affinity = "";
-        this.requirements = "";
+        this.baseStyle = "";
     }
 }
 
