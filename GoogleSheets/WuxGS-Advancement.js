@@ -30,7 +30,6 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += DisplayTrainingSheet.Print(sheetsDb);
             output += DisplayAdvancementSheet.Print(sheetsDb);
             output += DisplayStylesSheet.Print(sheetsDb);
-            output += DisplayAdvancedSheet.Print(sheetsDb);
             output += DisplayCoreCharacterSheet.Print(sheetsDb);
             output += DisplayFormeSheet.Print(sheetsDb);
             output += DisplayGearSheet.Print(sheetsDb);
@@ -1107,7 +1106,7 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                             ]);
                             let techStyles = [];
                             for (let k = 0; k < techFilterData.length; k++) {
-                                techStyles.push(buildStyleGroupFlexTableEntry(techFilterData[k]));
+                                techStyles.push(buildStyleGroupFlexTableEntry(techFilterData[k], stylesDatabase));
                             }
                             if (techStyles.length == 0) {
                                 continue;
@@ -1121,15 +1120,38 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     return contents;
                 },
 
-                buildStyleGroupFlexTableEntry = function (style) {
-                    let styleDef = style.createDefinition(WuxDef.Get("Style"));
+                buildStyleGroupFlexTableEntry = function (style, stylesDatabase) {
+                    
+                    let contents = `${buildStyleEntry(style)}
+                    ${buildStyleGroupAdvancedEntries(style, stylesDatabase)}`;
 
-                    let contents = `${buildStyleHeader(styleDef, style)}
+                    return `${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(contents), "Half wuxMinWidth220")}`;
+                },
+                
+                buildStyleGroupAdvancedEntries = function (style, stylesDatabase) {
+                    let techFilterData = stylesDatabase.filter([
+                        new DatabaseFilterData("baseStyle", style.name)
+                    ]);
+                    let techStyles = [];
+                    for (let k = 0; k < techFilterData.length; k++) {
+                        techStyles.push(buildStyleEntry(techFilterData[k]));
+                    }
+                    
+                    if (techStyles.length == 0) {
+                        return "";
+                    }
+                    let output = WuxSheetMain.Header2("Advanced Styles");
+                    output += WuxSheetMain.Table.FlexTable(techStyles);
+                    return `<div class="wuxMarginLeft50">${output}</div>`;
+                },
+                
+                buildStyleEntry = function (style) {
+                    let styleDef = style.createDefinition(WuxDef.Get("Style"));
+                    return `${buildStyleHeader(styleDef, style)}
 							${WuxSheetMain.SectionBlockHeaderFooter()}
                             ${buildTierSelect(styleDef, style)}
                             ${buildStyleDescription(styleDef)}`;
 
-                    return `${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(contents), "Half wuxMinWidth220")}`;
                 },
 
                 buildStyleHeader = function (styleDef, style) {

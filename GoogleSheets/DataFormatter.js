@@ -1906,14 +1906,14 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
     const trainingPageNavigation = function (definition, subheader) {
         let fieldName = WuxDef.GetAttribute("PageSet_Training");
         let mainContents = "";
-        mainContents += buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Knowledge", "Adv. Styles", "Styles", "Training"]);
+        mainContents += buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Knowledge", "Styles", "Training"]);
         mainContents += buildExitStickyButtons(fieldName, true);
         mainContents += buildHeader("Training", subheader, definition.getAttribute(WuxDef._info));
         return mainContents;
     };
     const advancementPageNavigation = function (definition, subheader) {
         let fieldName = WuxDef.GetAttribute("PageSet_Advancement");
-        let mainContents = buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Attributes", "Skills", "Adv. Styles", "Styles", "Jobs", "Advancement"]);
+        let mainContents = buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Attributes", "Skills", "Styles", "Jobs", "Advancement"]);
         mainContents += buildExitStickyButtons(fieldName, true);
         mainContents += buildHeader("Advancement", subheader, definition.getAttribute(WuxDef._info));
         return mainContents;
@@ -1949,7 +1949,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
     };
     const buildCharacterCreationTabs = function (sheetName) {
         let output = "";
-        let tabNames = ["Attributes", "Knowledge", "Skills", "Adv. Styles", "Styles", "Jobs", "Origin"];
+        let tabNames = ["Attributes", "Knowledge", "Skills", "Styles", "Jobs", "Origin"];
 
         for (let i = 0; i < tabNames.length; i++) {
             output += buildTabButton("radio", WuxDef.GetAttribute("Page"), tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
@@ -2795,6 +2795,13 @@ class TechniqueAssessment {
         this.technique.effects.iterate(function (effect) {
             assessor.assessEffect(effect, attributeHandler);
         });
+
+        if (this.technique.secondEffectConditionName == "TechOnEnter") {
+            this.onEnterEffect = true;
+        }
+        this.technique.secondaryEffects.iterate(function (effect) {
+            assessor.assessEffect(effect, attributeHandler);
+        });
         Debug.Log(`Assessing ${this.technique.name} with ${this.points} points`);
         this.getStructureAssessment();
         let customPoints = this.sheet.getRange(this.row, this.assessColumn + 2, 1, 1).getValues()[0];
@@ -2917,10 +2924,6 @@ class TechniqueAssessment {
     }
 
     assessEffect(effect, attributeHandler) {
-        if (effect.defense == "TechOnEnter") {
-            this.onEnterEffect = true;
-        }
-
         switch (effect.type) {
             case "HP":
                 this.getHPAssessment(effect, attributeHandler);
