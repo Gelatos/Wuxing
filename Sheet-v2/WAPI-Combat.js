@@ -110,10 +110,10 @@ var WuxConflictManager = WuxConflictManager || (function () {
                         // example: enemy is same level as ally -> 5 xp, 2 pp
                         
                         let levelDiff = enemyLevel - allyTeamXp[j].level;
-                        levelDiff = Math.floor(levelDiff / 2);
+                        levelDiff = Math.floor(levelDiff / 3);
                         let crDiff = enemyCR - allyTeamXp[j].cr;
                         
-                        let xpGain = Math.max(0, 5 + levelDiff + (crDiff * 3));
+                        let xpGain = Math.max(1, 5 + (levelDiff + (crDiff * 3)) / allyTeam.length);
                         let ppGain = Math.max(1, 2 + Math.floor(levelDiff / 2));
                         allyTeamXp[j].xp += xpGain;
                         allyTeamXp[j].pp += ppGain;
@@ -126,9 +126,6 @@ var WuxConflictManager = WuxConflictManager || (function () {
             let messages = [];
             messages.push("Conflict XP Results:");
             for (let i = 0; i < allyTeam.length; i++) {
-                // modify the xp values by party size
-                allyTeamXp[i].xp = Math.ceil(allyTeamXp[i].xp / allyTeam.length);
-                
                 let attributeHandler = new SandboxAttributeHandler(allyTeam[i].charId);
                 message = `${allyTeam[i].displayName} gains ${Math.floor(allyTeamXp[i].xp)} XP and ${Math.floor(allyTeamXp[i].pp)} PP`;
                 allyTeam[i].addModNoCap("XP", attributeHandler, allyTeamXp[i].xp, 
