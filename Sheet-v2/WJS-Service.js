@@ -336,6 +336,26 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 		});
 	}
 
+	updateAdvancementPoints(attributeHandler) {
+		let worker = this;
+		attributeHandler.addMod(worker.attrMax);
+		attributeHandler.addMod(worker.attrBuildDraft);
+		attributeHandler.addMod(WuxDef.GetVariable("Level"));
+
+		let manager = new WuxWorkerBuildManager(["Skill", "Job", "Style", "Attribute", "Perk"]);
+		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+
+		attributeHandler.addGetAttrCallback(function (attrHandler) {
+			Debug.Log(`Updating ${worker.attrMax} to ${attributeHandler.parseInt(worker.attrMax)}`);
+
+			worker.setBuildStatsDraft(attrHandler);
+			worker.updateBuildStats(attrHandler, worker.attrMax, attributeHandler.parseInt(worker.attrMax));
+			worker.setPointsMax(attrHandler);
+			worker.updatePoints(attrHandler);
+			manager.setAttributeHandlerPoints(attrHandler);
+		});
+	}
+
 	convertXp(attributeHandler) {
 		let worker = this;
 		let xpDefinition = WuxDef.Get("XP");

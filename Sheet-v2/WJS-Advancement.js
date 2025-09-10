@@ -388,10 +388,10 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			attributeHandler.run();
 		},
 		setAdvancementPointsUpdate = function (eventinfo) {
-			Debug.Log("Setting Advancement Points");
 			let attributeHandler = new WorkerAttributeHandler();
 			let worker = new WuxAdvancementWorkerBuild();
 			worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			worker.updateAdvancementPoints(attributeHandler);
 			attributeHandler.run();
 		},
 		setAffinityStats = function (attributeHandler) {
