@@ -121,6 +121,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
         commandGainConflictXP = function () {
             let levelVar = WuxDef.GetVariable("Level");
             let crVar = WuxDef.GetVariable("CR");
+            let vitalityVar = WuxDef.GetVariable("Cmb_Vitality");
             let xpDefinition = WuxDef.Get("XP");
             let ppDefinition = WuxDef.Get("PP");
 
@@ -132,7 +133,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
                 return;
             }
             for (let i = 0; i < allyTeam.length; i++) {
-                allyTeamXp.push({level: 0, cr: 0, xp: 0.0, pp: 0.0});
+                allyTeamXp.push({level: 0, cr: 0, xp: 0.0, pp: 0.0, xpBreakdown: "", ppBreakdown: ""});
                 let attributeHandler = new SandboxAttributeHandler(allyTeam[i].charId);
                 attributeHandler.addMod([levelVar, crVar, xpDefinition.getVariable(), ppDefinition.getVariable()]);
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -144,31 +145,35 @@ var WuxConflictManager = WuxConflictManager || (function () {
             
             for (let i = 0; i < enemyTeam.length; i++) {
                 let attributeHandler = new SandboxAttributeHandler(enemyTeam[i].charId);
-                attributeHandler.addMod([levelVar, crVar]);
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
-                    let enemyLevel = attrHandler.parseInt(levelVar);
-                    let enemyCR = attrHandler.parseInt(crVar);
+                    let enemyLevel = attrHandler.parseInt(levelVar, 0, false);
+                    let enemyCR = attrHandler.parseInt(crVar, 0, false);
+                    let enemyVitality = attrHandler.parseInt(vitalityVar, 0, true);
+                    if (enemyVitality <= 0) {
+                        enemyVitality = 1;
+                    }
                     
                     for (let j = 0; j < allyTeamXp.length; j++) {
-                        // base xp is 5, base pp is 2
-                        // each level above the ally is +0.5 xp, +0.25 pp (rounded down)
-                        // each level below the ally is -0.5 xp, -0.25 pp (rounded down)
-                        // each cr above the ally is +3 xp, +2.5 pp
-                        // each cr below the ally is -3 xp, -2.5 pp
-                        // minimum xp is 0, minimum pp is 1
-                        // example: enemy is 2 levels above ally -> 7 xp, 3 pp
-                        // example: enemy is 3 levels below ally -> 2 xp, 1 pp
-                        // example: enemy is 10 levels below ally -> 0 xp, 1 pp
-                        // example: enemy is same level as ally -> 5 xp, 2 pp
-                        
                         let levelDiff = enemyLevel - allyTeamXp[j].level;
-                        levelDiff = Math.floor(levelDiff / 2);
                         let crDiff = enemyCR - allyTeamXp[j].cr;
                         
-                        let xpGain = Math.max(0, 5 + levelDiff + (crDiff * 3));
-                        let ppGain = Math.max(1, 2 + Math.floor(levelDiff / 2));
+                        let xpMod = (levelDiff > 0 ? Math.floor(levelDiff * 0.75) : Math.floor(levelDiff / 3)) + (crDiff * 2);
+                        let xpGain = Math.max(1, 5 + xpMod) * enemyVitality;
+                        
+                        let ppMod = (levelDiff > 0 ? Math.floor(levelDiff * 0.75) : Math.floor(levelDiff / 2));
+                        let ppGain = Math.max(1, 2 + ppMod) * enemyVitality;
+                        
                         allyTeamXp[j].xp += xpGain;
+                        if (allyTeamXp[j].xpBreakdown != "") {
+                            allyTeamXp[j].xpBreakdown += " + ";
+                        }
+                        allyTeamXp[j].xpBreakdown += `${xpGain}(${enemyTeam[i].displayName})`;
+
                         allyTeamXp[j].pp += ppGain;
+                        if (allyTeamXp[j].ppBreakdown != "") {
+                            allyTeamXp[j].ppBreakdown += " + ";
+                        }
+                        allyTeamXp[j].ppBreakdown += `${ppGain}(${enemyTeam[i].displayName})`;
                     }
                 });
                 attributeHandler.run();
@@ -178,11 +183,9 @@ var WuxConflictManager = WuxConflictManager || (function () {
             let messages = [];
             messages.push("Conflict XP Results:");
             for (let i = 0; i < allyTeam.length; i++) {
-                // modify the xp values by party size
-                allyTeamXp[i].xp = Math.ceil(allyTeamXp[i].xp / allyTeam.length);
-                
                 let attributeHandler = new SandboxAttributeHandler(allyTeam[i].charId);
-                message = `${allyTeam[i].displayName} gains ${Math.floor(allyTeamXp[i].xp)} XP and ${Math.floor(allyTeamXp[i].pp)} PP`;
+                message = `${allyTeam[i].displayName} gains ${Format.ShowTooltip(allyTeamXp[i].xp, allyTeamXp[i].xpBreakdown)}` +
+                    ` XP and ${Format.ShowTooltip(allyTeamXp[i].pp, allyTeamXp[i].ppBreakdown)} PP`;
                 allyTeam[i].addModNoCap("XP", attributeHandler, allyTeamXp[i].xp, 
                     function (results, attrHandler, attributeVar) {
                         attrHandler.addUpdate(attributeVar, results.newValue, false);
@@ -7907,8 +7910,13 @@ class SandboxAttributeHandler extends AttributeHandler {
 
     databaseParseString(fieldName) {
         let output = super.databaseParseString(fieldName);
-        if (output == undefined && this.attributes[fieldName] != undefined) {
-            return this.attributes[fieldName].get(this.maxCheck ? "max" : "current");
+        if (output == undefined) {
+            if (this.attributes[fieldName] != undefined) {
+                return this.attributes[fieldName].get(this.maxCheck ? "max" : "current");
+            }
+            else {
+                return getAttrByName(this.characterId, fieldName, this.maxCheck ? "max" : "current");
+            }
         }
         return output;
     }
@@ -7920,8 +7928,13 @@ class SandboxAttributeHandler extends AttributeHandler {
 
     databaseParseInt(fieldName) {
         let output = super.databaseParseInt(fieldName);
-        if (output == undefined && this.attributes[fieldName] != undefined) {
-            return parseInt(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+        if (output == undefined) {
+            if (this.attributes[fieldName] != undefined) {
+                return parseInt(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+            }
+            else {
+                return parseInt(getAttrByName(this.characterId, fieldName, this.maxCheck ? "max" : "current"));
+            }
         }
         return output;
     }
@@ -7933,8 +7946,13 @@ class SandboxAttributeHandler extends AttributeHandler {
 
     databaseParseFloat(fieldName) {
         let output = super.databaseParseFloat(fieldName);
-        if (output == undefined && this.attributes[fieldName] != undefined) {
-            return parseFloat(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+        if (output == undefined) {
+            if (this.attributes[fieldName] != undefined) {
+                return parseFloat(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+            }
+            else {
+                return parseFloat(getAttrByName(this.characterId, fieldName, this.maxCheck ? "max" : "current"));
+            }
         }
         return output;
     }
@@ -7946,12 +7964,22 @@ class SandboxAttributeHandler extends AttributeHandler {
 
     databaseParseJSON(fieldName) {
         let output = super.databaseParseJSON(fieldName);
-        if (output == undefined && this.attributes[fieldName] != undefined) {
-            try {
-                return JSON.parse(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+        if (output == undefined) {
+            if (this.attributes[fieldName] != undefined) {
+                try {
+                    return JSON.parse(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+                }
+                catch {
+                    return undefined;
+                }
             }
-            catch {
-                return undefined;
+            else {
+                try {
+                    return JSON.parse(getAttrByName(this.characterId, fieldName, this.maxCheck ? "max" : "current"));
+                }
+                catch {
+                    return undefined;
+                }
             }
         }
         return output;

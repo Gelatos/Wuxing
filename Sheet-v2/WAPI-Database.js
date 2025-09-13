@@ -3803,8 +3803,13 @@ class SandboxAttributeHandler extends AttributeHandler {
 
     databaseParseString(fieldName) {
         let output = super.databaseParseString(fieldName);
-        if (output == undefined && this.attributes[fieldName] != undefined) {
-            return this.attributes[fieldName].get(this.maxCheck ? "max" : "current");
+        if (output == undefined) {
+            if (this.attributes[fieldName] != undefined) {
+                return this.attributes[fieldName].get(this.maxCheck ? "max" : "current");
+            }
+            else {
+                return getAttrByName(this.characterId, fieldName, this.maxCheck ? "max" : "current");
+            }
         }
         return output;
     }
@@ -3816,8 +3821,13 @@ class SandboxAttributeHandler extends AttributeHandler {
 
     databaseParseInt(fieldName) {
         let output = super.databaseParseInt(fieldName);
-        if (output == undefined && this.attributes[fieldName] != undefined) {
-            return parseInt(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+        if (output == undefined) {
+            if (this.attributes[fieldName] != undefined) {
+                return parseInt(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+            }
+            else {
+                return parseInt(getAttrByName(this.characterId, fieldName, this.maxCheck ? "max" : "current"));
+            }
         }
         return output;
     }
@@ -3829,8 +3839,13 @@ class SandboxAttributeHandler extends AttributeHandler {
 
     databaseParseFloat(fieldName) {
         let output = super.databaseParseFloat(fieldName);
-        if (output == undefined && this.attributes[fieldName] != undefined) {
-            return parseFloat(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+        if (output == undefined) {
+            if (this.attributes[fieldName] != undefined) {
+                return parseFloat(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+            }
+            else {
+                return parseFloat(getAttrByName(this.characterId, fieldName, this.maxCheck ? "max" : "current"));
+            }
         }
         return output;
     }
@@ -3842,12 +3857,22 @@ class SandboxAttributeHandler extends AttributeHandler {
 
     databaseParseJSON(fieldName) {
         let output = super.databaseParseJSON(fieldName);
-        if (output == undefined && this.attributes[fieldName] != undefined) {
-            try {
-                return JSON.parse(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+        if (output == undefined) {
+            if (this.attributes[fieldName] != undefined) {
+                try {
+                    return JSON.parse(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
+                }
+                catch {
+                    return undefined;
+                }
             }
-            catch {
-                return undefined;
+            else {
+                try {
+                    return JSON.parse(getAttrByName(this.characterId, fieldName, this.maxCheck ? "max" : "current"));
+                }
+                catch {
+                    return undefined;
+                }
             }
         }
         return output;
