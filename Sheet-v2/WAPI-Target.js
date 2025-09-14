@@ -128,13 +128,13 @@ class TargetData {
         let attributeHandler = new SandboxAttributeHandler(this.charId);
         let targetData = this;
         let displayNameVar = WuxDef.GetVariable("DisplayName");
+        let fullNameVar = WuxDef.GetVariable("FullName");
         let affinityVar = WuxDef.GetVariable("Affinity");
         let teamIndexVar = WuxDef.GetVariable("TeamIndex");
-        attributeHandler.addMod([displayNameVar, affinityVar, teamIndexVar]);
+        attributeHandler.addMod([displayNameVar, fullNameVar,affinityVar, teamIndexVar]);
         attributeHandler.addFinishCallback(function (attrHandler) {
-            let targetDisplayName = attrHandler.parseString(displayNameVar);
-            if (targetDisplayName.trim() != "") {
-                targetData.displayName = targetDisplayName;
+            if (attrHandler.parseString(fullNameVar) != "GenericOverride") {
+                targetData.displayName = attrHandler.parseString(displayNameVar);
             }
             targetData.elem = targetData.getElementStatus(attrHandler.parseString(affinityVar));
         });
@@ -328,12 +328,11 @@ class TokenTargetData extends TargetData {
         let attributeHandler = new SandboxAttributeHandler(this.charId);
         let tokenData = this;
         let displayNameVar = WuxDef.GetVariable("DisplayName");
+        let fullNameVar = WuxDef.GetVariable("FullName");
         attributeHandler.addMod(displayNameVar);
         attributeHandler.addFinishCallback(function (attrHandler) {
-
-            let targetDisplayName = attrHandler.parseString(displayNameVar);
-            if (targetDisplayName.trim() != "") {
-                tokenData.displayName = targetDisplayName;
+            if (attrHandler.parseString(fullNameVar) != "GenericOverride") {
+                tokenData.displayName = attrHandler.parseString(displayNameVar);
             }
         });
         attributeHandler.run();
