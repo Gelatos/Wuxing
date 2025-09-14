@@ -2084,13 +2084,13 @@ class ChapterMessage extends QuestMessage {
         let attributeHandler = new SandboxAttributeHandler(this.charId);
         let targetData = this;
         let displayNameVar = WuxDef.GetVariable("DisplayName");
+        let fullNameVar = WuxDef.GetVariable("FullName");
         let affinityVar = WuxDef.GetVariable("Affinity");
         let teamIndexVar = WuxDef.GetVariable("TeamIndex");
-        attributeHandler.addMod([displayNameVar, affinityVar, teamIndexVar]);
+        attributeHandler.addMod([displayNameVar, fullNameVar,affinityVar, teamIndexVar]);
         attributeHandler.addFinishCallback(function (attrHandler) {
-            let targetDisplayName = attrHandler.parseString(displayNameVar);
-            if (targetDisplayName.trim() != "") {
-                targetData.displayName = targetDisplayName;
+            if (attrHandler.parseString(fullNameVar) != "GenericOverride") {
+                targetData.displayName = attrHandler.parseString(displayNameVar);
             }
             targetData.elem = targetData.getElementStatus(attrHandler.parseString(affinityVar));
         });
@@ -2284,12 +2284,11 @@ class TokenTargetData extends TargetData {
         let attributeHandler = new SandboxAttributeHandler(this.charId);
         let tokenData = this;
         let displayNameVar = WuxDef.GetVariable("DisplayName");
+        let fullNameVar = WuxDef.GetVariable("FullName");
         attributeHandler.addMod(displayNameVar);
         attributeHandler.addFinishCallback(function (attrHandler) {
-
-            let targetDisplayName = attrHandler.parseString(displayNameVar);
-            if (targetDisplayName.trim() != "") {
-                tokenData.displayName = targetDisplayName;
+            if (attrHandler.parseString(fullNameVar) != "GenericOverride") {
+                tokenData.displayName = attrHandler.parseString(displayNameVar);
             }
         });
         attributeHandler.run();
@@ -10062,7 +10061,7 @@ var WuxDef = WuxDef || (function() {
                 "linkedGroups":[],
                 "isResource":""},
             "XP":{"name":"XP","fieldName":"xp","group":"Advancement","description":"","variable":"adv-xp{0}","title":"Experience","subGroup":"","descriptions":["Experience is a resource that is gained after completing challenges in a plot. When you gain enough experience you level up."],
-                "abbreviation":"XP","baseFormula":"","modifiers":"","formula":{"workers":[{"variableName":"","definitionName":"","value":30,"multiplier":1,"max":0}]},
+                "abbreviation":"XP","baseFormula":"","modifiers":"","formula":{"workers":[{"variableName":"","definitionName":"","value":60,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":true},
             "AdvancementJob":{"name":"AdvancementJob","fieldName":"advancementjob","group":"Advancement","description":"","variable":"adv-ap_job{0}","title":"Job Points","subGroup":"","descriptions":["You can spend advancement points to gain Job Points. These job points can be used to increase tier in a job. You must spend 2 advancement points to gain 1 job point."],
@@ -10101,8 +10100,8 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "PP":{"name":"PP","fieldName":"pp","group":"Training","description":"","variable":"trn-pp{0}","title":"Progression","subGroup":"","descriptions":["PP is gained when a character spends time learning new knowledge, styles, or techniques. This is usually gained by practicing a task during freetime at a rate of 1 per day. You may gain an additional PP if a character devotes an entire day to training. ","Once a character reaches 30 PP, they may spend their PP to gain a new knowledge or technique."],
-                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[{"variableName":"","definitionName":"","value":30,"multiplier":1,"max":0}]},
+            "PP":{"name":"PP","fieldName":"pp","group":"Training","description":"","variable":"trn-pp{0}","title":"Progression","subGroup":"","descriptions":["PP is gained when a character spends time learning new knowledge, styles, or techniques. This is usually gained by practicing a task during freetime at a rate of 1 per day. You may gain an additional PP if a character devotes an entire day to training. ","Once a character reaches 60 PP, they may spend their PP to gain a new knowledge or technique."],
+                "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[{"variableName":"","definitionName":"","value":60,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
             "BonusTraining":{"name":"BonusTraining","fieldName":"bonustraining","group":"Training","description":"","variable":"trn-bonustraining{0}","title":"Bonus Training Points","subGroup":"","descriptions":["Bonus training points are gained by spending PP - experience gained when performing tasks.","Whenever you gain 30 PP, you gain one Training Point."],
@@ -12040,7 +12039,7 @@ var WuxDef = WuxDef || (function() {
             "Style_Trickster Arte":{"name":"Style_Trickster Arte","fieldName":"style_trickster_arte","group":"Style","description":"","variable":"sty-trickster_arte{0}","title":"Trickster Arte","subGroup":"Finesse Weapons","descriptions":["A Finesse-focused style that attacks from a distance with a whip and knocks foes to the ground."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","mainGroup":"Advanced","baseStyle":"Trickster Arte","tier":null},
+                "isResource":"","mainGroup":"Advanced","baseStyle":"Whip Arte","tier":null},
             "Style_Aerial Arte":{"name":"Style_Aerial Arte","fieldName":"style_aerial_arte","group":"Style","description":"","variable":"sty-aerial_arte{0}","title":"Aerial Arte","subGroup":"Martial Arts","descriptions":["A Grapping-focused style that relies on aerial attacks to defeat their enemies."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
