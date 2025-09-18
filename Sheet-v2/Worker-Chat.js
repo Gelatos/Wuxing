@@ -56,6 +56,7 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
                             outfitEmotes.addEmote(emoteName, attrHandler.parseString(outfitRepeater.getFieldName(updateId, `${emoteUrlVar}${i}`)));
                         }
                     }
+                    outfitEmotes.emotes.sort((a, b) => a.name.localeCompare(b.name));
                     attrHandler.addUpdate(outfitRepeater.getFieldName(updateId, outfitEmotesVar), JSON.stringify(outfitEmotes));
                     attrHandler.addUpdate(outfitRepeater.getFieldName(updateId, WuxDef.GetVariable("Chat_OutfitEmotes")), JSON.stringify(outfitEmotes));
 
@@ -375,6 +376,7 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
                 attributeHandler.run();
                 return;
             }
+            outfitEmotes.emotes.sort((a, b) => a.name.localeCompare(b.name));
 
             let updateId = outfitRepeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
 

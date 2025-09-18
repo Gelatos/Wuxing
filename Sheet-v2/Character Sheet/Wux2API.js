@@ -6438,10 +6438,23 @@ class BaseTechniqueEffectDisplayData {
 
     formatStatusEffect(effect) {
         let state = WuxDef.Get(effect.effect);
+        let formula = this.formatCalcBonus(effect).trim();
 
         switch (effect.subType) {
+            case "Set":
+                if (formula == "") {
+                    return `${this.formatTargetGain(effect)} the ${state.title} ${state.group}`;
+                }
+                else {
+                    return `${this.formatTargetGain(effect)} ${state.title} ${state.group} and the rank is set to ${formula}`; 
+                }
             case "Add":
-                return `${this.formatTargetGain(effect)} the ${state.title} ${state.group}`;
+                if (formula == "") {
+                    return `${this.formatTargetGain(effect)} the ${state.title} ${state.group}`;
+                }
+                else {
+                    return `${this.formatTargetGain(effect)} ${formula} ranks in the ${state.title} ${state.group}`; 
+                }
             case "Remove":
                 return `${this.formatTargetLose(effect)} the ${state.title} ${state.group}`;
             case "Remove Any":
