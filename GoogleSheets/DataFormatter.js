@@ -3229,14 +3229,19 @@ class TechniqueAssessment {
         this.addPointsRubric(output.value, message);
     }
 
-    getStatusAssessment(effect) {
+    getStatusAssessment(effect, attributeHandler) {
         let state = WuxDef.Get(effect.effect);
         let value = 0;
         let message = "";
         switch (effect.subType) {
+            case "Set":
             case "Add":
             case "Self":
                 value = parseInt(state.points);
+                let formula = this.getDiceFormula(effect, attributeHandler);
+                if (formula.value > 0) {
+                    value *= formula.value;
+                }
                 message = `${value}(Add ${state.getTitle()})`;
 
                 if (effect.defense != "WillBreak") {
