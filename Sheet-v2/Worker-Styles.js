@@ -549,43 +549,40 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             });
         },
         
-        updateBuildPoints = function (eventinfo, points) {
+        updateBuildPoints = function (eventinfo) {
             Debug.Log("Update Styles Build Points");
             let attributeHandler = new WorkerAttributeHandler();
             let worker = new WuxStyleWorkerBuild();
-            worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue * points);
+            worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
             attributeHandler.run();
+        },
+        
+        refreshStats = function (attributeHandler) {
+            Debug.Log("Refresh Style Stats");
+            let styleWorker = new WuxStyleWorkerBuild();
+            attributeHandler.addMod([styleWorker.attrBuildDraft, styleWorker.attrMax]);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                styleWorker.setBuildStatsDraft(attrHandler);
+
+                styleWorker.cleanBuildStats();
+                styleWorker.updatePoints(attrHandler);
+                styleWorker.revertBuildStatsDraft(attrHandler);
+            });
         },
 
         updateStats = function (attributeHandler) {
             Debug.Log("Update Style Stats");
-            let styleWorker = new WuxBasicWorkerBuild("Style");
+            let styleWorker = new WuxStyleWorkerBuild();
             attributeHandler.addMod(styleWorker.attrBuildDraft);
 
-            let maxAdvancedStyles = 3;
-            let maxNormalStyles = 6;
-            let advancedStylesDef = WuxDef.Get("Forme_AdvancedSlot");
-            let normalStylesDef = WuxDef.Get("Forme_StyleSlot");
-            for (let i = 1; i <= maxNormalStyles; i++) {
-                if (i <= maxAdvancedStyles) {
-                    attributeHandler.addMod(advancedStylesDef.getVariable(i));
-                }
-                attributeHandler.addMod(normalStylesDef.getVariable(i));
-            }
-            
-            let advancedStyleValuesRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingStyles");
-            advancedStyleValuesRepeatingSection.getIds(function (advancedRepeater) {
-                advancedRepeater.removeAllIds();
-            });
             attributeHandler.addGetAttrCallback(function (attrHandler) {
-                Debug.Log("Adding Style Stats");
                 styleWorker.setBuildStatsDraft(attrHandler);
-
-                addStyles(attrHandler, styleWorker, advancedStyleValuesRepeatingSection);
 
                 styleWorker.cleanBuildStats();
                 styleWorker.setBuildStatVariables(attrHandler);
                 styleWorker.saveBuildStatsToFinal(attrHandler);
+                styleWorker.revertBuildStatsDraft(attrHandler);
             });
         },
 
@@ -666,6 +663,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
     return {
         AddStyles: addStyles,
         UpdateBuildPoints: updateBuildPoints,
+        RefreshStats: refreshStats,
         UpdateStats: updateStats,
         ToggleEquipJobStyle: toggleEquipJobStyle,
         ToggleEquipStyle: toggleEquipStyle,

@@ -81,33 +81,33 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
             attributeHandler.run();
         },
-        
+
+        refreshStats = function (attributeHandler) {
+            Debug.Log("Refresh Job Stats");
+            let jobWorker = new WuxBasicWorkerBuild("Job");
+            attributeHandler.addMod([jobWorker.attrBuildDraft, jobWorker.attrMax]);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                jobWorker.setBuildStatsDraft(attrHandler);
+
+                jobWorker.cleanBuildStats();
+                jobWorker.updatePoints(attrHandler);
+                jobWorker.setBuildStatVariables(attrHandler);
+            });
+        },
+
         updateStats = function (attributeHandler) {
             Debug.Log("Update Job Stats");
             let jobWorker = new WuxBasicWorkerBuild("Job");
             attributeHandler.addMod(jobWorker.attrBuildDraft);
-            
-            let maxJobSlots = 3;
-            let jobSlotDef = WuxDef.Get("Forme_JobSlot");
-            for (let i = 1; i <= maxJobSlots; i++) {
-                attributeHandler.addMod(jobSlotDef.getVariable(i));
-            }
-            attributeHandler.addMod(jobSlotDef.getVariable());
 
-            let repeaterName = "RepeatingJobStyles";
-            let jobStyleValuesRepeatingSection = new WorkerRepeatingSectionHandler(repeaterName);
-            jobStyleValuesRepeatingSection.getIds(function (jobStylesRepeater) {
-                jobStylesRepeater.removeAllIds();
-            });
-            
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 jobWorker.setBuildStatsDraft(attrHandler);
-
-                WuxWorkerStyles.AddStyles(attrHandler, jobWorker, jobStyleValuesRepeatingSection);
 
                 jobWorker.cleanBuildStats();
                 jobWorker.setBuildStatVariables(attrHandler);
                 jobWorker.saveBuildStatsToFinal(attrHandler);
+                jobWorker.revertBuildStatsDraft(attrHandler);
             });
         },
 
@@ -129,6 +129,7 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
 
     return {
         UpdateBuildPoints: updateBuildPoints,
+        RefreshStats: refreshStats,
         UpdateStats: updateStats,
         SeeTechniques: seeTechniques
     };

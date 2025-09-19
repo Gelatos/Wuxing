@@ -212,6 +212,9 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
 				worker.revertBuildStatsDraft(attrHandler);
 			});
 
+			WuxWorkerKnowledges.RefreshStats(attributeHandler);
+			WuxWorkerStyles.RefreshStats(attributeHandler);
+
 			attributeHandler.run();
 		},
 		finishBuild = function () {
@@ -312,6 +315,12 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 				worker.updateMaxBuildStats(attrHandler, WuxDef.GetVariable("XP"), attrHandler.parseInt(WuxDef.GetVariable("XP")));
 				worker.revertBuildStatsDraft(attrHandler);
 			});
+
+			WuxWorkerAttributes.RefreshStats(attributeHandler);
+			WuxWorkerPerks.RefreshStats(attributeHandler);
+			WuxWorkerSkills.RefreshStats(attributeHandler);
+			WuxWorkerJobs.RefreshStats(attributeHandler);
+			WuxWorkerStyles.RefreshStats(attributeHandler);
 
 			attributeHandler.run();
 		},
@@ -494,12 +503,27 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 			worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue, perkCost);
 			attributeHandler.run();
 		},
+
+		refreshStats = function (attributeHandler) {
+			Debug.Log("Refresh Perk Stats");
+			let worker = new WuxPerkWorkerBuild();
+			attributeHandler.addMod([worker.attrBuildDraft, worker.attrMax]);
+
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				worker.setBuildStatsDraft(attrHandler);
+
+				worker.cleanBuildStats();
+				worker.updatePoints(attrHandler);
+				worker.revertBuildStatsDraft(attrHandler);
+			});
+		},
 		updateStats = function (attributeHandler) {
 			WuxWorkerActions.PopulatePerkTechniques(attributeHandler);
 		}
 
 	return {
 		UpdateBuildPoints: updateBuildPoints,
+		RefreshStats: refreshStats,
 		UpdateStats: updateStats
 	};
 }());
@@ -515,6 +539,21 @@ var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
 			worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
 			attributeHandler.run();
 		},
+
+		refreshStats = function (attributeHandler) {
+			Debug.Log("Refresh Attribute Stats");
+			let worker = new WuxAttributeWorkerBuild();
+			attributeHandler.addMod([worker.attrBuildDraft, worker.attrMax]);
+
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				worker.setBuildStatsDraft(attrHandler);
+
+				worker.cleanBuildStats();
+				worker.updatePoints(attrHandler);
+				worker.revertBuildStatsDraft(attrHandler);
+			});
+		},
+		
 		updateStats = function (attributeHandler) {
 			let attributeDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Attribute"));
 			let formulaDefinitions = [];
@@ -541,6 +580,7 @@ var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
 
 	return {
 		UpdateBuildPoints: updateBuildPoints,
+		RefreshStats: refreshStats,
 		UpdateStats: updateStats
 	};
 }());
@@ -555,6 +595,20 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 			let worker = new WuxWorkerBuildManager("Knowledge");
 			worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
 			attributeHandler.run();
+		},
+
+		refreshStats = function (attributeHandler) {
+			Debug.Log("Refresh Knowledge Stats");
+			let worker = new WuxWorkerBuild("Knowledge");
+			attributeHandler.addMod([worker.attrBuildDraft, worker.attrMax]);
+
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				worker.setBuildStatsDraft(attrHandler);
+
+				worker.cleanBuildStats();
+				worker.updatePoints(attrHandler);
+				worker.revertBuildStatsDraft(attrHandler);
+			});
 		},
 		updateStats = function (attributeHandler) {
 			let loreCategoryDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "LoreCategory"));
@@ -608,6 +662,7 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 
 	return {
 		UpdateBuildPoints: updateBuildPoints,
+		RefreshStats: refreshStats,
 		UpdateStats: updateStats
 	};
 }());
@@ -622,6 +677,20 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
 			let worker = new WuxWorkerBuildManager("Skill");
 			worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
 			attributeHandler.run();
+		},
+
+		refreshStats = function (attributeHandler) {
+			Debug.Log("Refresh Skill Stats");
+			let worker = new WuxWorkerBuild("Skill");
+			attributeHandler.addMod([worker.attrBuildDraft, worker.attrMax]);
+
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				worker.setBuildStatsDraft(attrHandler);
+
+				worker.cleanBuildStats();
+				worker.updatePoints(attrHandler);
+				worker.revertBuildStatsDraft(attrHandler);
+			});
 		},
 		updateStats = function (attributeHandler) {
 			let skillDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
@@ -645,6 +714,7 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
 
 	return {
 		UpdateBuildPoints: updateBuildPoints,
+		RefreshStats: refreshStats,
 		UpdateStats: updateStats
 	};
 }());
