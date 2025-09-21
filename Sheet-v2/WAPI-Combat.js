@@ -1006,14 +1006,17 @@ class TechniqueUseResolver extends TechniqueResolverData {
     }
     
     addStatusEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
-        return;
         let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
+        let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
 
         switch (techniqueEffect.subType) {
+            case "Set":
+                tokenEffect.tokenTargetData.setStatus(attrSetters.getObjByTarget(techniqueEffect), techniqueEffect.effect, roll.total);
+                break;
             case "Add":
             case "Self":
             case "Choose":
-                tokenEffect.tokenTargetData.addStatus(attrSetters.getObjByTarget(techniqueEffect), techniqueEffect.effect);
+                tokenEffect.tokenTargetData.addStatus(attrSetters.getObjByTarget(techniqueEffect), techniqueEffect.effect, roll.total);
                 break;
             case "Remove":
                 tokenEffect.tokenTargetData.removeStatus(attrSetters.getObjByTarget(techniqueEffect), techniqueEffect.effect);

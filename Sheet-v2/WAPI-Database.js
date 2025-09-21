@@ -3261,6 +3261,7 @@ class StatusHandler {
         }
         catch {
             Debug.LogError(`[StatusHandler] Unable to parse JSON: ${stringifiedJSON}`);
+            return;
         }
     }
     createEmpty() {
@@ -3271,9 +3272,10 @@ class StatusHandler {
     importJson(json) {
         this.statusEffects = json.statusEffects != undefined ? json.statusEffects : {};
     }
-    
-    addStatus(defName) {
+
+    setStatus(defName, rank) {
         let definition = new StatusHandlerStatusData(WuxDef.Get(defName));
+        definition.rank = rank;
         switch(definition.subGroup) {
             case "Status":
                 if (this.statusEffects[defName] == undefined) {
@@ -3288,6 +3290,36 @@ class StatusHandler {
             case "Emotion":
                 if (this.emotions[defName] == undefined) {
                     this.emotions[defName] = definition;
+                }
+                break;
+        }
+    }
+    addStatus(defName, rank) {
+        let definition = new StatusHandlerStatusData(WuxDef.Get(defName));
+        definition.rank = rank;
+        switch(definition.subGroup) {
+            case "Status":
+                if (this.statusEffects[defName] == undefined) {
+                    this.statusEffects[defName] = definition;
+                }
+                else {
+                    this.statusEffects[defName].rank += rank;
+                }
+                break;
+            case "Condition":
+                if (this.conditions[defName] == undefined) {
+                    this.conditions[defName] = definition;
+                }
+                else {
+                    this.conditions[defName].rank += rank;
+                }
+                break;
+            case "Emotion":
+                if (this.emotions[defName] == undefined) {
+                    this.emotions[defName] = definition;
+                }
+                else {
+                    this.emotions[defName].rank += rank;
                 }
                 break;
         }
@@ -3312,17 +3344,18 @@ class StatusHandler {
     }
     
     printStatusSummary() {
-        let output = "";
+        let output = ` ==========STATUS========== `;
         let statuses = Object.values(this.statusEffects);
         let conditions = Object.values(this.conditions);
         let emotions = Object.values(this.emotions);
         if (statuses.length == 0 && conditions.length == 0 && emotions.length == 0) {
-            return "None";
+            output += "None";
+            return output;
         }
         if (statuses.length > 0) {
             output += "Statuses: ";
             for (let i = 0; i < statuses.length; i++) {
-                output += statuses[i].title;
+                output += statuses[i].printStatusTitle();
                 if (i < statuses.length - 1) {
                     output += "; ";
                 }
@@ -3334,7 +3367,7 @@ class StatusHandler {
             }
             output += "Conditions: ";
             for (let i = 0; i < conditions.length; i++) {
-                output += conditions[i].title;
+                output += conditions[i].printStatusTitle();
                 if (i < conditions.length - 1) {
                     output += "; ";
                 }
@@ -3346,7 +3379,7 @@ class StatusHandler {
             }
             output += "Emotions: ";
             for (let i = 0; i < emotions.length; i++) {
-                output += emotions[i].title;
+                output += emotions[i].printStatusTitle();
                 if (i < emotions.length - 1) {
                     output += "; ";
                 }
@@ -3385,14 +3418,28 @@ class StatusHandlerStatusData {
         this.name = "";
         this.title = "";
         this.subGroup = "";
-        this.shortDescription = "";
+        this.rank = 0;
+        this.subject = "";
     }
 
     importStatusEffects(json) {
         this.name = json.name != undefined ? json.name : "";
         this.title = json.title != undefined ? json.title : "";
         this.subGroup = json.subGroup != undefined ? json.subGroup : "";
-        this.shortDescription = json.shortDescription != undefined ? json.shortDescription : "";
+        this.rank = json.rank != undefined ? json.rank : 0;
+        this.subject = json.subject != undefined ? json.subject : "";
+    }
+    
+    printStatusTitle() {
+        if (this.rank > 0 && this.subject != "") {
+            return `${this.title}[${this.rank}/${this.subject}]`;
+        } else if (this.subject != "") {
+            return `${this.title} [${this.subject}]`;
+        }
+        else if (this.rank > 0) {
+            return `${this.title}[${this.rank}]`;
+        }
+        return this.title;
     }
 }
 
@@ -3410,7 +3457,6 @@ class CombatDetails {
         this.cr = 0;
         this.job = "";
         this.jobDefenses = "";
-        this.status = [];
         this.surges = 2;
         this.maxsurges = 2;
         this.vitality = 1;
@@ -3427,7 +3473,6 @@ class CombatDetails {
         this.cr = json.cr != undefined ? json.cr : 1;
         this.job = json.job != undefined ? json.job : "";
         this.jobDefenses = json.jobDefenses != undefined ? json.jobDefenses : "";
-        this.status = json.status != undefined ? json.status : [];
         this.surges = json.surges != undefined ? json.surges : 2;
         this.maxsurges = json.maxsurges != undefined ? json.maxsurges : 2;
         this.vitality = json.vitality != undefined ? json.vitality : 1;
@@ -3485,49 +3530,7 @@ class CombatDetails {
                 }
                 break;
         }
-        output += this.printTooltipStatus();
         return output;
-    }
-
-    printTooltipStatus() {
-        let output = ` ==========STATUS========== `;
-
-        if (this.status.length == 0) {
-            output += `None`;
-        } else {
-            let statuses = "";
-            let conditions = "";
-            let emotions = "";
-            for (let i = 0; i < this.status.length; i++) {
-                let statusDef = WuxDef.Get(this.status[i]);
-                switch (statusDef.subGroup) {
-                    case "Status":
-                        statuses = this.addStatusToTooltip(statusDef, "Status", statuses);
-                        break;
-                    case "Condition":
-                        conditions = this.addStatusToTooltip(statusDef, "Conditions", conditions);
-                        break;
-                    case "Emotion":
-                        emotions = this.addStatusToTooltip(statusDef, "Emotions", emotions);
-                        break;
-                }
-            }
-            output += statuses != "" ? `${statuses} ` : "";
-            output += conditions != "" ? `${conditions} ` : "";
-            output += emotions != "" ? `${emotions} ` : "";
-        }
-
-        return output;
-    }
-
-    addStatusToTooltip(statusDef, groupname, group) {
-        if (group == "") {
-            group = `${groupname}:`;
-        } else {
-            group += ";";
-        }
-        group += statusDef.title();
-        return group;
     }
 }
 
@@ -3587,12 +3590,6 @@ class CombatDetailsHandler {
         this.setData(attrHandler);
         this.combatDetails.armorvalue = armorValue;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
-    }
-
-    onUpdateStatus(attrHandler, statusHandler) {
-        return;
-        this.setData(attrHandler);
-        this.combatDetails.status = statusHandler.printStatusSummary();
     }
 
     onUpdateSurges(attrHandler, value) {

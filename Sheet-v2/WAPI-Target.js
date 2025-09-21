@@ -377,7 +377,7 @@ class TokenTargetData extends TargetData {
         this.refreshStatus(attributeHandler);
     }
 
-    setCombatDetails(attrHandler, tokenNoteReference) {
+    setCombatDetails(attrHandler, tokenNoteReference, statusHandler) {
         if (this.combatDetails == undefined) {
             Debug.LogError(`[TokenTargetData] No combat details exist for ${this.charName}`);
             return;
@@ -386,17 +386,24 @@ class TokenTargetData extends TargetData {
         this.combatDetails.setData(attrHandler);
 
         if (this.combatDetails.hasDisplayStyle()) {
+            let toolTip = ""; 
             if (this.isCharacter()) {
-                let statusObj = new StatusHandler(attrHandler.parseJSON(WuxDef.GetVariable("Status")));
-                this.combatDetails.onUpdateStatus(attrHandler, statusObj);
+                toolTip = this.combatDetails.printTooltip(attrHandler, this.displayName);
+                if (statusHandler == undefined) {
+                    statusHandler = new StatusHandler(attrHandler.parseJSON(WuxDef.GetVariable("Status")));
+                }
+                toolTip += statusHandler.printStatusSummary();
             } else {
                 if (tokenNoteReference == undefined) {
                     tokenNoteReference = new TokenNoteReference(this.getTokenNote());
                 }
-                this.combatDetails.onUpdateNoteStats(attrHandler, tokenNoteReference);
-                this.combatDetails.onUpdateStatus(attrHandler, tokenNoteReference.statusHandler);
+                toolTip = this.combatDetails.printTooltip(attrHandler, this.displayName);
+                if (statusHandler == undefined) {
+                    statusHandler = tokenNoteReference.statusHandler;
+                }
+                toolTip += statusHandler.printStatusSummary();
             }
-            this.setTooltip(this.combatDetails.printTooltip(attrHandler, this.displayName));
+            this.setTooltip(toolTip);
             this.showTooltip(true);
         } else {
             this.setTooltip("");
@@ -724,12 +731,16 @@ class TokenTargetData extends TargetData {
     }
 
     // Status
-    addStatus(attributeHandler, statusDefinitionName) {
-        this.modifyStatus(attributeHandler, statusDefinitionName, true);
+    setStatus(attributeHandler, statusDefinitionName, rank) {
+        this.modifyStatus(attributeHandler, statusDefinitionName, "set", rank);
+    }
+    
+    addStatus(attributeHandler, statusDefinitionName, rank) {
+        this.modifyStatus(attributeHandler, statusDefinitionName, "add", rank);
     }
 
     removeStatus(attributeHandler, statusDefinitionName) {
-        this.modifyStatus(attributeHandler, statusDefinitionName, false);
+        this.modifyStatus(attributeHandler, statusDefinitionName, "remove");
     }
 
     refreshStatus(attributeHandler) {
@@ -737,28 +748,40 @@ class TokenTargetData extends TargetData {
         attributeHandler.addAttribute(statusVar);
     }
 
-    modifyStatus(attributeHandler, statusDefinitionName, isAdded) {
+    modifyStatus(attributeHandler, statusDefinitionName, task, rank) {
         let tokenTargetData = this;
         tokenTargetData.refreshCombatDetails(attributeHandler);
         let statusVar = WuxDef.GetVariable("Status");
         attributeHandler.addAttribute(statusVar);
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
-            if (tokenTargetData.isBarLinked(1)) {
-                let statusObj = new StatusHandler(attrHandler.parseJSON(statusVar));
-                if (isAdded) {
-                    statusObj.addStatus(statusDefinitionName);
-                } else {
-                    statusObj.removeStatus(statusDefinitionName);
+            if (tokenTargetData.isCharacter()) {
+                let statusObj = new StatusHandler(statusVar);
+                switch (task) {
+                    case "set":
+                        statusObj.setStatus(statusDefinitionName, rank);
+                        break;
+                    case "add":
+                        statusObj.addStatus(statusDefinitionName, rank);
+                        break;
+                    case "remove":
+                        statusObj.removeStatus(statusDefinitionName);
+                        break;
                 }
+                tokenTargetData.setCombatDetails(attrHandler, undefined, statusObj);
                 statusObj.saveStatusesToCharacterSheet(attrHandler);
-                tokenTargetData.setCombatDetails(attrHandler);
             } else {
                 let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
-                if (isAdded) {
-                    tokenNoteReference.statusHandler.addStatus(statusDefinitionName);
-                } else {
-                    tokenNoteReference.statusHandler.removeStatus(statusDefinitionName);
+                switch (task) {
+                    case "set":
+                        tokenNoteReference.statusHandler.setStatus(statusDefinitionName, rank);
+                        break;
+                    case "add":
+                        tokenNoteReference.statusHandler.addStatus(statusDefinitionName, rank);
+                        break;
+                    case "remove":
+                        tokenNoteReference.statusHandler.removeStatus(statusDefinitionName);
+                        break;
                 }
                 tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
                 tokenTargetData.setCombatDetails(attrHandler, tokenNoteReference);
