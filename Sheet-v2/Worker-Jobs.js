@@ -101,8 +101,23 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             let jobWorker = new WuxBasicWorkerBuild("Job");
             attributeHandler.addMod(jobWorker.attrBuildDraft);
 
+            let maxJobSlots = 3;
+            let jobSlotDef = WuxDef.Get("Forme_JobSlot");
+            for (let i = 1; i <= maxJobSlots; i++) {
+                attributeHandler.addMod(jobSlotDef.getVariable(i));
+            }
+            attributeHandler.addMod(jobSlotDef.getVariable());
+
+            let repeaterName = "RepeatingJobStyles";
+            let jobStyleValuesRepeatingSection = new WorkerRepeatingSectionHandler(repeaterName);
+            jobStyleValuesRepeatingSection.getIds(function (jobStylesRepeater) {
+                jobStylesRepeater.removeAllIds();
+            });
+
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 jobWorker.setBuildStatsDraft(attrHandler);
+
+                WuxWorkerStyles.AddStyles(attrHandler, jobWorker, jobStyleValuesRepeatingSection);
 
                 jobWorker.cleanBuildStats();
                 jobWorker.setBuildStatVariables(attrHandler);

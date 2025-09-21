@@ -576,8 +576,26 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             let styleWorker = new WuxStyleWorkerBuild();
             attributeHandler.addMod(styleWorker.attrBuildDraft);
 
+            let maxAdvancedStyles = 3;
+            let maxNormalStyles = 6;
+            let advancedStylesDef = WuxDef.Get("Forme_AdvancedSlot");
+            let normalStylesDef = WuxDef.Get("Forme_StyleSlot");
+            for (let i = 1; i <= maxNormalStyles; i++) {
+                if (i <= maxAdvancedStyles) {
+                    attributeHandler.addMod(advancedStylesDef.getVariable(i));
+                }
+                attributeHandler.addMod(normalStylesDef.getVariable(i));
+            }
+
+            let advancedStyleValuesRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingStyles");
+            advancedStyleValuesRepeatingSection.getIds(function (advancedRepeater) {
+                advancedRepeater.removeAllIds();
+            });
+
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 styleWorker.setBuildStatsDraft(attrHandler);
+
+                addStyles(attrHandler, styleWorker, advancedStyleValuesRepeatingSection);
 
                 styleWorker.cleanBuildStats();
                 styleWorker.setBuildStatVariables(attrHandler);
