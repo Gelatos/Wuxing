@@ -3312,28 +3312,22 @@ class StatusHandler {
         definition.rank = rank;
         switch(definition.subGroup) {
             case "Status":
-                if (this.statusEffects[defName] == undefined) {
-                    this.statusEffects[defName] = definition;
+                if (this.statusEffects[defName] != undefined) {
+                    definition.rank += this.statusEffects[defName].rank;
                 }
-                else {
-                    this.statusEffects[defName].rank += rank;
-                }
+                this.statusEffects[defName] = definition;
                 break;
             case "Condition":
-                if (this.conditions[defName] == undefined) {
-                    this.conditions[defName] = definition;
+                if (this.conditions[defName] != undefined) {
+                    definition.rank += this.conditions[defName];
                 }
-                else {
-                    this.conditions[defName].rank += rank;
-                }
+                this.conditions[defName] = definition;
                 break;
             case "Emotion":
-                if (this.emotions[defName] == undefined) {
-                    this.emotions[defName] = definition;
+                if (this.emotions[defName] != undefined) {
+                    definition.rank += this.emotions[defName];
                 }
-                else {
-                    this.emotions[defName].rank += rank;
-                }
+                this.emotions[defName] = definition;
                 break;
         }
     }
