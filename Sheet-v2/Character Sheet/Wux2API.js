@@ -1075,10 +1075,10 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 break;
             case "Remove Any":
             case "Remove All":
-                tokenEffect.setRemoveStatusType("Condition");
+                tokenEffect.setRemoveStatusType(attrSetters.getObjByTarget(techniqueEffect), "Condition");
                 break;
             case "Remove Will":
-                tokenEffect.setRemoveStatusType("Emotion");
+                tokenEffect.setRemoveStatusType(attrSetters.getObjByTarget(techniqueEffect), "Emotion");
                 break;
         }
         
@@ -1121,6 +1121,17 @@ class TechniqueUseResolver extends TechniqueResolverData {
         let systemMessage = this.getMessageObject();
         WuxMessage.Send(systemMessage);
         Debug.LogShout(this.msg, `[TechniqueUseResolver] Finished with duration of ${Date.now() - this.startTime}`);
+        
+        if (this.senderTokenEffect.removeStatusMessage != "") {
+            let systemMessage = new SystemInfoMessage(this.senderTokenEffect.removeStatusMessage);
+            systemMessage.setSender("System");
+            WuxMessage.SendToSenderAndGM(systemMessage, this.msg);
+        }
+        if (this.targetTokenEffect.removeStatusMessage != "") {
+            let systemMessage = new SystemInfoMessage(this.targetTokenEffect.removeStatusMessage);
+            systemMessage.setSender("System");
+            WuxMessage.SendToSenderAndGM(systemMessage, this.msg);
+        }
     }
 }
 
@@ -1288,7 +1299,13 @@ var WuxMessage = WuxMessage || (function () {
                 sendChat(sender, message, null, { noarchive: true });
             }
         },
-        
+
+        sendToSender = function (messageObject, msg, archive) {
+            let senderTargets = [];
+            senderTargets.push(msg.who.split(" ")[0]); // Send to the player who sent the command
+            send(messageObject, senderTargets, archive);
+        },
+
         sendToSenderAndGM = function (messageObject, msg, archive) {
             let senderTargets = ["GM"];
             if (!playerIsGM(msg.playerid)) {
@@ -1303,6 +1320,7 @@ var WuxMessage = WuxMessage || (function () {
         ParseType: parseType,
         HandleMessageInput: handleMessageInput,
         Send: send,
+        SendToSender: sendToSender,
         SendToSenderAndGM: sendToSenderAndGM
     };
 }());
@@ -2865,7 +2883,7 @@ class TokenTargetEffectsData {
         this.effectMessages = [];
         this.damageRolls = [];
         this.spentSurge = false;
-        this.removeStatusType = "";
+        this.removeStatusMessage = "";
     }
 
     addMessage(message) {
@@ -2937,8 +2955,21 @@ class TokenTargetEffectsData {
             });
     }
 
-    setRemoveStatusType(statusType) {
-        this.removeStatusType = statusType;
+    setRemoveStatusType(attributeHandler, statusType) {
+        let targetEffect = this;
+        targetEffect.removeStatusMessage = "";
+        let statusVar = WuxDef.GetVariable("Status");
+        attributeHandler.addAttribute(statusVar);
+
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            if (targetEffect.tokenTargetData.isCharacter()) {
+                let statusObj = new StatusHandler(attrHandler.parseJSON(statusVar));
+                targetEffect.removeStatusMessage = statusObj.getStatusDetailsMessage(targetEffect.tokenTargetData, statusType);
+            } else {
+                let tokenNoteReference = new TokenNoteReference(targetEffect.tokenTargetData.getTokenNote());
+                targetEffect.removeStatusMessage = tokenNoteReference.statusHandler.getStatusDetailsMessage(targetEffect.tokenTargetData, statusType);
+            }
+        });
     }
 
     takeHpDamage(attributeHandler, damageRoll) {
@@ -3150,6 +3181,10 @@ var TargetReference = TargetReference || (function () {
                 case "!partyoptions":
                     commandShowPartyOptions(msg);
                     break;
+                case "!mcheckstatus":
+                    content = getMessageTarget(content);
+                    commandCheckStatus(msg, content.targets);
+                    break;
                 case "!tconflictstate":
                     commandSetConflictState(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
@@ -3189,8 +3224,16 @@ var TargetReference = TargetReference || (function () {
                     content = getTeamTargets(content);
                     commandHealVitality(msg, content.targets, content.content);
                     break;
-                case "!tresetSocial":
+                case "!tresetsocial":
                     commandResetSocial(msg, TokenReference.GetTokenTargetDataArray(msg));
+                    break;
+                case "!maddstatus":
+                    content = getMessageTarget(content);
+                    commandAddStatus(msg, content.targets, content.content);
+                    break;
+                case "!mremstatus":
+                    content = getMessageTarget(content);
+                    commandRemoveStatus(msg, content.targets, content.content);
                     break;
                 case "!tdetails":
                     commandUpdateCombatDetails(msg, TokenReference.GetTokenTargetDataArray(msg));
@@ -3279,6 +3322,22 @@ var TargetReference = TargetReference || (function () {
             output.content = contentSplit[1];
 
             let target = getTargetDataByName(contentSplit[0]);
+            if (target != undefined) {
+                output.targets.push(target);
+            }
+
+            return output;
+        },
+
+        getMessageTarget = function (content) {
+            let output = {
+                content: "",
+                targets: []
+            }
+            let contentSplit = content.split("@@@");
+            output.content = contentSplit[1];
+
+            let target = getTokenTargetData(contentSplit[0]);
             if (target != undefined) {
                 output.targets.push(target);
             }
@@ -3375,6 +3434,30 @@ var TargetReference = TargetReference || (function () {
             let senderMessage = new SystemInfoMessage(output);
             senderMessage.setSender(sender);
             WuxMessage.Send(senderMessage, sender);
+        },
+
+        commandCheckStatus = function (msg, targets) {
+            let statusVar = WuxDef.GetVariable("Status");
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                attributeHandler.addMod(statusVar);
+
+                attributeHandler.addGetAttrCallback(function () {
+                    let outputMessage = "";
+                    if (tokenTargetData.isCharacter()) {
+                        let statusObj = new StatusHandler(attributeHandler.parseJSON(statusVar));
+                        outputMessage = statusObj.getStatusDetailsMessage(tokenTargetData, "All");
+                    } else {
+                        let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
+                        outputMessage = tokenNoteReference.statusHandler.getStatusDetailsMessage(tokenTargetData, "All");
+                    }
+                    
+                    let messageObject = new SystemInfoMessage(outputMessage);
+                    messageObject.setSender("System");
+                    WuxMessage.SendToSender(messageObject, msg);
+                });
+                attributeHandler.run();
+            });
         },
 
         tokenOptionTitle = function (title) {
@@ -3516,6 +3599,29 @@ var TargetReference = TargetReference || (function () {
             });
 
             sendTokenUpdateMessage(msg, targets, `: social data reset`);
+        },
+
+        commandAddStatus = function (msg, targets, content) {
+            let statusType = content.split(";")[0];
+            let statusValue = content.split(";").length > 1 ? content.split(";")[1] : "";
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.addStatus(attributeHandler, statusType, statusValue);
+                attributeHandler.run();
+            });
+
+            sendTokenUpdateMessage(msg, targets, `: ${statusType}${statusValue != "" ? `[${statusValue}]`: ""} status added`);
+        },
+        
+        commandRemoveStatus = function (msg, targets, content) {
+            let statusType = content.split(";")[0];
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.removeStatus(attributeHandler, statusType);
+                attributeHandler.run();
+            });
+            
+            sendTokenUpdateMessage(msg, targets, `: ${WuxDef.GetName(statusType)} status removed`);
         },
 
         commandUpdateCombatDetails = function (msg, targets) {
@@ -5358,6 +5464,7 @@ class StatusData extends WuxDatabaseData {
         this.points = json.points;
         this.endsOnRoundStart = json.endsOnRoundStart;
         this.endsOnTrigger = json.endsOnTrigger;
+        this.hasRanks = json.hasRanks;
     }
 
     importSheets(dataArray) {
@@ -5378,6 +5485,8 @@ class StatusData extends WuxDatabaseData {
         i++;
         this.endsOnTrigger = ("" + dataArray[i]) != "";
         i++;
+        this.hasRanks = ("" + dataArray[i]) != "";
+        i++;
     }
 
     createEmpty() {
@@ -5390,6 +5499,7 @@ class StatusData extends WuxDatabaseData {
         this.points = 0;
         this.endsOnRoundStart = false;
         this.endsOnTrigger = false;
+        this.hasRanks = false;
     }
 
     createDefinition(baseDefinition) {
@@ -5400,6 +5510,7 @@ class StatusData extends WuxDatabaseData {
         definition.points = this.points;
         definition.endsOnRoundStart = this.endsOnRoundStart;
         definition.endsOnTrigger = this.endsOnTrigger;
+        definition.hasRanks = this.hasRanks;
         return definition;
     }
     
@@ -5961,6 +6072,7 @@ class StatusDefinitionData extends DefinitionData {
         this.points = json.points;
         this.endsOnRoundStart = json.endsOnRoundStart;
         this.endsOnTrigger = json.endsOnTrigger;
+        this.hasRanks = json.hasRanks;
     }
 
     setImportSheetExtraData(property, value) {
@@ -5974,6 +6086,9 @@ class StatusDefinitionData extends DefinitionData {
             case "shortDescription":
                 this.shortDescription = value;
                 break;
+            case "hasRanks":
+                this.hasRanks = value.toLowerCase() == "true";
+                break;
         }
     }
 
@@ -5983,6 +6098,7 @@ class StatusDefinitionData extends DefinitionData {
         this.points = 0;
         this.endsOnRoundStart = false;
         this.endsOnTrigger = false;
+        this.hasRanks = false;
     }
 }
 
@@ -7375,8 +7491,10 @@ class StatusHandler {
         this.createEmpty();
         if (data != undefined) {
             if (typeof data == "string") {
+                Debug.Log (`[StatusHandler] Importing Status Data: ${data}`);
                 this.importStringifiedJson(data);
             } else {
+                Debug.Log (`[StatusHandler] Importing Status Data: ${JSON.stringify(data)}`);
                 this.importJson(data);
             }
         }
@@ -7393,7 +7511,6 @@ class StatusHandler {
         }
         catch {
             Debug.LogError(`[StatusHandler] Unable to parse JSON: ${stringifiedJSON}`);
-            return;
         }
     }
     createEmpty() {
@@ -7403,6 +7520,8 @@ class StatusHandler {
     }
     importJson(json) {
         this.statusEffects = json.statusEffects != undefined ? json.statusEffects : {};
+        this.conditions = json.conditions != undefined ? json.conditions : {};
+        this.emotions = json.emotions != undefined ? json.emotions : {};
     }
 
     setStatus(defName, rank) {
@@ -7487,7 +7606,8 @@ class StatusHandler {
         if (statuses.length > 0) {
             output += "Statuses: ";
             for (let i = 0; i < statuses.length; i++) {
-                output += statuses[i].printStatusTitle();
+                let status = new StatusHandlerStatusData(statuses[i]);
+                output += status.printStatusTitle();
                 if (i < statuses.length - 1) {
                     output += "; ";
                 }
@@ -7499,7 +7619,8 @@ class StatusHandler {
             }
             output += "Conditions: ";
             for (let i = 0; i < conditions.length; i++) {
-                output += conditions[i].printStatusTitle();
+                let condition = new StatusHandlerStatusData(conditions[i]);
+                output += condition.printStatusTitle();
                 if (i < conditions.length - 1) {
                     output += "; ";
                 }
@@ -7511,7 +7632,8 @@ class StatusHandler {
             }
             output += "Emotions: ";
             for (let i = 0; i < emotions.length; i++) {
-                output += emotions[i].printStatusTitle();
+                let emotion = new StatusHandlerStatusData(emotions[i]);
+                output += emotion.printStatusTitle();
                 if (i < emotions.length - 1) {
                     output += "; ";
                 }
@@ -7519,11 +7641,93 @@ class StatusHandler {
         }
         return output;
     }
-
-    getStatusDetailsMessage(statusType, showAddOption) {
+    getStatusDetailsMessage(tokenTargetData, statusType, showAddOption) {
         let output = "";
-
-        return new SystemInfoMessage(output);
+        
+        if (statusType == "All") {
+            output += this.printStatusDetailsByStatusType(tokenTargetData, "Status");
+            output += this.statusDetailsSpacer();
+            output += this.printStatusDetailsByStatusType(tokenTargetData, "Condition");
+            output += this.statusDetailsSpacer();
+            output += this.printStatusDetailsByStatusType(tokenTargetData, "Emotion");
+        }
+        else {
+            output += this.printStatusDetailsByStatusType(tokenTargetData, statusType);
+        }
+        if (showAddOption) {
+        }
+        
+        return output;
+    }
+    
+    printStatusDetailsByStatusType(tokenTargetData, statusType) {
+        let output = "";
+        switch (statusType) {
+            case "Status":
+                output += this.statusDetailsTitle(`${tokenTargetData.displayName} Statuses`);
+                let statuses = Object.values(this.statusEffects);
+                if (statuses.length == 0) {
+                    output += `<div>No Statuses</div>`;
+                }
+                else {
+                    for (let i = 0; i < statuses.length; i++) {
+                        let status = new StatusHandlerStatusData(statuses[i]);
+                        output += this.statusDetails(status, tokenTargetData);
+                        if (i < statuses.length - 1) {
+                            output += this.statusDetailsSpacer();
+                        }
+                    }
+                }
+                break;
+            case "Condition":
+                output += this.statusDetailsTitle(`${tokenTargetData.displayName} Conditions`);
+                let conditions = Object.values(this.conditions);
+                if (conditions.length == 0) {
+                    output += `<div>No Conditions</div>`;
+                }
+                else {
+                    for (let i = 0; i < conditions.length; i++) {
+                        let condition = new StatusHandlerStatusData(conditions[i]);
+                        output += this.statusDetails(condition, tokenTargetData);
+                        if (i < conditions.length - 1) {
+                            output += this.statusDetailsSpacer();
+                        }
+                    }
+                }
+                break;
+            case "Emotion":
+                output += this.statusDetailsTitle(`${tokenTargetData.displayName} Emotions`);
+                let emotions = Object.values(this.emotions);
+                if (emotions.length == 0) {
+                    output += `<div>No Emotions</div>`;
+                }
+                else {
+                    for (let i = 0; i < emotions.length; i++) {
+                        let emotion = new StatusHandlerStatusData(emotions[i]);
+                        output += this.statusDetails(emotion, tokenTargetData);
+                        if (i < emotions.length - 1) {
+                            output += this.statusDetailsSpacer();
+                        }
+                    }
+                }
+                break;
+        }
+        return output;
+    }
+    
+    statusDetails(statusData, tokenTargetData) {
+        let output = "";
+        output += this.statusDetailsTitle(`${statusData.printStatusTitle()} ${this.removeButton(tokenTargetData, statusData.name)}`);
+        let description = WuxDef.GetDescription(statusData.name);
+        if (description != "") {
+            output += `<div>${description}</div>`;
+        }
+        return output;
+    }
+    
+    removeButton(tokenTargetData, statusName) {
+        let message = `mremstatus ${tokenTargetData.tokenId}@@@${statusName}`;
+        return `<span class="sheet-wuxInlineRow">[Remove](!${message})</span> `;
     }
 
     statusDetailsTitle(title) {
@@ -7669,7 +7873,8 @@ class CombatDetails {
 class CombatDetailsHandler {
     constructor(attributeHandler) {
         this.combatDetailsVar = WuxDef.GetVariable("CombatDetails");
-        attributeHandler.addMod(this.combatDetailsVar);
+        this.statusVar = WuxDef.GetVariable("Status");
+        attributeHandler.addMod([this.combatDetailsVar, this.statusVar]);
         this.combatDetails = new CombatDetails();
     }
 

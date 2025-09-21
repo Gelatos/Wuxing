@@ -1226,6 +1226,7 @@ class StatusData extends WuxDatabaseData {
         this.points = json.points;
         this.endsOnRoundStart = json.endsOnRoundStart;
         this.endsOnTrigger = json.endsOnTrigger;
+        this.hasRanks = json.hasRanks;
     }
 
     importSheets(dataArray) {
@@ -1246,6 +1247,8 @@ class StatusData extends WuxDatabaseData {
         i++;
         this.endsOnTrigger = ("" + dataArray[i]) != "";
         i++;
+        this.hasRanks = ("" + dataArray[i]) != "";
+        i++;
     }
 
     createEmpty() {
@@ -1258,6 +1261,7 @@ class StatusData extends WuxDatabaseData {
         this.points = 0;
         this.endsOnRoundStart = false;
         this.endsOnTrigger = false;
+        this.hasRanks = false;
     }
 
     createDefinition(baseDefinition) {
@@ -1268,6 +1272,7 @@ class StatusData extends WuxDatabaseData {
         definition.points = this.points;
         definition.endsOnRoundStart = this.endsOnRoundStart;
         definition.endsOnTrigger = this.endsOnTrigger;
+        definition.hasRanks = this.hasRanks;
         return definition;
     }
     
@@ -1829,6 +1834,7 @@ class StatusDefinitionData extends DefinitionData {
         this.points = json.points;
         this.endsOnRoundStart = json.endsOnRoundStart;
         this.endsOnTrigger = json.endsOnTrigger;
+        this.hasRanks = json.hasRanks;
     }
 
     setImportSheetExtraData(property, value) {
@@ -1842,6 +1848,9 @@ class StatusDefinitionData extends DefinitionData {
             case "shortDescription":
                 this.shortDescription = value;
                 break;
+            case "hasRanks":
+                this.hasRanks = value.toLowerCase() == "true";
+                break;
         }
     }
 
@@ -1851,6 +1860,7 @@ class StatusDefinitionData extends DefinitionData {
         this.points = 0;
         this.endsOnRoundStart = false;
         this.endsOnTrigger = false;
+        this.hasRanks = false;
     }
 }
 
@@ -3243,8 +3253,10 @@ class StatusHandler {
         this.createEmpty();
         if (data != undefined) {
             if (typeof data == "string") {
+                Debug.Log (`[StatusHandler] Importing Status Data: ${data}`);
                 this.importStringifiedJson(data);
             } else {
+                Debug.Log (`[StatusHandler] Importing Status Data: ${JSON.stringify(data)}`);
                 this.importJson(data);
             }
         }
@@ -3261,7 +3273,6 @@ class StatusHandler {
         }
         catch {
             Debug.LogError(`[StatusHandler] Unable to parse JSON: ${stringifiedJSON}`);
-            return;
         }
     }
     createEmpty() {
@@ -3271,6 +3282,8 @@ class StatusHandler {
     }
     importJson(json) {
         this.statusEffects = json.statusEffects != undefined ? json.statusEffects : {};
+        this.conditions = json.conditions != undefined ? json.conditions : {};
+        this.emotions = json.emotions != undefined ? json.emotions : {};
     }
 
     setStatus(defName, rank) {
@@ -3355,7 +3368,8 @@ class StatusHandler {
         if (statuses.length > 0) {
             output += "Statuses: ";
             for (let i = 0; i < statuses.length; i++) {
-                output += statuses[i].printStatusTitle();
+                let status = new StatusHandlerStatusData(statuses[i]);
+                output += status.printStatusTitle();
                 if (i < statuses.length - 1) {
                     output += "; ";
                 }
@@ -3367,7 +3381,8 @@ class StatusHandler {
             }
             output += "Conditions: ";
             for (let i = 0; i < conditions.length; i++) {
-                output += conditions[i].printStatusTitle();
+                let condition = new StatusHandlerStatusData(conditions[i]);
+                output += condition.printStatusTitle();
                 if (i < conditions.length - 1) {
                     output += "; ";
                 }
@@ -3379,7 +3394,8 @@ class StatusHandler {
             }
             output += "Emotions: ";
             for (let i = 0; i < emotions.length; i++) {
-                output += emotions[i].printStatusTitle();
+                let emotion = new StatusHandlerStatusData(emotions[i]);
+                output += emotion.printStatusTitle();
                 if (i < emotions.length - 1) {
                     output += "; ";
                 }
@@ -3387,11 +3403,93 @@ class StatusHandler {
         }
         return output;
     }
-
-    getStatusDetailsMessage(statusType, showAddOption) {
+    getStatusDetailsMessage(tokenTargetData, statusType, showAddOption) {
         let output = "";
-
-        return new SystemInfoMessage(output);
+        
+        if (statusType == "All") {
+            output += this.printStatusDetailsByStatusType(tokenTargetData, "Status");
+            output += this.statusDetailsSpacer();
+            output += this.printStatusDetailsByStatusType(tokenTargetData, "Condition");
+            output += this.statusDetailsSpacer();
+            output += this.printStatusDetailsByStatusType(tokenTargetData, "Emotion");
+        }
+        else {
+            output += this.printStatusDetailsByStatusType(tokenTargetData, statusType);
+        }
+        if (showAddOption) {
+        }
+        
+        return output;
+    }
+    
+    printStatusDetailsByStatusType(tokenTargetData, statusType) {
+        let output = "";
+        switch (statusType) {
+            case "Status":
+                output += this.statusDetailsTitle(`${tokenTargetData.displayName} Statuses`);
+                let statuses = Object.values(this.statusEffects);
+                if (statuses.length == 0) {
+                    output += `<div>No Statuses</div>`;
+                }
+                else {
+                    for (let i = 0; i < statuses.length; i++) {
+                        let status = new StatusHandlerStatusData(statuses[i]);
+                        output += this.statusDetails(status, tokenTargetData);
+                        if (i < statuses.length - 1) {
+                            output += this.statusDetailsSpacer();
+                        }
+                    }
+                }
+                break;
+            case "Condition":
+                output += this.statusDetailsTitle(`${tokenTargetData.displayName} Conditions`);
+                let conditions = Object.values(this.conditions);
+                if (conditions.length == 0) {
+                    output += `<div>No Conditions</div>`;
+                }
+                else {
+                    for (let i = 0; i < conditions.length; i++) {
+                        let condition = new StatusHandlerStatusData(conditions[i]);
+                        output += this.statusDetails(condition, tokenTargetData);
+                        if (i < conditions.length - 1) {
+                            output += this.statusDetailsSpacer();
+                        }
+                    }
+                }
+                break;
+            case "Emotion":
+                output += this.statusDetailsTitle(`${tokenTargetData.displayName} Emotions`);
+                let emotions = Object.values(this.emotions);
+                if (emotions.length == 0) {
+                    output += `<div>No Emotions</div>`;
+                }
+                else {
+                    for (let i = 0; i < emotions.length; i++) {
+                        let emotion = new StatusHandlerStatusData(emotions[i]);
+                        output += this.statusDetails(emotion, tokenTargetData);
+                        if (i < emotions.length - 1) {
+                            output += this.statusDetailsSpacer();
+                        }
+                    }
+                }
+                break;
+        }
+        return output;
+    }
+    
+    statusDetails(statusData, tokenTargetData) {
+        let output = "";
+        output += this.statusDetailsTitle(`${statusData.printStatusTitle()} ${this.removeButton(tokenTargetData, statusData.name)}`);
+        let description = WuxDef.GetDescription(statusData.name);
+        if (description != "") {
+            output += `<div>${description}</div>`;
+        }
+        return output;
+    }
+    
+    removeButton(tokenTargetData, statusName) {
+        let message = `mremstatus ${tokenTargetData.tokenId}@@@${statusName}`;
+        return `<span class="sheet-wuxInlineRow">[Remove](!${message})</span> `;
     }
 
     statusDetailsTitle(title) {
@@ -3537,7 +3635,8 @@ class CombatDetails {
 class CombatDetailsHandler {
     constructor(attributeHandler) {
         this.combatDetailsVar = WuxDef.GetVariable("CombatDetails");
-        attributeHandler.addMod(this.combatDetailsVar);
+        this.statusVar = WuxDef.GetVariable("Status");
+        attributeHandler.addMod([this.combatDetailsVar, this.statusVar]);
         this.combatDetails = new CombatDetails();
     }
 

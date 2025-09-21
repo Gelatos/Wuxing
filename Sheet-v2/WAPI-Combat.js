@@ -1023,10 +1023,10 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 break;
             case "Remove Any":
             case "Remove All":
-                tokenEffect.setRemoveStatusType("Condition");
+                tokenEffect.setRemoveStatusType(attrSetters.getObjByTarget(techniqueEffect), "Condition");
                 break;
             case "Remove Will":
-                tokenEffect.setRemoveStatusType("Emotion");
+                tokenEffect.setRemoveStatusType(attrSetters.getObjByTarget(techniqueEffect), "Emotion");
                 break;
         }
         
@@ -1069,6 +1069,17 @@ class TechniqueUseResolver extends TechniqueResolverData {
         let systemMessage = this.getMessageObject();
         WuxMessage.Send(systemMessage);
         Debug.LogShout(this.msg, `[TechniqueUseResolver] Finished with duration of ${Date.now() - this.startTime}`);
+        
+        if (this.senderTokenEffect.removeStatusMessage != "") {
+            let systemMessage = new SystemInfoMessage(this.senderTokenEffect.removeStatusMessage);
+            systemMessage.setSender("System");
+            WuxMessage.SendToSenderAndGM(systemMessage, this.msg);
+        }
+        if (this.targetTokenEffect.removeStatusMessage != "") {
+            let systemMessage = new SystemInfoMessage(this.targetTokenEffect.removeStatusMessage);
+            systemMessage.setSender("System");
+            WuxMessage.SendToSenderAndGM(systemMessage, this.msg);
+        }
     }
 }
 

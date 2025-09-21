@@ -155,7 +155,13 @@ var WuxMessage = WuxMessage || (function () {
                 sendChat(sender, message, null, { noarchive: true });
             }
         },
-        
+
+        sendToSender = function (messageObject, msg, archive) {
+            let senderTargets = [];
+            senderTargets.push(msg.who.split(" ")[0]); // Send to the player who sent the command
+            send(messageObject, senderTargets, archive);
+        },
+
         sendToSenderAndGM = function (messageObject, msg, archive) {
             let senderTargets = ["GM"];
             if (!playerIsGM(msg.playerid)) {
@@ -170,6 +176,7 @@ var WuxMessage = WuxMessage || (function () {
         ParseType: parseType,
         HandleMessageInput: handleMessageInput,
         Send: send,
+        SendToSender: sendToSender,
         SendToSenderAndGM: sendToSenderAndGM
     };
 }());

@@ -906,7 +906,7 @@ class TokenTargetEffectsData {
         this.effectMessages = [];
         this.damageRolls = [];
         this.spentSurge = false;
-        this.removeStatusType = "";
+        this.removeStatusMessage = "";
     }
 
     addMessage(message) {
@@ -978,8 +978,21 @@ class TokenTargetEffectsData {
             });
     }
 
-    setRemoveStatusType(statusType) {
-        this.removeStatusType = statusType;
+    setRemoveStatusType(attributeHandler, statusType) {
+        let targetEffect = this;
+        targetEffect.removeStatusMessage = "";
+        let statusVar = WuxDef.GetVariable("Status");
+        attributeHandler.addAttribute(statusVar);
+
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            if (targetEffect.tokenTargetData.isCharacter()) {
+                let statusObj = new StatusHandler(attrHandler.parseJSON(statusVar));
+                targetEffect.removeStatusMessage = statusObj.getStatusDetailsMessage(targetEffect.tokenTargetData, statusType);
+            } else {
+                let tokenNoteReference = new TokenNoteReference(targetEffect.tokenTargetData.getTokenNote());
+                targetEffect.removeStatusMessage = tokenNoteReference.statusHandler.getStatusDetailsMessage(targetEffect.tokenTargetData, statusType);
+            }
+        });
     }
 
     takeHpDamage(attributeHandler, damageRoll) {
@@ -1191,6 +1204,10 @@ var TargetReference = TargetReference || (function () {
                 case "!partyoptions":
                     commandShowPartyOptions(msg);
                     break;
+                case "!mcheckstatus":
+                    content = getMessageTarget(content);
+                    commandCheckStatus(msg, content.targets);
+                    break;
                 case "!tconflictstate":
                     commandSetConflictState(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
@@ -1230,8 +1247,16 @@ var TargetReference = TargetReference || (function () {
                     content = getTeamTargets(content);
                     commandHealVitality(msg, content.targets, content.content);
                     break;
-                case "!tresetSocial":
+                case "!tresetsocial":
                     commandResetSocial(msg, TokenReference.GetTokenTargetDataArray(msg));
+                    break;
+                case "!maddstatus":
+                    content = getMessageTarget(content);
+                    commandAddStatus(msg, content.targets, content.content);
+                    break;
+                case "!mremstatus":
+                    content = getMessageTarget(content);
+                    commandRemoveStatus(msg, content.targets, content.content);
                     break;
                 case "!tdetails":
                     commandUpdateCombatDetails(msg, TokenReference.GetTokenTargetDataArray(msg));
@@ -1320,6 +1345,22 @@ var TargetReference = TargetReference || (function () {
             output.content = contentSplit[1];
 
             let target = getTargetDataByName(contentSplit[0]);
+            if (target != undefined) {
+                output.targets.push(target);
+            }
+
+            return output;
+        },
+
+        getMessageTarget = function (content) {
+            let output = {
+                content: "",
+                targets: []
+            }
+            let contentSplit = content.split("@@@");
+            output.content = contentSplit[1];
+
+            let target = getTokenTargetData(contentSplit[0]);
             if (target != undefined) {
                 output.targets.push(target);
             }
@@ -1416,6 +1457,30 @@ var TargetReference = TargetReference || (function () {
             let senderMessage = new SystemInfoMessage(output);
             senderMessage.setSender(sender);
             WuxMessage.Send(senderMessage, sender);
+        },
+
+        commandCheckStatus = function (msg, targets) {
+            let statusVar = WuxDef.GetVariable("Status");
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                attributeHandler.addMod(statusVar);
+
+                attributeHandler.addGetAttrCallback(function () {
+                    let outputMessage = "";
+                    if (tokenTargetData.isCharacter()) {
+                        let statusObj = new StatusHandler(attributeHandler.parseJSON(statusVar));
+                        outputMessage = statusObj.getStatusDetailsMessage(tokenTargetData, "All");
+                    } else {
+                        let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
+                        outputMessage = tokenNoteReference.statusHandler.getStatusDetailsMessage(tokenTargetData, "All");
+                    }
+                    
+                    let messageObject = new SystemInfoMessage(outputMessage);
+                    messageObject.setSender("System");
+                    WuxMessage.SendToSender(messageObject, msg);
+                });
+                attributeHandler.run();
+            });
         },
 
         tokenOptionTitle = function (title) {
@@ -1557,6 +1622,29 @@ var TargetReference = TargetReference || (function () {
             });
 
             sendTokenUpdateMessage(msg, targets, `: social data reset`);
+        },
+
+        commandAddStatus = function (msg, targets, content) {
+            let statusType = content.split(";")[0];
+            let statusValue = content.split(";").length > 1 ? content.split(";")[1] : "";
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.addStatus(attributeHandler, statusType, statusValue);
+                attributeHandler.run();
+            });
+
+            sendTokenUpdateMessage(msg, targets, `: ${statusType}${statusValue != "" ? `[${statusValue}]`: ""} status added`);
+        },
+        
+        commandRemoveStatus = function (msg, targets, content) {
+            let statusType = content.split(";")[0];
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.removeStatus(attributeHandler, statusType);
+                attributeHandler.run();
+            });
+            
+            sendTokenUpdateMessage(msg, targets, `: ${WuxDef.GetName(statusType)} status removed`);
         },
 
         commandUpdateCombatDetails = function (msg, targets) {
