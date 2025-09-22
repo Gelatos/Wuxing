@@ -243,7 +243,6 @@ var OverviewBuilder = OverviewBuilder || (function () {
             output += listenerGenerateCharacter();
             output += listenerUseGeneration();
             output += listenerClearBackground();
-            output += listenerUpdateStatus();
             output += listenerUpdateCR();
             output += listenerUpdateSurge();
             output += listenerUpdateVitality();
@@ -284,16 +283,6 @@ var OverviewBuilder = OverviewBuilder || (function () {
             let output = `WuxWorkerGeneral.ClearBackground()`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
-        },
-        listenerUpdateStatus = function () {
-            let output = "";
-            let statuses = WuxDef.Filter([new DatabaseFilterData("group", "Status")]);
-            for (let i = 0; i < statuses.length; i++) {
-                let groupVariableNames = [(statuses[i].getVariable())];
-                output += "\n" + WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerGeneral.UpdateStatus("${statuses[i].name}", eventinfo)`, true);
-            }
-
-            return output;
         },
         listenerUpdateCR = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("CR")}`];

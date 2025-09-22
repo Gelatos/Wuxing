@@ -677,7 +677,25 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
     width: calc(100% - 60px);
 }
 
+.wuxFeatureHeaderNameButton
+{
+    position: relative;
+    display: inline-block;
+    width: calc(100% - 36px);
+    min-width: 36px;
+    margin-right: 3px;
+    
+    text-align: left;
+    text-shadow: none;
+    
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
 .wuxFeatureHeaderName,
+.wuxFeatureHeaderNameButton span,
+button[type=roll].wuxFeatureHeaderNameButton span,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderName,
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderName
 {
@@ -690,6 +708,18 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
     
     font-size: 13px; 
     font-weight: bold;
+}
+
+button[type=roll].wuxFeatureHeaderNameButton:hover
+{
+    text-shadow: #001e00;
+    background: rgba(0,0,0,0.2);
+    box-shadow: none;
+}
+
+button[type=roll].wuxFeatureHeaderNameButton::before
+{
+    content: "" !important;
 }
 
 .wuxFeatureHeaderInfo,

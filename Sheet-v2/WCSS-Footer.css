@@ -590,7 +590,16 @@ input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInsp
 .wuxSubMenuSection input[type=radio],
 .wuxSubMenuSection input[type=checkbox]
 {
-    height: 100%;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+}
+
+.wuxFeatureHeaderDisplayBlock .wuxSubMenuButton input[type=checkbox],
+.wuxFeatureHeaderDisplayBlock .wuxSubMenuSection input[type=checkbox]
+{
+    width: 18px;
 }
 
 .wuxSubMenuButton input[type=radio]:checked + span,

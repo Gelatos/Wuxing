@@ -141,11 +141,6 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             });
             attributeHandler.run();
         },
-        updateStatus = function (statusName, eventinfo) {
-            let attributeHandler = new WorkerAttributeHandler();
-            let statusHandler = new StatusHandler(attributeHandler);
-            // statusHandler.changeStatus(statusName, eventinfo.newValue);
-        },
         updateCR = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
             let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
@@ -219,7 +214,6 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
         GenerateCharacter: generateCharacter,
         UseGeneration: useGeneration,
         ClearBackground: clearBackground,
-        UpdateStatus: updateStatus,
         UpdateCR: updateCR,
         UpdateSurge: updateSurge,
         UpdateVitality: updateVitality,

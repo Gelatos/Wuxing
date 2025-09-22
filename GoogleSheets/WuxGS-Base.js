@@ -85,7 +85,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             let contents = "";
                             contents += buildCharacterSection();
                             contents += buildResourcesSection();
-                            contents += buildStatusSection();
                             return contents;
                         },
 
@@ -110,16 +109,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_OverviewResources");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
-                        },
-
-                        buildStatusSection = function () {
-                            let contents = "";
-                            contents += statuses();
-
-                            contents = WuxSheetMain.TabBlock(contents);
-
-                            let definition = WuxDef.Get("Page_OverviewStatus");
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                         },
 
@@ -235,31 +224,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                                 output.push(WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150"));
                             }
                             return output;
-                        },
-
-                        statuses = function () {
-                            let contents = "";
-                            let statusDef = WuxDef.Get("Status");
-
-                            let statusInfo = WuxDefinition.TooltipDescription(statusDef);
-                            statusInfo = WuxSheetMain.Info.Contents(statusDef.getAttribute(WuxDef._info), statusInfo);
-                            contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(statusDef.getAttribute(WuxDef._info))}${statusDef.title}`)}
-							${statusInfo}`;
-
-                            contents += statusNames(WuxDef.Get("Status"), WuxDef.Filter([new DatabaseFilterData("subGroup", "Status")]));
-                            contents += statusNames(WuxDef.Get("Condition"), WuxDef.Filter([new DatabaseFilterData("subGroup", "Condition")]));
-                            contents += statusNames(WuxDef.Get("Emotion"), WuxDef.Filter([new DatabaseFilterData("subGroup", "Emotion")]));
-
-                            return contents;
-                        },
-
-                        statusNames = function (titleDef, statusDefs) {
-                            let states = [];
-                            for (let i = 0; i < statusDefs.length; i++) {
-                                states.push(`<div class="wuxFlexTableItemGroup wuxMinWidth150">${WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(statusDefs[i].getAttribute(), statusDefs[i].getAttribute(WuxDef._info),
-                                    WuxSheetMain.Header(statusDefs[i].title), WuxDefinition.TooltipDescription(statusDefs[i]))}</div>`);
-                            }
-                            return WuxSheetMain.Header2(titleDef.title) + WuxSheetMain.MultiRowGroup(states, WuxSheetMain.Table.FlexTable, 3);
                         }
 
                     return {
@@ -1341,15 +1305,19 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 addRepeaterContentsStyles = function (isCustom) {
                     let submenuFieldName = WuxDef.GetAttribute("Action_Actions");
+                    
+                    let submenuText = `<div class="wuxInlineBlock">
+                            <input type="checkbox" name="${submenuFieldName}">
+                            <span class="wuxSubMenuText">l&nbsp;</span>
+                            <input type="hidden" class="wuxSubMenu-flag" name="${submenuFieldName}" value="0">
+                            <div class="wuxSubMenuContent">\n${isCustom ? addCustomSubmenuContentsStyles() : addSubmenuContentsStyles()}\n</div>
+                    </div>`;
 
                     return `
                     <div class="wuxFeature wuxMinWidth220">
                         <input type="hidden" class="wuxFeatureHeader-flag" name="${getActionTypeAttribute("TechActionType")}">
                         <div class="wuxFeatureHeader wuxSubMenuSection">
-                            <input type="checkbox" name="${submenuFieldName}">
-                            ${buildBaseTechniqueHeaderContents(`<span class="wuxSubMenuText">l&nbsp;</span>`)}
-                            <input type="hidden" class="wuxSubMenu-flag" name="${submenuFieldName}" value="0">
-                            <div class="wuxSubMenuContent">\n${isCustom ? addCustomSubmenuContentsStyles() : addSubmenuContentsStyles()}\n</div>
+                            ${buildBaseTechniqueHeaderContents(submenuText, true)}
                         </div>
                         ${buildBaseTechniqueRequirements()}
                     </div>`;
@@ -1390,9 +1358,22 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 },
 
-                buildBaseTechniqueHeaderContents = function (headerPrefix) {
+                buildBaseTechniqueHeaderContents = function (headerPrefix, includeUseCode) {
+                    let headerText = "";
+                    if (includeUseCode) {
+                        let variableName = WuxDef.GetVariable("Action_Use");
+                        headerText = `<div class="wuxFeatureHeaderName">
+                        ${headerPrefix == undefined ? "" : headerPrefix}
+                            <button class="wuxFeatureHeaderNameButton" type="roll" value="@{${variableName}}">
+                                <span name="${getActionTypeAttribute("TechName")}">
+                            </button>
+                        </div>`;
+                    }
+                    else {
+                        headerText = `<div class="wuxFeatureHeaderName"><span name="${getActionTypeAttribute("TechName")}"></span></div>`;
+                    }
                     return `<div class="wuxFeatureHeaderDisplayBlock">
-                        <div class="wuxFeatureHeaderName">${headerPrefix != undefined ? headerPrefix : ""}<span name="${getActionTypeAttribute("TechName")}"></span></div>
+                        ${headerText}
                         <div class="wuxFeatureHeaderInfo"><span name="${getActionTypeAttribute("TechResourceData")}"></span></div>
                         <div class="wuxFeatureHeaderInfo"><span name="${getActionTypeAttribute("TechTargetingData")}"></span></div>
                         <div class="wuxFeatureHeaderInfo">
