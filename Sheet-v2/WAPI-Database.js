@@ -3313,19 +3313,22 @@ class StatusHandler {
         switch(definition.subGroup) {
             case "Status":
                 if (this.statusEffects[defName] != undefined) {
-                    definition.rank += this.statusEffects[defName].rank;
+                    definition = new StatusHandlerStatusData(this.statusEffects[defName]);
+                    definition.rank += rank;
                 }
                 this.statusEffects[defName] = definition;
                 break;
             case "Condition":
                 if (this.conditions[defName] != undefined) {
-                    definition.rank += this.conditions[defName];
+                    definition = new StatusHandlerStatusData(this.conditions[defName]);
+                    definition.rank += rank;
                 }
                 this.conditions[defName] = definition;
                 break;
             case "Emotion":
                 if (this.emotions[defName] != undefined) {
-                    definition.rank += this.emotions[defName];
+                    definition = new StatusHandlerStatusData(this.emotions[defName]);
+                    definition.rank += rank;
                 }
                 this.emotions[defName] = definition;
                 break;
@@ -3411,6 +3414,8 @@ class StatusHandler {
             output += this.printStatusDetailsByStatusType(tokenTargetData, statusType);
         }
         if (showAddOption) {
+            output += this.statusDetailsSpacer();
+            output += this.printAddStatusOptions(tokenTargetData);
         }
         
         return output;
@@ -3428,7 +3433,7 @@ class StatusHandler {
                 else {
                     for (let i = 0; i < statuses.length; i++) {
                         let status = new StatusHandlerStatusData(statuses[i]);
-                        output += this.statusDetails(status, tokenTargetData);
+                        output += this.printRemoveStatusDetails(status, tokenTargetData);
                         if (i < statuses.length - 1) {
                             output += this.statusDetailsSpacer();
                         }
@@ -3444,7 +3449,7 @@ class StatusHandler {
                 else {
                     for (let i = 0; i < conditions.length; i++) {
                         let condition = new StatusHandlerStatusData(conditions[i]);
-                        output += this.statusDetails(condition, tokenTargetData);
+                        output += this.printRemoveStatusDetails(condition, tokenTargetData);
                         if (i < conditions.length - 1) {
                             output += this.statusDetailsSpacer();
                         }
@@ -3460,7 +3465,7 @@ class StatusHandler {
                 else {
                     for (let i = 0; i < emotions.length; i++) {
                         let emotion = new StatusHandlerStatusData(emotions[i]);
-                        output += this.statusDetails(emotion, tokenTargetData);
+                        output += this.printRemoveStatusDetails(emotion, tokenTargetData);
                         if (i < emotions.length - 1) {
                             output += this.statusDetailsSpacer();
                         }
@@ -3471,7 +3476,44 @@ class StatusHandler {
         return output;
     }
     
-    statusDetails(statusData, tokenTargetData) {
+    printAddStatusOptions(tokenTargetData) {
+        let output = "";
+        output += this.statusDetailsTitle(`Add Status to ${tokenTargetData.displayName}`);
+        output += this.statusDetailsButton("Add Status", `maddstatuslist ${tokenTargetData.tokenId}@@@Status`);
+        output += this.statusDetailsButton("Add Condition", `maddstatuslist ${tokenTargetData.tokenId}@@@Condition`);
+        output += this.statusDetailsButton("Add Emotion", `maddstatuslist ${tokenTargetData.tokenId}@@@Emotion`);
+        return output;
+    }
+    
+    printAddStatusPage(tokenTargetData, statusType) {
+        let output = "";
+        switch (statusType) {
+            case "Status":
+                output += this.statusDetailsTitle(`Add ${tokenTargetData.displayName} Statuses`);
+                let statuses = WuxDef.Filter(new DatabaseFilterData("subGroup", statusType));
+                for (let i = 0; i < statuses.length; i++) {
+                    output += this.printAddStatusDetails(statuses[i], tokenTargetData);
+                }
+                break;
+            case "Condition":
+                output += this.statusDetailsTitle(`Add ${tokenTargetData.displayName} Conditions`);
+                let conditions = WuxDef.Filter(new DatabaseFilterData("subGroup", statusType));
+                for (let i = 0; i < conditions.length; i++) {
+                    output += this.printAddStatusDetails(conditions[i], tokenTargetData);
+                }
+                break;
+            case "Emotion":
+                output += this.statusDetailsTitle(`Add ${tokenTargetData.displayName} Emotions`);
+                let emotions = WuxDef.Filter(new DatabaseFilterData("subGroup", statusType));
+                for (let i = 0; i < emotions.length; i++) {
+                    output += this.printAddStatusDetails(emotions[i], tokenTargetData);
+                }
+                break;
+        }
+        return output;
+    }
+
+    printRemoveStatusDetails(statusData, tokenTargetData) {
         let output = "";
         output += this.statusDetailsTitle(`${statusData.printStatusTitle()} ${this.removeButton(tokenTargetData, statusData.name)}`);
         let description = WuxDef.GetDescription(statusData.name);
@@ -3480,7 +3522,15 @@ class StatusHandler {
         }
         return output;
     }
-    
+
+    printAddStatusDetails(statusDefinition, tokenTargetData) {
+        let message = `maddstatus ${tokenTargetData.tokenId}@@@${statusDefinition.name}`;
+        if (statusDefinition.hasRanks) {
+            message += `;?{Ranks To Add|1}`;
+        }
+        return `<span class="sheet-wuxInlineRow">[Add ${statusDefinition.getTitle()}](!${message})</span> `;
+    }
+
     removeButton(tokenTargetData, statusName) {
         let message = `mremstatus ${tokenTargetData.tokenId}@@@${statusName}`;
         return `<span class="sheet-wuxInlineRow">[Remove](!${message})</span> `;
@@ -3518,11 +3568,12 @@ class StatusHandlerStatusData {
         this.name = json.name != undefined ? json.name : "";
         this.title = json.title != undefined ? json.title : "";
         this.subGroup = json.subGroup != undefined ? json.subGroup : "";
-        this.rank = json.rank != undefined ? json.rank : 0;
+        this.rank = json.rank != undefined ? parseInt(json.rank) : 0;
         this.subject = json.subject != undefined ? json.subject : "";
     }
     
     printStatusTitle() {
+        Debug.Log(`[StatusHandlerStatusData] printStatusTitle: ${this.title} - Rank: ${this.rank}`);
         if (this.rank > 0 && this.subject != "") {
             return `${this.title}[${this.rank}/${this.subject}]`;
         } else if (this.subject != "") {
