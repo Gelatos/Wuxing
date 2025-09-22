@@ -144,7 +144,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
         updateStatus = function (statusName, eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
             let statusHandler = new StatusHandler(attributeHandler);
-            statusHandler.changeStatus(statusName, eventinfo.newValue);
+            // statusHandler.changeStatus(statusName, eventinfo.newValue);
         },
         updateCR = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();

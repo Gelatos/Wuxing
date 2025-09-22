@@ -647,17 +647,27 @@ class TokenTargetData extends TargetData {
     }
 
     addDashModifiers(attributeHandler) {
-        attributeHandler.addMod([WuxDef.GetVariable("Cmb_Mv"), WuxDef.GetVariable("Cmb_MvPotency")]);
+        attributeHandler.addMod([WuxDef.GetVariable("Cmb_Mv"), WuxDef.GetVariable("Cmb_MvPotency"), WuxDef.GetVariable("Status")]);
     }
 
     performDash(attrHandler) {
         let baseMoveSpeed = attrHandler.parseInt(WuxDef.GetVariable("Cmb_Mv"), 0, false);
         let maxMoveSpeed = attrHandler.parseInt(WuxDef.GetVariable("Cmb_MvPotency"), 0, false);
+        if (this.hasStatus(attrHandler, "Stat_Encumbered")) {
+            baseMoveSpeed = 0;
+            maxMoveSpeed = Math.max(1, maxMoveSpeed - 2);
+            Debug.Log(`[performDash] Encumbered: Setting base move to 0 and reducing max move by 2. (${baseMoveSpeed} to ${maxMoveSpeed})`);
+        }
         if (baseMoveSpeed > maxMoveSpeed) {
             baseMoveSpeed = maxMoveSpeed;
         }
         let dieRoll = new DieRoll();
         dieRoll.rollDice(1, maxMoveSpeed);
+        let chilled = this.hasStatus(attrHandler, "Stat_Chilled");
+        if (chilled != false && chilled > 0) {
+            dieRoll.addModToRoll(-1 * chilled);
+            Debug.Log(`[performDash] Chilled: Reducing move roll by ${chilled}.`);
+        }
         return Math.max(dieRoll.total, baseMoveSpeed)
     }
 
@@ -731,6 +741,16 @@ class TokenTargetData extends TargetData {
     }
 
     // Status
+    hasStatus(attrHandler, statusDefinitionName) {
+        let tokenTargetData = this;
+        if (tokenTargetData.isCharacter()) {
+            let statusObj = new StatusHandler(attrHandler.parseJSON(WuxDef.GetVariable("Status")));
+            return statusObj.hasStatus(statusDefinitionName);
+        } else {
+            let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
+            return tokenNoteReference.statusHandler.hasStatus(statusDefinitionName);
+        }
+    }
     setStatus(attributeHandler, statusDefinitionName, rank) {
         this.modifyStatus(attributeHandler, statusDefinitionName, "set", rank);
     }
@@ -953,12 +973,38 @@ class TokenTargetEffectsData {
                 default:
                     if (damageRoll.traits != "AP") {
                         let armorTotal = attrGetter.parseInt(WuxDef.GetVariable("Cmb_Armor"));
+                        if (tokenTargetEffect.tokenTargetData.hasStatus(attrSetter, "Stat_Armored")) {
+                            armorTotal += 2 * attrGetter.parseInt(WuxDef.GetVariable("CR"));
+                        }
+                        
                         if (armorTotal > damageRoll.total / 2) {
                             armorTotal = Math.floor(damageRoll.total / 2);
                         }
                         damageRoll.addModToRoll(-1 * armorTotal, "Armor");
                     }
-                    tokenTargetEffect.takeHpDamage(attrSetter, damageRoll);
+                    if (tokenTargetEffect.tokenTargetData.hasStatus(attrSetter, "Stat_Shielded")) {
+                        damageRoll.addModToRoll(-1 * Math.floor(damageRoll.total / 2), "Shielded");
+                        tokenTargetEffect.effectMessages.push(`Removed Shielded status.`);
+                        tokenTargetEffect.tokenTargetData.removeStatus(attrSetter, "Stat_Shielded");
+                    }
+                    let mantle = tokenTargetEffect.tokenTargetData.hasStatus(attrSetter, "Stat_Mantle");
+                    if (mantle != false && mantle > 0) {
+                        let mantleNewValue = mantle - damageRoll.total;
+                        tokenTargetEffect.effectMessages.push(`${tokenTargetEffect.tokenTargetData.displayName}'s mantle takes ` + 
+                            `${Format.ShowTooltip(damageRoll.total, damageRoll.message)} ${damageRoll.damageType} damage.`);
+                        if (mantleNewValue <= 0) {
+                            tokenTargetEffect.effectMessages.push(`${tokenTargetEffect.tokenTargetData.displayName}'s mantle is broken!`);
+                            tokenTargetEffect.tokenTargetData.removeStatus(attrSetter, "Stat_Mantle");
+                        } else {
+                            tokenTargetEffect.tokenTargetData.setStatus(attrSetter, "Stat_Mantle", mantleNewValue);
+                        }
+                        damageRoll.addModToRoll(-1 * mantle, "Mantle");
+
+                    }
+                    
+                    if (damageRoll.total > 0) {
+                        tokenTargetEffect.takeHpDamage(attrSetter, damageRoll);
+                    }
             }
         });
     }
@@ -1050,8 +1096,10 @@ class TokenTargetEffectsData {
                 targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} will damage.`);
                 if (results.remainder < 0) {
                     // the target can take a will break
-                    willBreakEffect.addWillResetEffect(results.remainder * -1);
-                    targetEffect.effectMessages.push(`<span class="sheet-wuxInlineRow">[Use Will Break Effect](${willBreakEffect.printWillBreakString()})</span> `)
+                    if (willBreakEffect != undefined) {
+                        willBreakEffect.addWillResetEffect(results.remainder * -1);
+                        targetEffect.effectMessages.push(`<span class="sheet-wuxInlineRow">[Use Will Break Effect](${willBreakEffect.printWillBreakString()})</span> `)
+                    }
                 }
                 tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
             });

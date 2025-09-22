@@ -3253,10 +3253,8 @@ class StatusHandler {
         this.createEmpty();
         if (data != undefined) {
             if (typeof data == "string") {
-                Debug.Log (`[StatusHandler] Importing Status Data: ${data}`);
                 this.importStringifiedJson(data);
             } else {
-                Debug.Log (`[StatusHandler] Importing Status Data: ${JSON.stringify(data)}`);
                 this.importJson(data);
             }
         }
@@ -3286,6 +3284,39 @@ class StatusHandler {
         this.emotions = json.emotions != undefined ? json.emotions : {};
     }
 
+    hasStatus(defName) {
+        let definition = new StatusHandlerStatusData(WuxDef.Get(defName));
+        switch(definition.subGroup) {
+            case "Status":
+                if (this.statusEffects[defName] != undefined) {
+                    let status = new StatusHandlerStatusData(this.statusEffects[defName]);
+                    if (status.rank > 0) {
+                        return status.rank;
+                    }
+                    return true;
+                }
+                return false;
+            case "Condition":
+                if (this.conditions[defName] != undefined) {
+                    let status = new StatusHandlerStatusData(this.conditions[defName]);
+                    if (status.rank > 0) {
+                        return status.rank;
+                    }
+                    return true;
+                }
+                return false;
+            case "Emotion":
+                if (this.emotions[defName] != undefined) {
+                    let status = new StatusHandlerStatusData(this.emotions[defName]);
+                    if (status.rank > 0) {
+                        return status.rank;
+                    }
+                    return true;
+                }
+                return false;
+        }
+        return false;
+    }
     setStatus(defName, rank) {
         let definition = new StatusHandlerStatusData(WuxDef.Get(defName));
         definition.rank = rank;
@@ -3680,8 +3711,7 @@ class CombatDetails {
 class CombatDetailsHandler {
     constructor(attributeHandler) {
         this.combatDetailsVar = WuxDef.GetVariable("CombatDetails");
-        this.statusVar = WuxDef.GetVariable("Status");
-        attributeHandler.addMod([this.combatDetailsVar, this.statusVar]);
+        attributeHandler.addMod([this.combatDetailsVar]);
         this.combatDetails = new CombatDetails();
     }
 

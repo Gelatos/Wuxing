@@ -272,13 +272,72 @@ var WuxConflictManager = WuxConflictManager || (function () {
         // round start
         startRound = function (startConflict) {
             state.WuxConflictManager.round++;
-            setStartRoundTokens(startConflict);
-            sendStartRoundMessage();
+            let messages = [];
+            messages.push(`Round ${state.WuxConflictManager.round} Begins!`);
+            messages = messages.concat(setStartRoundTokens(startConflict));
+            sendStartRoundMessage(messages);
         },
         
         setStartRoundTokens = function (startConflict) {
+            let messages = [];
             TargetReference.IterateOverActiveTargetData(function (tokenTargetData) {
+                let tokenEffect = new TokenTargetEffectsData(tokenTargetData);
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                attributeHandler.addAttribute([WuxDef.GetVariable("Status"),
+                    WuxDef.GetVariable("HP"), WuxDef.GetVariable("WILL"),
+                    WuxDef.GetVariable("Cmb_Armor"), WuxDef.GetVariable("CR")]);
+
+                attributeHandler.addGetAttrCallback(function (attrGetter) {
+                    let aflame = tokenTargetData.hasStatus(attrGetter, "Stat_Aflame");
+                    Debug.Log(`[setStartRoundTokens] ${tokenTargetData.displayName} aflame status: ${aflame}`);
+                    if (aflame != false && aflame > 0) {
+                        let roll = new DamageRoll();
+                        roll.rollDice(aflame, 6);
+                        roll.setDamageType(WuxDef.GetTitle("Dmg_Fire"));
+                        tokenEffect.addDamageRoll(roll);
+                    }
+                    let bleeding = tokenTargetData.hasStatus(attrGetter, "Stat_Bleeding");
+                    if (bleeding != false && bleeding > 0) {
+                        let roll = new DamageRoll();
+                        roll.rollDice(bleeding, 6);
+                        roll.setDamageType(WuxDef.GetTitle("Dmg_Tension"));
+                        roll.setTraits("AP");
+                        tokenEffect.addDamageRoll(roll);
+                    }
+                    if (tokenTargetData.hasStatus(attrGetter, "Stat_Doubt")) {
+                        let roll = new DamageRoll();
+                        roll.addModToRoll(5 + (5 * attrGetter.parseInt(WuxDef.GetVariable("CR"))));
+                        roll.setDamageType("Will");
+                        tokenEffect.addDamageRoll(roll);
+                    }
+                });
+                
+                attributeHandler.addFinishCallback(function (attrGetter) {
+                    let newAttributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                    newAttributeHandler.addAttribute([WuxDef.GetVariable("Status"),
+                        WuxDef.GetVariable("HP"), WuxDef.GetVariable("WILL"),
+                        WuxDef.GetVariable("Cmb_Armor"), WuxDef.GetVariable("CR")]);
+                    
+                    tokenEffect.performDamageRolls(attrGetter, newAttributeHandler);
+                    
+                    if (tokenTargetData.hasStatus(newAttributeHandler, "Stat_Armored")) {
+                        tokenTargetData.removeStatus(newAttributeHandler, "Stat_Armored");
+                        messages.push(`${tokenTargetData.displayName} is no longer Armored`);
+                    }
+                    if (tokenTargetData.hasStatus(newAttributeHandler, "Stat_Dodge")) {
+                        tokenTargetData.removeStatus(newAttributeHandler, "Stat_Dodge");
+                        messages.push(`${tokenTargetData.displayName} is no longer Dodging`);
+                    }
+                    if (tokenTargetData.hasStatus(newAttributeHandler, "Stat_Hindered")) {
+                        tokenTargetData.removeStatus(newAttributeHandler, "Stat_Hindered");
+                        messages.push(`${tokenTargetData.displayName} is no longer Hindered`);
+                    }
+                    newAttributeHandler.addFinishCallback(function () {
+                        messages = messages.concat(tokenEffect.effectMessages);
+                    })
+                    newAttributeHandler.run();
+                });
+                
                 if (startConflict) {
                     tokenTargetData.setEnergyToStart(attributeHandler);
                 }
@@ -303,12 +362,12 @@ var WuxConflictManager = WuxConflictManager || (function () {
 
                 attributeHandler.run();
             });
+            return messages;
         },
-        sendStartRoundMessage = function () {
-            let message = `Round ${state.WuxConflictManager.round} Begins!\n`;
+        sendStartRoundMessage = function (messages) {
             state.WuxConflictManager.activeTeamIndex = state.WuxConflictManager.startRoundTeamIndex;
-            message += getPhaseStartMessage();
-            let systemMessage = new SystemInfoMessage(message);
+            messages.push(getPhaseStartMessage());
+            let systemMessage = new SystemInfoMessage(messages);
             systemMessage.setSender("System");
             WuxMessage.Send(systemMessage);
         },
@@ -317,8 +376,10 @@ var WuxConflictManager = WuxConflictManager || (function () {
         endTurn = function (msg) {
             setNextActiveTeam();
             TokenReference.IterateOverSelectedTokens(msg, function (tokenTargetData) {
-                tokenTargetData.setTurnIcon(false);
-                sendEndTurnMessage(tokenTargetData);
+                let messages = [];
+                messages.push(`${tokenTargetData.displayName} Ends Turn`);
+                messages = messages.concat(setEndTurnTokenUpkeep(tokenTargetData));
+                sendEndTurnMessage(messages);
             });
         },
         setNextActiveTeam = function () {
@@ -329,10 +390,33 @@ var WuxConflictManager = WuxConflictManager || (function () {
             }
             state.WuxConflictManager.activeTeamIndex = activeTeam;
         },
-        sendEndTurnMessage = function (targetData) {
-            let message = `${targetData.displayName} Ends Turn\n`;
-            message += getPhaseStartMessage();
-            let systemMessage = new SystemInfoMessage(message);
+
+        setEndTurnTokenUpkeep = function (tokenTargetData) {
+            let messages = [];
+            tokenTargetData.setTurnIcon(false);
+            
+            let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+            attributeHandler.addAttribute([WuxDef.GetVariable("Status")]);
+            
+            if (tokenTargetData.hasStatus(attributeHandler, "Stat_Jolted")) {
+                tokenTargetData.removeStatus(attributeHandler, "Stat_Jolted");
+                messages.push(`${tokenTargetData.displayName} is no longer Jolted`);
+            }
+            if (tokenTargetData.hasStatus(attributeHandler, "Stat_Quickened")) {
+                tokenTargetData.removeStatus(attributeHandler, "Stat_Quickened");
+                messages.push(`${tokenTargetData.displayName} is no longer Quickened`);
+            }
+            if (tokenTargetData.hasStatus(attributeHandler, "Stat_Surprised")) {
+                tokenTargetData.removeStatus(attributeHandler, "Stat_Surprised");
+                messages.push(`${tokenTargetData.displayName} is no longer Surprised`);
+            }
+
+            attributeHandler.run();
+            return messages;
+        },
+        sendEndTurnMessage = function (messages) {
+            messages.push(getPhaseStartMessage());
+            let systemMessage = new SystemInfoMessage(messages);
             systemMessage.setSender("System");
             WuxMessage.Send(systemMessage);
         },
@@ -706,7 +790,9 @@ class TechniqueUseResolver extends TechniqueResolverData {
         super.createEmpty();
         this.technique = {};
         this.skillCheck = 0;
+        this.skillCheckValue = 0;
         this.advantage = 0;
+        this.failedEvasion = false;
         this.senderTokenEffect = {};
         this.targetTokenEffect = {};
     }
@@ -743,32 +829,16 @@ class TechniqueUseResolver extends TechniqueResolverData {
         }
         let techUseResolver = this;
         let senderAttributeHandler = new SandboxAttributeHandler(this.senderTokenEffect.tokenTargetData.charId);
-        techUseResolver.tryGetSenderSkillCheck(techUseResolver, senderAttributeHandler);
         techUseResolver.tryGetSenderAttributes(techUseResolver, senderAttributeHandler);
+        techUseResolver.tryGetSenderSkillCheck(techUseResolver, senderAttributeHandler);
         techUseResolver.getTargetData(techUseResolver, senderAttributeHandler);
         senderAttributeHandler.run();
-    }
-    
-    tryGetSenderSkillCheck(techUseResolver, senderAttributeHandler) {
-        if (techUseResolver.technique.skill == "") {
-            return;
-        }
-        
-        let skillCheckVar = WuxDef.GetVariable(Format.GetDefinitionName("Skill", techUseResolver.technique.skill));
-        senderAttributeHandler.addMod(skillCheckVar);
-        
-        senderAttributeHandler.addGetAttrCallback(function (attrHandler) {
-            let skillValue = attrHandler.parseInt(skillCheckVar);
-            techUseResolver.skillCheck = new DieRoll();
-            techUseResolver.skillCheck.rollCheck(techUseResolver.advantage);
-            techUseResolver.skillCheck.addModToRoll(skillValue);
-            techUseResolver.addMessage(`${techUseResolver.technique.skill} Check: ` + 
-                Format.ShowTooltip(`${techUseResolver.skillCheck.total}`, techUseResolver.skillCheck.message));
-        });
     }
 
     tryGetSenderAttributes(techUseResolver, senderAttributeHandler) {
         senderAttributeHandler.addMod(WuxDef.GetVariable("Status"));
+        senderAttributeHandler.addMod(WuxDef.GetVariable("CR"));
+        techUseResolver.senderTokenEffect.tokenTargetData.refreshCombatDetails(senderAttributeHandler);
         techUseResolver.technique.effects.iterate(function (techniqueEffect) {
             if (techniqueEffect.target == "Self") {
                 techUseResolver.tryGetAttributesFromTechniqueEffect(techniqueEffect, senderAttributeHandler);
@@ -777,6 +847,19 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 senderAttributeHandler.addMod(WuxDef.GetVariable("WeaponDamage"));
             }
             senderAttributeHandler.addMod(techniqueEffect.formula.getAttributes());
+        });
+    }
+
+    tryGetSenderSkillCheck(techUseResolver, senderAttributeHandler) {
+        if (techUseResolver.technique.skill == "") {
+            return;
+        }
+
+        let skillCheckVar = WuxDef.GetVariable(Format.GetDefinitionName("Skill", techUseResolver.technique.skill));
+        senderAttributeHandler.addMod(skillCheckVar);
+
+        senderAttributeHandler.addGetAttrCallback(function (attrHandler) {
+            techUseResolver.skillCheckValue = attrHandler.parseInt(skillCheckVar);
         });
     }
     
@@ -828,6 +911,8 @@ class TechniqueUseResolver extends TechniqueResolverData {
 
     tryGetDefensesAndAttributes(techUseResolver, targetAttributeHandler) {
         targetAttributeHandler.addMod(WuxDef.GetVariable("Status"));
+        targetAttributeHandler.addMod(WuxDef.GetVariable("CR"));
+        techUseResolver.targetTokenEffect.tokenTargetData.refreshCombatDetails(targetAttributeHandler);
         techUseResolver.technique.effects.iterate(function (techniqueEffect) {
             if (techniqueEffect.defense.startsWith("Def_")) {
                 let defenseDef = WuxDef.Get(techniqueEffect.defense);
@@ -852,6 +937,9 @@ class TechniqueUseResolver extends TechniqueResolverData {
             let attrSetters = new TechniqueTargetObjectCollection(
                 new SandboxAttributeHandler(techUseResolver.senderTokenEffect.tokenTargetData.charId),
                 new SandboxAttributeHandler(techUseResolver.targetTokenEffect.tokenTargetData.charId));
+
+            techUseResolver.rollSkillCheck(techUseResolver, attrSetters);
+            
             techUseResolver.technique.effects.iterate(function (techniqueEffect) {
                 if (techniqueEffect.defense != currentCheck) {
                     currentCheck = techniqueEffect.defense;
@@ -872,9 +960,43 @@ class TechniqueUseResolver extends TechniqueResolverData {
         });
     }
     
+    rollSkillCheck(techUseResolver, attrSetters) {
+        let advantage = techUseResolver.advantage;
+        
+        // add advantages based on sender statuses
+        if (techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Impaired")) {
+            advantage -= 1;
+            techUseResolver.addMessage(`${techUseResolver.senderTokenEffect.tokenTargetData.displayName} is Impaired: -1 Advantage`);
+        }
+        if (techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Sickened")) {
+            advantage -= 1;
+            techUseResolver.addMessage(`${techUseResolver.senderTokenEffect.tokenTargetData.displayName} is Sickened: -1 Advantage`);
+        }
+        
+        // add advantages based on what statuses the target has
+        if (techUseResolver.targetTokenEffect.tokenTargetData.hasStatus(attrSetters.target, "Stat_Hindered")) {
+            advantage += 1;
+            techUseResolver.targetTokenEffect.tokenTargetData.removeStatus(attrSetters.target, "Stat_Hindered");
+            techUseResolver.addMessage(`${techUseResolver.targetTokenEffect.tokenTargetData.displayName} is Hindered: +1 Advantage. Removed Hindered status.`);
+        }
+        if (techUseResolver.targetTokenEffect.tokenTargetData.hasStatus(attrSetters.target, "Stat_Restrained")) {
+            advantage += 1;
+            techUseResolver.addMessage(`${techUseResolver.targetTokenEffect.tokenTargetData.displayName} is Restrained: +1 Advantage`);
+        }
+        
+        techUseResolver.skillCheck = new DieRoll();
+        techUseResolver.skillCheck.rollCheck(advantage);
+        techUseResolver.skillCheck.addModToRoll(techUseResolver.skillCheckValue, techUseResolver.technique.skill);
+        techUseResolver.addMessage(`${techUseResolver.technique.skill} Check: ` +
+            Format.ShowTooltip(`${techUseResolver.skillCheck.total}`, techUseResolver.skillCheck.message));
+    }
+    
     checkPassDc(techniqueEffect, techUseResolver, targetAttrHandler) {
         if (techniqueEffect.defense == "") {
             return true;
+        }
+        if (techUseResolver.failedEvasion) {
+            return false;
         }
         
         let message = "";
@@ -883,6 +1005,14 @@ class TechniqueUseResolver extends TechniqueResolverData {
             let defenseDef = WuxDef.Get(techniqueEffect.defense);
             message = `Vs. ${defenseDef.getTitle()}`;
             dcValue = targetAttrHandler.parseInt(defenseDef.getVariable());
+            if (techUseResolver.targetTokenEffect.tokenTargetData.hasStatus(targetAttrHandler, "Stat_Dodge")) {
+                techUseResolver.targetTokenEffect.tokenTargetData.removeStatus(targetAttrHandler, "Stat_Dodge");
+                if (techniqueEffect.defense == "Def_Evasion") {
+                    dcValue += 6;
+                }
+                techUseResolver.addMessage(`${techUseResolver.targetTokenEffect.tokenTargetData.displayName}: +6 Evasion. Removed Dodge status.`);
+            }
+            
             if (techUseResolver.targetTokenEffect.tokenTargetData.getDowned()) {
                 message += " (Downed -5)";
                 dcValue -= 5;
@@ -897,6 +1027,10 @@ class TechniqueUseResolver extends TechniqueResolverData {
         }
         
         let pass = techUseResolver.skillCheck.total >= dcValue;
+        if (!pass && techniqueEffect.defense == "Def_Evasion") {
+            techUseResolver.failedEvasion = true;
+            message += "Failed Evasion. No further effects will be applied.";
+        }
         message += pass ? "Success!" : "Failure!";
         techUseResolver.addMessage(message);
         return pass;
@@ -986,6 +1120,11 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 break;
             default:
                 roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
+                if (techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Empowered")) {
+                    roll.addModToRoll(attrGetters.sender.parseInt("CR") + 3, "Empowered");
+                    techUseResolver.senderTokenEffect.tokenTargetData.removeStatus(attrSetters.sender, "Stat_Empowered");
+                    techUseResolver.addMessage(`Removed Empowered status.`);
+                }
                 let damageType = WuxDef.GetTitle(techniqueEffect.effect);
                 if (damageType == "Weapon") {
                     damageType = attrGetters.sender.parseString(WuxDef.GetVariable("WeaponDamage"));
@@ -2624,17 +2763,27 @@ class TokenTargetData extends TargetData {
     }
 
     addDashModifiers(attributeHandler) {
-        attributeHandler.addMod([WuxDef.GetVariable("Cmb_Mv"), WuxDef.GetVariable("Cmb_MvPotency")]);
+        attributeHandler.addMod([WuxDef.GetVariable("Cmb_Mv"), WuxDef.GetVariable("Cmb_MvPotency"), WuxDef.GetVariable("Status")]);
     }
 
     performDash(attrHandler) {
         let baseMoveSpeed = attrHandler.parseInt(WuxDef.GetVariable("Cmb_Mv"), 0, false);
         let maxMoveSpeed = attrHandler.parseInt(WuxDef.GetVariable("Cmb_MvPotency"), 0, false);
+        if (this.hasStatus(attrHandler, "Stat_Encumbered")) {
+            baseMoveSpeed = 0;
+            maxMoveSpeed = Math.max(1, maxMoveSpeed - 2);
+            Debug.Log(`[performDash] Encumbered: Setting base move to 0 and reducing max move by 2. (${baseMoveSpeed} to ${maxMoveSpeed})`);
+        }
         if (baseMoveSpeed > maxMoveSpeed) {
             baseMoveSpeed = maxMoveSpeed;
         }
         let dieRoll = new DieRoll();
         dieRoll.rollDice(1, maxMoveSpeed);
+        let chilled = this.hasStatus(attrHandler, "Stat_Chilled");
+        if (chilled != false && chilled > 0) {
+            dieRoll.addModToRoll(-1 * chilled);
+            Debug.Log(`[performDash] Chilled: Reducing move roll by ${chilled}.`);
+        }
         return Math.max(dieRoll.total, baseMoveSpeed)
     }
 
@@ -2708,6 +2857,16 @@ class TokenTargetData extends TargetData {
     }
 
     // Status
+    hasStatus(attrHandler, statusDefinitionName) {
+        let tokenTargetData = this;
+        if (tokenTargetData.isCharacter()) {
+            let statusObj = new StatusHandler(attrHandler.parseJSON(WuxDef.GetVariable("Status")));
+            return statusObj.hasStatus(statusDefinitionName);
+        } else {
+            let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
+            return tokenNoteReference.statusHandler.hasStatus(statusDefinitionName);
+        }
+    }
     setStatus(attributeHandler, statusDefinitionName, rank) {
         this.modifyStatus(attributeHandler, statusDefinitionName, "set", rank);
     }
@@ -2930,12 +3089,38 @@ class TokenTargetEffectsData {
                 default:
                     if (damageRoll.traits != "AP") {
                         let armorTotal = attrGetter.parseInt(WuxDef.GetVariable("Cmb_Armor"));
+                        if (tokenTargetEffect.tokenTargetData.hasStatus(attrSetter, "Stat_Armored")) {
+                            armorTotal += 2 * attrGetter.parseInt(WuxDef.GetVariable("CR"));
+                        }
+                        
                         if (armorTotal > damageRoll.total / 2) {
                             armorTotal = Math.floor(damageRoll.total / 2);
                         }
                         damageRoll.addModToRoll(-1 * armorTotal, "Armor");
                     }
-                    tokenTargetEffect.takeHpDamage(attrSetter, damageRoll);
+                    if (tokenTargetEffect.tokenTargetData.hasStatus(attrSetter, "Stat_Shielded")) {
+                        damageRoll.addModToRoll(-1 * Math.floor(damageRoll.total / 2), "Shielded");
+                        tokenTargetEffect.effectMessages.push(`Removed Shielded status.`);
+                        tokenTargetEffect.tokenTargetData.removeStatus(attrSetter, "Stat_Shielded");
+                    }
+                    let mantle = tokenTargetEffect.tokenTargetData.hasStatus(attrSetter, "Stat_Mantle");
+                    if (mantle != false && mantle > 0) {
+                        let mantleNewValue = mantle - damageRoll.total;
+                        tokenTargetEffect.effectMessages.push(`${tokenTargetEffect.tokenTargetData.displayName}'s mantle takes ` + 
+                            `${Format.ShowTooltip(damageRoll.total, damageRoll.message)} ${damageRoll.damageType} damage.`);
+                        if (mantleNewValue <= 0) {
+                            tokenTargetEffect.effectMessages.push(`${tokenTargetEffect.tokenTargetData.displayName}'s mantle is broken!`);
+                            tokenTargetEffect.tokenTargetData.removeStatus(attrSetter, "Stat_Mantle");
+                        } else {
+                            tokenTargetEffect.tokenTargetData.setStatus(attrSetter, "Stat_Mantle", mantleNewValue);
+                        }
+                        damageRoll.addModToRoll(-1 * mantle, "Mantle");
+
+                    }
+                    
+                    if (damageRoll.total > 0) {
+                        tokenTargetEffect.takeHpDamage(attrSetter, damageRoll);
+                    }
             }
         });
     }
@@ -3027,8 +3212,10 @@ class TokenTargetEffectsData {
                 targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} will damage.`);
                 if (results.remainder < 0) {
                     // the target can take a will break
-                    willBreakEffect.addWillResetEffect(results.remainder * -1);
-                    targetEffect.effectMessages.push(`<span class="sheet-wuxInlineRow">[Use Will Break Effect](${willBreakEffect.printWillBreakString()})</span> `)
+                    if (willBreakEffect != undefined) {
+                        willBreakEffect.addWillResetEffect(results.remainder * -1);
+                        targetEffect.effectMessages.push(`<span class="sheet-wuxInlineRow">[Use Will Break Effect](${willBreakEffect.printWillBreakString()})</span> `)
+                    }
                 }
                 tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
             });
@@ -7514,10 +7701,8 @@ class StatusHandler {
         this.createEmpty();
         if (data != undefined) {
             if (typeof data == "string") {
-                Debug.Log (`[StatusHandler] Importing Status Data: ${data}`);
                 this.importStringifiedJson(data);
             } else {
-                Debug.Log (`[StatusHandler] Importing Status Data: ${JSON.stringify(data)}`);
                 this.importJson(data);
             }
         }
@@ -7547,6 +7732,39 @@ class StatusHandler {
         this.emotions = json.emotions != undefined ? json.emotions : {};
     }
 
+    hasStatus(defName) {
+        let definition = new StatusHandlerStatusData(WuxDef.Get(defName));
+        switch(definition.subGroup) {
+            case "Status":
+                if (this.statusEffects[defName] != undefined) {
+                    let status = new StatusHandlerStatusData(this.statusEffects[defName]);
+                    if (status.rank > 0) {
+                        return status.rank;
+                    }
+                    return true;
+                }
+                return false;
+            case "Condition":
+                if (this.conditions[defName] != undefined) {
+                    let status = new StatusHandlerStatusData(this.conditions[defName]);
+                    if (status.rank > 0) {
+                        return status.rank;
+                    }
+                    return true;
+                }
+                return false;
+            case "Emotion":
+                if (this.emotions[defName] != undefined) {
+                    let status = new StatusHandlerStatusData(this.emotions[defName]);
+                    if (status.rank > 0) {
+                        return status.rank;
+                    }
+                    return true;
+                }
+                return false;
+        }
+        return false;
+    }
     setStatus(defName, rank) {
         let definition = new StatusHandlerStatusData(WuxDef.Get(defName));
         definition.rank = rank;
@@ -7941,8 +8159,7 @@ class CombatDetails {
 class CombatDetailsHandler {
     constructor(attributeHandler) {
         this.combatDetailsVar = WuxDef.GetVariable("CombatDetails");
-        this.statusVar = WuxDef.GetVariable("Status");
-        attributeHandler.addMod([this.combatDetailsVar, this.statusVar]);
+        attributeHandler.addMod([this.combatDetailsVar]);
         this.combatDetails = new CombatDetails();
     }
 
@@ -13671,32 +13888,32 @@ var WuxDef = WuxDef || (function() {
             "Stat_Bleeding":{"name":"Stat_Bleeding","fieldName":"stat_bleeding","group":"Status","description":"","variable":"sts-bleeding{0}","title":"Bleeding","subGroup":"Condition","descriptions":["You are bleeding. At the start of each round you take 1d6 tension [AP] damage per rank of the Bleeding condition."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","shortDescription":"At start of round, take 1d6 Tension [AP] Damage.","points":"8","endsOnRoundStart":false,"endsOnTrigger":false,"hasRanks":true},
-            "Stat_Chilled":{"name":"Stat_Chilled","fieldName":"stat_chilled","group":"Status","description":"","variable":"sts-chilled{0}","title":"Chilled","subGroup":"Condition","descriptions":["The character's base speed is 0. This condition ends when you are warmed or are set on fire."],
+                "isResource":"","shortDescription":"","points":"8","endsOnRoundStart":false,"endsOnTrigger":false,"hasRanks":true},
+            "Stat_Chilled":{"name":"Stat_Chilled","fieldName":"stat_chilled","group":"Status","description":"","variable":"sts-chilled{0}","title":"Chilled","subGroup":"Condition","descriptions":["Whenever you gain Move Charge, it is reduced by your chilled rank (minimum 1). This condition ends when you are warmed or are set on fire."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","shortDescription":"Base Speed is 0.","points":"4","endsOnRoundStart":false,"endsOnTrigger":false,"hasRanks":false},
-            "Stat_Dodge":{"name":"Stat_Dodge","fieldName":"stat_dodge","group":"Status","description":"","variable":"sts-dodge{0}","title":"Dodge","subGroup":"Condition","descriptions":["Your Evasion defense increases by 12 vs. the next Attack made against you. This triggers even if the attack does not target Evasion.","This Condition ends when it is triggered or at the start of the next round."],
+                "isResource":"","shortDescription":"","points":"2","endsOnRoundStart":false,"endsOnTrigger":false,"hasRanks":true},
+            "Stat_Dodge":{"name":"Stat_Dodge","fieldName":"stat_dodge","group":"Status","description":"","variable":"sts-dodge{0}","title":"Dodge","subGroup":"Condition","descriptions":["Your Evasion defense increases by 6 vs. the next Attack made against you. This triggers even if the attack does not target Evasion.","This Condition ends when it is triggered or at the start of the next round."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":"","shortDescription":"","points":"7","endsOnRoundStart":true,"endsOnTrigger":true,"hasRanks":false},
-            "Stat_Encumbered":{"name":"Stat_Encumbered","fieldName":"stat_encumbered","group":"Status","description":"","variable":"sts-encumbered{0}","title":"Encumbered","subGroup":"Condition","descriptions":["Whenever this character gains Move Charge, it is reduced by 3 (minimum 1)."],
+            "Stat_Encumbered":{"name":"Stat_Encumbered","fieldName":"stat_encumbered","group":"Status","description":"","variable":"sts-encumbered{0}","title":"Encumbered","subGroup":"Condition","descriptions":["Your base speed is 0 and your move potency is reduced by 2. "],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","shortDescription":"Move Charge -3 (min 1)","points":"6","endsOnRoundStart":false,"endsOnTrigger":false,"hasRanks":false},
-            "Stat_Empowered":{"name":"Stat_Empowered","fieldName":"stat_empowered","group":"Status","description":"","variable":"sts-empowered{0}","title":"Empowered","subGroup":"Condition","descriptions":["The next time you deal damage with an attack and the attack adds your [Power] to the damage, you add 5 to the damage. ","This Condition ends when it is triggered."],
+                "isResource":"","shortDescription":"","points":"4","endsOnRoundStart":false,"endsOnTrigger":false,"hasRanks":false},
+            "Stat_Empowered":{"name":"Stat_Empowered","fieldName":"stat_empowered","group":"Status","description":"","variable":"sts-empowered{0}","title":"Empowered","subGroup":"Condition","descriptions":["The next time you deal damage with an attack and the attack adds your [Power] to the damage, you add 3 + Character Rank to the damage. ","This Condition ends when it is triggered."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","shortDescription":"Add 5 to your [Power] damage.","points":"5","endsOnRoundStart":false,"endsOnTrigger":true,"hasRanks":false},
-            "Stat_Hindered":{"name":"Stat_Hindered","fieldName":"stat_hindered","group":"Status","description":"","variable":"sts-hindered{0}","title":"Hindered","subGroup":"Condition","descriptions":["Skill checks against a hindered target receive +1 Advantage. Hindered is also required to use some techniques.","This Condition ends when it is triggered or at the start of the next round."],
+                "isResource":"","shortDescription":"","points":"5","endsOnRoundStart":false,"endsOnTrigger":true,"hasRanks":false},
+            "Stat_Hindered":{"name":"Stat_Hindered","fieldName":"stat_hindered","group":"Status","description":"","variable":"sts-hindered{0}","title":"Hindered","subGroup":"Condition","descriptions":["Skill checks against a hindered target receive +1 Advantage.","This Condition ends when it is triggered or at the start of the next round."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":"","shortDescription":"","points":"3","endsOnRoundStart":true,"endsOnTrigger":true,"hasRanks":false},
-            "Stat_Immobilized":{"name":"Stat_Immobilized","fieldName":"stat_immobilized","group":"Status","description":"","variable":"sts-immobilized{0}","title":"Immobilized","subGroup":"Condition","descriptions":["Immobilized characters cannot make any voluntary movements, although involuntary movements are unaffected."],
+            "Stat_Immobilized":{"name":"Stat_Immobilized","fieldName":"stat_immobilized","group":"Status","description":"","variable":"sts-immobilized{0}","title":"Immobilized","subGroup":"Condition","descriptions":["You cannot make any voluntary movements, although involuntary movements are unaffected."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":"","shortDescription":"","points":"8","endsOnRoundStart":false,"endsOnTrigger":false,"hasRanks":false},
-            "Stat_Impaired":{"name":"Stat_Impaired","fieldName":"stat_impaired","group":"Status","description":"","variable":"sts-impaired{0}","title":"Impaired","subGroup":"Condition","descriptions":["Impaired characters receive +1 Disadvantage on all skill checks."],
+            "Stat_Impaired":{"name":"Stat_Impaired","fieldName":"stat_impaired","group":"Status","description":"","variable":"sts-impaired{0}","title":"Impaired","subGroup":"Condition","descriptions":["You receive +1 Disadvantage on all skill checks."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":"","shortDescription":"","points":"8","endsOnRoundStart":false,"endsOnTrigger":false,"hasRanks":false},
@@ -13704,7 +13921,7 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":"","shortDescription":"","points":"8","endsOnRoundStart":false,"endsOnTrigger":true,"hasRanks":false},
-            "Stat_Prone":{"name":"Stat_Prone","fieldName":"stat_prone","group":"Status","description":"","variable":"sts-prone{0}","title":"Prone","subGroup":"Condition","descriptions":["Skill checks against Prone targets within range 1 of them receive +1 Advantage. \nProne characters count as moving in difficult terrain. Characters can stand and remove Prone by spending 2 Move Charge, unless they’re Immobilized or Restrained. Standing up doesn’t count as movement."],
+            "Stat_Prone":{"name":"Stat_Prone","fieldName":"stat_prone","group":"Status","description":"","variable":"sts-prone{0}","title":"Prone","subGroup":"Condition","descriptions":["Skill checks against you within range 1 of them receive +1 Advantage. \nProne characters count as moving in difficult terrain. You can stand and remove Prone by spending 2 Move Charge, unless you're Immobilized or Restrained. Standing up doesn’t count as movement."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":"","shortDescription":"","points":"4","endsOnRoundStart":false,"endsOnTrigger":false,"hasRanks":false},
