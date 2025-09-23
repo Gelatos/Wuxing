@@ -331,12 +331,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
 
                 let style = WuxStyles.GetByVariableName(styleVariableData.name);
                 if (style.group != "" && styleVariableData.value > 0 && style.name == styleName) {
-                    if (style.group == "Advanced") {
-                        populateStyleActions(repeatingSectionName, repeatingSectionIndex, styleName, parseInt(styleVariableData.value / 2));
-                    }
-                    else {
-                        populateStyleActions(repeatingSectionName, repeatingSectionIndex, styleName, styleVariableData.value);
-                    }
+                    populateStyleActions(repeatingSectionName, repeatingSectionIndex, styleName, styleVariableData.value);
                 }
             });
         });

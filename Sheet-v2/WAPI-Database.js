@@ -3000,27 +3000,36 @@ class FormulaData {
                         if (definition.group == "StatBonus") {
                             output += `${definition.getDescription()} (${definition.formula.getString()})`;
                         }
-                        else if (worker.multiplier != 1) {
-                            if (worker.multiplier > 1) {
-                                output += `[${definition.title} x ${worker.multiplier}]`;
-                            } else {
-                                switch (worker.multiplier) {
-                                    case 0.5:
-                                        output += `[½ ${definition.title}]`;
-                                        break;
-                                    case 0.33:
-                                        output += `[⅓ ${definition.title}]`;
-                                        break;
-                                    case 0.25:
-                                        output += `[¼ ${definition.title}]`;
-                                        break;
-                                    case 0.2:
-                                        output += `[⅕ ${definition.title}]`;
-                                        break;
+                        else {
+                            if (worker.multiplier != 1) {
+                                if (isNaN(parseFloat(worker.multiplier))) {
+                                    let text = "";
+                                    if (worker.multiplier == "adv-cr") {
+                                        text = WuxDef.GetTitle("CR");
+                                    }
+                                    output += `[${definition.title} x ${text}]`;
                                 }
+                                else if (worker.multiplier > 1) {
+                                    output += `[${definition.title} x ${worker.multiplier}]`;
+                                } else {
+                                    switch (worker.multiplier) {
+                                        case 0.5:
+                                            output += `[½ ${definition.title}]`;
+                                            break;
+                                        case 0.33:
+                                            output += `[⅓ ${definition.title}]`;
+                                            break;
+                                        case 0.25:
+                                            output += `[¼ ${definition.title}]`;
+                                            break;
+                                        case 0.2:
+                                            output += `[⅕ ${definition.title}]`;
+                                            break;
+                                    }
+                                }
+                            } else {
+                                output += `[${definition.title}]`;
                             }
-                        } else {
-                            output += `[${definition.title}]`;
                         }
 
                         if (worker.max > 0) {
