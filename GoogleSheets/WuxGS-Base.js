@@ -1282,7 +1282,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         <div>
                             <div class="wuxRepeatingFlexSection">
                                 <fieldset class="${repeatingDef.getVariable()}">
-                                ${addRepeaterContentsStyles(true)}
+                                ${addRepeaterContentsTechniqueDisplay(true)}
                                 </fieldset>
                             </div>
                         ${WuxSheetMain.Row("&nbsp;")}
@@ -1293,7 +1293,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 repeatingTechniquesSection = function (header, repeaterFieldName) {
                     return `${WuxSheetMain.Header(header)}
                         <div>
-                        ${buildRepeater(repeaterFieldName, addRepeaterContentsStyles(false))}
+                        ${buildRepeater(repeaterFieldName, addRepeaterContentsTechniqueDisplay(false))}
                         ${WuxSheetMain.Row("&nbsp;")}
                     </div>`;
                 },
@@ -1303,23 +1303,22 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
                 },
 
-                addRepeaterContentsStyles = function (isCustom) {
+                addRepeaterContentsTechniqueDisplay = function (isCustom) {
+                    let submenuText = printTechniqueDisplaySubmenuButton(isCustom);
+                    let actionDisplay = printTechniqueActionDisplay(submenuText);
+                    return WuxSheetMain.HiddenIndexFieldWithVariable(
+                        getActionTypeAttribute("TechCR"), 
+                        getActionTypeAttribute("TechTier"), 
+                        actionDisplay);
+                },
+                
+                printTechniqueDisplaySubmenuButton = function (isCustom) {
                     let submenuFieldName = WuxDef.GetAttribute("Action_Actions");
-                    
-                    let submenuText = `<div class="wuxInlineBlock">
+                    return `<div class="wuxInlineBlock">
                             <input type="checkbox" name="${submenuFieldName}">
                             <span class="wuxSubMenuText">l&nbsp;</span>
                             <input type="hidden" class="wuxSubMenu-flag" name="${submenuFieldName}" value="0">
                             <div class="wuxSubMenuContent">\n${isCustom ? addCustomSubmenuContentsStyles() : addSubmenuContentsStyles()}\n</div>
-                    </div>`;
-
-                    return `
-                    <div class="wuxFeature wuxMinWidth220">
-                        <input type="hidden" class="wuxFeatureHeader-flag" name="${getActionTypeAttribute("TechActionType")}">
-                        <div class="wuxFeatureHeader wuxSubMenuSection">
-                            ${buildBaseTechniqueHeaderContents(submenuText, true)}
-                        </div>
-                        ${buildBaseTechniqueRequirements()}
                     </div>`;
                 },
 
@@ -1343,6 +1342,17 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         ${WuxSheetMain.Header2("Full Technique Details")}
                         ${buildSubmenuTechniqueTemplate()}
                     `;
+                },
+                
+                printTechniqueActionDisplay = function (submenuText) {
+                    return `
+                    <div class="wuxFeature wuxMinWidth220">
+                        <input type="hidden" class="wuxFeatureHeader-flag" name="${getActionTypeAttribute("TechActionType")}">
+                        <div class="wuxFeatureHeader wuxSubMenuSection">
+                            ${buildBaseTechniqueHeaderContents(submenuText, true)}
+                        </div>
+                        ${buildBaseTechniqueRequirements()}
+                    </div>`;
                 },
 
                 buildSubmenuTechniqueTemplate = function () {

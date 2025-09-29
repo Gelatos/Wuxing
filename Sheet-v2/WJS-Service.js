@@ -389,10 +389,13 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 		let incrementer = 4;
 		let modIncrementer = 1;
 		let checkingLevel = 4;
-		while (level >= checkingLevel) {
+		while (level >= checkingLevel || cr >= 9) {
 			cr++;
 			incrementer += modIncrementer;
 			checkingLevel += incrementer;
+		}
+		if (cr > 9) {
+			cr = 9;
 		}
 		return cr;
 	}
@@ -676,9 +679,18 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 	
 	setTechniqueInfo (technique, setUse) {
 		this.clearTechniqueInfo();
+		
+		let cr = this.attrHandler.parseInt(WuxDef.GetVariable("CR"));
+		let tier = 1;
+		if (technique.tier > 1) {
+			tier = technique.tier;
+		}
+		Debug.Log(`Setting technique info for ${technique.name} (CR ${cr}, Tier ${tier})`);
 
 		let displayData = new TechniqueDisplayData(technique);
 		this.attrHandler.addUpdate(this.getVariable("TechName"), displayData.name);
+		this.attrHandler.addUpdate(this.getVariable("TechCR"), cr);
+		this.attrHandler.addUpdate(this.getVariable("TechTier"), tier);
 		this.attrHandler.addUpdate(this.getVariable("TechActionType"), displayData.actionType);
 		this.attrHandler.addUpdate(this.getVariable("TechResourceData"), displayData.resourceData);
 		this.attrHandler.addUpdate(this.getVariable("TechTargetingData"), displayData.targetData);

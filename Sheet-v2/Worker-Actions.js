@@ -265,7 +265,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         attributeHandler.addMod(crFieldName);
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
-            populateStyleTechniques(attrHandler, actionRepeatingWorker, styleName, attrHandler.parseInt(crFieldName));
+            populateStyleTechniques(attrHandler, actionRepeatingWorker, styleName, 9);
         });
     };
     const populateInspectionElements = function (attrHandler, popupRepeater, sectionRepeater, inspectionTitle, selectedId) {
@@ -327,8 +327,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             let styleName = attrHandler.parseString(styleNameVar);
             styleWorker.setBuildStatsDraft(attrHandler);
             styleWorker.iterateBuildStats(function (styleVariableData) {
-                Debug.Log(`Checking style variable ${styleVariableData.name} with value ${styleVariableData.value}`);
-
                 let style = WuxStyles.GetByVariableName(styleVariableData.name);
                 if (style.group != "" && styleVariableData.value > 0 && style.name == styleName) {
                     populateStyleActions(repeatingSectionName, repeatingSectionIndex, styleName, styleVariableData.value);
@@ -432,11 +430,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 attributeHandler.addMod(crFieldName);
 
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
-                    let cr = attrHandler.parseInt(crFieldName);
-                    let maxRank = Math.min(tier, cr);
 
                     let hasRemovedPassives = removeOldTechniqueActions(attrHandler, actionsRepeater, WuxDef.GetVariable("BoostStyleTech"));
-                    let hasAddedPassives = populateStyleTechniques(attrHandler, actionsRepeatingWorker, styleName, maxRank);
+                    let hasAddedPassives = populateStyleTechniques(attrHandler, actionsRepeatingWorker, styleName, tier);
                     if (hasRemovedPassives || hasAddedPassives) {
                         setTechniqueBoosters(attrHandler);
                     }
