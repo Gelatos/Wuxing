@@ -326,6 +326,9 @@ var WuxConflictManager = WuxConflictManager || (function () {
             TokenReference.IterateOverSelectedTokens(msg, function (tokenTargetData) {
                 let messages = [];
                 messages.push(`${tokenTargetData.displayName} Ends Turn`);
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.setMoveCharge(attributeHandler, 0);
+                attributeHandler.run();
                 messages = messages.concat(setEndTurnTokenUpkeep(tokenTargetData));
                 sendEndTurnMessage(messages);
             });
