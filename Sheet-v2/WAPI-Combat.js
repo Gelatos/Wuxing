@@ -237,7 +237,6 @@ var WuxConflictManager = WuxConflictManager || (function () {
 
                 attributeHandler.addGetAttrCallback(function (attrGetter) {
                     let aflame = tokenTargetData.hasStatus(attrGetter, "Stat_Aflame");
-                    Debug.Log(`[setStartRoundTokens] ${tokenTargetData.displayName} aflame status: ${aflame}`);
                     if (aflame != false && aflame > 0) {
                         let roll = new DamageRoll();
                         roll.rollDice(aflame, 6);
@@ -279,6 +278,14 @@ var WuxConflictManager = WuxConflictManager || (function () {
                     if (tokenTargetData.hasStatus(newAttributeHandler, "Stat_Hindered")) {
                         tokenTargetData.removeStatus(newAttributeHandler, "Stat_Hindered");
                         messages.push(`${tokenTargetData.displayName} is no longer Hindered`);
+                    }
+                    if (tokenTargetData.hasStatus(newAttributeHandler, "Stat_Rally")) {
+                        tokenTargetData.removeStatus(newAttributeHandler, "Stat_Rally");
+                        messages.push(`${tokenTargetData.displayName} is no longer Rallied`);
+                    }
+                    if (tokenTargetData.hasStatus(newAttributeHandler, "Stat_Distracted")) {
+                        tokenTargetData.removeStatus(newAttributeHandler, "Stat_Distracted");
+                        messages.push(`${tokenTargetData.displayName} is no longer Distracted`);
                     }
                     newAttributeHandler.addFinishCallback(function () {
                         messages = messages.concat(tokenEffect.effectMessages);
@@ -917,11 +924,28 @@ class TechniqueUseResolver extends TechniqueResolverData {
         // add advantages based on sender statuses
         if (techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Impaired")) {
             advantage -= 1;
-            techUseResolver.addMessage(`${techUseResolver.senderTokenEffect.tokenTargetData.displayName} is Impaired: -1 Advantage`);
+            techUseResolver.addMessage(`${techUseResolver.senderTokenEffect.tokenTargetData.displayName} is Impaired: +1 Disadvantage`);
         }
         if (techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Sickened")) {
             advantage -= 1;
-            techUseResolver.addMessage(`${techUseResolver.senderTokenEffect.tokenTargetData.displayName} is Sickened: -1 Advantage`);
+            techUseResolver.addMessage(`${techUseResolver.senderTokenEffect.tokenTargetData.displayName} is Sickened: +1 Disadvantage`);
+        }
+        if (techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Encouraged")) {
+            advantage -= 1;
+            techUseResolver.targetTokenEffect.tokenTargetData.removeStatus(attrSetters.target, "Stat_Encouraged");
+            techUseResolver.addMessage(`${techUseResolver.senderTokenEffect.tokenTargetData.displayName} is Encouraged: +1 Advantage. Removed Encouraged status.`);
+        }
+        let distracted = techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Distracted");
+        if (distracted != false && distracted > 0) {
+            advantage -= distracted;
+            techUseResolver.targetTokenEffect.tokenTargetData.removeStatus(attrSetters.target, "Stat_Distracted");
+            techUseResolver.addMessage(`${techUseResolver.senderTokenEffect.tokenTargetData.displayName} is Distracted: +${distracted} Disadvantage. Removed Distracted status.`);
+        }
+        let rally = techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Rally");
+        if (rally != false && rally > 0) {
+            advantage += rally;
+            techUseResolver.targetTokenEffect.tokenTargetData.removeStatus(attrSetters.target, "Stat_Rally");
+            techUseResolver.addMessage(`${techUseResolver.senderTokenEffect.tokenTargetData.displayName} is Rallied: +${rally} Advantage. Removed Rally status.`);
         }
         
         // add advantages based on what statuses the target has
@@ -1030,6 +1054,8 @@ class TechniqueUseResolver extends TechniqueResolverData {
     applySetters(techUseResolver, attrGetters, attrSetters, willBreakEffect) {
         techUseResolver.senderTokenEffect.performDamageRolls(attrGetters.sender, attrSetters.sender, willBreakEffect);
         techUseResolver.targetTokenEffect.performDamageRolls(attrGetters.target, attrSetters.target, willBreakEffect);
+        techUseResolver.senderTokenEffect.performStatusResults(attrSetters.sender);
+        techUseResolver.targetTokenEffect.performStatusResults(attrSetters.target);
         attrSetters.sender.run();
         attrSetters.target.run();
         techUseResolver.printMessages();
@@ -1153,15 +1179,15 @@ class TechniqueUseResolver extends TechniqueResolverData {
 
         switch (techniqueEffect.subType) {
             case "Set":
-                tokenEffect.tokenTargetData.setStatus(attrSetters.getObjByTarget(techniqueEffect), techniqueEffect.effect, roll.total);
+                tokenEffect.addStatusResult(techniqueEffect.effect, "set", roll.total);
                 break;
             case "Add":
             case "Self":
             case "Choose":
-                tokenEffect.tokenTargetData.addStatus(attrSetters.getObjByTarget(techniqueEffect), techniqueEffect.effect, roll.total);
+                tokenEffect.addStatusResult(techniqueEffect.effect, "add", roll.total);
                 break;
             case "Remove":
-                tokenEffect.tokenTargetData.removeStatus(attrSetters.getObjByTarget(techniqueEffect), techniqueEffect.effect);
+                tokenEffect.addStatusResult(techniqueEffect.effect, "remove", roll.total);
                 break;
             case "Remove Any":
             case "Remove All":
