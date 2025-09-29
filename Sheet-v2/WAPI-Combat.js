@@ -1030,6 +1030,8 @@ class TechniqueUseResolver extends TechniqueResolverData {
     applySetters(techUseResolver, attrGetters, attrSetters, willBreakEffect) {
         techUseResolver.senderTokenEffect.performDamageRolls(attrGetters.sender, attrSetters.sender, willBreakEffect);
         techUseResolver.targetTokenEffect.performDamageRolls(attrGetters.target, attrSetters.target, willBreakEffect);
+        techUseResolver.senderTokenEffect.performStatusResults(attrSetters.sender);
+        techUseResolver.targetTokenEffect.performStatusResults(attrSetters.target);
         attrSetters.sender.run();
         attrSetters.target.run();
         techUseResolver.printMessages();
@@ -1153,15 +1155,15 @@ class TechniqueUseResolver extends TechniqueResolverData {
 
         switch (techniqueEffect.subType) {
             case "Set":
-                tokenEffect.tokenTargetData.setStatus(attrSetters.getObjByTarget(techniqueEffect), techniqueEffect.effect, roll.total);
+                tokenEffect.addStatusResult(techniqueEffect.effect, "set", roll.total);
                 break;
             case "Add":
             case "Self":
             case "Choose":
-                tokenEffect.tokenTargetData.addStatus(attrSetters.getObjByTarget(techniqueEffect), techniqueEffect.effect, roll.total);
+                tokenEffect.addStatusResult(techniqueEffect.effect, "add", roll.total);
                 break;
             case "Remove":
-                tokenEffect.tokenTargetData.removeStatus(attrSetters.getObjByTarget(techniqueEffect), techniqueEffect.effect);
+                tokenEffect.addStatusResult(techniqueEffect.effect, "remove", roll.total);
                 break;
             case "Remove Any":
             case "Remove All":

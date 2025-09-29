@@ -930,6 +930,7 @@ class TokenTargetEffectsData {
         this.tokenTargetData = tokenTargetData;
         this.effectMessages = [];
         this.damageRolls = [];
+        this.statusEffects = {};
         this.spentSurge = false;
         this.removeStatusMessage = "";
     }
@@ -1005,6 +1006,89 @@ class TokenTargetEffectsData {
                     if (damageRoll.total > 0) {
                         tokenTargetEffect.takeHpDamage(attrSetter, damageRoll);
                     }
+            }
+        });
+    }
+    
+    addStatusResult(statusDefinitionName, type, rank) {
+        if (this.statusEffects[statusDefinitionName] == undefined) {
+            this.statusEffects[statusDefinitionName] = {
+                type: type,
+                rank: parseInt(rank)
+            };
+            return;
+        }
+        
+        switch (type) {
+            case "add":
+                let existingType = this.statusEffects[statusDefinitionName].type;
+                let existingRank = this.statusEffects[statusDefinitionName].rank;
+                if (existingType == "set") {
+                    this.statusEffects[statusDefinitionName].rank = existingRank + parseInt(rank);
+                } else if (existingType == "add") {
+                    this.statusEffects[statusDefinitionName].rank = existingRank + parseInt(rank);
+                } else if (existingType == "remove") {
+                    this.statusEffects[statusDefinitionName].type = "set";
+                    this.statusEffects[statusDefinitionName].rank = parseInt(rank);
+                }
+                break;
+            default:
+                this.statusEffects[statusDefinitionName].type = type;
+                this.statusEffects[statusDefinitionName].rank = parseInt(rank);
+                break;
+        }
+    }
+
+    performStatusResults(attrSetter) {
+        let tokenTargetEffect = this;
+        tokenTargetEffect.tokenTargetData.refreshCombatDetails(attrSetter);
+        let statusVar = WuxDef.GetVariable("Status");
+        attrSetter.addAttribute(statusVar);
+
+        attrSetter.addGetAttrCallback(function (attrHandler) {
+            if (tokenTargetEffect.tokenTargetData.isCharacter()) {
+                let statusObj = new StatusHandler(attrHandler.parseJSON(statusVar));
+                for(let statusName in tokenTargetEffect.statusEffects) {
+                    let statusInfo = tokenTargetEffect.statusEffects[statusName];
+                    let statusDefinitionName = statusName;
+                    let task = statusInfo.type;
+                    let rank = statusInfo.rank;
+                    Debug.Log(`Performing status effect: ${task} ${statusDefinitionName} ${rank}`);
+                    switch (task) {
+                        case "set":
+                            statusObj.setStatus(statusDefinitionName, rank);
+                            break;
+                        case "add":
+                            statusObj.addStatus(statusDefinitionName, rank);
+                            break;
+                        case "remove":
+                            statusObj.removeStatus(statusDefinitionName);
+                            break;
+                    }
+                }
+                tokenTargetEffect.tokenTargetData.setCombatDetails(attrHandler, undefined, statusObj);
+                statusObj.saveStatusesToCharacterSheet(attrHandler);
+            } else {
+                let tokenNoteReference = new TokenNoteReference(tokenTargetEffect.tokenTargetData.getTokenNote());
+                for(let statusName in tokenTargetEffect.statusEffects) {
+                    let statusInfo = tokenTargetEffect.statusEffects[statusName];
+                    let statusDefinitionName = statusName;
+                    let task = statusInfo.type;
+                    let rank = statusInfo.rank;
+                    switch (task) {
+                        case "set":
+                            tokenNoteReference.statusHandler.setStatus(statusDefinitionName, rank);
+                            break;
+                        case "add":
+                            tokenNoteReference.statusHandler.addStatus(statusDefinitionName, rank);
+                            break;
+                        case "remove":
+                            tokenNoteReference.statusHandler.removeStatus(statusDefinitionName);
+                            break;
+                    }
+                }
+                tokenTargetEffect.tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
+                tokenTargetEffect.tokenTargetData.setCombatDetails(attrHandler, tokenNoteReference);
             }
         });
     }
