@@ -2436,7 +2436,7 @@ class BaseTechniqueEffectDisplayData {
             case "Charge":
                 return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} Move Charge.`;
             case "Jump":
-                return `${this.formatTargetCopula(effect)} jumps ${this.formatCalcBonus(effect)} spaces ${effect.effect}`;
+                return `${this.formatTarget(effect)} jumps ${this.formatCalcBonus(effect)} spaces ${effect.effect}`;
             case "Pushed":
                 return `${this.formatTargetCopula(effect)} Pushed ${this.formatCalcBonus(effect)} spaces ${effect.effect == "" ? "from you." : effect.effect}`;
             case "Pulled":
@@ -3327,50 +3327,50 @@ class StatusHandler {
         return false;
     }
     setStatus(defName, rank) {
-        let definition = new StatusHandlerStatusData(WuxDef.Get(defName));
-        definition.rank = rank;
-        switch(definition.subGroup) {
+        let statusEffect = new StatusHandlerStatusData(WuxDef.Get(defName));
+        statusEffect.rank = rank;
+        switch(statusEffect.subGroup) {
             case "Status":
-                this.statusEffects[defName] = definition;
+                this.statusEffects[defName] = statusEffect;
                 break;
             case "Condition":
-                this.conditions[defName] = definition;
+                this.conditions[defName] = statusEffect;
                 break;
             case "Emotion":
-                this.emotions[defName] = definition;
+                this.emotions[defName] = statusEffect;
                 break;
         }
     }
     addStatus(defName, rank) {
-        let definition = new StatusHandlerStatusData(WuxDef.Get(defName));
-        definition.rank = rank;
-        switch(definition.subGroup) {
+        let statusEffect = new StatusHandlerStatusData(WuxDef.Get(defName));
+        statusEffect.rank = rank;
+        switch(statusEffect.subGroup) {
             case "Status":
                 if (this.statusEffects[defName] != undefined) {
-                    definition = new StatusHandlerStatusData(this.statusEffects[defName]);
-                    definition.rank += rank;
+                    statusEffect = new StatusHandlerStatusData(this.statusEffects[defName]);
+                    statusEffect.rank += rank;
                 }
-                this.statusEffects[defName] = definition;
+                this.statusEffects[defName] = statusEffect;
                 break;
             case "Condition":
                 if (this.conditions[defName] != undefined) {
-                    definition = new StatusHandlerStatusData(this.conditions[defName]);
-                    definition.rank += rank;
+                    statusEffect = new StatusHandlerStatusData(this.conditions[defName]);
+                    statusEffect.rank += rank;
                 }
-                this.conditions[defName] = definition;
+                this.conditions[defName] = statusEffect;
                 break;
             case "Emotion":
                 if (this.emotions[defName] != undefined) {
-                    definition = new StatusHandlerStatusData(this.emotions[defName]);
-                    definition.rank += rank;
+                    statusEffect = new StatusHandlerStatusData(this.emotions[defName]);
+                    statusEffect.rank += rank;
                 }
-                this.emotions[defName] = definition;
+                this.emotions[defName] = statusEffect;
                 break;
         }
     }
     removeStatus(defName) {
-        let definition = new StatusHandlerStatusData(WuxDef.Get(defName));
-        switch(definition.subGroup) {
+        let statusEffect = new StatusHandlerStatusData(WuxDef.Get(defName));
+        switch(statusEffect.subGroup) {
             case "Status":
                 delete this.statusEffects[defName];
                 break;
