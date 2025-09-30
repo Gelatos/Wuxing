@@ -679,18 +679,11 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 	
 	setTechniqueInfo (technique, setUse) {
 		this.clearTechniqueInfo();
-		
-		let cr = this.attrHandler.parseInt(WuxDef.GetVariable("CR"));
-		let tier = 1;
-		if (technique.tier > 1) {
-			tier = technique.tier;
-		}
-		Debug.Log(`Setting technique info for ${technique.name} (CR ${cr}, Tier ${tier})`);
 
 		let displayData = new TechniqueDisplayData(technique);
 		this.attrHandler.addUpdate(this.getVariable("TechName"), displayData.name);
-		this.attrHandler.addUpdate(this.getVariable("TechCR"), cr);
-		this.attrHandler.addUpdate(this.getVariable("TechTier"), tier);
+		this.attrHandler.addUpdate(this.getVariable("TechAffinity"), technique.affinity);
+		this.attrHandler.addUpdate(this.getVariable("TechTier"), technique.tier);
 		this.attrHandler.addUpdate(this.getVariable("TechActionType"), displayData.actionType);
 		this.attrHandler.addUpdate(this.getVariable("TechResourceData"), displayData.resourceData);
 		this.attrHandler.addUpdate(this.getVariable("TechTargetingData"), displayData.targetData);
@@ -777,6 +770,8 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addUpdate(this.getVariable("TechActionType"), "");
 		this.attrHandler.addUpdate(this.getVariable("TechName"), 0);
 		this.attrHandler.addUpdate(this.getVariable("TechDisplayName"), "");
+		this.attrHandler.addUpdate(this.getVariable("TechAffinity"), "");
+		this.attrHandler.addUpdate(this.getVariable("TechTier"), 0);
 		this.attrHandler.addUpdate(this.getVariable("TechResourceData"), "");
 		this.attrHandler.addUpdate(this.getVariable("TechTargetingData"), "");
 		this.clearDefinition("TechTrait", 0);
@@ -810,6 +805,32 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.attrHandler.addUpdate(this.getVariable("TechSEffect", `${i}name`), 0);
 			this.attrHandler.addUpdate(this.getVariable("TechSEffect", `${i}desc`), "");
 		}
+	}
+	calcAndSetVisibility(affinities, maxTier) {
+		let tier = this.attrHandler.parseInt(this.getVariable("TechTier"));
+		let cr = this.attrHandler.parseInt(WuxDef.GetVariable("CR"));
+		
+		if (tier > cr || tier > maxTier) {
+			this.setVisibilityAttribute(false);
+			return;
+		}
+
+		let affinity = this.attrHandler.parseString(this.getVariable("TechAffinity"));
+		if (affinity.includes(";")) {
+			let affinityParts = affinity.split(";").map(s => s.trim());
+			if (affinity != "" && !affinityParts.some(part => affinities.includes(part))) {
+				this.setVisibilityAttribute(false);
+				return;
+			}
+		}
+		if (affinity != "" && !affinities.includes(affinity)) {
+			this.setVisibilityAttribute(false);
+			return;
+		}
+		this.setVisibilityAttribute(true);
+	}
+	setVisibilityAttribute (isVisible) {
+		this.attrHandler.addUpdate(this.getVariable("TechIsVisible"), isVisible ? "1" : "0");
 	}
 }
 

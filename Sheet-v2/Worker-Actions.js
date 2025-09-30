@@ -27,6 +27,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         actionRepeater.iterate(function (id) {
             let techniqueName = attrHandler.parseString(actionRepeater.getFieldName(id, WuxDef.GetUntypedVariable("Action", "TechName")));
             let technique = WuxTechs.Get(techniqueName);
+            if (technique == undefined) {
+                return;
+            }
             if (technique.action == "Passive") {
                 let index = passiveStyleTechniques.indexOf(technique.name);
                 if (index >= 0) {
@@ -193,26 +196,17 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", sectionRepeater);
         let affinities = getAffinities(attrHandler);
         let boosterFieldName = WuxDef.GetVariable("BoostStyleTech");
-        for (let tier = 1; tier <= maxTier; tier++) {
+        for (let tier = 1; tier <= 9; tier++) {
             let tierData = styleTechniques.get(tier);
-            tierData.iterate(function (techsByAffinity, affinity) {
+            tierData.iterate(function (techsByAffinity) {
                 if (techsByAffinity.length == 0) {
-                    return;
-                }
-                if (affinity.includes(";")) {
-                    let affinityParts = affinity.split(";").map(s => s.trim());
-                    if (affinity != "" && !affinityParts.some(part => affinities.includes(part))) {
-                        return;
-                    }
-                    
-                }
-                else if (affinity != "" && !affinities.includes(affinity)) {
                     return;
                 }
 
                 techsByAffinity.forEach(function (technique) {
                     techniqueAttributeHandler.setId(sectionRepeater.generateRowId());
                     techniqueAttributeHandler.setTechniqueInfo(technique, true);
+                    techniqueAttributeHandler.calcAndSetVisibility(affinities, maxTier);
                     if (tryAddTechniqueToBoosters(attrHandler, technique, boosterFieldName)) {
                         hasAddedPassives = true;
                     }
@@ -517,6 +511,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             Debug.Log(`Setting technique ${technique.name} with id ${selectedId}`);
             techniqueAttributeHandler.setId(selectedId);
             techniqueAttributeHandler.setTechniqueInfo(technique, true);
+            techniqueAttributeHandler.setVisibilityAttribute(true);
             attributeHandler.run();
         }
     ;

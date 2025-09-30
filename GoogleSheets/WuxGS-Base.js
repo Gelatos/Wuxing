@@ -1306,10 +1306,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 addRepeaterContentsTechniqueDisplay = function (isCustom) {
                     let submenuText = printTechniqueDisplaySubmenuButton(isCustom);
                     let actionDisplay = printTechniqueActionDisplay(submenuText);
-                    return WuxSheetMain.HiddenIndexFieldWithVariable(
-                        getActionTypeAttribute("TechCR"), 
-                        getActionTypeAttribute("TechTier"), 
-                        actionDisplay);
+                    return WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible"), actionDisplay);
                 },
                 
                 printTechniqueDisplaySubmenuButton = function (isCustom) {
@@ -1383,6 +1380,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         headerText = `<div class="wuxFeatureHeaderName"><span name="${getActionTypeAttribute("TechName")}"></span></div>`;
                     }
                     return `<div class="wuxFeatureHeaderDisplayBlock">
+                        <input type="hidden" name="${getActionTypeAttribute("TechAffinity")}" value="" />
+                        <input type="hidden" name="${getActionTypeAttribute("TechTier")}" value="0" />
                         ${headerText}
                         <div class="wuxFeatureHeaderInfo"><span name="${getActionTypeAttribute("TechResourceData")}"></span></div>
                         <div class="wuxFeatureHeaderInfo"><span name="${getActionTypeAttribute("TechTargetingData")}"></span></div>
@@ -1695,6 +1694,8 @@ var DisplayPopups = DisplayPopups || (function () {
                         ${WuxSheetMain.Header("Technique")}
                         <div class="wuxFeature">
                             <input type="hidden" class="wuxFeatureHeader-flag" name="${getPopupAttribute("TechActionType")}">
+                            <input type="hidden" name="${getPopupAttribute("TechAffinity")}" value="" />
+                            <input type="hidden" name="${getPopupAttribute("TechTier")}" value="0" />
                             <div class="wuxFeatureHeader">
                                 <div class="wuxFeatureHeaderDisplayBlock">
                                     <span class="wuxFeatureHeaderName" name="${getPopupAttribute("TechName")}"></span>

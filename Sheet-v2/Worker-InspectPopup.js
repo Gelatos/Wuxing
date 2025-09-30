@@ -110,6 +110,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", repeater);
         techniqueAttributeHandler.setId(newRowId);
         techniqueAttributeHandler.setTechniqueInfo(technique, true);
+        techniqueAttributeHandler.setVisibilityAttribute(true);
     };
     const getEquipMenuText = function (item) {
         switch (item.group) {
@@ -176,6 +177,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                         itemAttributeHandler.clearItemInfo(attrHandler);
                         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Popup");
                         techniqueAttributeHandler.setTechniqueInfo(selectedItem.item);
+                        techniqueAttributeHandler.setVisibilityAttribute(true);
                     }
                 });
             });
@@ -224,6 +226,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                             itemAttributeHandler.clearItemInfo();
                             let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Popup");
                             techniqueAttributeHandler.setTechniqueInfo(technique);
+                            techniqueAttributeHandler.setVisibilityAttribute(true);
                         }
                         setInspectionSelection(attrHandler, repeaterName, selectedId);
                     });
