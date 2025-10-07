@@ -1136,14 +1136,13 @@ class TokenTargetEffectsData {
         this.tokenTargetData.addHp(attributeHandler, -1 * damageRoll.total,
             function (results, attrHandler, attributeVar, tokenTargetData) {
                 targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} ${damageRoll.damageType} damage.`);
-                if (results.remainder < 0) {
-                    let vitalityDamage = 0;
-                    while (results.remainder < 0) {
-                        vitalityDamage++;
-                        results.remainder += results.max;
+                if (results.newValue == 0) {
+                    results.remainder += results.max;
+                    if (results.remainder < 1) {
+                        results.remainder = 1;
                     }
                     let newAttributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                    targetEffect.takeVitalityDamage(targetEffect, newAttributeHandler, vitalityDamage);
+                    targetEffect.takeVitalityDamage(targetEffect, newAttributeHandler, 1);
                     newAttributeHandler.run();
                     results.newValue = results.remainder;
                 }
