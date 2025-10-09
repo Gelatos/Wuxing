@@ -3634,6 +3634,7 @@ class CombatDetails {
         this.cr = 0;
         this.job = "";
         this.jobDefenses = "";
+        this.defenses = new CombatDetailsDefenses();
         this.surges = 2;
         this.maxsurges = 2;
         this.vitality = 1;
@@ -3650,6 +3651,9 @@ class CombatDetails {
         this.cr = json.cr != undefined ? json.cr : 1;
         this.job = json.job != undefined ? json.job : "";
         this.jobDefenses = json.jobDefenses != undefined ? json.jobDefenses : "";
+        if (json.defenses != undefined) {
+            this.defenses.importJson(JSON.parse(json.defenses));
+        }
         this.surges = json.surges != undefined ? json.surges : 2;
         this.maxsurges = json.maxsurges != undefined ? json.maxsurges : 2;
         this.vitality = json.vitality != undefined ? json.vitality : 1;
@@ -3709,6 +3713,34 @@ class CombatDetails {
         }
         return output;
     }
+}
+
+class CombatDetailsDefenses () {
+    constructor(json) {
+        this.createEmpty();
+        if (json != undefined) {
+            this.importJson(json);
+        }
+    }
+
+    createEmpty() {
+        this.brace = 0;
+        this.warding = 0;
+        this.reflex = 0;
+        this.fortitude = 0;
+        this.hide = 0;
+        this.evasion = 0;
+        this.resolve = 0;
+        this.insight = 0;
+        this.guile = 0;
+    }
+
+    importJson(json) {
+        this.warding = json.warding != undefined ? json.warding : 0;
+    }
+    
+    
+    
 }
 
 class CombatDetailsHandler {
