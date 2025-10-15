@@ -3715,7 +3715,7 @@ class CombatDetails {
     }
 }
 
-class CombatDetailsDefenses () {
+class CombatDetailsDefenses {
     constructor(json) {
         this.createEmpty();
         if (json != undefined) {
