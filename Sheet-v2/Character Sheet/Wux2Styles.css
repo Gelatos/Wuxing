@@ -2085,6 +2085,13 @@ input.wuxFeatureHeader-flag[value="Full"] + .wuxFeatureHeader,
     background-color: #e18181;
 }
 
+input.wuxFeatureHeader-flag[value="Assist"] + .wuxFeatureHeader,
+.wuxFeatureHeader-Reaction,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Reaction
+{
+    background-color: #cad4f6;
+}
+
 input.wuxFeatureHeader-flag[value="Reaction"] + .wuxFeatureHeader,
 .wuxFeatureHeader-Reaction,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Reaction
