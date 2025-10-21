@@ -142,23 +142,27 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             attributeHandler.run();
         },
         updateCR = function (eventinfo) {
-            let attributeHandler = new WorkerAttributeHandler();
-            let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
             let cr = parseInt(eventinfo.newValue);
+            let loader = new LoadingScreenHandler();
+            loader.showLoadingScreen(() => {
+                WuxWorkerActions.GetAllStyleSlotRepeaterIDs((repeaterSlotData) => {
+                    let attributeHandler = new WorkerAttributeHandler();
+                    let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
 
-            WuxWorkerAttributes.UpdateStats(attributeHandler);
-            WuxWorkerPerks.UpdateStats(attributeHandler);
-            WuxWorkerSkills.UpdateStats(attributeHandler);
-            WuxWorkerKnowledges.UpdateStats(attributeHandler);
-            WuxWorkerJobs.UpdateStats(attributeHandler);
-            WuxWorkerStyles.UpdateStats(attributeHandler);
-            WuxWorkerAdvancement.UpdateStats(attributeHandler);
-            WuxWorkerActions.UpdateStats(attributeHandler);
-            updateStats(attributeHandler, combatDetailsHandler);
-            attributeHandler.addGetAttrCallback(function (attrHandler) {
-                combatDetailsHandler.onUpdateCR(attrHandler, cr);
+                    WuxWorkerSkills.UpdateStats(attributeHandler);
+                    WuxWorkerKnowledges.UpdateStats(attributeHandler);
+                    WuxWorkerActions.UpdateAllActiveStyleActions(attributeHandler, repeaterSlotData, cr);
+                    updateStats(attributeHandler, combatDetailsHandler);
+                    
+                    attributeHandler.addGetAttrCallback(function (attrHandler) {
+                        combatDetailsHandler.onUpdateCR(attrHandler, cr);
+                    });
+                    attributeHandler.addFinishCallback(() => {
+                        loader.hideLoadingScreen();
+                    });
+                    attributeHandler.run();
+                });
             });
-            attributeHandler.run();
         },
         updateSurge = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();

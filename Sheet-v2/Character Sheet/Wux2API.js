@@ -8212,7 +8212,12 @@ class CombatDetails {
         this.job = json.job != undefined ? json.job : "";
         this.jobDefenses = json.jobDefenses != undefined ? json.jobDefenses : "";
         if (json.defenses != undefined) {
-            this.defenses.importJson(JSON.parse(json.defenses));
+            try {
+                this.defenses.importJson(JSON.parse(json.defenses));
+            }
+            catch {
+                Debug.LogError(`[CombatDetails] Unable to parse Defenses JSON: ${json.defenses}`);
+            }
         }
         this.surges = json.surges != undefined ? json.surges : 2;
         this.maxsurges = json.maxsurges != undefined ? json.maxsurges : 2;

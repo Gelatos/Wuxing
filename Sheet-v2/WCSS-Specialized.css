@@ -478,10 +478,10 @@ input.wuxFeatureHeader-flag[value="Full"] + .wuxFeatureHeader,
 }
 
 input.wuxFeatureHeader-flag[value="Assist"] + .wuxFeatureHeader,
-.wuxFeatureHeader-Reaction,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Reaction
+.wuxFeatureHeader-Assist,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Assist
 {
-    background-color: #cad4f6;
+    background-color: #e4caf6;
 }
 
 input.wuxFeatureHeader-flag[value="Reaction"] + .wuxFeatureHeader,

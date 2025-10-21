@@ -206,9 +206,10 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 techsByAffinity.forEach(function (technique) {
                     techniqueAttributeHandler.setId(sectionRepeater.generateRowId());
                     techniqueAttributeHandler.setTechniqueInfo(technique, true);
-                    techniqueAttributeHandler.calcAndSetVisibility(affinities, maxTier);
-                    if (tryAddTechniqueToBoosters(attrHandler, technique, boosterFieldName)) {
-                        hasAddedPassives = true;
+                    if (techniqueAttributeHandler.calcAndSetVisibility(affinities, maxTier)) {
+                        if (tryAddTechniqueToBoosters(attrHandler, technique, boosterFieldName)) {
+                            hasAddedPassives = true;
+                        }
                     }
                 });
             });
@@ -331,14 +332,88 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         loader.run();
 
     }
+    
+    const getAllStyleSlotRepeaters = function() {
+        let repeaterSlotIds = [];
+        let jobStylesVar = "RepeatingJobTech";
+        let normalStylesVar = "RepeatingAdvTech";
+        let maxAdvancedSlots = 3;
+        let maxNormalSlots = 6;
+        for (let i = 1; i <= maxNormalSlots; i++) {
+            if (i <= maxAdvancedSlots) {
+                repeaterSlotIds.push({name: jobStylesVar, index: i, repeaterData: {}});
+                repeaterSlotIds.push({name: normalStylesVar, index: i, repeaterData: {}});
+            }
+            repeaterSlotIds.push({name: normalStylesVar, index: i + maxAdvancedSlots, repeaterData: {}});
+        }
+        return repeaterSlotIds;
+    }
+
+    const getStyleSlotRepeaterIDs = function (repeaterSlotData, index, finishCallback) {
+        if (index >= repeaterSlotData.length) {
+            finishCallback(repeaterSlotData);
+            return;
+        }
+        let slotData = repeaterSlotData[index];
+        let styleRepeater = new WorkerRepeatingSectionHandler(slotData.name, slotData.index);
+        Debug.Log(`Style Repeater IDs: ${styleRepeater.repeatingSection}`);
+        styleRepeater.getIds(function (repeater) {
+            repeaterSlotData[index].repeaterData = repeater;
+            getStyleSlotRepeaterIDs(repeaterSlotData, index + 1, finishCallback);
+        });
+    }
     'use strict';
 
-    const updateStats = function (attributeHandler) {
+    const 
+        updateAllActiveStyleActions = function (attributeHandler, repeaterSlotData, cr) {
+            let baseDefinitionName = "Action";
             addBoosterVariables(attributeHandler);
-
+            addAffinityVariables(attributeHandler);
+            addNameVariables(attributeHandler);
+            
+            for (let i = 0; i < repeaterSlotData.length; i++) {
+                let slotData = repeaterSlotData[i];
+                for (let j = 0; j < slotData.repeaterData.ids.length; j++) {
+                    let id = slotData.repeaterData.ids[j];
+                    let techniqueAttributeHandler = new TechniqueDataAttributeHandler(
+                        attributeHandler, baseDefinitionName, slotData.repeaterData, id);
+                    Debug.Log(`Bhesdf: ${slotData.repeaterData.repeatingSection}`);
+                    attributeHandler.addMod(techniqueAttributeHandler.getVariable("TechName"));
+                    attributeHandler.addMod(techniqueAttributeHandler.getVariable("TechTier"));
+                    attributeHandler.addMod(techniqueAttributeHandler.getVariable("TechAffinity"));
+                }
+            }
+    
             attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let affinities = getAffinities(attrHandler);
+                let boosterFieldName = WuxDef.GetVariable("BoostStyleTech");
+    
+                attrHandler.addUpdate(boosterFieldName, "[]");
+                for (let i = 0; i < repeaterSlotData.length; i++) {
+                    let slotData = repeaterSlotData[i];
+                    for (let j = 0; j < slotData.repeaterData.ids.length; j++) {
+                        let id = slotData.repeaterData.ids[j];
+                        let techniqueAttributeHandler = new TechniqueDataAttributeHandler(
+                            attributeHandler, baseDefinitionName, slotData.repeaterData, id);
+                        let techName = attrHandler.parseString(techniqueAttributeHandler.getVariable("TechName"));
+                        Debug.Log(`Checking technique: ${techName}`);
+                        if (techName == "") {
+                            continue;
+                        }
+                        if (techniqueAttributeHandler.calcAndSetVisibility(affinities, 9, cr)) { // TODO: Set the max tier based on style level
+                            let technique = WuxTechs.Get(techName);
+                            tryAddTechniqueToBoosters(attrHandler, technique, boosterFieldName);
+                        }
+                    }
+                }
                 setTechniqueBoosters(attrHandler);
             });
+        },
+
+        getAllStyleSlotRepeaterIDs = function (finishCallback) {
+            let repeaterSlotData = getAllStyleSlotRepeaters();
+            Debug.Log(`Getting Style Slot Repeater IDs for ${repeaterSlotData.length} slots`);
+            getStyleSlotRepeaterIDs(repeaterSlotData, 0, finishCallback);
         },
 
         populateAllBasicActions = function (attributeHandler) {
@@ -348,6 +423,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             populateBasicActions(attributeHandler, "RepeatingBasicSocial", "Basic Social");
             populateBasicActions(attributeHandler, "RepeatingBasicSpirit", "Basic Spirit");
         },
+        
         populatePerkTechniques = function (attributeHandler) {
 
             let perkTechniques = [];
@@ -517,7 +593,8 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
     ;
 
     return {
-        UpdateStats: updateStats,
+        UpdateAllActiveStyleActions: updateAllActiveStyleActions,
+        GetAllStyleSlotRepeaterIDs: getAllStyleSlotRepeaterIDs,
         PopulateAllBasicActions: populateAllBasicActions,
         PopulatePerkTechniques: populatePerkTechniques,
         InspectTechniqueBasicAction: inspectTechniqueBasicAction,

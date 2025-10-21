@@ -23,19 +23,31 @@ class eventinfo {
 
 class LoadingScreenHandler {
 	constructor(attributeHandler) {
-		this.attributeHandler = attributeHandler;
+		this.loadingScreenAttr = WuxDef.GetVariable("Loading");
+		if (attributeHandler != undefined) {
+			this.attributeHandler = attributeHandler;
+		}
 	}
 
 	async run() {
-		let loadingScreenAttr = WuxDef.GetVariable("Loading");
+		await this.showLoadingScreen();
+		await this.attributeHandler.run();
+		await this.hideLoadingScreen();
+	}
+
+	async showLoadingScreen(callback) {
 		let update = {};
-		update[loadingScreenAttr] = "1";
+		update[this.loadingScreenAttr] = "1";
 		await setAttrsAsync(update, {silent: true});
 		await this.sleep(1000);
+		if (callback != undefined) {
+			callback();
+		}
+	}
 
-		await this.attributeHandler.run();
-		
-		update[loadingScreenAttr] = "0";
+	async hideLoadingScreen() {
+		let update = {};
+		update[this.loadingScreenAttr] = "0";
 		await setAttrsAsync(update, {silent: true});
 	}
 
@@ -806,13 +818,16 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.attrHandler.addUpdate(this.getVariable("TechSEffect", `${i}desc`), "");
 		}
 	}
-	calcAndSetVisibility(affinities, maxTier) {
+	
+	calcAndSetVisibility(affinities, maxTier, cr) {
 		let tier = this.attrHandler.parseInt(this.getVariable("TechTier"));
-		let cr = this.attrHandler.parseInt(WuxDef.GetVariable("CR"));
+		if (cr == undefined) {
+			cr = this.attrHandler.parseInt(WuxDef.GetVariable("CR"));
+		}
 		
 		if (tier > cr || tier > maxTier) {
 			this.setVisibilityAttribute(false);
-			return;
+			return false;
 		}
 
 		let affinity = this.attrHandler.parseString(this.getVariable("TechAffinity"));
@@ -820,14 +835,15 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			let affinityParts = affinity.split(";").map(s => s.trim());
 			if (affinity != "" && !affinityParts.some(part => affinities.includes(part))) {
 				this.setVisibilityAttribute(false);
-				return;
+				return false;
 			}
 		}
 		if (affinity != "" && !affinities.includes(affinity)) {
 			this.setVisibilityAttribute(false);
-			return;
+			return false;
 		}
 		this.setVisibilityAttribute(true);
+		return true;
 	}
 	setVisibilityAttribute (isVisible) {
 		this.attrHandler.addUpdate(this.getVariable("TechIsVisible"), isVisible ? "1" : "0");
