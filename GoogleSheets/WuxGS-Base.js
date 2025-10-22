@@ -1240,12 +1240,12 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     });
                     contents += repeatingBasicTechniquesSection("RepeatingGearTech");
                     contents += repeatingBasicTechniquesSection("RepeatingConsumables");
-                    contents += repeatingBasicTechniquesSection("RepeatingBasicActions");
-                    contents += repeatingBasicTechniquesSection("RepeatingBasicRecovery");
-                    contents += repeatingBasicTechniquesSection("RepeatingBasicAttack");
-                    contents += repeatingBasicTechniquesSection("RepeatingBasicSocial");
+                    contents += repeatingBasicTechniquesSection("RepeatingBasicActions", "BasicActions");
+                    contents += repeatingBasicTechniquesSection("RepeatingBasicRecovery", "BasicRecovery");
+                    contents += repeatingBasicTechniquesSection("RepeatingBasicAttack", "BasicAttack");
+                    contents += repeatingBasicTechniquesSection("RepeatingBasicSocial", "BasicSocial");
                     contents += WuxSheetMain.HiddenAncestryField("Spirit",
-                        repeatingBasicTechniquesSection("RepeatingBasicSpirit"));
+                        repeatingBasicTechniquesSection("RepeatingBasicSpirit", "BasicSpirit"));
                     contents += repeatingCustomTechniquesSection();
                     contents = WuxSheetMain.TabBlock(contents);
 
@@ -1268,10 +1268,15 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
 
-                repeatingBasicTechniquesSection = function (repeaterName) {
+                repeatingBasicTechniquesSection = function (repeaterName, refreshName) {
                     let repeatingDef = WuxDef.Get(repeaterName);
 
-                    let contents = repeatingTechniquesSection(repeatingDef.getTitle(), repeatingDef.getVariable());
+                    let header = repeatingDef.getTitle();
+                    if (refreshName != undefined) {
+                        header = WuxSheetMain.Button(WuxDef.GetAttribute(refreshName, WuxDef._refresh), "1", "wuxStyleRefreshButton") +
+                        `<span>${header}</span>`;
+                    }
+                    let contents = repeatingTechniquesSection(header, repeatingDef.getVariable());
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
 

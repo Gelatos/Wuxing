@@ -474,6 +474,7 @@ var ActionBuilder = ActionBuilder || (function () {
             output += listenerInspectRepeatingStyles();
             output += listenerSetDataRepeatingStyles();
             output += listenerRefreshRepeatingActions();
+            output += listenerRefreshBasicActions();
             return output;
         },
         listenerInspectRepeatingStyles = function () {
@@ -504,6 +505,20 @@ var ActionBuilder = ActionBuilder || (function () {
                 output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Forme_StyleSlot", i)}${WuxDef._refresh}`],
                     `WuxWorkerActions.RefreshStandardStyleActions(${i+3})`, false)}`;
             }
+            return output;
+        },
+        listenerRefreshBasicActions = function () {
+            let output = "";
+            output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("BasicActions", WuxDef._refresh)}`],
+                `WuxWorkerActions.RefreshBasicActions()`, false)}`;
+            output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("BasicRecovery", WuxDef._refresh)}`],
+                `WuxWorkerActions.RefreshBasicRecovery()`, false)}`;
+            output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("BasicAttack", WuxDef._refresh)}`],
+                `WuxWorkerActions.RefreshBasicAttack()`, false)}`;
+            output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("BasicSocial", WuxDef._refresh)}`],
+                `WuxWorkerActions.RefreshBasicSocial()`, false)}`;
+            output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("BasicSpirit", WuxDef._refresh)}`],
+                `WuxWorkerActions.RefreshBasicSpirit()`, false)}`;
             return output;
         }
     return {

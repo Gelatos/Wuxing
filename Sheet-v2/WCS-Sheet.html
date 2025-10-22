@@ -7077,7 +7077,7 @@
 													7 + [Character Rank] + [Body]</span><span class="wuxHeader2">Hit Points</span><br />
 												<span class="wuxDescription">Hit Points (HP) are the number of hits a character can take in combat. Your character’s hit points is a representation of your character maintaining their barrier to take hits, resisting harm with their toughness, and general ability to avoid harm. A character may be taking attacks from multiple sources that can be easily shrugged off, but once they run out of HP to do so is when the big hits make their way through. </span>
 												<span class="wuxDescription">Hit Points is calculated as:
-													25 + [Character Rank x 5] + [Character Level] + [Body]</span><span class="wuxHeader2">Power</span><br />
+													25 + [Character Rank x 15] + [Character Level] + [Body]</span><span class="wuxHeader2">Power</span><br />
 												<span class="wuxDescription">Power is used as a potency bonus for some techniques reliant on physical force. </span>
 												<span class="wuxDescription">Power is calculated as:
 													[Body x Character Rank]</span><span class="wuxHeader2">Carrying Capacity</span><br />
@@ -14246,7 +14246,7 @@
 
 														<span class="wuxDescription">Hit Points (HP) are the number of hits a character can take in combat. Your character’s hit points is a representation of your character maintaining their barrier to take hits, resisting harm with their toughness, and general ability to avoid harm. A character may be taking attacks from multiple sources that can be easily shrugged off, but once they run out of HP to do so is when the big hits make their way through. </span>
 														<span class="wuxDescription">Hit Points is calculated as:
-															25 + [Character Rank x 5] + [Character Level] + [Body]</span>
+															25 + [Character Rank x 15] + [Character Level] + [Body]</span>
 													</div>
 												</div>
 											</div>
@@ -16607,7 +16607,7 @@
 
 														<span class="wuxDescription">Hit Points (HP) are the number of hits a character can take in combat. Your character’s hit points is a representation of your character maintaining their barrier to take hits, resisting harm with their toughness, and general ability to avoid harm. A character may be taking attacks from multiple sources that can be easily shrugged off, but once they run out of HP to do so is when the big hits make their way through. </span>
 														<span class="wuxDescription">Hit Points is calculated as:
-															25 + [Character Rank x 5] + [Character Level] + [Body]</span>
+															25 + [Character Rank x 15] + [Character Level] + [Body]</span>
 													</div>
 												</div>
 											</div></span><span class="wuxFlexTableItemData">
@@ -42822,7 +42822,12 @@
 								</div>
 							</div>
 							<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
-								<div class="wuxHeader">Basic Action Techniques</div>
+								<div class="wuxHeader">
+									<div class="wuxButton wuxStyleRefreshButton">
+										<input type="checkbox" name="attr_basicaction_refresh">
+										<span>1</span>
+									</div><span>Basic Action Techniques</span>
+								</div>
 								<div>
 									<div class="wuxNoRepControl wuxRepeatingFlexSection">
 										<fieldset class="repeating_basicaction">
@@ -43787,7 +43792,12 @@
 								</div>
 							</div>
 							<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
-								<div class="wuxHeader">Basic Recovery Techniques</div>
+								<div class="wuxHeader">
+									<div class="wuxButton wuxStyleRefreshButton">
+										<input type="checkbox" name="attr_basicrecovery_refresh">
+										<span>1</span>
+									</div><span>Basic Recovery Techniques</span>
+								</div>
 								<div>
 									<div class="wuxNoRepControl wuxRepeatingFlexSection">
 										<fieldset class="repeating_basicrecovery">
@@ -44752,7 +44762,12 @@
 								</div>
 							</div>
 							<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
-								<div class="wuxHeader">Basic Attack Techniques</div>
+								<div class="wuxHeader">
+									<div class="wuxButton wuxStyleRefreshButton">
+										<input type="checkbox" name="attr_basicattack_refresh">
+										<span>1</span>
+									</div><span>Basic Attack Techniques</span>
+								</div>
 								<div>
 									<div class="wuxNoRepControl wuxRepeatingFlexSection">
 										<fieldset class="repeating_basicattack">
@@ -45717,7 +45732,12 @@
 								</div>
 							</div>
 							<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
-								<div class="wuxHeader">Basic Social Techniques</div>
+								<div class="wuxHeader">
+									<div class="wuxButton wuxStyleRefreshButton">
+										<input type="checkbox" name="attr_basicsocial_refresh">
+										<span>1</span>
+									</div><span>Basic Social Techniques</span>
+								</div>
 								<div>
 									<div class="wuxNoRepControl wuxRepeatingFlexSection">
 										<fieldset class="repeating_basicsocial">
@@ -46683,7 +46703,12 @@
 							</div><input type="hidden" class="wuxHiddenAncestry-flag" name="attr_ancestry" value="0">
 							<div class="wuxHiddenAncestrySpirit">
 								<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
-									<div class="wuxHeader">Basic Spirit Techniques</div>
+									<div class="wuxHeader">
+										<div class="wuxButton wuxStyleRefreshButton">
+											<input type="checkbox" name="attr_basicspirit_refresh">
+											<span>1</span>
+										</div><span>Basic Spirit Techniques</span>
+									</div>
 									<div>
 										<div class="wuxNoRepControl wuxRepeatingFlexSection">
 											<fieldset class="repeating_basicspirit">
@@ -50110,6 +50135,21 @@ WuxWorkerActions.RefreshStandardStyleActions(11)
 });
 on("change:forme-styleslot9_refresh", function (eventinfo) {
 WuxWorkerActions.RefreshStandardStyleActions(12)
+});
+on("change:basicaction_refresh", function (eventinfo) {
+WuxWorkerActions.RefreshBasicActions()
+});
+on("change:basicrecovery_refresh", function (eventinfo) {
+WuxWorkerActions.RefreshBasicRecovery()
+});
+on("change:basicattack_refresh", function (eventinfo) {
+WuxWorkerActions.RefreshBasicAttack()
+});
+on("change:basicsocial_refresh", function (eventinfo) {
+WuxWorkerActions.RefreshBasicSocial()
+});
+on("change:basicspirit_refresh", function (eventinfo) {
+WuxWorkerActions.RefreshBasicSpirit()
 });
 on("change:note-opennotebookactions change:repeating_notebooks:note-notebookactions change:repeating_jobstyles:forme-actions change::forme-actions change:repeating_styles:forme-actions change:forme-jobslot1_expand change:forme-advancedslot1_expand change:forme-styleslot1_expand change:forme-jobslot2_expand change:forme-advancedslot2_expand change:forme-styleslot2_expand change:forme-jobslot3_expand change:forme-advancedslot3_expand change:forme-styleslot3_expand change:forme-styleslot4_expand change:forme-styleslot5_expand change:forme-styleslot6_expand change:repeating_equipment:gear-itemaction change:repeating_consumables:gear-itemaction change:repeating_goods:gear-itemaction change:repeating_jobtech1:act-actions change:repeating_jobtech2:act-actions change:repeating_jobtech3:act-actions change:repeating_advtech1:act-actions change:repeating_advtech2:act-actions change:repeating_advtech3:act-actions change:repeating_advtech4:act-actions change:repeating_advtech5:act-actions change:repeating_advtech6:act-actions change:repeating_advtech7:act-actions change:repeating_advtech8:act-actions change:repeating_advtech9:act-actions change:repeating_geartech:act-actions change:repeating_consumables:act-actions change:repeating_basicaction:act-actions change:repeating_basicrecovery:act-actions change:repeating_basicattack:act-actions change:repeating_basicsocial:act-actions change:repeating_customtech:act-actions change:job-fighter_expand change:job-sentinel_expand change:job-warden_expand change:job-bulwark_expand change:job-hunter_expand change:job-sniper_expand change:job-trooper_expand change:job-warmage_expand change:job-alchemist_expand change:job-brawler_expand change:job-kineticist_expand change:job-rogue_expand change:job-labourer_expand change:job-tactician_expand change:job-magus_expand change:job-scholar_expand change:job-inquisitor_expand change:job-detective_expand change:job-culinarian_expand change:job-bard_expand change:job-spellwright_expand change:job-medic_expand change:job-empath_expand change:job-merchant_expand change:job-orator_expand change:job-hardliner_expand change:job-etherealist_expand change:job-shade_expand change:sty-basic_action_expand change:sty-basic_recovery_expand change:sty-basic_attack_expand change:sty-basic_social_expand change:sty-basic_spirit_expand change:sty-smashing_arte_expand change:sty-mauler_arte_expand change:sty-berserker_arte_expand change:sty-avenger_arte_expand change:sty-cleaving_arte_expand change:sty-battering_arte_expand change:sty-crushing_arte_expand change:sty-arcanestrike_arte_expand change:sty-flame_spellblade_arte_expand change:sty-lightning_spellblade_arte_expand change:sty-cold_spellblade_arte_expand change:sty-duelist_arte_expand change:sty-fencer_arte_expand change:sty-swashbuckling_arte_expand change:sty-deftblade_arte_expand change:sty-jumpspear_arte_expand change:sty-sky_pike_arte_expand change:sty-chargestrike_arte_expand change:sty-overwhelming_arte_expand change:sty-phalanx_arte_expand change:sty-finesse_blade_arte_expand change:sty-flashcut_arte_expand change:sty-whip_arte_expand change:sty-trickster_arte_expand change:sty-aerial_arte_expand change:sty-windfall_arte_expand change:sty-firefall_arte_expand change:sty-skyfall_arte_expand change:sty-forceful_fist_arte_expand change:sty-powerarm_arte_expand change:sty-stepflow_arte_expand change:sty-swaying_palm_arte_expand change:sty-wrestling_arte_expand change:sty-ironhold_arte_expand change:sty-galegrip_arte_expand change:sty-heaven's_reach_arte_expand change:sty-rapid_strikes_arte_expand change:sty-disruption_form_arte_expand change:sty-archery_arte_expand change:sty-bowmaster_arte_expand change:sty-gunslinger_arte_expand change:sty-pistolero_arte_expand change:sty-trick_shot_arte_expand change:sty-sentry_arte_expand change:sty-longsight_arte_expand change:sty-scatterpoint_arte_expand change:sty-bomber_arte_expand change:sty-daggerthrow_arte_expand change:sty-blasting_flames_expand change:sty-hellfire_expand change:sty-lightning_shot_expand change:sty-storm_caller_expand change:sty-binding_cold_expand change:sty-sheer_cold_expand change:sty-arcane_spellshot_expand change:sty-flaming_sphere_expand change:sty-shock_bomb_expand change:sty-area_spark_expand change:sty-chilling_blast_expand change:sty-ki_channeling_expand change:sty-manification_expand change:sty-ether_magic_expand change:sty-time_control_expand change:sty-messaging_expand change:sty-sound_control_expand change:sty-fire_field_expand change:sty-blazing_field_expand change:sty-light_control_expand change:sty-illusory_field_expand change:sty-blurred_light_expand change:sty-shadow_control_expand change:sty-darkness_weaving_expand change:sty-shadow_walking_expand change:sty-bursting_fire_expand change:sty-close_circuit_expand change:sty-ice_storm_expand change:sty-fire_conduit_expand change:sty-lightning_conduit_expand change:sty-cold_conduit_expand change:sty-windglide_expand change:sty-jetstream_expand change:sty-freeform_flight_expand change:sty-surging_dust_expand change:sty-surging_water_expand change:sty-binding_winds_expand change:sty-windsweep_expand change:sty-binding_weight_expand change:sty-gravity_force_expand change:sty-propelling_force_expand change:sty-telekinesis_expand change:sty-levitation_expand change:sty-dust_impact_expand change:sty-kinetic_assault_expand change:sty-throwcraft_expand change:sty-warsmith_expand change:sty-conjure_blades_expand change:sty-glass_blades_expand change:sty-conjure_skyfall_expand change:sty-structural_magic_expand change:sty-arbormaking_expand change:sty-stonemaking_expand change:sty-iron_walls_expand change:sty-glacial_walls_expand change:sty-clouded_shroud_expand change:sty-smoke_field_expand change:sty-misty_terrtain_expand change:sty-floral_shroud_expand change:sty-poison_spore_expand change:sty-dust_shaping_expand change:sty-shape_mastery_expand change:sty-terrain_molding_expand change:sty-geomancy_expand change:sty-earth_shaker_expand change:sty-ground_splitter_expand change:sty-icy_terrain_expand change:sty-cryomancy_expand change:sty-unshaping_expand change:sty-plant_growth_expand change:sty-calming_blooms_expand change:sty-verdant_armory_expand change:sty-earthen_armory_expand change:sty-water_shape_expand change:sty-frozen_armory_expand change:sty-healing_hands_expand change:sty-soul_surge_expand change:sty-blood_flux_expand change:sty-earthen_endurance_expand change:sty-propelling_motion_expand change:sty-traversal_expand change:sty-unrelenting_motion_expand change:sty-powered_leap_expand change:sty-hidden_footing_expand change:sty-enduring_body_expand change:sty-unbeatable_brawn_expand change:sty-evasive_maneuvers_expand change:sty-reactive_defense_expand change:sty-remotion_expand change:sty-loyalty_appeal_expand change:sty-social_grace_expand change:sty-flattery_expand change:sty-deft_negotiator_expand change:sty-sales_tactics_expand change:sty-fluster_point_expand change:sty-provoking_anger_expand change:sty-intimidating_fear_expand change:sty-beguiling_instinct_expand change:sty-taunting_wit_expand change:sty-invigorating_rally_expand change:sty-underminer_expand change:sty-stillheart_expand change:sty-connecting_bond_expand", function (eventinfo) {
 WuxWorkerGeneral.OpenSubMenu(eventinfo)
