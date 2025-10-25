@@ -310,15 +310,11 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         });
     };
     
-    const refreshStyleActions = function (repeatingSectionName, styleNameVar, repeatingSectionIndex, styleWorkerType) {
-        Debug.Log("Update Style Stats");
-        let attributeHandler = new WorkerAttributeHandler();
+    const refreshStyleActions = function (attributeHandler, repeatingSectionName, styleNameVar, repeatingSectionIndex, styleWorkerType) {
         let styleWorker = new WuxBasicWorkerBuild(styleWorkerType);
-        Debug.Log(`Style Worker Type: ${styleWorkerType}, with draft: ${styleWorker.attrBuildDraft} and Style Name Var: ${styleNameVar}`);
         attributeHandler.addMod([styleWorker.attrBuildDraft, styleNameVar]);
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
-            Debug.Log("Refreshing Style Actions");
             let styleName = attrHandler.parseString(styleNameVar);
             styleWorker.setBuildStatsDraft(attrHandler);
             styleWorker.iterateBuildStats(function (styleVariableData) {
@@ -328,9 +324,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 }
             });
         });
-        let loader = new LoadingScreenHandler(attributeHandler);
-        loader.run();
-
     }
     
     const getAllStyleSlotRepeaters = function() {
@@ -512,18 +505,51 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         },
         refreshJobStyleActions = function (repeatingSectionIndex) {
             Debug.Log(`Refreshing Job Style Actions in slot ${repeatingSectionIndex}`);
-            refreshStyleActions("RepeatingJobTech", 
+            let attributeHandler = new WorkerAttributeHandler();
+            refreshStyleActions(attributeHandler, "RepeatingJobTech",
                 WuxDef.GetVariable("Forme_JobSlot", repeatingSectionIndex), repeatingSectionIndex, "Job");
+            let loader = new LoadingScreenHandler(attributeHandler);
+            loader.run();
         },
         refreshAdvancedStyleActions = function (repeatingSectionIndex) {
             Debug.Log(`Refreshing Advanced Style Actions in slot ${repeatingSectionIndex}`);
-            refreshStyleActions("RepeatingAdvTech",
+            let attributeHandler = new WorkerAttributeHandler();
+            refreshStyleActions(attributeHandler, "RepeatingAdvTech",
                 WuxDef.GetVariable("Forme_AdvancedSlot", repeatingSectionIndex), repeatingSectionIndex, "Style");
+            let loader = new LoadingScreenHandler(attributeHandler);
+            loader.run();
         },
         refreshStandardStyleActions = function (repeatingSectionIndex) {
             Debug.Log(`Refreshing Standard Style Actions in slot ${repeatingSectionIndex}`);
-            refreshStyleActions("RepeatingAdvTech",
+            let attributeHandler = new WorkerAttributeHandler();
+            refreshStyleActions(attributeHandler, "RepeatingAdvTech",
                 WuxDef.GetVariable("Forme_StyleSlot", parseInt(repeatingSectionIndex)-3), repeatingSectionIndex, "Style");
+            let loader = new LoadingScreenHandler(attributeHandler);
+            loader.run();
+        },
+        populateAllActions = function () {
+            Debug.Log("Populating all style actions");
+            let attributeHandler = new WorkerAttributeHandler();
+            // let maxAdvancedSlots = 3;
+            // let maxNormalSlots = 6;
+            // for (let i = 1; i <= maxNormalSlots; i++) {
+            //     if (i <= maxAdvancedSlots) {
+            //         refreshStyleActions(attributeHandler, "RepeatingJobTech",
+            //             WuxDef.GetVariable("Forme_JobSlot", i), i, "Job");
+            //         refreshStyleActions(attributeHandler, "RepeatingAdvTech",
+            //             WuxDef.GetVariable("Forme_AdvancedSlot", i), i, "Style");
+            //     }
+            //     refreshStyleActions(attributeHandler, "RepeatingAdvTech",
+            //         WuxDef.GetVariable("Forme_StyleSlot", i), i + 3, "Style");
+            // }
+            
+            populateBasicActions(attributeHandler, "RepeatingBasicActions", "Basic Action");
+            populateBasicActions(attributeHandler, "RepeatingBasicRecovery", "Basic Recovery");
+            populateBasicActions(attributeHandler, "RepeatingBasicAttack", "Basic Attack");
+            populateBasicActions(attributeHandler, "RepeatingBasicSocial", "Basic Social");
+            populateBasicActions(attributeHandler, "RepeatingBasicSpirit", "Basic Spirit");
+            let loader = new LoadingScreenHandler(attributeHandler);
+            loader.run();
         },
         refreshBasicActions = function () {
             let attributeHandler = new WorkerAttributeHandler();
@@ -636,6 +662,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         RefreshJobStyleActions: refreshJobStyleActions,
         RefreshAdvancedStyleActions: refreshAdvancedStyleActions,
         RefreshStandardStyleActions: refreshStandardStyleActions,
+        PopulateAllActions: populateAllActions,
         RefreshBasicActions: refreshBasicActions,
         RefreshBasicRecovery: refreshBasicRecovery,
         RefreshBasicAttack: refreshBasicAttack,

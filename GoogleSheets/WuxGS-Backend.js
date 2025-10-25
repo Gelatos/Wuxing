@@ -509,6 +509,10 @@ var ActionBuilder = ActionBuilder || (function () {
         },
         listenerRefreshBasicActions = function () {
             let output = "";
+            output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RefreshTech")}`],
+                `WuxWorkerActions.PopulateAllActions()`, false)}`;
+            output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("GearTech", WuxDef._refresh)}`],
+                `WuxWorkerActions.PopulateGearActions()`, false)}`;
             output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("BasicActions", WuxDef._refresh)}`],
                 `WuxWorkerActions.RefreshBasicActions()`, false)}`;
             output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("BasicRecovery", WuxDef._refresh)}`],

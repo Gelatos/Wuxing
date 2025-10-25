@@ -57,7 +57,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                     contents += WuxSheetSidebar.BuildChatSection();
                     contents += WuxSheetSidebar.BuildChecksSection();
                     contents += WuxSheetSidebar.BuildBoonSection();
-                    contents += WuxSheetSidebar.BuildStatusSection();
                     // contents += WuxSheetSidebar.BuildLanguageSection();
                     return WuxSheetSidebar.Build("", contents);
                 }
@@ -701,7 +700,6 @@ var DisplayFormeSheet = DisplayFormeSheet || (function () {
                     contents += WuxSheetSidebar.BuildChatSection();
                     contents += WuxSheetSidebar.BuildChecksSection();
                     contents += WuxSheetSidebar.BuildBoonSection();
-                    contents += WuxSheetSidebar.BuildStatusSection();
                     // contents += WuxSheetSidebar.BuildLanguageSection();
                     return WuxSheetSidebar.Build("", contents);
                 }
@@ -850,7 +848,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     contents += WuxSheetSidebar.BuildChatSection();
                     contents += WuxSheetSidebar.BuildChecksSection();
                     contents += WuxSheetSidebar.BuildBoonSection();
-                    contents += WuxSheetSidebar.BuildStatusSection();
                     // contents += WuxSheetSidebar.BuildLanguageSection();
                     return WuxSheetSidebar.Build("", contents);
                 }
@@ -1207,7 +1204,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     contents += WuxSheetSidebar.BuildChatSection();
                     contents += WuxSheetSidebar.BuildChecksSection();
                     contents += WuxSheetSidebar.BuildBoonSection();
-                    contents += WuxSheetSidebar.BuildStatusSection();
+                    contents += WuxSheetSidebar.BuildTechSection();
                     // contents += WuxSheetSidebar.BuildLanguageSection();
                     return WuxSheetSidebar.Build("", contents);
                 }
@@ -1238,7 +1235,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     repeaterSlotData.forEach(function (repeaterData) {
                         contents += repeatingFormeTechniquesSection(repeaterData);
                     });
-                    contents += repeatingBasicTechniquesSection("RepeatingGearTech");
+                    contents += repeatingBasicTechniquesSection("RepeatingGearTech", "GearTech");
                     contents += repeatingBasicTechniquesSection("RepeatingConsumables");
                     contents += repeatingBasicTechniquesSection("RepeatingBasicActions", "BasicActions");
                     contents += repeatingBasicTechniquesSection("RepeatingBasicRecovery", "BasicRecovery");

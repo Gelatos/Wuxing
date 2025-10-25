@@ -1251,13 +1251,13 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), output, true);
         },
 
-        buildStatusSection = function () {
-            let output = buildStatusNames(WuxDef.Filter([new DatabaseFilterData("subGroup", "Status")]));
-            output += buildStatusNames(WuxDef.Filter([new DatabaseFilterData("subGroup", "Condition")]));
-            output += buildStatusNames(WuxDef.Filter([new DatabaseFilterData("subGroup", "Emotion")]));
+        buildTechSection = function () {
+            let contents = "";
+            let refreshTechDef = WuxDef.Get("RefreshTech");
+            contents += WuxSheetMain.Button(refreshTechDef.getAttribute(), refreshTechDef.getTitle(), "wuxSizePercent");
 
-            let titleDefinition = WuxDef.Get("Status");
-            return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), output, true);
+            let titleDefinition = WuxDef.Get("Action_Techniques");
+            return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), contents, true);
         };
     return {
         Build: build,
@@ -1269,7 +1269,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
         BuildChatSection: buildChatSection,
         BuildLanguageSection: buildLanguageSection,
         BuildChecksSection: buildChecksSection,
-        BuildStatusSection: buildStatusSection
+        BuildTechSection: buildTechSection
     };
 }());
 
