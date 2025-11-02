@@ -1399,7 +1399,9 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                             ${buildTooltipSection("TechTrait", 3)}
                             ${buildTooltipSection("TechTrait", 4)}
                         </div>
-                    </div>`;
+                    </div>
+                    <input type="hidden" class="wuxFeatureDefenseIcon-flag" name="${getActionTypeAttribute("TechCoreDefense")}" value="" />
+                    <div class="wuxFeatureDefenseIcon"></div>`;
                 },
 
                 buildBaseTechniqueRequirements = function () {
@@ -1716,6 +1718,8 @@ var DisplayPopups = DisplayPopups || (function () {
                                         ${buildTooltipSection("TechTrait", 4)}
                                     </div>
                                 </div>
+                                <input type="hidden" class="wuxFeatureDefenseIcon-flag" name="${getPopupAttribute("TechCoreDefense")}" value="" />
+                                <div class="wuxFeatureDefenseIcon"></div>
                             </div>
                             <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechTrigger")}" value="0" />
                             <div class="wuxHiddenField">

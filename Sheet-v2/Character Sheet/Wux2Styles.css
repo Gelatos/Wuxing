@@ -2136,6 +2136,74 @@ input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeader,
     border-bottom: 1px solid #000;
 }
 
+.wuxFeatureHeader .wuxFeatureDefenseIcon,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Brace,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Fortitude,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Warding,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Hide,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Reflex,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Evasion,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Resolve,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Insight,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Guile
+{
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 48px;
+    height: 48px;
+    background-size: cover;
+    background-position: bottom;
+    z-index: 0;
+}
+
+.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Brace"] + .wuxFeatureDefenseIcon,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Brace
+{
+    background-image: url("http://i.imgur.com/0dVA66J.png");
+}
+.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Fortitude"] + .wuxFeatureDefenseIcon,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Fortitude
+{
+    background-image: url("http://i.imgur.com/15XSu62.png");
+}
+.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Warding"] + .wuxFeatureDefenseIcon,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Warding
+{
+    background-image: url("http://i.imgur.com/LCZV8Hb.png");
+}
+.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Hide"] + .wuxFeatureDefenseIcon,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .wuxFeatureDefenseIcon-Hide
+{
+    background-image: url("http://i.imgur.com/7qTwPRK.png");
+}
+.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Reflex"] + .wuxFeatureDefenseIcon,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Reflex
+{
+    background-image: url("http://i.imgur.com/nPJnTat.png");
+}
+.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Evasion"] + .wuxFeatureDefenseIcon,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .wuxFeatureDefenseIcon-Evasion
+{
+    background-image: url("http://i.imgur.com/lMEhyIh.png");
+}
+.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Resolve"] + .wuxFeatureDefenseIcon,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .wuxFeatureDefenseIcon-Resolve
+{
+    background-image: url("http://i.imgur.com/G7DD0ly.png");
+}
+.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Insight"] + .wuxFeatureDefenseIcon,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .wuxFeatureDefenseIcon-Insight
+{
+    background-image: url("http://i.imgur.com/axbMBDm.png");
+}
+.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Guile"] + .wuxFeatureDefenseIcon,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .wuxFeatureDefenseIcon-Guile
+{
+    background-image: url("http://i.imgur.com/jx7OA69.png");
+}
+
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeader
 {
     background: #1d1e1f;
@@ -2299,6 +2367,7 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
     width: calc(100% - 36px);
     min-width: 36px;
     margin-right: 3px;
+    z-index: 100;
     
     text-align: left;
     text-shadow: none;

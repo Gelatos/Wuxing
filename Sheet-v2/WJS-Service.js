@@ -696,6 +696,7 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addUpdate(this.getVariable("TechName"), displayData.name);
 		this.attrHandler.addUpdate(this.getVariable("TechAffinity"), technique.affinity);
 		this.attrHandler.addUpdate(this.getVariable("TechTier"), technique.tier);
+		this.attrHandler.addUpdate(this.getVariable("TechCoreDefense"), displayData.coreDefense);
 		this.attrHandler.addUpdate(this.getVariable("TechActionType"), displayData.actionType);
 		this.attrHandler.addUpdate(this.getVariable("TechResourceData"), displayData.resourceData);
 		this.attrHandler.addUpdate(this.getVariable("TechTargetingData"), displayData.targetData);
@@ -784,6 +785,7 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addUpdate(this.getVariable("TechDisplayName"), "");
 		this.attrHandler.addUpdate(this.getVariable("TechAffinity"), "");
 		this.attrHandler.addUpdate(this.getVariable("TechTier"), 0);
+		this.attrHandler.addUpdate(this.getVariable("TechCoreDefense"), 0);
 		this.attrHandler.addUpdate(this.getVariable("TechResourceData"), "");
 		this.attrHandler.addUpdate(this.getVariable("TechTargetingData"), "");
 		this.clearDefinition("TechTrait", 0);

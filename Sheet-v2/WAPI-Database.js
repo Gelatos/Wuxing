@@ -558,6 +558,7 @@ class TechniqueData extends WuxDatabaseData {
         this.itemTraits = json.itemTraits;
         this.trigger = json.trigger;
         this.flavorText = json.flavorText;
+        this.coreDefense = json.coreDefense;
         this.definitions = json.definitions;
         this.effects = new TechniqueEffectDatabase(json.effects);
         this.secondEffectConditionName = json.secondEffectConditionName;
@@ -607,6 +608,8 @@ class TechniqueData extends WuxDatabaseData {
         i++;
         this.flavorText = "" + dataArray[i];
         i++;
+        this.coreDefense = "" + dataArray[i];
+        i++;
         
         this.techniqueEffect = new TechniqueEffect(dataArray.slice(i));
         this.addEffect(this.techniqueEffect);
@@ -633,6 +636,7 @@ class TechniqueData extends WuxDatabaseData {
         this.itemTraits = "";
         this.trigger = "";
         this.flavorText = "";
+        this.coreDefense = "";
         this.definitions = [];
         this.effects = new TechniqueEffectDatabase();
         this.secondEffectConditionName = "";
@@ -1885,7 +1889,7 @@ class ItemDefinitionData extends DefinitionData {
     }
 }
 
-// Special Display
+// Display
 class TechniqueDisplayData {
 
     constructor(technique) {
@@ -1915,6 +1919,8 @@ class TechniqueDisplayData {
         this.fieldName = Format.ToFieldName(technique.name);
         this.actionType = technique.action;
         this.isFree = technique.isFree;
+        this.coreDefense = technique.coreDefense;
+        Debug.Log(`${this.name} is setting core defense to:${this.coreDefense} `);
     }
 
     setTechSetResourceData(technique) {
@@ -1959,12 +1965,22 @@ class TechniqueDisplayData {
             }
             if (technique.size > 0) {
                 if (technique.target.includes("Target") || technique.target.includes("Object")) {
-                    this.targetData += `${technique.size} ${technique.target}`;
+                    this.targetData += `${this.numberToWord(technique.size)} ${technique.target}`;
                 }
                 else {
                     this.targetData += `${technique.target} ${technique.size}`;
                 }
             }
+        }
+    }
+
+    numberToWord(num) {
+        const words = ["Zero", "One", "Two", "Three", "Four", "Five", "Six"];
+
+        if (Number.isInteger(num) && num >= 0 && num <= 6) {
+            return words[num];
+        } else {
+            return num;
         }
     }
 
@@ -2040,6 +2056,7 @@ class TechniqueDisplayData {
         this.definition = {};
         this.fieldName = "";
         this.isFree = false;
+        this.coreDefense = "";
 
         this.resourceData = "";
         this.targetData = "";
@@ -2071,6 +2088,9 @@ class TechniqueDisplayData {
         }
         if (this.traits.length > 0) {
             output += this.rollTemplateDefinitions(this.traits, "Trait");
+        }
+        if (this.coreDefense != "") {
+            output += `{{CoreDefense${this.coreDefense}=1}}`;
         }
         if (this.trigger != "") {
             output += `{{Trigger=${this.trigger}}}`;
