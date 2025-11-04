@@ -547,6 +547,7 @@ class TechniqueData extends WuxDatabaseData {
         this.tier = parseInt(json.tier);
         this.isFree = this.affinity == "" && this.tier <= 0;
         this.action = json.action;
+        this.forms = json.forms;
         this.traits = json.traits;
         this.resourceCost = json.resourceCost;
         this.limits = json.limits;
@@ -585,6 +586,8 @@ class TechniqueData extends WuxDatabaseData {
         i++;
         this.isFree = this.affinity == "" && this.tier <= 0;
         this.action = "" + dataArray[i];
+        i++;
+        this.forms = "" + dataArray[i];
         i++;
         this.traits = "" + dataArray[i];
         i++;
@@ -625,6 +628,7 @@ class TechniqueData extends WuxDatabaseData {
         this.tier = 0;
         this.isFree = false;
         this.action = "";
+        this.forms = "";
         this.traits = "";
         this.resourceCost = "";
         this.limits = "";
@@ -1991,6 +1995,7 @@ class TechniqueDisplayData {
     }
 
     setTraits(technique) {
+        this.forms = WuxDef.GetValues(technique.forms, ";", "Trait_");
         this.traits = WuxDef.GetValues(technique.traits, ";", "Trait_");
     }
 
@@ -2060,6 +2065,7 @@ class TechniqueDisplayData {
 
         this.resourceData = "";
         this.targetData = "";
+        this.forms = [];
         this.traits = [];
 
         this.trigger = "";
@@ -2085,6 +2091,9 @@ class TechniqueDisplayData {
         }
         if (this.targetData != "") {
             output += `{{Targeting=${this.targetData}}}`;
+        }
+        if (this.forms.length > 0) {
+            output += this.rollTemplateDefinitions(this.forms, "FormTrait");
         }
         if (this.traits.length > 0) {
             output += this.rollTemplateDefinitions(this.traits, "Trait");
@@ -2288,11 +2297,7 @@ class BaseTechniqueEffectDisplayData {
             case "Surge":
                 return `If ${this.formatTarget(effect)} has a surge, they must spend one and heal ${this.formatCalcBonus(effect)} ${hp}`;
             default:
-                let traits = "";
-                if (effect.traits != "") {
-                    traits = `[${effect.traits}] `;
-                }
-                return `${traits}${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+                return `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
         }
     }
 
@@ -4420,23 +4425,6 @@ var FeatureService = FeatureService || (function () {
     'use strict';
 
     var
-
-        // Display Technique (Variants)
-        // ------------------------,
-
-        getRollTemplate = function (techDisplayData) {
-            let output = "";
-
-            output += `{{Displayname=${techDisplayData.displayname}}}{{Name=${techDisplayData.name}}}{{SlotType=${techDisplayData.slotFooter}}}{{Source=${techDisplayData.slotSource}}}{{UsageInfo=${techDisplayData.usageInfo}}}${techDisplayData.traits.length > 0 ? rollTemplateTraits(techDisplayData.traits, "Trait") : ""}${techDisplayData.trigger ? `{{Trigger=${techDisplayData.trigger}}}` : ""}${techDisplayData.requirement ? `{{Requirement=${techDisplayData.requirement}}}` : ""}${techDisplayData.item ? `{{Item=${techDisplayData.item}}}` : ""}${techDisplayData.range ? `{{Range=${techDisplayData.range}}}` : ""}${techDisplayData.target ? `{{Target=${techDisplayData.target}}}` : ""}${techDisplayData.skill ? `{{SkillString=${techDisplayData.skill}}}` : ""}${techDisplayData.damage ? `{{DamageString=${techDisplayData.damage}}}` : ""}${techDisplayData.description ? `{{Desc=${techDisplayData.description}}}` : ""}${techDisplayData.onHit ? `{{OnHit=${techDisplayData.onHit}}}` : ""}${techDisplayData.conditions ? `{{Conditions=${techDisplayData.conditions}}}` : ""}`;
-            output += ` {{type-${techDisplayData.slotType}=1}} ${techDisplayData.slotIsPath ? "{{isPath=1}} " : ""}{{type-${techDisplayData.actionType}=1}} ${techDisplayData.isFunctionBlock ? "{{type-FunctionBlock=1}} " : ""}${techDisplayData.isCheckBlock ? "{{type-CheckBlock=1}} " : ""}${techDisplayData.isCheckBlock ? "{{type-CheckBlockTarget=1}} " : ""}${techDisplayData.isDescBlock ? "{{type-DescBlock=1}} " : ""}`;
-
-            return `&{template:technique} ${output.trim()}`;
-        },
-
-        getRollTemplateFromTechnique = function (technique) {
-            return getRollTemplate(new TechniqueDisplayData(technique));
-        },
-
         // Formatting
         // ------------------------,
 
@@ -4579,8 +4567,6 @@ var FeatureService = FeatureService || (function () {
 
     ;
     return {
-        GetRollTemplate: getRollTemplate,
-        GetRollTemplateFromTechnique: getRollTemplateFromTechnique,
         RollTemplateTraits: rollTemplateTraits,
         GetDamageString: getDamageString,
         GetPrerequisiteString: getPrerequisiteString,

@@ -700,6 +700,9 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addUpdate(this.getVariable("TechActionType"), displayData.actionType);
 		this.attrHandler.addUpdate(this.getVariable("TechResourceData"), displayData.resourceData);
 		this.attrHandler.addUpdate(this.getVariable("TechTargetingData"), displayData.targetData);
+		if (displayData.forms.length > 0) {
+			this.addDefinitions(displayData.forms, this.getVariable("TechForm"), 3);
+		}
 		if (displayData.traits.length > 0) {
 			this.addDefinitions(displayData.traits, this.getVariable("TechTrait"), 3);
 		}
@@ -788,10 +791,16 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addUpdate(this.getVariable("TechCoreDefense"), 0);
 		this.attrHandler.addUpdate(this.getVariable("TechResourceData"), "");
 		this.attrHandler.addUpdate(this.getVariable("TechTargetingData"), "");
+		this.clearDefinition("TechForm", 0);
+		this.clearDefinition("TechForm", 1);
+		this.clearDefinition("TechForm", 2);
+		this.clearDefinition("TechForm", 3);
+		this.clearDefinition("TechForm", 4);
 		this.clearDefinition("TechTrait", 0);
 		this.clearDefinition("TechTrait", 1);
 		this.clearDefinition("TechTrait", 2);
 		this.clearDefinition("TechTrait", 3);
+		this.clearDefinition("TechTrait", 4);
 		this.attrHandler.addUpdate(this.getVariable("TechTrigger"), 0);
 		this.attrHandler.addUpdate(this.getVariable("TechRequirements"), 0);
 		this.clearDefinition("TechItemReq", 0);

@@ -972,7 +972,7 @@ class TokenTargetEffectsData {
                     tokenTargetEffect.takeWillFullHealing(attrSetter);
                     break;
                 default:
-                    if (damageRoll.traits != "AP") {
+                    if (!damageRoll.traits.includes("AP")) {
                         let armorTotal = attrGetter.parseInt(WuxDef.GetVariable("Cmb_Armor"));
                         if (tokenTargetEffect.tokenTargetData.hasStatus(attrSetter, "Stat_Armored")) {
                             armorTotal += 2 * attrGetter.parseInt(WuxDef.GetVariable("CR"));
