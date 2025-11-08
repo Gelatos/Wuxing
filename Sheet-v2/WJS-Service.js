@@ -845,11 +845,12 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		if (affinity.includes(";")) {
 			let affinityParts = affinity.split(";").map(s => s.trim());
 			if (affinity != "" && !affinityParts.some(part => affinities.includes(part))) {
+				
 				this.setVisibilityAttribute(false);
 				return false;
 			}
 		}
-		if (affinity != "" && !affinities.includes(affinity)) {
+		else if (affinity != "" && !affinities.includes(affinity)) {
 			this.setVisibilityAttribute(false);
 			return false;
 		}
