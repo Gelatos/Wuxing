@@ -1924,7 +1924,6 @@ class TechniqueDisplayData {
         this.actionType = technique.action;
         this.isFree = technique.isFree;
         this.coreDefense = technique.coreDefense;
-        Debug.Log(`${this.name} is setting core defense to:${this.coreDefense} `);
     }
 
     setTechSetResourceData(technique) {
