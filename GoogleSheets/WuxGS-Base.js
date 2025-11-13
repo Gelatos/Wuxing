@@ -1385,11 +1385,9 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         <input type="hidden" name="${getActionTypeAttribute("TechAffinity")}" value="" />
                         <input type="hidden" name="${getActionTypeAttribute("TechTier")}" value="0" />
                         ${headerText}
-                        <div class="wuxFeatureHeaderInfo"><span name="${getActionTypeAttribute("TechResourceData")}"></span></div>
-                        <div class="wuxFeatureHeaderInfo"><span name="${getActionTypeAttribute("TechTargetingData")}"></span></div>
-                        <div class="wuxFeatureHeaderInfo">
-                            <span><strong>Forms: </strong></span>
-                            <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechForm", 0)}" value="0" />
+                        <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechForm", 0)}" value="0" />
+                        <div class="wuxHiddenField wuxFeatureHeaderInfo">
+                            <span><strong>Keywords: </strong></span>
                             <div class="wuxHiddenInlineAuxField">
                                 <span>None</span>
                             </div>
@@ -1399,8 +1397,10 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                             ${buildTooltipSection("TechForm", 3)}
                             ${buildTooltipSection("TechForm", 4)}
                         </div>
+                        <div class="wuxFeatureHeaderInfo"><span name="${getActionTypeAttribute("TechResourceData")}"></span></div>
+                        <div class="wuxFeatureHeaderInfo"><span name="${getActionTypeAttribute("TechTargetingData")}"></span></div>
                         <div class="wuxFeatureHeaderInfo">
-                            <span><strong>Impacts: </strong></span>
+                            <span><strong>Traits: </strong></span>
                             <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechTrait", 0)}" value="0" />
                             <div class="wuxHiddenInlineAuxField">
                                 <span>None</span>
@@ -1715,22 +1715,19 @@ var DisplayPopups = DisplayPopups || (function () {
                             <div class="wuxFeatureHeader">
                                 <div class="wuxFeatureHeaderDisplayBlock">
                                     <span class="wuxFeatureHeaderName" name="${getPopupAttribute("TechName")}"></span>
-                                    <div class="wuxFeatureHeaderInfo"><span name="${getPopupAttribute("TechResourceData")}"></span></div>
-                                    <div class="wuxFeatureHeaderInfo"><span name="${getPopupAttribute("TechTargetingData")}"></span></div>
-                                    <div class="wuxFeatureHeaderInfo">
-                                        <span><strong>Forms: </strong></span>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechForm", 0)}" value="0" />
-                                        <div class="wuxHiddenInlineAuxField">
-                                            <span>None</span>
-                                        </div>
+                                    <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechForm", 0)}" value="0" />
+                                    <div class="wuxHiddenField wuxFeatureHeaderInfo">
+                                        <span><strong>Keywords: </strong></span>
                                         ${buildTooltipSection("TechForm", 0)}
                                         ${buildTooltipSection("TechForm", 1)}
                                         ${buildTooltipSection("TechForm", 2)}
                                         ${buildTooltipSection("TechForm", 3)}
                                         ${buildTooltipSection("TechForm", 4)}
                                     </div>
+                                    <div class="wuxFeatureHeaderInfo"><span name="${getPopupAttribute("TechResourceData")}"></span></div>
+                                    <div class="wuxFeatureHeaderInfo"><span name="${getPopupAttribute("TechTargetingData")}"></span></div>
                                     <div class="wuxFeatureHeaderInfo">
-                                        <span><strong>Impacts: </strong></span>
+                                        <span><strong>Traits: </strong></span>
                                         <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechTrait", 0)}" value="0" />
                                         <div class="wuxHiddenInlineAuxField">
                                             <span>None</span>
