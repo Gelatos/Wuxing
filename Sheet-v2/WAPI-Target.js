@@ -1821,14 +1821,35 @@ var TargetReference = TargetReference || (function () {
 
                 let crVar = WuxDef.GetVariable("CR");
                 let jobVar = WuxDef.GetVariable("Forme_JobSlot", 1);
+                
+                let braceVar = WuxDef.GetVariable("Def_Brace");
+                let wardingVar = WuxDef.GetVariable("Def_Warding");
+                let reflexVar = WuxDef.GetVariable("Def_Reflex");
+                let evasionVar = WuxDef.GetVariable("Def_Evasion");
+                let resolveVar = WuxDef.GetVariable("Def_Resolve");
+                let insightVar = WuxDef.GetVariable("Def_Insight");
+                let guileVar = WuxDef.GetVariable("Def_Guile");
+                
                 let surgeVar = WuxDef.GetVariable("Surge");
                 let vitalityVar = WuxDef.GetVariable("Cmb_Vitality");
                 let hvVar = WuxDef.GetVariable("Cmb_HV");
                 let armorVar = WuxDef.GetVariable("Cmb_Armor");
-                attributeHandler.addAttribute([crVar, jobVar, surgeVar, vitalityVar, hvVar, armorVar]);
+                attributeHandler.addAttribute([crVar, jobVar, 
+                    braceVar, wardingVar, reflexVar, evasionVar, resolveVar, insightVar, guileVar,
+                    surgeVar, vitalityVar, hvVar, armorVar]);
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
+                    Debug.LogError(`Getting Brace ${braceVar}: ${attrHandler.parseInt(braceVar, 0, false)}`);
                     tokenTargetData.combatDetails.onUpdateCR(attrHandler, attrHandler.parseInt(crVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateJob(attrHandler, attrHandler.parseString(jobVar, 0, false));
+                    tokenTargetData.combatDetails.onUpdateDefenses(attrHandler, 
+                        attrHandler.parseInt(braceVar, 0, false),
+                        attrHandler.parseInt(wardingVar, 0, false),
+                        attrHandler.parseInt(reflexVar, 0, false),
+                        attrHandler.parseInt(evasionVar, 0, false),
+                        attrHandler.parseInt(resolveVar, 0, false),
+                        attrHandler.parseInt(insightVar, 0, false),
+                        attrHandler.parseInt(guileVar, 0, false)
+                        );
                     tokenTargetData.combatDetails.onUpdateSurges(attrHandler, attrHandler.parseInt(surgeVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateMaxSurges(attrHandler, attrHandler.parseInt(surgeVar, 0, true));
                     tokenTargetData.combatDetails.onUpdateVitality(attrHandler, attrHandler.parseInt(vitalityVar, 0, false));

@@ -48,6 +48,15 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         let techBoosters = attrHandler.parseJSON(WuxDef.GetVariable("BoostStyleTech"));
         let gearBoosters = attrHandler.parseJSON(WuxDef.GetVariable("BoostGearTech"));
         let perkBoosters = attrHandler.parseJSON(WuxDef.GetVariable("BoostPerkTech"));
+
+        let braceVar = WuxDef.GetVariable("Def_Brace");
+        let wardingVar = WuxDef.GetVariable("Def_Warding");
+        let reflexVar = WuxDef.GetVariable("Def_Reflex");
+        let evasionVar = WuxDef.GetVariable("Def_Evasion");
+        let resolveVar = WuxDef.GetVariable("Def_Resolve");
+        let insightVar = WuxDef.GetVariable("Def_Insight");
+        let guileVar = WuxDef.GetVariable("Def_Guile");
+        
         let healValueVar = WuxDef.GetVariable("Cmb_HV");
         let armorDefVar = WuxDef.GetVariable("Cmb_Armor");
         let surgeDef = WuxDef.Get("Surge");
@@ -95,6 +104,13 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                     attrHandler.addUpdate(techniqueModifierDefs[i].getVariable(), techniqueModifierDefs[i].formula.getValue(attrHandler));
                 }
             }
+            combatDetailsHandler.onUpdateDefenses(attrHandler,
+                attrHandler.parseInt(braceVar), attrHandler.parseInt(wardingVar),
+                attrHandler.parseInt(reflexVar), attrHandler.parseInt(evasionVar),
+                attrHandler.parseInt(resolveVar), attrHandler.parseInt(insightVar),
+                attrHandler.parseInt(guileVar)
+            );
+            
             combatDetailsHandler.onUpdateHealValue(attrHandler, attrHandler.parseInt(healValueVar));
             combatDetailsHandler.onUpdateSurges(attrHandler, attrHandler.parseInt(surgeDef.getVariable()));
             combatDetailsHandler.onUpdateMaxSurges(attrHandler, attrHandler.parseInt(surgeDef.getVariable(WuxDef._max)));

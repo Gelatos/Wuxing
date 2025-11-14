@@ -3966,14 +3966,35 @@ var TargetReference = TargetReference || (function () {
 
                 let crVar = WuxDef.GetVariable("CR");
                 let jobVar = WuxDef.GetVariable("Forme_JobSlot", 1);
+                
+                let braceVar = WuxDef.GetVariable("Def_Brace");
+                let wardingVar = WuxDef.GetVariable("Def_Warding");
+                let reflexVar = WuxDef.GetVariable("Def_Reflex");
+                let evasionVar = WuxDef.GetVariable("Def_Evasion");
+                let resolveVar = WuxDef.GetVariable("Def_Resolve");
+                let insightVar = WuxDef.GetVariable("Def_Insight");
+                let guileVar = WuxDef.GetVariable("Def_Guile");
+                
                 let surgeVar = WuxDef.GetVariable("Surge");
                 let vitalityVar = WuxDef.GetVariable("Cmb_Vitality");
                 let hvVar = WuxDef.GetVariable("Cmb_HV");
                 let armorVar = WuxDef.GetVariable("Cmb_Armor");
-                attributeHandler.addAttribute([crVar, jobVar, surgeVar, vitalityVar, hvVar, armorVar]);
+                attributeHandler.addAttribute([crVar, jobVar, 
+                    braceVar, wardingVar, reflexVar, evasionVar, resolveVar, insightVar, guileVar,
+                    surgeVar, vitalityVar, hvVar, armorVar]);
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
+                    Debug.LogError(`Getting Brace ${braceVar}: ${attrHandler.parseInt(braceVar, 0, false)}`);
                     tokenTargetData.combatDetails.onUpdateCR(attrHandler, attrHandler.parseInt(crVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateJob(attrHandler, attrHandler.parseString(jobVar, 0, false));
+                    tokenTargetData.combatDetails.onUpdateDefenses(attrHandler, 
+                        attrHandler.parseInt(braceVar, 0, false),
+                        attrHandler.parseInt(wardingVar, 0, false),
+                        attrHandler.parseInt(reflexVar, 0, false),
+                        attrHandler.parseInt(evasionVar, 0, false),
+                        attrHandler.parseInt(resolveVar, 0, false),
+                        attrHandler.parseInt(insightVar, 0, false),
+                        attrHandler.parseInt(guileVar, 0, false)
+                        );
                     tokenTargetData.combatDetails.onUpdateSurges(attrHandler, attrHandler.parseInt(surgeVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateMaxSurges(attrHandler, attrHandler.parseInt(surgeVar, 0, true));
                     tokenTargetData.combatDetails.onUpdateVitality(attrHandler, attrHandler.parseInt(vitalityVar, 0, false));
@@ -8237,10 +8258,11 @@ class CombatDetails {
         this.jobDefenses = json.jobDefenses != undefined ? json.jobDefenses : "";
         if (json.defenses != undefined) {
             try {
-                this.defenses.importJson(JSON.parse(json.defenses));
+                this.defenses.importJson(json.defenses);
             }
             catch {
                 Debug.LogError(`[CombatDetails] Unable to parse Defenses JSON: ${json.defenses}`);
+                this.defenses = new CombatDetailsDefenses();
             }
         }
         this.surges = json.surges != undefined ? json.surges : 2;
@@ -8256,8 +8278,8 @@ class CombatDetails {
     printTooltip() {
         let output = `${this.displayName} [CR${this.cr}] ${this.job}`;
         output += ` =========================== `;
-        output += `${this.jobDefenses} - `;
-
+        // output += `${this.jobDefenses} - `;
+        output += `${this.defenses.printDefenses(this.cr)} - `;
         switch (this.displayStyle) {
             case "Battle":
                 output += `Vit:`;
@@ -8316,8 +8338,6 @@ class CombatDetailsDefenses {
         this.brace = 0;
         this.warding = 0;
         this.reflex = 0;
-        this.fortitude = 0;
-        this.hide = 0;
         this.evasion = 0;
         this.resolve = 0;
         this.insight = 0;
@@ -8325,10 +8345,52 @@ class CombatDetailsDefenses {
     }
 
     importJson(json) {
+        this.brace = json.brace != undefined ? json.brace : 0;
         this.warding = json.warding != undefined ? json.warding : 0;
+        this.reflex = json.reflex != undefined ? json.reflex : 0;
+        this.evasion = json.evasion != undefined ? json.evasion : 0;
+        this.resolve = json.resolve != undefined ? json.resolve : 0;
+        this.insight = json.insight != undefined ? json.insight : 0;
+        this.guile = json.guile != undefined ? json.guile : 0;
     }
     
+    calculateAverageDefense(cr) {
+        return 11 + cr; // 11 = 7 (base) + 2 (job) + 2 (attribute)
+    }
     
+    calculateAverageEvasion(cr) {
+        return 9 + cr; // 9 = 5 (base) + 2 (job) + 2 (attribute)
+    }
+    
+    printDefenses(cr) {
+        let output = "Defs:";
+        let averageDefense = this.calculateAverageDefense(cr);
+        let averageEvasion = this.calculateAverageEvasion(cr);
+        if (this.evasion < averageEvasion) {
+            output += `${WuxDef.GetAbbreviation("Def_Evasion")}${this.evasion}.`;
+        }
+        if (this.brace <= averageDefense) {
+            output += `${WuxDef.GetAbbreviation("Def_Brace")}${this.brace}.`;
+        }
+        if (this.warding <= averageDefense) {
+            output += `${WuxDef.GetAbbreviation("Def_Warding")}${this.warding}.`;
+        }
+        if (this.reflex <= averageDefense) {
+            output += `${WuxDef.GetAbbreviation("Def_Reflex")}${this.reflex}.`;
+        }
+        output += " Sens:";
+        if (this.resolve <= averageDefense) {
+            output += `${WuxDef.GetAbbreviation("Def_Resolve")}${this.resolve}.`;
+        }
+        if (this.insight <= averageDefense) {
+            output += `${WuxDef.GetAbbreviation("Def_Insight")}${this.insight}.`;
+        }
+        if (this.guile <= averageDefense) {
+            output += `${WuxDef.GetAbbreviation("Def_Guile")}${this.guile}.`;
+        }
+        
+        return output;
+    }
     
 }
 
@@ -8375,6 +8437,18 @@ class CombatDetailsHandler {
 
         this.combatDetails.job = jobDef.title;
         this.combatDetails.jobDefenses = jobDef.defenses;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+    
+    onUpdateDefenses(attrHandler, brace, warding, reflex, evasion, resolve, insight, guile) {
+        this.setData(attrHandler);
+        this.combatDetails.defenses.brace = brace;
+        this.combatDetails.defenses.warding = warding;
+        this.combatDetails.defenses.reflex = reflex;
+        this.combatDetails.defenses.evasion = evasion;
+        this.combatDetails.defenses.resolve = resolve;
+        this.combatDetails.defenses.insight = insight;
+        this.combatDetails.defenses.guile = guile;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
