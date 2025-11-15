@@ -567,6 +567,7 @@ class TechniqueData extends WuxDatabaseData {
         this.secondaryEffects = new TechniqueEffectDatabase(json.secondaryEffects);
         this.endEffectConditionName = json.endEffectConditionName;
         this.endEffectConditionEffect = json.endEffectConditionEffect;
+        this.isCustom = json.isCustom != undefined ? json.isCustom : false;
     }
 
     importSheets(dataArray) {
@@ -649,6 +650,7 @@ class TechniqueData extends WuxDatabaseData {
         this.endEffectConditionName = "";
         this.endEffectConditionEffect = "";
         this.techniqueEffect = {};
+        this.isCustom = false;
     }
 
     createDefinition(baseDefinition) {
@@ -914,8 +916,11 @@ class TechniqueUseEffect extends dbObj {
         this.effects = new TechniqueEffectDatabase();
     }
     
-    getUseTech(sheetName) {
-        return `!utech ${this.sanitizeSheetRollAction(JSON.stringify(this))}$$${sheetName}`;
+    getUseTech(sheetName, isCustom) {
+        if (isCustom) {
+            return `!utech ${this.sanitizeSheetRollAction(JSON.stringify(this))}$$${sheetName}`;
+        }
+        return `!utech ${this.name}$$${sheetName}`;
     }
 
     sanitizeSheetRollAction(sheetRoll) {
@@ -2126,12 +2131,12 @@ class TechniqueDisplayData {
             if (this.technique.effects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
                 effectData.import(this.technique.name, this.technique.skill, this.technique.effects);
-                output += `{{targetData=${effectData.getUseTech(this.sheetname)}}}`;
+                output += `{{targetData=${effectData.getUseTech(this.sheetname, this.technique.isCustom)}}}`;
             }
             if (this.technique.secondaryEffects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
                 effectData.import(this.technique.name, this.technique.skill, this.technique.secondaryEffects);
-                output += `{{targetData2=${effectData.getUseTech(this.sheetname)}}}`;
+                output += `{{targetData2=${effectData.getUseTech(this.sheetname, this.technique.isCustom)}}}`;
             }
             if (this.technique.skill != "") {
                 output += "{{hascheck=1}}";
@@ -4286,6 +4291,14 @@ class RepeatingSectionHandler {
         return "";
     }
     
+    idLength() {
+        return this.ids.length;
+    }
+    
+    getIdAtIndex(index) {
+        return this.ids[index];
+    }
+    
     addFieldNames(fieldNames) {
         if (Array.isArray(fieldNames)) {
             this.fieldNames = this.fieldNames.concat(fieldNames);
@@ -4322,7 +4335,10 @@ class RepeatingSectionHandler {
     }
 
     removeId(id) {
-        
+        const index = this.ids.indexOf(id);
+        if (index !== -1) {
+            this.ids.splice(index, 1);
+        }
     }
 
     removeAllIds() {

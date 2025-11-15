@@ -2443,7 +2443,7 @@ function AssessTechniqueAtRow(sheet, rowIndex) {
         let assessment = new TechniqueAssessment(techniqueData.tech, sheet, techniqueData.row, assessColumn);
         assessment.printCellValues();
         if (sheet.getSheetName() == "CustomTechniques") {
-            assessment.printCellJson();
+            assessment.printCellJson(true);
         }
         if (rowIndex != techniqueData.row) {
             assessingCell.setValue("");
@@ -2747,9 +2747,10 @@ class TechniqueAssessment {
         range.setValues([[this.assessment, `${this.pointVarianceRange()}\n${this.points}`]]);
     }
 
-    printCellJson() {
+    printCellJson(isCustom) {
         Debug.Log("Printing JSON for technique");
         let range = this.sheet.getRange(this.row, this.assessColumn + 4, 1, 1);
+        this.technique.isCustom = isCustom;
         range.setValue(JSON.stringify(this.technique));
     }
 

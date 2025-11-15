@@ -483,7 +483,7 @@ class TechniqueWillBreakEffects {
 
     printWillBreakString() {
         let techUseEffect = this.getTechUseEffect();
-        return techUseEffect.getUseTech(this.sourceSheetName) + `$$0$$${this.targetTokenId}`;
+        return techUseEffect.getUseTech(this.sourceSheetName, true) + `$$0$$${this.targetTokenId}`;
     }
 }
 
@@ -768,13 +768,32 @@ class TechniqueUseResolver extends TechniqueResolverData {
             return;
         }
         this.targetTokenEffect = new TokenTargetEffectsData(targetToken);
-        this.advantage = parseInt(contentData[2]);
+        if (contentData.length >= 3) {
+            this.advantage = parseInt(contentData[2]);
+        }
         this.addInitialMessage();
     }
 
     initializeTechniqueData(data) {
         this.technique = new TechniqueUseEffect();
-        this.technique.importSandboxJson(data);
+        try {
+            this.technique.importSandboxJson(data);
+            Debug.Log(`[TechniqueUse] TechniqueData created`);
+        }
+        catch {
+            Debug.Log(`[TechniqueUse] Forming TechniqueData from a name`);
+            let techniqueData = WuxTechs.Get(data);
+            if (techniqueData == undefined) {
+                let item = WuxItems.Get(data);
+                if (item == undefined) {
+                    return;
+                }
+                techniqueData = item.technique;
+            }
+            this.technique.name = techniqueData.name;
+            this.technique.skill = techniqueData.skill;
+            this.technique.effects = new TechniqueEffectDatabase(techniqueData.effects);
+        }
     }
 
     addInitialMessage() {
@@ -1236,7 +1255,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
         this.messages = this.messages.concat(this.targetTokenEffect.effectMessages);
         let systemMessage = this.getMessageObject();
         WuxMessage.Send(systemMessage);
-        Debug.LogShout(this.msg, `[TechniqueUseResolver] Finished with duration of ${Date.now() - this.startTime}`);
+        Debug.LogShout(this.msg, `[TechniqueUseResolver] Calculated with a duration of ${(Date.now() - this.startTime)/1000} seconds`);
         
         if (this.senderTokenEffect.removeStatusMessage != "") {
             let systemMessage = new SystemInfoMessage(this.senderTokenEffect.removeStatusMessage);
