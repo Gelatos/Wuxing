@@ -216,42 +216,71 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
 		},
 		finishBuild = function () {
 			Debug.Log("Finish Training Build");
-			let attributeHandler = new WorkerAttributeHandler();
+			let loader = new LoadingScreenHandler();
+			loader.showLoadingScreen(() => {
+				let crVar = WuxDef.GetVariable("CR");
+				let crAttributeHandler = new WorkerAttributeHandler();
+				crAttributeHandler.addMod(crVar);
+				crAttributeHandler.addFinishCallback(function (crAttrHandler) {
+					let cr = crAttrHandler.parseInt(crVar);
+					WuxWorkerActions.GetAllStyleSlotRepeaterIDs((repeaterSlotData) => {
+						let attributeHandler = new WorkerAttributeHandler();
 
-			let pointManagers = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
-			pointManagers.commitChanges(attributeHandler);
+						let pointManagers = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+						pointManagers.commitChanges(attributeHandler);
 
-			let trainingWorker = new WuxTrainingWorkerBuild();
-			trainingWorker.commitChanges(attributeHandler);
+						let trainingWorker = new WuxTrainingWorkerBuild();
+						trainingWorker.commitChanges(attributeHandler);
 
-			WuxWorkerActions.RemoveAllStyleBoosters(attributeHandler);
-			WuxWorkerKnowledges.UpdateStats(attributeHandler);
-			WuxWorkerStyles.UpdateStats(attributeHandler);
+						WuxWorkerKnowledges.UpdateStats(attributeHandler);
+						WuxWorkerStyles.UpdateStats(attributeHandler);
+						WuxWorkerActions.UpdateAllActiveStyleActions(attributeHandler, repeaterSlotData, cr);
 
-			leavePageVariables(attributeHandler);
+						leavePageVariables(attributeHandler);
 
-			let loader = new LoadingScreenHandler(attributeHandler);
-			loader.run();
+						attributeHandler.addFinishCallback(() => {
+							loader.hideLoadingScreen();
+						});
+						attributeHandler.run();
+					});
+					
+				});
+				crAttributeHandler.run();
+			});
 		},
 		exitBuild = function () {
 			Debug.Log("Exit Training Build");
-			let attributeHandler = new WorkerAttributeHandler();
+			let loader = new LoadingScreenHandler();
+			loader.showLoadingScreen(() => {
+				let crVar = WuxDef.GetVariable("CR");
+				let crAttributeHandler = new WorkerAttributeHandler();
+				crAttributeHandler.addMod(crVar);
+				crAttributeHandler.addFinishCallback(function (crAttrHandler) {
+					let cr = crAttrHandler.parseInt(crVar);
+					WuxWorkerActions.GetAllStyleSlotRepeaterIDs((repeaterSlotData) => {
+						let attributeHandler = new WorkerAttributeHandler();
+			
+						let pointManagers = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+						pointManagers.resetChanges(attributeHandler);
+			
+						let trainingWorker = new WuxTrainingWorkerBuild();
+						trainingWorker.resetChanges(attributeHandler);
 
-			let pointManagers = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
-			pointManagers.resetChanges(attributeHandler);
+						WuxWorkerKnowledges.UpdateStats(attributeHandler);
+						WuxWorkerStyles.UpdateStats(attributeHandler);
+						WuxWorkerActions.UpdateAllActiveStyleActions(attributeHandler, repeaterSlotData, cr);
+			
+						leavePageVariables(attributeHandler);
 
-			let trainingWorker = new WuxTrainingWorkerBuild();
-			trainingWorker.resetChanges(attributeHandler);
+						attributeHandler.addFinishCallback(() => {
+							loader.hideLoadingScreen();
+						});
+						attributeHandler.run();
+					});
 
-			WuxWorkerActions.RemoveAllStyleBoosters(attributeHandler);
-			WuxWorkerKnowledges.UpdateStats(attributeHandler);
-			WuxWorkerJobs.UpdateStats(attributeHandler);
-			WuxWorkerStyles.UpdateStats(attributeHandler);
-
-			leavePageVariables(attributeHandler);
-
-			let loader = new LoadingScreenHandler(attributeHandler);
-			loader.run();
+				});
+				crAttributeHandler.run();
+			});
 		},
 		leavePageVariables = function (attributeHandler) {
 			attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
@@ -323,49 +352,79 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 		},
 		finishBuild = function () {
 			Debug.Log("Finish Advancement Build");
-			let attributeHandler = new WorkerAttributeHandler();
+			let loader = new LoadingScreenHandler();
+			loader.showLoadingScreen(() => {
+				let crVar = WuxDef.GetVariable("CR");
+				let crAttributeHandler = new WorkerAttributeHandler();
+				crAttributeHandler.addMod(crVar);
+				crAttributeHandler.addFinishCallback(function (crAttrHandler) {
+					let cr = crAttrHandler.parseInt(crVar);
+					WuxWorkerActions.GetAllStyleSlotRepeaterIDs((repeaterSlotData) => {
+						let attributeHandler = new WorkerAttributeHandler();
+			
+						let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique", "Perk"]);
+						pointManagers.commitChanges(attributeHandler);
+			
+						let advancementWorker = new WuxAdvancementWorkerBuild();
+						advancementWorker.commitChanges(attributeHandler);
 
-			let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique", "Perk"]);
-			pointManagers.commitChanges(attributeHandler);
+						WuxWorkerAttributes.UpdateStats(attributeHandler);
+						WuxWorkerPerks.UpdateStats(attributeHandler);
+						WuxWorkerSkills.UpdateStats(attributeHandler);
+						WuxWorkerJobs.UpdateStats(attributeHandler);
+						WuxWorkerStyles.UpdateStats(attributeHandler);
+						WuxWorkerActions.UpdateAllActiveStyleActions(attributeHandler, repeaterSlotData, cr);
+						updateStats(attributeHandler);
+			
+						leavePageVariables(attributeHandler);
 
-			let advancementWorker = new WuxAdvancementWorkerBuild();
-			advancementWorker.commitChanges(attributeHandler);
+						attributeHandler.addFinishCallback(() => {
+							loader.hideLoadingScreen();
+						});
+						attributeHandler.run();
+					});
 
-			WuxWorkerActions.RemoveAllStyleBoosters(attributeHandler);
-			WuxWorkerAttributes.UpdateStats(attributeHandler);
-			WuxWorkerPerks.UpdateStats(attributeHandler);
-			WuxWorkerSkills.UpdateStats(attributeHandler);
-			WuxWorkerJobs.UpdateStats(attributeHandler);
-			WuxWorkerStyles.UpdateStats(attributeHandler);
-			updateStats(attributeHandler);
-
-			leavePageVariables(attributeHandler);
-
-			let loader = new LoadingScreenHandler(attributeHandler);
-			loader.run();
+				});
+				crAttributeHandler.run();
+			});
 		},
 		exitBuild = function () {
 			Debug.Log("Exit Advancement Build");
-			let attributeHandler = new WorkerAttributeHandler();
+			let loader = new LoadingScreenHandler();
+			loader.showLoadingScreen(() => {
+				let crVar = WuxDef.GetVariable("CR");
+				let crAttributeHandler = new WorkerAttributeHandler();
+				crAttributeHandler.addMod(crVar);
+				crAttributeHandler.addFinishCallback(function (crAttrHandler) {
+					let cr = crAttrHandler.parseInt(crVar);
+					WuxWorkerActions.GetAllStyleSlotRepeaterIDs((repeaterSlotData) => {
+						let attributeHandler = new WorkerAttributeHandler();
+			
+						let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique", "Perk"]);
+						pointManagers.resetChanges(attributeHandler);
+			
+						let advancementWorker = new WuxAdvancementWorkerBuild();
+						advancementWorker.resetChanges(attributeHandler);
 
-			let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique", "Perk"]);
-			pointManagers.resetChanges(attributeHandler);
+						WuxWorkerAttributes.UpdateStats(attributeHandler);
+						WuxWorkerPerks.UpdateStats(attributeHandler);
+						WuxWorkerSkills.UpdateStats(attributeHandler);
+						WuxWorkerJobs.UpdateStats(attributeHandler);
+						WuxWorkerStyles.UpdateStats(attributeHandler);
+						WuxWorkerActions.UpdateAllActiveStyleActions(attributeHandler, repeaterSlotData, cr);
+						updateStats(attributeHandler);
+			
+						leavePageVariables(attributeHandler);
 
-			let advancementWorker = new WuxAdvancementWorkerBuild();
-			advancementWorker.resetChanges(attributeHandler);
+						attributeHandler.addFinishCallback(() => {
+							loader.hideLoadingScreen();
+						});
+						attributeHandler.run();
+					});
 
-			WuxWorkerActions.RemoveAllStyleBoosters(attributeHandler);
-			WuxWorkerAttributes.UpdateStats(attributeHandler);
-			WuxWorkerPerks.UpdateStats(attributeHandler);
-			WuxWorkerSkills.UpdateStats(attributeHandler);
-			WuxWorkerJobs.UpdateStats(attributeHandler);
-			WuxWorkerStyles.UpdateStats(attributeHandler);
-			updateStats(attributeHandler);
-
-			leavePageVariables(attributeHandler);
-
-			let loader = new LoadingScreenHandler(attributeHandler);
-			loader.run();
+				});
+				crAttributeHandler.run();
+			});
 		},
 		leavePageVariables = function (attributeHandler) {
 			attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");

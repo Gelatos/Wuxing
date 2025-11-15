@@ -40,7 +40,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             }
         });
 
-        actionRepeater.removeAllIds();
         return hasRemovedPassive;
     }
     const setTechniqueBoosters = function (attrHandler) {
@@ -123,7 +122,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
 
     const addBoostStyleTechFormulaMods = function (attrHandler, techBoosters) {
         iteratePassiveStyleTechniques(techBoosters, function (technique) {
-            Debug.Log(`Adding boost formula mods for ${technique.name}`);
             addBoostTechniqueFormulaMods(attrHandler, technique);
         });
     }
@@ -158,7 +156,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
 
                 switch (techEffect.subType) {
                     case "Set":
-                        Debug.Log(`Setting ${boostDef.getVariable()} to ${techEffect.formula.getValue(attrHandler)}`);
                         attrHandler.addUpdate(boostDef.getVariable(WuxDef._techset), techEffect.formula.getValue(attrHandler) - boostDef.formula.getValue(attrHandler));
                         break;
                     default:
@@ -212,6 +209,8 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", sectionRepeater);
         let affinities = getAffinities(attrHandler);
         let boosterFieldName = WuxDef.GetVariable("BoostStyleTech");
+        let sectionRepeaterIndex = 0;
+        Debug.Log(`Populating Techniques for ${styleName} with tech count ${sectionRepeater.idLength()}`)
         for (let tier = 1; tier <= 9; tier++) {
             let tierData = styleTechniques.get(tier);
             tierData.iterate(function (techsByAffinity) {
@@ -220,7 +219,11 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 }
 
                 techsByAffinity.forEach(function (technique) {
-                    techniqueAttributeHandler.setId(sectionRepeater.generateRowId());
+                    if (sectionRepeaterIndex >= sectionRepeater.idLength()) {
+                        sectionRepeater.addIds(sectionRepeater.generateRowId());
+                    }
+                    techniqueAttributeHandler.setId(sectionRepeater.getIdAtIndex(sectionRepeaterIndex));
+                    sectionRepeaterIndex++;
                     techniqueAttributeHandler.setTechniqueInfo(technique, true);
                     if (techniqueAttributeHandler.calcAndSetVisibility(affinities, maxTier)) {
                         if (tryAddTechniqueToBoosters(attrHandler, technique, boosterFieldName)) {
@@ -230,38 +233,56 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 });
             });
         }
+
+        // remove extra techniques 
+        sectionRepeater.removeAllIdsAfterIndex(sectionRepeaterIndex);
         return hasAddedPassives;
     };
     const populateGearTechniques = function (attrHandler, sectionRepeater, weaponSlotDef, equipSlotDef) {
         let hasAddedPassives = false;
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", sectionRepeater);
         let boosterFieldName = WuxDef.GetVariable("BoostGearTech");
+        let sectionRepeaterIndex = 0;
 
         let itemName = attrHandler.parseString(weaponSlotDef.getVariable(1));
-        if (tryAddItemTechnique(attrHandler, techniqueAttributeHandler, sectionRepeater, boosterFieldName, itemName)) {
-            hasAddedPassives = true;
+        let item = WuxItems.Get(itemName);
+        if (item.hasTechnique) {
+            if (sectionRepeaterIndex >= sectionRepeater.idLength()) {
+                sectionRepeater.addIds(sectionRepeater.generateRowId());
+            }
+            techniqueAttributeHandler.setId(sectionRepeater.getIdAtIndex(sectionRepeaterIndex));
+            sectionRepeaterIndex++;
+            
+            let technique = item.technique;
+            techniqueAttributeHandler.setTechniqueInfo(technique, true);
+            if (tryAddTechniqueToBoosters(attrHandler, technique, boosterFieldName)) {
+                hasAddedPassives = true;
+            }
         }
 
         for (let i = 1; i <= 9; i++) {
             itemName = attrHandler.parseString(equipSlotDef.getVariable(i));
-            if (tryAddItemTechnique(attrHandler, techniqueAttributeHandler, sectionRepeater, boosterFieldName, itemName)) {
-                hasAddedPassives = true;
+            item = WuxItems.Get(itemName);
+            if (item.hasTechnique) {
+                if (sectionRepeaterIndex >= sectionRepeater.idLength()) {
+                    sectionRepeater.addIds(sectionRepeater.generateRowId());
+                }
+                techniqueAttributeHandler.setId(sectionRepeater.getIdAtIndex(sectionRepeaterIndex));
+                sectionRepeaterIndex++;
+
+                let technique = item.technique;
+                techniqueAttributeHandler.setTechniqueInfo(technique, true);
+                if (tryAddTechniqueToBoosters(attrHandler, technique, boosterFieldName)) {
+                    hasAddedPassives = true;
+                }
             }
         }
+
+        // remove extra techniques 
+        sectionRepeater.removeAllIdsAfterIndex(sectionRepeaterIndex);
+        
         return hasAddedPassives;
     };
-    const tryAddItemTechnique = function (attrHandler, techniqueAttributeHandler, sectionRepeater, boosterFieldName, itemName) {
-        let item = WuxItems.Get(itemName);
-        if (item.hasTechnique) {
-            let technique = item.technique;
-            techniqueAttributeHandler.setId(sectionRepeater.generateRowId());
-            techniqueAttributeHandler.setTechniqueInfo(technique, true);
-            if (tryAddTechniqueToBoosters(attrHandler, technique, boosterFieldName)) {
-                return true;
-            }
-        }
-        return false;
-    }
     const populateBasicActions = function (attributeHandler, repeatingSectionName, styleName) {
         let actionRepeatingWorker = new WorkerRepeatingSectionHandler(repeatingSectionName);
 
@@ -386,7 +407,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                     let id = slotData.repeaterData.ids[j];
                     let techniqueAttributeHandler = new TechniqueDataAttributeHandler(
                         attributeHandler, baseDefinitionName, slotData.repeaterData, id);
-                    Debug.Log(`Bhesdf: ${slotData.repeaterData.repeatingSection}`);
                     attributeHandler.addMod(techniqueAttributeHandler.getVariable("TechName"));
                     attributeHandler.addMod(techniqueAttributeHandler.getVariable("TechTier"));
                     attributeHandler.addMod(techniqueAttributeHandler.getVariable("TechAffinity"));
@@ -405,7 +425,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(
                             attributeHandler, baseDefinitionName, slotData.repeaterData, id);
                         let techName = attrHandler.parseString(techniqueAttributeHandler.getVariable("TechName"));
-                        Debug.Log(`Checking technique: ${techName}`);
                         if (techName == "") {
                             continue;
                         }
@@ -511,7 +530,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
 
                     let hasRemovedPassives = removeOldTechniqueActions(attrHandler, actionsRepeater, WuxDef.GetVariable("BoostStyleTech"));
-                    let hasAddedPassives = populateStyleTechniques(attrHandler, actionsRepeatingWorker, styleName, tier);
+                    let hasAddedPassives = populateStyleTechniques(attrHandler, actionsRepeater, styleName, tier);
                     if (hasRemovedPassives || hasAddedPassives) {
                         setTechniqueBoosters(attrHandler);
                     }

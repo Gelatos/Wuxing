@@ -91,6 +91,12 @@ class WorkerRepeatingSectionHandler extends RepeatingSectionHandler {
 		super.removeId(id);
 		removeRepeatingRow(this.repeatingSection + "_" + id);
 	}
+
+	removeAllIdsAfterIndex(index) {
+		while (this.ids.length > index) {
+			this.removeId(this.ids[index]);
+		}
+	}
 }
 
 class WuxWorkerBuildManager {
