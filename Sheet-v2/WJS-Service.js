@@ -302,6 +302,7 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 		let advJobs = WuxDef.GetVariable("AdvancementJob");
 		let advSkills = WuxDef.GetVariable("AdvancementSkill");
 		let advTechs = WuxDef.GetVariable("AdvancementTechnique");
+		let perkConversion = WuxDef.GetVariable("AdvancementPerkTransfer");
 
 		if (this.buildStats.has(advJobs)) {
 			buildPoints += this.buildStats.getIntValue(advJobs) * 2;
@@ -312,6 +313,9 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 		if (this.buildStats.has(advTechs)) {
 			buildPoints += this.buildStats.getIntValue(advTechs);
 		}
+		if (this.buildStats.has(perkConversion)) {
+			buildPoints -= this.buildStats.getIntValue(perkConversion);
+		}
 		let buildPointsMax = attributeHandler.parseInt(this.attrMax);
 
 		attributeHandler.addUpdate(this.definition.getVariable(), buildPointsMax - buildPoints);
@@ -320,7 +324,8 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 
 	getBuildVariables() {
 		return [WuxDef.GetVariable("Level"), WuxDef.GetVariable("XP"),
-			WuxDef.GetVariable("AdvancementJob"), WuxDef.GetVariable("AdvancementSkill"), WuxDef.GetVariable("AdvancementTechnique")];
+			WuxDef.GetVariable("AdvancementJob"), WuxDef.GetVariable("AdvancementSkill"), 
+			WuxDef.GetVariable("AdvancementTechnique"), WuxDef.GetVariable("AdvancementPerkTransfer")];
 	}
 
 	updateLevel(attributeHandler, fieldName, level) {

@@ -459,6 +459,14 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			worker.updateAdvancementPoints(attributeHandler);
 			attributeHandler.run();
 		},
+		setAdvancementPerkTransferPointsUpdate = function (eventinfo) {
+			let attributeHandler = new WorkerAttributeHandler();
+			let worker = new WuxAdvancementWorkerBuild();
+			worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			worker.updateAdvancementPoints(attributeHandler);
+			attributeHandler.run();
+			WuxWorkerPerks.UpdateBuildPoints(eventinfo, eventinfo.newValue);
+		},
 		setAffinityStats = function (attributeHandler) {
 			let affinityVariable = WuxDef.GetVariable("Affinity");
 			let crVariable = WuxDef.GetVariable("CR");
@@ -543,6 +551,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 		ConvertXp: convertXp,
 		SetLevel: setLevel,
 		SetAdvancementPointsUpdate: setAdvancementPointsUpdate,
+		SetAdvancementPerkTransferPointsUpdate: setAdvancementPerkTransferPointsUpdate,
 		SetAffinityStats: setAffinityStats,
 		UpdateStats: updateStats
 	};

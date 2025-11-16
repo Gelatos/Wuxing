@@ -267,7 +267,7 @@
 										</div>
 									</div>
 									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_skill" value="" placeholder="0" />
-										<div class="wuxInputLabel">cost: 2 advancement points</div>
+										<div class="wuxInputLabel">cost: 1 advancement point</div>
 									</div>
 									<div class="wuxHeader2">Style Points<div class="wuxTooltipButtonContainer">
 											<div class="wuxTooltipButton wuxFloatRight">
@@ -390,6 +390,20 @@
 									</div>
 								</div>
 								<span class="wuxDescription"><span name="attr_perk"></span> / <span name="attr_perk_max"></span></span>
+								<div class="wuxHeader2">Convert Perks to Advancement Points<div class="wuxTooltipButtonContainer">
+										<div class="wuxTooltipButton wuxFloatRight">
+											<div class="wuxTooltipText">i</div>
+											<div class="wuxTooltipContent">
+												<div class="wuxHeader2">Convert Perks to Advancement Points</div>
+
+												<span class="wuxDescription">You can convert perk points to advancement points at a 1:1 ratio.</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_perktransfer" value="" placeholder="0" />
+									<div class="wuxInputLabel">cost: 1 perk point</div>
+								</div>
 								<div class="wuxHeader">Origin Perks</div>
 								<div class="wuxFlexTable">
 									<div class="wuxFlexTableItemGroup wuxMinWidth350">
@@ -3959,7 +3973,7 @@
 										</div>
 									</div>
 									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_skill" value="" placeholder="0" />
-										<div class="wuxInputLabel">cost: 2 advancement points</div>
+										<div class="wuxInputLabel">cost: 1 advancement point</div>
 									</div>
 									<div class="wuxHeader2">Style Points<div class="wuxTooltipButtonContainer">
 											<div class="wuxTooltipButton wuxFloatRight">
@@ -4012,6 +4026,20 @@
 									</div>
 								</div>
 								<span class="wuxDescription"><span name="attr_perk"></span> / <span name="attr_perk_max"></span></span>
+								<div class="wuxHeader2">Convert Perks to Advancement Points<div class="wuxTooltipButtonContainer">
+										<div class="wuxTooltipButton wuxFloatRight">
+											<div class="wuxTooltipText">i</div>
+											<div class="wuxTooltipContent">
+												<div class="wuxHeader2">Convert Perks to Advancement Points</div>
+
+												<span class="wuxDescription">You can convert perk points to advancement points at a 1:1 ratio.</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_perktransfer" value="" placeholder="0" />
+									<div class="wuxInputLabel">cost: 1 perk point</div>
+								</div>
 								<div class="wuxHeader">Origin Perks</div>
 								<div class="wuxFlexTable">
 									<div class="wuxFlexTableItemGroup wuxMinWidth350">
@@ -46628,6 +46656,10 @@ WuxWorkerAdvancement.SetLevel(eventinfo);
 });
 on("change:adv-ap_job change:adv-ap_skill change:adv-ap_technique", function (eventinfo) {
 WuxWorkerAdvancement.SetAdvancementPointsUpdate(eventinfo);
+
+});
+on("change:adv-ap_perktransfer", function (eventinfo) {
+WuxWorkerAdvancement.SetAdvancementPerkTransferPointsUpdate(eventinfo);
 
 });
 on("change:tch-affinity_rank", function (eventinfo) {
