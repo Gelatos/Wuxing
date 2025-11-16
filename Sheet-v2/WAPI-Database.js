@@ -3791,26 +3791,26 @@ class CombatDetailsDefenses {
         let averageDefense = this.calculateAverageDefense(cr);
         let averageEvasion = this.calculateAverageEvasion(cr);
         if (this.evasion < averageEvasion) {
-            output += `${WuxDef.GetAbbreviation("Def_Evasion")}${this.evasion}.`;
+            output += `${WuxDef.GetAbbreviation("Def_Evasion")}${this.evasion};`;
         }
         if (this.brace <= averageDefense) {
-            output += `${WuxDef.GetAbbreviation("Def_Brace")}${this.brace}.`;
+            output += `${WuxDef.GetAbbreviation("Def_Brace")}${this.brace};`;
         }
         if (this.warding <= averageDefense) {
-            output += `${WuxDef.GetAbbreviation("Def_Warding")}${this.warding}.`;
+            output += `${WuxDef.GetAbbreviation("Def_Warding")}${this.warding};`;
         }
         if (this.reflex <= averageDefense) {
-            output += `${WuxDef.GetAbbreviation("Def_Reflex")}${this.reflex}.`;
+            output += `${WuxDef.GetAbbreviation("Def_Reflex")}${this.reflex};`;
         }
         output += " Sens:";
         if (this.resolve <= averageDefense) {
-            output += `${WuxDef.GetAbbreviation("Def_Resolve")}${this.resolve}.`;
+            output += `${WuxDef.GetAbbreviation("Def_Resolve")}${this.resolve};`;
         }
         if (this.insight <= averageDefense) {
-            output += `${WuxDef.GetAbbreviation("Def_Insight")}${this.insight}.`;
+            output += `${WuxDef.GetAbbreviation("Def_Insight")}${this.insight};`;
         }
         if (this.guile <= averageDefense) {
-            output += `${WuxDef.GetAbbreviation("Def_Guile")}${this.guile}.`;
+            output += `${WuxDef.GetAbbreviation("Def_Guile")}${this.guile};`;
         }
         
         return output;
