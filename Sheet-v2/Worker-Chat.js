@@ -7,10 +7,11 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
         let postNameVar = WuxDef.GetVariable("Chat_PostName");
         let postUrlVar = WuxDef.GetVariable("Chat_PostURL");
         outfitEmotes.iterate(function (emote) {
-            newRowId = generateRowID();
+            newRowId = emoteButtonRepeater.getNextId();
             attrHandler.addUpdate(emoteButtonRepeater.getFieldName(newRowId, postNameVar), emote.name);
             attrHandler.addUpdate(emoteButtonRepeater.getFieldName(newRowId, postUrlVar), emote.url);
         });
+        emoteButtonRepeater.removeAllIdsAfterIteratorIndex();
     };
     const setOutfitEmotesIndividualEntry = function (eventinfo) {
         let outfitRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingOutfits");
@@ -61,7 +62,6 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
                     attrHandler.addUpdate(outfitRepeater.getFieldName(updateId, WuxDef.GetVariable("Chat_OutfitEmotes")), JSON.stringify(outfitEmotes));
 
                     if (setId == updateId) {
-                        emoteButtonRepeater.removeAllIds();
                         updateActiveEmoteSet(emoteButtonRepeater, attrHandler, outfitEmotes);
                     }
                 });
@@ -181,9 +181,10 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
             Debug.Log(`Tried to open Notebook data but the data is not formatted correctly: ${JSON.stringify(notebookData)}`);
         }
         for (let i = 0; i < notebookData.length; i++) {
-            let newId = repeatingSection.generateRowId();
+            let newId = repeatingSection.getNextId();
             addNotebookPageTemplateData(attributeHandler, repeatingSection, newId, notebookData[i]);
         }
+        repeatingSection.removeAllIdsAfterIteratorIndex();
     };
     const addNotebookPageTemplateData = function (attributeHandler, repeatingSection, updateId, templateDataString) {
         attributeHandler.addUpdate(repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageTemplateData")), templateDataString);
@@ -261,11 +262,9 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
             outfitRepeatingSection.getIds(function (outfitRepeater) {
                 let emoteButtonRepeaterSection = new WorkerRepeatingSectionHandler("RepeatingActiveEmotes");
                 emoteButtonRepeaterSection.getIds(function (emoteButtonRepeater) {
-                    emoteButtonRepeater.removeAllIds();
                     
                     let emoteNoteButtonRepeaterSection = new WorkerRepeatingSectionHandler("RepeatingActiveEmotesNotes");
                     emoteNoteButtonRepeaterSection.getIds(function (emoteNoteButtonRepeater) {
-                        emoteNoteButtonRepeater.removeAllIds();
 
                         let attributeHandler = new WorkerAttributeHandler();
                         let setIdVar = WuxDef.GetVariable("Chat_SetId");
@@ -413,7 +412,6 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
                     let setId = attrHandler.parseString(setIdVar);
                     if (setId == updateId) {
-                        emoteButtonRepeater.removeAllIds();
                         updateActiveEmoteSet(emoteButtonRepeater, attrHandler, outfitEmotes);
                     }
                 });
@@ -505,7 +503,6 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
 
             let pagesRepeaterSection = new WorkerRepeatingSectionHandler("NotebookPages");
             pagesRepeaterSection.getIds(function (pagesRepeater) {
-                pagesRepeaterSection.removeAllIds();
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
                     attributeHandler.addUpdate(openNotebookVar, attrHandler.parseString(targetNotebookNameVar));
                     addNotebookPagesFromNotebook(attrHandler, pagesRepeater, attrHandler.parseJSON(targetNotebookContentsVar));
@@ -598,7 +595,6 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
             
             let pagesRepeaterSection = new WorkerRepeatingSectionHandler("NotebookPages");
             pagesRepeaterSection.getIds(function (pagesRepeatingSection) {
-                pagesRepeaterSection.removeAllIds();
                 let noteBookRepeaterSection = new WorkerRepeatingSectionHandler("Notebooks");
                 noteBookRepeaterSection.getIds(function (notebookRepeatingSection) {
                     notebookRepeatingSection.iterate(function (id) {
