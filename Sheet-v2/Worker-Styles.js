@@ -146,9 +146,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         let selectedElement = null;
         let styleTechniques = WuxTechs.FilterAndSortTechniquesByRequirement(new DatabaseFilterData("style", styleName));
 
-        Debug.Log(`Populate ${maxTier} tiers of ${styleName} techniques`);
         for (let tier = 1; tier <= maxTier; tier++) {
-            Debug.Log(`Adding Style Techniques for ${styleName} at tier ${tier}`);
 
             let tierData = styleTechniques.get(tier);
             tierData.iterate(function (techsByAffinity, affinity) {
@@ -173,7 +171,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 }
 
                 techsByAffinity.forEach(function (styleTechnique) {
-                    let newRowId = itemPopupRepeater.generateRowId();
+                    let newRowId = itemPopupRepeater.getNextId();
                     attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), styleTechnique.name);
                     attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectType")), "Tech");
 
@@ -190,6 +188,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             });
         }
 
+        itemPopupRepeater.removeAllIdsAfterIteratorIndex();
         return selectedElement;
     };
     const addStyleTierHeaderToInspectionPopup = function (attrHandler, itemPopupRepeater, affinity, styleName, tier) {
@@ -223,7 +222,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             }
         }
 
-        let newRowId = itemPopupRepeater.generateRowId();
+        let newRowId = itemPopupRepeater.getNextId();
         attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), techHeader);
         attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectType")), "");
         attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectDesc")), techDesc);
@@ -495,7 +494,6 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             styleWorker.iterateBuildStats(function (styleVariableData) {
                 let style = WuxStyles.GetByVariableName(styleVariableData.name);
                 if (style.group != "" && styleVariableData.value > 0) {
-                    Debug.Log(`Adding Style ${styleVariableData.name} which is part of group ${style.group} at tier ${styleVariableData.value}`);
                     let newRowId = advancedRepeater.generateRowId();
                     attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Name")), style.name);
                     attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Tier")), styleVariableData.value);

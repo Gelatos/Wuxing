@@ -4285,6 +4285,7 @@ class RepeatingSectionHandler {
         this.repeatingSection = this.definition.getVariable(variableId);
         this.ids = [];
         this.fieldNames = [];
+        this.iteratorIndex = 0;
     }
 
     addIds(ids) {
@@ -4302,9 +4303,23 @@ class RepeatingSectionHandler {
     generateRowId() {
         return "";
     }
-    
-    idLength() {
-        return this.ids.length;
+
+    getNextId() {
+        while (this.iteratorIndex >= this.ids.length) {
+            let generatedRowId = this.generateRowId();
+            Debug.Log(`Adding generated row id ${generatedRowId}`)
+            this.addIds(generatedRowId);
+        }
+        let value = this.getIdAtIndex(this.iteratorIndex);
+        this.iteratorIndex++;
+        return value;
+    }
+
+    removeAllIdsAfterIteratorIndex() {
+        Debug.Log (`Removing ${this.ids.length - this.iteratorIndex} ids after iterator index ${this.iteratorIndex}`)
+        while (this.ids.length > this.iteratorIndex) {
+            this.removeId(this.ids[this.iteratorIndex]);
+        }
     }
     
     getIdAtIndex(index) {

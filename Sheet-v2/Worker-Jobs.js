@@ -28,14 +28,14 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
                     techDesc +=  (techDesc == "" ? "" : " ") + `and require ${affinity} affinity`;
                 }
 
-                let newRowId = itemPopupRepeater.generateRowId();
+                let newRowId = itemPopupRepeater.getNextId();
                 attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), techHeader);
                 attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectType")), "");
                 attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectDesc")), techDesc);
                 attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), 0);
                 
                 techsByAffinity.forEach(function (jobTechnique) {
-                    newRowId = itemPopupRepeater.generateRowId();
+                    newRowId = itemPopupRepeater.getNextId();
                     attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), jobTechnique.name);
                     attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectType")), "Tech");
 

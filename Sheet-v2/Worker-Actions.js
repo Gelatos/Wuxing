@@ -60,7 +60,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         let armorDefVar = WuxDef.GetVariable("Cmb_Armor");
         let surgeDef = WuxDef.Get("Surge");
         let vitalityDef = WuxDef.Get("Cmb_Vitality");
-        Debug.Log(`Boost Perk Tech: ${perkBoosters}`);
 
         let attributeHandler = new WorkerAttributeHandler();
         attributeHandler.addMod([healValueVar, armorDefVar,
@@ -159,7 +158,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                         attrHandler.addUpdate(boostDef.getVariable(WuxDef._techset), techEffect.formula.getValue(attrHandler) - boostDef.formula.getValue(attrHandler));
                         break;
                     default:
-                        Debug.Log(`Setting ${boostDef.getVariable(WuxDef._tech)} to ${attrHandler.parseInt(boostDef.getVariable(WuxDef._tech)) + techEffect.formula.getValue(attrHandler)}`);
                         attrHandler.addUpdate(boostDef.getVariable(WuxDef._tech),
                             attrHandler.parseInt(boostDef.getVariable(WuxDef._tech)) + techEffect.formula.getValue(attrHandler));
                         break;
@@ -209,8 +207,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", sectionRepeater);
         let affinities = getAffinities(attrHandler);
         let boosterFieldName = WuxDef.GetVariable("BoostStyleTech");
-        let sectionRepeaterIndex = 0;
-        Debug.Log(`Populating Techniques for ${styleName} with tech count ${sectionRepeater.idLength()}`)
         for (let tier = 1; tier <= 9; tier++) {
             let tierData = styleTechniques.get(tier);
             tierData.iterate(function (techsByAffinity) {
@@ -219,11 +215,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 }
 
                 techsByAffinity.forEach(function (technique) {
-                    if (sectionRepeaterIndex >= sectionRepeater.idLength()) {
-                        sectionRepeater.addIds(sectionRepeater.generateRowId());
-                    }
-                    techniqueAttributeHandler.setId(sectionRepeater.getIdAtIndex(sectionRepeaterIndex));
-                    sectionRepeaterIndex++;
+                    techniqueAttributeHandler.setId(sectionRepeater.getNextId());
                     techniqueAttributeHandler.setTechniqueInfo(technique, true);
                     if (techniqueAttributeHandler.calcAndSetVisibility(affinities, maxTier)) {
                         if (tryAddTechniqueToBoosters(attrHandler, technique, boosterFieldName)) {
@@ -235,23 +227,18 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         }
 
         // remove extra techniques 
-        sectionRepeater.removeAllIdsAfterIndex(sectionRepeaterIndex);
+        sectionRepeater.removeAllIdsAfterIteratorIndex();
         return hasAddedPassives;
     };
     const populateGearTechniques = function (attrHandler, sectionRepeater, weaponSlotDef, equipSlotDef) {
         let hasAddedPassives = false;
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", sectionRepeater);
         let boosterFieldName = WuxDef.GetVariable("BoostGearTech");
-        let sectionRepeaterIndex = 0;
 
         let itemName = attrHandler.parseString(weaponSlotDef.getVariable(1));
         let item = WuxItems.Get(itemName);
         if (item.hasTechnique) {
-            if (sectionRepeaterIndex >= sectionRepeater.idLength()) {
-                sectionRepeater.addIds(sectionRepeater.generateRowId());
-            }
-            techniqueAttributeHandler.setId(sectionRepeater.getIdAtIndex(sectionRepeaterIndex));
-            sectionRepeaterIndex++;
+            techniqueAttributeHandler.setId(sectionRepeater.getNextId());
             
             let technique = item.technique;
             techniqueAttributeHandler.setTechniqueInfo(technique, true);
@@ -264,11 +251,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             itemName = attrHandler.parseString(equipSlotDef.getVariable(i));
             item = WuxItems.Get(itemName);
             if (item.hasTechnique) {
-                if (sectionRepeaterIndex >= sectionRepeater.idLength()) {
-                    sectionRepeater.addIds(sectionRepeater.generateRowId());
-                }
-                techniqueAttributeHandler.setId(sectionRepeater.getIdAtIndex(sectionRepeaterIndex));
-                sectionRepeaterIndex++;
+                techniqueAttributeHandler.setId(sectionRepeater.getNextId());
 
                 let technique = item.technique;
                 techniqueAttributeHandler.setTechniqueInfo(technique, true);
@@ -279,7 +262,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         }
 
         // remove extra techniques 
-        sectionRepeater.removeAllIdsAfterIndex(sectionRepeaterIndex);
+        sectionRepeater.removeAllIdsAfterIteratorIndex();
         
         return hasAddedPassives;
     };
@@ -309,7 +292,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             let techniqueName = attrHandler.parseString(sectionRepeater.getFieldName(id, WuxDef.GetUntypedVariable("Action", "TechName")));
             let technique = WuxTechs.Get(techniqueName);
             if (technique.techSet != "") {
-                let newRowId = popupRepeater.generateRowId();
+                let newRowId = popupRepeater.getNextId();
                 attrHandler.addUpdate(popupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), technique.name);
                 attrHandler.addUpdate(popupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectType")), "Tech");
 
@@ -666,7 +649,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         },
 
         setCustomTechnique = function (eventinfo) {
-            Debug.Log(`Setting custom technique for ${eventinfo.sourceAttribute} to ${eventinfo.newValue}`);
             let attributeHandler = new WorkerAttributeHandler();
             let actionRepeater = new WorkerRepeatingSectionHandler("RepeatingCustomTech");
             
@@ -675,7 +657,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
 
             let selectedId = actionRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
             let technique = new TechniqueData(eventinfo.newValue);
-            Debug.Log(`Setting technique ${technique.name} with id ${selectedId}`);
             techniqueAttributeHandler.setId(selectedId);
             techniqueAttributeHandler.setTechniqueInfo(technique, true);
             techniqueAttributeHandler.setVisibilityAttribute(true);

@@ -298,7 +298,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         return selectedElement;
     };
     const createItemInspectionEquipmentListing = function (attrHandler, popupRepeater, item, itemType, isOn) {
-        let newRowId = popupRepeater.generateRowId();
+        let newRowId = popupRepeater.getNextId();
         attrHandler.addUpdate(popupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), item.name);
         attrHandler.addUpdate(popupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectType")), itemType);
         attrHandler.addUpdate(popupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), isOn ? "on" : 0);

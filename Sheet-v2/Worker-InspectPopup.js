@@ -141,7 +141,6 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 showPopup(updateCallback, function (attrHandler) {
                     attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupName"), WuxDef.GetTitle("Popup_ItemInspectionName"));
                     attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
-                    itemPopupRepeater.removeAllIds();
 
                     let selectedItem = setSelectedItemCallback(attrHandler, itemPopupRepeater);
                     if (selectedItem == null) {
@@ -152,6 +151,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                         let itemAttributeHandler = new ItemDataAttributeHandler(attrHandler, "Popup");
                         itemAttributeHandler.setItemInfo(selectedItem.item);
                     }
+                    itemPopupRepeater.removeAllIdsAfterIteratorIndex();
                 });
             });
         },
@@ -165,7 +165,6 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 showPopup(updateCallback, function (attrHandler) {
                     attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupName"), WuxDef.GetTitle("Popup_TechniqueInspectionName"));
                     attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
-                    techniquePopupRepeater.removeAllIds();
 
                     let selectedItem = setSelectedItemCallback(attrHandler, techniquePopupRepeater);
                     if (selectedItem == null) {
@@ -179,6 +178,8 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                         techniqueAttributeHandler.setTechniqueInfo(selectedItem.item);
                         techniqueAttributeHandler.setVisibilityAttribute(true);
                     }
+
+                    techniquePopupRepeater.removeAllIdsAfterIteratorIndex();
                 });
             });
         },
