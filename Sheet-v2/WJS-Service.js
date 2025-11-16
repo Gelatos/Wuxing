@@ -307,7 +307,7 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 			buildPoints += this.buildStats.getIntValue(advJobs) * 2;
 		}
 		if (this.buildStats.has(advSkills)) {
-			buildPoints += this.buildStats.getIntValue(advSkills) * 2;
+			buildPoints += this.buildStats.getIntValue(advSkills);
 		}
 		if (this.buildStats.has(advTechs)) {
 			buildPoints += this.buildStats.getIntValue(advTechs);
