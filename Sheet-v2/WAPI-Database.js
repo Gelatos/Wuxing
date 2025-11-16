@@ -961,6 +961,9 @@ class TechniqueStyle extends WuxDatabaseData {
         this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
         this.subGroup = json.subGroup;
+        this.affinity = json.affinity;
+        this.skills = json.skills;
+        this.effects = json.effects;
         this.description = json.description;
         this.baseStyle = json.baseStyle;
         this.cr = json.cr;
@@ -977,6 +980,12 @@ class TechniqueStyle extends WuxDatabaseData {
         i++;
         this.subGroup = "" + dataArray[i];
         i++;
+        this.affinity = "" + dataArray[i];
+        i++;
+        this.skills = dataArray[i];
+        i++;
+        this.effects = dataArray[i];
+        i++;
         this.description = "" + dataArray[i];
         i++;
         this.baseStyle = "" + dataArray[i];
@@ -991,6 +1000,9 @@ class TechniqueStyle extends WuxDatabaseData {
         this.fieldName = "";
         this.group = "";
         this.subGroup = "";
+        this.affinity = "";
+        this.skills = "";
+        this.effects = "";
         this.description = "";
         this.baseStyle = "";
         this.cr = 0;
