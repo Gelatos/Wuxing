@@ -163,7 +163,6 @@ var WuxConflictManager = WuxConflictManager || (function () {
                 Debug.LogError(`[startConflict] No Active Targets for Conflict`);
                 return;
             }
-            rollInitiative();
             setActiveTokensForConflict();
             startRound(true);
         },
