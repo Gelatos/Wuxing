@@ -45,6 +45,9 @@ var WuxConflictManager = WuxConflictManager || (function () {
                 case "!conflictxp":
                     commandGainConflictXP();
                     break;
+                case "!rollinit":
+                    rollInitiative();
+                    break;
             }
             ;
         },
