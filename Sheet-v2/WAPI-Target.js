@@ -1583,6 +1583,7 @@ var TargetReference = TargetReference || (function () {
             output += tokenOptionTitle("Conflict Options");
             output += tokenOptionButton("Start Battle", "cmbstartbattle");
             output += tokenOptionButton("Start Social", "cmbstartsocial");
+            output += tokenOptionButton("Roll Init", "rollinit");
             output += tokenOptionButton("Round", "startround");
             output += tokenOptionSpacer();
             output += tokenOptionButton("Conflict XP", "conflictxp");
