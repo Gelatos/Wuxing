@@ -640,20 +640,22 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
     }
     
     consumeWill(techniqueConsumptionResolver, attrHandler, resourceObject) {
-        let techniqueEffect = new TechniqueEffect();
-        techniqueEffect.name = "T0";
-        techniqueEffect.target = "Self";
-        techniqueEffect.type = "HP";
-        techniqueEffect.forumla = 5 + (attrHandler.parseInt(WuxDef.GetVariable("CR")) * 5);
-        techniqueEffect.effect = "Tension";
-        techniqueEffect.traits = "AP";
-        
         let willDamageRoll = new DamageRoll();
         willDamageRoll.addModToRoll(resourceObject.resourceValue);
         
+        let willBreakTechEffect = new TechniqueEffect();
+        willBreakTechEffect.name = "T0";
+        willBreakTechEffect.target = "Self";
+        willBreakTechEffect.type = "HP";
+        let damageCalc = (5 + (attrHandler.parseInt(WuxDef.GetVariable("CR")) * 5));
+        willBreakTechEffect.formula = new FormulaData("" + damageCalc);
+        willBreakTechEffect.effect = "Tension";
+        willBreakTechEffect.traits = "AP";
+        
         let willBreakEffect = new TechniqueWillBreakEffects("Magic", 
             techniqueConsumptionResolver.sourceSheetName, techniqueConsumptionResolver.tokenEffect.tokenTargetData.tokenId);
-        willBreakEffect.add(techniqueEffect);
+        willBreakEffect.add(willBreakTechEffect);
+        
         techniqueConsumptionResolver.tokenEffect.takeWillDamage(attrHandler, willDamageRoll, willBreakEffect);
     }
 
