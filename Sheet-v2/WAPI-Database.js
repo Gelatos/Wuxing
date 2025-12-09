@@ -2083,7 +2083,6 @@ class TechniqueDisplayData {
         this.targetData = "";
         this.forms = [];
         this.traits = [];
-        this.hasAdvantageCheck = false;
 
         this.trigger = "";
         this.requirements = "";
@@ -2152,13 +2151,7 @@ class TechniqueDisplayData {
                 output += `{{targetData2=${effectData.getUseTech(this.sheetname, this.technique.isCustom)}}}`;
             }
             if (this.technique.skill != "") {
-                if (this.traits.length > 0) {
-                    // find traits that require the advantage check
-                    let advantageTraits = ["Favor", "Willbreak"];
-                    if (this.traits.includes(advantageTraits)) {
-                        output += "{{hascheck=1}}";
-                    }
-                }
+                output += "{{hascheck=1}}";
             }
         }
 
