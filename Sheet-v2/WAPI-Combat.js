@@ -432,6 +432,14 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                     commandConsumeTechnique(msg, content);
                     break;
                 case "!utech":
+                    if (state.WuxConflictManager.conflictType == "Social") {
+                        sendToChat(msg.sender, `!sutech ${content}$$?{Advantage|0}`, false);
+                    }
+                    else {
+                        commandUseTechnique(msg, content);
+                    }
+                    break;
+                case "!sutech":
                     commandUseTechnique(msg, content);
                     break;
             }
@@ -767,13 +775,13 @@ class TechniqueUseResolver extends TechniqueResolverData {
         }
         this.senderTokenEffect = new TokenTargetEffectsData(this.senderTokenTargetData);
         
-        let targetToken = TargetReference.GetTokenTargetData(contentData[3]);
+        let targetToken = TargetReference.GetTokenTargetData(contentData[2]);
         if (targetToken == undefined) {
             return;
         }
         this.targetTokenEffect = new TokenTargetEffectsData(targetToken);
-        if (contentData.length >= 3) {
-            this.advantage = parseInt(contentData[2]);
+        if (contentData.length >= 4) {
+            this.advantage = parseInt(contentData[3]);
         }
         this.addInitialMessage();
     }
