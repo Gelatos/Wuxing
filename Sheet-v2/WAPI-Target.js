@@ -608,20 +608,20 @@ class TokenTargetData extends TargetData {
         }
     }
 
-    setDash(attributeHandler, resultsCallback) {
+    addRun(attributeHandler, resultsCallback) {
         this.addDashModifiers(attributeHandler);
         resultsCallback = resultsCallback == undefined ? this.applyResultsMoveCharge : resultsCallback;
 
         if (this.isCharacter()) {
             this.modifyResourceAttribute(attributeHandler, "MvCharge", 0,
                 function (results, value, attrHandler, tokenTargetData) {
-                    results.newValue = tokenTargetData.performDash(attrHandler);
+                    results.newValue = tokenTargetData.performRun(attrHandler);
                 },
                 resultsCallback);
         } else {
             this.modifyIconAttribute(attributeHandler, "status_yellow", 0,
                 function (results, value, attrHandler, tokenTargetData) {
-                    results.newValue = tokenTargetData.performDash(attrHandler);
+                    results.newValue = tokenTargetData.performRun(attrHandler);
                 },
                 resultsCallback);
         }
@@ -647,28 +647,27 @@ class TokenTargetData extends TargetData {
     }
 
     addDashModifiers(attributeHandler) {
-        attributeHandler.addMod([WuxDef.GetVariable("Cmb_Mv"), WuxDef.GetVariable("Cmb_MvPotency"), WuxDef.GetVariable("Status")]);
+        attributeHandler.addMod([WuxDef.GetVariable("Cmb_Mv"), WuxDef.GetVariable("Cmb_MvDash"), WuxDef.GetVariable("Status")]);
+    }
+
+    performRun(attrHandler) {
+        let speed = attrHandler.parseInt(WuxDef.GetVariable("Cmb_Mv"), 0, false);
+        if (this.hasStatus(attrHandler, "Stat_Encumbered")) {
+            speed -= 1;
+        }
+        let chilled = this.hasStatus(attrHandler, "Stat_Chilled");
+        if (chilled != false && chilled > 0) {
+            speed -= chilled;
+        }
+        return Math.max(speed, 1);
     }
 
     performDash(attrHandler) {
-        let baseMoveSpeed = attrHandler.parseInt(WuxDef.GetVariable("Cmb_Mv"), 0, false);
-        let maxMoveSpeed = attrHandler.parseInt(WuxDef.GetVariable("Cmb_MvPotency"), 0, false);
+        let speed = attrHandler.parseInt(WuxDef.GetVariable("Cmb_MvDash"), 0, false);
         if (this.hasStatus(attrHandler, "Stat_Encumbered")) {
-            baseMoveSpeed = 0;
-            maxMoveSpeed = Math.max(1, maxMoveSpeed - 2);
-            Debug.Log(`[performDash] Encumbered: Setting base move to 0 and reducing max move by 2. (${baseMoveSpeed} to ${maxMoveSpeed})`);
+            speed -= 2;
         }
-        if (baseMoveSpeed > maxMoveSpeed) {
-            baseMoveSpeed = maxMoveSpeed;
-        }
-        let dieRoll = new DieRoll();
-        dieRoll.rollDice(1, maxMoveSpeed);
-        let chilled = this.hasStatus(attrHandler, "Stat_Chilled");
-        if (chilled != false && chilled > 0) {
-            dieRoll.addModToRoll(-1 * chilled);
-            Debug.Log(`[performDash] Chilled: Reducing move roll by ${chilled}.`);
-        }
-        return Math.max(dieRoll.total, baseMoveSpeed)
+        return Math.max(speed, 1);
     }
 
     applyResultsMoveCharge(results, attrHandler, attributeVar, tokenTargetData) {

@@ -308,7 +308,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
                             tokenTargetData.setMoveCharge(attributeHandler, 0);
                         }
                         else {
-                            tokenTargetData.setDash(attributeHandler);
+                            tokenTargetData.addRun(attributeHandler);
                         }
                         break;
                     case "Social":
