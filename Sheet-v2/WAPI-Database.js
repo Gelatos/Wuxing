@@ -691,7 +691,7 @@ class TechniqueData extends WuxDatabaseData {
             case "Move":
                 effect.setName(`T${this.getEffectDbLength()}`);
                 this.addToEffectsDb(effect);
-                let moveTypes = ["Pushed", "Pulled", "ForceMove", "Fly", "Float", "FreeMove", "Teleport"];
+                let moveTypes = ["Pushed", "Pulled", "ForceMove", "Fly", "Float", "FreeMove", "Teleport", "Fall"];
                 if (!moveTypes.some(moveType => effect.subType.includes(moveType))) {
                     this.addDefinition(effect.subType);
                 }
@@ -2498,6 +2498,8 @@ class BaseTechniqueEffectDisplayData {
                 return `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces. This movement does not break the hidden status.`;
             case "Invis":
                 return `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces. This movement does not break the hidden or invisible status.`;
+            case "Fall":
+                return `${this.formatTarget(effect)} falls.`;
             default:
                 return `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces.`;
         }

@@ -3220,6 +3220,9 @@ class TechniqueAssessment {
             case "Pulled":
                 output.value = Math.floor(output.value * (1 + (output.value * 0.5)));
                 break;
+            case "Fall":
+                output.value = 2;
+                break;
         }
         let message = `${output.value}(${effect.subType == "" ? "Move" : effect.subType})`;
 
