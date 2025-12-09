@@ -945,6 +945,12 @@ class TechniqueUseResolver extends TechniqueResolverData {
         let advantage = techUseResolver.advantage;
         
         // add advantages based on sender statuses
+        if (techUseResolver.technique.action != "Assist") {
+            if (techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Downed")) {
+                advantage -= 1;
+                techUseResolver.addMessage(`${techUseResolver.senderTokenEffect.tokenTargetData.displayName} is Downed: +1 Disadvantage`);
+            }
+        }
         if (techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Impaired")) {
             advantage -= 1;
             techUseResolver.addMessage(`${techUseResolver.senderTokenEffect.tokenTargetData.displayName} is Impaired: +1 Disadvantage`);
@@ -980,6 +986,14 @@ class TechniqueUseResolver extends TechniqueResolverData {
         if (techUseResolver.targetTokenEffect.tokenTargetData.hasStatus(attrSetters.target, "Stat_Restrained")) {
             advantage += 1;
             techUseResolver.addMessage(`${techUseResolver.targetTokenEffect.tokenTargetData.displayName} is Restrained: +1 Advantage`);
+        }
+        if (techUseResolver.targetTokenEffect.tokenTargetData.hasStatus(attrSetters.target, "Stat_Frozen")) {
+            advantage += 2;
+            techUseResolver.addMessage(`${techUseResolver.targetTokenEffect.tokenTargetData.displayName} is Frozen: +2 Advantage`);
+        }
+        if (techUseResolver.targetTokenEffect.tokenTargetData.hasStatus(attrSetters.target, "Stat_Paralyzed")) {
+            advantage += 2;
+            techUseResolver.addMessage(`${techUseResolver.targetTokenEffect.tokenTargetData.displayName} is Paralyzed: +2 Advantage`);
         }
         
         techUseResolver.skillCheck = new DieRoll();
