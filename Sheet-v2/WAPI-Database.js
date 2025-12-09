@@ -552,6 +552,7 @@ class TechniqueData extends WuxDatabaseData {
         this.resourceCost = json.resourceCost;
         this.limits = json.limits;
         this.skill = json.skill;
+        this.hasAdv = json.hasAdv;
         this.range = json.range;
         this.target = json.target;
         this.size = parseInt(json.size);
@@ -598,6 +599,8 @@ class TechniqueData extends WuxDatabaseData {
         i++;
         this.skill = "" + dataArray[i];
         i++;
+        this.hasAdv = dataArray[i];
+        i++;
         this.range = "" + dataArray[i];
         i++;
         this.target = "" + dataArray[i];
@@ -634,6 +637,7 @@ class TechniqueData extends WuxDatabaseData {
         this.resourceCost = "";
         this.limits = "";
         this.skill = "";
+        this.hasAdv = 0;
         this.range = "";
         this.target = "";
         this.size = 0;
@@ -2150,8 +2154,8 @@ class TechniqueDisplayData {
                 effectData.import(this.technique.name, this.technique.skill, this.technique.secondaryEffects);
                 output += `{{targetData2=${effectData.getUseTech(this.sheetname, this.technique.isCustom)}}}`;
             }
-            if (this.technique.skill != "") {
-                output += "{{hascheck=1}}";
+            if (this.technique.hasAdv != 0) {
+                output += `{{hascheck=${this.technique.hasAdv}}`;
             }
         }
 
