@@ -942,6 +942,10 @@ class TechniqueUseResolver extends TechniqueResolverData {
     }
     
     rollSkillCheck(techUseResolver, attrSetters) {
+        if (techUseResolver.technique.skill == "") {
+            return;
+        }
+        
         let advantage = techUseResolver.advantage;
         
         // add advantages based on sender statuses
