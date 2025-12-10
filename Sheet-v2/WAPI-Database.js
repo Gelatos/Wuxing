@@ -593,6 +593,8 @@ class TechniqueData extends WuxDatabaseData {
         i++;
         this.traits = "" + dataArray[i];
         i++;
+        // Dodging some sheet logic
+        i+=3;
         this.resourceCost = "" + dataArray[i];
         i++;
         this.limits = "" + dataArray[i];
