@@ -1834,6 +1834,8 @@ var TargetReference = TargetReference || (function () {
                 let vitalityVar = WuxDef.GetVariable("Cmb_Vitality");
                 let hvVar = WuxDef.GetVariable("Cmb_HV");
                 let armorVar = WuxDef.GetVariable("Cmb_Armor");
+                let speedVar = WuxDef.GetVariable("Cmb_Mv");
+                let dashVar = WuxDef.GetVariable("Cmb_MvDash");
                 attributeHandler.addAttribute([crVar, jobVar, 
                     braceVar, wardingVar, reflexVar, evasionVar, resolveVar, insightVar, guileVar,
                     surgeVar, vitalityVar, hvVar, armorVar]);
@@ -1856,6 +1858,8 @@ var TargetReference = TargetReference || (function () {
                     tokenTargetData.combatDetails.onUpdateMaxVitality(attrHandler, attrHandler.parseInt(vitalityVar, 0, true));
                     tokenTargetData.combatDetails.onUpdateHealValue(attrHandler, attrHandler.parseInt(hvVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateArmorValue(attrHandler, attrHandler.parseInt(armorVar, 0, false));
+                    tokenTargetData.combatDetails.onUpdateMoveSpeedValue(attrHandler, attrHandler.parseInt(speedVar, 0, false));
+                    tokenTargetData.combatDetails.onUpdateDashSpeedValue(attrHandler, attrHandler.parseInt(dashVar, 0, false));
                     tokenTargetData.setCombatDetails(attrHandler);
                 });
                 attributeHandler.run();

@@ -3690,6 +3690,8 @@ class CombatDetails {
         this.maxvitality = 1;
         this.healvalue = 0;
         this.armorvalue = 0;
+        this.mvSpeed = 0;
+        this.dashSpeed = 0;
         this.supportiveInfluence = 0;
         this.opposingInfluence = 0;
     }
@@ -3715,6 +3717,8 @@ class CombatDetails {
         this.maxvitality = json.maxvitality != undefined ? json.maxvitality : 1;
         this.healvalue = json.healvalue;
         this.armorvalue = json.armorvalue;
+        this.mvSpeed = json.mvSpeed;
+        this.dashSpeed = json.dashSpeed;
         this.supportiveInfluence = json.supportiveInfluence != undefined ? json.supportiveInfluence : 0;
         this.opposingInfluence = json.opposingInfluence != undefined ? json.opposingInfluence : 0;
     }
@@ -3746,6 +3750,8 @@ class CombatDetails {
                 }
                 output += ` HV:${this.healvalue}`;
                 output += `.Armor:${this.armorvalue}`;
+                output += `.Mv:${this.mvSpeed}`;
+                output += `.Dash:${this.dashSpeed}`;
                 break;
             case "Social":
                 output += `Surges:`;
@@ -3808,30 +3814,15 @@ class CombatDetailsDefenses {
     
     printDefenses(cr) {
         let output = "Defs:";
-        let averageDefense = this.calculateAverageDefense(cr);
-        let averageEvasion = this.calculateAverageEvasion(cr);
-        if (this.evasion < averageEvasion) {
-            output += `${WuxDef.GetAbbreviation("Def_Evasion")}${this.evasion};`;
-        }
-        if (this.brace <= averageDefense) {
-            output += `${WuxDef.GetAbbreviation("Def_Brace")}${this.brace};`;
-        }
-        if (this.warding <= averageDefense) {
-            output += `${WuxDef.GetAbbreviation("Def_Warding")}${this.warding};`;
-        }
-        if (this.reflex <= averageDefense) {
-            output += `${WuxDef.GetAbbreviation("Def_Reflex")}${this.reflex};`;
-        }
+        output += `${WuxDef.GetAbbreviation("Def_Evasion")}${this.evasion};`;
+        output += `${WuxDef.GetAbbreviation("Def_Brace")}${this.brace};`;
+        output += `${WuxDef.GetAbbreviation("Def_Warding")}${this.warding};`;
+        output += `${WuxDef.GetAbbreviation("Def_Reflex")}${this.reflex};`;
+        
         output += " Sens:";
-        if (this.resolve <= averageDefense) {
-            output += `${WuxDef.GetAbbreviation("Def_Resolve")}${this.resolve};`;
-        }
-        if (this.insight <= averageDefense) {
-            output += `${WuxDef.GetAbbreviation("Def_Insight")}${this.insight};`;
-        }
-        if (this.guile <= averageDefense) {
-            output += `${WuxDef.GetAbbreviation("Def_Guile")}${this.guile};`;
-        }
+        output += `${WuxDef.GetAbbreviation("Def_Resolve")}${this.resolve};`;
+        output += `${WuxDef.GetAbbreviation("Def_Insight")}${this.insight};`;
+        output += `${WuxDef.GetAbbreviation("Def_Guile")}${this.guile};`;
         
         return output;
     }
@@ -3905,6 +3896,18 @@ class CombatDetailsHandler {
     onUpdateArmorValue(attrHandler, armorValue) {
         this.setData(attrHandler);
         this.combatDetails.armorvalue = armorValue;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+
+    onUpdateMoveSpeedValue(attrHandler, value) {
+        this.setData(attrHandler);
+        this.combatDetails.mvSpeed = value;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+
+    onUpdateDashSpeedValue(attrHandler, value) {
+        this.setData(attrHandler);
+        this.combatDetails.dashSpeed = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
@@ -4676,34 +4679,6 @@ var FeatureService = FeatureService || (function () {
         GetActionEffects: getActionEffects
     };
 
-}());
-
-var ItemHandler = ItemHandler || (function () {
-    'use strict';
-
-    let getTechniqueWeaponRollTemplate = function (itemData) {
-            let output = "";
-            output += `{{WpnName=${itemData.name}}} `;
-
-            output += FeatureService.RollTemplateTraits(WuxDef.Get(itemData.traits), "WpnTrait");
-            output += FeatureService.RollTemplateTraits(WuxDef.Get(itemData.abilities), "WpnAbility");
-
-            if (itemData.range != "") {
-                output += `{{WpnRange=${itemData.range}}} `;
-            }
-            if (itemData.threat != "") {
-                output += `{{WpnThreat=${itemData.threat}}} `;
-            }
-            output += `{{WpnDamage=${itemData.damageString}}} `;
-            output += `{{WpnSkill=${itemData.skill}}} `;
-
-            return output;
-        }
-
-    ;
-    return {
-        GetTechniqueWeaponRollTemplate: getTechniqueWeaponRollTemplate
-    };
 }());
 
 var Format = Format || (function () {

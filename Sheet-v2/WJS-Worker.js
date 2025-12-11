@@ -20,9 +20,11 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
 
             let healValueVar = WuxDef.GetVariable("Cmb_HV");
             let armorDefVar = WuxDef.GetVariable("Cmb_Armor");
+            let mvSpeedVar = WuxDef.GetVariable("Cmb_Mv");
+            let mvDashVar = WuxDef.GetVariable("Cmb_MvDash");
             let surgeDef = WuxDef.Get("Surge");
             let vitalityDef = WuxDef.Get("Cmb_Vitality");
-            attributeHandler.addMod([healValueVar, armorDefVar, 
+            attributeHandler.addMod([healValueVar, armorDefVar, mvSpeedVar, mvDashVar,
                 surgeDef.getVariable(), surgeDef.getVariable(WuxDef._max),
                 vitalityDef.getVariable(), vitalityDef.getVariable(WuxDef._max)]);
 
@@ -42,6 +44,8 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                 if (combatDetailsHandler != undefined) {
                     combatDetailsHandler.onUpdateHealValue(attrHandler, attrHandler.parseInt(healValueVar));
                     combatDetailsHandler.onUpdateArmorValue(attrHandler, attrHandler.parseInt(armorDefVar));
+                    combatDetailsHandler.onUpdateMoveSpeedValue(attrHandler, attrHandler.parseInt(mvSpeedVar));
+                    combatDetailsHandler.onUpdateDashSpeedValue(attrHandler, attrHandler.parseInt(mvDashVar));
                     combatDetailsHandler.onUpdateSurges(attrHandler, attrHandler.parseInt(surgeDef.getVariable()));
                     combatDetailsHandler.onUpdateMaxSurges(attrHandler, attrHandler.parseInt(surgeDef.getVariable(WuxDef._max)));
                     combatDetailsHandler.onUpdateVitality(attrHandler, attrHandler.parseInt(vitalityDef.getVariable()));
