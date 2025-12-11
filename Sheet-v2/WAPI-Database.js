@@ -921,12 +921,20 @@ class TechniqueUseEffect extends dbObj {
         this.skill = "";
         this.effects = new TechniqueEffectDatabase();
     }
-    
+
     getUseTech(sheetName, isCustom) {
+        return `!utech ${this.getRollActionData(sheetName, isCustom)}`;
+    }
+
+    getCheckTech(sheetName, isCustom) {
+        return `!chtech ${this.getRollActionData(sheetName, isCustom)}`;
+    }
+    
+    getRollActionData(sheetName, isCustom) {
         if (isCustom) {
-            return `!utech ${this.sanitizeSheetRollAction(JSON.stringify(this))}$$${sheetName}`;
+            return `${this.sanitizeSheetRollAction(JSON.stringify(this))}$$${sheetName}`;
         }
-        return `!utech ${this.name}$$${sheetName}`;
+        return `${this.name}$$${sheetName}`;
     }
 
     sanitizeSheetRollAction(sheetRoll) {
@@ -2149,11 +2157,15 @@ class TechniqueDisplayData {
             if (this.technique.effects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
                 effectData.import(this.technique.name, this.technique.skill, this.technique.effects);
+
+                output += `{{checkData=${effectData.getCheckTech(this.sheetname, this.technique.isCustom)}}}`;
                 output += `{{targetData=${effectData.getUseTech(this.sheetname, this.technique.isCustom)}}}`;
             }
             if (this.technique.secondaryEffects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
                 effectData.import(this.technique.name, this.technique.skill, this.technique.secondaryEffects);
+                
+                output += `{{checkData2=${effectData.getCheckTech(this.sheetname, this.technique.isCustom)}}}`;
                 output += `{{targetData2=${effectData.getUseTech(this.sheetname, this.technique.isCustom)}}}`;
             }
             if (this.technique.hasAdv != 0) {
