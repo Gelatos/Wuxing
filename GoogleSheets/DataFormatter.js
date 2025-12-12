@@ -2682,6 +2682,8 @@ class TechniqueAssessment {
         this.willbreakPoints = 0;
         this.willbreakPointsRubric = "";
         this.patience = 0;
+        this.pointBreakdown = [];
+        this.pointBreakdownIndex = 0;
 
         this.dps = 0;
         this.lowDps = 0;
@@ -2743,8 +2745,15 @@ class TechniqueAssessment {
     printCellValues() {
         let range = this.sheet.getRange(this.row, this.assessColumn, 1, 1);
         range.setNote(this.printNotes());
-        range = this.sheet.getRange(this.row, this.assessColumn, 1, 2);
-        range.setValues([[this.assessment, `${this.pointVarianceRange()}\n${this.points}`]]);
+        let values = [];
+        values[0] = [this.assessment, `${this.pointVarianceRange()}\n${this.points}; ${this.pointBreakdown[0].points}`];
+        for (let i = 1; i < this.pointBreakdown.length; i++) {
+            Debug.Log(`Index ${i} has ${JSON.stringify(this.pointBreakdown[i])}`)
+            values.push(["", `${this.pointBreakdown[i].points}; ${this.pointBreakdown[i].rubric}`]);
+        }
+
+        range = this.sheet.getRange(this.row, this.assessColumn, this.pointBreakdown.length, 2);
+        range.setValues(values);
     }
 
     printCellJson(isCustom) {
@@ -2800,14 +2809,20 @@ class TechniqueAssessment {
         let assessor = this;
         let attributeHandler = this.getFakeAttributeHandler();
         this.technique.effects.iterate(function (effect) {
+            assessor.pointBreakdown.push({points: 0, rubric: ""});
             assessor.assessEffect(effect, attributeHandler);
+            assessor.pointBreakdownIndex++;
         });
 
         if (this.technique.secondEffectConditionName == "TechOnEnter") {
-            this.onEnterEffect = true;
+            assessor.pointBreakdown.push({points: 0, rubric: ""});
+            assessor.onEnterEffect = true;
         }
+        this.pointBreakdownIndex++;
         this.technique.secondaryEffects.iterate(function (effect) {
-            assessor.assessEffect(effect, attributeHandler);
+            assessor.pointBreakdown.push({points: 0, rubric: ""});
+            assessor.assessEffect(effect, attributeHandler)
+            assessor.pointBreakdownIndex++;
         });
         Debug.Log(`Assessing ${this.technique.name} with ${this.points} points`);
         this.getStructureAssessment();
@@ -3419,10 +3434,15 @@ class TechniqueAssessment {
 
     addPointsRubric(points, message) {
         this.points += points;
+        this.pointBreakdown[this.pointBreakdownIndex].points += points;
         if (this.pointsRubric != "") {
             this.pointsRubric += " + ";
         }
+        if (this.pointBreakdown[this.pointBreakdownIndex].rubric != "") {
+            this.pointBreakdown[this.pointBreakdownIndex].rubric += " + ";
+        }
         this.pointsRubric += message;
+        this.pointBreakdown[this.pointBreakdownIndex].rubric += message;
     }
 
     getDiceFormula(effect, attributeHandler) {
