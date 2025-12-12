@@ -1004,20 +1004,58 @@ class TechniqueCheckResolver extends TechniqueSkillCheckResolver {
                 dcValue = targetAttrHandler.parseInt(defenseDef.getVariable());
             }
             
-            let odds = 0;
             let skillCheckDifference = dcValue - techCheckResolver.skillCheckValue;
-            if (skillCheckDifference <= 2) {
-                odds = 100;
-            }
-            else if (skillCheckDifference <= 12) {
-                let advantage = techCheckResolver.getAdvantageBonus(techCheckResolver,
-                    senderAttrHandler, targetAttrHandler, false);
-                // perform calculation
-            }
+            let advantage = techCheckResolver.getAdvantageBonus(techCheckResolver,
+                senderAttrHandler, targetAttrHandler, false);
+            let odds = techCheckResolver.probAtLeastKeep(advantage, skillCheckDifference);
 
-            targetAttrHandler.addMessage(`Vs. ${defenseName}: ${odds}%`);
+            targetAttrHandler.addMessage(`Vs. ${defenseName}: ${odds}`);
         });
         
+    }
+    
+    probAtLeastKeep(n, target) {
+        
+        const minSum = 2;
+        const maxSum = 12;
+
+        if (target <= minSum) return "100%";
+        if (target > maxSum) return "0%";
+        
+        let totalDice = 2 + Math.abs(n);
+        if (totalDice > 8) totalDice = 8;
+
+        const keepMode = n >= 0 ? 'highest' : 'lowest';
+        const k = 2; // always keep 2 dice
+
+        const totalOutcomes = Math.pow(6, totalDice);
+        let successful = 0;
+
+        function recurse(i, cur) {
+            if (i === totalDice) {
+                const sorted = cur.slice().sort((a, b) => a - b);
+                let sum;
+
+                if (keepMode === 'highest') {
+                    sum = sorted[totalDice - 1] + sorted[totalDice - 2];
+                } else {
+                    sum = sorted[0] + sorted[1];
+                }
+
+                if (sum >= target) successful++;
+                return;
+            }
+
+            for (let f = 1; f <= 6; f++) {
+                cur[i] = f;
+                recurse(i + 1, cur);
+            }
+        }
+
+        recurse(0, new Array(totalDice));
+
+        const percent = Math.round((successful / totalOutcomes) * 100);
+        return percent + "%";
     }
 
     printMessages() {
