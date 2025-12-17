@@ -2683,7 +2683,6 @@ class TechniqueAssessment {
         this.willbreakPointsRubric = "";
         this.patience = 0;
         this.pointBreakdown = [];
-        this.pointBreakdownIndex = 0;
 
         this.dps = 0;
         this.lowDps = 0;
@@ -2811,25 +2810,24 @@ class TechniqueAssessment {
         this.technique.effects.iterate(function (effect) {
             assessor.pointBreakdown.push({points: 0, rubric: ""});
             assessor.assessEffect(effect, attributeHandler);
-            assessor.pointBreakdownIndex++;
         });
 
         if (this.technique.secondEffectConditionName == "TechOnEnter") {
-            assessor.pointBreakdown.push({points: 0, rubric: ""});
             assessor.onEnterEffect = true;
         }
-        this.pointBreakdownIndex++;
-        this.technique.secondaryEffects.iterate(function (effect) {
+        if (this.technique.secondaryEffects.length > 0) {
             assessor.pointBreakdown.push({points: 0, rubric: ""});
-            assessor.assessEffect(effect, attributeHandler)
-            assessor.pointBreakdownIndex++;
-        });
+            this.technique.secondaryEffects.iterate(function (effect) {
+                assessor.pointBreakdown.push({points: 0, rubric: ""});
+                assessor.assessEffect(effect, attributeHandler);
+            });
+        }
         Debug.Log(`Assessing ${this.technique.name} with ${this.points} points`);
         this.getStructureAssessment();
         let customPoints = this.sheet.getRange(this.row, this.assessColumn + 2, 1, 1).getValues()[0];
         customPoints = isNaN(parseInt(customPoints)) ? 0 : parseInt(customPoints);
         if (customPoints != 0) {
-            this.addPointsRubric(customPoints, `${customPoints}(Custom)`)
+            this.addPointsRubric(customPoints, `(Custom)`)
         }
 
         this.averagePoints = this.getAveragePoint(this.getEnergy(), this.technique);
@@ -2999,7 +2997,7 @@ class TechniqueAssessment {
         switch (effect.subType) {
             case "Heal":
                 output.value = Math.floor(output.value * 2.5);
-                message = `${output.value}(Heal HP)`;
+                message = `(Heal HP)`;
 
                 if (effect.defense != "WillBreak") {
                     this.addPointsRubric(output.value, message);
@@ -3007,7 +3005,7 @@ class TechniqueAssessment {
                 this.addTargetedPointsRubric(effect, output.value);
                 break;
             case "Surge":
-                message = `${output.value}(Surge HP)`;
+                message = `(Surge HP)`;
 
                 if (effect.defense != "WillBreak") {
                     this.addPointsRubric(output.value, message);
@@ -3022,7 +3020,7 @@ class TechniqueAssessment {
                     this.lowDps += output.lowValue;
                     this.highDps += output.highValue;
                 }
-                message = `${output.value}(HP)`;
+                message = `(HP)`;
 
                 if (effect.defense != "WillBreak") {
                     this.addPointsRubric(output.value, message);
@@ -3036,11 +3034,11 @@ class TechniqueAssessment {
             let effectPts;
             if (effect.traits.includes("Brutal")) {
                 effectPts = Math.floor(output.value * 0.33);
-                this.addPointsRubric(effectPts, `${effectPts}(Brutal)`);
+                this.addPointsRubric(effectPts, `(Brutal)`);
             }
             if (effect.traits.includes("AP")) {
                 effectPts = Math.floor(output.value * 0.33);
-                this.addPointsRubric(effectPts, `${effectPts}(AP)`);
+                this.addPointsRubric(effectPts, `(AP)`);
             }
         }
     }
@@ -3052,7 +3050,7 @@ class TechniqueAssessment {
         switch (effect.subType) {
             case "Heal":
                 output.value = Math.floor(output.value * 1.5);
-                message = `${output.value}(Heal Will)`;
+                message = `(Heal Will)`;
                 break;
             default:
                 if (effect.target == "Self") {
@@ -3063,7 +3061,7 @@ class TechniqueAssessment {
                     this.highWill += output.highValue;
                     output.value = Math.floor(output.value * 0.8);
                 }
-                message = `${output.value}(Will)`;
+                message = `(Will)`;
                 break;
         }
 
@@ -3080,7 +3078,7 @@ class TechniqueAssessment {
         if (effect.subType != "Heal") {
             output.value = Math.floor(output.value * 1.5);
         }
-        let message = `${output.value}(${effect.subType != "" ? `${effect.subType} ` : ""}Vit)`;
+        let message = `(${effect.subType != "" ? `${effect.subType} ` : ""}Vit)`;
 
         if (effect.defense != "WillBreak") {
             this.addPointsRubric(output.value, message);
@@ -3093,7 +3091,7 @@ class TechniqueAssessment {
         switch (effect.subType) {
             case "Heal":
                 output.value *= 10;
-                this.addPointsRubric(output.value, `${output.value}(Heal Impatience)`);
+                this.addPointsRubric(output.value, `(Heal Impatience)`);
                 break;
             default:
                 this.patience += output.value;
@@ -3107,14 +3105,14 @@ class TechniqueAssessment {
         switch (effect.subType) {
             case "Heal":
                 output.value *= 6;
-                message = `${output.value}(Heal Favor)`;
+                message = `(Heal Favor)`;
                 break;
             default:
                 this.favor += output.value;
                 this.lowFavor += output.lowValue;
                 this.highFavor += output.highValue;
                 output.value *= 4;
-                message = `${output.value}(Favor)`;
+                message = `(Favor)`;
                 break;
         }
 
@@ -3132,20 +3130,20 @@ class TechniqueAssessment {
             case "Raise":
             case "Lower":
                 points = 14;
-                this.addPointsRubric(points, `${points}(${subTypes[0]} Influence)`);
+                this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
                 break;
             case "Adjust":
                 points = 16;
-                this.addPointsRubric(points, `${points}(${subTypes[0]} Influence)`);
+                this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
                 break;
             case "Reveal":
                 points = 10;
-                this.addPointsRubric(points, `${points}(${subTypes[0]} Influence)`);
+                this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
                 break;
             case "RevealNeg":
             case "RevealPos":
                 points = 8;
-                this.addPointsRubric(points, `${points}(${subTypes[0]} Influence)`);
+                this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
                 break;
             case "Add":
                 if (subTypes.length > 1) {
@@ -3155,7 +3153,7 @@ class TechniqueAssessment {
                         points = 30;
                     }
                 }
-                this.addPointsRubric(points, `${points}(Add ${subTypes[1]} Influence)`);
+                this.addPointsRubric(points, `(Add ${subTypes[1]} Influence)`);
                 break;
         }
     }
@@ -3166,7 +3164,7 @@ class TechniqueAssessment {
         this.request += output.value;
         this.lowRequest += output.lowValue;
         this.highRequest += output.highValue;
-        let message = `${output.value}(Request)`;
+        let message = `(Request)`;
         this.addPointsRubric(output.value, message);
     }
 
@@ -3176,11 +3174,11 @@ class TechniqueAssessment {
         let message = "";
         switch (effect.subType) {
             case "Add":
-                message = `${value}(Add ${effectDefinition.getTitle()})`;
+                message = `(Add ${effectDefinition.getTitle()})`;
                 break;
             case "Remove":
                 value = Math.floor(value * 0.75);
-                message = `${value}(Remove ${effectDefinition.getTitle()})`;
+                message = `(Remove ${effectDefinition.getTitle()})`;
                 break;
         }
 
@@ -3212,7 +3210,7 @@ class TechniqueAssessment {
                 pointMod += Math.ceil(pointMod * (this.structureHeight - 1) * 0.6);
             }
             let value = this.structureCount * pointMod;
-            let message = `${value}(Structure)`;
+            let message = `(Structure)`;
             this.addPointsRubric(value, message);
         }
     }
@@ -3239,7 +3237,7 @@ class TechniqueAssessment {
                 output.value = 2;
                 break;
         }
-        let message = `${output.value}(${effect.subType == "" ? "Move" : effect.subType})`;
+        let message = `(${effect.subType == "" ? "Move" : effect.subType})`;
 
         if (effect.defense != "WillBreak") {
             this.addPointsRubric(output.value, message);
@@ -3250,7 +3248,7 @@ class TechniqueAssessment {
     getEnAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
         output.value *= 2;
-        let message = `${output.value}(EN)`;
+        let message = `(EN)`;
         this.addPointsRubric(output.value, message);
     }
 
@@ -3267,7 +3265,7 @@ class TechniqueAssessment {
                 if (formula.value > 0) {
                     value *= formula.value;
                 }
-                message = `${value}(Add ${state.getTitle()})`;
+                message = `(Add ${state.getTitle()})`;
 
                 if (effect.defense != "WillBreak") {
                     this.addPointsRubric(value, message);
@@ -3279,13 +3277,13 @@ class TechniqueAssessment {
                     this.statusCount++;
                     if (this.statusCount > 1) {
                         value = Math.floor(this.statusCount * 4);
-                        this.addPointsRubric(value, `${value}(MultiStat)`);
+                        this.addPointsRubric(value, `(MultiStat)`);
                     }
                 }
                 break;
             case "Remove":
                 value = Math.floor(parseInt(state.points) * 0.75);
-                message = `${value}(Remove ${state.getTitle()})`;
+                message = `(Remove ${state.getTitle()})`;
 
                 if (effect.defense != "WillBreak") {
                     this.addPointsRubric(value, message);
@@ -3296,13 +3294,13 @@ class TechniqueAssessment {
                     this.statusCount++;
                     if (this.statusCount > 1) {
                         let subvalue = Math.max(-2, -1 * value);
-                        this.addPointsRubric(subvalue, `${subvalue}(MultiStat)`);
+                        this.addPointsRubric(subvalue, `(MultiStat)`);
                     }
                 }
                 break;
             case "Choose":
                 value = parseInt(state.points) + 2;
-                message = `${value}(Choose ${state.getTitle()})`;
+                message = `(Choose ${state.getTitle()})`;
 
                 if (effect.defense != "WillBreak") {
                     this.addPointsRubric(value, message);
@@ -3311,7 +3309,7 @@ class TechniqueAssessment {
                 break;
             case "Remove Any":
                 value = 10;
-                message = `${value}(Remove Any)`;
+                message = `(Remove Any)`;
 
                 if (effect.defense != "WillBreak") {
                     this.addPointsRubric(value, message);
@@ -3320,7 +3318,7 @@ class TechniqueAssessment {
                 break;
             case "Remove All":
                 value = 20;
-                message = `${value}(Remove All)`;
+                message = `(Remove All)`;
 
                 if (effect.defense != "WillBreak") {
                     this.addPointsRubric(value, message);
@@ -3329,7 +3327,7 @@ class TechniqueAssessment {
                 break;
             case "Remove Will":
                 value = 16;
-                message = `${value}(Remove Will)`;
+                message = `(Remove Will)`;
 
                 if (effect.defense != "WillBreak") {
                     this.addPointsRubric(value, message);
@@ -3341,14 +3339,14 @@ class TechniqueAssessment {
 
     getResistanceAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
-        let message = `${output.value}(Resist ${effect.effect})`;
+        let message = `(Resist ${effect.effect})`;
         this.addPointsRubric(output.value, message);
     }
 
     getAdvantageAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
         output.value = Math.abs(Math.floor(output.value * 4));
-        let message = `${output.value}(${output.value > 0 ? "Advantage" : "Disadvantage"})`;
+        let message = `(${output.value > 0 ? "Advantage" : "Disadvantage"})`;
         this.addPointsRubric(output.value, message);
         this.addTargetedPointsRubric(effect, output.value);
     }
@@ -3361,20 +3359,20 @@ class TechniqueAssessment {
             switch (effect.defense) {
                 case "Def_Evasion":
                     pointMod = Math.ceil(points * 0.25);
-                    this.addPointsRubric(pointMod, `${pointMod}(Evasion)`);
+                    this.addPointsRubric(pointMod, `(Evasion)`);
                     break;
                 case "Def_Fortitude":
                     pointMod = Math.ceil(points * 0.15);
-                    this.addPointsRubric(pointMod, `${pointMod}(Fortitude)`);
+                    this.addPointsRubric(pointMod, `(Fortitude)`);
                     break;
                 case "Def_Scrutiny":
                     pointMod = Math.ceil(points * 0.15);
-                    this.addPointsRubric(pointMod, `${pointMod}(Scrutiny)`);
+                    this.addPointsRubric(pointMod, `(Scrutiny)`);
                     break;
                 case "":
                     if (effect.target != "Self") {
                         pointMod = Math.ceil(points * 0.4);
-                        this.addPointsRubric(pointMod, `${pointMod}(No Def)`);
+                        this.addPointsRubric(pointMod, `(No Def)`);
                     }
                     break;
             }
@@ -3389,32 +3387,32 @@ class TechniqueAssessment {
             case "Targets":
             case "Targets or Self":
                 pointMod = Math.floor(points * (this.size - 1) * 0.65);
-                this.addPointsRubric(pointMod, `${pointMod}(${this.size} ${this.target})`);
+                this.addPointsRubric(pointMod, `(${this.size} ${this.target})`);
                 break;
             case "Blast":
             case "Blast(2H)":
             case "Blast(3H)":
                 pointMod = Math.floor(points * this.getAreaPointMod(0.75, 1));
-                this.addPointsRubric(pointMod, `${pointMod}(${this.target} ${this.size})`);
+                this.addPointsRubric(pointMod, `(${this.target} ${this.size})`);
                 break;
             case "Burst":
             case "Burst(2H)":
             case "Burst(3H)":
                 pointMod = Math.floor(points * this.getAreaPointMod(0.6, 1));
-                this.addPointsRubric(pointMod, `${pointMod}(${this.target} ${this.size})`);
+                this.addPointsRubric(pointMod, `(${this.target} ${this.size})`);
                 break;
             case "Cone":
             case "Line":
             case "Line(2H)":
             case "Line(3H)":
                 pointMod = Math.floor(points * this.getAreaPointMod(0.4, 0.66));
-                this.addPointsRubric(pointMod, `${pointMod}(${this.target} ${this.size})`);
+                this.addPointsRubric(pointMod, `(${this.target} ${this.size})`);
                 break;
         }
 
         if (this.onEnterEffect) {
             pointMod = 4;
-            this.addPointsRubric(pointMod, `${pointMod}(On Enter)`);
+            this.addPointsRubric(pointMod, `(On Enter)`);
             this.pointsRubric += "\n";
         } else if (pointMod > 0) {
             this.pointsRubric += "\n";
@@ -3434,15 +3432,15 @@ class TechniqueAssessment {
 
     addPointsRubric(points, message) {
         this.points += points;
-        this.pointBreakdown[this.pointBreakdownIndex].points += points;
+        this.pointBreakdown[this.pointBreakdown.length - 1].points += points;
         if (this.pointsRubric != "") {
             this.pointsRubric += " + ";
         }
-        if (this.pointBreakdown[this.pointBreakdownIndex].rubric != "") {
-            this.pointBreakdown[this.pointBreakdownIndex].rubric += " + ";
+        if (this.pointBreakdown[this.pointBreakdown.length - 1].rubric != "") {
+            this.pointBreakdown[this.pointBreakdown.length - 1].rubric += ` + ${points}`;
         }
-        this.pointsRubric += message;
-        this.pointBreakdown[this.pointBreakdownIndex].rubric += message;
+        this.pointsRubric += `${points}message`;
+        this.pointBreakdown[this.pointBreakdown.length - 1].rubric += message;
     }
 
     getDiceFormula(effect, attributeHandler) {
