@@ -1144,6 +1144,26 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 roll.setTraits(techniqueEffect.traits);
                 tokenEffect.addDamageRoll(roll);
                 break;
+            case "Burst Damage":
+                let burstDamageRank = techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Burst");
+                if (burstDamageRank == false || burstDamageRank <= 0) {
+                    techUseResolver.addMessage(`No Burst condition. No bonus damage.`);
+                    break;
+                }
+                
+                let modifiedTechniqueEffect = new TechniqueEffect(techniqueEffect);
+                modifiedTechniqueEffect.dVal *= burstDamageRank;
+                modifiedTechniqueEffect.formula.setMultipliers(burstDamageRank);
+                techUseResolver.senderTokenEffect.tokenTargetData.removeStatus(attrSetters.sender, "Stat_Burst");
+                techUseResolver.addMessage(`Removed Burst (Rank ${burstDamageRank}) condition.`);
+
+                roll = techUseResolver.calculateFormula(modifiedTechniqueEffect, attrGetters.sender);
+                let burstDamageType = techUseResolver.getDamageType(attrGetters, techniqueEffect);
+                roll.setDamageType(burstDamageType);
+                roll.setTraits(techniqueEffect.traits);
+                tokenEffect.addDamageRoll(roll);
+                
+                break;
             default:
                 roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
                 if (techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Empowered")) {
@@ -1151,20 +1171,25 @@ class TechniqueUseResolver extends TechniqueResolverData {
                     techUseResolver.senderTokenEffect.tokenTargetData.removeStatus(attrSetters.sender, "Stat_Empowered");
                     techUseResolver.addMessage(`Removed Empowered status.`);
                 }
-                let damageType = WuxDef.GetTitle(techniqueEffect.effect);
-                if (damageType == "Weapon") {
-                    damageType = attrGetters.sender.parseString(WuxDef.GetVariable("WeaponDamage"));
-                    if (damageType == "" || damageType == 0) {
-                        damageType = WuxDef.GetTitle("Dmg_Force");
-                    }
-                    else {
-                        damageType = WuxDef.GetTitle(damageType);
-                    }
-                }
+                let damageType = techUseResolver.getDamageType(attrGetters, techniqueEffect);
                 roll.setDamageType(damageType);
                 roll.setTraits(techniqueEffect.traits);
                 tokenEffect.addDamageRoll(roll);
         }
+    }
+    
+    getDamageType(attrGetters, techniqueEffect) {
+        let damageType = WuxDef.GetTitle(techniqueEffect.effect);
+        if (damageType == "Weapon") {
+            damageType = attrGetters.sender.parseString(WuxDef.GetVariable("WeaponDamage"));
+            if (damageType == "" || damageType == 0) {
+                damageType = WuxDef.GetTitle("Dmg_Force");
+            }
+            else {
+                damageType = WuxDef.GetTitle(damageType);
+            }
+        }
+        return damageType;
     }
 
     addWillEffect(techniqueEffect, techUseResolver, attrGetters) {

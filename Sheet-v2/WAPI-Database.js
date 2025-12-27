@@ -2318,6 +2318,8 @@ class BaseTechniqueEffectDisplayData {
                 return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${hp}`;
             case "Surge":
                 return `If ${this.formatTarget(effect)} has a surge, they must spend one and heal ${this.formatCalcBonus(effect)} ${hp}`;
+            case "Burst Damage":
+                return `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage per rank of your Burst condition. You then lose the Burst condition.`;
             default:
                 return `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
         }
@@ -2947,6 +2949,12 @@ class FormulaData {
             if (attributes[i] != "") {
                 this.workers.push(this.makeWorker(attributes[i], "", 0, 1, 0));
             }
+        }
+    }
+    
+    setMultipliers(multiplier) {
+        for (let i = 0; i < this.workers.length; i++) {
+            this.workers[i].multiplier = multiplier;
         }
     }
 
