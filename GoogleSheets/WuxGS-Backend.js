@@ -205,7 +205,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
                 for (let i = 0; i < perkTechniques.length; i++) {
                     let perkDef = perkTechniques[i].createDefinition(techniqueDefinition);
                     output += WuxSheetBackend.OnChange([perkDef.getVariable(WuxDef._rank)],
-                        `WuxWorkerPerks.UpdateBuildPoints(eventinfo, ${perkTechniques[i].resourceCost})`, true);
+                        `WuxWorkerPerks.UpdateBuildPoints(eventinfo, ${perkTechniques[i].group})`, true);
                 }
             }
 

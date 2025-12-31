@@ -594,8 +594,13 @@ class TechniqueData extends WuxDatabaseData {
         this.traits = "" + dataArray[i];
         i++;
         // Dodging some sheet logic
-        i+=3;
-        this.resourceCost = "" + dataArray[i];
+        let enCost = parseInt(dataArray[i]);
+        i++;
+        let isMagic = "" + parseInt(dataArray[i]);
+        i++;
+        let boonCost = parseInt(dataArray[i]);
+        i++;
+        this.resourceCost = this.buildResourceCost(enCost, isMagic, boonCost);
         i++;
         this.limits = "" + dataArray[i];
         i++;
@@ -622,6 +627,30 @@ class TechniqueData extends WuxDatabaseData {
         
         this.techniqueEffect = new TechniqueEffect(dataArray.slice(i));
         this.addEffect(this.techniqueEffect);
+    }
+    
+    buildResourceCost(enCost, isMagic, boonCost) {
+        const parts = [];
+
+        if (enCost != "") {
+            parts.push(`${enCost} EN`);
+        }
+
+        if (isMagic !== "") {
+            if (this.tier <= 0) {
+                parts.push(`${isMagic} WILL`);
+            }
+            else {
+                let willCost = (this.action === "Full" ? 5 : 3) * this.tier * isMagic;
+                parts.push(`${willCost} WILL`);
+            }
+        }
+
+        if (boonCost != "") {
+            parts.push(`${boonCost} Boon`);
+        }
+        
+        return parts.join("; ");
     }
 
     createEmpty() {
