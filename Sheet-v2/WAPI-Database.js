@@ -599,7 +599,6 @@ class TechniqueData extends WuxDatabaseData {
         let isMagic = "" + parseInt(dataArray[i]);
         i++;
         let boonCost = parseInt(dataArray[i]);
-        i++;
         this.resourceCost = this.buildResourceCost(enCost, isMagic, boonCost);
         i++;
         this.limits = "" + dataArray[i];
@@ -630,13 +629,13 @@ class TechniqueData extends WuxDatabaseData {
     }
     
     buildResourceCost(enCost, isMagic, boonCost) {
-        const parts = [];
+        let parts = [];
 
-        if (enCost != "") {
+        if (!isNaN(enCost)) {
             parts.push(`${enCost} EN`);
         }
 
-        if (isMagic !== "") {
+        if (!isNaN(isMagic)) {
             if (this.tier <= 0) {
                 parts.push(`${isMagic} WILL`);
             }
@@ -646,11 +645,14 @@ class TechniqueData extends WuxDatabaseData {
             }
         }
 
-        if (boonCost != "") {
+        if (!isNaN(boonCost)) {
             parts.push(`${boonCost} Boon`);
         }
         
-        return parts.join("; ");
+        if (parts.length > 0) {
+            return parts.join("; ");
+        }
+        return "";
     }
 
     createEmpty() {
