@@ -1190,8 +1190,8 @@ class JobData extends WuxDatabaseData {
         this.fieldName = "";
         this.group = "";
         this.category = "";
+        this.skills = "";
         this.description = "";
-        this.shortDescription = "";
         this.defenses = "";
         this.techniques = [];
     }
@@ -1202,8 +1202,8 @@ class JobData extends WuxDatabaseData {
         this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
         this.category = json.category;
+        this.skills = json.skills;
         this.description = json.description;
-        this.shortDescription = json.shortDescription;
         this.defenses = json.defenses;
         this.techniques = json.techniques;
     }
@@ -1218,9 +1218,9 @@ class JobData extends WuxDatabaseData {
         i++;
         this.category = "" + dataArray[i];
         i++;
-        this.description = "" + dataArray[i];
+        this.skills = "" + dataArray[i];
         i++;
-        this.shortDescription = "" + dataArray[i];
+        this.description = "" + dataArray[i];
         i++;
         this.defenses = "" + dataArray[i];
         i++;
@@ -1231,6 +1231,7 @@ class JobData extends WuxDatabaseData {
     createDefinition(baseDefinition) {
         let definition = new JobDefinitionData(super.createDefinition(baseDefinition));
         definition.subGroup = this.group;
+        definition.skills = this.skills;
         definition.requirements = this.getRequirements();
         definition.defenses = this.defenses;
         definition.formula = new FormulaData();
@@ -1265,6 +1266,7 @@ class JobData extends WuxDatabaseData {
         style.fieldName = this.fieldName;
         style.group = "Job";
         style.subGroup = this.group;
+        style.skills = this.skills;
         style.description = this.description;
         style.affinity = "";
         style.cr = 0;
@@ -1867,8 +1869,9 @@ class LanguageDefinitionData extends DefinitionData {
 class JobDefinitionData extends DefinitionData {
     importJson(json) {
         super.importJson(json);
+        this.skills = json.skills;
         this.requirements = json.requirements;
-        this.defenses = json.defenses
+        this.defenses = json.defenses;
     }
 
     setImportSheetExtraData(property, value) {
@@ -1884,6 +1887,7 @@ class JobDefinitionData extends DefinitionData {
 
     createEmpty() {
         super.createEmpty();
+        this.skills = "";
         this.requirements = "";
         this.defenses = "";
     }
