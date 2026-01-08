@@ -999,7 +999,7 @@ class TechniqueCheckResolver extends TechniqueSkillCheckResolver {
             let defenseName = `DC ${techniqueEffect.defense}`;
             let dcValue = parseInt(techniqueEffect.defense);
             if (isNaN(dcValue)) {
-                let defenseDef = WuxDef.GetTitle(techniqueEffect.defense);
+                let defenseDef = WuxDef.Get(techniqueEffect.defense);
                 defenseName = defenseDef.getTitle();
                 dcValue = targetAttrHandler.parseInt(defenseDef.getVariable());
             }
@@ -1009,7 +1009,7 @@ class TechniqueCheckResolver extends TechniqueSkillCheckResolver {
                 senderAttrHandler, targetAttrHandler, false);
             let odds = techCheckResolver.probAtLeastKeep(advantage, skillCheckDifference);
 
-            targetAttrHandler.addMessage(`Vs. ${defenseName}: ${odds}`);
+            techCheckResolver.addMessage(`Vs. ${defenseName}: ${odds}`);
         });
         
     }
@@ -1062,7 +1062,7 @@ class TechniqueCheckResolver extends TechniqueSkillCheckResolver {
         this.messages = this.messages.concat(this.senderTokenEffect.effectMessages);
         this.messages = this.messages.concat(this.targetTokenEffect.effectMessages);
         let systemMessage = this.getMessageObject();
-        WuxMessage.SendToSender(systemMessage);
+        WuxMessage.SendToSender(systemMessage, this.msg);
 
     }
     
