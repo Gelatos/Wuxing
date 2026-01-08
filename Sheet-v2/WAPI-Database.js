@@ -594,8 +594,12 @@ class TechniqueData extends WuxDatabaseData {
         this.traits = "" + dataArray[i];
         i++;
         // Dodging some sheet logic
-        i+=3;
-        this.resourceCost = "" + dataArray[i];
+        let enCost = parseInt(dataArray[i]);
+        i++;
+        let isMagic = "" + parseInt(dataArray[i]);
+        i++;
+        let boonCost = parseInt(dataArray[i]);
+        this.resourceCost = this.buildResourceCost(enCost, isMagic, boonCost);
         i++;
         this.limits = "" + dataArray[i];
         i++;
@@ -622,6 +626,33 @@ class TechniqueData extends WuxDatabaseData {
         
         this.techniqueEffect = new TechniqueEffect(dataArray.slice(i));
         this.addEffect(this.techniqueEffect);
+    }
+    
+    buildResourceCost(enCost, isMagic, boonCost) {
+        let parts = [];
+
+        if (!isNaN(enCost)) {
+            parts.push(`${enCost} EN`);
+        }
+
+        if (!isNaN(isMagic)) {
+            if (this.tier <= 0) {
+                parts.push(`${isMagic} WILL`);
+            }
+            else {
+                let willCost = (this.action === "Full" ? 5 : 3) * this.tier * isMagic;
+                parts.push(`${willCost} WILL`);
+            }
+        }
+
+        if (!isNaN(boonCost)) {
+            parts.push(`${boonCost} Boon`);
+        }
+        
+        if (parts.length > 0) {
+            return parts.join("; ");
+        }
+        return "";
     }
 
     createEmpty() {
@@ -921,12 +952,20 @@ class TechniqueUseEffect extends dbObj {
         this.skill = "";
         this.effects = new TechniqueEffectDatabase();
     }
-    
+
     getUseTech(sheetName, isCustom) {
+        return `!utech ${this.getRollActionData(sheetName, isCustom)}`;
+    }
+
+    getCheckTech(sheetName, isCustom) {
+        return `!chtech ${this.getRollActionData(sheetName, isCustom)}`;
+    }
+    
+    getRollActionData(sheetName, isCustom) {
         if (isCustom) {
-            return `!utech ${this.sanitizeSheetRollAction(JSON.stringify(this))}$$${sheetName}`;
+            return `${this.sanitizeSheetRollAction(JSON.stringify(this))}$$${sheetName}`;
         }
-        return `!utech ${this.name}$$${sheetName}`;
+        return `${this.name}$$${sheetName}`;
     }
 
     sanitizeSheetRollAction(sheetRoll) {
@@ -2149,11 +2188,15 @@ class TechniqueDisplayData {
             if (this.technique.effects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
                 effectData.import(this.technique.name, this.technique.skill, this.technique.effects);
+
+                output += `{{checkData=${effectData.getCheckTech(this.sheetname, this.technique.isCustom)}}}`;
                 output += `{{targetData=${effectData.getUseTech(this.sheetname, this.technique.isCustom)}}}`;
             }
             if (this.technique.secondaryEffects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
                 effectData.import(this.technique.name, this.technique.skill, this.technique.secondaryEffects);
+                
+                output += `{{checkData2=${effectData.getCheckTech(this.sheetname, this.technique.isCustom)}}}`;
                 output += `{{targetData2=${effectData.getUseTech(this.sheetname, this.technique.isCustom)}}}`;
             }
             if (this.technique.hasAdv != 0) {

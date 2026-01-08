@@ -318,8 +318,10 @@
         {{/Def0}}
         <div>
             {{#consumeData}}[Consume Resources]({{consumeData}}){{/consumeData}}
-            {{#targetData}}[Target Effects]({{targetData}}$$@{target||token_id}){{/targetData}}$${{^hascheck}}0{{/hascheck}}{{#hascheck}}?{Advantage|{{hascheck}}}{{/hascheck}}
-            {{#targetData2}}[2nd Target Effects]({{targetData2}}$$@{target||token_id}){{/targetData2}}$${{^hascheck}}0{{/hascheck}}{{#hascheck}}?{Advantage|{{hascheck}}}{{/hascheck}}
+            {{#checkData}}[Check]({{checkData}}$$@{target||token_id}){{/checkData}}
+            {{#targetData}}[Target Effects]({{targetData}}$$@{target||token_id}$${{^hascheck}}0{{/hascheck}}{{#hascheck}}?{Advantage|{{hascheck}}}{{/hascheck}}){{/targetData}}
+            {{#checkData2}}[2nd Check]({{checkData2}}$$@{target||token_id}){{/checkData2}}
+            {{#targetData2}}[2nd Target Effects]({{targetData2}}$$@{target||token_id}$${{^hascheck}}0{{/hascheck}}{{#hascheck}}?{Advantage|{{hascheck}}}{{/hascheck}}){{/targetData2}}
         </div>
 
 
