@@ -135,6 +135,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         });
     }
     const addBoostTechniqueFormulaMods = function (attrHandler, technique) {
+        if (technique == undefined) {
+            return;
+        }
         Debug.Log(`Adding boost formula mods for ${technique.name}`);
         technique.effects.iterate(function (techEffect) {
             if (techEffect.type == "Boost") {
@@ -154,6 +157,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         });
     }
     const addBoostTechniqueModifiers = function (attrHandler, technique) {
+        if (technique == undefined) {
+            return;
+        }
         technique.effects.iterate(function (techEffect) {
             if (techEffect.type == "Boost") {
                 let boostDef = WuxDef.Get(techEffect.effect);

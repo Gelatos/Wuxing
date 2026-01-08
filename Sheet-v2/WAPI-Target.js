@@ -1840,7 +1840,6 @@ var TargetReference = TargetReference || (function () {
                     braceVar, wardingVar, reflexVar, evasionVar, resolveVar, insightVar, guileVar,
                     surgeVar, vitalityVar, hvVar, armorVar]);
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
-                    Debug.LogError(`Getting Brace ${braceVar}: ${attrHandler.parseInt(braceVar, 0, false)}`);
                     tokenTargetData.combatDetails.onUpdateCR(attrHandler, attrHandler.parseInt(crVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateJob(attrHandler, attrHandler.parseString(jobVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateDefenses(attrHandler, 
