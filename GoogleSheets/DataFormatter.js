@@ -2807,6 +2807,7 @@ class TechniqueAssessment {
     assessTechnique() {
         let assessor = this;
         let attributeHandler = this.getFakeAttributeHandler();
+        
         this.technique.effects.iterate(function (effect) {
             assessor.pointBreakdown.push({points: 0, rubric: ""});
             assessor.assessEffect(effect, attributeHandler);
@@ -2815,7 +2816,7 @@ class TechniqueAssessment {
         if (this.technique.secondEffectConditionName == "TechOnEnter") {
             assessor.onEnterEffect = true;
         }
-        if (this.technique.secondaryEffects.length > 0) {
+        if (this.technique.secondaryEffects.length() > 0) {
             assessor.pointBreakdown.push({points: 0, rubric: ""});
             this.technique.secondaryEffects.iterate(function (effect) {
                 assessor.pointBreakdown.push({points: 0, rubric: ""});
@@ -3205,7 +3206,7 @@ class TechniqueAssessment {
 
     getStructureAssessment() {
         if (this.structureCount > 0) {
-            let pointMod = Math.ceil(this.structureHP / 8);
+            let pointMod = Math.ceil(this.structureHP / 4);
             if (this.structureHeight > 0) {
                 pointMod += Math.ceil(pointMod * (this.structureHeight - 1) * 0.6);
             }
