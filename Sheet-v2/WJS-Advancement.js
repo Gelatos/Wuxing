@@ -690,7 +690,7 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 				attributeHandler.addMod(languageDefinitions[i].getVariable(WuxDef._rank));
 			}
 
-			attributeHandler.addMod(["CR", "Recall"]);
+			attributeHandler.addMod([WuxDef.GetVariable("CR"), WuxDef.GetVariable("Recall")]);
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				let skillPointValue = 0;
 				let skillRank = 0;
@@ -740,8 +740,11 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
 			Debug.Log("Update Skills");
 			let attributeHandler = new WorkerAttributeHandler();
 			let worker = new WuxWorkerBuildManager("Skill");
+			attributeHandler.addMod([WuxDef.GetVariable("CR")]);
 			worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			updateStats(attributeHandler);
 			attributeHandler.run();
+			
 		},
 
 		refreshStats = function (attributeHandler) {
@@ -751,7 +754,6 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
 
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				worker.setBuildStatsDraft(attrHandler);
-
 				worker.cleanBuildStats();
 				worker.updatePoints(attrHandler);
 				worker.revertBuildStatsDraft(attrHandler);
@@ -765,13 +767,16 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
 
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				let skillPointValue = 0;
+				let skillPointValueNoCr = 0;
 				let skillRank = 0;
 				for (let i = 0; i < skillDefinitions.length; i++) {
-					skillPointValue = skillDefinitions[i].formula.getValue(attrHandler);
+					skillPointValueNoCr = skillDefinitions[i].formula.getValue(attrHandler);
+					skillPointValue = skillPointValueNoCr;
 					skillRank = attrHandler.parseString(skillDefinitions[i].getVariable(WuxDef._rank));
 					if (skillRank == "on") {
-						skillPointValue = skillPointValue + 2 + attrHandler.parseInt(WuxDef.GetVariable("CR"));
+						skillPointValue += 1 + attrHandler.parseInt(WuxDef.GetVariable("CR"));
 					}
+					attrHandler.addUpdate(skillDefinitions[i].getVariable(WuxDef._max), skillPointValueNoCr);
 					attrHandler.addUpdate(skillDefinitions[i].getVariable(), skillPointValue);
 				}
 			});

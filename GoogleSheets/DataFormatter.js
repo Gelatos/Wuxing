@@ -869,8 +869,7 @@ var WuxDefinition = WuxDefinition || (function () {
         if (definitionData.formula.hasFormula()) {
             switch (definitionData.group) {
                 case "Skill":
-                    expandContents += "\n" + WuxSheetMain.Desc(`${definitionData.title} is calculated as:\n${definitionData.formula.getString()}`);
-                    expandContents += "\n" + WuxSheetMain.Desc(`If trained, add 2 + [${WuxDef.GetTitle("CR")}]`);
+                    expandContents += "";
                     break;
                 case "LoreCategory":
                     expandContents += "\n" + WuxSheetMain.Desc(`If trained, ${definitionData.title} is calculated as:\n${definitionData.formula.getString()} + [${WuxDef.GetTitle("CR")}]`);

@@ -1073,6 +1073,7 @@ class SkillData extends WuxDatabaseData {
         this.group = json.group;
         this.subGroup = json.subGroup;
         this.abilityScore = json.abilityScore;
+        this.abilityScore2 = json.abilityScore2;
         this.description = json.description;
     }
 
@@ -1088,6 +1089,8 @@ class SkillData extends WuxDatabaseData {
         i++;
         this.abilityScore = "" + dataArray[i];
         i++;
+        this.abilityScore2 = "" + dataArray[i];
+        i++;
         this.description = "" + dataArray[i];
         i++;
 
@@ -1100,13 +1103,14 @@ class SkillData extends WuxDatabaseData {
         this.group = "";
         this.subGroup = "";
         this.abilityScore = "";
+        this.abilityScore2 = "";
         this.description = "";
     }
 
     createDefinition(baseDefinition) {
         let definition = super.createDefinition(baseDefinition);
-        definition.subGroup = this.subGroup;
-        definition.formula = new FormulaData(`${this.abilityScore}`);
+        definition.subGroup = `${WuxDef.GetTitle(this.abilityScore)} + ${WuxDef.GetTitle(this.abilityScore2)}`;
+        definition.formula = new FormulaData(`${this.abilityScore};${this.abilityScore2}%4`);
         definition.formula.addAttributes(definition.getFormulaMods(`${WuxDef._rank}`));
         return definition;
     }
@@ -2912,16 +2916,27 @@ class FormulaData {
 
     createEmpty() {
         this.workers = [];
+        this.totalMax = 0;
     }
 
     importJson(json) {
         this.workers = json.workers;
+        this.totalMax = json.totalMax;
     }
 
     importFormula(data) {
         data = "" + data;
         if (data == "" || data == undefined) {
             return;
+        }
+        
+        let formulaArray = data.split("%");
+        if (formulaArray.length >= 2) {
+            this.totalMax = parseInt(formulaArray[1]);
+            data = formulaArray[0];
+        }
+        else {
+            this.totalMax = 0;
         }
 
         let formulaData = this;
@@ -3070,6 +3085,12 @@ class FormulaData {
             }
             output += mod;
         });
+        if (this.totalMax > 0) {
+            if (printName != undefined) {
+                printOutput = this.addPrintModifier(printOutput, `Capped to ${this.totalMax}`, multiplier);
+            }
+            output = Math.min(parseInt(output), this.totalMax);
+        }
         if (printName != undefined) {
             Debug.Log(`${printName} Formula: ${printOutput} = ${output}`);
         }
