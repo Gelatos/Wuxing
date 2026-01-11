@@ -359,6 +359,21 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
 }
 
 /*========================================
+    Skills
+========================================*/
+
+.wuxIsKeySkill input[type=hidden].wuxInteractiveIcon-flag + .wuxHeader
+{
+    /*color: #f37b7b;*/
+    color: red;
+}
+
+.wuxIsKeySkill input[type=hidden].wuxInteractiveIcon-flag[value="on"] + .wuxHeader
+{
+    color: green;
+}
+
+/*========================================
     Actions
 ========================================*/
 
