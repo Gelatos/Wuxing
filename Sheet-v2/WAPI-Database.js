@@ -2342,6 +2342,8 @@ class BaseTechniqueEffectDisplayData {
                 return "Until you lose focus, ";
             case "Conflict":
                 return "Until the end of the conflict, ";
+            case "Long Rest":
+                return "Until the end of the next Long Rest, ";
         }
         return "";
     }
