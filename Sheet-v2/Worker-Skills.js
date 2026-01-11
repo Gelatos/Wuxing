@@ -25,6 +25,7 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
                 worker.revertBuildStatsDraft(attrHandler);
             });
         },
+        
         updateStats = function (attributeHandler) {
             let skillDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
             for (let i = 0; i < skillDefinitions.length; i++) {
@@ -46,12 +47,43 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
                     attrHandler.addUpdate(skillDefinitions[i].getVariable(), skillPointValue);
                 }
             });
+        },
+        
+        updateKeySkills = function (attributeHandler) {
+            let jobWorker = new WuxBasicWorkerBuild("Job");
+            let styleWorker = new WuxStyleWorkerBuild();
+            attributeHandler.addMod([jobWorker.attrBuildDraft, styleWorker.attrBuildDraft]);
+            
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let styleSkillDictionary = new Dictionary();
+                jobWorker.setBuildStatsDraft(attrHandler);
+                styleWorker.setBuildStatsDraft(attrHandler);
+
+                jobWorker.iterateBuildStats(function (styleVariableData) {
+                    let style = WuxStyles.GetByVariableName(styleVariableData.name);
+                    let skills = style.skills.split(";");
+                    for (let i = 0; i < skills.length; i++) {
+                        let skill = skills[i].trim();
+                        styleSkillDictionary.add(skill, 0);
+                    }
+                });
+
+                styleWorker.iterateBuildStats(function (styleVariableData) {
+                    let style = WuxStyles.GetByVariableName(styleVariableData.name);
+                    let skills = style.skills.split(";");
+                    for (let i = 0; i < skills.length; i++) {
+                        let skill = skills[i].trim();
+                        styleSkillDictionary.add(skill, 0);
+                    }
+                });
+            });
         }
 
     return {
         UpdateBuildPoints: updateBuildPoints,
         RefreshStats: refreshStats,
-        UpdateStats: updateStats
+        UpdateStats: updateStats,
+        UpdateKeySkills: updateKeySkills
     };
 }());
 
