@@ -65,6 +65,7 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
                     for (let i = 0; i < skills.length; i++) {
                         let skill = skills[i].trim();
                         styleSkillDictionary.add(skill, 0);
+                        Debug.Log(`Adding ${skill} to key skills`);
                     }
                 });
 
@@ -74,8 +75,20 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
                     for (let i = 0; i < skills.length; i++) {
                         let skill = skills[i].trim();
                         styleSkillDictionary.add(skill, 0);
+                        Debug.Log(`Adding ${skill} to key skills`);
                     }
                 });
+
+                let skillDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
+                for (let i = 0; i < skillDefinitions.length; i++) {
+                    if (styleSkillDictionary.keys.includes(skillDefinitions[i].title)) {
+                        Debug.Log(`Found ${skillDefinitions[i].title} as a skill in key skills`);
+                    }
+                    attrHandler.addUpdate(
+                        skillDefinitions[i].getVariable(WuxDef._learn), 
+                        styleSkillDictionary.keys.includes(skillDefinitions[i].title) ? "on" : "0");
+                }
+                
             });
         }
 

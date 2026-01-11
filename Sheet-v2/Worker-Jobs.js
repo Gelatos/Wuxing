@@ -79,6 +79,7 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             let attributeHandler = new WorkerAttributeHandler();
             let worker = new WuxWorkerBuildManager("Job");
             worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+            WuxWorkerSkills.UpdateKeySkills(attributeHandler);
             attributeHandler.run();
         },
 

@@ -551,6 +551,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             let attributeHandler = new WorkerAttributeHandler();
             let worker = new WuxStyleWorkerBuild();
             worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+            WuxWorkerSkills.UpdateKeySkills(attributeHandler);
             attributeHandler.run();
         },
         
