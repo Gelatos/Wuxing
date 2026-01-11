@@ -963,7 +963,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                         buildSkill = function (skill) {
                             let skillDefinition = skill.createDefinition(WuxDef.Get("Skill"));
-                            let interactHeader = `<span class="wuxHeader">${skill.name} (${WuxDef.GetAbbreviation(skill.abilityScore)})</span>`;
+                            let interactHeader = `<span class="wuxHeader">${skill.name}</span><span class="wuxFloatRight" name="${skillDefinition.getAttribute()}">0</span>`;
 
                             return WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(skillDefinition.getAttribute(WuxDef._rank), skillDefinition.getAttribute(WuxDef._info),
                                 interactHeader, WuxDefinition.TooltipDescription(skillDefinition));

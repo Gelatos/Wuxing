@@ -952,12 +952,20 @@ class TechniqueUseEffect extends dbObj {
         this.skill = "";
         this.effects = new TechniqueEffectDatabase();
     }
-    
+
     getUseTech(sheetName, isCustom) {
+        return `!utech ${this.getRollActionData(sheetName, isCustom)}`;
+    }
+
+    getCheckTech(sheetName, isCustom) {
+        return `!chtech ${this.getRollActionData(sheetName, isCustom)}`;
+    }
+    
+    getRollActionData(sheetName, isCustom) {
         if (isCustom) {
-            return `!utech ${this.sanitizeSheetRollAction(JSON.stringify(this))}$$${sheetName}`;
+            return `${this.sanitizeSheetRollAction(JSON.stringify(this))}$$${sheetName}`;
         }
-        return `!utech ${this.name}$$${sheetName}`;
+        return `${this.name}$$${sheetName}`;
     }
 
     sanitizeSheetRollAction(sheetRoll) {
@@ -1065,6 +1073,7 @@ class SkillData extends WuxDatabaseData {
         this.group = json.group;
         this.subGroup = json.subGroup;
         this.abilityScore = json.abilityScore;
+        this.abilityScore2 = json.abilityScore2;
         this.description = json.description;
     }
 
@@ -1080,6 +1089,8 @@ class SkillData extends WuxDatabaseData {
         i++;
         this.abilityScore = "" + dataArray[i];
         i++;
+        this.abilityScore2 = "" + dataArray[i];
+        i++;
         this.description = "" + dataArray[i];
         i++;
 
@@ -1092,13 +1103,14 @@ class SkillData extends WuxDatabaseData {
         this.group = "";
         this.subGroup = "";
         this.abilityScore = "";
+        this.abilityScore2 = "";
         this.description = "";
     }
 
     createDefinition(baseDefinition) {
         let definition = super.createDefinition(baseDefinition);
-        definition.subGroup = this.subGroup;
-        definition.formula = new FormulaData(`${this.abilityScore}`);
+        definition.subGroup = `${WuxDef.GetTitle(this.abilityScore)} + ${WuxDef.GetTitle(this.abilityScore2)}`;
+        definition.formula = new FormulaData(`${this.abilityScore};${this.abilityScore2}%4`);
         definition.formula.addAttributes(definition.getFormulaMods(`${WuxDef._rank}`));
         return definition;
     }
@@ -2184,11 +2196,15 @@ class TechniqueDisplayData {
             if (this.technique.effects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
                 effectData.import(this.technique.name, this.technique.skill, this.technique.effects);
+
+                output += `{{checkData=${effectData.getCheckTech(this.sheetname, this.technique.isCustom)}}}`;
                 output += `{{targetData=${effectData.getUseTech(this.sheetname, this.technique.isCustom)}}}`;
             }
             if (this.technique.secondaryEffects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
                 effectData.import(this.technique.name, this.technique.skill, this.technique.secondaryEffects);
+                
+                output += `{{checkData2=${effectData.getCheckTech(this.sheetname, this.technique.isCustom)}}}`;
                 output += `{{targetData2=${effectData.getUseTech(this.sheetname, this.technique.isCustom)}}}`;
             }
             if (this.technique.hasAdv != 0) {
@@ -2355,6 +2371,8 @@ class BaseTechniqueEffectDisplayData {
                 return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${hp}`;
             case "Surge":
                 return `If ${this.formatTarget(effect)} has a surge, they must spend one and heal ${this.formatCalcBonus(effect)} ${hp}`;
+            case "Burst Damage":
+                return `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage per rank of your Burst condition. You then lose the Burst condition.`;
             default:
                 return `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
         }
@@ -2904,16 +2922,27 @@ class FormulaData {
 
     createEmpty() {
         this.workers = [];
+        this.totalMax = 0;
     }
 
     importJson(json) {
         this.workers = json.workers;
+        this.totalMax = json.totalMax;
     }
 
     importFormula(data) {
         data = "" + data;
         if (data == "" || data == undefined) {
             return;
+        }
+        
+        let formulaArray = data.split("%");
+        if (formulaArray.length >= 2) {
+            this.totalMax = parseInt(formulaArray[1]);
+            data = formulaArray[0];
+        }
+        else {
+            this.totalMax = 0;
         }
 
         let formulaData = this;
@@ -2986,6 +3015,12 @@ class FormulaData {
             }
         }
     }
+    
+    setMultipliers(multiplier) {
+        for (let i = 0; i < this.workers.length; i++) {
+            this.workers[i].multiplier = multiplier;
+        }
+    }
 
     makeWorker(variableName, definitionName, value, multiplier, max) {
         return {
@@ -3056,6 +3091,12 @@ class FormulaData {
             }
             output += mod;
         });
+        if (this.totalMax > 0) {
+            if (printName != undefined) {
+                printOutput = this.addPrintModifier(printOutput, `Capped to ${this.totalMax}`, multiplier);
+            }
+            output = Math.min(parseInt(output), this.totalMax);
+        }
         if (printName != undefined) {
             Debug.Log(`${printName} Formula: ${printOutput} = ${output}`);
         }

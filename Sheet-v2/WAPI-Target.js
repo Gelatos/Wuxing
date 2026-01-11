@@ -316,11 +316,18 @@ class TokenTargetData extends TargetData {
         }
         return this.token.get("status_dead");
     }
-    setDowned(value) {
+    setDowned(value, attributeHandler) {
         if (!this.validateToken()) {
             return false;
         }
         this.token.set("status_dead", value);
+        
+        if (value) {
+            this.addStatus(attributeHandler, "Status_Downed", 1);
+        }
+        else {
+            this.removeStatus(attributeHandler, "Status_Downed");
+        }
     }
 
     // Modifiers
@@ -1164,7 +1171,7 @@ class TokenTargetEffectsData {
         this.tokenTargetData.addVitality(attributeHandler, -1 * damage,
             function (results, attrHandler, attributeVar, tokenTargetData) {
                 if (results.newValue <= 0) {
-                    tokenTargetData.setDowned(true);
+                    tokenTargetData.setDowned(true, attrHandler);
                 }
                 tokenTargetData.applyResultsVitality(results, attrHandler, attributeVar, tokenTargetData);
             });
@@ -1840,7 +1847,6 @@ var TargetReference = TargetReference || (function () {
                     braceVar, wardingVar, reflexVar, evasionVar, resolveVar, insightVar, guileVar,
                     surgeVar, vitalityVar, hvVar, armorVar]);
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
-                    Debug.LogError(`Getting Brace ${braceVar}: ${attrHandler.parseInt(braceVar, 0, false)}`);
                     tokenTargetData.combatDetails.onUpdateCR(attrHandler, attrHandler.parseInt(crVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateJob(attrHandler, attrHandler.parseString(jobVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateDefenses(attrHandler, 

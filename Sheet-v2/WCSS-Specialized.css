@@ -537,6 +537,7 @@ input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeader,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Reflex,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Evasion,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Resolve,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Ego,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Insight,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Guile
 {
@@ -582,6 +583,11 @@ input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeader,
 }
 .wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Resolve"] + .wuxFeatureDefenseIcon,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader .wuxFeatureDefenseIcon-Resolve
+{
+    background-image: url("https://i.imgur.com/3xuKr2b.png");
+}
+.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Ego"] + .wuxFeatureDefenseIcon,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .wuxFeatureDefenseIcon-Ego
 {
     background-image: url("https://i.imgur.com/xYt4rHC.png");
 }

@@ -49,7 +49,6 @@ var WuxConflictManager = WuxConflictManager || (function () {
                     rollInitiative();
                     break;
             }
-            ;
         },
 
         commandStartBattle = function () {
@@ -207,7 +206,6 @@ var WuxConflictManager = WuxConflictManager || (function () {
                     }
                 }
             }
-            ;
 
             let systemMessage = new SystemInfoMessage(tableData.print());
             systemMessage.setSender("System");
@@ -431,6 +429,9 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                 case "!ctech":
                     commandConsumeTechnique(msg, content);
                     break;
+                case "!chtech":
+                    commandCheckTechnique(msg, content);
+                    break;
                 case "!utech":
                     if (state.WuxConflictManager.conflictType == "Social") {
                         sendToChat(msg.sender, `!sutech ${content}$$?{Advantage|0}`, false);
@@ -448,6 +449,10 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
         commandConsumeTechnique = function (msg, content) {
             let techniqueConsumptionResolver = new TechniqueConsumptionResolver(msg, content);
             techniqueConsumptionResolver.run();
+        },
+        commandCheckTechnique = function (msg, content) {
+            let techniqueCheckResolver = new TechniqueCheckResolver(msg, content);
+            techniqueCheckResolver.run();
         },
         commandUseTechnique = function (msg, content) {
             let techUseResolver = new TechniqueUseResolver(msg, content);
@@ -750,12 +755,12 @@ class TechniqueTargetObjectCollection {
     }
 }
 
-class TechniqueUseResolver extends TechniqueResolverData {
+class TechniqueSkillCheckResolver extends TechniqueResolverData {
     constructor(msg, content) {
         super(msg, content);
         this.startTime = Date.now();
     }
-    
+
     createEmpty() {
         super.createEmpty();
         this.technique = {};
@@ -774,7 +779,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
             return;
         }
         this.senderTokenEffect = new TokenTargetEffectsData(this.senderTokenTargetData);
-        
+
         let targetToken = TargetReference.GetTokenTargetData(contentData[2]);
         if (targetToken == undefined) {
             return;
@@ -790,10 +795,10 @@ class TechniqueUseResolver extends TechniqueResolverData {
         this.technique = new TechniqueUseEffect();
         try {
             this.technique.importSandboxJson(data);
-            Debug.Log(`[TechniqueUse] TechniqueData created`);
+            Debug.Log(`[TechniqueSkill] TechniqueData created`);
         }
         catch {
-            Debug.Log(`[TechniqueUse] Forming TechniqueData from a name`);
+            Debug.Log(`[TechniqueSkill] Forming TechniqueData from a name`);
             let techniqueData = WuxTechs.Get(data);
             if (techniqueData == undefined) {
                 let item = WuxItems.Get(data);
@@ -811,47 +816,24 @@ class TechniqueUseResolver extends TechniqueResolverData {
     addInitialMessage() {
         this.addMessage(`${this.senderTokenEffect.tokenTargetData.displayName} uses ${this.technique.name} on ${this.targetTokenEffect.tokenTargetData.displayName}`);
     }
-    
+
     run() {
         if (this.senderTokenTargetData == undefined || this.targetTokenEffect.tokenTargetData == undefined) {
             return;
         }
-        let techUseResolver = this;
+        let techSkillCheckResolver = this;
         let senderAttributeHandler = new SandboxAttributeHandler(this.senderTokenEffect.tokenTargetData.charId);
-        techUseResolver.tryGetSenderAttributes(techUseResolver, senderAttributeHandler);
-        techUseResolver.tryGetSenderSkillCheck(techUseResolver, senderAttributeHandler);
-        techUseResolver.getTargetData(techUseResolver, senderAttributeHandler);
+        techSkillCheckResolver.tryGetSenderAttributes(techSkillCheckResolver, senderAttributeHandler);
+        techSkillCheckResolver.tryGetSenderSkillCheck(techSkillCheckResolver, senderAttributeHandler);
+        techSkillCheckResolver.getTargetData(techSkillCheckResolver, senderAttributeHandler);
         senderAttributeHandler.run();
     }
 
-    tryGetSenderAttributes(techUseResolver, senderAttributeHandler) {
+    tryGetSenderAttributes(techSkillCheckResolver, senderAttributeHandler) {
         senderAttributeHandler.addMod(WuxDef.GetVariable("Status"));
         senderAttributeHandler.addMod(WuxDef.GetVariable("CR"));
-        techUseResolver.senderTokenEffect.tokenTargetData.refreshCombatDetails(senderAttributeHandler);
-        techUseResolver.technique.effects.iterate(function (techniqueEffect) {
-            if (techniqueEffect.target == "Self") {
-                techUseResolver.tryGetAttributesFromTechniqueEffect(techniqueEffect, senderAttributeHandler);
-            }
-            if (techniqueEffect.effect == "Dmg_Weapon") {
-                senderAttributeHandler.addMod(WuxDef.GetVariable("WeaponDamage"));
-            }
-            senderAttributeHandler.addMod(techniqueEffect.formula.getAttributes());
-        });
     }
 
-    tryGetSenderSkillCheck(techUseResolver, senderAttributeHandler) {
-        if (techUseResolver.technique.skill == "") {
-            return;
-        }
-
-        let skillCheckVar = WuxDef.GetVariable(Format.GetDefinitionName("Skill", techUseResolver.technique.skill));
-        senderAttributeHandler.addMod(skillCheckVar);
-
-        senderAttributeHandler.addGetAttrCallback(function (attrHandler) {
-            techUseResolver.skillCheckValue = attrHandler.parseInt(skillCheckVar);
-        });
-    }
-    
     tryGetAttributesFromTechniqueEffect(techniqueEffect, attributeHandler) {
         switch (techniqueEffect.type) {
             case "HP":
@@ -888,28 +870,219 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 break;
         }
     }
-    
-    getTargetData(techUseResolver, senderAttributeHandler) {
+
+    tryGetSenderSkillCheck(techSkillCheckResolver, senderAttributeHandler) {
+        if (techSkillCheckResolver.technique.skill == "") {
+            return;
+        }
+
+        let skillCheckVar = WuxDef.GetVariable(Format.GetDefinitionName("Skill", techSkillCheckResolver.technique.skill));
+        senderAttributeHandler.addMod(skillCheckVar);
+
+        senderAttributeHandler.addGetAttrCallback(function (attrHandler) {
+            techSkillCheckResolver.skillCheckValue = attrHandler.parseInt(skillCheckVar);
+        });
+    }
+
+    getTargetData(techSkillCheckResolver, senderAttributeHandler) {
         senderAttributeHandler.addFinishCallback(function (senderAttrHandler) {
-            let targetAttributeHandler = new SandboxAttributeHandler(techUseResolver.targetTokenEffect.tokenTargetData.charId);
-            techUseResolver.tryGetDefensesAndAttributes(techUseResolver, targetAttributeHandler);
-            techUseResolver.performEffects(techUseResolver, senderAttrHandler, targetAttributeHandler);
+            let targetAttributeHandler = new SandboxAttributeHandler(techSkillCheckResolver.targetTokenEffect.tokenTargetData.charId);
+            techSkillCheckResolver.tryGetDefensesAndAttributes(techSkillCheckResolver, targetAttributeHandler);
+            techSkillCheckResolver.performEffects(techSkillCheckResolver, senderAttrHandler, targetAttributeHandler);
             targetAttributeHandler.run();
         })
     }
 
-    tryGetDefensesAndAttributes(techUseResolver, targetAttributeHandler) {
+    tryGetDefensesAndAttributes(techSkillCheckResolver, targetAttributeHandler) {
         targetAttributeHandler.addMod(WuxDef.GetVariable("Status"));
         targetAttributeHandler.addMod(WuxDef.GetVariable("CR"));
-        techUseResolver.targetTokenEffect.tokenTargetData.refreshCombatDetails(targetAttributeHandler);
-        techUseResolver.technique.effects.iterate(function (techniqueEffect) {
+        techSkillCheckResolver.targetTokenEffect.tokenTargetData.refreshCombatDetails(targetAttributeHandler);
+        techSkillCheckResolver.technique.effects.iterate(function (techniqueEffect) {
             if (techniqueEffect.defense.startsWith("Def_")) {
                 let defenseDef = WuxDef.Get(techniqueEffect.defense);
                 targetAttributeHandler.addMod(defenseDef.getVariable());
             }
             if (techniqueEffect.target != "Self") {
-                techUseResolver.tryGetAttributesFromTechniqueEffect(techniqueEffect, targetAttributeHandler);
+                techSkillCheckResolver.tryGetAttributesFromTechniqueEffect(techniqueEffect, targetAttributeHandler);
             }
+        });
+    }
+
+    performEffects(techSkillCheckResolver, senderAttrHandler, targetAttributeHandler) {
+        // ADD CODE TO PERFORM EFFECTS
+    }
+    
+    getAdvantageBonus(techSkillCheckResolver, senderAttributeHandler, targetAttributeHandler, removeStatus) {
+        let advantage = techSkillCheckResolver.advantage;
+
+        // add advantages based on sender statuses
+        if (techSkillCheckResolver.technique.action != "Assist") {
+            let downed = techSkillCheckResolver.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Downed");
+            if (downed != false && downed > 0) {
+                advantage -= downed;
+                techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Downed: +${downed} Disadvantage`);
+            }
+        }
+        if (techSkillCheckResolver.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Impaired")) {
+            advantage -= 1;
+            techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Impaired: +1 Disadvantage`);
+        }
+        if (techSkillCheckResolver.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Sickened")) {
+            advantage -= 1;
+            techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Sickened: +1 Disadvantage`);
+        }
+        if (techSkillCheckResolver.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Encouraged")) {
+            advantage -= 1;
+            if (removeStatus) {
+                techSkillCheckResolver.targetTokenEffect.tokenTargetData.removeStatus(targetAttributeHandler, "Stat_Encouraged");
+            }
+            techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Encouraged: +1 Advantage. Removed Encouraged status.`);
+        }
+        let distracted = techSkillCheckResolver.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Distracted");
+        if (distracted != false && distracted > 0) {
+            advantage -= distracted;
+            if (removeStatus) {
+                techSkillCheckResolver.targetTokenEffect.tokenTargetData.removeStatus(targetAttributeHandler, "Stat_Distracted");
+            }
+            techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Distracted: +${distracted} Disadvantage. Removed Distracted status.`);
+        }
+        let rally = techSkillCheckResolver.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Rally");
+        if (rally != false && rally > 0) {
+            advantage += rally;
+            if (removeStatus) {
+                techSkillCheckResolver.targetTokenEffect.tokenTargetData.removeStatus(targetAttributeHandler, "Stat_Rally");
+            }
+            techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Rallied: +${rally} Advantage. Removed Rally status.`);
+        }
+
+        // add advantages based on what statuses the target has
+        if (techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(targetAttributeHandler, "Stat_Hindered")) {
+            advantage += 1;
+            if (removeStatus) {
+                techSkillCheckResolver.targetTokenEffect.tokenTargetData.removeStatus(targetAttributeHandler, "Stat_Hindered");
+            }
+            techSkillCheckResolver.addMessage(`${techSkillCheckResolver.targetTokenEffect.tokenTargetData.displayName} is Hindered: +1 Advantage. Removed Hindered status.`);
+        }
+        if (techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(targetAttributeHandler, "Stat_Restrained")) {
+            advantage += 1;
+            techSkillCheckResolver.addMessage(`${techSkillCheckResolver.targetTokenEffect.tokenTargetData.displayName} is Restrained: +1 Advantage`);
+        }
+        if (techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(targetAttributeHandler, "Stat_Frozen")) {
+            advantage += 2;
+            techSkillCheckResolver.addMessage(`${techSkillCheckResolver.targetTokenEffect.tokenTargetData.displayName} is Frozen: +2 Advantage`);
+        }
+        if (techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(targetAttributeHandler, "Stat_Paralyzed")) {
+            advantage += 2;
+            techSkillCheckResolver.addMessage(`${techSkillCheckResolver.targetTokenEffect.tokenTargetData.displayName} is Paralyzed: +2 Advantage`);
+        }
+        
+        return advantage;
+    }
+}
+
+class TechniqueCheckResolver extends TechniqueSkillCheckResolver {
+    
+    performEffects(techCheckResolver, senderAttrHandler, targetAttributeHandler) {
+        targetAttributeHandler.addFinishCallback(function (targetAttrHandler) {
+            techCheckResolver.getPassChance(techCheckResolver, senderAttrHandler, targetAttrHandler);
+            techCheckResolver.printMessages();
+        });
+    }
+    
+    getPassChance(techCheckResolver, senderAttrHandler, targetAttrHandler) {
+        let defenseChecks = [];
+        techCheckResolver.technique.effects.iterate(function (techniqueEffect) {
+            if (defenseChecks.includes(techniqueEffect.defense) || techniqueEffect.defense == "WillBreak") {
+                return;
+            }
+            defenseChecks.push(techniqueEffect.defense);
+            
+            let defenseName = `DC ${techniqueEffect.defense}`;
+            let dcValue = parseInt(techniqueEffect.defense);
+            if (isNaN(dcValue)) {
+                let defenseDef = WuxDef.Get(techniqueEffect.defense);
+                defenseName = defenseDef.getTitle();
+                dcValue = targetAttrHandler.parseInt(defenseDef.getVariable());
+            }
+            
+            let skillCheckDifference = dcValue - techCheckResolver.skillCheckValue;
+            let advantage = techCheckResolver.getAdvantageBonus(techCheckResolver,
+                senderAttrHandler, targetAttrHandler, false);
+            let odds = techCheckResolver.probAtLeastKeep(advantage, skillCheckDifference);
+
+            techCheckResolver.addMessage(`Vs. ${defenseName}: ${odds}`);
+        });
+        
+    }
+    
+    probAtLeastKeep(n, target) {
+        
+        const minSum = 2;
+        const maxSum = 12;
+
+        if (target <= minSum) return "100%";
+        if (target > maxSum) return "0%";
+        
+        let totalDice = 2 + Math.abs(n);
+        if (totalDice > 8) totalDice = 8;
+
+        const keepMode = n >= 0 ? 'highest' : 'lowest';
+        const k = 2; // always keep 2 dice
+
+        const totalOutcomes = Math.pow(6, totalDice);
+        let successful = 0;
+
+        function recurse(i, cur) {
+            if (i === totalDice) {
+                const sorted = cur.slice().sort((a, b) => a - b);
+                let sum;
+
+                if (keepMode === 'highest') {
+                    sum = sorted[totalDice - 1] + sorted[totalDice - 2];
+                } else {
+                    sum = sorted[0] + sorted[1];
+                }
+
+                if (sum >= target) successful++;
+                return;
+            }
+
+            for (let f = 1; f <= 6; f++) {
+                cur[i] = f;
+                recurse(i + 1, cur);
+            }
+        }
+
+        recurse(0, new Array(totalDice));
+
+        const percent = Math.round((successful / totalOutcomes) * 100);
+        return percent + "%";
+    }
+
+    printMessages() {
+        this.messages = this.messages.concat(this.senderTokenEffect.effectMessages);
+        this.messages = this.messages.concat(this.targetTokenEffect.effectMessages);
+        let systemMessage = this.getMessageObject();
+        WuxMessage.SendToSender(systemMessage, this.msg);
+
+    }
+    
+}
+
+class TechniqueUseResolver extends TechniqueSkillCheckResolver {
+
+    tryGetSenderAttributes(techUseResolver, senderAttributeHandler) {
+        
+        super.tryGetSenderAttributes(techUseResolver, senderAttributeHandler);
+        techUseResolver.senderTokenEffect.tokenTargetData.refreshCombatDetails(senderAttributeHandler);
+        techUseResolver.technique.effects.iterate(function (techniqueEffect) {
+            if (techniqueEffect.target == "Self") {
+                techUseResolver.tryGetAttributesFromTechniqueEffect(techniqueEffect, senderAttributeHandler);
+            }
+            if (techniqueEffect.effect == "Dmg_Weapon") {
+                senderAttributeHandler.addMod(WuxDef.GetVariable("WeaponDamage"));
+            }
+            senderAttributeHandler.addMod(techniqueEffect.formula.getAttributes());
         });
     }
     
@@ -948,96 +1121,44 @@ class TechniqueUseResolver extends TechniqueResolverData {
             techUseResolver.applySetters(techUseResolver, attrGetters, attrSetters, willBreakEffect);
         });
     }
-    
-    rollSkillCheck(techUseResolver, attrSetters) {
-        if (techUseResolver.technique.skill == "") {
+
+    rollSkillCheck(techSkillCheckResolver, attrSetters) {
+        if (techSkillCheckResolver.technique.skill == "") {
             return;
         }
-        
-        let advantage = techUseResolver.advantage;
-        
-        // add advantages based on sender statuses
-        if (techUseResolver.technique.action != "Assist") {
-            if (techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Downed")) {
-                advantage -= 1;
-                techUseResolver.addMessage(`${techUseResolver.senderTokenEffect.tokenTargetData.displayName} is Downed: +1 Disadvantage`);
-            }
-        }
-        if (techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Impaired")) {
-            advantage -= 1;
-            techUseResolver.addMessage(`${techUseResolver.senderTokenEffect.tokenTargetData.displayName} is Impaired: +1 Disadvantage`);
-        }
-        if (techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Sickened")) {
-            advantage -= 1;
-            techUseResolver.addMessage(`${techUseResolver.senderTokenEffect.tokenTargetData.displayName} is Sickened: +1 Disadvantage`);
-        }
-        if (techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Encouraged")) {
-            advantage -= 1;
-            techUseResolver.targetTokenEffect.tokenTargetData.removeStatus(attrSetters.target, "Stat_Encouraged");
-            techUseResolver.addMessage(`${techUseResolver.senderTokenEffect.tokenTargetData.displayName} is Encouraged: +1 Advantage. Removed Encouraged status.`);
-        }
-        let distracted = techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Distracted");
-        if (distracted != false && distracted > 0) {
-            advantage -= distracted;
-            techUseResolver.targetTokenEffect.tokenTargetData.removeStatus(attrSetters.target, "Stat_Distracted");
-            techUseResolver.addMessage(`${techUseResolver.senderTokenEffect.tokenTargetData.displayName} is Distracted: +${distracted} Disadvantage. Removed Distracted status.`);
-        }
-        let rally = techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Rally");
-        if (rally != false && rally > 0) {
-            advantage += rally;
-            techUseResolver.targetTokenEffect.tokenTargetData.removeStatus(attrSetters.target, "Stat_Rally");
-            techUseResolver.addMessage(`${techUseResolver.senderTokenEffect.tokenTargetData.displayName} is Rallied: +${rally} Advantage. Removed Rally status.`);
-        }
-        
-        // add advantages based on what statuses the target has
-        if (techUseResolver.targetTokenEffect.tokenTargetData.hasStatus(attrSetters.target, "Stat_Hindered")) {
-            advantage += 1;
-            techUseResolver.targetTokenEffect.tokenTargetData.removeStatus(attrSetters.target, "Stat_Hindered");
-            techUseResolver.addMessage(`${techUseResolver.targetTokenEffect.tokenTargetData.displayName} is Hindered: +1 Advantage. Removed Hindered status.`);
-        }
-        if (techUseResolver.targetTokenEffect.tokenTargetData.hasStatus(attrSetters.target, "Stat_Restrained")) {
-            advantage += 1;
-            techUseResolver.addMessage(`${techUseResolver.targetTokenEffect.tokenTargetData.displayName} is Restrained: +1 Advantage`);
-        }
-        if (techUseResolver.targetTokenEffect.tokenTargetData.hasStatus(attrSetters.target, "Stat_Frozen")) {
-            advantage += 2;
-            techUseResolver.addMessage(`${techUseResolver.targetTokenEffect.tokenTargetData.displayName} is Frozen: +2 Advantage`);
-        }
-        if (techUseResolver.targetTokenEffect.tokenTargetData.hasStatus(attrSetters.target, "Stat_Paralyzed")) {
-            advantage += 2;
-            techUseResolver.addMessage(`${techUseResolver.targetTokenEffect.tokenTargetData.displayName} is Paralyzed: +2 Advantage`);
-        }
-        
-        techUseResolver.skillCheck = new DieRoll();
-        techUseResolver.skillCheck.rollCheck(advantage);
-        techUseResolver.skillCheck.addModToRoll(techUseResolver.skillCheckValue, techUseResolver.technique.skill);
-        techUseResolver.addMessage(`${techUseResolver.technique.skill} Check: ` +
-            Format.ShowTooltip(`${techUseResolver.skillCheck.total}`, techUseResolver.skillCheck.message));
+
+        let advantage = this.getAdvantageBonus(techSkillCheckResolver, attrSetters.sender, attrSetters.target, true);
+
+        techSkillCheckResolver.skillCheck = new DieRoll();
+        techSkillCheckResolver.skillCheck.rollCheck(advantage);
+        techSkillCheckResolver.skillCheck.addModToRoll(techSkillCheckResolver.skillCheckValue, techSkillCheckResolver.technique.skill);
+        techSkillCheckResolver.addMessage(`${techSkillCheckResolver.technique.skill} Check: ` +
+            Format.ShowTooltip(`${techSkillCheckResolver.skillCheck.total}`, techSkillCheckResolver.skillCheck.message));
     }
-    
-    checkPassDc(techniqueEffect, techUseResolver, targetAttrHandler) {
+
+    checkPassDc(techniqueEffect, techSkillCheckResolver, targetAttrHandler) {
         if (techniqueEffect.defense == "") {
             return true;
         }
-        if (techUseResolver.failedEvasion) {
+        if (techSkillCheckResolver.failedEvasion) {
             return false;
         }
-        
+
         let message = "";
         let dcValue = parseInt(techniqueEffect.defense);
         if (isNaN(dcValue)) {
             let defenseDef = WuxDef.Get(techniqueEffect.defense);
             message = `Vs. ${defenseDef.getTitle()}`;
             dcValue = targetAttrHandler.parseInt(defenseDef.getVariable());
-            if (techUseResolver.targetTokenEffect.tokenTargetData.hasStatus(targetAttrHandler, "Stat_Dodge")) {
-                techUseResolver.targetTokenEffect.tokenTargetData.removeStatus(targetAttrHandler, "Stat_Dodge");
+            if (techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(targetAttrHandler, "Stat_Dodge")) {
+                techSkillCheckResolver.targetTokenEffect.tokenTargetData.removeStatus(targetAttrHandler, "Stat_Dodge");
                 if (techniqueEffect.defense == "Def_Evasion") {
                     dcValue += 6;
                 }
-                techUseResolver.addMessage(`${techUseResolver.targetTokenEffect.tokenTargetData.displayName}: +6 Evasion. Removed Dodge status.`);
+                techSkillCheckResolver.addMessage(`${techSkillCheckResolver.targetTokenEffect.tokenTargetData.displayName}: +6 Evasion. Removed Dodge status.`);
             }
-            
-            if (techUseResolver.targetTokenEffect.tokenTargetData.getDowned()) {
+
+            if (techSkillCheckResolver.targetTokenEffect.tokenTargetData.getDowned()) {
                 message += " (Downed -5)";
                 dcValue -= 5;
             }
@@ -1049,14 +1170,14 @@ class TechniqueUseResolver extends TechniqueResolverData {
         else {
             message = `Vs. DC ${dcValue}: `;
         }
-        
-        let pass = techUseResolver.skillCheck.total >= dcValue;
+
+        let pass = techSkillCheckResolver.skillCheck.total >= dcValue;
         if (!pass && techniqueEffect.defense == "Def_Evasion") {
-            techUseResolver.failedEvasion = true;
+            techSkillCheckResolver.failedEvasion = true;
             message += "Failed Evasion. No further effects will be applied.";
         }
         message += pass ? "Success!" : "Failure!";
-        techUseResolver.addMessage(message);
+        techSkillCheckResolver.addMessage(message);
         return pass;
     }
     
@@ -1144,6 +1265,26 @@ class TechniqueUseResolver extends TechniqueResolverData {
                 roll.setTraits(techniqueEffect.traits);
                 tokenEffect.addDamageRoll(roll);
                 break;
+            case "Burst Damage":
+                let burstDamageRank = techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Burst");
+                if (burstDamageRank == false || burstDamageRank <= 0) {
+                    techUseResolver.addMessage(`No Burst condition. No bonus damage.`);
+                    break;
+                }
+                
+                let modifiedTechniqueEffect = new TechniqueEffect(techniqueEffect);
+                modifiedTechniqueEffect.dVal *= burstDamageRank;
+                modifiedTechniqueEffect.formula.setMultipliers(burstDamageRank);
+                techUseResolver.senderTokenEffect.tokenTargetData.removeStatus(attrSetters.sender, "Stat_Burst");
+                techUseResolver.addMessage(`Removed Burst (Rank ${burstDamageRank}) condition.`);
+
+                roll = techUseResolver.calculateFormula(modifiedTechniqueEffect, attrGetters.sender);
+                let burstDamageType = techUseResolver.getDamageType(attrGetters, techniqueEffect);
+                roll.setDamageType(burstDamageType);
+                roll.setTraits(techniqueEffect.traits);
+                tokenEffect.addDamageRoll(roll);
+                
+                break;
             default:
                 roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
                 if (techUseResolver.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Empowered")) {
@@ -1151,20 +1292,25 @@ class TechniqueUseResolver extends TechniqueResolverData {
                     techUseResolver.senderTokenEffect.tokenTargetData.removeStatus(attrSetters.sender, "Stat_Empowered");
                     techUseResolver.addMessage(`Removed Empowered status.`);
                 }
-                let damageType = WuxDef.GetTitle(techniqueEffect.effect);
-                if (damageType == "Weapon") {
-                    damageType = attrGetters.sender.parseString(WuxDef.GetVariable("WeaponDamage"));
-                    if (damageType == "" || damageType == 0) {
-                        damageType = WuxDef.GetTitle("Dmg_Force");
-                    }
-                    else {
-                        damageType = WuxDef.GetTitle(damageType);
-                    }
-                }
+                let damageType = techUseResolver.getDamageType(attrGetters, techniqueEffect);
                 roll.setDamageType(damageType);
                 roll.setTraits(techniqueEffect.traits);
                 tokenEffect.addDamageRoll(roll);
         }
+    }
+    
+    getDamageType(attrGetters, techniqueEffect) {
+        let damageType = WuxDef.GetTitle(techniqueEffect.effect);
+        if (damageType == "Weapon") {
+            damageType = attrGetters.sender.parseString(WuxDef.GetVariable("WeaponDamage"));
+            if (damageType == "" || damageType == 0) {
+                damageType = WuxDef.GetTitle("Dmg_Force");
+            }
+            else {
+                damageType = WuxDef.GetTitle(damageType);
+            }
+        }
+        return damageType;
     }
 
     addWillEffect(techniqueEffect, techUseResolver, attrGetters) {
@@ -1285,7 +1431,7 @@ class TechniqueUseResolver extends TechniqueResolverData {
         this.messages = this.messages.concat(this.targetTokenEffect.effectMessages);
         let systemMessage = this.getMessageObject();
         WuxMessage.Send(systemMessage);
-        Debug.LogShout(this.msg, `[TechniqueUseResolver] Calculated with a duration of ${(Date.now() - this.startTime)/1000} seconds`);
+        Debug.Log(this.msg, `[TechniqueResolver] Calculated with a duration of ${(Date.now() - this.startTime)/1000} seconds`);
         
         if (this.senderTokenEffect.removeStatusMessage != "") {
             let systemMessage = new SystemInfoMessage(this.senderTokenEffect.removeStatusMessage);

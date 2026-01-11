@@ -690,7 +690,7 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 				attributeHandler.addMod(languageDefinitions[i].getVariable(WuxDef._rank));
 			}
 
-			attributeHandler.addMod(["CR", "Recall"]);
+			attributeHandler.addMod([WuxDef.GetVariable("CR"), WuxDef.GetVariable("Recall")]);
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				let skillPointValue = 0;
 				let skillRank = 0;
@@ -722,58 +722,6 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 					attrHandler.addUpdate(languageDefinitions[i].getVariable(WuxDef._filter), skillRank == "on" ? "1" : "0");
 				}
 				attrHandler.addUpdate(WuxDef.GetVariable("Language", WuxDef._true), JSON.stringify(languages));
-			});
-		}
-
-	return {
-		UpdateBuildPoints: updateBuildPoints,
-		RefreshStats: refreshStats,
-		UpdateStats: updateStats
-	};
-}());
-
-var WuxWorkerSkills = WuxWorkerSkills || (function () {
-	'use strict';
-
-	var
-		updateBuildPoints = function (eventinfo) {
-			Debug.Log("Update Skills");
-			let attributeHandler = new WorkerAttributeHandler();
-			let worker = new WuxWorkerBuildManager("Skill");
-			worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
-			attributeHandler.run();
-		},
-
-		refreshStats = function (attributeHandler) {
-			Debug.Log("Refresh Skill Stats");
-			let worker = new WuxWorkerBuild("Skill");
-			attributeHandler.addMod([worker.attrBuildDraft, worker.attrMax]);
-
-			attributeHandler.addGetAttrCallback(function (attrHandler) {
-				worker.setBuildStatsDraft(attrHandler);
-
-				worker.cleanBuildStats();
-				worker.updatePoints(attrHandler);
-				worker.revertBuildStatsDraft(attrHandler);
-			});
-		},
-		updateStats = function (attributeHandler) {
-			let skillDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
-			for (let i = 0; i < skillDefinitions.length; i++) {
-				attributeHandler.addFormulaMods(skillDefinitions[i]);
-			}
-
-			attributeHandler.addGetAttrCallback(function (attrHandler) {
-				let skillPointValue = 0;
-				let skillRank = 0;
-				for (let i = 0; i < skillDefinitions.length; i++) {
-					skillPointValue = skillDefinitions[i].formula.getValue(attrHandler);
-					skillRank = attrHandler.parseString(skillDefinitions[i].getVariable(WuxDef._rank));
-					if (skillRank == "on") {
-						skillPointValue = skillPointValue + 2 + attrHandler.parseInt(WuxDef.GetVariable("CR"));
-					}
-					attrHandler.addUpdate(skillDefinitions[i].getVariable(), skillPointValue);
-				}
 			});
 		}
 

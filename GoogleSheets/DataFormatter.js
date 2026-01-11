@@ -869,8 +869,7 @@ var WuxDefinition = WuxDefinition || (function () {
         if (definitionData.formula.hasFormula()) {
             switch (definitionData.group) {
                 case "Skill":
-                    expandContents += "\n" + WuxSheetMain.Desc(`${definitionData.title} is calculated as:\n${definitionData.formula.getString()}`);
-                    expandContents += "\n" + WuxSheetMain.Desc(`If trained, add 2 + [${WuxDef.GetTitle("CR")}]`);
+                    expandContents += "";
                     break;
                 case "LoreCategory":
                     expandContents += "\n" + WuxSheetMain.Desc(`If trained, ${definitionData.title} is calculated as:\n${definitionData.formula.getString()} + [${WuxDef.GetTitle("CR")}]`);
@@ -3015,6 +3014,16 @@ class TechniqueAssessment {
                 }
                 this.addTargetedPointsRubric(effect, output.value);
                 break;
+            case "Burst Damage":
+                output.value = Math.max(Math.floor(output.value * 0.25), 1);
+                message = `(Burst)`;
+
+                if (effect.defense != "WillBreak") {
+                    this.addPointsRubric(output.value, message);
+                }
+                this.addTargetedPointsRubric(effect, output.value);
+                break;
+                
             default:
                 if (effect.target == "Self") {
                     output.value = Math.floor(output.value * -0.5);
@@ -3442,7 +3451,7 @@ class TechniqueAssessment {
         if (this.pointBreakdown[this.pointBreakdown.length - 1].rubric != "") {
             this.pointBreakdown[this.pointBreakdown.length - 1].rubric += ` + ${points}`;
         }
-        this.pointsRubric += `${points}message`;
+        this.pointsRubric += `${points}${message}`;
         this.pointBreakdown[this.pointBreakdown.length - 1].rubric += message;
     }
 
