@@ -2878,7 +2878,9 @@ class TechniqueAssessment {
         attributeHandler.addMod(WuxDef.GetVariable("MvCharge"));
         attributeHandler.current[WuxDef.GetVariable("MvCharge")] = 5;
         attributeHandler.addMod(WuxDef.GetVariable("Cmb_Mv"));
-        attributeHandler.current[WuxDef.GetVariable("Cmb_Mv")] = 3;
+        attributeHandler.current[WuxDef.GetVariable("Cmb_Mv")] = 5;
+        attributeHandler.addMod(WuxDef.GetVariable("Cmb_MvDash"));
+        attributeHandler.current[WuxDef.GetVariable("Cmb_MvDash")] = 3;
         attributeHandler.addMod(WuxDef.GetVariable("MvPotency"));
         attributeHandler.current[WuxDef.GetVariable("MvPotency")] = 7;
 

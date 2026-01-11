@@ -867,7 +867,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let contents = `${buildJobHeader(jobDef, job)}
 							${WuxSheetMain.SectionBlockHeaderFooter()}
                             ${buildTierSelect(jobDef)}
-                            ${buildJobShortDescription(job)}`;
+                            ${buildJobDescription(job)}`;
 
                             return `${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(contents), "Half wuxMinWidth220")}`;
                         },
@@ -884,14 +884,16 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         addSubmenuContents = function (jobDef, job) {
-                            return `${WuxSheetMain.Header2("Description")}
-                                ${WuxSheetMain.Span("", job.description)}
-                                ${WuxSheetMain.SubMenuOptionButton(jobDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Forme_SeeTechniques")}</span>`, job.name)}
+                            return `${WuxSheetMain.SubMenuOptionButton(
+                                jobDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Forme_SeeTechniques")}</span>`, 
+                                job.name)}
                             `;
                         },
 
-                        buildJobShortDescription = function (job) {
-                            return WuxSheetMain.Desc(`<div>${job.category}</div><div>${job.shortDescription}</div>`);
+                        buildJobDescription = function (job) {
+                            return WuxSheetMain.Desc(`<span>${job.category}</span>
+                            <span>Skills: ${job.skills != "" ? job.skills : "None"}</span>
+                            <span>${job.description}</span>`);
                         }
                     ;
                     return {
