@@ -891,8 +891,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         buildJobDescription = function (job) {
-                            return WuxSheetMain.Desc(`<span>${job.category}</span>
-                            <span>Skills: ${job.skills != "" ? job.skills : "None"}</span>
+                            return WuxSheetMain.Desc(`<span>Category: ${job.category}</span>
+                            <span>Main Skills: ${job.skills != "" ? job.skills : "None"}</span>
                             <span>${job.description}</span>`);
                         }
                     ;
@@ -1161,7 +1161,7 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     return `${buildStyleHeader(styleDef, style)}
 							${WuxSheetMain.SectionBlockHeaderFooter()}
                             ${buildTierSelect(styleDef, style)}
-                            ${buildStyleDescription(styleDef)}`;
+                            ${buildStyleDescription(styleDef, style)}`;
 
                 },
 
@@ -1192,8 +1192,9 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     `;
                 },
 
-                buildStyleDescription = function (styleDef) {
-                    return WuxSheetMain.Desc(styleDef.getDescription());
+                buildStyleDescription = function (styleDef, style) {
+                    return WuxSheetMain.Desc(`<span>Main Skills: ${style.skills != "" ? style.skills : "None"}</span>
+                    <span>${styleDef.getDescription()}</span>`);
                 },
 
                 buildTechniqueStyleGroupTab = function (contents, groupName, title) {
