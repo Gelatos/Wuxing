@@ -917,9 +917,10 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
 
         // add advantages based on sender statuses
         if (techSkillCheckResolver.technique.action != "Assist") {
-            if (techSkillCheckResolver.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Downed")) {
-                advantage -= 1;
-                techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Downed: +1 Disadvantage`);
+            let downed = techSkillCheckResolver.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Downed");
+            if (downed != false && downed > 0) {
+                advantage -= downed;
+                techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Downed: +${downed} Disadvantage`);
             }
         }
         if (techSkillCheckResolver.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Impaired")) {
