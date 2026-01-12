@@ -21,6 +21,7 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 worker.setBuildStatsDraft(attrHandler);
                 worker.cleanBuildStats();
+                worker.setPointsMax(attrHandler);
                 worker.updatePoints(attrHandler);
                 worker.revertBuildStatsDraft(attrHandler);
             });

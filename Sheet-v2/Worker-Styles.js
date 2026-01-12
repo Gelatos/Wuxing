@@ -564,6 +564,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 styleWorker.setBuildStatsDraft(attrHandler);
 
                 styleWorker.cleanBuildStats();
+                styleWorker.setPointsMax(attrHandler);
                 styleWorker.updatePoints(attrHandler);
                 styleWorker.revertBuildStatsDraft(attrHandler);
             });

@@ -92,6 +92,7 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
                 jobWorker.setBuildStatsDraft(attrHandler);
 
                 jobWorker.cleanBuildStats();
+                jobWorker.setPointsMax(attrHandler);
                 jobWorker.updatePoints(attrHandler);
                 jobWorker.setBuildStatVariables(attrHandler);
             });

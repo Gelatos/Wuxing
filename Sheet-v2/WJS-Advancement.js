@@ -574,6 +574,7 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 				worker.setBuildStatsDraft(attrHandler);
 
 				worker.cleanBuildStats();
+				worker.setPointsMax(attrHandler);
 				worker.updatePoints(attrHandler);
 				worker.revertBuildStatsDraft(attrHandler);
 			});
@@ -610,6 +611,7 @@ var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
 				worker.setBuildStatsDraft(attrHandler);
 
 				worker.cleanBuildStats();
+				worker.setPointsMax(attrHandler);
 				worker.updatePoints(attrHandler);
 				worker.revertBuildStatsDraft(attrHandler);
 			});
@@ -667,6 +669,7 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 				worker.setBuildStatsDraft(attrHandler);
 
 				worker.cleanBuildStats();
+				worker.setPointsMax(attrHandler);
 				worker.updatePoints(attrHandler);
 				worker.revertBuildStatsDraft(attrHandler);
 			});
