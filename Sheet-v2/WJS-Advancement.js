@@ -331,7 +331,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Advancement");
 			attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Advancement"), "Advancement");
 
-			attributeHandler.addMod(WuxDef.GetVariable("XP"));
+			attributeHandler.addMod([WuxDef.GetVariable("XP"), WuxDef.GetVariable("CR")]);
 			let worker = new WuxAdvancementWorkerBuild();
 			attributeHandler.addMod(worker.attrMax);
 			attributeHandler.addMod(worker.attrBuildFinal);
@@ -446,10 +446,6 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			advWorker.updateLevel(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
 			let trnWorker = new WuxTrainingWorkerBuild();
 			trnWorker.updateLevel(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
-			// let perkDef = WuxDef.Get("Perk");
-			// attributeHandler.addGetAttrCallback(function (attrHandler) {
-			// 	attrHandler.addUpdate(perkDef.getVariable(WuxDef._max), perkDef.formula.getValue(attrHandler));
-			// });
 			attributeHandler.run();
 		},
 		setAdvancementPointsUpdate = function (eventinfo) {
