@@ -987,10 +987,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                     var
                         build = function () {
                             let contents = buildAttributes();
-                            contents = WuxSheetMain.TabBlock(contents);
-
-                            let definition = WuxDef.Get("Page_Attributes");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            contents += buildAffectedStats();
+                            return contents;
                         },
 
                         buildAttributes = function () {
@@ -1000,31 +998,155 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             for (let i = 0; i < attributes.length; i++) {
                                 output.push(buildAttribute(attributes[i], attributeValuesFilter));
                             }
-                            return WuxSheetMain.MultiRowGroup(output, WuxSheetMain.Table.FlexTable, 3);
+
+                            let contents = WuxSheetMain.MultiRowGroup(output, WuxSheetMain.Table.FlexTable, 4);
+                            contents = WuxSheetMain.TabBlock(contents);
+
+                            let definition = WuxDef.Get("Page_Attributes");
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                         },
 
                         buildAttribute = function (attributeDefinition, attributeValuesFilter) {
                             let contents = "";
                             contents += WuxSheetMain.Select(attributeDefinition.getAttribute(), attributeValuesFilter, false);
-
-                            let expandContents = "";
-                            let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formulaMods", attributeDefinition.name));
-                            for (let i = 0; i < formulaDefinitions.length; i++) {
-                                if (formulaDefinitions[i].group != "Skill") {
-                                    expandContents += WuxSheetMain.Header2(formulaDefinitions[i].title, "span");
-                                    expandContents += "<br />";
-                                    expandContents += WuxDefinition.DefinitionContents(formulaDefinitions[i]);
-                                }
-                            }
-                            let expandFieldName = attributeDefinition.getAttribute(WuxDef._expand);
-                            contents += WuxSheetMain.InteractionElement.Build(true, `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
-							${WuxSheetMain.Header("Affected Stats")}
-							${WuxSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`);
-
+                            // contents += buildAttributeStatsDetails(attributeDefinition);
+                            
                             let header = `${attributeDefinition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(attributeDefinition))}`;
                             let output = WuxSheetMain.Table.FlexTableHeader(header);
                             output += WuxSheetMain.Table.FlexTableData(contents);
                             return WuxSheetMain.Table.FlexTableGroup(output, " wuxMinWidth150");
+                        },
+                        
+                        buildAttributeStatsDetails = function (attributeDefinition) {
+                            let expandContents = "";
+                            let formulaDefinitions = WuxDef.Filter(new DatabaseFilterData("formulaMods", attributeDefinition.name));
+                            for (let i = 0; i < formulaDefinitions.length; i++) {
+                                expandContents += `<div>${WuxSheetMain.Header2(formulaDefinitions[i].title, "span")}
+                                    ${formulaDefinitions[i].subGroup != "" ? WuxSheetMain.Header2(formulaDefinitions[i].subGroup, "span") : ""}
+                                </div>`;
+                            }
+                            let expandFieldName = attributeDefinition.getAttribute(WuxDef._expand);
+                            return WuxSheetMain.InteractionElement.Build(true, `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(expandFieldName)}
+							${WuxSheetMain.Header(WuxDef.GetTitle("Page_AffectedStats"))}
+							${WuxSheetMain.InteractionElement.ExpandableBlockContents(expandFieldName, expandContents)}`);
+                        },
+                        
+                        buildAffectedStats = function () {
+                            let attributes = WuxDef.Filter([new DatabaseFilterData("group", "Attribute")]);
+                            let output = [];
+                            let attributeValuesFilter = WuxDef.Filter([new DatabaseFilterData("group", "AttributeValue")]);
+                            for (let i = 0; i < attributes.length; i++) {
+                                output.push(buildAttribute(attributes[i], attributeValuesFilter));
+                            }
+                            let definition = WuxDef.Get("Page_AffectedStats");
+
+                            let contents = WuxSheetMain.Desc(definition.getDescription());
+                            contents += buildPotencyStats();
+                            contents += buildDefenseStats();
+                            contents += buildSkillStats();
+                            contents = WuxSheetMain.TabBlock(contents);
+
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                        },
+
+                        buildPotencyStats = function () {
+                            let statFilterData = WuxDef.Filter([
+                                new DatabaseFilterData("group", "General"),
+                                new DatabaseFilterData("subGroup", "Potency")
+                            ]);
+
+                            let output = [];
+                            for (let i = 0; i < statFilterData.length; i++) {
+                                let definition = statFilterData[i];
+                                let attributes = getFormulaAttributes(definition);
+                                if (attributes.length > 0) {
+                                    output.push(buildStat(definition, `attr_${attributes[0].variableName}`, definition.getAttribute(),
+                                        WuxDef.GetAbbreviation(attributes[0].definitionName)));
+                                }
+                            }
+
+                            let contents = WuxSheetMain.MultiRowGroup(output, WuxSheetMain.Table.FlexTable, 4);
+                            return buildStatHeader("Page_PotencyStats") + contents;
+                        },
+
+                        buildDefenseStats = function () {
+                            let statFilterData = WuxDef.Filter([
+                                new DatabaseFilterData("group", "Defense")
+                            ]);
+                            statFilterData = statFilterData.concat(WuxDef.Filter([
+                                new DatabaseFilterData("group", "Sense")
+                            ]));
+
+                            let output = [];
+                            for (let i = 0; i < statFilterData.length; i++) {
+                                let definition = statFilterData[i];
+                                let attributes = getFormulaAttributes(definition);
+                                if (attributes.length > 0) {
+                                    output.push(buildStat(definition, `attr_${attributes[0].variableName}`, definition.getAttribute(),
+                                        WuxDef.GetAbbreviation(attributes[0].definitionName)));
+                                }
+                            }
+
+                            let contents = WuxSheetMain.MultiRowGroup(output, WuxSheetMain.Table.FlexTable, 3);
+                            return buildStatHeader("Page_DefensiveStats") + contents;
+                        },
+
+                        buildSkillStats = function () {
+                            let statFilterData = WuxDef.Filter([
+                                new DatabaseFilterData("group", "Skill")
+                            ]);
+
+                            let output = [];
+                            for (let i = 0; i < statFilterData.length; i++) {
+                                let definition = statFilterData[i];
+                                let attributes = getFormulaAttributes(definition);
+                                if (attributes.length > 0) {
+                                    let attributeString = "";
+                                    attributes.forEach(attribute => {
+                                       if (attributeString != "") {
+                                           attributeString += "+";
+                                       } 
+                                       attributeString += WuxDef.GetAbbreviation(attribute.definitionName);
+                                    });
+                                    output.push(buildStat(definition, definition.getAttribute(WuxDef._max), definition.getAttribute(), attributeString));
+                                }
+                            }
+
+                            let contents = WuxSheetMain.MultiRowGroup(output, WuxSheetMain.Table.FlexTable, 3);
+                            return buildStatHeader("Page_SkillStats") + contents;
+                        },
+                        
+                        getFormulaAttributes = function (definition) {
+                            let attributes = [];
+                            definition.formula.workers.forEach((worker) => {
+                                if (worker.definitionName != "" && worker.definitionName.includes("Attr_")) {
+                                    // this is an attribute
+                                    attributes.push(worker);
+                                }
+                            });
+                            return attributes;
+                        },
+
+                        buildStatHeader = function (statGroupName) {
+                            let statGroupDef = WuxDef.Get(statGroupName);
+                            return WuxDefinition.InfoHeader(statGroupDef);
+                        },
+
+                        buildStat = function (statDefinition, mainStatAttr, fullStatAttr, attributes) {
+                            let statValues = `<span class="wuxFloatRight"><span name="${mainStatAttr}"></span>(<span name="${fullStatAttr}"></span>)</span>`
+                            let interactHeader = `<span class="wuxHeader">${statDefinition.getTitle()} (${attributes})</span>${statValues}`;
+                            
+                            let infoFieldName = statDefinition.getAttribute(WuxDef._info);
+                            let tooltipInfo = WuxDefinition.TooltipDescription(statDefinition);
+                            tooltipInfo = WuxSheetMain.Info.Contents(infoFieldName, tooltipInfo);
+                            
+                            let output = `<div class="wuxInteractiveBlock">${WuxSheetMain.Info.Button(infoFieldName)}
+                            ${interactHeader}
+                            ${tooltipInfo}</div>`;
+                            
+                            return `<div class="wuxFlexTableItemGroup wuxMinWidth150">
+								<div class="wuxFlexTableItemData wuxTextLeft">${output}</div>
+							</div>`;
                         }
                     ;
                     return {

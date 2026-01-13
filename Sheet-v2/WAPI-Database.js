@@ -3102,6 +3102,7 @@ class FormulaData {
         }
         return parseInt(output);
     }
+    
     addPrintModifier(printOutput, value, multiplier) {
         if (printOutput != "") {
             printOutput += ` + `;

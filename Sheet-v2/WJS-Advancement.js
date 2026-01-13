@@ -599,6 +599,8 @@ var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
 			let attributeHandler = new WorkerAttributeHandler();
 			let worker = new WuxAttributeWorkerBuild();
 			worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			updateStats(attributeHandler);
+			WuxWorkerSkills.UpdateStats(attributeHandler);
 			attributeHandler.run();
 		},
 

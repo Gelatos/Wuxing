@@ -1282,6 +1282,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         }
         return `<input type="${type}" class="${className}" name="${fieldName}"${extras} />`
     };
+    
     var interactionElement = interactionElement || (function () {
         'use strict';
         var
