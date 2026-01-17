@@ -1344,8 +1344,13 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                 },
 
                 buildStyleDescription = function (styleDef, style) {
-                    return WuxSheetMain.Desc(`<span>Main Skills: ${style.skills != "" ? style.skills : "None"}</span>
-                    <span>${styleDef.getDescription()}</span>`);
+                    let output = "";
+                    if (style.affinity != "") {
+                        output += `<span>Affinity: ${style.affinity}</span>\n`;
+                    }
+                    output += `<span>Main Skills: ${style.skills != "" ? style.skills : "None"}</span>\n`;
+                    output += `<span>${styleDef.getDescription()}</span>`;
+                    return WuxSheetMain.Desc(output);
                 },
 
                 buildTechniqueStyleGroupTab = function (contents, groupName, title) {

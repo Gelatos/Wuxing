@@ -752,12 +752,17 @@ var DisplayFormeSheet = DisplayFormeSheet || (function () {
                 addRepeaterContentsStyles = function () {
                     let nameDef = WuxDef.Get("Forme_Name");
                     let tierDef = WuxDef.Get("Forme_Tier");
+                    let isAdvancedAttr = WuxDef.GetAttribute("Forme_IsAdvanced");
                     let actionDef = WuxDef.Get("Forme_Actions");
 
+                    let tierData = `<span>Tier </span><span name="${tierDef.getAttribute()}"></span>`;
+                    let tierOutput = WuxSheetMain.HiddenSpanField(isAdvancedAttr, `${tierData}<span>A</span>`);
+                    tierOutput += WuxSheetMain.HiddenAuxSpanField(isAdvancedAttr, tierData);
+
                     return WuxSheetMain.MultiRow(`
-                        ${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), addSubmenuContentsStyles())}
-                        <div class="wuxEquipableType"><span class="wuxDescription"><span>Tier </span><span name="${tierDef.getAttribute()}"></span></span></div>
-                        <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>`
+                                ${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), addSubmenuContentsStyles())}
+                                <div class="wuxEquipableType wuxDescription">${tierOutput}</div>
+                                <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>`
                     );
                 },
 

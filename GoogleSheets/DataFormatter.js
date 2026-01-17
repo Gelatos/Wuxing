@@ -1572,6 +1572,16 @@ var WuxSheetMain = WuxSheetMain || (function () {
             <div class="${fieldName}">\n${contents}\n</div>\n`;
         },
 
+        hiddenSpanField = function (fieldName, contents) {
+            return `<input type="hidden" class="wuxHiddenField-flag" name="${fieldName}" value="0">
+            <span class="wuxHiddenInlineField">\n${contents}\n</span>\n`;
+        },
+
+        hiddenAuxSpanField = function (fieldName, contents) {
+            return `<input type="hidden" class="wuxHiddenField-flag" name="${fieldName}" value="0">
+            <span class="wuxHiddenInlineAuxField">\n${contents}\n</span>\n`;
+        },
+
         subMenuButton = function (fieldName, contents) {
             return `<div class="wuxSubMenuButton">
                 <input type="checkbox" name="${fieldName}">
@@ -1873,6 +1883,8 @@ var WuxSheetMain = WuxSheetMain || (function () {
         HiddenIndexField: hiddenIndexField,
         HiddenIndexFieldWithVariable: hiddenIndexFieldWithVariable,
         HiddenAncestryField: hiddenAncestryField,
+        HiddenSpanField: hiddenSpanField,
+        HiddenAuxSpanField: hiddenAuxSpanField,
         SubMenuButton: subMenuButton,
         SubMenuOptionButton: subMenuOptionButton,
         SubMenuOptionRollButton: subMenuOptionRollButton,
