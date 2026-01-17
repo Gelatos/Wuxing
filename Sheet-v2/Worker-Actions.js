@@ -1,5 +1,8 @@
 var WuxWorkerActions = WuxWorkerActions || (function () {
     const tryAddTechniqueToBoosters = function (attrHandler, technique, boosterFieldName) {
+        if (technique == undefined) {
+            return false;
+        }
         if (technique.action == "Passive") {
             let passiveStyleTechniques = attrHandler.parseJSON(boosterFieldName);
             if (passiveStyleTechniques == "0" || passiveStyleTechniques == "") {

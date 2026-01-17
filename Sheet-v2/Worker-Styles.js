@@ -559,6 +559,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             Debug.Log("Refresh Style Stats");
             let styleWorker = new WuxStyleWorkerBuild();
             attributeHandler.addMod([styleWorker.attrBuildDraft, styleWorker.attrMax]);
+            attributeHandler.addFormulaMods(styleWorker.definition);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 styleWorker.setBuildStatsDraft(attrHandler);

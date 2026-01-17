@@ -17,6 +17,7 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
             Debug.Log("Refresh Skill Stats");
             let worker = new WuxWorkerBuild("Skill");
             attributeHandler.addMod([worker.attrBuildDraft, worker.attrMax]);
+            attributeHandler.addFormulaMods(worker.definition);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 worker.setBuildStatsDraft(attrHandler);
@@ -31,6 +32,7 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
             let skillDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
             for (let i = 0; i < skillDefinitions.length; i++) {
                 attributeHandler.addFormulaMods(skillDefinitions[i]);
+                attributeHandler.addMod(skillDefinitions[i].getVariable(WuxDef._rank));
             }
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -42,7 +44,7 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
                     skillPointValue = skillPointValueNoCr;
                     skillRank = attrHandler.parseString(skillDefinitions[i].getVariable(WuxDef._rank));
                     if (skillRank == "on") {
-                        skillPointValue += 1 + attrHandler.parseInt(WuxDef.GetVariable("CR"));
+                        skillPointValue += 2 + attrHandler.parseInt(WuxDef.GetVariable("CR"));
                     }
                     attrHandler.addUpdate(skillDefinitions[i].getVariable(WuxDef._max), skillPointValueNoCr);
                     attrHandler.addUpdate(skillDefinitions[i].getVariable(), skillPointValue);

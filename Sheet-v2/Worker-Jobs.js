@@ -87,6 +87,7 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             Debug.Log("Refresh Job Stats");
             let jobWorker = new WuxBasicWorkerBuild("Job");
             attributeHandler.addMod([jobWorker.attrBuildDraft, jobWorker.attrMax]);
+            attributeHandler.addFormulaMods(jobWorker.definition);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 jobWorker.setBuildStatsDraft(attrHandler);

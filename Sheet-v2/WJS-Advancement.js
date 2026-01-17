@@ -569,6 +569,7 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 			Debug.Log("Refresh Perk Stats");
 			let worker = new WuxPerkWorkerBuild();
 			attributeHandler.addMod([worker.attrBuildDraft, worker.attrMax]);
+			attributeHandler.addFormulaMods(worker.definition);
 
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				worker.setBuildStatsDraft(attrHandler);
@@ -608,6 +609,7 @@ var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
 			Debug.Log("Refresh Attribute Stats");
 			let worker = new WuxAttributeWorkerBuild();
 			attributeHandler.addMod([worker.attrBuildDraft, worker.attrMax]);
+			attributeHandler.addFormulaMods(worker.definition);
 
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				worker.setBuildStatsDraft(attrHandler);
@@ -633,6 +635,9 @@ var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
 
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				for (let i = 0; i < formulaDefinitions.length; i++) {
+					if (formulaDefinitions[i].group == "Skill") {
+						continue;
+					}
 					if (formulaDefinitions[i].isResource) {
 						attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
 						attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].formula.getValue(attrHandler));
