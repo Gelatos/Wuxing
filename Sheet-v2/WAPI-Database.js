@@ -1109,8 +1109,8 @@ class SkillData extends WuxDatabaseData {
 
     createDefinition(baseDefinition) {
         let definition = super.createDefinition(baseDefinition);
-        definition.subGroup = `${WuxDef.GetTitle(this.abilityScore)} + ${WuxDef.GetTitle(this.abilityScore2)}`;
-        definition.formula = new FormulaData(`${this.abilityScore};${this.abilityScore2}%4`);
+        definition.subGroup = `${WuxDef.GetTitle(this.abilityScore)}${this.abilityScore2 == "" ? "" : ` or ${WuxDef.GetTitle(this.abilityScore2)}`}`;
+        definition.formula = new FormulaData(`${this.abilityScore}%${this.abilityScore2}`);
         definition.formula.addAttributes(definition.getFormulaMods(`${WuxDef._rank}`));
         return definition;
     }
@@ -2922,12 +2922,10 @@ class FormulaData {
 
     createEmpty() {
         this.workers = [];
-        this.totalMax = 0;
     }
 
     importJson(json) {
         this.workers = json.workers;
-        this.totalMax = json.totalMax;
     }
 
     importFormula(data) {
@@ -2935,33 +2933,40 @@ class FormulaData {
         if (data == "" || data == undefined) {
             return;
         }
-        
-        let formulaArray = data.split("%");
-        if (formulaArray.length >= 2) {
-            this.totalMax = parseInt(formulaArray[1]);
-            data = formulaArray[0];
-        }
-        else {
-            this.totalMax = 0;
-        }
 
         let formulaData = this;
-        let definition = {};
-        let modDefinition = {};
-        let formulaVar = "";
         this.iterateFormulaComponentsForImport(data, function (definitionName, definitionNameModifier, multiplier, max) {
             if (isNaN(parseInt(definitionName))) {
-                definition = WuxDef.Get(definitionName);
+                let definition = [];
+                let modDefinition = {};
+                let definitionNames = [];
+                let formulaVar = [];
+                if (definitionName.includes("%")) {
+                    let tempDefinition = definitionName.split("%");
+                    definition.push(WuxDef.Get(tempDefinition[0]));
+                    definition.push(WuxDef.Get(tempDefinition[1]));
+                    definitionNames.push(tempDefinition[0]);
+                    definitionNames.push(tempDefinition[1]);
+                }
+                else {
+                    definition.push(WuxDef.Get(definitionName));
+                    definitionNames.push(definitionName);
+                }
+                
                 if (definitionNameModifier == "") {
-                    formulaVar = definition.getVariable();
+                    definition.forEach((def) => {
+                      formulaVar.push(def.getVariable());  
+                    })
                 } else {
                     modDefinition = WuxDef.Get(definitionNameModifier);
-                    formulaVar = definition.getVariable(modDefinition.getVariable());
+                    definition.forEach((def) => {
+                        formulaVar.push(def.getVariable(modDefinition.getVariable()));
+                    })
                 }
 
-                formulaData.workers.push(formulaData.makeWorker(formulaVar, definitionName, 0, multiplier, max));
+                formulaData.workers.push(formulaData.makeWorker(formulaVar, definitionNames, 0, multiplier, max));
             } else {
-                formulaData.workers.push(formulaData.makeWorker("", "", parseInt(definitionName), multiplier, max));
+                formulaData.workers.push(formulaData.makeWorker([], [], parseInt(definitionName), multiplier, max));
             }
         })
     }
@@ -3035,8 +3040,10 @@ class FormulaData {
     getAttributes() {
         let attributes = [];
         for (let i = 0; i < this.workers.length; i++) {
-            if (this.workers[i].variableName != "") {
-                attributes.push(this.workers[i].variableName);
+            if (this.workers[i].variableName.length > 0) {
+                for (let j = 0; j < this.workers[i].variableName.length; j++) {
+                    attributes.push(this.workers[i].variableName[j]);
+                }
             }
             if (isNaN(this.workers[i].multiplier)) {
                 attributes.push(this.workers[i].multiplier);
@@ -3048,8 +3055,8 @@ class FormulaData {
     getDefinitions() {
         let definitions = [];
         for (let i = 0; i < this.workers.length; i++) {
-            if (this.workers[i].definitionName != "") {
-                definitions.push(this.workers[i].definitionName);
+            for (let j = 0; j < this.workers[i].definitionName.length; j++) {
+                definitions.push(this.workers[i].definitionName[j]);
             }
         }
         return definitions;
@@ -3061,9 +3068,14 @@ class FormulaData {
     
     hasWorker(variableName) {
         for (let i = 0; i < this.workers.length; i++) {
-            if (this.workers[i].variableName == variableName) {
-                return true;
+            if (this.workers[i].variableName.length > 0) {
+                for (let j = 0; j < this.workers[i].variableName.length; j++) {
+                    if (this.workers[i].variableName[j] == variableName) {
+                        return true;
+                    }
+                }
             }
+            
         }
         return false;
     }
@@ -3077,10 +3089,21 @@ class FormulaData {
             if (isNaN(multiplier)) {
                 multiplier = attributeHandler.parseInt(worker.multiplier);
             }
-            if (worker.variableName != "") {
-                worker.value = attributeHandler.parseInt(worker.variableName);
+            if (worker.variableName.length == 1) {
+                worker.value = attributeHandler.parseInt(worker.variableName[0]);
                 if (printName != undefined) {
-                    printOutput = this.addPrintModifier(printOutput, `${worker.variableName}(${worker.value})`, multiplier);
+                    printOutput = this.addPrintModifier(printOutput, `${worker.variableName[0]}(${worker.value})`, multiplier);
+                }
+            } else if (worker.variableName.length >= 2) {
+                worker.value = 0;
+                for (let j = 0; j < worker.variableName.length; j++) {
+                    let tempValue = attributeHandler.parseInt(worker.variableName[j]);
+                    if (tempValue > worker.value) {
+                        worker.value = tempValue;
+                    }
+                }
+                if (printName != undefined) {
+                    printOutput = this.addPrintModifier(printOutput, `MultValue(${worker.value})`, multiplier);
                 }
             } else if (printName != undefined) {
                 printOutput = this.addPrintModifier(printOutput, `${worker.value}`, multiplier);
@@ -3091,12 +3114,6 @@ class FormulaData {
             }
             output += mod;
         });
-        if (this.totalMax > 0) {
-            if (printName != undefined) {
-                printOutput = this.addPrintModifier(printOutput, `Capped to ${this.totalMax}`, multiplier);
-            }
-            output = Math.min(parseInt(output), this.totalMax);
-        }
         if (printName != undefined) {
             Debug.Log(`${printName} Formula: ${printOutput} = ${output}`);
         }
@@ -3118,10 +3135,9 @@ class FormulaData {
         let output = "";
         let definition = {};
         this.workers.forEach((worker) => {
-            if (worker.variableName != "") {
-                if (worker.definitionName != "") {
-                    definition = WuxDef.Get(worker.definitionName);
-                    if (definition != undefined) {
+            if (worker.definitionName.length > 0) {
+                definition = WuxDef.Get(worker.definitionName[0]);
+                if (definition != undefined) {
                         if (output != "") {
                             output += " + ";
                         }
@@ -3164,7 +3180,6 @@ class FormulaData {
                             output += `(max:${worker.max})`;
                         }
                     }
-                }
             } else {
                 if (output != "") {
                     output += " + ";
