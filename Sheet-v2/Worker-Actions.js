@@ -101,10 +101,12 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
 
             // recalculate all techniques that have modifiers
             for (let i = 0; i < techniqueModifierDefs.length; i++) {
-                if (techniqueModifierDefs[i].isResource) {
-                    attrHandler.addUpdate(techniqueModifierDefs[i].getVariable(WuxDef._max), techniqueModifierDefs[i].formula.getValue(attrHandler));
+                let definition = techniqueModifierDefs[i];
+                let value = definition.formula.getValue(attrHandler, definition.name);
+                if (definition.isResource) {
+                    attrHandler.addUpdate(definition.getVariable(WuxDef._max), value);
                 } else {
-                    attrHandler.addUpdate(techniqueModifierDefs[i].getVariable(), techniqueModifierDefs[i].formula.getValue(attrHandler));
+                    attrHandler.addUpdate(definition.getVariable(), value);
                 }
             }
             combatDetailsHandler.onUpdateDefenses(attrHandler,
@@ -163,21 +165,27 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         if (technique == undefined) {
             return;
         }
+        let debugOutput = `${technique.name}`;
         technique.effects.iterate(function (techEffect) {
             if (techEffect.type == "Boost") {
                 let boostDef = WuxDef.Get(techEffect.effect);
+                let value = techEffect.formula.getValue(attrHandler);
 
                 switch (techEffect.subType) {
                     case "Set":
-                        attrHandler.addUpdate(boostDef.getVariable(WuxDef._techset), techEffect.formula.getValue(attrHandler) - boostDef.formula.getValue(attrHandler));
+                        attrHandler.addUpdate(boostDef.getVariable(WuxDef._techset),
+                            value - boostDef.formula.getValue(attrHandler));
+                        debugOutput += `\nSet ${boostDef.name} to ${value}`;
                         break;
                     default:
                         attrHandler.addUpdate(boostDef.getVariable(WuxDef._tech),
-                            attrHandler.parseInt(boostDef.getVariable(WuxDef._tech)) + techEffect.formula.getValue(attrHandler));
+                            attrHandler.parseInt(boostDef.getVariable(WuxDef._tech)) + value);
+                        debugOutput += `\nIncrease ${boostDef.name} by ${value} to ${attrHandler.parseInt(boostDef.getVariable(WuxDef._tech)) + value}`;
                         break;
                 }
             }
         });
+        Debug.Log(debugOutput);
     }
 
     const iteratePassiveStyleTechniques = function (techBoosters, callback) {

@@ -963,6 +963,10 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             }
             techSkillCheckResolver.addMessage(`${techSkillCheckResolver.targetTokenEffect.tokenTargetData.displayName} is Hindered: +1 Advantage. Removed Hindered status.`);
         }
+        if (techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(targetAttributeHandler, "Stat_Prone")) {
+            advantage += 1;
+            techSkillCheckResolver.addMessage(`${techSkillCheckResolver.targetTokenEffect.tokenTargetData.displayName} is Prone: +1 Advantage`);
+        }
         if (techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(targetAttributeHandler, "Stat_Restrained")) {
             advantage += 1;
             techSkillCheckResolver.addMessage(`${techSkillCheckResolver.targetTokenEffect.tokenTargetData.displayName} is Restrained: +1 Advantage`);

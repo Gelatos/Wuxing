@@ -3525,6 +3525,11 @@ class StatusHandler {
                 break;
         }
     }
+    removeAllStatus() {
+        this.statusEffects = {};
+        this.conditions = {};
+        this.emotions = {};
+    }
     
     saveStatusesToCharacterSheet(attributeHandler) {
         attributeHandler.addUpdate(WuxDef.GetVariable("Status"), JSON.stringify(this));

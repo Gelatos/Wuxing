@@ -1,3 +1,5 @@
+// noinspection SpellCheckingInspection
+
 class TargetData {
     constructor(data) {
         this.baseConstructor(data);
@@ -169,7 +171,7 @@ class TokenTargetData extends TargetData {
     }
 
     importTokenDataOnPlayerPage() {
-        var tokens = findObjs({
+        let tokens = findObjs({
             _pageid: Campaign().get("playerpageid"),
             _type: "graphic",
             represents: this.charId
@@ -322,7 +324,7 @@ class TokenTargetData extends TargetData {
         }
         this.token.set("status_dead", value);
         
-        if (value) {
+        if (value == true) {
             this.addStatus(attributeHandler, "Status_Downed", 1);
         }
         else {
@@ -367,16 +369,6 @@ class TokenTargetData extends TargetData {
             }
         );
     }
-    setMod(modDefinitionName, attributeHandler, value) {
-        this.modifyResourceAttribute(attributeHandler,
-            modDefinitionName,
-            value,
-            this.setModifierToAttribute,
-            function (results, attrHandler, attributeVar) {
-                attrHandler.addUpdate(attributeVar, results.newValue, false);
-            }
-        );
-    }
 
     // Combat Details
     refreshCombatDetails(attributeHandler) {
@@ -393,7 +385,7 @@ class TokenTargetData extends TargetData {
         this.combatDetails.setData(attrHandler);
 
         if (this.combatDetails.hasDisplayStyle()) {
-            let toolTip = ""; 
+            let toolTip; 
             if (this.isCharacter()) {
                 toolTip = this.combatDetails.printTooltip(attrHandler, this.displayName);
                 if (statusHandler == undefined) {
@@ -772,6 +764,27 @@ class TokenTargetData extends TargetData {
 
     removeStatus(attributeHandler, statusDefinitionName) {
         this.modifyStatus(attributeHandler, statusDefinitionName, "remove");
+    }
+    
+    removeAllStatus(attributeHandler) {
+        let tokenTargetData = this;
+        tokenTargetData.refreshCombatDetails(attributeHandler);
+        let statusVar = WuxDef.GetVariable("Status");
+        attributeHandler.addAttribute(statusVar);
+
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            if (tokenTargetData.isCharacter()) {
+                let statusObj = new StatusHandler(attrHandler.parseJSON(statusVar));
+                statusObj.removeAllStatus();
+                tokenTargetData.setCombatDetails(attrHandler, undefined, statusObj);
+                statusObj.saveStatusesToCharacterSheet(attrHandler);
+            } else {
+                let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
+                tokenNoteReference.statusHandler.removeAllStatus();
+                tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
+                tokenTargetData.setCombatDetails(attrHandler, tokenNoteReference);
+            }
+        });
     }
 
     refreshStatus(attributeHandler) {
@@ -1226,7 +1239,7 @@ class TokenTargetEffectsData {
                     surgeResults.newValue = surgeResults.current - 1;
                     results.newValue = results.max + value;
                     if (results.newValue <= 0) {
-                        results.newValue = 1; // we do not allow multiple will Breaks to occur. Willpower always restores to at least 1
+                        results.newValue = 1; // we do not allow multiple willbreaks to occur. Willpower always restores to at least 1
                     }
                     targetEffect.effectMessages.push(`${targetEffect.tokenTargetData.displayName} consumes a Surge. ` +
                         `${targetEffect.tokenTargetData.displayName} fully heals Will ` +
@@ -1613,7 +1626,7 @@ var TargetReference = TargetReference || (function () {
                 attributeHandler.addMod(statusVar);
 
                 attributeHandler.addGetAttrCallback(function () {
-                    let outputMessage = "";
+                    let outputMessage;
                     if (tokenTargetData.isCharacter()) {
                         let statusObj = new StatusHandler(attributeHandler.parseJSON(statusVar));
                         outputMessage = statusObj.getStatusDetailsMessage(tokenTargetData, "All", true);
@@ -1734,6 +1747,7 @@ var TargetReference = TargetReference || (function () {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
                 tokenTargetData.setHpToFull(attributeHandler);
                 tokenTargetData.setWillToFull(attributeHandler);
+                tokenTargetData.removeAllStatus(attributeHandler);
                 attributeHandler.run();
             });
 
@@ -1765,6 +1779,7 @@ var TargetReference = TargetReference || (function () {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
                 tokenTargetData.emptyFavor(attributeHandler);
                 tokenTargetData.setWillToFull(attributeHandler);
+                tokenTargetData.emptyImpatience(attributeHandler);
                 attributeHandler.run();
             });
 
