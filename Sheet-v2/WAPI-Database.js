@@ -2954,14 +2954,14 @@ class FormulaData {
                 }
                 
                 if (definitionNameModifier == "") {
-                    definition.forEach((def) => {
-                      formulaVar.push(def.getVariable());  
-                    })
+                    for (let i = 0; i < definition.length; i++) {
+                      formulaVar.push(definition[i].getVariable());  
+                    }
                 } else {
                     modDefinition = WuxDef.Get(definitionNameModifier);
-                    definition.forEach((def) => {
-                        formulaVar.push(def.getVariable(modDefinition.getVariable()));
-                    })
+                    for (let i = 0; i < definition.length; i++) {
+                        formulaVar.push(definition[i].getVariable(modDefinition.getVariable()));
+                    }
                 }
 
                 formulaData.workers.push(formulaData.makeWorker(formulaVar, definitionNames, 0, multiplier, max));
@@ -3016,7 +3016,7 @@ class FormulaData {
     addAttributes(attributes) {
         for (let i = 0; i < attributes.length; i++) {
             if (attributes[i] != "") {
-                this.workers.push(this.makeWorker(attributes[i], "", 0, 1, 0));
+                this.workers.push(this.makeWorker([attributes[i]], [], 0, 1, 0));
             }
         }
     }
