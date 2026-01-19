@@ -1109,7 +1109,7 @@ class SkillData extends WuxDatabaseData {
 
     createDefinition(baseDefinition) {
         let definition = super.createDefinition(baseDefinition);
-        definition.subGroup = `${WuxDef.GetTitle(this.abilityScore)}${this.abilityScore2 == "" ? "" : ` or ${WuxDef.GetTitle(this.abilityScore2)}`}`;
+        definition.subGroup = this.subGroup;
         definition.formula = new FormulaData(`${this.abilityScore}%${this.abilityScore2}`);
         definition.formula.addAttributes(definition.getFormulaMods(`${WuxDef._rank}`));
         return definition;
@@ -3930,6 +3930,9 @@ class CombatDetailsDefenses {
 
 class CombatDetailsHandler {
     constructor(attributeHandler) {
+        if (attributeHandler == undefined) {
+            return;
+        }
         this.combatDetailsVar = WuxDef.GetVariable("CombatDetails");
         attributeHandler.addMod([this.combatDetailsVar]);
         this.combatDetails = new CombatDetails();

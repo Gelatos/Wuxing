@@ -3420,9 +3420,9 @@ class TechniqueAssessment {
                 pointMod = Math.floor(points * this.getAreaPointMod(0.75, 1));
                 this.addPointsRubric(pointMod, `(${this.target} ${this.size})`);
                 break;
-            case "Burst":
-            case "Burst(2H)":
-            case "Burst(3H)":
+            case "Radial":
+            case "Radial(2H)":
+            case "Radial(3H)":
                 pointMod = Math.floor(points * this.getAreaPointMod(0.6, 1));
                 this.addPointsRubric(pointMod, `(${this.target} ${this.size})`);
                 break;
