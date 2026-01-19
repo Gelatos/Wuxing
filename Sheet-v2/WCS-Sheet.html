@@ -6422,7 +6422,7 @@
 														<div class="wuxInfoContent">
 															<div class="wuxHeader2">Might</div>
 															<span class="wuxDescription"><em>Fight</em></span>
-															<span class="wuxDescription">Might is an active skill about using strength to beat a foe down. This skill is frequently used in weapon techniques with a focus on heavy swings and feats of power.</span>
+															<span class="wuxDescription">Might techniques tend to focus on the application of simple, big damage.</span>
 														</div>
 													</div>
 
@@ -6449,7 +6449,7 @@
 													<div class="wuxInfoContent">
 														<div class="wuxHeader2">Might</div>
 														<span class="wuxDescription"><em>Fight</em></span>
-														<span class="wuxDescription">Might is an active skill about using strength to beat a foe down. This skill is frequently used in weapon techniques with a focus on heavy swings and feats of power.</span>
+														<span class="wuxDescription">Might techniques tend to focus on the application of simple, big damage.</span>
 													</div>
 												</div>
 
@@ -7665,6 +7665,60 @@
 
 											</div>
 										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_skl-medicine_learn" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxIsKeySkill">
+												<div class="wuxInteractiveBlock">
+													<div class="wuxInfoButton"><input type="checkbox" name="attr_skl-medicine_info"><span>?</span></div>
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_skl-medicine_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skl-medicine_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skl-medicine_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skl-medicine_rank" />
+															<span class="wuxHeader">Medicine (PRC/RSN)</span><span class="wuxFloatRight" name="attr_skl-medicine">0</span>
+														</div>
+													</div>
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_skl-medicine_info" value="0">
+													<div class="wuxHiddenField">
+														<div class="wuxInfoContent">
+															<div class="wuxHeader2">Medicine</div>
+															<span class="wuxDescription"><em>Device</em></span>
+															<span class="wuxDescription">Medicine is used when applying medical procedures like stitching a wound or using curatives.</span>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_skl-medicine_learn" value="0">
+										<div class="wuxHiddenAuxField">
+											<div class="wuxInteractiveBlock">
+												<div class="wuxInfoButton"><input type="checkbox" name="attr_skl-medicine_info"><span>?</span></div>
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_skl-medicine_rank" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skl-medicine_rank" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skl-medicine_rank" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_skl-medicine_rank" />
+														<span class="wuxHeader">Medicine (PRC/RSN)</span><span class="wuxFloatRight" name="attr_skl-medicine">0</span>
+													</div>
+												</div>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_skl-medicine_info" value="0">
+												<div class="wuxHiddenField">
+													<div class="wuxInfoContent">
+														<div class="wuxHeader2">Medicine</div>
+														<span class="wuxDescription"><em>Device</em></span>
+														<span class="wuxDescription">Medicine is used when applying medical procedures like stitching a wound or using curatives.</span>
+													</div>
+												</div>
+
+											</div>
+										</div>
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_skl-pilot_learn" value="0">
 										<div class="wuxHiddenField">
 											<div class="wuxIsKeySkill">
@@ -8144,6 +8198,9 @@
 													<div class="wuxFlexTableItemData wuxTextLeft wuxMinWidth150"><span class="wuxHeader">Kinesis</span><span class="wuxFloatRight"><span name="attr_skl-kinesis"></span></span></div>
 												</div>
 												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemData wuxTextLeft wuxMinWidth150"><span class="wuxHeader">Medicine</span><span class="wuxFloatRight"><span name="attr_skl-medicine"></span></span></div>
+												</div>
+												<div class="wuxFlexTable">
 													<div class="wuxFlexTableItemData wuxTextLeft wuxMinWidth150"><span class="wuxHeader">Pilot</span><span class="wuxFloatRight"><span name="attr_skl-pilot"></span></span></div>
 												</div>
 												<div class="wuxFlexTable">
@@ -8549,6 +8606,9 @@
 												</div>
 												<div class="wuxFlexTable">
 													<div class="wuxFlexTableItemData wuxTextLeft wuxMinWidth150"><span class="wuxHeader">Heal</span><span class="wuxFloatRight"><span name="attr_skl-heal"></span></span></div>
+												</div>
+												<div class="wuxFlexTable">
+													<div class="wuxFlexTableItemData wuxTextLeft wuxMinWidth150"><span class="wuxHeader">Medicine</span><span class="wuxFloatRight"><span name="attr_skl-medicine"></span></span></div>
 												</div>
 												<div class="wuxFlexTable">
 													<div class="wuxFlexTableItemData wuxTextLeft wuxMinWidth150"><span class="wuxHeader">Misdirect</span><span class="wuxFloatRight"><span name="attr_skl-misdirect"></span></span></div>
@@ -16396,13 +16456,31 @@
 										</span>
 									</div>
 									<div class="wuxFlexTableItemGroup wuxMinWidth150">
+										<span class="wuxFlexTableItemHeader">Medicine<div class="wuxTooltipButtonContainer">
+												<div class="wuxTooltipButton wuxFloatRight">
+													<div class="wuxTooltipText">i</div>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Medicine</div>
+														<span class="wuxDescription"><em>Device</em></span>
+														<span class="wuxDescription">Medicine is used when applying medical procedures like stitching a wound or using curatives.</span>
+													</div>
+												</div>
+											</div></span><span class="wuxFlexTableItemData">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup wuxMinWidth100">
+													<span class="wuxFlexTableItemData wuxTextCenter" name="attr_skl-medicine">0</span>
+												</div>
+											</div>
+										</span>
+									</div>
+									<div class="wuxFlexTableItemGroup wuxMinWidth150">
 										<span class="wuxFlexTableItemHeader">Might<div class="wuxTooltipButtonContainer">
 												<div class="wuxTooltipButton wuxFloatRight">
 													<div class="wuxTooltipText">i</div>
 													<div class="wuxTooltipContent">
 														<div class="wuxHeader2">Might</div>
 														<span class="wuxDescription"><em>Fight</em></span>
-														<span class="wuxDescription">Might is an active skill about using strength to beat a foe down. This skill is frequently used in weapon techniques with a focus on heavy swings and feats of power.</span>
+														<span class="wuxDescription">Might techniques tend to focus on the application of simple, big damage.</span>
 													</div>
 												</div>
 											</div></span><span class="wuxFlexTableItemData">
@@ -17630,152 +17708,446 @@
 									<div class="wuxFlexTableItemGroup wuxMinWidth150">
 										<div class="wuxHeader">Notebooks</div>
 										<div>
-											<div>
-												<fieldset class="repeating_notebooks">
 
-													<div class="wuxEquipableSubMenu">
-														<div class="wuxSubMenuButton">
-															<input type="checkbox" name="attr_note-notebookactions">
-															<span class="wuxSubMenuText">l</span>
-															<input type="hidden" class="wuxSubMenu-flag" name="attr_note-notebookactions" value="0">
-															<div class="wuxSubMenuContent">
+											<div class="wuxEquipableSubMenu">
+												<div class="wuxSubMenuButton">
+													<input type="checkbox" name="attr_note-notebookactions0">
+													<span class="wuxSubMenuText">l</span>
+													<input type="hidden" class="wuxSubMenu-flag" name="attr_note-notebookactions0" value="0">
+													<div class="wuxSubMenuContent">
 
-																<div class="wuxButton wuxSubMenuOptionButton">
-																	<input type="checkbox" name="attr_note-notebookopen">
-																	<span>Open</span>
-																</div>
-																<div class="wuxButton wuxSubMenuOptionButton">
-																	<input type="checkbox" name="attr_note-notebookdelete">
-																	<span>Delete</span>
-																</div>
-																<div class="wuxButton wuxSubMenuOptionButton">
-																	<input type="text" name="attr_note-notebookcontents" placeholder="Contents Empty">
-																</div>
-
-															</div>
+														<div class="wuxButton wuxSubMenuOptionButton">
+															<input type="checkbox" name="attr_note-notebookopen0">
+															<span>Open</span>
 														</div>
+
 													</div>
-													<input type="text" class="wuxInput wuxWidth160" name="attr_note-notebookname" />
-												</fieldset>
+												</div>
 											</div>
+											<input type="text" class="wuxInput wuxWidth160" name="attr_note-notebookname0" placeholder="Notebook 1" />
+											<div class="wuxRow">&nbsp;</div>
+											<div class="wuxEquipableSubMenu">
+												<div class="wuxSubMenuButton">
+													<input type="checkbox" name="attr_note-notebookactions1">
+													<span class="wuxSubMenuText">l</span>
+													<input type="hidden" class="wuxSubMenu-flag" name="attr_note-notebookactions1" value="0">
+													<div class="wuxSubMenuContent">
+
+														<div class="wuxButton wuxSubMenuOptionButton">
+															<input type="checkbox" name="attr_note-notebookopen1">
+															<span>Open</span>
+														</div>
+
+													</div>
+												</div>
+											</div>
+											<input type="text" class="wuxInput wuxWidth160" name="attr_note-notebookname1" placeholder="Notebook 2" />
+											<div class="wuxRow">&nbsp;</div>
+											<div class="wuxEquipableSubMenu">
+												<div class="wuxSubMenuButton">
+													<input type="checkbox" name="attr_note-notebookactions2">
+													<span class="wuxSubMenuText">l</span>
+													<input type="hidden" class="wuxSubMenu-flag" name="attr_note-notebookactions2" value="0">
+													<div class="wuxSubMenuContent">
+
+														<div class="wuxButton wuxSubMenuOptionButton">
+															<input type="checkbox" name="attr_note-notebookopen2">
+															<span>Open</span>
+														</div>
+
+													</div>
+												</div>
+											</div>
+											<input type="text" class="wuxInput wuxWidth160" name="attr_note-notebookname2" placeholder="Notebook 3" />
+											<div class="wuxRow">&nbsp;</div>
+											<div class="wuxEquipableSubMenu">
+												<div class="wuxSubMenuButton">
+													<input type="checkbox" name="attr_note-notebookactions3">
+													<span class="wuxSubMenuText">l</span>
+													<input type="hidden" class="wuxSubMenu-flag" name="attr_note-notebookactions3" value="0">
+													<div class="wuxSubMenuContent">
+
+														<div class="wuxButton wuxSubMenuOptionButton">
+															<input type="checkbox" name="attr_note-notebookopen3">
+															<span>Open</span>
+														</div>
+
+													</div>
+												</div>
+											</div>
+											<input type="text" class="wuxInput wuxWidth160" name="attr_note-notebookname3" placeholder="Notebook 4" />
+											<div class="wuxRow">&nbsp;</div>
 											<div class="wuxRow">&nbsp;</div>
 										</div>
 									</div>
 									<div class="wuxFlexTableItemGroup wuxMinWidth150 wuxFlexTableItemGroup2">
-										<div class="wuxHeader">Opened Notebook</div>
-										<div class="wuxEquipableSubMenu">
-											<div class="wuxSubMenuButton">
-												<input type="checkbox" name="attr_note-opennotebookactions">
-												<span class="wuxSubMenuText">l</span>
-												<input type="hidden" class="wuxSubMenu-flag" name="attr_note-opennotebookactions" value="0">
-												<div class="wuxSubMenuContent">
 
-													<div class="wuxButton wuxSubMenuOptionButton">
-														<input type="checkbox" name="attr_note-notebooksave">
-														<span>Save</span>
-													</div>
-													<div class="wuxButton wuxSubMenuOptionButton">
-														<input type="checkbox" name="attr_note-notebookclose">
-														<span>Close</span>
-													</div>
-													<div class="wuxButton wuxSubMenuOptionButton">
-														<input type="checkbox" name="attr_note-notebookreload">
-														<span>Reload</span>
-													</div>
-
-												</div>
-											</div>
-										</div>
-										<input type="text" class="wuxInput wuxWidth160" name="attr_note-opennotebook" placeholder="Notebook Name" />
-										<div class="wuxHeader">Notebook Pages</div>
 										<div>
-											<div>
-												<fieldset class="repeating_notebookpages">
-													<div class="wuxMultiRow"><select class="wuxInput wuxInfluenceType" name="attr_note-pagetype" value="0">
-															<option value="0">Notes</option>
-															<option value="infoBox">Info</option>
-															<option value="locationBox">Location</option>
-															<option value="systemInfoBox">System</option>
-															<option value="chapter">Chapter</option>
-															<option value="historyBox">History</option>
-															<option value="ctmsg">Speak</option>
-															<option value="ctwsp">Whisper</option>
-															<option value="ctyell">Yell</option>
-															<option value="ctcomms">Comms</option>
-															<option value="ctthk">Think</option>
-															<option value="ctdesc">Describe</option>
-														</select><button class="wuxSmallButton wuxNotebookButton" type="roll" value="@{note-pagetemplatedata}">
-															<span>Post</span>
-														</button>
-														<div class="wuxButton wuxSmallButton wuxNotebookButton">
-															<input type="checkbox" name="attr_note-pagedelete">
-															<span>Del</span>
-														</div><input type="text" class="wuxInput wuxInlineBlock wuxWidth50" name="attr_note-pagetemplatedata" onfocus="this.select();" placeholder="Template Data" />
-													</div><input type="hidden" class="wuxPageDisplay-Flag" name="attr_note-pagedisplay" value="0" />
-													<div class="wuxPageDisplay-0">
-														<textarea class="wuxInput wuxHeight30" name="attr_note-pagecontents" placeholder="Contents"></textarea>
-													</div>
-													<div class="wuxPageDisplay-Character">
-														<div class="wuxMultiRow"><input type="text" class="wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagecharname" placeholder="Character Name" />
-															<input type="text" class="wuxInput wuxInlineBlock wuxWidth70" name="attr_note-pagecharemote" placeholder="Emote" />
-															<input type="text" class="wuxInput wuxInlineBlock wuxWidth50" name="attr_note-pagecharurl" placeholder="URL" />
-															<select class="wuxInput wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagecharlanguage" value="0">
-																<option value="Minere">Minere</option>
-																<option value="Junal">Junal</option>
-																<option value="Apollen">Apollen</option>
-																<option value="Lib">Lib</option>
-																<option value="Cert">Cert</option>
-																<option value="Byric">Byric</option>
-																<option value="Dustell">Dustell</option>
-																<option value="Muralic">Muralic</option>
-																<option value="Shira">Shira</option>
-																<option value="Ciel">Ciel</option>
-																<option value="Citeq">Citeq</option>
-																<option value="Manstan">Manstan</option>
-																<option value="Salkan">Salkan</option>
-																<option value="Sansic">Sansic</option>
-																<option value="Silq">Silq</option>
-																<option value="Kleikan">Kleikan</option>
-																<option value="Crinere">Crinere</option>
-																<option value="Palmic">Palmic</option>
-																<option value="Shorespeak">Shorespeak</option>
-																<option value="Verdeni">Verdeni</option>
-																<option value="Vulca">Vulca</option>
-																<option value="Emotion">Emotion</option>
-																<option value="Empathy">Empathy</option>
-																<option value="Wolfwarg">Wolfwarg</option>
-																<option value="Jovean">Jovean</option>
-																<option value="Mytikan">Mytikan</option>
-															</select>
+											<input type="hidden" class="wuxHiddenIndexField-flag" name="attr_note-opennotebook" value="0">
+											<div class="wuxHiddenUniqueIndexField0">
+												<div class="wuxHeader"><span name="attr_note-notebookname0"></span><span> Pages</span></div>
+												<div>
+													<fieldset class="repeating_notebookpages0">
+														<div class="wuxMultiRow"><select class="wuxInput wuxInfluenceType" name="attr_note-pagetype" value="0">
+																<option value="0">Notes</option>
+																<option value="infoBox">Info</option>
+																<option value="locationBox">Location</option>
+																<option value="systemInfoBox">System</option>
+																<option value="chapter">Chapter</option>
+																<option value="historyBox">History</option>
+																<option value="ctmsg">Speak</option>
+																<option value="ctwsp">Whisper</option>
+																<option value="ctyell">Yell</option>
+																<option value="ctcomms">Comms</option>
+																<option value="ctthk">Think</option>
+																<option value="ctdesc">Describe</option>
+															</select><button class="wuxSmallButton wuxNotebookButton" type="roll" value="@{note-pagetemplatedata}">
+																<span>Post</span>
+															</button>
+															<div class="wuxButton wuxSmallButton wuxNotebookButton">
+																<input type="checkbox" name="attr_note-pagedelete">
+																<span>Del</span>
+															</div><input type="text" class="wuxInput wuxInlineBlock wuxWidth50" name="attr_note-pagetemplatedata" onfocus="this.select();" placeholder="Template Data" />
+														</div><input type="hidden" class="wuxPageDisplay-Flag" name="attr_note-pagedisplay" value="0" />
+														<div class="wuxPageDisplay-0">
+															<textarea class="wuxInput wuxHeight30" name="attr_note-pagecontents" placeholder="Contents"></textarea>
 														</div>
-														<textarea class="wuxInput wuxHeight30" name="attr_note-pagecontents" placeholder="Contents"></textarea>
-													</div>
-													<div class="wuxPageDisplay-Location">
-														<input type="text" class="wuxInput" name="attr_note-pagelocation" value="" placeholder="Location Name" />
-														<input type="text" class="wuxInput" name="attr_note-pagearea" value="" placeholder="Area Name" />
-														<div class="wuxMultiRow"><input type="text" class="wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagedate" placeholder="Date" />
-															<select class="wuxInput wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagetime" value="0">
-																<option value="Dawn">Dawn</option>
-																<option value="Morning">Morning</option>
-																<option value="Midday">Midday</option>
-																<option value="Evening">Evening</option>
-																<option value="Night">Night</option>
-																<option value="Deepnight">Deepnight</option>
-															</select>
+														<div class="wuxPageDisplay-Character">
+															<div class="wuxMultiRow"><input type="text" class="wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagecharname" placeholder="Character Name" />
+																<input type="text" class="wuxInput wuxInlineBlock wuxWidth70" name="attr_note-pagecharemote" placeholder="Emote" />
+																<input type="text" class="wuxInput wuxInlineBlock wuxWidth50" name="attr_note-pagecharurl" placeholder="URL" />
+																<select class="wuxInput wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagecharlanguage" value="0">
+																	<option value="Minere">Minere</option>
+																	<option value="Junal">Junal</option>
+																	<option value="Apollen">Apollen</option>
+																	<option value="Lib">Lib</option>
+																	<option value="Cert">Cert</option>
+																	<option value="Byric">Byric</option>
+																	<option value="Dustell">Dustell</option>
+																	<option value="Muralic">Muralic</option>
+																	<option value="Shira">Shira</option>
+																	<option value="Ciel">Ciel</option>
+																	<option value="Citeq">Citeq</option>
+																	<option value="Manstan">Manstan</option>
+																	<option value="Salkan">Salkan</option>
+																	<option value="Sansic">Sansic</option>
+																	<option value="Silq">Silq</option>
+																	<option value="Kleikan">Kleikan</option>
+																	<option value="Crinere">Crinere</option>
+																	<option value="Palmic">Palmic</option>
+																	<option value="Shorespeak">Shorespeak</option>
+																	<option value="Verdeni">Verdeni</option>
+																	<option value="Vulca">Vulca</option>
+																	<option value="Emotion">Emotion</option>
+																	<option value="Empathy">Empathy</option>
+																	<option value="Wolfwarg">Wolfwarg</option>
+																	<option value="Jovean">Jovean</option>
+																	<option value="Mytikan">Mytikan</option>
+																</select>
+															</div>
+															<textarea class="wuxInput wuxHeight30" name="attr_note-pagecontents" placeholder="Contents"></textarea>
 														</div>
-													</div>
-													<div class="wuxPageDisplay-Chapter">
-														<input type="text" class="wuxInput" name="attr_note-pagequestname" value="" placeholder="Quest Name" />
-														<div class="wuxMultiRow"><span class="wuxDescription wuxMarginRight5">Chapter</span>
-															<input type="number" class="wuxInput wuxInlineBlock wuxWidth70" name="attr_note-pagechapter" placeholder="Chapter" />
-															<span class="wuxDescription wuxMarginLeft5 wuxMarginRight5">Part</span>
-															<input type="number" class="wuxInput wuxInlineBlock wuxWidth70" name="attr_note-pagepart" placeholder="Part" />
+														<div class="wuxPageDisplay-Location">
+															<input type="text" class="wuxInput" name="attr_note-pagelocation" value="" placeholder="Location Name" />
+															<input type="text" class="wuxInput" name="attr_note-pagearea" value="" placeholder="Area Name" />
+															<div class="wuxMultiRow"><input type="text" class="wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagedate" placeholder="Date" />
+																<select class="wuxInput wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagetime" value="0">
+																	<option value="Dawn">Dawn</option>
+																	<option value="Morning">Morning</option>
+																	<option value="Midday">Midday</option>
+																	<option value="Evening">Evening</option>
+																	<option value="Night">Night</option>
+																	<option value="Deepnight">Deepnight</option>
+																</select>
+															</div>
 														</div>
-													</div>
-													<div class="wuxRow">&nbsp;</div>
-												</fieldset>
+														<div class="wuxPageDisplay-Chapter">
+															<input type="text" class="wuxInput" name="attr_note-pagequestname" value="" placeholder="Quest Name" />
+															<div class="wuxMultiRow"><span class="wuxDescription wuxMarginRight5">Chapter</span>
+																<input type="number" class="wuxInput wuxInlineBlock wuxWidth70" name="attr_note-pagechapter" placeholder="Chapter" />
+																<span class="wuxDescription wuxMarginLeft5 wuxMarginRight5">Part</span>
+																<input type="number" class="wuxInput wuxInlineBlock wuxWidth70" name="attr_note-pagepart" placeholder="Part" />
+															</div>
+														</div>
+														<div class="wuxRow">&nbsp;</div>
+													</fieldset>
+												</div>
+												<div class="wuxRow">&nbsp;</div>
 											</div>
-											<div class="wuxRow">&nbsp;</div>
+											<input type="hidden" class="wuxHiddenIndexField-flag" name="attr_note-opennotebook" value="0">
+											<div class="wuxHiddenUniqueIndexField1">
+												<div class="wuxHeader"><span name="attr_note-notebookname1"></span><span> Pages</span></div>
+												<div>
+													<fieldset class="repeating_notebookpages1">
+														<div class="wuxMultiRow"><select class="wuxInput wuxInfluenceType" name="attr_note-pagetype" value="0">
+																<option value="0">Notes</option>
+																<option value="infoBox">Info</option>
+																<option value="locationBox">Location</option>
+																<option value="systemInfoBox">System</option>
+																<option value="chapter">Chapter</option>
+																<option value="historyBox">History</option>
+																<option value="ctmsg">Speak</option>
+																<option value="ctwsp">Whisper</option>
+																<option value="ctyell">Yell</option>
+																<option value="ctcomms">Comms</option>
+																<option value="ctthk">Think</option>
+																<option value="ctdesc">Describe</option>
+															</select><button class="wuxSmallButton wuxNotebookButton" type="roll" value="@{note-pagetemplatedata}">
+																<span>Post</span>
+															</button>
+															<div class="wuxButton wuxSmallButton wuxNotebookButton">
+																<input type="checkbox" name="attr_note-pagedelete">
+																<span>Del</span>
+															</div><input type="text" class="wuxInput wuxInlineBlock wuxWidth50" name="attr_note-pagetemplatedata" onfocus="this.select();" placeholder="Template Data" />
+														</div><input type="hidden" class="wuxPageDisplay-Flag" name="attr_note-pagedisplay" value="0" />
+														<div class="wuxPageDisplay-0">
+															<textarea class="wuxInput wuxHeight30" name="attr_note-pagecontents" placeholder="Contents"></textarea>
+														</div>
+														<div class="wuxPageDisplay-Character">
+															<div class="wuxMultiRow"><input type="text" class="wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagecharname" placeholder="Character Name" />
+																<input type="text" class="wuxInput wuxInlineBlock wuxWidth70" name="attr_note-pagecharemote" placeholder="Emote" />
+																<input type="text" class="wuxInput wuxInlineBlock wuxWidth50" name="attr_note-pagecharurl" placeholder="URL" />
+																<select class="wuxInput wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagecharlanguage" value="0">
+																	<option value="Minere">Minere</option>
+																	<option value="Junal">Junal</option>
+																	<option value="Apollen">Apollen</option>
+																	<option value="Lib">Lib</option>
+																	<option value="Cert">Cert</option>
+																	<option value="Byric">Byric</option>
+																	<option value="Dustell">Dustell</option>
+																	<option value="Muralic">Muralic</option>
+																	<option value="Shira">Shira</option>
+																	<option value="Ciel">Ciel</option>
+																	<option value="Citeq">Citeq</option>
+																	<option value="Manstan">Manstan</option>
+																	<option value="Salkan">Salkan</option>
+																	<option value="Sansic">Sansic</option>
+																	<option value="Silq">Silq</option>
+																	<option value="Kleikan">Kleikan</option>
+																	<option value="Crinere">Crinere</option>
+																	<option value="Palmic">Palmic</option>
+																	<option value="Shorespeak">Shorespeak</option>
+																	<option value="Verdeni">Verdeni</option>
+																	<option value="Vulca">Vulca</option>
+																	<option value="Emotion">Emotion</option>
+																	<option value="Empathy">Empathy</option>
+																	<option value="Wolfwarg">Wolfwarg</option>
+																	<option value="Jovean">Jovean</option>
+																	<option value="Mytikan">Mytikan</option>
+																</select>
+															</div>
+															<textarea class="wuxInput wuxHeight30" name="attr_note-pagecontents" placeholder="Contents"></textarea>
+														</div>
+														<div class="wuxPageDisplay-Location">
+															<input type="text" class="wuxInput" name="attr_note-pagelocation" value="" placeholder="Location Name" />
+															<input type="text" class="wuxInput" name="attr_note-pagearea" value="" placeholder="Area Name" />
+															<div class="wuxMultiRow"><input type="text" class="wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagedate" placeholder="Date" />
+																<select class="wuxInput wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagetime" value="0">
+																	<option value="Dawn">Dawn</option>
+																	<option value="Morning">Morning</option>
+																	<option value="Midday">Midday</option>
+																	<option value="Evening">Evening</option>
+																	<option value="Night">Night</option>
+																	<option value="Deepnight">Deepnight</option>
+																</select>
+															</div>
+														</div>
+														<div class="wuxPageDisplay-Chapter">
+															<input type="text" class="wuxInput" name="attr_note-pagequestname" value="" placeholder="Quest Name" />
+															<div class="wuxMultiRow"><span class="wuxDescription wuxMarginRight5">Chapter</span>
+																<input type="number" class="wuxInput wuxInlineBlock wuxWidth70" name="attr_note-pagechapter" placeholder="Chapter" />
+																<span class="wuxDescription wuxMarginLeft5 wuxMarginRight5">Part</span>
+																<input type="number" class="wuxInput wuxInlineBlock wuxWidth70" name="attr_note-pagepart" placeholder="Part" />
+															</div>
+														</div>
+														<div class="wuxRow">&nbsp;</div>
+													</fieldset>
+												</div>
+												<div class="wuxRow">&nbsp;</div>
+											</div>
+											<input type="hidden" class="wuxHiddenIndexField-flag" name="attr_note-opennotebook" value="0">
+											<div class="wuxHiddenUniqueIndexField2">
+												<div class="wuxHeader"><span name="attr_note-notebookname2"></span><span> Pages</span></div>
+												<div>
+													<fieldset class="repeating_notebookpages2">
+														<div class="wuxMultiRow"><select class="wuxInput wuxInfluenceType" name="attr_note-pagetype" value="0">
+																<option value="0">Notes</option>
+																<option value="infoBox">Info</option>
+																<option value="locationBox">Location</option>
+																<option value="systemInfoBox">System</option>
+																<option value="chapter">Chapter</option>
+																<option value="historyBox">History</option>
+																<option value="ctmsg">Speak</option>
+																<option value="ctwsp">Whisper</option>
+																<option value="ctyell">Yell</option>
+																<option value="ctcomms">Comms</option>
+																<option value="ctthk">Think</option>
+																<option value="ctdesc">Describe</option>
+															</select><button class="wuxSmallButton wuxNotebookButton" type="roll" value="@{note-pagetemplatedata}">
+																<span>Post</span>
+															</button>
+															<div class="wuxButton wuxSmallButton wuxNotebookButton">
+																<input type="checkbox" name="attr_note-pagedelete">
+																<span>Del</span>
+															</div><input type="text" class="wuxInput wuxInlineBlock wuxWidth50" name="attr_note-pagetemplatedata" onfocus="this.select();" placeholder="Template Data" />
+														</div><input type="hidden" class="wuxPageDisplay-Flag" name="attr_note-pagedisplay" value="0" />
+														<div class="wuxPageDisplay-0">
+															<textarea class="wuxInput wuxHeight30" name="attr_note-pagecontents" placeholder="Contents"></textarea>
+														</div>
+														<div class="wuxPageDisplay-Character">
+															<div class="wuxMultiRow"><input type="text" class="wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagecharname" placeholder="Character Name" />
+																<input type="text" class="wuxInput wuxInlineBlock wuxWidth70" name="attr_note-pagecharemote" placeholder="Emote" />
+																<input type="text" class="wuxInput wuxInlineBlock wuxWidth50" name="attr_note-pagecharurl" placeholder="URL" />
+																<select class="wuxInput wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagecharlanguage" value="0">
+																	<option value="Minere">Minere</option>
+																	<option value="Junal">Junal</option>
+																	<option value="Apollen">Apollen</option>
+																	<option value="Lib">Lib</option>
+																	<option value="Cert">Cert</option>
+																	<option value="Byric">Byric</option>
+																	<option value="Dustell">Dustell</option>
+																	<option value="Muralic">Muralic</option>
+																	<option value="Shira">Shira</option>
+																	<option value="Ciel">Ciel</option>
+																	<option value="Citeq">Citeq</option>
+																	<option value="Manstan">Manstan</option>
+																	<option value="Salkan">Salkan</option>
+																	<option value="Sansic">Sansic</option>
+																	<option value="Silq">Silq</option>
+																	<option value="Kleikan">Kleikan</option>
+																	<option value="Crinere">Crinere</option>
+																	<option value="Palmic">Palmic</option>
+																	<option value="Shorespeak">Shorespeak</option>
+																	<option value="Verdeni">Verdeni</option>
+																	<option value="Vulca">Vulca</option>
+																	<option value="Emotion">Emotion</option>
+																	<option value="Empathy">Empathy</option>
+																	<option value="Wolfwarg">Wolfwarg</option>
+																	<option value="Jovean">Jovean</option>
+																	<option value="Mytikan">Mytikan</option>
+																</select>
+															</div>
+															<textarea class="wuxInput wuxHeight30" name="attr_note-pagecontents" placeholder="Contents"></textarea>
+														</div>
+														<div class="wuxPageDisplay-Location">
+															<input type="text" class="wuxInput" name="attr_note-pagelocation" value="" placeholder="Location Name" />
+															<input type="text" class="wuxInput" name="attr_note-pagearea" value="" placeholder="Area Name" />
+															<div class="wuxMultiRow"><input type="text" class="wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagedate" placeholder="Date" />
+																<select class="wuxInput wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagetime" value="0">
+																	<option value="Dawn">Dawn</option>
+																	<option value="Morning">Morning</option>
+																	<option value="Midday">Midday</option>
+																	<option value="Evening">Evening</option>
+																	<option value="Night">Night</option>
+																	<option value="Deepnight">Deepnight</option>
+																</select>
+															</div>
+														</div>
+														<div class="wuxPageDisplay-Chapter">
+															<input type="text" class="wuxInput" name="attr_note-pagequestname" value="" placeholder="Quest Name" />
+															<div class="wuxMultiRow"><span class="wuxDescription wuxMarginRight5">Chapter</span>
+																<input type="number" class="wuxInput wuxInlineBlock wuxWidth70" name="attr_note-pagechapter" placeholder="Chapter" />
+																<span class="wuxDescription wuxMarginLeft5 wuxMarginRight5">Part</span>
+																<input type="number" class="wuxInput wuxInlineBlock wuxWidth70" name="attr_note-pagepart" placeholder="Part" />
+															</div>
+														</div>
+														<div class="wuxRow">&nbsp;</div>
+													</fieldset>
+												</div>
+												<div class="wuxRow">&nbsp;</div>
+											</div>
+											<input type="hidden" class="wuxHiddenIndexField-flag" name="attr_note-opennotebook" value="0">
+											<div class="wuxHiddenUniqueIndexField3">
+												<div class="wuxHeader"><span name="attr_note-notebookname3"></span><span> Pages</span></div>
+												<div>
+													<fieldset class="repeating_notebookpages3">
+														<div class="wuxMultiRow"><select class="wuxInput wuxInfluenceType" name="attr_note-pagetype" value="0">
+																<option value="0">Notes</option>
+																<option value="infoBox">Info</option>
+																<option value="locationBox">Location</option>
+																<option value="systemInfoBox">System</option>
+																<option value="chapter">Chapter</option>
+																<option value="historyBox">History</option>
+																<option value="ctmsg">Speak</option>
+																<option value="ctwsp">Whisper</option>
+																<option value="ctyell">Yell</option>
+																<option value="ctcomms">Comms</option>
+																<option value="ctthk">Think</option>
+																<option value="ctdesc">Describe</option>
+															</select><button class="wuxSmallButton wuxNotebookButton" type="roll" value="@{note-pagetemplatedata}">
+																<span>Post</span>
+															</button>
+															<div class="wuxButton wuxSmallButton wuxNotebookButton">
+																<input type="checkbox" name="attr_note-pagedelete">
+																<span>Del</span>
+															</div><input type="text" class="wuxInput wuxInlineBlock wuxWidth50" name="attr_note-pagetemplatedata" onfocus="this.select();" placeholder="Template Data" />
+														</div><input type="hidden" class="wuxPageDisplay-Flag" name="attr_note-pagedisplay" value="0" />
+														<div class="wuxPageDisplay-0">
+															<textarea class="wuxInput wuxHeight30" name="attr_note-pagecontents" placeholder="Contents"></textarea>
+														</div>
+														<div class="wuxPageDisplay-Character">
+															<div class="wuxMultiRow"><input type="text" class="wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagecharname" placeholder="Character Name" />
+																<input type="text" class="wuxInput wuxInlineBlock wuxWidth70" name="attr_note-pagecharemote" placeholder="Emote" />
+																<input type="text" class="wuxInput wuxInlineBlock wuxWidth50" name="attr_note-pagecharurl" placeholder="URL" />
+																<select class="wuxInput wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagecharlanguage" value="0">
+																	<option value="Minere">Minere</option>
+																	<option value="Junal">Junal</option>
+																	<option value="Apollen">Apollen</option>
+																	<option value="Lib">Lib</option>
+																	<option value="Cert">Cert</option>
+																	<option value="Byric">Byric</option>
+																	<option value="Dustell">Dustell</option>
+																	<option value="Muralic">Muralic</option>
+																	<option value="Shira">Shira</option>
+																	<option value="Ciel">Ciel</option>
+																	<option value="Citeq">Citeq</option>
+																	<option value="Manstan">Manstan</option>
+																	<option value="Salkan">Salkan</option>
+																	<option value="Sansic">Sansic</option>
+																	<option value="Silq">Silq</option>
+																	<option value="Kleikan">Kleikan</option>
+																	<option value="Crinere">Crinere</option>
+																	<option value="Palmic">Palmic</option>
+																	<option value="Shorespeak">Shorespeak</option>
+																	<option value="Verdeni">Verdeni</option>
+																	<option value="Vulca">Vulca</option>
+																	<option value="Emotion">Emotion</option>
+																	<option value="Empathy">Empathy</option>
+																	<option value="Wolfwarg">Wolfwarg</option>
+																	<option value="Jovean">Jovean</option>
+																	<option value="Mytikan">Mytikan</option>
+																</select>
+															</div>
+															<textarea class="wuxInput wuxHeight30" name="attr_note-pagecontents" placeholder="Contents"></textarea>
+														</div>
+														<div class="wuxPageDisplay-Location">
+															<input type="text" class="wuxInput" name="attr_note-pagelocation" value="" placeholder="Location Name" />
+															<input type="text" class="wuxInput" name="attr_note-pagearea" value="" placeholder="Area Name" />
+															<div class="wuxMultiRow"><input type="text" class="wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagedate" placeholder="Date" />
+																<select class="wuxInput wuxInput wuxInlineBlock wuxWidth120" name="attr_note-pagetime" value="0">
+																	<option value="Dawn">Dawn</option>
+																	<option value="Morning">Morning</option>
+																	<option value="Midday">Midday</option>
+																	<option value="Evening">Evening</option>
+																	<option value="Night">Night</option>
+																	<option value="Deepnight">Deepnight</option>
+																</select>
+															</div>
+														</div>
+														<div class="wuxPageDisplay-Chapter">
+															<input type="text" class="wuxInput" name="attr_note-pagequestname" value="" placeholder="Quest Name" />
+															<div class="wuxMultiRow"><span class="wuxDescription wuxMarginRight5">Chapter</span>
+																<input type="number" class="wuxInput wuxInlineBlock wuxWidth70" name="attr_note-pagechapter" placeholder="Chapter" />
+																<span class="wuxDescription wuxMarginLeft5 wuxMarginRight5">Part</span>
+																<input type="number" class="wuxInput wuxInlineBlock wuxWidth70" name="attr_note-pagepart" placeholder="Part" />
+															</div>
+														</div>
+														<div class="wuxRow">&nbsp;</div>
+													</fieldset>
+												</div>
+												<div class="wuxRow">&nbsp;</div>
+											</div>
+
 										</div>
 									</div>
 								</div>
@@ -48443,7 +48815,7 @@ WuxWorkerJobs.UpdateBuildPoints(eventinfo)
 on("change:job-fighter_info change:job-sentinel_info change:job-warden_info change:job-bulwark_info change:job-hunter_info change:job-sniper_info change:job-trooper_info change:job-warmage_info change:job-alchemist_info change:job-brawler_info change:job-exemplar_info change:job-kineticist_info change:job-geomancer_info change:job-rogue_info change:job-labourer_info change:job-tactician_info change:job-magus_info change:job-scholar_info change:job-inquisitor_info change:job-detective_info change:job-culinarian_info change:job-bard_info change:job-spellwright_info change:job-medic_info change:job-empath_info change:job-merchant_info change:job-orator_info change:job-hardliner_info change:job-etherealist_info change:job-phantasm_info change:job-shade_info", function (eventinfo) {
 WuxWorkerJobs.SeeTechniques(eventinfo)
 });
-on("change:skl-agility_rank change:skl-alchemy_rank change:skl-analyze_rank change:skl-build_rank change:skl-channel_rank change:skl-charm_rank change:skl-conjure_rank change:skl-cook_rank change:skl-demoralize_rank change:skl-empathy_rank change:skl-glyphwork_rank change:skl-grappling_rank change:skl-heal_rank change:skl-inspire_rank change:skl-kinesis_rank change:skl-might_rank change:skl-misdirect_rank change:skl-physique_rank change:skl-pilot_rank change:skl-rationalize_rank change:skl-search_rank change:skl-shape_rank change:skl-shoot_rank change:skl-skirmish_rank change:skl-sneak_rank change:skl-throw_rank change:skl-tinker_rank", function (eventinfo) {
+on("change:skl-agility_rank change:skl-alchemy_rank change:skl-analyze_rank change:skl-build_rank change:skl-channel_rank change:skl-charm_rank change:skl-conjure_rank change:skl-cook_rank change:skl-demoralize_rank change:skl-empathy_rank change:skl-glyphwork_rank change:skl-grappling_rank change:skl-heal_rank change:skl-inspire_rank change:skl-kinesis_rank change:skl-medicine_rank change:skl-might_rank change:skl-misdirect_rank change:skl-physique_rank change:skl-pilot_rank change:skl-rationalize_rank change:skl-search_rank change:skl-shape_rank change:skl-shoot_rank change:skl-skirmish_rank change:skl-sneak_rank change:skl-throw_rank change:skl-tinker_rank", function (eventinfo) {
 WuxWorkerSkills.UpdateBuildPoints(eventinfo)
 });
 on("change:atr-bod change:atr-prc change:atr-qck change:atr-str change:atr-cnv change:atr-ess change:atr-int change:atr-rsn", function (eventinfo) {
@@ -48763,7 +49135,7 @@ WuxWorkerActions.RefreshBasicSocial()
 on("change:basicspirit_refresh", function (eventinfo) {
 WuxWorkerActions.RefreshBasicSpirit()
 });
-on("change:note-opennotebookactions change:repeating_notebooks:note-notebookactions change:repeating_jobstyles:forme-actions change::forme-actions change:repeating_styles:forme-actions change:forme-jobslot1_expand change:forme-advancedslot1_expand change:forme-styleslot1_expand change:forme-jobslot2_expand change:forme-advancedslot2_expand change:forme-styleslot2_expand change:forme-jobslot3_expand change:forme-advancedslot3_expand change:forme-styleslot3_expand change:forme-styleslot4_expand change:forme-styleslot5_expand change:forme-styleslot6_expand change:repeating_equipment:gear-itemaction change:repeating_consumables:gear-itemaction change:repeating_goods:gear-itemaction change:repeating_jobtech1:act-actions change:repeating_jobtech2:act-actions change:repeating_jobtech3:act-actions change:repeating_advtech1:act-actions change:repeating_advtech2:act-actions change:repeating_advtech3:act-actions change:repeating_advtech4:act-actions change:repeating_advtech5:act-actions change:repeating_advtech6:act-actions change:repeating_advtech7:act-actions change:repeating_advtech8:act-actions change:repeating_advtech9:act-actions change:repeating_geartech:act-actions change:repeating_consumables:act-actions change:repeating_basicaction:act-actions change:repeating_basicrecovery:act-actions change:repeating_basicattack:act-actions change:repeating_basicsocial:act-actions change:repeating_customtech:act-actions change:job-fighter_expand change:job-sentinel_expand change:job-warden_expand change:job-bulwark_expand change:job-hunter_expand change:job-sniper_expand change:job-trooper_expand change:job-warmage_expand change:job-alchemist_expand change:job-brawler_expand change:job-exemplar_expand change:job-kineticist_expand change:job-geomancer_expand change:job-rogue_expand change:job-labourer_expand change:job-tactician_expand change:job-magus_expand change:job-scholar_expand change:job-inquisitor_expand change:job-detective_expand change:job-culinarian_expand change:job-bard_expand change:job-spellwright_expand change:job-medic_expand change:job-empath_expand change:job-merchant_expand change:job-orator_expand change:job-hardliner_expand change:job-etherealist_expand change:job-phantasm_expand change:job-shade_expand change:sty-basic_action_expand change:sty-basic_recovery_expand change:sty-basic_attack_expand change:sty-basic_social_expand change:sty-basic_spirit_expand change:sty-smashing_arte_expand change:sty-mauler_arte_expand change:sty-berserker_arte_expand change:sty-avenger_arte_expand change:sty-cleaving_arte_expand change:sty-battering_arte_expand change:sty-crushing_arte_expand change:sty-arcanestrike_arte_expand change:sty-flame_spellblade_arte_expand change:sty-lightning_spellblade_arte_expand change:sty-cold_spellblade_arte_expand change:sty-chargestrike_arte_expand change:sty-flashcut_arte_expand change:sty-duelist_arte_expand change:sty-fencer_arte_expand change:sty-swashbuckling_arte_expand change:sty-deftblade_arte_expand change:sty-jumpspear_arte_expand change:sty-sky_pike_arte_expand change:sty-whip_arte_expand change:sty-trickster_arte_expand change:sty-overwhelming_arte_expand change:sty-phalanx_arte_expand change:sty-aerial_arte_expand change:sty-windfall_arte_expand change:sty-firefall_arte_expand change:sty-skyfall_arte_expand change:sty-forceful_fist_arte_expand change:sty-powerarm_arte_expand change:sty-stepflow_arte_expand change:sty-swaying_palm_arte_expand change:sty-wrestling_arte_expand change:sty-ironhold_arte_expand change:sty-galegrip_arte_expand change:sty-heaven's_reach_arte_expand change:sty-rapid_strikes_arte_expand change:sty-disruption_form_arte_expand change:sty-archery_arte_expand change:sty-bowmaster_arte_expand change:sty-gunslinger_arte_expand change:sty-pistolero_arte_expand change:sty-trick_shot_arte_expand change:sty-sentry_arte_expand change:sty-longsight_arte_expand change:sty-scatterpoint_arte_expand change:sty-bomber_arte_expand change:sty-daggerthrow_arte_expand change:sty-blasting_flames_expand change:sty-hellfire_expand change:sty-lightning_shot_expand change:sty-storm_caller_expand change:sty-binding_cold_expand change:sty-sheer_cold_expand change:sty-arcane_spellshot_expand change:sty-flaming_sphere_expand change:sty-shock_bomb_expand change:sty-area_spark_expand change:sty-chilling_blast_expand change:sty-ki_channeling_expand change:sty-manification_expand change:sty-ether_magic_expand change:sty-time_control_expand change:sty-messaging_expand change:sty-sound_control_expand change:sty-fire_field_expand change:sty-blazing_field_expand change:sty-light_control_expand change:sty-illusory_field_expand change:sty-blurred_light_expand change:sty-shadow_control_expand change:sty-darkness_weaving_expand change:sty-shadow_walking_expand change:sty-windglide_expand change:sty-fire_conduit_expand change:sty-jetstream_expand change:sty-bursting_fire_expand change:sty-lightning_conduit_expand change:sty-freeform_flight_expand change:sty-close_circuit_expand change:sty-cold_conduit_expand change:sty-ice_storm_expand change:sty-surging_dust_expand change:sty-surging_water_expand change:sty-binding_winds_expand change:sty-windsweep_expand change:sty-binding_weight_expand change:sty-gravity_force_expand change:sty-propelling_force_expand change:sty-telekinesis_expand change:sty-levitation_expand change:sty-dust_impact_expand change:sty-kinetic_assault_expand change:sty-throwcraft_expand change:sty-warsmith_expand change:sty-conjure_blades_expand change:sty-glass_blades_expand change:sty-conjure_skyfall_expand change:sty-structural_magic_expand change:sty-arbormaking_expand change:sty-stonemaking_expand change:sty-iron_walls_expand change:sty-glacial_walls_expand change:sty-clouded_shroud_expand change:sty-smoke_field_expand change:sty-misty_terrtain_expand change:sty-floral_shroud_expand change:sty-poison_spore_expand change:sty-dust_shaping_expand change:sty-shape_mastery_expand change:sty-terrain_molding_expand change:sty-sinking_terrain_expand change:sty-earth_shaker_expand change:sty-ground_splitter_expand change:sty-icy_terrain_expand change:sty-frozen_terrain_expand change:sty-unshaping_expand change:sty-plant_growth_expand change:sty-calming_blooms_expand change:sty-verdant_armory_expand change:sty-earthen_armory_expand change:sty-water_shape_expand change:sty-frozen_armory_expand change:sty-healing_hands_expand change:sty-soul_surge_expand change:sty-blood_flux_expand change:sty-earthen_endurance_expand change:sty-propelling_motion_expand change:sty-traversal_expand change:sty-unrelenting_motion_expand change:sty-powered_leap_expand change:sty-hidden_footing_expand change:sty-enduring_body_expand change:sty-unbeatable_brawn_expand change:sty-evasive_maneuvers_expand change:sty-reactive_defense_expand change:sty-remotion_expand change:sty-loyalty_appeal_expand change:sty-social_grace_expand change:sty-flattery_expand change:sty-deft_negotiator_expand change:sty-sales_tactics_expand change:sty-fluster_point_expand change:sty-provoking_anger_expand change:sty-intimidating_fear_expand change:sty-beguiling_instinct_expand change:sty-taunting_wit_expand change:sty-invigorating_rally_expand change:sty-underminer_expand change:sty-stillheart_expand change:sty-connecting_bond_expand", function (eventinfo) {
+on("change:note-opennotebookactions change:note-notebookactions0 change:note-notebookactions1 change:note-notebookactions2 change:note-notebookactions3 change:repeating_jobstyles:forme-actions change::forme-actions change:repeating_styles:forme-actions change:forme-jobslot1_expand change:forme-advancedslot1_expand change:forme-styleslot1_expand change:forme-jobslot2_expand change:forme-advancedslot2_expand change:forme-styleslot2_expand change:forme-jobslot3_expand change:forme-advancedslot3_expand change:forme-styleslot3_expand change:forme-styleslot4_expand change:forme-styleslot5_expand change:forme-styleslot6_expand change:repeating_equipment:gear-itemaction change:repeating_consumables:gear-itemaction change:repeating_goods:gear-itemaction change:repeating_jobtech1:act-actions change:repeating_jobtech2:act-actions change:repeating_jobtech3:act-actions change:repeating_advtech1:act-actions change:repeating_advtech2:act-actions change:repeating_advtech3:act-actions change:repeating_advtech4:act-actions change:repeating_advtech5:act-actions change:repeating_advtech6:act-actions change:repeating_advtech7:act-actions change:repeating_advtech8:act-actions change:repeating_advtech9:act-actions change:repeating_geartech:act-actions change:repeating_consumables:act-actions change:repeating_basicaction:act-actions change:repeating_basicrecovery:act-actions change:repeating_basicattack:act-actions change:repeating_basicsocial:act-actions change:repeating_customtech:act-actions change:job-fighter_expand change:job-sentinel_expand change:job-warden_expand change:job-bulwark_expand change:job-hunter_expand change:job-sniper_expand change:job-trooper_expand change:job-warmage_expand change:job-alchemist_expand change:job-brawler_expand change:job-exemplar_expand change:job-kineticist_expand change:job-geomancer_expand change:job-rogue_expand change:job-labourer_expand change:job-tactician_expand change:job-magus_expand change:job-scholar_expand change:job-inquisitor_expand change:job-detective_expand change:job-culinarian_expand change:job-bard_expand change:job-spellwright_expand change:job-medic_expand change:job-empath_expand change:job-merchant_expand change:job-orator_expand change:job-hardliner_expand change:job-etherealist_expand change:job-phantasm_expand change:job-shade_expand change:sty-basic_action_expand change:sty-basic_recovery_expand change:sty-basic_attack_expand change:sty-basic_social_expand change:sty-basic_spirit_expand change:sty-smashing_arte_expand change:sty-mauler_arte_expand change:sty-berserker_arte_expand change:sty-avenger_arte_expand change:sty-cleaving_arte_expand change:sty-battering_arte_expand change:sty-crushing_arte_expand change:sty-arcanestrike_arte_expand change:sty-flame_spellblade_arte_expand change:sty-lightning_spellblade_arte_expand change:sty-cold_spellblade_arte_expand change:sty-chargestrike_arte_expand change:sty-flashcut_arte_expand change:sty-duelist_arte_expand change:sty-fencer_arte_expand change:sty-swashbuckling_arte_expand change:sty-deftblade_arte_expand change:sty-jumpspear_arte_expand change:sty-sky_pike_arte_expand change:sty-whip_arte_expand change:sty-trickster_arte_expand change:sty-overwhelming_arte_expand change:sty-phalanx_arte_expand change:sty-aerial_arte_expand change:sty-windfall_arte_expand change:sty-firefall_arte_expand change:sty-skyfall_arte_expand change:sty-forceful_fist_arte_expand change:sty-powerarm_arte_expand change:sty-stepflow_arte_expand change:sty-swaying_palm_arte_expand change:sty-wrestling_arte_expand change:sty-ironhold_arte_expand change:sty-galegrip_arte_expand change:sty-heaven's_reach_arte_expand change:sty-rapid_strikes_arte_expand change:sty-disruption_form_arte_expand change:sty-archery_arte_expand change:sty-bowmaster_arte_expand change:sty-gunslinger_arte_expand change:sty-pistolero_arte_expand change:sty-trick_shot_arte_expand change:sty-sentry_arte_expand change:sty-longsight_arte_expand change:sty-scatterpoint_arte_expand change:sty-bomber_arte_expand change:sty-daggerthrow_arte_expand change:sty-blasting_flames_expand change:sty-hellfire_expand change:sty-lightning_shot_expand change:sty-storm_caller_expand change:sty-binding_cold_expand change:sty-sheer_cold_expand change:sty-arcane_spellshot_expand change:sty-flaming_sphere_expand change:sty-shock_bomb_expand change:sty-area_spark_expand change:sty-chilling_blast_expand change:sty-ki_channeling_expand change:sty-manification_expand change:sty-ether_magic_expand change:sty-time_control_expand change:sty-messaging_expand change:sty-sound_control_expand change:sty-fire_field_expand change:sty-blazing_field_expand change:sty-light_control_expand change:sty-illusory_field_expand change:sty-blurred_light_expand change:sty-shadow_control_expand change:sty-darkness_weaving_expand change:sty-shadow_walking_expand change:sty-windglide_expand change:sty-fire_conduit_expand change:sty-jetstream_expand change:sty-bursting_fire_expand change:sty-lightning_conduit_expand change:sty-freeform_flight_expand change:sty-close_circuit_expand change:sty-cold_conduit_expand change:sty-ice_storm_expand change:sty-surging_dust_expand change:sty-surging_water_expand change:sty-binding_winds_expand change:sty-windsweep_expand change:sty-binding_weight_expand change:sty-gravity_force_expand change:sty-propelling_force_expand change:sty-telekinesis_expand change:sty-levitation_expand change:sty-dust_impact_expand change:sty-kinetic_assault_expand change:sty-throwcraft_expand change:sty-warsmith_expand change:sty-conjure_blades_expand change:sty-glass_blades_expand change:sty-conjure_skyfall_expand change:sty-structural_magic_expand change:sty-arbormaking_expand change:sty-stonemaking_expand change:sty-iron_walls_expand change:sty-glacial_walls_expand change:sty-clouded_shroud_expand change:sty-smoke_field_expand change:sty-misty_terrtain_expand change:sty-floral_shroud_expand change:sty-poison_spore_expand change:sty-dust_shaping_expand change:sty-shape_mastery_expand change:sty-terrain_molding_expand change:sty-sinking_terrain_expand change:sty-earth_shaker_expand change:sty-ground_splitter_expand change:sty-icy_terrain_expand change:sty-frozen_terrain_expand change:sty-unshaping_expand change:sty-plant_growth_expand change:sty-calming_blooms_expand change:sty-verdant_armory_expand change:sty-earthen_armory_expand change:sty-water_shape_expand change:sty-frozen_armory_expand change:sty-healing_hands_expand change:sty-soul_surge_expand change:sty-blood_flux_expand change:sty-earthen_endurance_expand change:sty-propelling_motion_expand change:sty-traversal_expand change:sty-unrelenting_motion_expand change:sty-powered_leap_expand change:sty-hidden_footing_expand change:sty-enduring_body_expand change:sty-unbeatable_brawn_expand change:sty-evasive_maneuvers_expand change:sty-reactive_defense_expand change:sty-remotion_expand change:sty-loyalty_appeal_expand change:sty-social_grace_expand change:sty-flattery_expand change:sty-deft_negotiator_expand change:sty-sales_tactics_expand change:sty-fluster_point_expand change:sty-provoking_anger_expand change:sty-intimidating_fear_expand change:sty-beguiling_instinct_expand change:sty-taunting_wit_expand change:sty-invigorating_rally_expand change:sty-underminer_expand change:sty-stillheart_expand change:sty-connecting_bond_expand", function (eventinfo) {
 WuxWorkerGeneral.OpenSubMenu(eventinfo)
 });
 on("change:popup-submenuactive", function (eventinfo) {
@@ -48808,33 +49180,57 @@ WuxWorkerChat.UpdateOutfitEmotesName(eventinfo)
 on("change:repeating_emotes:chat-emote_url2 change:repeating_emotes:chat-emote_url3 change:repeating_emotes:chat-emote_url4 change:repeating_emotes:chat-emote_url5 change:repeating_emotes:chat-emote_url6 change:repeating_emotes:chat-emote_url7 change:repeating_emotes:chat-emote_url8 change:repeating_emotes:chat-emote_url9 change:repeating_emotes:chat-emote_url10 change:repeating_emotes:chat-emote_url11 change:repeating_emotes:chat-emote_url12 change:repeating_emotes:chat-emote_url13 change:repeating_emotes:chat-emote_url14 change:repeating_emotes:chat-emote_url15 change:repeating_emotes:chat-emote_url16 change:repeating_emotes:chat-emote_url17 change:repeating_emotes:chat-emote_url18 change:repeating_emotes:chat-emote_url19 change:repeating_emotes:chat-emote_url20 change:repeating_emotes:chat-emote_url21 change:repeating_emotes:chat-emote_url22 change:repeating_emotes:chat-emote_url23 change:repeating_emotes:chat-emote_url24 change:repeating_emotes:chat-emote_url25 change:repeating_emotes:chat-emote_url26 change:repeating_emotes:chat-emote_url27 change:repeating_emotes:chat-emote_url28 change:repeating_emotes:chat-emote_url29 change:repeating_emotes:chat-emote_url30", function (eventinfo) {
 WuxWorkerChat.UpdateOutfitEmotesUrl(eventinfo)
 });
-on("change:repeating_notebooks:note-notebookopen", function (eventinfo) {
-WuxWorkerChat.OpenNotebook(eventinfo)
-});
-on("change:repeating_notebooks:note-notebookdelete", function (eventinfo) {
-WuxWorkerChat.DeleteNotebook(eventinfo)
-});
-on("change:note-notebooksave", function (eventinfo) {
-WuxWorkerChat.SaveOpenedNotebook()
-});
-on("change:note-notebookclose", function (eventinfo) {
-WuxWorkerChat.CloseOpenedNotebook()
-});
-on("change:note-notebookreload", function (eventinfo) {
-WuxWorkerChat.ReloadOpenedNotebook()
-});
 on("change:repeating_activeemotesnotes:chat-post_emotenote", function (eventinfo) {
 WuxWorkerChat.PostToNotebook(eventinfo)
 });
-on("change:repeating_notebookpages:note-pagetype", function (eventinfo) {
-WuxWorkerChat.SetNotebookPageType(eventinfo)
+on("change:note-notebookopen0", function (eventinfo) {
+WuxWorkerChat.OpenNotebook(eventinfo, 0)
 });
-on("change:repeating_notebookpages:note-pagetemplatedata", function (eventinfo) {
-WuxWorkerChat.SetNotebookPageTemplateData(eventinfo)
+on("change:note-notebookopen1", function (eventinfo) {
+WuxWorkerChat.OpenNotebook(eventinfo, 1)
 });
-on("change:repeating_notebookpages:note-pagedelete", function (eventinfo) {
-WuxWorkerChat.SetNotebookPageDelete(eventinfo)
+on("change:note-notebookopen2", function (eventinfo) {
+WuxWorkerChat.OpenNotebook(eventinfo, 2)
 });
-on("change:repeating_notebookpages:note-pagecontents change:repeating_notebookpages:note-pagelocation change:repeating_notebookpages:note-pagearea change:repeating_notebookpages:note-pagedate change:repeating_notebookpages:note-pagetime change:repeating_notebookpages:note-pagecharname change:repeating_notebookpages:note-pagecharurl change:repeating_notebookpages:note-pagecharemote change:repeating_notebookpages:note-pagecharlanguage change:repeating_notebookpages:note-pagequestname change:repeating_notebookpages:note-pagechapter change:repeating_notebookpages:note-pagepart", function (eventinfo) {
-WuxWorkerChat.SetNotebookPageData(eventinfo)
+on("change:note-notebookopen3", function (eventinfo) {
+WuxWorkerChat.OpenNotebook(eventinfo, 3)
+});
+on("change:repeating_notebookpages0:note-pagetype", function (eventinfo) {
+WuxWorkerChat.SetNotebookPageType(eventinfo, 0)
+});
+on("change:repeating_notebookpages1:note-pagetype", function (eventinfo) {
+WuxWorkerChat.SetNotebookPageType(eventinfo, 1)
+});
+on("change:repeating_notebookpages2:note-pagetype", function (eventinfo) {
+WuxWorkerChat.SetNotebookPageType(eventinfo, 2)
+});
+on("change:repeating_notebookpages3:note-pagetype", function (eventinfo) {
+WuxWorkerChat.SetNotebookPageType(eventinfo, 3)
+});
+on("change:repeating_notebookpages0:note-pagetemplatedata", function (eventinfo) {
+WuxWorkerChat.SetNotebookPageTemplateData(eventinfo, 0)
+});
+on("change:repeating_notebookpages1:note-pagetemplatedata", function (eventinfo) {
+WuxWorkerChat.SetNotebookPageTemplateData(eventinfo, 1)
+});
+on("change:repeating_notebookpages2:note-pagetemplatedata", function (eventinfo) {
+WuxWorkerChat.SetNotebookPageTemplateData(eventinfo, 2)
+});
+on("change:repeating_notebookpages3:note-pagetemplatedata", function (eventinfo) {
+WuxWorkerChat.SetNotebookPageTemplateData(eventinfo, 3)
+});
+on("change:repeating_notebookpages0:note-pagedelete", function (eventinfo) {
+WuxWorkerChat.SetNotebookPageDelete(eventinfo, 0)
+});
+on("change:repeating_notebookpages1:note-pagedelete", function (eventinfo) {
+WuxWorkerChat.SetNotebookPageDelete(eventinfo, 1)
+});
+on("change:repeating_notebookpages2:note-pagedelete", function (eventinfo) {
+WuxWorkerChat.SetNotebookPageDelete(eventinfo, 2)
+});
+on("change:repeating_notebookpages3:note-pagedelete", function (eventinfo) {
+WuxWorkerChat.SetNotebookPageDelete(eventinfo, 3)
+});
+on("change:repeating_notebookpages3:note-pagecontents change:repeating_notebookpages3:note-pagelocation change:repeating_notebookpages3:note-pagearea change:repeating_notebookpages3:note-pagedate change:repeating_notebookpages3:note-pagetime change:repeating_notebookpages3:note-pagecharname change:repeating_notebookpages3:note-pagecharurl change:repeating_notebookpages3:note-pagecharemote change:repeating_notebookpages3:note-pagecharlanguage change:repeating_notebookpages3:note-pagequestname change:repeating_notebookpages3:note-pagechapter change:repeating_notebookpages3:note-pagepart", function (eventinfo) {
+WuxWorkerChat.SetNotebookPageData(eventinfo, 3)
 });

@@ -441,9 +441,10 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
             let chatTypeVar = WuxDef.GetVariable("Chat_Type");
             let chatMessageVar = WuxDef.GetVariable("Chat_Message");
             let chatLanguageVar = WuxDef.GetVariable("Chat_Language");
+            let openNotebookVar = WuxDef.GetVariable("Note_OpenNotebook");
             let postNameVar = repeatingEmoteSection.getFieldName(updateId, WuxDef.GetVariable("Chat_PostName"));
             let postUrlVar = repeatingEmoteSection.getFieldName(updateId, WuxDef.GetVariable("Chat_PostURL"));
-            attributeHandler.addMod([displayNameVar, chatTypeVar, chatMessageVar, chatLanguageVar, postNameVar, postUrlVar]);
+            attributeHandler.addMod([displayNameVar, chatTypeVar, chatMessageVar, chatLanguageVar, postNameVar, postUrlVar, openNotebookVar]);
             
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let chatType = attrHandler.parseString(chatTypeVar);
@@ -474,7 +475,8 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
                 emoteMessage.setUrl(attrHandler.parseString(postUrlVar));
                 emoteMessage.setLanguage(attrHandler.parseString(chatLanguageVar));
                 
-                let repeatingSection = new WorkerRepeatingSectionHandler("NotebookPages");
+                let repeatingSection = new WorkerRepeatingSectionHandler("NotebookPages", 
+                    attrHandler.parseString(openNotebookVar));
                 let newRowId = repeatingSection.generateRowId();
                 attrHandler.addUpdate(repeatingSection.getFieldName(newRowId, WuxDef.GetVariable("Note_PageType")), chatType);
                 attrHandler.addUpdate(repeatingSection.getFieldName(newRowId, WuxDef.GetVariable("Note_PageDisplay")), "Character");
@@ -488,137 +490,20 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
             attributeHandler.run();
         },
 
-        openNotebook = function (eventinfo) {
+        openNotebook = function (eventinfo, index) {
             let attributeHandler = new WorkerAttributeHandler();
-            let noteBookRepeaterSection = new WorkerRepeatingSectionHandler("Notebooks");
-            let updateId = noteBookRepeaterSection.getIdFromFieldName(eventinfo.sourceAttribute);
-            
-            let targetNotebookContentsVar = noteBookRepeaterSection.getFieldName(updateId, WuxDef.GetVariable("Note_NotebookContents"));
-            let targetNotebookNameVar = noteBookRepeaterSection.getFieldName(updateId, WuxDef.GetVariable("Note_NotebookName"));
             let openNotebookVar = WuxDef.GetVariable("Note_OpenNotebook");
-            attributeHandler.addMod([targetNotebookContentsVar, targetNotebookNameVar]);
-            
-            attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
-            attributeHandler.addUpdate(noteBookRepeaterSection.getFieldName(updateId, WuxDef.GetVariable("Note_NotebookActions")), "0");
+            let actionNotebookVar = WuxDef.GetVariable("Note_NotebookActions", index);
 
-            let pagesRepeaterSection = new WorkerRepeatingSectionHandler("NotebookPages");
-            pagesRepeaterSection.getIds(function (pagesRepeater) {
-                attributeHandler.addGetAttrCallback(function (attrHandler) {
-                    attributeHandler.addUpdate(openNotebookVar, attrHandler.parseString(targetNotebookNameVar));
-                    addNotebookPagesFromNotebook(attrHandler, pagesRepeater, attrHandler.parseJSON(targetNotebookContentsVar));
-                });
-                attributeHandler.run();
-            });
-
-        },
-        deleteNotebook = function (eventinfo) {
-            let repeatingSection = new WorkerRepeatingSectionHandler("Notebooks");
-            let updateId = repeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
-            repeatingSection.removeId(updateId);
-            
-            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addUpdate(openNotebookVar, index);
+            attributeHandler.addUpdate(actionNotebookVar, "0");
             attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
             attributeHandler.run();
         },
-        saveOpenedNotebook = function () {
+
+        setNotebookPageType = function (eventinfo, index) {
             let attributeHandler = new WorkerAttributeHandler();
-            let openNotebookVar = WuxDef.GetVariable("Note_OpenNotebook");
-            let notebookNameVar = WuxDef.GetVariable("Note_NotebookName");
-            let notebookContentsVar = WuxDef.GetVariable("Note_NotebookContents");
-            let templateDataVar = WuxDef.GetVariable("Note_PageTemplateData");
-            attributeHandler.addMod(openNotebookVar);
-
-            attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
-            attributeHandler.addUpdate(WuxDef.GetVariable("Note_OpenNotebookActions"), "0");
-
-            let pagesRepeaterSection = new WorkerRepeatingSectionHandler("NotebookPages");
-            pagesRepeaterSection.getIds(function (pagesRepeatingSection) {
-                pagesRepeaterSection.iterate(function (id) {
-                    attributeHandler.addMod(pagesRepeaterSection.getFieldName(id, templateDataVar));
-                });
-                let noteBookRepeaterSection = new WorkerRepeatingSectionHandler("Notebooks");
-                noteBookRepeaterSection.getIds(function (notebookRepeatingSection) {
-                    notebookRepeatingSection.iterate(function (id) {
-                        attributeHandler.addMod(notebookRepeatingSection.getFieldName(id, notebookNameVar));
-                    });
-                    attributeHandler.addGetAttrCallback(function (attrHandler) {
-                        
-                        let openNotebook = attrHandler.parseString(openNotebookVar);
-                        if (openNotebook == "") {
-                            Debug.Log("No notebook is currently open, cannot save.");
-                            return;
-                        }
-                        let foundNotebook = "";
-                        notebookRepeatingSection.iterate(function (id) {
-                            if (attrHandler.parseString(notebookRepeatingSection.getFieldName(id, notebookNameVar)) == openNotebook) {
-                                foundNotebook = noteBookRepeaterSection.getFieldName(id, notebookContentsVar);
-                            }
-                        });
-                        if (foundNotebook == "") {
-                            let newRowId = notebookRepeatingSection.generateRowId();
-                            foundNotebook = notebookRepeatingSection.getFieldName(newRowId, notebookContentsVar);
-                            attrHandler.addUpdate(notebookRepeatingSection.getFieldName(newRowId, notebookNameVar), openNotebook);
-                            attrHandler.addUpdate(foundNotebook, "");
-                        }
-                        
-                        let notebookContents = [];
-                        pagesRepeatingSection.iterate(function (id) {
-                            notebookContents.push(attrHandler.parseString(pagesRepeaterSection.getFieldName(id, templateDataVar)));
-                        });
-                        attrHandler.addUpdate(foundNotebook, JSON.stringify(notebookContents));
-                    });
-                    attributeHandler.run();
-                });
-            });
-
-        },
-        closeOpenedNotebook = function () {
-            let attributeHandler = new WorkerAttributeHandler();
-            attributeHandler.addUpdate(WuxDef.GetVariable("Note_OpenNotebook"), "");
-            attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
-            attributeHandler.addUpdate(WuxDef.GetVariable("Note_OpenNotebookActions"), "0");
-            attributeHandler.run();
-            let repeaterSection = new WorkerRepeatingSectionHandler("NotebookPages");
-            repeaterSection.getIds(function (repeatingSection) {
-                repeatingSection.removeAllIds();
-            });
-        },
-        reloadOpenedNotebook = function () {
-            let attributeHandler = new WorkerAttributeHandler();
-            let openNotebookVar = WuxDef.GetVariable("Note_OpenNotebook");
-            let notebookNameVar = WuxDef.GetVariable("Note_NotebookName");
-            let notebookContentsVar = WuxDef.GetVariable("Note_NotebookContents");
-            attributeHandler.addMod(openNotebookVar);
-
-            attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
-            attributeHandler.addUpdate(WuxDef.GetVariable("Note_OpenNotebookActions"), "0");
-            
-            let pagesRepeaterSection = new WorkerRepeatingSectionHandler("NotebookPages");
-            pagesRepeaterSection.getIds(function (pagesRepeatingSection) {
-                let noteBookRepeaterSection = new WorkerRepeatingSectionHandler("Notebooks");
-                noteBookRepeaterSection.getIds(function (notebookRepeatingSection) {
-                    notebookRepeatingSection.iterate(function (id) {
-                        attributeHandler.addMod([
-                            notebookRepeatingSection.getFieldName(id, notebookNameVar),
-                            notebookRepeatingSection.getFieldName(id, notebookContentsVar)]);
-                    });
-                    attributeHandler.addGetAttrCallback(function (attrHandler) {
-                        let openNotebook = attrHandler.parseString(openNotebookVar);
-                        notebookRepeatingSection.iterate(function (id) {
-                            if (attrHandler.parseString(notebookRepeatingSection.getFieldName(id, notebookNameVar)) == openNotebook) {
-                                addNotebookPagesFromNotebook(attrHandler, pagesRepeatingSection, 
-                                    attrHandler.parseJSON(notebookRepeatingSection.getFieldName(id, notebookContentsVar)));
-                            }
-                        });
-                    });
-                    attributeHandler.run();
-                });
-            });
-        },
-
-        setNotebookPageType = function (eventinfo) {
-            let attributeHandler = new WorkerAttributeHandler();
-            let repeatingSection = new WorkerRepeatingSectionHandler("NotebookPages");
+            let repeatingSection = new WorkerRepeatingSectionHandler("NotebookPages", index);
             let updateId = repeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
             let pageDisplayVar = repeatingSection.getFieldName(updateId, WuxDef.GetVariable("Note_PageDisplay"));
 
@@ -646,22 +531,22 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
             updateNotebookPageTemplateData(attributeHandler, repeatingSection, updateId);
             attributeHandler.run();
         },
-        setNotebookPageData = function (eventinfo) {
+        setNotebookPageData = function (eventinfo, index) {
             let attributeHandler = new WorkerAttributeHandler();
-            let repeatingSection = new WorkerRepeatingSectionHandler("NotebookPages");
+            let repeatingSection = new WorkerRepeatingSectionHandler("NotebookPages", index);
             let updateId = repeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
 
             updateNotebookPageTemplateData(attributeHandler, repeatingSection, updateId);
             attributeHandler.run();
         },
-        setNotebookPageDelete = function (eventinfo) {
-            let repeatingSection = new WorkerRepeatingSectionHandler("NotebookPages");
+        setNotebookPageDelete = function (eventinfo, index) {
+            let repeatingSection = new WorkerRepeatingSectionHandler("NotebookPages", index);
             let updateId = repeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
             repeatingSection.removeId(updateId);
         },
-        setNotebookPageTemplateData = function (eventinfo) {
+        setNotebookPageTemplateData = function (eventinfo, index) {
             let attributeHandler = new WorkerAttributeHandler();
-            let repeatingSection = new WorkerRepeatingSectionHandler("NotebookPages");
+            let repeatingSection = new WorkerRepeatingSectionHandler("NotebookPages", index);
             let updateId = repeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
             addNotebookPageTemplateData(attributeHandler, repeatingSection, updateId, eventinfo.newValue);
             attributeHandler.run();
@@ -678,10 +563,6 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
         UpdateOutfitEmotesUrl: updateOutfitEmotesUrl,
         PostToNotebook: postToNotebook,
         OpenNotebook: openNotebook,
-        DeleteNotebook: deleteNotebook,
-        SaveOpenedNotebook: saveOpenedNotebook,
-        CloseOpenedNotebook: closeOpenedNotebook,
-        ReloadOpenedNotebook: reloadOpenedNotebook,
         SetNotebookPageType: setNotebookPageType,
         SetNotebookPageData: setNotebookPageData,
         SetNotebookPageDelete: setNotebookPageDelete,

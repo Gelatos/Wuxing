@@ -1561,6 +1561,11 @@ var WuxSheetMain = WuxSheetMain || (function () {
             <div class="wuxHiddenIndexField" name="${indexFieldName}">\n${contents}\n</div>\n`;
         },
 
+        hiddenUniqueIndexField = function (fieldName, index, contents) {
+            return `<input type="hidden" class="wuxHiddenIndexField-flag" name="${fieldName}" value="0">
+            <div class="wuxHiddenUniqueIndexField${index}">\n${contents}\n</div>\n`;
+        },
+
         hiddenAncestryField = function (ancestryType, contents) {
             let fieldName = "";
             switch (ancestryType) {
@@ -1882,6 +1887,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         HiddenAuxField: hiddenAuxField,
         HiddenIndexField: hiddenIndexField,
         HiddenIndexFieldWithVariable: hiddenIndexFieldWithVariable,
+        HiddenUniqueIndexField: hiddenUniqueIndexField,
         HiddenAncestryField: hiddenAncestryField,
         HiddenSpanField: hiddenSpanField,
         HiddenAuxSpanField: hiddenAuxSpanField,
