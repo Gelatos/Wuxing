@@ -372,6 +372,9 @@ class TokenTargetData extends TargetData {
 
     // Combat Details
     refreshCombatDetails(attributeHandler) {
+        if (attributeHandler == undefined) {
+            return;
+        }
         this.combatDetails = new CombatDetailsHandler(attributeHandler);
         this.refreshStatus(attributeHandler);
     }
@@ -2426,10 +2429,12 @@ var TokenReference = TokenReference || (function () {
             tokenTargetData.showTooltip(false);
             tokenTargetData.setEnergyIcon(false);
             tokenTargetData.setTurnIcon(false);
-            tokenTargetData.setDowned(false);
 
             let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
             tokenTargetData.refreshCombatDetails(attributeHandler);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                tokenTargetData.setDowned(false, attrHandler);
+            });
             attributeHandler.addFinishCallback(function (attrHandler) {
                 tokenTargetData.combatDetails.onUpdateDisplayStyle(attrHandler, "");
                 tokenTargetData.setCombatDetails(attrHandler);
