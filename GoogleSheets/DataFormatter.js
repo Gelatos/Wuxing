@@ -2386,10 +2386,8 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
 function onOpen() {
     SpreadsheetApp.getUi()
         .createMenu('Assessment')
-        .addItem('Assess All', 'AssessAllTechniques')
-        .addItem('Assess All From Here', 'AssessAllTechniquesFromPosition')
-        .addItem('Set Job Defenses', 'SetJobDefenses')
-        .addItem('Set Job Defenses From Here', 'SetJobDefensesFromPosition')
+        .addItem('Assess All', 'AssessAll')
+        .addItem('Assess All From Here', 'AssessAllFromPosition')
         .addToUi();
 }
 
@@ -2428,23 +2426,45 @@ function TryConsumableAssessment(sheet, e) {
     return false;
 }
 
-function AssessAllTechniques() {
+function AssessAll() {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getActiveSheet();
-    if (sheet.getSheetName() == "Techniques" || sheet.getSheetName() == "CustomTechniques") {
-        AssessAllTechniquesByStartRow(sheet, 2);
+    if (TryAssessAllTechniques(sheet)) {
+        return;
+    }
+    if (SetJobDefenses(sheet)) {
+        return;
     }
 }
 
-function AssessAllTechniquesFromPosition() {
+function AssessAllFromPosition() {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getActiveSheet();
+    if (AssessAllTechniquesFromPosition(sheet)) {
+        return;
+    }
+    if (SetJobDefensesFromPosition(sheet)) {
+        return;
+    }
+}
+
+function TryAssessAllTechniques(sheet) {
+    if (sheet.getSheetName() == "Techniques" || sheet.getSheetName() == "CustomTechniques") {
+        AssessAllTechniquesByStartRow(sheet, 2);
+        return true;
+    }
+    return false;
+}
+
+function AssessAllTechniquesFromPosition(sheet) {
     if (sheet.getSheetName() == "Techniques" || sheet.getSheetName() == "CustomTechniques") {
         const range = sheet.getActiveRange();
         let row = range.getRow();
         row = AssessTechniqueAtRow(sheet, row);
         AssessAllTechniquesByStartRow(sheet, row);
+        return true;
     }
+    return false;
 }
 
 function AssessTechniqueAtRow(sheet, rowIndex) {
@@ -2990,6 +3010,9 @@ class TechniqueAssessment {
             case "Status":
                 this.getStatusAssessment(effect, attributeHandler);
                 break;
+            case "BreakFocus":
+                this.getBreakFocusAssessment(effect, attributeHandler);
+                break;
             case "Resistance":
                 this.getResistanceAssessment(effect, attributeHandler);
                 break;
@@ -3368,6 +3391,11 @@ class TechniqueAssessment {
         }
     }
 
+    getBreakFocusAssessment(effect, attributeHandler) {
+        let message = `(Break Focus)`;
+        this.addPointsRubric(28, message);
+    }
+
     getResistanceAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
         let message = `(Resist ${effect.effect})`;
@@ -3569,22 +3597,22 @@ class GearValueAssessment {
     }
 }
 
-function SetJobDefenses() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getActiveSheet();
+function SetJobDefenses(sheet) {
     if (sheet.getSheetName() == "Jobs") {
         SetAllJobDefenses(sheet, 2);
+        return true;
     }
+    return  false;
 }
 
-function SetJobDefensesFromPosition() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getActiveSheet();
+function SetJobDefensesFromPosition(sheet) {
     if (sheet.getSheetName() == "Jobs") {
         const range = sheet.getActiveRange();
         let row = range.getRow();
         SetAllJobDefenses(sheet, row);
+        return true;
     }
+    return false;
 }
 
 function SetAllJobDefenses(sheet, startRow) {

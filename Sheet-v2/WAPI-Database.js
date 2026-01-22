@@ -2313,6 +2313,9 @@ class BaseTechniqueEffectDisplayData {
             case "Status":
                 output += this.formatStatusEffect(effect);
                 break;
+            case "BreakFocus":
+                output += this.formatBreakFocusEffect(effect);
+                break;
             case "Resistance":
                 output += this.formatResistanceEffect(effect);
                 break;
@@ -2476,6 +2479,10 @@ class BaseTechniqueEffectDisplayData {
             default:
                 return `${this.formatTargetGain(effect)} the ${state.title} ${state.group}`;
         }
+    }
+    
+    formatBreakFocusEffect() {
+        return `A technique of your choice that is being focused on by the target ends.`;
     }
 
     formatResistanceEffect(effect) {
