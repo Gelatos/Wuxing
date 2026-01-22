@@ -2319,9 +2319,6 @@ class BaseTechniqueEffectDisplayData {
             case "Resistance":
                 output += this.formatResistanceEffect(effect);
                 break;
-            case "Advantage":
-                output += this.formatAdvantageEffect(effect);
-                break;
             case "Boost":
                 output += this.formatBoostEffect(effect);
                 break;
@@ -2489,21 +2486,6 @@ class BaseTechniqueEffectDisplayData {
         let resistance = WuxDef.GetTitle("Resistance");
         let damageType = WuxDef.GetTitle(effect.effect);
         return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${resistance} against ${damageType} damage`;
-    }
-
-    formatAdvantageEffect(effect) {
-        let owner = "their";
-        if (effect.target == "Self") {
-            owner = "your";
-        }
-        let formatCalc = this.formatCalcBonus(effect);
-
-        switch (effect.subType) {
-            case "Opponent":
-                return `The next ${effect.effect} made against ${this.formatTarget(effect)} gains +${Math.abs(formatCalc)} ${formatCalc > 0 ? "Advantage" : "Disadvantage"}`;
-            default:
-                return `${this.formatTargetGain(effect)} +${Math.abs(formatCalc)} ${formatCalc > 0 ? "Advantage" : "Disadvantage"} on ${owner} next ${effect.effect}`;
-        }
     }
 
     formatBoostEffect(effect) {
@@ -2744,9 +2726,6 @@ class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
                 break;
             case "Resistance":
                 output += this.formatResistanceEffect(effect);
-                break;
-            case "Advantage":
-                output += this.formatAdvantageEffect(effect);
                 break;
             case "Terrain":
                 output += this.formatTerrainEffect(effect);

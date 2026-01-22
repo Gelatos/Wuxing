@@ -3016,9 +3016,6 @@ class TechniqueAssessment {
             case "Resistance":
                 this.getResistanceAssessment(effect, attributeHandler);
                 break;
-            case "Advantage":
-                this.getAdvantageAssessment(effect, attributeHandler);
-                break;
             case "Terrain":
                 this.getTerrainAssessment(effect, attributeHandler);
                 break;
@@ -3400,14 +3397,6 @@ class TechniqueAssessment {
         let output = this.getDiceFormula(effect, attributeHandler);
         let message = `(Resist ${effect.effect})`;
         this.addPointsRubric(output.value, message);
-    }
-
-    getAdvantageAssessment(effect, attributeHandler) {
-        let output = this.getDiceFormula(effect, attributeHandler);
-        output.value = Math.abs(Math.floor(output.value * 4));
-        let message = `(${output.value > 0 ? "Advantage" : "Disadvantage"})`;
-        this.addPointsRubric(output.value, message);
-        this.addTargetedPointsRubric(effect, output.value);
     }
 
     addDefensePointsRubric(effect, points) {
