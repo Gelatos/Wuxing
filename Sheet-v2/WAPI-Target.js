@@ -1853,7 +1853,7 @@ var TargetReference = TargetReference || (function () {
                 let evasionVar = WuxDef.GetVariable("Def_Evasion");
                 let resolveVar = WuxDef.GetVariable("Def_Resolve");
                 let insightVar = WuxDef.GetVariable("Def_Insight");
-                let guileVar = WuxDef.GetVariable("Def_Guile");
+                let egoVar = WuxDef.GetVariable("Def_Ego");
                 
                 let surgeVar = WuxDef.GetVariable("Surge");
                 let vitalityVar = WuxDef.GetVariable("Cmb_Vitality");
@@ -1862,7 +1862,7 @@ var TargetReference = TargetReference || (function () {
                 let speedVar = WuxDef.GetVariable("Cmb_Mv");
                 let dashVar = WuxDef.GetVariable("Cmb_MvDash");
                 attributeHandler.addAttribute([crVar, jobVar, 
-                    braceVar, wardingVar, reflexVar, evasionVar, resolveVar, insightVar, guileVar,
+                    braceVar, wardingVar, reflexVar, evasionVar, resolveVar, insightVar, egoVar,
                     surgeVar, vitalityVar, hvVar, armorVar]);
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
                     tokenTargetData.combatDetails.onUpdateCR(attrHandler, attrHandler.parseInt(crVar, 0, false));
@@ -1874,7 +1874,7 @@ var TargetReference = TargetReference || (function () {
                         attrHandler.parseInt(evasionVar, 0, false),
                         attrHandler.parseInt(resolveVar, 0, false),
                         attrHandler.parseInt(insightVar, 0, false),
-                        attrHandler.parseInt(guileVar, 0, false)
+                        attrHandler.parseInt(egoVar, 0, false)
                         );
                     tokenTargetData.combatDetails.onUpdateSurges(attrHandler, attrHandler.parseInt(surgeVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateMaxSurges(attrHandler, attrHandler.parseInt(surgeVar, 0, true));
