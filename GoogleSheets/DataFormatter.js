@@ -2432,7 +2432,7 @@ function AssessAll() {
     if (TryAssessAllTechniques(sheet)) {
         return;
     }
-    if (SetJobDefenses(sheet)) {
+    if (SetStyleEffects(sheet)) {
         return;
     }
 }
@@ -2443,7 +2443,7 @@ function AssessAllFromPosition() {
     if (AssessAllTechniquesFromPosition(sheet)) {
         return;
     }
-    if (SetJobDefensesFromPosition(sheet)) {
+    if (SetStyleEffectsFromPosition(sheet)) {
         return;
     }
 }
@@ -2472,13 +2472,14 @@ function AssessTechniqueAtRow(sheet, rowIndex) {
         return;
     }
     let assessColumn = getNamedColumn(sheet, "Assessment");
+    let impactsColumn = getNamedColumn(sheet, "Impacts");
 
     let assessingCell = sheet.getRange(rowIndex, assessColumn, 1, 1);
     assessingCell.setValue("Calculating...")
 
     let techniqueData = GetTechniqueForAssessment(sheet, rowIndex, assessColumn);
     if (techniqueData != undefined) {
-        let assessment = new TechniqueAssessment(techniqueData.tech, sheet, techniqueData.row, assessColumn);
+        let assessment = new TechniqueAssessment(techniqueData.tech, sheet, techniqueData.row, assessColumn, impactsColumn);
         assessment.printCellValues();
         if (sheet.getSheetName() == "CustomTechniques") {
             assessment.printCellJson(true);
@@ -2498,7 +2499,7 @@ function AssessGearAtRow(sheet, rowIndex) {
         return;
     }
     let assessColumn = getNamedColumn(sheet, "Assessment");
-    let valueColumn = getNamedColumn(sheet, "Value");
+    let impactsColumn = getNamedColumn(sheet, "Impacts");
 
     let assessingCell = sheet.getRange(rowIndex, assessColumn, 1, 1);
     assessingCell.setValue("Calculating...")
@@ -2506,7 +2507,7 @@ function AssessGearAtRow(sheet, rowIndex) {
     let itemData = GetGearForAssessment(sheet, rowIndex, assessColumn);
     if (itemData != undefined) {
         if (itemData.item.hasTechnique) {
-            let techniqueAssessment = new TechniqueAssessment(itemData.item.technique, sheet, itemData.row, assessColumn);
+            let techniqueAssessment = new TechniqueAssessment(itemData.item.technique, sheet, itemData.row, assessColumn, impactsColumn);
             techniqueAssessment.printCellValues();
         }
         if (rowIndex != itemData.row) {
@@ -2527,6 +2528,7 @@ function AssessConsumableAtRow(sheet, rowIndex) {
 function AssessAllTechniquesByStartRow(sheet, startRow) {
     const lastRow = sheet.getLastRow();
     let assessColumn = getNamedColumn(sheet, "Assessment");
+    let impactsColumn = getNamedColumn(sheet, "Impacts");
     let rowIndex = startRow;
     let techniqueData;
     while (rowIndex < lastRow) {
@@ -2536,7 +2538,8 @@ function AssessAllTechniquesByStartRow(sheet, startRow) {
         techniqueData = GetTechniqueForAssessment(sheet, rowIndex, assessColumn);
         if (techniqueData != undefined) {
             rowIndex = techniqueData.finalRow;
-            let assessment = new TechniqueAssessment(techniqueData.tech, sheet, techniqueData.row, assessColumn);
+            let assessment = new TechniqueAssessment(
+                techniqueData.tech, sheet, techniqueData.row, assessColumn, impactsColumn);
             assessment.printCellValues();
         } else {
             assessingCell.setValue("");
@@ -2699,14 +2702,17 @@ function getNamedColumn(sheet, name) {
 }
 
 class TechniqueAssessment {
-    constructor(technique, sheet, row, assessColumn) {
+    constructor(technique, sheet, row, assessColumn, impactsColumn) {
         this.sheet = sheet;
         this.row = row;
         this.assessColumn = assessColumn;
+        this.impactsColumn = impactsColumn;
 
         this.technique = technique;
         this.assessment = "";
         this.averagePoints = 0;
+        
+        this.impactTraits = {};
 
         this.target = technique.target;
         this.size = technique.size;
@@ -3032,6 +3038,7 @@ class TechniqueAssessment {
     }
 
     getHPAssessment(effect, attributeHandler) {
+        
         let output = this.getDiceFormula(effect, attributeHandler);
 
         let message;
@@ -3044,6 +3051,7 @@ class TechniqueAssessment {
                     this.addPointsRubric(output.value, message);
                 }
                 this.addTargetedPointsRubric(effect, output.value);
+                this.addImpactTrait("Trait_Heal");
                 break;
             case "Surge":
                 message = `(Surge HP)`;
@@ -3052,6 +3060,7 @@ class TechniqueAssessment {
                     this.addPointsRubric(output.value, message);
                 }
                 this.addTargetedPointsRubric(effect, output.value);
+                this.addImpactTrait("Trait_Heal-Surge");
                 break;
             case "Burst Damage":
                 output.value = Math.max(Math.floor(output.value * 0.25), 1);
@@ -3061,6 +3070,7 @@ class TechniqueAssessment {
                     this.addPointsRubric(output.value, message);
                 }
                 this.addTargetedPointsRubric(effect, output.value);
+                this.addAttackImpactTrait("Trait_Atk");
                 break;
                 
             default:
@@ -3078,6 +3088,7 @@ class TechniqueAssessment {
                 }
                 this.addDefensePointsRubric(effect, output.value, message);
                 this.addTargetedPointsRubric(effect, output.value);
+                this.addAttackImpactTrait("Trait_Atk");
                 break;
         }
 
@@ -3086,10 +3097,12 @@ class TechniqueAssessment {
             if (effect.traits.includes("Brutal")) {
                 effectPts = Math.floor(output.value * 0.33);
                 this.addPointsRubric(effectPts, `(Brutal)`);
+                this.addImpactTrait("Trait_Brutal");
             }
             if (effect.traits.includes("AP")) {
                 effectPts = Math.floor(output.value * 0.33);
                 this.addPointsRubric(effectPts, `(AP)`);
+                this.addImpactTrait("Trait_Brutal");
             }
         }
     }
@@ -3102,6 +3115,7 @@ class TechniqueAssessment {
             case "Heal":
                 output.value = Math.floor(output.value * 1.5);
                 message = `(Heal Will)`;
+                this.addImpactTrait("Trait_Heal-Will");
                 break;
             default:
                 if (effect.target == "Self") {
@@ -3113,6 +3127,7 @@ class TechniqueAssessment {
                     output.value = Math.floor(output.value * 0.8);
                 }
                 message = `(Will)`;
+                this.addAttackImpactTrait("Trait_Will");
                 break;
         }
 
@@ -3128,6 +3143,7 @@ class TechniqueAssessment {
         output.value *= 21;
         if (effect.subType != "Heal") {
             output.value = Math.floor(output.value * 1.5);
+            this.addImpactTrait("Trait_Heal-Vitality");
         }
         let message = `(${effect.subType != "" ? `${effect.subType} ` : ""}Vit)`;
 
@@ -3143,9 +3159,11 @@ class TechniqueAssessment {
             case "Heal":
                 output.value *= 10;
                 this.addPointsRubric(output.value, `(Heal Impatience)`);
+                this.addImpactTrait("Trait_Heal-Impatience");
                 break;
             default:
                 this.patience += output.value;
+                this.addImpactTrait(`Trait_Impatience-${this.patience}`);
                 break;
         }
     }
@@ -3157,6 +3175,7 @@ class TechniqueAssessment {
             case "Heal":
                 output.value *= 6;
                 message = `(Heal Favor)`;
+                this.addImpactTrait("Trait_Heal-Favor");
                 break;
             default:
                 this.favor += output.value;
@@ -3164,6 +3183,7 @@ class TechniqueAssessment {
                 this.highFavor += output.highValue;
                 output.value *= 4;
                 message = `(Favor)`;
+                this.addAttackImpactTrait("Trait_Favor");
                 break;
         }
 
@@ -3182,19 +3202,23 @@ class TechniqueAssessment {
             case "Lower":
                 points = 14;
                 this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
+                this.addAttackImpactTrait("Trait_Influence");
                 break;
             case "Adjust":
                 points = 16;
                 this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
+                this.addAttackImpactTrait("Trait_Influence");
                 break;
             case "Reveal":
                 points = 10;
                 this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
+                this.addAttackImpactTrait("Trait_Assess");
                 break;
             case "RevealNeg":
             case "RevealPos":
                 points = 8;
                 this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
+                this.addAttackImpactTrait("Trait_Assess");
                 break;
             case "Add":
                 if (subTypes.length > 1) {
@@ -3205,6 +3229,7 @@ class TechniqueAssessment {
                     }
                 }
                 this.addPointsRubric(points, `(Add ${subTypes[1]} Influence)`);
+                this.addAttackImpactTrait("Trait_AddInfluence");
                 break;
         }
     }
@@ -3217,6 +3242,7 @@ class TechniqueAssessment {
         this.highRequest += output.highValue;
         let message = `(Request)`;
         this.addPointsRubric(output.value, message);
+        this.addImpactTrait("Trait_Request");
     }
 
     getTerrainAssessment(effect, attributeHandler) {
@@ -3237,6 +3263,7 @@ class TechniqueAssessment {
             this.addPointsRubric(value, message);
         }
         this.addTargetedPointsRubric(effect, value);
+        this.addImpactTrait(`Ter_${effect.effect}`);
     }
 
     getStructureAssessmentData(effect, attributeHandler) {
@@ -3268,24 +3295,27 @@ class TechniqueAssessment {
 
     getMoveAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
-        Debug.Log("assessing Effect Move " + effect.formula.getString());
         switch (effect.subType) {
             case "Teleport":
                 output.value = Math.floor(output.value * 2);
+                this.addImpactTrait(`Trait_Move-${effect.subType}`);
                 break;
             case "Fly":
             case "FreeMove":
             case "Invis":
             case "Sneak":
                 output.value = Math.floor(output.value * 1.5);
+                this.addImpactTrait(`Trait_Move-${effect.subType}`);
                 break;
             case "ForceMove":
             case "Pushed":
             case "Pulled":
                 output.value = Math.floor(output.value * (1 + (output.value * 0.5)));
+                this.addImpactTrait(`Trait_ForceMove-${effect.subType}`);
                 break;
             case "Fall":
                 output.value = 2;
+                this.addImpactTrait(`Trait_ForceMove-${effect.subType}`);
                 break;
         }
         let message = `(${effect.subType == "" ? "Move" : effect.subType})`;
@@ -3301,6 +3331,7 @@ class TechniqueAssessment {
         output.value *= 2;
         let message = `(EN)`;
         this.addPointsRubric(output.value, message);
+        this.addImpactTrait(`Trait_EN`);
     }
 
     getStatusAssessment(effect, attributeHandler) {
@@ -3386,6 +3417,7 @@ class TechniqueAssessment {
                 this.addTargetedPointsRubric(effect, value);
                 break;
         }
+        this.addImpactTrait(`Status_${effect}`);
     }
 
     getBreakFocusAssessment(effect, attributeHandler) {
@@ -3498,6 +3530,22 @@ class TechniqueAssessment {
         value += effect.getAverageDiceValue();
         return {value: value, lowValue: lowValue, highValue: highValue};
     }
+    
+    addAttackImpactTrait(traitName) {
+        this.addImpactTrait(`${traitName}-${this.technique.coreDefense}`);
+    }
+
+    addImpactTrait(traitName) {
+        let traitParts = traitName.split("-");
+        let traitBase = traitParts[0];
+        let traitType = "";
+        if (traitParts.length > 1) {
+            traitType = traitParts[1];
+        }
+        if (this.impactTraits[traitBase] == undefined || this.impactTraits[traitBase] == "") {
+            this.impactTraits[traitBase] = traitType;
+        }
+    }
 }
 
 class GearValueAssessment {
@@ -3586,54 +3634,62 @@ class GearValueAssessment {
     }
 }
 
-function SetJobDefenses(sheet) {
-    if (sheet.getSheetName() == "Jobs") {
-        SetAllJobDefenses(sheet, 2);
+function SetStyleEffects(sheet) {
+    if (sheet.getSheetName() == "Styles") {
+        SetAllStyleKeywords(sheet, 2);
         return true;
     }
     return  false;
 }
 
-function SetJobDefensesFromPosition(sheet) {
-    if (sheet.getSheetName() == "Jobs") {
+function SetStyleEffectsFromPosition(sheet) {
+    if (sheet.getSheetName() == "Styles") {
         const range = sheet.getActiveRange();
         let row = range.getRow();
-        SetAllJobDefenses(sheet, row);
+        SetAllStyleKeywords(sheet, row);
         return true;
     }
     return false;
 }
 
-function SetAllJobDefenses(sheet, startRow) {
+function SetAllStyleKeywords(sheet, startRow) {
     const lastRow = sheet.getLastRow();
-    let defenseColumn = getNamedColumn(sheet, "Defenses");
+    let effectColumn = getNamedColumn(sheet, "Effects");
     let rowIndex = startRow;
     while (rowIndex < lastRow) {
-        let defenseCell = sheet.getRange(rowIndex, defenseColumn, 1, 1);
-        defenseCell.setValue("Calculating...")
+        let effectCell = sheet.getRange(rowIndex, effectColumn, 1, 1);
+        effectCell.setValue("Calculating...")
         
-        let rowData = sheet.getRange(rowIndex, 1, 1, defenseColumn - 1).getValues()[0];
+        let rowData = sheet.getRange(rowIndex, 1, 1, effectColumn - 1).getValues()[0];
         if (rowData[0] == "" || rowData[0].startsWith("#")) {
-            defenseCell.setValue("");
+            effectCell.setValue("");
             rowIndex++;
             continue;
         }
 
-        let techniqueName = `${rowData[0]} Discipline`;
-        
-        let techniqueData = WuxTechs.Get(techniqueName);
-        if (techniqueData == undefined) {
-            defenseCell.setValue("");
-        } else {
-            Debug.Log(`Assessing Job: ${rowData[0]}`);
-            defenseCell.setValue(PrintTechniqueEffectBoosterDefenses(techniqueData));
-        }
-        
+        SetStyleKeywords(rowData, effectCell)
         rowIndex++;
     }
 }
 
-function PrintTechniqueEffectBoosterDefenses(techniqueData) {
+function SetStyleKeywords(rowData, effectCell) {
+    let style = new TechniqueStyle(rowData);
+    let techniqueFilter = WuxTechs.Filter(new DatabaseFilterData("style", style.name));
+
+    if (techniqueFilter.length == 0) {
+        effectCell.setValue("");
+    } else {
+        let baseTechniqueKeywords = [];
+        if (style.group == "Advanced") {
+            let baseTechniqueFilters = WuxTechs.Filter(new DatabaseFilterData("style", style.baseStyle));
+            baseTechniqueKeywords = GetStyleTechniqueKeywords(baseTechniqueFilters);
+        }
+        let techniqueKeywords = GetStyleTechniqueKeywords(techniqueFilter, baseTechniqueKeywords);
+        effectCell.setValue(PrintStyleEffects(techniqueKeywords));
+    }
+}
+
+function PrintStyleEffects(techniqueKeywords) {
     let definitionTitle;
     let defenses = "";
     let senses = "";
@@ -3648,7 +3704,7 @@ function PrintTechniqueEffectBoosterDefenses(techniqueData) {
         senseNames.push(senseFilters[i].name);
     }
 
-    techniqueData.effects.iterate(function(effect) {
+    techniqueKeywords.effects.iterate(function(effect) {
         if (effect.type == "Boost") {
             if (defNames.includes(effect.effect)) {
                 definitionTitle = WuxDef.GetAbbreviation(effect.effect);
@@ -3669,33 +3725,35 @@ function PrintTechniqueEffectBoosterDefenses(techniqueData) {
     return `${defenses}${(defenses != "" && senses != "" ? " " : "")}${senses}`;
 }
 
-function PrintTechniqueEffectBoostCount(techniqueEffect) {
-    let output = "";
-    for(let i = 0; i < techniqueEffect.formula.workers.length; i++) {
-        let worker = techniqueEffect.formula.workers[i];
-        output += PrintDefenseStars(techniqueEffect, worker.variableName);
+function GetStyleTechniqueKeywords(techniqueFilters, ignoreKeywords) {
+    if (ignoreKeywords == undefined) {
+        ignoreKeywords = [];
     }
-    if (output != "") {
-        output = `(${output})`;
+    let keywords = [];
+    for (let i = 0; i < techniqueFilters.length; i++) {
+        let technique = techniqueFilters[i];
+        keywords = AddTechniqueImpactTraitsToKeywordsArray(technique, keywords, ignoreKeywords);
+        keywords = AddTechniqueEffectsToKeywordsArray(technique, keywords, ignoreKeywords);
     }
-    return output;
+    
+    return keywords;
 }
 
-function PrintDefenseStars(techniqueEffect, variableName) {
-    let power = GetDefenseTypePowerCount(variableName);
-    return "+".repeat(power);
+function AddTechniqueImpactTraitsToKeywordsArray(technique, keywords, ignoreKeywords) {
+    let impacts = technique.traits.split(";");
+    for (let i = 0; i < impacts.length; i++) {
+        let trait = `Trait_${impacts[i].trim()}`;
+        if (!keywords.includes(trait) && !ignoreKeywords.includes(trait)) {
+            keywords.push(trait);
+        }
+    }
+    return keywords;
 }
 
-function GetDefenseTypePowerCount(variableName) {
-    switch(variableName) {
-        case "sb-gooddef":
-            return 1;
-        case "sb-greatdef":
-            return 2;
-        case "sb-excellentdef":
-            return 3;
-    }
-    return 0;
+function AddTechniqueEffectsToKeywordsArray(technique, keywords, ignoreKeywords) {
+    keywords = IterateTechniqueEffectsToAddToKeywordsArray(technique.effects, keywords, ignoreKeywords);
+    keywords = IterateTechniqueEffectsToAddToKeywordsArray(technique.secondaryEffects, keywords, ignoreKeywords);
+    return keywords;
 }
 
 

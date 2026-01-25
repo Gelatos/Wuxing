@@ -593,6 +593,8 @@ class TechniqueData extends WuxDatabaseData {
         i++;
         this.traits = "" + dataArray[i];
         i++;
+        this.traits = "" + dataArray[i];
+        i++;
         // Dodging some sheet logic
         let enCost = parseInt(dataArray[i]);
         i++;
@@ -724,12 +726,6 @@ class TechniqueData extends WuxDatabaseData {
             case "Move":
                 effect.setName(`T${this.getEffectDbLength()}`);
                 this.addToEffectsDb(effect);
-                let moveTypes = ["Pushed", "Pulled", "ForceMove", "Fly", "Float", "FreeMove", "Teleport", "Fall"];
-                if (!moveTypes.some(moveType => effect.subType.includes(moveType))) {
-                    this.addDefinition(effect.subType);
-                }
-                let moveDefs = effect.formula.getDefinitions();
-                moveDefs.forEach(moveDef => this.addDefinition(moveDef.name));
                 return;
             case "Terrain":
                 effect.setName(`T${this.getEffectDbLength()}`);
@@ -1789,6 +1785,11 @@ class DefinitionData extends WuxDatabaseData {
     }
 
     setImportSheetExtraData(property, value) {
+    }
+    
+    addSubDefinition(subDefinition) {
+        this.title = `${this.title} [${subDefinition.getTitle()}]`;
+        this.descriptions = this.descriptions.concat(subDefinition.descriptions);
     }
 }
 
