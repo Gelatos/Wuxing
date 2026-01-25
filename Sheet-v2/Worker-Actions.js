@@ -57,7 +57,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         let evasionVar = WuxDef.GetVariable("Def_Evasion");
         let resolveVar = WuxDef.GetVariable("Def_Resolve");
         let insightVar = WuxDef.GetVariable("Def_Insight");
-        let guileVar = WuxDef.GetVariable("Def_Guile");
+        let egoVar = WuxDef.GetVariable("Def_Ego");
         
         let healValueVar = WuxDef.GetVariable("Cmb_HV");
         let armorDefVar = WuxDef.GetVariable("Cmb_Armor");
@@ -113,7 +113,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 attrHandler.parseInt(braceVar), attrHandler.parseInt(wardingVar),
                 attrHandler.parseInt(reflexVar), attrHandler.parseInt(evasionVar),
                 attrHandler.parseInt(resolveVar), attrHandler.parseInt(insightVar),
-                attrHandler.parseInt(guileVar)
+                attrHandler.parseInt(egoVar)
             );
             
             combatDetailsHandler.onUpdateHealValue(attrHandler, attrHandler.parseInt(healValueVar));

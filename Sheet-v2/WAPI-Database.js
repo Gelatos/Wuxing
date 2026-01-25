@@ -3877,7 +3877,7 @@ class CombatDetailsDefenses {
         this.evasion = 0;
         this.resolve = 0;
         this.insight = 0;
-        this.guile = 0;
+        this.ego = 0;
     }
 
     importJson(json) {
@@ -3887,7 +3887,7 @@ class CombatDetailsDefenses {
         this.evasion = json.evasion != undefined ? json.evasion : 0;
         this.resolve = json.resolve != undefined ? json.resolve : 0;
         this.insight = json.insight != undefined ? json.insight : 0;
-        this.guile = json.guile != undefined ? json.guile : 0;
+        this.ego = json.ego != undefined ? json.ego : 0;
     }
     
     calculateAverageDefense(cr) {
@@ -3908,7 +3908,7 @@ class CombatDetailsDefenses {
         output += " Sens:";
         output += `${WuxDef.GetAbbreviation("Def_Resolve")}${this.resolve};`;
         output += `${WuxDef.GetAbbreviation("Def_Insight")}${this.insight};`;
-        output += `${WuxDef.GetAbbreviation("Def_Guile")}${this.guile};`;
+        output += `${WuxDef.GetAbbreviation("Def_Ego")}${this.ego};`;
         
         return output;
     }
@@ -3964,7 +3964,7 @@ class CombatDetailsHandler {
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
     
-    onUpdateDefenses(attrHandler, brace, warding, reflex, evasion, resolve, insight, guile) {
+    onUpdateDefenses(attrHandler, brace, warding, reflex, evasion, resolve, insight, ego) {
         this.setData(attrHandler);
         this.combatDetails.defenses.brace = brace;
         this.combatDetails.defenses.warding = warding;
@@ -3972,7 +3972,7 @@ class CombatDetailsHandler {
         this.combatDetails.defenses.evasion = evasion;
         this.combatDetails.defenses.resolve = resolve;
         this.combatDetails.defenses.insight = insight;
-        this.combatDetails.defenses.guile = guile;
+        this.combatDetails.defenses.ego = ego;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
