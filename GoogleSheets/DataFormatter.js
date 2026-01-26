@@ -2284,21 +2284,22 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
 
         let output = [];
         let name = "";
-        let lookup = "";
-        let dataInfo;
+        let keywords = []; 
+        let definitionOutput;
 
         for (let i = 0; i < keyArray.length; i++) {
             name = `${prefix}${keyArray[i].trim()}`;
+            keywords = name.split(":");
 
-            lookup = name;
-            if (lookup.indexOf("(") >= 0) {
-                lookup = lookup.replace(/\([^)]*\)/g, "(X)");
-            }
-
-            dataInfo = get(lookup);
-            if (dataInfo != undefined) {
-                dataInfo.name = name;
-                output.push(dataInfo);
+            definitionOutput = get(keywords[0].trim());
+            if (definitionOutput != undefined) {
+                if (keywords.length > 1) {
+                    let subDefinition = get(keywords[1].trim());
+                    if (subDefinition != undefined) {
+                        definitionOutput.addSubDefinition(subDefinition);
+                    }
+                }
+                output.push(definitionOutput);
             }
         }
 
@@ -2472,7 +2473,7 @@ function AssessTechniqueAtRow(sheet, rowIndex) {
         return;
     }
     let assessColumn = getNamedColumn(sheet, "Assessment");
-    let impactsColumn = getNamedColumn(sheet, "Impacts");
+    let impactsColumn = getNamedColumn(sheet, "Impact Traits");
 
     let assessingCell = sheet.getRange(rowIndex, assessColumn, 1, 1);
     assessingCell.setValue("Calculating...")
@@ -2499,7 +2500,7 @@ function AssessGearAtRow(sheet, rowIndex) {
         return;
     }
     let assessColumn = getNamedColumn(sheet, "Assessment");
-    let impactsColumn = getNamedColumn(sheet, "Impacts");
+    let impactsColumn = getNamedColumn(sheet, "Impact Traits");
 
     let assessingCell = sheet.getRange(rowIndex, assessColumn, 1, 1);
     assessingCell.setValue("Calculating...")
@@ -2528,7 +2529,7 @@ function AssessConsumableAtRow(sheet, rowIndex) {
 function AssessAllTechniquesByStartRow(sheet, startRow) {
     const lastRow = sheet.getLastRow();
     let assessColumn = getNamedColumn(sheet, "Assessment");
-    let impactsColumn = getNamedColumn(sheet, "Impacts");
+    let impactsColumn = getNamedColumn(sheet, "Impact Traits");
     let rowIndex = startRow;
     let techniqueData;
     while (rowIndex < lastRow) {
@@ -2797,6 +2798,12 @@ class TechniqueAssessment {
 
         range = this.sheet.getRange(this.row, this.assessColumn, this.pointBreakdown.length, 2);
         range.setValues(values);
+        
+        // set impact traits
+        let impactValues = [];
+        impactValues[0] = [this.printImpactTraits()];
+        range = this.sheet.getRange(this.row, this.impactsColumn, 1, 1);
+        range.setValues(impactValues);
     }
 
     printCellJson(isCustom) {
@@ -2837,6 +2844,22 @@ class TechniqueAssessment {
             output += `\nRequest: ${this.lowRequest} => ${this.request} <= ${this.highRequest}`;
             if (this.requestVariance) {
                 output += " (High Variance)";
+            }
+        }
+        return output;
+    }
+    
+    printImpactTraits() {
+        let output = "";
+        for(let key in this.impactTraits) {
+            if (output != "") {
+                output += "; ";
+            }
+            if (this.impactTraits[key] == "") {
+                output += key;
+            }
+            else {
+                output += `${key}-${this.impactTraits[key]}`
             }
         }
         return output;
@@ -3070,9 +3093,11 @@ class TechniqueAssessment {
                     this.addPointsRubric(output.value, message);
                 }
                 this.addTargetedPointsRubric(effect, output.value);
-                this.addAttackImpactTrait("Trait_Atk");
+                this.addImpactTrait("Trait_Atk");
                 break;
-                
+            case "Special":
+                this.addImpactTrait("Trait_Atk");
+                break;
             default:
                 if (effect.target == "Self") {
                     output.value = Math.floor(output.value * -0.5);
@@ -3083,12 +3108,15 @@ class TechniqueAssessment {
                 }
                 message = `(HP)`;
 
-                if (effect.defense != "WillBreak") {
+                if (effect.defense == "WillBreak") {
+                    this.addImpactTrait(`Trait_Will:Trait_Atk`);
+                }
+                else {
                     this.addPointsRubric(output.value, message);
+                    this.addImpactTrait("Trait_Atk");
                 }
                 this.addDefensePointsRubric(effect, output.value, message);
                 this.addTargetedPointsRubric(effect, output.value);
-                this.addAttackImpactTrait("Trait_Atk");
                 break;
         }
 
@@ -3102,7 +3130,7 @@ class TechniqueAssessment {
             if (effect.traits.includes("AP")) {
                 effectPts = Math.floor(output.value * 0.33);
                 this.addPointsRubric(effectPts, `(AP)`);
-                this.addImpactTrait("Trait_Brutal");
+                this.addImpactTrait("Trait_AP");
             }
         }
     }
@@ -3127,13 +3155,10 @@ class TechniqueAssessment {
                     output.value = Math.floor(output.value * 0.8);
                 }
                 message = `(Will)`;
-                this.addAttackImpactTrait("Trait_Will");
                 break;
         }
 
-        if (effect.defense != "WillBreak") {
-            this.addPointsRubric(output.value, message);
-        }
+        this.addPointsRubric(output.value, message);
         this.addDefensePointsRubric(effect, output.value, message);
         this.addTargetedPointsRubric(effect, output.value);
     }
@@ -3141,13 +3166,17 @@ class TechniqueAssessment {
     getVitalityAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
         output.value *= 21;
+        let impactTrait = "";
         if (effect.subType != "Heal") {
             output.value = Math.floor(output.value * 1.5);
             this.addImpactTrait("Trait_Heal-Vitality");
         }
         let message = `(${effect.subType != "" ? `${effect.subType} ` : ""}Vit)`;
 
-        if (effect.defense != "WillBreak") {
+        if (effect.defense == "WillBreak") {
+            this.addImpactTrait(`Trait_Will:Trait_Atk-Vitality`);
+        }
+        else {
             this.addPointsRubric(output.value, message);
         }
         this.addTargetedPointsRubric(effect, output.value);
@@ -3183,12 +3212,15 @@ class TechniqueAssessment {
                 this.highFavor += output.highValue;
                 output.value *= 4;
                 message = `(Favor)`;
-                this.addAttackImpactTrait("Trait_Favor");
                 break;
         }
 
-        if (effect.defense != "WillBreak") {
+        if (effect.defense == "WillBreak") {
+            this.addImpactTrait(`Trait_Will:Trait_Favor`);
+        }
+        else {
             this.addPointsRubric(output.value, message);
+            this.addImpactTrait("Trait_Favor");
         }
         this.addDefensePointsRubric(effect, output.value, message);
         this.addTargetedPointsRubric(effect, output.value);
@@ -3202,23 +3234,23 @@ class TechniqueAssessment {
             case "Lower":
                 points = 14;
                 this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
-                this.addAttackImpactTrait("Trait_Influence");
+                this.addImpactTrait("Trait_Influence");
                 break;
             case "Adjust":
                 points = 16;
                 this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
-                this.addAttackImpactTrait("Trait_Influence");
+                this.addImpactTrait("Trait_Influence");
                 break;
             case "Reveal":
                 points = 10;
                 this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
-                this.addAttackImpactTrait("Trait_Assess");
+                this.addImpactTrait("Trait_Assess");
                 break;
             case "RevealNeg":
             case "RevealPos":
                 points = 8;
                 this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
-                this.addAttackImpactTrait("Trait_Assess");
+                this.addImpactTrait("Trait_Assess");
                 break;
             case "Add":
                 if (subTypes.length > 1) {
@@ -3229,7 +3261,7 @@ class TechniqueAssessment {
                     }
                 }
                 this.addPointsRubric(points, `(Add ${subTypes[1]} Influence)`);
-                this.addAttackImpactTrait("Trait_AddInfluence");
+                this.addImpactTrait("Trait_AddInfluence");
                 break;
         }
     }
@@ -3259,9 +3291,7 @@ class TechniqueAssessment {
                 break;
         }
 
-        if (effect.defense != "WillBreak") {
-            this.addPointsRubric(value, message);
-        }
+        this.addPointsRubric(value, message);
         this.addTargetedPointsRubric(effect, value);
         this.addImpactTrait(`Ter_${effect.effect}`);
     }
@@ -3295,33 +3325,38 @@ class TechniqueAssessment {
 
     getMoveAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
+        let impactTrait = "";
         switch (effect.subType) {
             case "Teleport":
                 output.value = Math.floor(output.value * 2);
-                this.addImpactTrait(`Trait_Move-${effect.subType}`);
+                impactTrait = `Trait_Move-${effect.subType}`;
                 break;
             case "Fly":
             case "FreeMove":
             case "Invis":
             case "Sneak":
                 output.value = Math.floor(output.value * 1.5);
-                this.addImpactTrait(`Trait_Move-${effect.subType}`);
+                impactTrait = `Trait_Move-${effect.subType}`;
                 break;
             case "ForceMove":
             case "Pushed":
             case "Pulled":
                 output.value = Math.floor(output.value * (1 + (output.value * 0.5)));
-                this.addImpactTrait(`Trait_ForceMove-${effect.subType}`);
+                impactTrait = `Trait_ForceMove-${effect.subType}`;
                 break;
             case "Fall":
                 output.value = 2;
-                this.addImpactTrait(`Trait_ForceMove-${effect.subType}`);
+                impactTrait = `Trait_ForceMove-${effect.subType}`;
                 break;
         }
         let message = `(${effect.subType == "" ? "Move" : effect.subType})`;
 
-        if (effect.defense != "WillBreak") {
+        if (effect.defense == "WillBreak") {
+            this.addImpactTrait(`Trait_Will:${impactTrait}`);
+        }
+        else {
             this.addPointsRubric(output.value, message);
+            this.addImpactTrait(impactTrait);
         }
         this.addTargetedPointsRubric(effect, output.value);
     }
@@ -3349,10 +3384,14 @@ class TechniqueAssessment {
                 }
                 message = `(Add ${state.getTitle()})`;
 
-                if (effect.defense != "WillBreak") {
+                if (effect.defense == "WillBreak") {
+                    this.addImpactTrait(`Trait_Will-Apply:${state.name}`);
+                }
+                else {
                     this.addPointsRubric(value, message);
                     this.addDefensePointsRubric(effect, value, message);
                     this.addTargetedPointsRubric(effect, value);
+                    this.addImpactTrait(`Trait_Apply:${state.name}`);
                 }
 
                 if (effect.effect != "Stat_Engaged") {
@@ -3367,8 +3406,12 @@ class TechniqueAssessment {
                 value = Math.floor(parseInt(state.points) * 0.75);
                 message = `(Remove ${state.getTitle()})`;
 
-                if (effect.defense != "WillBreak") {
+                if (effect.defense == "WillBreak") {
+                    this.addImpactTrait(`Trait_Will-Cleanse:${state.name}`);
+                }
+                else {
                     this.addPointsRubric(value, message);
+                    this.addImpactTrait(`Trait_Cleanse:${state.name}`);
                 }
                 this.addTargetedPointsRubric(effect, value);
 
@@ -3384,8 +3427,12 @@ class TechniqueAssessment {
                 value = parseInt(state.points) + 2;
                 message = `(Choose ${state.getTitle()})`;
 
-                if (effect.defense != "WillBreak") {
+                if (effect.defense == "WillBreak") {
+                    this.addImpactTrait(`Trait_Will-Apply:${state.name}`);
+                }
+                else {
                     this.addPointsRubric(value, message);
+                    this.addImpactTrait(`Trait_Apply:${state.name}`);
                 }
                 this.addTargetedPointsRubric(effect, value);
                 break;
@@ -3393,34 +3440,30 @@ class TechniqueAssessment {
                 value = 10;
                 message = `(Remove Any)`;
 
-                if (effect.defense != "WillBreak") {
-                    this.addPointsRubric(value, message);
-                }
+                this.addPointsRubric(value, message);
                 this.addTargetedPointsRubric(effect, value);
+                this.addImpactTrait(`Trait_Cleanse-Any`);
                 break;
             case "Remove All":
                 value = 20;
                 message = `(Remove All)`;
 
-                if (effect.defense != "WillBreak") {
-                    this.addPointsRubric(value, message);
-                }
+                this.addPointsRubric(value, message);
                 this.addTargetedPointsRubric(effect, value);
+                this.addImpactTrait(`Trait_Cleanse-All`);
                 break;
             case "Remove Will":
                 value = 16;
                 message = `(Remove Will)`;
 
-                if (effect.defense != "WillBreak") {
-                    this.addPointsRubric(value, message);
-                }
+                this.addPointsRubric(value, message);
                 this.addTargetedPointsRubric(effect, value);
+                this.addImpactTrait(`Trait_Cleanse-Will`);
                 break;
         }
-        this.addImpactTrait(`Status_${effect}`);
     }
 
-    getBreakFocusAssessment(effect, attributeHandler) {
+    getBreakFocusAssessment() {
         let message = `(Break Focus)`;
         this.addPointsRubric(28, message);
     }
@@ -3529,10 +3572,6 @@ class TechniqueAssessment {
         let highValue = value + effect.getHighDiceValue();
         value += effect.getAverageDiceValue();
         return {value: value, lowValue: lowValue, highValue: highValue};
-    }
-    
-    addAttackImpactTrait(traitName) {
-        this.addImpactTrait(`${traitName}-${this.technique.coreDefense}`);
     }
 
     addImpactTrait(traitName) {

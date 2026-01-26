@@ -593,8 +593,6 @@ class TechniqueData extends WuxDatabaseData {
         i++;
         this.traits = "" + dataArray[i];
         i++;
-        this.traits = "" + dataArray[i];
-        i++;
         // Dodging some sheet logic
         let enCost = parseInt(dataArray[i]);
         i++;
@@ -1789,6 +1787,7 @@ class DefinitionData extends WuxDatabaseData {
     
     addSubDefinition(subDefinition) {
         this.title = `${this.title} [${subDefinition.getTitle()}]`;
+        this.descriptions.push(subDefinition.getTitle());
         this.descriptions = this.descriptions.concat(subDefinition.descriptions);
     }
 }
@@ -2066,7 +2065,7 @@ class TechniqueDisplayData {
 
     setTraits(technique) {
         this.forms = WuxDef.GetValues(technique.forms, ";", "Trait_");
-        this.traits = WuxDef.GetValues(technique.traits, ";", "Trait_");
+        this.traits = WuxDef.GetValues(technique.traits, ";");
     }
 
     setFlavorText(technique) {
