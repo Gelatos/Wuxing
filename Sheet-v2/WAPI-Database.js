@@ -1002,9 +1002,9 @@ class TechniqueStyle extends WuxDatabaseData {
         this.subGroup = json.subGroup;
         this.affinity = json.affinity;
         this.skills = json.skills;
-        this.effects = json.effects;
         this.description = json.description;
         this.baseStyle = json.baseStyle;
+        this.effects = json.effects;
         this.cr = json.cr;
         this.maxTier = json.maxTier;
     }
@@ -1023,11 +1023,11 @@ class TechniqueStyle extends WuxDatabaseData {
         i++;
         this.skills = dataArray[i];
         i++;
-        this.effects = dataArray[i];
-        i++;
         this.description = "" + dataArray[i];
         i++;
         this.baseStyle = "" + dataArray[i];
+        i++;
+        this.effects = dataArray[i];
         i++;
         this.cr = parseInt(dataArray[i]);
         i++;
@@ -1787,7 +1787,7 @@ class DefinitionData extends WuxDatabaseData {
     
     addSubDefinition(subDefinition) {
         this.title = `${this.title} [${subDefinition.getTitle()}]`;
-        this.descriptions.push(subDefinition.getTitle());
+        this.descriptions = this.descriptions.concat(["&nbsp;", subDefinition.getTitle()]);
         this.descriptions = this.descriptions.concat(subDefinition.descriptions);
     }
 }

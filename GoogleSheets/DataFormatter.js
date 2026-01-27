@@ -3836,13 +3836,14 @@ function SetStyleEffectsFromPosition(sheet) {
 
 function SetAllStyleKeywords(sheet, startRow) {
     const lastRow = sheet.getLastRow();
+    const lastCol = sheet.getLastColumn();
     let effectColumn = getNamedColumn(sheet, "Effects");
     let rowIndex = startRow;
-    while (rowIndex < lastRow) {
+    while (rowIndex <= lastRow) {
         let effectCell = sheet.getRange(rowIndex, effectColumn, 1, 1);
         effectCell.setValue("Calculating...")
         
-        let rowData = sheet.getRange(rowIndex, 1, 1, effectColumn - 1).getValues()[0];
+        let rowData = sheet.getRange(rowIndex, 1, 1, lastCol).getValues()[0];
         if (rowData[0] == "" || rowData[0].startsWith("#")) {
             effectCell.setValue("");
             rowIndex++;
@@ -3855,90 +3856,95 @@ function SetAllStyleKeywords(sheet, startRow) {
 }
 
 function SetStyleKeywords(rowData, effectCell) {
+    
     let style = new TechniqueStyle(rowData);
     let techniqueFilter = WuxTechs.Filter(new DatabaseFilterData("style", style.name));
 
     if (techniqueFilter.length == 0) {
         effectCell.setValue("");
     } else {
-        let baseTechniqueKeywords = [];
-        if (style.group == "Advanced") {
+        let styleAssessment = new StyleAssessment(style, techniqueFilter);
+        styleAssessment.print(effectCell);
+    }
+}
+
+class StyleAssessment {
+    
+    constructor (style, techniqueFilter) {
+        this.baseTechniqueKeywords = {};
+        if (style.baseStyle != "") {
             let baseTechniqueFilters = WuxTechs.Filter(new DatabaseFilterData("style", style.baseStyle));
-            baseTechniqueKeywords = GetStyleTechniqueKeywords(baseTechniqueFilters);
+            this.baseTechniqueKeywords = this.getStyleTechniqueKeywords(baseTechniqueFilters);
         }
-        let techniqueKeywords = GetStyleTechniqueKeywords(techniqueFilter, baseTechniqueKeywords);
-        effectCell.setValue(PrintStyleEffects(techniqueKeywords));
-    }
-}
-
-function PrintStyleEffects(techniqueKeywords) {
-    let definitionTitle;
-    let defenses = "";
-    let senses = "";
-    let defFilters = WuxDef.Filter([new DatabaseFilterData("group", "Defense")]);
-    let defNames = [];
-    for (let i = 0; i < defFilters.length; i++) {
-        defNames.push(defFilters[i].name);
-    }
-    let senseFilters = WuxDef.Filter([new DatabaseFilterData("group", "Sense")]);
-    let senseNames = [];
-    for (let i = 0; i < senseFilters.length; i++) {
-        senseNames.push(senseFilters[i].name);
+        this.techniqueKeywords = this.getStyleTechniqueKeywords(techniqueFilter);
     }
 
-    techniqueKeywords.effects.iterate(function(effect) {
-        if (effect.type == "Boost") {
-            if (defNames.includes(effect.effect)) {
-                definitionTitle = WuxDef.GetAbbreviation(effect.effect);
-                defenses += `${definitionTitle}${PrintTechniqueEffectBoostCount(effect)}.`;
-            }
-            if (senseNames.includes(effect.effect)) {
-                definitionTitle = WuxDef.GetAbbreviation(effect.effect);
-                senses += `${definitionTitle}${PrintTechniqueEffectBoostCount(effect)}.`;
-            }
+    print(effectCell) {
+        effectCell.setValue(this.printKeywords());
+    }
+
+    printKeywords() {
+        let output = "";
+
+        Object.keys(this.techniqueKeywords)
+            .sort()
+            .forEach(key => {
+                if (Object.hasOwn(this.baseTechniqueKeywords, key)) {
+                    return;
+                }
+                if (key == "Trait_Impatience") {
+                    return;
+                }
+                if (output != "") {
+                    output += "; ";
+                }
+                if (this.techniqueKeywords[key] == "") {
+                    output += key;
+                }
+                else {
+                    output += `${key}-${this.techniqueKeywords[key]}`
+                }
+            });
+        return output;
+    }
+
+    getStyleTechniqueKeywords(techniqueFilters) {
+        let keywords = [];
+        for (let i = 0; i < techniqueFilters.length; i++) {
+            let technique = techniqueFilters[i];
+            this.addTechniqueCoreDefenseToKeywords(technique, keywords);
+            this.addTechniqueImpactTraitsToKeywordsArray(technique, keywords);
         }
-    });
-    if (defenses != "") {
-        defenses = `Defs:${defenses}`;
-    }
-    if (senses != "") {
-        senses = `Sens:${senses}`;
-    }
-    return `${defenses}${(defenses != "" && senses != "" ? " " : "")}${senses}`;
-}
 
-function GetStyleTechniqueKeywords(techniqueFilters, ignoreKeywords) {
-    if (ignoreKeywords == undefined) {
-        ignoreKeywords = [];
-    }
-    let keywords = [];
-    for (let i = 0; i < techniqueFilters.length; i++) {
-        let technique = techniqueFilters[i];
-        keywords = AddTechniqueEffectsToKeywordsArray(technique, keywords, ignoreKeywords);
-        keywords = AddTechniqueImpactTraitsToKeywordsArray(technique, keywords, ignoreKeywords);
+        return keywords;
     }
     
-    return keywords;
-}
-
-function AddTechniqueImpactTraitsToKeywordsArray(technique, keywords, ignoreKeywords) {
-    let impacts = technique.traits.split(";");
-    for (let i = 0; i < impacts.length; i++) {
-        let trait = `Trait_${impacts[i].trim()}`;
-        if (!keywords.includes(trait) && !ignoreKeywords.includes(trait)) {
-            keywords.push(trait);
+    addTechniqueCoreDefenseToKeywords(technique, keywords) {
+        if (technique.coreDefense == "") {
+            return;
+        }
+        let impactType = `Trait_A-${technique.coreDefense}`;
+        if (keywords[impactType] == undefined || keywords[impactType] == "") {
+            keywords[impactType] = "";
         }
     }
-    return keywords;
+
+    addTechniqueImpactTraitsToKeywordsArray(technique, keywords) {
+        let impacts = technique.traits.split(";");
+        for (let i = 0; i < impacts.length; i++) {
+            let impact = impacts[i].trim().split("-");
+            let impactType = impact[0];
+            if (keywords[impactType] == undefined || keywords[impactType] == "") {
+                if (impact.length > 1) {
+                    keywords[impactType] = impact[1];
+                }
+                else {
+                    keywords[impactType] = "";
+                }
+            }
+        }
+    }
 }
-
-function AddTechniqueEffectsToKeywordsArray(technique, keywords, ignoreKeywords) {
-    keywords = IterateTechniqueEffectsToAddToKeywordsArray(technique.effects, keywords, ignoreKeywords);
-    keywords = IterateTechniqueEffectsToAddToKeywordsArray(technique.secondaryEffects, keywords, ignoreKeywords);
-    return keywords;
-}
-
-
 
 function SetDatabase(ss, sheet) {
     if (sheet.getSheetName() == "Database") {
@@ -4170,9 +4176,6 @@ class DatabaseAssessment {
     }
 }
 
-function GetSheetData() {
-    
-}
 
 
 

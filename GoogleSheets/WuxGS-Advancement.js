@@ -1246,8 +1246,7 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                 },
 
                 build = function (stylesDatabase) {
-                    let contents = buildStyleGroups(stylesDatabase);
-                    return contents;
+                    return  buildStyleGroups(stylesDatabase);
                 },
 
                 buildStyleGroups = function (stylesDatabase) {
@@ -1348,9 +1347,35 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     if (style.affinity != "") {
                         output += `<span>Affinity: ${style.affinity}</span>\n`;
                     }
-                    output += `<span>Main Skills: ${style.skills != "" ? style.skills : "None"}</span>\n`;
+                    output += `<span><em>Main Skills: ${style.skills != "" ? style.skills : "None"}</em></span>\n`;
+                    output += `<span class="wuxStyleTooltipContainer"><em>Traits: ${getStyleTraits(style)}</em></span>\n`;
                     output += `<span>${styleDef.getDescription()}</span>`;
                     return WuxSheetMain.Desc(output);
+                },
+                
+                getStyleTraits = function (style) {
+                    let output = "";
+                    let traits = WuxDef.GetValues(style.effects, ";");
+                    for(let i = 0; i < traits.length; i++) {
+                        let trait = traits[i];
+                        let subGroup = "";
+                        if (trait.subGroup != "") {
+                            subGroup = `<span class="wuxDescription"><em>${trait.subGroup}</em></span>`;
+                        }
+                        let description = "";
+                        for (let j = 0; j < trait.descriptions.length; j++) {
+                            description += `<span class="wuxDescription">${trait.descriptions[j]}</span>`;
+                        }
+                        output += `<span class="wuxTooltip">
+                            <span class="wuxTooltipText">${trait.getTitle()}</span>
+                            <div class="wuxTooltipContent">
+                                <div class="wuxHeader2">${trait.getTitle()}</div>
+                                ${subGroup}
+                                ${description}
+                            </div>
+                        </span>`;
+                    }
+                    return output;
                 },
 
                 buildTechniqueStyleGroupTab = function (contents, groupName, title) {
