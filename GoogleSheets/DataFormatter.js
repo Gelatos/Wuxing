@@ -16,8 +16,59 @@ var Debug = Debug || (function () {
     };
 }());
 
+function SplitLargeEntry(output, splitCharacter) {
+    if (splitCharacter == undefined) {
+        splitCharacter = "\n";
+    }
+
+    let outputArray = [];
+    let splitString = "";
+    let splitIndex = 0;
+    if (output.length > 50000) {
+        while (output.length > 0) {
+            if (output.length > 50000) {
+                splitString = output.substring(0, 50000);
+
+                if (splitCharacter != "") {
+                    splitIndex = splitString.lastIndexOf(splitCharacter);
+                    if (splitIndex > 0) {
+                        splitString = output.substring(0, splitIndex + splitCharacter.length);
+                        output = output.substring(splitIndex + splitCharacter.length);
+                    }
+                    else {
+                        output = output.substring(50000);
+                    }
+                }
+                else {
+                    output = output.substring(50000);
+                }
+                outputArray.push(splitString);
+            }
+            else {
+                outputArray.push(output.substring(0));
+                output = "";
+            }
+        }
+    }
+    else
+    {
+        outputArray[0] = output;
+    }
+    return outputArray;
+}
+
+function ColumnToLetter(col) {
+    let letter = "";
+    while (col > 0) {
+        letter = String.fromCharCode((col - 1) % 26 + 65) + letter;
+        col = Math.floor((col - 1) / 26);
+    }
+    return letter;
+}
+
 function SetDefinitionsDatabase(definitionTypesArray, groupDefinitionArray, definitionArray, systemDefinitionArray,
                                 styleArray, skillsArray, languageArray, loreArray, jobsArray, statusArray, namesArray, regionArray) {
+    
     let definitionDatabase = SheetsDatabase.CreateDefinitionTypes(definitionTypesArray);
     definitionDatabase.importSheets(groupDefinitionArray, function (arr) {
         let definition = new DefinitionData(arr);
@@ -438,6 +489,93 @@ var SheetsDatabase = SheetsDatabase || (function () {
         CreateDefinitionTypes: createDefinitionTypes
     }
 }());
+
+class SheetDatabaseObject {
+    constructor(ss) {
+        this.ss = ss;
+        this.filterSheet = this.ss.getSheetByName("Filter");
+        this.filterCells = this.filterSheet.getRange("A1");
+        this.techniques;
+        this.styles;
+        this.skills;
+        this.language;
+        this.lore;
+        this.job;
+        this.goods;
+        this.gear;
+        this.consumables;
+        this.status;
+    }
+
+    readDatabase(sheetName, startRow) {
+        let sheet = this.ss.getSheetByName(sheetName);
+        let lastColLetter = ColumnToLetter(sheet.getLastColumn());
+        return this.readFilteredThenClear(
+            `=FILTER(${sheetName}!A${startRow}:${lastColLetter}, NOT(${sheetName}!A${startRow}:A=""))`, lastColLetter);
+    }
+
+    readFilteredThenClear(filter, columnRange) {
+        this.filterCells.setFormula(filter);
+
+        // 2. Flush so the formula calculates before reading
+        SpreadsheetApp.flush();
+
+        // 3. Get the filtered values
+        const lastRow = this.filterSheet.getLastRow();
+        const filteredData = this.filterSheet
+            .getRange(`A1:${columnRange}${lastRow}`)
+            .getValues()
+            .filter(row => row.some(cell => cell !== ""));
+
+        // 4. Clear the temporary range (formula + results)
+        this.filterSheet.getRange(`A1:${columnRange}${lastRow}`).clearContent();
+
+        return filteredData;
+    }
+    
+    setTechniques() {
+        this.techniques = SheetsDatabase.CreateTechniques(this.readDatabase("Techniques", 2));
+    }
+    setStyles() {
+        if (this.techniques == undefined) {
+            return;
+        }
+        this.styles = this.getStyles();
+    }
+    getStyles() {
+        if (this.techniques == undefined) {
+            return;
+        }
+        return SheetsDatabase.CreateStyles(this.readDatabase("Styles", 2), this.techniques);
+    }
+    setSkills() {
+        this.skills = SheetsDatabase.CreateSkills(this.readDatabase("Skills", 2));
+    }
+    setLanguage() {
+        this.language = SheetsDatabase.CreateLanguages(this.readDatabase("Languages", 2));
+    }
+    setLore() {
+        this.lore = SheetsDatabase.CreateLores(this.readDatabase("Lores", 2));
+    }
+    setJobs() {
+        this.job = SheetsDatabase.CreateJobs(this.readDatabase("Jobs", 10));
+    }
+    setGear() {
+        this.gear = this.getGear();
+    }
+    getGear() {
+        return SheetsDatabase.CreateGear(this.readDatabase("Gear", 2));
+    }
+    setGoods() {
+        this.goods = SheetsDatabase.CreateGoods(this.readDatabase("Goods", 2));
+    }
+    setConsumables() {
+        this.consumables = SheetsDatabase.CreateConsumables(this.readDatabase("Consumables", 2));
+    }
+    setStatus() {
+        this.status = SheetsDatabase.CreateStatus(this.readDatabase("Status", 2));
+    }
+}
 
 var WuxPrintTechnique = WuxPrintTechnique || (function () {
     const setTechniqueDisplayHtml = function (techDisplayData, displayOptions) {
@@ -2436,6 +2574,8 @@ function AssessAll() {
     if (SetStyleEffects(sheet)) {
         return;
     }
+
+    SetDatabase(ss, sheet);
 }
 
 function AssessAllFromPosition() {
@@ -2447,6 +2587,8 @@ function AssessAllFromPosition() {
     if (SetStyleEffectsFromPosition(sheet)) {
         return;
     }
+
+    SetDatabaseFromPosition(ss, sheet);
 }
 
 function TryAssessAllTechniques(sheet) {
@@ -3293,7 +3435,7 @@ class TechniqueAssessment {
 
         this.addPointsRubric(value, message);
         this.addTargetedPointsRubric(effect, value);
-        this.addImpactTrait(`Ter_${effect.effect}`);
+        this.addImpactTrait(`${effect.effect}`);
     }
 
     getStructureAssessmentData(effect, attributeHandler) {
@@ -3466,6 +3608,7 @@ class TechniqueAssessment {
     getBreakFocusAssessment() {
         let message = `(Break Focus)`;
         this.addPointsRubric(28, message);
+        this.addImpactTrait(`Trait_BreakFocus`);
     }
 
     getResistanceAssessment(effect, attributeHandler) {
@@ -3771,8 +3914,8 @@ function GetStyleTechniqueKeywords(techniqueFilters, ignoreKeywords) {
     let keywords = [];
     for (let i = 0; i < techniqueFilters.length; i++) {
         let technique = techniqueFilters[i];
-        keywords = AddTechniqueImpactTraitsToKeywordsArray(technique, keywords, ignoreKeywords);
         keywords = AddTechniqueEffectsToKeywordsArray(technique, keywords, ignoreKeywords);
+        keywords = AddTechniqueImpactTraitsToKeywordsArray(technique, keywords, ignoreKeywords);
     }
     
     return keywords;
@@ -3796,6 +3939,240 @@ function AddTechniqueEffectsToKeywordsArray(technique, keywords, ignoreKeywords)
 }
 
 
+
+function SetDatabase(ss, sheet) {
+    if (sheet.getSheetName() == "Database") {
+        let dbAssessment = new DatabaseAssessment(ss, sheet);
+        dbAssessment.printAllDatabases();
+        return true;
+    }
+    return  false;
+}
+
+function SetDatabaseFromPosition(ss, sheet) {
+    if (sheet.getSheetName() == "Database") {
+        const range = sheet.getActiveRange();
+        let col = range.getColumn();
+        let dbAssessment = new DatabaseAssessment(ss, sheet);
+        dbAssessment.printDataBasedOnColumn(col);
+        return true;
+    }
+    return  false;
+}
+
+class DatabaseAssessment {
+    constructor(ss, sheet) {
+        this.ss = ss;
+        this.sheetsDb = new SheetDatabaseObject(ss);
+        this.sheet = sheet;
+        this.definitionColumn = getNamedColumn(sheet, "Definitions");
+        this.techColumn = getNamedColumn(sheet, "Tech");
+        this.sheetColumn = getNamedColumn(sheet, "Sheet");
+    }
+    
+    printAllDatabases() {
+        this.setSheetDb(true, true, true);
+        this.printDefinitionDatabase();
+        this.printTechniqueDatabase();
+        this.printCharacterSheetBase();
+    }
+    
+    printDataBasedOnColumn(column) {
+        if (column == this.definitionColumn) {
+            this.setSheetDb(true, false, false);
+            this.printDefinitionDatabase();
+        }
+        else if (column == this.techColumn) {
+            this.setSheetDb(false, true, false);
+            this.printTechniqueDatabase();
+        }
+        else if (column == this.sheetColumn) {
+            this.setSheetDb(false, false, true);
+            this.printCharacterSheetBase();
+        }
+    }
+    
+    printDataToColumn(data, splitCharacter, row, column) {
+        let arr = SplitLargeEntry(data, splitCharacter);
+        let output = [];
+        for (let i = 0; i < 99; i++) {
+            if (i < arr.length) {
+                output.push([arr[i]]);
+            }
+            else {
+                output.push([""]);
+            }
+        }
+
+        let range = this.sheet.getRange(row, column, 99, 1);
+        range.setValues(output);
+    }
+    
+    setSheetDb(setDefinitions, setTech, setCharacterSheet) {
+
+        if (setDefinitions || setTech || setCharacterSheet) {
+            this.sheetsDb.setTechniques();
+        }
+        if (setDefinitions || setCharacterSheet) {
+            this.sheetsDb.setStyles();
+        }
+        if (setDefinitions || setCharacterSheet) {
+            this.sheetsDb.setSkills();
+        }
+        if (setDefinitions || setCharacterSheet) {
+            this.sheetsDb.setLanguage();
+        }
+        if (setDefinitions || setCharacterSheet) {
+            this.sheetsDb.setLore();
+        }
+        if (setDefinitions || setTech || setCharacterSheet) {
+            this.sheetsDb.setJobs();
+        }
+        if (setTech || setCharacterSheet) {
+            this.sheetsDb.setGoods();
+        }
+        if (setCharacterSheet) {
+            this.sheetsDb.setGear();
+        }
+        if (setTech || setCharacterSheet) {
+            this.sheetsDb.setConsumables();
+        }
+        if (setDefinitions) {
+            this.sheetsDb.setStatus();
+        }
+    }
+
+    printDefinitionDatabase() {
+        let definitionDatabase = SheetsDatabase.CreateDefinitionTypes(
+            this.sheetsDb.readDatabase("DefinitionTypes", 2));
+        this.importBasicDefinitions(definitionDatabase, "GroupDefinitions");
+        this.importBasicDefinitions(definitionDatabase, "Definitions");
+        this.importBasicDefinitions(definitionDatabase, "SystemDefinitions");
+        this.importDatabaseDefinitionsWithGroupCheck(definitionDatabase, this.sheetsDb.styles, WuxDef.Get("Style"));
+        this.importDatabaseDefinitionsWithGroupCheck(definitionDatabase, this.sheetsDb.skills, WuxDef.Get("Skill"));
+        this.importDatabaseDefinitions(definitionDatabase, this.sheetsDb.language, WuxDef.Get("Language"));
+        let loreCategoryDef = WuxDef.Get("LoreCategory");
+        let loreDef = WuxDef.Get("Lore");
+        this.sheetsDb.lore.iterate(function (value) {
+            let definition;
+            if (value.group == value.name) {
+                definition = value.createDefinition(loreCategoryDef);
+            } else {
+                definition = value.createDefinition(loreDef);
+            }
+            definitionDatabase.add(definition.name, definition);
+        });
+        this.importDatabaseDefinitions(definitionDatabase, this.sheetsDb.job, WuxDef.Get("Job"));
+        this.importDatabaseDefinitions(definitionDatabase, this.sheetsDb.job, WuxDef.Get("JobStyle"));
+        this.importDatabaseDefinitions(definitionDatabase, this.sheetsDb.status, WuxDef.Get("Status"));
+
+        let definitionClassData = JavascriptDatabase.Create(definitionDatabase, WuxDefinition.GetDefinition);
+        definitionClassData.addPublicFunction("getAttribute", WuxDefinition.GetAttribute);
+        definitionClassData.addPublicFunction("getVariable", WuxDefinition.GetVariable);
+        definitionClassData.addPublicFunction("getUntypedAttribute", WuxDefinition.GetUntypedAttribute);
+        definitionClassData.addPublicFunction("getUntypedVariable", WuxDefinition.GetUntypedVariable);
+        definitionClassData.addPublicFunction("getAbbreviation", WuxDefinition.GetAbbreviation);
+        definitionClassData.addPublicFunction("getVariables", WuxDefinition.GetVariables);
+        definitionClassData.addPublicFunction("getGroupVariables", WuxDefinition.GetGroupVariables);
+        definitionClassData.addPublicFunction("getTitle", WuxDefinition.GetTitle);
+        definitionClassData.addPublicFunction("getDescription", WuxDefinition.GetDescription);
+        definitionClassData.addPublicFunction("getName", WuxDefinition.GetName);
+        let variableMods = definitionDatabase.filter(new DatabaseFilterData("group", "VariableMod"));
+        for (let i = 0; i < variableMods.length; i++) {
+            definitionClassData.addPublicVariable(variableMods[i].variable, `"${variableMods[i].variable}"`);
+        }
+
+        let output = "";
+        output += definitionClassData.print("WuxDef");
+
+        let nameDatabase = NameDatabase.Create(
+            this.sheetsDb.readDatabase("Names", 2),
+            this.sheetsDb.readDatabase("RacesByRegion", 2));
+        output += "\n" + nameDatabase.print("WuxNames");
+
+        this.printDataToColumn(output, "]", 3, this.definitionColumn);
+    }
+
+    printTechniqueDatabase() {
+        let output = "";
+
+        let techniqueClassData = JavascriptDatabase.Create(this.sheetsDb.techniques, WuxDefinition.GetTechnique);
+        techniqueClassData.addPublicFunction("filterAndSortTechniquesByRequirement", WuxDefinition.FilterAndSortTechniquesByRequirement);
+        output += techniqueClassData.print("WuxTechs") + "\n";
+
+        let styleDb = this.sheetsDb.getStyles();
+        let variableNameKeys = {};
+        styleDb.iterate(function (value, key) {
+            let definition = value.createDefinition(WuxDef.Get("Style"));
+            variableNameKeys[definition.getVariable()] = key;
+        });
+        this.sheetsDb.job.iterate(function (job, key) {
+            let jobStyle = job.convertToStyle();
+            styleDb.add(jobStyle.name, jobStyle);
+            let definition = job.createDefinition(WuxDef.Get("Job"));
+            variableNameKeys[definition.getVariable()] = key;
+        });
+        let styleClassData = JavascriptDatabase.Create(styleDb, WuxDefinition.GetStyle);
+        styleClassData.addVariable("variableNameKeys", JSON.stringify(variableNameKeys));
+        styleClassData.addPublicFunction("getByVariableName", function (variableName) {
+            let key = variableNameKeys[variableName];
+            return get(key);
+        });
+        output += styleClassData.print("WuxStyles") + "\n";
+
+        let goodsClassData = JavascriptDatabase.Create(this.sheetsDb.goods, WuxDefinition.GetGoods);
+        output += goodsClassData.print("WuxGoods") + "\n";
+
+        let itemsDatabase = this.sheetsDb.getGear();
+        this.sheetsDb.consumables.iterate(function (item) {
+            let valueAssessment = new GearValueAssessment(item);
+            item.value = valueAssessment.assessment;
+            itemsDatabase.add(item.name, item);
+        });
+        let itemClassData = JavascriptDatabase.Create(itemsDatabase, WuxDefinition.GetItem);
+        output += itemClassData.print("WuxItems") + "\n";
+
+        this.printDataToColumn(output, "}", 3, this.techColumn);
+    }
+
+    printCharacterSheetBase() {
+        let output = BuildCharacterSheet.PrintBase(this.sheetsDb);
+        this.printDataToColumn(output, "\n", 3, this.sheetColumn);
+    }
+    
+    importBasicDefinitions(definitionDatabase, sheetName) {
+        definitionDatabase.importSheets(this.sheetsDb.readDatabase(sheetName, 2),
+            function (arr) {
+                let definition = new DefinitionData(arr);
+                let baseDefinition = definitionDatabase.get(definition.group);
+                if (baseDefinition != undefined && baseDefinition.group == "Type") {
+                    return definition.createDefinition(baseDefinition);
+                }
+                return definition;
+            }
+        );
+    }
+
+    importDatabaseDefinitions(definitionDatabase, database, baseDefinition) {
+        database.iterate(function (value) {
+            let definition = value.createDefinition(baseDefinition);
+            definitionDatabase.add(definition.name, definition);
+        });
+    }
+
+    importDatabaseDefinitionsWithGroupCheck(definitionDatabase, database, baseDefinition) {
+        database.iterate(function (value) {
+            if (value.group != "") {
+                let definition = value.createDefinition(baseDefinition);
+                definitionDatabase.add(definition.name, definition);
+            }
+        });
+    }
+}
+
+function GetSheetData() {
+    
+}
 
 
 

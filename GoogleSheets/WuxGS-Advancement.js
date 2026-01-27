@@ -26,7 +26,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
 
         buildCharacterSheetBaseHtml = function (sheetsDb) {
             let output = "";
-            output += DisplayOriginSheet.Print(sheetsDb);
+            output += DisplayOriginSheet.Print();
             output += DisplayTrainingSheet.Print(sheetsDb);
             output += DisplayAdvancementSheet.Print(sheetsDb);
             output += DisplayStylesSheet.Print(sheetsDb);
@@ -386,7 +386,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
     var
         print = function (sheetsDb) {
             let output = "";
-            output += printTraining(sheetsDb);
+            output += printTraining();
             output += printKnowledge(sheetsDb);
             return output;
         },

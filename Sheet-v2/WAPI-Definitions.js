@@ -2144,25 +2144,14 @@ var WuxDef = WuxDef || (function () {
                 "fieldName": "academics",
                 "group": "LoreCategory",
                 "description": "",
-                "variable": "lrc-academics{0}",
+                "variable": "lrc-Academics{0}",
                 "title": "Academics",
-                "subGroup": "Academics",
-                "descriptions": ["This represents general education for academic study for the purposes of functioning in modern society."],
+                "subGroup": "",
+                "descriptions": ["", "This represents general education for academic study for the purposes of functioning in modern society."],
                 "abbreviation": "",
                 "baseFormula": "",
                 "modifiers": "",
-                "formula": {
-                    "workers": [{
-                        "variableName": ["gen-recall"],
-                        "definitionName": ["Recall"],
-                        "value": 0, "multiplier": 1, "max": 0
-                    },
-                        {
-                            "variableName": ["lrc-academics_rank"],
-                            "definitionName": [],
-                            "value": 0, "multiplier": 1, "max": 0
-                        }]
-                },
+                "formula": {"workers": []},
                 "linkedGroups": [],
                 "isResource": ""
             },
@@ -2171,25 +2160,14 @@ var WuxDef = WuxDef || (function () {
                 "fieldName": "profession",
                 "group": "LoreCategory",
                 "description": "",
-                "variable": "lrc-profession{0}",
+                "variable": "lrc-Profession{0}",
                 "title": "Profession",
-                "subGroup": "Profession",
-                "descriptions": ["Profession is the general knowledge of any kind of job, what they do, and how it is performed."],
+                "subGroup": "",
+                "descriptions": ["", "Profession is the general knowledge of any kind of job, what they do, and how it is performed."],
                 "abbreviation": "",
                 "baseFormula": "",
                 "modifiers": "",
-                "formula": {
-                    "workers": [{
-                        "variableName": ["gen-recall"],
-                        "definitionName": ["Recall"],
-                        "value": 0, "multiplier": 1, "max": 0
-                    },
-                        {
-                            "variableName": ["lrc-profession_rank"],
-                            "definitionName": [],
-                            "value": 0, "multiplier": 1, "max": 0
-                        }]
-                },
+                "formula": {"workers": []},
                 "linkedGroups": [],
                 "isResource": ""
             },
@@ -2198,25 +2176,14 @@ var WuxDef = WuxDef || (function () {
                 "fieldName": "craftmanship",
                 "group": "LoreCategory",
                 "description": "",
-                "variable": "lrc-craftmanship{0}",
+                "variable": "lrc-Craftmanship{0}",
                 "title": "Craftmanship",
-                "subGroup": "Craftmanship",
-                "descriptions": ["The knowledge of creating items through manipulation of substances and materials. A knowledge check here will help one identify techniques used to create an object but not necessarily how to recreate it."],
+                "subGroup": "",
+                "descriptions": ["", "The knowledge of creating items through manipulation of substances and materials. A knowledge check here will help one identify techniques used to create an object but not necessarily how to recreate it."],
                 "abbreviation": "",
                 "baseFormula": "",
                 "modifiers": "",
-                "formula": {
-                    "workers": [{
-                        "variableName": ["gen-recall"],
-                        "definitionName": ["Recall"],
-                        "value": 0, "multiplier": 1, "max": 0
-                    },
-                        {
-                            "variableName": ["lrc-craftmanship_rank"],
-                            "definitionName": [],
-                            "value": 0, "multiplier": 1, "max": 0
-                        }]
-                },
+                "formula": {"workers": []},
                 "linkedGroups": [],
                 "isResource": ""
             },
@@ -2225,25 +2192,14 @@ var WuxDef = WuxDef || (function () {
                 "fieldName": "geography",
                 "group": "LoreCategory",
                 "description": "",
-                "variable": "lrc-geography{0}",
+                "variable": "lrc-Geography{0}",
                 "title": "Geography",
-                "subGroup": "Geography",
-                "descriptions": ["Geography represents general knowledge of terrains and locations within an area."],
+                "subGroup": "",
+                "descriptions": ["", "Geography represents general knowledge of terrains and locations within an area."],
                 "abbreviation": "",
                 "baseFormula": "",
                 "modifiers": "",
-                "formula": {
-                    "workers": [{
-                        "variableName": ["gen-recall"],
-                        "definitionName": ["Recall"],
-                        "value": 0, "multiplier": 1, "max": 0
-                    },
-                        {
-                            "variableName": ["lrc-geography_rank"],
-                            "definitionName": [],
-                            "value": 0, "multiplier": 1, "max": 0
-                        }]
-                },
+                "formula": {"workers": []},
                 "linkedGroups": [],
                 "isResource": ""
             },
@@ -2252,25 +2208,14 @@ var WuxDef = WuxDef || (function () {
                 "fieldName": "history",
                 "group": "LoreCategory",
                 "description": "",
-                "variable": "lrc-history{0}",
+                "variable": "lrc-History{0}",
                 "title": "History",
-                "subGroup": "History",
-                "descriptions": ["History knowledges represent known history of civilizations and any legends that may exist."],
+                "subGroup": "",
+                "descriptions": ["", "History knowledges represent known history of civilizations and any legends that may exist."],
                 "abbreviation": "",
                 "baseFormula": "",
                 "modifiers": "",
-                "formula": {
-                    "workers": [{
-                        "variableName": ["gen-recall"],
-                        "definitionName": ["Recall"],
-                        "value": 0, "multiplier": 1, "max": 0
-                    },
-                        {
-                            "variableName": ["lrc-history_rank"],
-                            "definitionName": [],
-                            "value": 0, "multiplier": 1, "max": 0
-                        }]
-                },
+                "formula": {"workers": []},
                 "linkedGroups": [],
                 "isResource": ""
             },
@@ -2279,25 +2224,14 @@ var WuxDef = WuxDef || (function () {
                 "fieldName": "culture",
                 "group": "LoreCategory",
                 "description": "",
-                "variable": "lrc-culture{0}",
+                "variable": "lrc-Culture{0}",
                 "title": "Culture",
-                "subGroup": "Culture",
-                "descriptions": ["Culture knowledge represents information on societal customs, art, and entertainment options."],
+                "subGroup": "",
+                "descriptions": ["", "Culture knowledge represents information on societal customs, art, and entertainment options."],
                 "abbreviation": "",
                 "baseFormula": "",
                 "modifiers": "",
-                "formula": {
-                    "workers": [{
-                        "variableName": ["gen-recall"],
-                        "definitionName": ["Recall"],
-                        "value": 0, "multiplier": 1, "max": 0
-                    },
-                        {
-                            "variableName": ["lrc-culture_rank"],
-                            "definitionName": [],
-                            "value": 0, "multiplier": 1, "max": 0
-                        }]
-                },
+                "formula": {"workers": []},
                 "linkedGroups": [],
                 "isResource": ""
             },
@@ -2306,25 +2240,14 @@ var WuxDef = WuxDef || (function () {
                 "fieldName": "religion",
                 "group": "LoreCategory",
                 "description": "",
-                "variable": "lrc-religion{0}",
+                "variable": "lrc-Religion{0}",
                 "title": "Religion",
-                "subGroup": "Religion",
-                "descriptions": ["Religion knowledge represent known tenets, famous people and creatures of the religion, and information about legends, beliefs, and organizations."],
+                "subGroup": "",
+                "descriptions": ["", "Religion knowledge represent known tenets, famous people and creatures of the religion, and information about legends, beliefs, and organizations."],
                 "abbreviation": "",
                 "baseFormula": "",
                 "modifiers": "",
-                "formula": {
-                    "workers": [{
-                        "variableName": ["gen-recall"],
-                        "definitionName": ["Recall"],
-                        "value": 0, "multiplier": 1, "max": 0
-                    },
-                        {
-                            "variableName": ["lrc-religion_rank"],
-                            "definitionName": [],
-                            "value": 0, "multiplier": 1, "max": 0
-                        }]
-                },
+                "formula": {"workers": []},
                 "linkedGroups": [],
                 "isResource": ""
             },
@@ -4016,8 +3939,7 @@ var WuxDef = WuxDef || (function () {
                 "variable": "stylesubgroup-battlesmithing{0}",
                 "title": "Battlesmithing",
                 "subGroup": "Materialization Magic",
-                "descriptions": [""]
-                ,
+                "descriptions": [""],
                 "abbreviation": "",
                 "baseFormula": "",
                 "modifiers": "",
@@ -4070,7 +3992,8 @@ var WuxDef = WuxDef || (function () {
                 "baseFormula": "",
                 "modifiers": "",
                 "formula": {"workers": []},
-                "linkedGroups": [],
+                "linkedGroups": []
+                ,
                 "isResource": ""
             },
             "StyleSubGroup_Movement": {
@@ -6206,8 +6129,7 @@ var WuxDef = WuxDef || (function () {
                 "formula": {
                     "workers": [{
                         "variableName": [],
-                        "definitionName": []
-                        ,
+                        "definitionName": [],
                         "value": 15, "multiplier": 1, "max": 0
                     },
                         {
@@ -6269,7 +6191,8 @@ var WuxDef = WuxDef || (function () {
                         },
                         {
                             "variableName": ["atr-cnv"],
-                            "definitionName": ["Attr_CNV"],
+                            "definitionName": ["Attr_CNV"]
+                            ,
                             "value": 0, "multiplier": 1, "max": 0
                         },
                         {
@@ -7880,9 +7803,7 @@ var WuxDef = WuxDef || (function () {
                 "abbreviation": "",
                 "baseFormula": "",
                 "modifiers": "",
-                "formula": {
-                    "workers": []
-                },
+                "formula": {"workers": []},
                 "linkedGroups": [],
                 "isResource": ""
             },
@@ -7915,7 +7836,8 @@ var WuxDef = WuxDef || (function () {
                 "baseFormula": "",
                 "modifiers": "",
                 "formula": {"workers": []},
-                "linkedGroups": [],
+                "linkedGroups": []
+                ,
                 "isResource": ""
             },
             "Trait_Optional": {
@@ -9675,8 +9597,7 @@ var WuxDef = WuxDef || (function () {
                 "baseFormula": "",
                 "modifiers": "",
                 "formula": {"workers": []},
-                "linkedGroups": []
-                ,
+                "linkedGroups": [],
                 "isResource": ""
             },
             "Page_AddAnimalGood": {
@@ -9735,7 +9656,8 @@ var WuxDef = WuxDef || (function () {
                 "variable": "pag-addvegetable{0}",
                 "title": "Add Vegetable",
                 "subGroup": "",
-                "descriptions": [""],
+                "descriptions": [""]
+                ,
                 "abbreviation": "",
                 "baseFormula": "",
                 "modifiers": "",
@@ -12003,9 +11925,7 @@ var WuxDef = WuxDef || (function () {
                 "abbreviation": "",
                 "baseFormula": "",
                 "modifiers": "",
-                "formula": {
-                    "workers": []
-                },
+                "formula": {"workers": []},
                 "linkedGroups": [],
                 "isResource": ""
             },
@@ -12070,7 +11990,8 @@ var WuxDef = WuxDef || (function () {
                 "baseFormula": "",
                 "modifiers": "",
                 "formula": {"workers": []},
-                "linkedGroups": [],
+                "linkedGroups": []
+                ,
                 "isResource": ""
             },
             "ItemDescription": {
@@ -13911,8 +13832,7 @@ var WuxDef = WuxDef || (function () {
                 "variable": "note-pagecharlanguage{0}",
                 "title": "Language",
                 "subGroup": "",
-                "descriptions": [""]
-                ,
+                "descriptions": [""],
                 "abbreviation": "",
                 "baseFormula": "",
                 "modifiers": "",
@@ -13965,7 +13885,8 @@ var WuxDef = WuxDef || (function () {
                 "baseFormula": "",
                 "modifiers": "",
                 "formula": {"workers": []},
-                "linkedGroups": [],
+                "linkedGroups": []
+                ,
                 "isResource": ""
             },
             "Style_Basic Action": {
@@ -15957,8 +15878,7 @@ var WuxDef = WuxDef || (function () {
                 "baseFormula": "",
                 "modifiers": "",
                 "formula": {"workers": []},
-                "linkedGroups": []
-                ,
+                "linkedGroups": [],
                 "isResource": "",
                 "mainGroup": "Advanced",
                 "baseStyle": "Structural Magic",
@@ -15996,7 +15916,8 @@ var WuxDef = WuxDef || (function () {
                 "baseFormula": "",
                 "modifiers": "",
                 "formula": {"workers": []},
-                "linkedGroups": [],
+                "linkedGroups": []
+                ,
                 "isResource": "",
                 "mainGroup": "Advanced",
                 "baseStyle": "Structural Magic",
@@ -17853,8 +17774,7 @@ var WuxDef = WuxDef || (function () {
                 "baseFormula": "",
                 "modifiers": "",
                 "formula": {"workers": []},
-                "linkedGroups": []
-                ,
+                "linkedGroups": [],
                 "isResource": "",
                 "location": "South West Ceres"
             },
@@ -17888,7 +17808,8 @@ var WuxDef = WuxDef || (function () {
                 "baseFormula": "",
                 "modifiers": "",
                 "formula": {"workers": []},
-                "linkedGroups": [],
+                "linkedGroups": []
+                ,
                 "isResource": "",
                 "location": "North West Ceres"
             },
@@ -19932,8 +19853,7 @@ var WuxDef = WuxDef || (function () {
                 "variable": "job-culinarian{0}",
                 "title": "Culinarian",
                 "subGroup": "Waymaker",
-                "descriptions": ["A chef that grants benefits to those that consume their meals."]
-                ,
+                "descriptions": ["A chef that grants benefits to those that consume their meals."],
                 "abbreviation": "",
                 "baseFormula": "",
                 "modifiers": "",
@@ -19971,7 +19891,8 @@ var WuxDef = WuxDef || (function () {
                 "variable": "job-spellwright{0}",
                 "title": "Spellwright",
                 "subGroup": "Waymaker",
-                "descriptions": ["A conjuration mage that shapes material into new forms, allowing them to maintain magic that creates objects and changes the terrain."],
+                "descriptions": ["A conjuration mage that shapes material into new forms, allowing them to maintain magic that creates objects and changes the terrain."]
+                ,
                 "abbreviation": "",
                 "baseFormula": "",
                 "modifiers": "",
@@ -21683,9 +21604,8 @@ var WuxDef = WuxDef || (function () {
                 "JobTier": ["JobTier0", "JobTier1", "JobTier2", "JobTier3", "JobTier4", "JobTier5", "JobTier6"],
                 "LoreTier": ["LoreTier0", "LoreTier1", "LoreTier2", "LoreTier3"],
                 "GeneralLoreTier": ["GeneralLoreTier0", "GeneralLoreTier1"],
-                "LoreCategory": ["LoreCat_Academics", "LoreCat_Profession", "LoreCat_Craftmanship", "LoreCat_Geography", "LoreCat_History", "LoreCat_Culture", "LoreCat_Religion", "LoreCat_Academics", "LoreCat_Profession", "LoreCat_Craftmanship", "LoreCat_Geography", "LoreCat_History", "LoreCat_Culture", "LoreCat_Religion"],
-                "RegionType": ["Walthair", "EastSea", "Khem", "Aridsha", "Ceres", "Colswei", "Dowfeng", "Wayling", "Novus"]
-                ,
+                "LoreCategory": ["LoreCat_Academics", "LoreCat_Profession", "LoreCat_Craftmanship", "LoreCat_Geography", "LoreCat_History", "LoreCat_Culture", "LoreCat_Religion"],
+                "RegionType": ["Walthair", "EastSea", "Khem", "Aridsha", "Ceres", "Colswei", "Dowfeng", "Wayling", "Novus"],
                 "RaceType": ["Coastborne", "Suntouched", "Sandfolk", "Plains-kin", "Frostcloaked", "Earthblood", "Other"],
                 "GenderType": ["Male", "Female", "NonBinary"],
                 "NotebookType": ["Notebook", "Category"],
@@ -21698,7 +21618,8 @@ var WuxDef = WuxDef || (function () {
                 "SeverityRank": ["Svr_LowSeverity", "Svr_ModerateSeverity", "Svr_HighSeverity"],
                 "DamageType": ["Dmg_Burn", "Dmg_Cold", "Dmg_Energy", "Dmg_Fire", "Dmg_Force", "Dmg_Piercing", "Dmg_Shock", "Dmg_Tension", "Dmg_Weapon"],
                 "TerrainFxType": ["Ter_Darkness", "Ter_Fog", "Ter_Harsh", "Ter_Heavy", "Ter_Liftstream", "Ter_Light", "Ter_Slippery", "Ter_Sodden"],
-                "PerkGroup": ["PerkGroup_Origin Perks", "PerkGroup_Stat Boost Perks", "PerkGroup_Slot Perks"],
+                "PerkGroup": ["PerkGroup_Origin Perks", "PerkGroup_Stat Boost Perks", "PerkGroup_Slot Perks"]
+                ,
                 "JobGroup": ["JobGroup_Vanguard", "JobGroup_Operator", "JobGroup_Athlete", "JobGroup_Strategist", "JobGroup_Waymaker", "JobGroup_Advocate", "JobGroup_Esper"],
                 "StyleGroup": ["StyleGroup_Melee Weaponry", "StyleGroup_Ranged Weaponry", "StyleGroup_Martial Arts", "StyleGroup_Arcanification Magic", "StyleGroup_Fluctuation Magic", "StyleGroup_Materialization Magic", "StyleGroup_Transformation Magic", "StyleGroup_Athletics", "StyleGroup_Speechcraft"],
                 "StyleSubGroup": ["StyleSubGroup_Mighty Weapons", "StyleSubGroup_Skirmish Weapons", "StyleSubGroup_Shoot Weapons", "StyleSubGroup_Throw Weapons", "StyleSubGroup_Martial Arts", "StyleSubGroup_Kinetics", "StyleSubGroup_Evocation", "StyleSubGroup_Channelling", "StyleSubGroup_Fluctuation", "StyleSubGroup_Battlesmithing", "StyleSubGroup_Conjury", "StyleSubGroup_Transmutation", "StyleSubGroup_Physiomancy", "StyleSubGroup_Movement", "StyleSubGroup_Perseverance", "StyleSubGroup_Favor Building", "StyleSubGroup_Disruption", "StyleSubGroup_Emotional Support"],
@@ -21800,13 +21721,13 @@ var WuxDef = WuxDef || (function () {
                 "Colswei": ["Lang_Lib"],
                 "Ceres": ["Lang_Cert", "Lang_Ciel", "Lang_Citeq", "Lang_Manstan", "Lang_Salkan", "Lang_Sansic", "Lang_Silq"],
                 "Special": ["Lang_Emotion", "Lang_Empathy", "Lang_Wolfwarg", "Lang_Jovean", "Lang_Mytikan"],
-                "Academics": ["LoreCat_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology"],
-                "Profession": ["LoreCat_Profession", "Lore_Arboriculture", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining"],
-                "Craftmanship": ["LoreCat_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving"],
-                "Geography": ["LoreCat_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane"],
-                "History": ["LoreCat_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History"],
-                "Culture": ["LoreCat_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater"],
-                "Religion": ["LoreCat_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"],
+                "Academics": ["Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology"],
+                "Profession": ["Lore_Arboriculture", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining"],
+                "Craftmanship": ["Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving"],
+                "Geography": ["Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane"],
+                "History": ["Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History"],
+                "Culture": ["Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater"],
+                "Religion": ["Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"],
                 "Vanguard": ["Job_Fighter", "Job_Sentinel", "Job_Warden", "Job_Bulwark", "JStyle_Fighter", "JStyle_Sentinel", "JStyle_Warden", "JStyle_Bulwark"],
                 "Operator": ["Job_Hunter", "Job_Sniper", "Job_Trooper", "Job_Warmage", "Job_Alchemist", "JStyle_Hunter", "JStyle_Sniper", "JStyle_Trooper", "JStyle_Warmage", "JStyle_Alchemist"],
                 "Athlete": ["Job_Brawler", "Job_Exemplar", "Job_Kineticist", "Job_Geomancer", "Job_Rogue", "Job_Labourer", "JStyle_Brawler", "JStyle_Exemplar", "JStyle_Kineticist", "JStyle_Geomancer", "JStyle_Rogue", "JStyle_Labourer"],
@@ -21841,7 +21762,7 @@ var WuxDef = WuxDef || (function () {
                 "Attr_PRC": ["Accuracy", "Skill_Alchemy", "Skill_Kinesis", "Skill_Medicine", "Skill_Pilot", "Skill_Shoot", "Skill_Skirmish", "Skill_Sneak", "Skill_Throw", "Skill_Tinker"],
                 "Attr_RSN": ["Recall", "Skill_Alchemy", "Skill_Analyze", "Skill_Build", "Skill_Glyphwork", "Skill_Heal", "Skill_Medicine", "Skill_Misdirect", "Skill_Rationalize", "Skill_Search", "Skill_Shape"],
                 "": ["Skill_Analyze", "Skill_Empathy", "Skill_Inspire", "Skill_Shoot"],
-                "Recall": ["LoreCat_Academics", "Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "LoreCat_Profession", "Lore_Arboriculture", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "LoreCat_Craftmanship", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "LoreCat_Geography", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "LoreCat_History", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "LoreCat_Culture", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "LoreCat_Religion", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"]
+                "Recall": ["Lore_Health", "Lore_Mana", "Lore_Mathematics", "Lore_Nature", "Lore_School", "Lore_Spirit", "Lore_Warfare", "Lore_Zoology", "Lore_Arboriculture", "Lore_Farming", "Lore_Fishing", "Lore_Hunting", "Lore_Legal", "Lore_Mercantile", "Lore_Mining", "Lore_Alchemy", "Lore_Architecture", "Lore_Brewing", "Lore_Cooking", "Lore_Engineering", "Lore_Glassblowing", "Lore_Leatherworking", "Lore_Sculpting", "Lore_Smithing", "Lore_Weaving", "Lore_Aridsha", "Lore_Ceres", "Lore_Colswei", "Lore_Khem", "Lore_Novus", "Lore_Walthair", "Lore_Wayling", "Lore_Ethereal Plane", "Lore_Aridsha History", "Lore_Ceres History", "Lore_Colswei History", "Lore_Khem History", "Lore_Novus History", "Lore_Walthair History", "Lore_Wayling History", "Lore_Art", "Lore_Etiquette", "Lore_Fashion", "Lore_Games", "Lore_Music", "Lore_Scribing", "Lore_Theater", "Lore_Church of Kongkwei", "Lore_Guidance", "Lore_Life's Circle", "Lore_Ocean Court", "Lore_Sylvan", "Lore_Zushaon"]
             },
             "techMods": {
                 "_tech": ["Influence", "Def_Brace", "Def_Warding", "Def_Reflex", "Def_Evasion", "Def_Resolve", "Def_Ego", "Def_Insight", "JobSlots", "AdvancedSlots", "StyleSlots", "WeaponSlots", "EquipmentSlots", "HP", "WILL", "Surge", "EN", "StartEN", "RoundEN", "Power", "Accuracy", "Artistry", "Charisma", "Recall", "Initiative", "CarryingCapacity", "Cmb_Vitality", "Cmb_HV", "Cmb_Armor", "Cmb_Mv", "Cmb_MvDash"],
@@ -21910,8 +21831,7 @@ var WuxDef = WuxDef || (function () {
 
             let output = [];
             let name = "";
-            let keywords = []
-            ;
+            let keywords = [];
             let definitionOutput;
 
             for (let i = 0; i < keyArray.length; i++) {
@@ -21949,7 +21869,8 @@ var WuxDef = WuxDef || (function () {
                     if (filteredGroup == undefined || filteredGroup.length == 0) {
                         return [];
                     }
-                    nextFilter = getSortedGroup(filterData[i].property, filterData[i].value);
+                    nextFilter = getSortedGroup(filterData[i].property, filterData[i]
+                        .value);
                     filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
                 }
             } else {
