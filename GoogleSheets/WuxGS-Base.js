@@ -1204,10 +1204,13 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
             var
                 print = function () {
                     let contents = "";
+                    let jobSlotCount = parseInt(WuxDef.Get("Forme_JobSlotCount").formula.getValue());
+                    let advancedSlotCount = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
+                    let styleSlotCount = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
                     contents += buildActionSection([
-                            {repeater: "RepeatingJobTech", slot: "Forme_JobSlot", max: 3, slotMod: 0},
-                            {repeater: "RepeatingAdvTech", slot: "Forme_AdvancedSlot", max: 3, slotMod: 0},
-                            {repeater: "RepeatingAdvTech", slot: "Forme_StyleSlot", max: 9, slotMod: 3}],
+                            {repeater: "RepeatingJobTech", slot: "Forme_JobSlot", max: jobSlotCount, slotMod: 0},
+                            {repeater: "RepeatingAdvTech", slot: "Forme_AdvancedSlot", max: advancedSlotCount, slotMod: 0},
+                            {repeater: "RepeatingAdvTech", slot: "Forme_StyleSlot", max: (styleSlotCount + advancedSlotCount), slotMod: advancedSlotCount}],
                         "Action_Techniques");
                     return WuxSheetMain.Build(contents);
                 },

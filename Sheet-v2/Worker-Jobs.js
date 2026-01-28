@@ -104,7 +104,7 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             let jobWorker = new WuxBasicWorkerBuild("Job");
             attributeHandler.addMod(jobWorker.attrBuildDraft);
 
-            let maxJobSlots = 3;
+            let maxJobSlots = parseInt(WuxDef.Get("Forme_JobSlotCount").formula.getValue());
             let jobSlotDef = WuxDef.Get("Forme_JobSlot");
             for (let i = 1; i <= maxJobSlots; i++) {
                 attributeHandler.addMod(jobSlotDef.getVariable(i));

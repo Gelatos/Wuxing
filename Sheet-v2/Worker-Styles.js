@@ -232,7 +232,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
     const equipJobStyle = function (eventinfo) {
         let countFieldName = "JobSlots";
         let slotName = "Forme_JobSlot";
-        let maxSlots = 3;
+        let maxSlots = parseInt(WuxDef.Get("Forme_JobSlotCount").formula.getValue());
         let actionFieldName = "RepeatingJobTech";
 
         let equipStyleWorker = new EquipStyleWorker();
@@ -269,7 +269,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
     const unequipJobStyle = function (eventinfo) {
         let countFieldName = "JobSlots";
         let slotName = "Forme_JobSlot";
-        let maxSlots = 3;
+        let maxSlots = parseInt(WuxDef.Get("Forme_JobSlotCount").formula.getValue());
         let actionFieldName = "RepeatingJobTech";
 
         let equipStyleWorker = new EquipStyleWorker();
@@ -299,8 +299,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         let advancedCountFieldName = "StyleSlots";
         let arteformSlotName = "Forme_AdvancedSlot";
         let advancedSlotName = "Forme_StyleSlot";
-        let arteformMaxSlots = 3;
-        let advancedMaxSlots = 6;
+        let arteformMaxSlots = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
+        let advancedMaxSlots = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
         let actionFieldName = "RepeatingAdvTech";
 
         let equipStyleWorker = new EquipStyleWorker();
@@ -363,8 +363,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         let advancedCountFieldName = "StyleSlots";
         let arteformSlotName = "Forme_AdvancedSlot";
         let advancedSlotName = "Forme_StyleSlot";
-        let arteformMaxSlots = 3;
-        let advancedMaxSlots = 6;
+        let arteformMaxSlots = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
+        let advancedMaxSlots = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
         let actionFieldName = "RepeatingAdvTech";
 
         let equipStyleWorker = new EquipStyleWorker();
@@ -480,8 +480,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             let jobStyles = WuxDef.Get("Forme_JobSlot");
             let advancedStyles = WuxDef.Get("Forme_AdvancedSlot");
             let normalStyles = WuxDef.Get("Forme_StyleSlot");
-            let maxAdvancedSlots = 3;
-            let maxNormalSlots = 6;
+            let maxAdvancedSlots = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
+            let maxNormalSlots = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
             for (let i = 1; i <= maxNormalSlots; i++) {
                 if (i <= maxAdvancedSlots) {
                     jobSlots.push({name: attrHandler.parseString(jobStyles.getVariable(i)), index: i});
@@ -576,8 +576,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             let styleWorker = new WuxStyleWorkerBuild();
             attributeHandler.addMod(styleWorker.attrBuildDraft);
 
-            let maxAdvancedStyles = 3;
-            let maxNormalStyles = 6;
+            let maxAdvancedStyles = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
+            let maxNormalStyles = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
             let advancedStylesDef = WuxDef.Get("Forme_AdvancedSlot");
             let normalStylesDef = WuxDef.Get("Forme_StyleSlot");
             for (let i = 1; i <= maxNormalStyles; i++) {

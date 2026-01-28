@@ -3167,7 +3167,6 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 
 .wuxStyleTooltipContainer .wuxTooltip .wuxTooltipText {
     display: block;
-    vertical-align: text-top;
 }
 
 .wuxStyleTooltipContainer .wuxTooltip .wuxTooltipContent {

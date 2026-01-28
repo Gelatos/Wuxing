@@ -372,8 +372,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         let repeaterSlotIds = [];
         let jobStylesVar = "RepeatingJobTech";
         let normalStylesVar = "RepeatingAdvTech";
-        let maxAdvancedSlots = 3;
-        let maxNormalSlots = 6;
+
+        let maxAdvancedSlots = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
+        let maxNormalSlots = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
         for (let i = 1; i <= maxNormalSlots; i++) {
             if (i <= maxAdvancedSlots) {
                 repeaterSlotIds.push({name: jobStylesVar, index: i, repeaterData: {}});
