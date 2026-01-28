@@ -462,8 +462,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                         
 
                         createNotebookDisplay = function () {
-                            let attrHandler = new AttributeHandler();
-                            let notebookCount = parseInt(WuxDef.Get("Note_NotebookCount").formula.getValue(attrHandler));
+                            let notebookCount = parseInt(WuxDef.Get("Note_NotebookCount").formula.getValue());
                             let contents = WuxSheetMain.MultiRowGroup([notebookSelect(notebookCount), notebookPages(notebookCount)], 
                                 WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);

@@ -557,8 +557,7 @@ var PopupBuilder = PopupBuilder || (function () {
             let groupVariableNames = [];
             groupVariableNames.push(WuxDef.GetVariable("Note_OpenNotebookActions"));
             
-            let attrHandler = new AttributeHandler();
-            let notebookCount = parseInt(WuxDef.Get("Note_NotebookCount").formula.getValue(attrHandler));
+            let notebookCount = parseInt(WuxDef.Get("Note_NotebookCount").formula.getValue());
             for (let i = 0; i < notebookCount; i++) {
                 groupVariableNames = groupVariableNames.concat([WuxDef.GetVariable("Note_NotebookActions", i)]);
             }
@@ -654,8 +653,7 @@ var ChatBuilder = ChatBuilder || (function () {
             output += listenerUpdateRepeatingChatEmoteUrlUpdate();
             output += listenerUpdateRepeatingChatPostTarget();
             
-            let attrHandler = new AttributeHandler();
-            let notebookCount = parseInt(WuxDef.Get("Note_NotebookCount").formula.getValue(attrHandler));
+            let notebookCount = parseInt(WuxDef.Get("Note_NotebookCount").formula.getValue());
             output += listenerRepeatingNotebookOpen(notebookCount);
             output += listenerUpdateNotebookPageType(notebookCount);
             output += listenerUpdateNotebookPageTemplateData(notebookCount);

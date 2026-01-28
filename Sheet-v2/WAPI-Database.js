@@ -3073,14 +3073,26 @@ class FormulaData {
         this.workers.forEach((worker) => {
             let multiplier = parseFloat(worker.multiplier);
             if (isNaN(multiplier)) {
+                if (attributeHandler == undefined) {
+                    Debug.LogError(`[Formula.GetValue] No AttributeHandler defined.`);
+                    return;
+                }
                 multiplier = attributeHandler.parseInt(worker.multiplier);
             }
             if (worker.variableName.length == 1) {
+                if (attributeHandler == undefined) {
+                    Debug.LogError(`[Formula.GetValue] No AttributeHandler defined.`);
+                    return;
+                }
                 worker.value = attributeHandler.parseInt(worker.variableName[0]);
                 if (printName != undefined) {
                     printOutput = this.addPrintModifier(printOutput, `${worker.variableName[0]}(${worker.value})`, multiplier);
                 }
             } else if (worker.variableName.length >= 2) {
+                if (attributeHandler == undefined) {
+                    Debug.LogError(`[Formula.GetValue] No AttributeHandler defined.`);
+                    return;
+                }
                 worker.value = 0;
                 for (let j = 0; j < worker.variableName.length; j++) {
                     let tempValue = attributeHandler.parseInt(worker.variableName[j]);
