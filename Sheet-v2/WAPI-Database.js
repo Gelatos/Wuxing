@@ -4479,9 +4479,12 @@ class RepeatingSectionHandler {
         }
     }
 
-    removeAllIds() {
-        for (let i = 0; i < this.ids.length; i++) {
-            this.removeId(this.ids[i]);
+    removeAllIds(debugName) {
+        while (this.ids.length > 0) {
+            if (debugName != undefined) {
+                Debug.Log(`[${debugName}] Removed ${this.ids[0]}`);
+            }
+            this.removeId(this.ids[0]);
         }
     }
 }

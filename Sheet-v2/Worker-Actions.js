@@ -102,7 +102,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             // recalculate all techniques that have modifiers
             for (let i = 0; i < techniqueModifierDefs.length; i++) {
                 let definition = techniqueModifierDefs[i];
-                let value = definition.formula.getValue(attrHandler, definition.name);
+                let value = definition.formula.getValue(attrHandler);
                 if (definition.isResource) {
                     attrHandler.addUpdate(definition.getVariable(WuxDef._max), value);
                 } else {
@@ -143,7 +143,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         if (technique == undefined) {
             return;
         }
-        Debug.Log(`Adding boost formula mods for ${technique.name}`);
         technique.effects.iterate(function (techEffect) {
             if (techEffect.type == "Boost") {
                 attrHandler.addFormulaMods(techEffect);
@@ -165,7 +164,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         if (technique == undefined) {
             return;
         }
-        let debugOutput = `${technique.name}`;
+        // let debugOutput = `${technique.name}`;
         technique.effects.iterate(function (techEffect) {
             if (techEffect.type == "Boost") {
                 let boostDef = WuxDef.Get(techEffect.effect);
@@ -175,17 +174,17 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                     case "Set":
                         attrHandler.addUpdate(boostDef.getVariable(WuxDef._techset),
                             value - boostDef.formula.getValue(attrHandler));
-                        debugOutput += `\nSet ${boostDef.name} to ${value}`;
+                        // debugOutput += `\nSet ${boostDef.name} to ${value}`;
                         break;
                     default:
                         attrHandler.addUpdate(boostDef.getVariable(WuxDef._tech),
                             attrHandler.parseInt(boostDef.getVariable(WuxDef._tech)) + value);
-                        debugOutput += `\nIncrease ${boostDef.name} by ${value} to ${attrHandler.parseInt(boostDef.getVariable(WuxDef._tech)) + value}`;
+                        // debugOutput += `\nIncrease ${boostDef.name} by ${value} to ${attrHandler.parseInt(boostDef.getVariable(WuxDef._tech)) + value}`;
                         break;
                 }
             }
         });
-        Debug.Log(debugOutput);
+        // Debug.Log(debugOutput);
     }
 
     const iteratePassiveStyleTechniques = function (techBoosters, callback) {
@@ -392,7 +391,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         }
         let slotData = repeaterSlotData[index];
         let styleRepeater = new WorkerRepeatingSectionHandler(slotData.name, slotData.index);
-        Debug.Log(`Style Repeater IDs: ${styleRepeater.repeatingSection}`);
         styleRepeater.getIds(function (repeater) {
             repeaterSlotData[index].repeaterData = repeater;
             getStyleSlotRepeaterIDs(repeaterSlotData, index + 1, finishCallback);
@@ -446,7 +444,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
 
         getAllStyleSlotRepeaterIDs = function (finishCallback) {
             let repeaterSlotData = getAllStyleSlotRepeaters();
-            Debug.Log(`Getting Style Slot Repeater IDs for ${repeaterSlotData.length} slots`);
             getStyleSlotRepeaterIDs(repeaterSlotData, 0, finishCallback);
         },
 
@@ -492,7 +489,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                         }
                     }
                     else if (techRank != "0") {
-                        Debug.Log(`Adding technique ${technique.name} with rank ${techRank} to boosters`);
                         perkBoosters.push(technique.name);
                     }
                 }

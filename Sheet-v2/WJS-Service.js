@@ -57,8 +57,21 @@ class LoadingScreenHandler {
 }
 
 class WorkerAttributeHandler extends AttributeHandler {
+
+	constructor(props) {
+		super(props);
+		this.repeatingSections = {};
+	}
+	
+	addRepeatingSection(definitionId, variableId) {
+		this.repeatingSections[definitionId] = new WorkerRepeatingSectionHandler(definitionId, variableId);
+	}
+
 	async run() {
 		let attributeHandler = this;
+		for (const key in attributeHandler.repeatingSections) {
+			this.repeatingSections[key].ids = await getSectionIDsAsync(this.repeatingSections[key].repeatingSection);
+		}
 		attributeHandler.current = await getAttrsAsync(attributeHandler.mods);
 		
 		attributeHandler.getCallbacks.forEach((callback) => {
