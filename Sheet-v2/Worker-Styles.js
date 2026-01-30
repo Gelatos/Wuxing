@@ -503,7 +503,6 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                     let actionFieldName = "";
                     switch (style.group) {
                         case "Job":
-                            Debug.Log(`Checking through ${JSON.stringify(jobSlots)} for ${style.name}`);
                             actionFieldName = "RepeatingJobTech";
                             jobSlots.forEach(function (slot) {
                                 if(slot.name == style.name) {
@@ -587,15 +586,14 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 attributeHandler.addMod(normalStylesDef.getVariable(i));
             }
 
-            let advancedStyleValuesRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingStyles");
-            advancedStyleValuesRepeatingSection.getIds(function (advancedRepeater) {
-                advancedRepeater.removeAllIds();
-            });
+            let styleRepeaterId = "RepeatingStyles";
+            attributeHandler.addRepeatingSection(styleRepeaterId);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
+                attributeHandler.repeatingSections[styleRepeaterId].removeAllIds();
                 styleWorker.setBuildStatsDraft(attrHandler);
 
-                addStyles(attrHandler, styleWorker, advancedStyleValuesRepeatingSection);
+                addStyles(attrHandler, styleWorker, attributeHandler.repeatingSections[styleRepeaterId]);
 
                 styleWorker.cleanBuildStats();
                 styleWorker.setBuildStatVariables(attrHandler);

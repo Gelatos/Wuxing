@@ -111,16 +111,14 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             }
             attributeHandler.addMod(jobSlotDef.getVariable());
 
-            let repeaterName = "RepeatingJobStyles";
-            let jobStyleValuesRepeatingSection = new WorkerRepeatingSectionHandler(repeaterName);
-            jobStyleValuesRepeatingSection.getIds(function (jobStylesRepeater) {
-                jobStylesRepeater.removeAllIds();
-            });
+            let styleRepeaterId = "RepeatingJobStyles";
+            attributeHandler.addRepeatingSection(styleRepeaterId);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
+                attributeHandler.repeatingSections[styleRepeaterId].removeAllIds();
                 jobWorker.setBuildStatsDraft(attrHandler);
 
-                WuxWorkerStyles.AddStyles(attrHandler, jobWorker, jobStyleValuesRepeatingSection);
+                WuxWorkerStyles.AddStyles(attrHandler, jobWorker, attributeHandler.repeatingSections[styleRepeaterId]);
 
                 jobWorker.cleanBuildStats();
                 jobWorker.setBuildStatVariables(attrHandler);
