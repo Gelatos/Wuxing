@@ -63,6 +63,9 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
                 styleWorker.setBuildStatsDraft(attrHandler);
 
                 jobWorker.iterateBuildStats(function (styleVariableData) {
+                    if (styleVariableData.value == null || styleVariableData.value <= 0) {
+                        return;
+                    }
                     let style = WuxStyles.GetByVariableName(styleVariableData.name);
                     let skills = style.skills.split(";");
                     for (let i = 0; i < skills.length; i++) {
@@ -73,6 +76,9 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
                 });
 
                 styleWorker.iterateBuildStats(function (styleVariableData) {
+                    if (styleVariableData.value == null || styleVariableData.value <= 0) {
+                        return;
+                    }
                     let style = WuxStyles.GetByVariableName(styleVariableData.name);
                     let skills = style.skills.split(";");
                     for (let i = 0; i < skills.length; i++) {
