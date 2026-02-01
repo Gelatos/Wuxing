@@ -776,9 +776,9 @@ var DisplayFormeSheet = DisplayFormeSheet || (function () {
 
                 buildEquipSlot = function (definition, index, emptyName) {
                     return `${WuxSheetMain.Header2(`${definition.title} ${index}`)}
-                    ${WuxSheetMain.Input("hidden", definition.getAttribute(index + WuxDef._expand), "0")}
+                    ${WuxSheetMain.Input("hidden", definition.getAttribute(index + WuxDef._info), "0")}
                     ${WuxSheetMain.HiddenField(definition.getAttribute(index), `<div class="wuxDescription">
-                        ${WuxSheetMain.SubMenuButton(definition.getAttribute(index + WuxDef._expand),
+                        ${WuxSheetMain.SubMenuButton(definition.getAttribute(index + WuxDef._info),
                         addSubmenuContentsEquippedSlots(definition, index))}
                         ${WuxSheetMain.Span(definition.getAttribute(index))}
                     </div>`)}
@@ -1242,10 +1242,18 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     for (let i = 1; i <= repeaterData.max; i++) {
                         let repeatingFieldName = WuxDef.GetVariable(repeaterData.repeater, i + repeaterData.slotMod);
                         let slotFieldName = WuxDef.GetAttribute(repeaterData.slot, i);
-                        let header = WuxSheetMain.Button(slotFieldName + WuxDef._refresh, "1", "wuxStyleRefreshButton") +
-                            `<span name="${slotFieldName}"></span>`;
+                        let hiddenField = slotFieldName + WuxDef._expand;
+                        let headerButtons = `<span class="wuxStyleHeaderButtonContainer">
+                            ${WuxSheetMain.Button(slotFieldName + WuxDef._refresh, 
+                                "<span class='wuxStyleHeaderButtonIcon'>&#8635;</span> Update", "wuxStyleHeaderButton")}
+                            ${WuxSheetMain.HiddenSpanFieldToggle(hiddenField,
+                                WuxSheetMain.Button(hiddenField, "<span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show", "wuxStyleHeaderButton"),
+                                WuxSheetMain.Button(hiddenField, "<span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide", "wuxStyleHeaderButton")
+                            )}
+                        </span>`;
+                        let header = headerButtons + `<span name="${slotFieldName}"></span>`;
                         contents += WuxSheetMain.HiddenField(slotFieldName,
-                            repeatingTechniquesSection(header, repeatingFieldName, false)
+                            repeatingTechniquesSection(header, hiddenField, repeatingFieldName, false)
                         );
                     }
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
@@ -1257,12 +1265,21 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     }
                     let repeatingDef = WuxDef.Get(repeaterName);
 
-                    let header = repeatingDef.getTitle();
+                    let headerButtons = "";
                     if (refreshName != undefined) {
-                        header = WuxSheetMain.Button(WuxDef.GetAttribute(refreshName, WuxDef._refresh), "1", "wuxStyleRefreshButton") +
-                        `<span>${header}</span>`;
+                        headerButtons = WuxSheetMain.Button(WuxDef.GetAttribute(refreshName, WuxDef._refresh), 
+                            "<span class='wuxStyleHeaderButtonIcon'>&#8635;</span> Update", "wuxStyleHeaderButton");
                     }
-                    let contents = repeatingTechniquesSection(header, repeatingDef.getVariable(), alwaysShow);
+                    let hiddenField = WuxDef.GetAttribute(refreshName, WuxDef._expand);
+                    headerButtons = `<span class="wuxStyleHeaderButtonContainer">
+                        ${headerButtons}
+                        ${WuxSheetMain.HiddenSpanFieldToggle(hiddenField,
+                        WuxSheetMain.Button(hiddenField, "<span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show", "wuxStyleHeaderButton"),
+                        WuxSheetMain.Button(hiddenField, "<span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide", "wuxStyleHeaderButton")
+                    )}
+                    </span>`;
+                    let header = headerButtons + `<span>${repeatingDef.getTitle()}</span>`;
+                    let contents = repeatingTechniquesSection(header, hiddenField, repeatingDef.getVariable(), alwaysShow);
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
 
@@ -1281,12 +1298,13 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
 
-                repeatingTechniquesSection = function (header, repeaterFieldName, alwaysShow) {
+                repeatingTechniquesSection = function (header, hiddenField, repeaterFieldName, alwaysShow) {
                     return `${WuxSheetMain.Header(header)}
-                        <div>
-                        ${buildRepeater(repeaterFieldName, addRepeaterContentsTechniqueDisplay(false, alwaysShow))}
-                        ${WuxSheetMain.Row("&nbsp;")}
-                    </div>`;
+                        ${WuxSheetMain.HiddenFieldToggle(hiddenField, 
+                            `<div class="wuxDescription">Contents Hidden</div>`,
+                        `${buildRepeater(repeaterFieldName, addRepeaterContentsTechniqueDisplay(false, alwaysShow))}
+                        ${WuxSheetMain.Row("&nbsp;")}`
+                    )}`;
                 },
 
                 getActionTypeAttribute = function (attribute, suffix) {

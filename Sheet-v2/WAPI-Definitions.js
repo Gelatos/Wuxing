@@ -2057,7 +2057,7 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Trait_Cleanse-Will":{"name":"Trait_Cleanse-Will","fieldName":"cleanse-will","group":"Trait","description":"","variable":"trt-cleanse-will{0}","title":"Cleanse[Will]","subGroup":"Impact Trait","descriptions":["This technique removes all emotions of your chouce on the target."],
+            "Trait_Cleanse-Will":{"name":"Trait_Cleanse-Will","fieldName":"cleanse-will","group":"Trait","description":"","variable":"trt-cleanse-will{0}","title":"Cleanse[Emotions]","subGroup":"Impact Trait","descriptions":["This technique removes all emotions of your chouce on the target."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},

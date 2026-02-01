@@ -569,10 +569,10 @@ var PopupBuilder = PopupBuilder || (function () {
             let advancedSlotDef = WuxDef.Get("Forme_StyleSlot");
             for (let i = 1; i <= 6; i++) {
                 if (i <= 3) {
-                    groupVariableNames = groupVariableNames.concat([jobEquipSlotDef.getVariable(i + WuxDef._expand), 
-                        arteformSlotDef.getVariable(i + WuxDef._expand)]);
+                    groupVariableNames = groupVariableNames.concat([jobEquipSlotDef.getVariable(i + WuxDef._info), 
+                        arteformSlotDef.getVariable(i + WuxDef._info)]);
                 }
-                groupVariableNames = groupVariableNames.concat([advancedSlotDef.getVariable(i + WuxDef._expand)]);
+                groupVariableNames = groupVariableNames.concat([advancedSlotDef.getVariable(i + WuxDef._info)]);
             }
 
             let actionFieldName = `${WuxDef.GetVariable("Gear")}-${WuxDef.GetVariable("ItemAction")}`;

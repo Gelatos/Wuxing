@@ -1689,6 +1689,11 @@ var WuxSheetMain = WuxSheetMain || (function () {
             <div class="wuxHiddenAuxField">\n${contents}\n</div>\n`;
         },
 
+        hiddenFieldToggle = function (fieldName, onContents, offContents) {
+            return `${hiddenField(fieldName, onContents)}
+                ${hiddenAuxField(fieldName, offContents)}`;
+        },
+
         hiddenIndexField = function (fieldName, index, contents) {
             return `<input type="hidden" class="wuxHiddenIndexField-flag" name="${fieldName}" value="0">
             <div class="wuxHiddenIndexField${index}">\n${contents}\n</div>\n`;
@@ -1723,6 +1728,11 @@ var WuxSheetMain = WuxSheetMain || (function () {
         hiddenAuxSpanField = function (fieldName, contents) {
             return `<input type="hidden" class="wuxHiddenField-flag" name="${fieldName}" value="0">
             <span class="wuxHiddenInlineAuxField">\n${contents}\n</span>\n`;
+        },
+
+        hiddenSpanFieldToggle = function (fieldName, onContents, offContents) {
+            return `${hiddenSpanField(fieldName, onContents)}
+                ${hiddenAuxSpanField(fieldName, offContents)}`;
         },
 
         subMenuButton = function (fieldName, contents) {
@@ -2023,12 +2033,14 @@ var WuxSheetMain = WuxSheetMain || (function () {
         MultiRowGroup: multiRowGroup,
         HiddenField: hiddenField,
         HiddenAuxField: hiddenAuxField,
+        HiddenFieldToggle: hiddenFieldToggle,
         HiddenIndexField: hiddenIndexField,
         HiddenIndexFieldWithVariable: hiddenIndexFieldWithVariable,
         HiddenUniqueIndexField: hiddenUniqueIndexField,
         HiddenAncestryField: hiddenAncestryField,
         HiddenSpanField: hiddenSpanField,
         HiddenAuxSpanField: hiddenAuxSpanField,
+        HiddenSpanFieldToggle: hiddenSpanFieldToggle,
         SubMenuButton: subMenuButton,
         SubMenuOptionButton: subMenuOptionButton,
         SubMenuOptionRollButton: subMenuOptionRollButton,

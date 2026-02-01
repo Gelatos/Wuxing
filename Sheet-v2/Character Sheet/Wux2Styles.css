@@ -1985,24 +1985,34 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     Actions
 ========================================*/
 
-div.wuxStyleRefreshButton {
+.wuxStyleHeaderButtonContainer {
+    float: right;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+div.wuxStyleHeaderButton {
     background: none;
     border: none;
 }
 
-div.wuxStyleRefreshButton span {
-    font-family: pictos, serif;
-    font-size: 18px;
+div.wuxStyleHeaderButton span {
     color: #979898;
+    margin: 0;
+    padding: 0;
 }
 
-div.wuxStyleRefreshButton:hover {
+div.wuxStyleHeaderButton .wuxStyleHeaderButtonIcon {
+    font-size: 24px;
+}
+
+div.wuxStyleHeaderButton:hover {
     background: none;
     box-shadow: none;
     border: none;
 }
 
-div.wuxStyleRefreshButton:hover span {
+div.wuxStyleHeaderButton:hover span {
     color: #f4f6f8;
 }
 
