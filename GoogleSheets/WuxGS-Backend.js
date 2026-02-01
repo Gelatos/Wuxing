@@ -797,7 +797,7 @@ var ChatBuilder = ChatBuilder || (function () {
                     `${repeatingSection.getVariable(i)}:${WuxDef.GetVariable("Note_PageChapter")}`,
                     `${repeatingSection.getVariable(i)}:${WuxDef.GetVariable("Note_PagePart")}`
                 ];
-                output = WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerChat.SetNotebookPageData(eventinfo, ${i})`, true);
+                output += WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerChat.SetNotebookPageData(eventinfo, ${i})`, true);
             }
 
             return output;

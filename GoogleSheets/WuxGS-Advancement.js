@@ -1004,7 +1004,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 output.push(buildAttribute(attributes[i], attributeValuesFilter));
                             }
 
-                            let contents = WuxSheetMain.MultiRowGroup(output, WuxSheetMain.Table.FlexTable, 4);
+                            let contents = WuxSheetMain.MultiRowGroup(output, WuxSheetMain.Table.FlexTable, 3);
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Attributes");
@@ -1025,19 +1025,19 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         buildAttributeStatsDetails = function (attributeDefinition) {
                             let expandContents = [];
 
-                            let statFilterData = WuxDef.Filter([
-                                new DatabaseFilterData("formulaMods", attributeDefinition.name),
-                                new DatabaseFilterData("group", "General"),
-                                new DatabaseFilterData("subGroup", "Potency")
-                            ]);
-                            if (statFilterData.length > 0) {
-                                expandContents.push(`<div class="wuxFlexTableItemData wuxTextLeft wuxMinWidth150">
-                                ${WuxSheetMain.Header2(WuxDef.GetTitle("Page_PotencyStats"))}
-                                </div>`);
-                                expandContents = expandContents.concat(buildStatLabels(statFilterData, addNoAttributeFooter));
-                            }
+                            // let statFilterData = WuxDef.Filter([
+                            //     new DatabaseFilterData("formulaMods", attributeDefinition.name),
+                            //     new DatabaseFilterData("group", "General"),
+                            //     new DatabaseFilterData("subGroup", "Potency")
+                            // ]);
+                            // if (statFilterData.length > 0) {
+                            //     expandContents.push(`<div class="wuxFlexTableItemData wuxTextLeft wuxMinWidth150">
+                            //     ${WuxSheetMain.Header2(WuxDef.GetTitle("Page_PotencyStats"))}
+                            //     </div>`);
+                            //     expandContents = expandContents.concat(buildStatLabels(statFilterData, addNoAttributeFooter));
+                            // }
                             
-                            statFilterData = WuxDef.Filter([
+                            let statFilterData = WuxDef.Filter([
                                 new DatabaseFilterData("formulaMods", attributeDefinition.name),
                                 new DatabaseFilterData("group", "Defense")
                             ]);
@@ -1074,23 +1074,10 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let definition = WuxDef.Get("Page_AffectedStats");
 
                             let contents = WuxSheetMain.Desc(definition.getDescription());
-                            contents += buildPotencyStats();
                             contents += buildDefenseStats();
                             contents = WuxSheetMain.TabBlock(contents);
 
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
-                        },
-
-                        buildPotencyStats = function () {
-                            let statFilterData = WuxDef.Filter([
-                                new DatabaseFilterData("group", "General"),
-                                new DatabaseFilterData("subGroup", "Potency")
-                            ]);
-
-                            let output = buildStatInfoLabels(statFilterData, addSingleAttributeFooter);
-
-                            let contents = WuxSheetMain.MultiRowGroup(output, WuxSheetMain.Table.FlexTable, 4);
-                            return buildStatHeader("Page_PotencyStats") + contents;
                         },
 
                         buildDefenseStats = function () {

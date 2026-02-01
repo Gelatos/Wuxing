@@ -502,6 +502,7 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
         },
 
         setNotebookPageType = function (eventinfo, index) {
+            Debug.Log(`Setting notebook page type for ${index}`);
             let attributeHandler = new WorkerAttributeHandler();
             let repeatingSection = new WorkerRepeatingSectionHandler("NotebookPages", index);
             let updateId = repeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
@@ -532,6 +533,7 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
             attributeHandler.run();
         },
         setNotebookPageData = function (eventinfo, index) {
+            Debug.Log(`Setting notebook page data for ${index}`);
             let attributeHandler = new WorkerAttributeHandler();
             let repeatingSection = new WorkerRepeatingSectionHandler("NotebookPages", index);
             let updateId = repeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
