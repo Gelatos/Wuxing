@@ -176,6 +176,7 @@ var WuxMessage = WuxMessage || (function () {
         ParseType: parseType,
         HandleMessageInput: handleMessageInput,
         Send: send,
+        SendToChat: sendToChat,
         SendToSender: sendToSender,
         SendToSenderAndGM: sendToSenderAndGM
     };

@@ -434,7 +434,7 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                     break;
                 case "!utech":
                     if (state.WuxConflictManager.conflictType == "Social") {
-                        sendToChat(msg.sender, `!sutech ${content}$$?{Advantage|0}`, false);
+                        sendChat(msg.sender, `!sutech ${content}$$?{Advantage|0}`);
                     }
                     else {
                         commandUseTechnique(msg, content);
@@ -1202,12 +1202,10 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                 techUseResolver.addFavorEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters);
                 break;
             case "Vitality":
-                techUseResolver.addAttributeValue(techniqueEffect, "Cmb_Vitality", techUseResolver, attrGetters, attrSetters);
-                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
+                techUseResolver.addVitalityEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters);
                 break;
             case "Impatience":
-                techUseResolver.addAttributeValue(techniqueEffect, "Soc_Impatience", techUseResolver, attrGetters, attrSetters);
-                techUseResolver.addMessage(techDisplayData.formatEffect(techniqueEffect));
+                techUseResolver.addImpatienceEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters);
                 break;
             case "Request":
                 techUseResolver.addRequestCheck(techniqueEffect, techUseResolver, attrGetters);
@@ -1356,6 +1354,38 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
             default:
                 tokenEffect.tokenTargetData.addFavor(attrSetters.getObjByTarget(techniqueEffect), roll.total);
                 techUseResolver.addMessage(`${tokenEffect.tokenTargetData.displayName} gains ${Format.ShowTooltip(roll.total, roll.message)} Favor`);
+                break;
+        }
+    }
+
+    addVitalityEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
+        let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
+        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
+
+        switch (techniqueEffect.subType) {
+            case "Heal":
+                tokenEffect.tokenTargetData.addVitality(attrSetters.getObjByTarget(techniqueEffect), roll.total);
+                techUseResolver.addMessage(`${tokenEffect.tokenTargetData.displayName} gains ${Format.ShowTooltip(roll.total, roll.message)} Vitality`);
+                break;
+            default:
+                tokenEffect.tokenTargetData.addVitality(attrSetters.getObjByTarget(techniqueEffect), roll.total * -1);
+                techUseResolver.addMessage(`${tokenEffect.tokenTargetData.displayName} loses ${Format.ShowTooltip(roll.total, roll.message)} Vitality`);
+                break;
+        }
+    }
+
+    addImpatienceEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
+        let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
+        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
+
+        switch (techniqueEffect.subType) {
+            case "Heal":
+                tokenEffect.tokenTargetData.addImpatience(attrSetters.getObjByTarget(techniqueEffect), roll.total * -1);
+                techUseResolver.addMessage(`${tokenEffect.tokenTargetData.displayName} loses ${Format.ShowTooltip(roll.total, roll.message)} Impatience`);
+                break;
+            default:
+                tokenEffect.tokenTargetData.addImpatience(attrSetters.getObjByTarget(techniqueEffect), roll.total);
+                techUseResolver.addMessage(`${tokenEffect.tokenTargetData.displayName} gains ${Format.ShowTooltip(roll.total, roll.message)} Impatience`);
                 break;
         }
     }

@@ -776,9 +776,9 @@ var DisplayFormeSheet = DisplayFormeSheet || (function () {
 
                 buildEquipSlot = function (definition, index, emptyName) {
                     return `${WuxSheetMain.Header2(`${definition.title} ${index}`)}
-                    ${WuxSheetMain.Input("hidden", definition.getAttribute(index + WuxDef._info), "0")}
+                    ${WuxSheetMain.Input("hidden", definition.getAttribute(index + WuxDef._submenu), "0")}
                     ${WuxSheetMain.HiddenField(definition.getAttribute(index), `<div class="wuxDescription">
-                        ${WuxSheetMain.SubMenuButton(definition.getAttribute(index + WuxDef._info),
+                        ${WuxSheetMain.SubMenuButton(definition.getAttribute(index + WuxDef._submenu),
                         addSubmenuContentsEquippedSlots(definition, index))}
                         ${WuxSheetMain.Span(definition.getAttribute(index))}
                     </div>`)}
