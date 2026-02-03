@@ -1751,7 +1751,13 @@ var WuxSheetMain = WuxSheetMain || (function () {
             </div>`;
         },
 
-        subMenuOptionRollButton = function (fieldName, variableName, contents) {
+        subMenuOptionRollButton = function (fieldName, contents, value) {
+            return `<button class="wuxButton wuxSubMenuOptionButton" type="roll" value="${value}">
+                <span>${contents}</span>
+            </button>`;
+        },
+
+        subMenuOptionRollButtonWithVariableInput = function (fieldName, contents, variableName) {
             return `<input type="hidden" name="${fieldName}" value="0"/>
             <button class="wuxButton wuxSubMenuOptionButton" type="roll" value="@{${variableName}}">
                 <span name="${WuxDef.GetAttribute("Chat_PostName")}">${contents}</span>
@@ -2044,6 +2050,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         SubMenuButton: subMenuButton,
         SubMenuOptionButton: subMenuOptionButton,
         SubMenuOptionRollButton: subMenuOptionRollButton,
+        SubMenuOptionRollButtonWithVariableInput: subMenuOptionRollButtonWithVariableInput,
         SubMenuOptionText: subMenuOptionText,
         Info: info,
         Tooltip: tooltip,

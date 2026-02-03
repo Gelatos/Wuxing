@@ -686,9 +686,9 @@ class DatabaseItemAttributeHandler {
 	
 	clearDefinition (baseAttribute, index) {
 		this.attrHandler.addUpdate(this.getVariable(baseAttribute, index), 0);
-		this.attrHandler.addUpdate(this.getVariable(baseAttribute, `${index}desc0`), 0);
-		this.attrHandler.addUpdate(this.getVariable(baseAttribute, `${index}desc1`), 0);
-		this.attrHandler.addUpdate(this.getVariable(baseAttribute, `${index}desc2`), 0);
+		for (let i = 0; i < 4; i++) {
+			this.attrHandler.addUpdate(this.getVariable(baseAttribute, `${index}desc${i}`), 0);
+		}
 	};
 	addDefinitions (definitionData, prefix, descriptionMaxIndex) {
 		for (let i = 0; i < definitionData.length; i++) {
@@ -719,10 +719,10 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addUpdate(this.getVariable("TechResourceData"), displayData.resourceData);
 		this.attrHandler.addUpdate(this.getVariable("TechTargetingData"), displayData.targetData);
 		if (displayData.forms.length > 0) {
-			this.addDefinitions(displayData.forms, this.getVariable("TechForm"), 3);
+			this.addDefinitions(displayData.forms, this.getVariable("TechForm"), 4);
 		}
 		if (displayData.traits.length > 0) {
-			this.addDefinitions(displayData.traits, this.getVariable("TechTrait"), 3);
+			this.addDefinitions(displayData.traits, this.getVariable("TechTrait"), 4);
 		}
 
 		if (displayData.trigger != "") {
@@ -762,7 +762,7 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.attrHandler.addUpdate(this.getVariable("TechEEffectTitle"), displayData.endEffectDesc);
 		}
 		if (displayData.definitions.length > 0) {
-			this.addDefinitions(displayData.definitions, this.getVariable("TechDef"), 3);
+			this.addDefinitions(displayData.definitions, this.getVariable("TechDef"), 4);
 		}
 		
 		if (setUse) {
@@ -909,7 +909,7 @@ class ItemDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addUpdate(this.getVariable("ItemStats"), displayData.stats);
 
 		if (displayData.traits.length > 0) {
-			this.addDefinitions(displayData.traits, this.getVariable("ItemTrait"), 3);
+			this.addDefinitions(displayData.traits, this.getVariable("ItemTrait"), 4);
 		}
 		if (displayData.description != "") {
 			this.attrHandler.addUpdate(this.getVariable("ItemDescription"), displayData.description);

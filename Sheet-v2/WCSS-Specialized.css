@@ -462,6 +462,11 @@ input[type=hidden].wuxFilterFeature-flag[value="1"] + .wuxFeature
     display: none;
 }
 
+.wuxRepeatingFlexSection .wuxFeature {
+    display: inline-block;
+    flex: 1;
+}
+
 .wuxFeatureHeader,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader,
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeader,

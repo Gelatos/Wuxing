@@ -1787,7 +1787,7 @@ class DefinitionData extends WuxDatabaseData {
     
     addSubDefinition(subDefinition) {
         this.title = `${this.title} [${subDefinition.getTitle()}]`;
-        this.descriptions = this.descriptions.concat(["&nbsp;", subDefinition.getTitle()]);
+        this.descriptions = this.descriptions.concat(["", subDefinition.getTitle()]);
         this.descriptions = this.descriptions.concat(subDefinition.descriptions);
     }
 }
@@ -2152,9 +2152,16 @@ class TechniqueDisplayData {
     }
 
     getRollTemplate(addTechnique) {
-        let output = "";
-
-        output += `{{Displayname=${this.displayname}}}{{Name=${this.name}}}{{type-${this.actionType}=1}}`;
+        let output = `&{template:technique} {{Displayname=${this.displayname}}}`;
+        return `${output}${this.sanitizeBaseRollAction(this.generateRollTemplate(addTechnique).trim())}`;
+    }
+    getSheetRollTemplate(addTechnique) {
+        let output = `&{template:technique} {{Displayname=${this.displayname}}}`;
+        return `${output}${this.sanitizeSheetRollAction(this.generateRollTemplate(addTechnique).trim())}`;
+    }
+    
+    generateRollTemplate(addTechnique) {
+        let output = `{{Name=${this.name}}}{{type-${this.actionType}=1}}`;
         if (this.resourceData != "") {
             output += `{{Resources=${this.resourceData}}}`;
         }
@@ -2203,7 +2210,7 @@ class TechniqueDisplayData {
             if (this.technique.secondaryEffects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
                 effectData.import(this.technique.name, this.technique.skill, this.technique.secondaryEffects);
-                
+
                 output += `{{checkData2=${effectData.getCheckTech(this.sheetname, this.technique.isCustom)}}}`;
                 output += `{{targetData2=${effectData.getUseTech(this.sheetname, this.technique.isCustom)}}}`;
             }
@@ -2211,8 +2218,7 @@ class TechniqueDisplayData {
                 output += `{{hascheck=${this.technique.hasAdv}}`;
             }
         }
-
-        return `&{template:technique} ${this.sanitizeSheetRollAction(output.trim())}`;
+        return output;
     }
 
     rollTemplateDefinitions(definition, traitType) {
@@ -2263,19 +2269,24 @@ class TechniqueDisplayData {
         return output;
     }
 
+    sanitizeBaseRollAction(roll) {
+        let sheetRoll = roll;
+        sheetRoll = sheetRoll.replace(/'/g, "&#39;");
+        return sheetRoll;
+    }
     sanitizeSheetRollAction(roll) {
         let sheetRoll = roll;
         sheetRoll = sheetRoll.replace(/'/g, "&#39;");
-        // sheetRoll = sheetRoll.replace(/%/g, "&#37;");
-        // sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
-        // sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
-        // sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
-        // sheetRoll = sheetRoll.replace(/"/g, "&#34;");
-        // sheetRoll = sheetRoll.replace(/:/g, "");
-        // sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
-        // sheetRoll = sheetRoll.replace(/@/g, "&#64;");
-        // sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
-        // sheetRoll = sheetRoll.replace(/]/g, "&#93;");
+        sheetRoll = sheetRoll.replace(/%/g, "&#37;");
+        sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
+        sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
+        sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
+        sheetRoll = sheetRoll.replace(/"/g, "&#34;");
+        sheetRoll = sheetRoll.replace(/:/g, "");
+        sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
+        sheetRoll = sheetRoll.replace(/@/g, "&#64;");
+        sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
+        sheetRoll = sheetRoll.replace(/]/g, "&#93;");
         // sheetRoll = sheetRoll.replace(/\n/g, "&&");
         return sheetRoll;
     }

@@ -575,6 +575,15 @@ var PopupBuilder = PopupBuilder || (function () {
                 groupVariableNames = groupVariableNames.concat([advancedSlotDef.getVariable(i + WuxDef._submenu)]);
             }
 
+            let basicStyleFilters = WuxDef.Filter([new DatabaseFilterData("group", "BasicStyleGroup")]);
+            for (let i = 0; i < basicStyleFilters.length; i++) {
+                let techniquesFilterData = WuxTechs.Filter([new DatabaseFilterData("style", basicStyleFilters[i].getTitle())]);
+                for (let j = 0; j < techniquesFilterData.length; j++) {
+                    let techDef = techniquesFilterData[j].createDefinition(WuxDef.Get("Technique"));;
+                    groupVariableNames = groupVariableNames.concat([techDef.getVariable(WuxDef._submenu)]);
+                }
+            }
+
             let actionFieldName = `${WuxDef.GetVariable("Gear")}-${WuxDef.GetVariable("ItemAction")}`;
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingEquipment")}:${actionFieldName}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingConsumables")}:${actionFieldName}`]);
