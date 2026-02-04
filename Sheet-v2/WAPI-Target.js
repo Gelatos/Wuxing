@@ -1012,16 +1012,18 @@ class TokenTargetEffectsData {
                     }
                     let mantle = tokenTargetEffect.tokenTargetData.hasStatus(attrSetter, "Stat_Mantle");
                     if (mantle != false && mantle > 0) {
-                        let mantleNewValue = mantle - damageRoll.total;
+                        let mantleShielding = Math.ceil(damageRoll.total / 2);
+                        let mantleNewValue = mantle - mantleShielding;
                         tokenTargetEffect.effectMessages.push(`${tokenTargetEffect.tokenTargetData.displayName}'s mantle takes ` + 
                             `${Format.ShowTooltip(damageRoll.total, damageRoll.message)} ${damageRoll.damageType} damage.`);
                         if (mantleNewValue <= 0) {
                             tokenTargetEffect.effectMessages.push(`${tokenTargetEffect.tokenTargetData.displayName}'s mantle is broken!`);
                             tokenTargetEffect.tokenTargetData.removeStatus(attrSetter, "Stat_Mantle");
+                            damageRoll.addModToRoll(-1 * mantle, "Mantle");
                         } else {
                             tokenTargetEffect.tokenTargetData.setStatus(attrSetter, "Stat_Mantle", mantleNewValue);
+                            damageRoll.addModToRoll(-1 * mantleShielding, "Mantle");
                         }
-                        damageRoll.addModToRoll(-1 * mantle, "Mantle");
 
                     }
                     
