@@ -2634,7 +2634,7 @@ function AssessTechniqueAtRow(sheet, rowIndex) {
         return;
     }
     let assessColumn = getNamedColumn(sheet, "Assessment");
-    let impactsColumn = getNamedColumn(sheet, "Impact Traits");
+    let impactsColumn = getNamedColumn(sheet, "Gen Traits");
 
     let assessingCell = sheet.getRange(rowIndex, assessColumn, 1, 1);
     assessingCell.setValue("Calculating...")
@@ -3286,12 +3286,10 @@ class TechniqueAssessment {
             if (effect.traits.includes("Brutal")) {
                 effectPts = Math.floor(output.value * 0.33);
                 this.addPointsRubric(effectPts, `(Brutal)`);
-                this.addImpactTrait("Trait_Brutal");
             }
             if (effect.traits.includes("AP")) {
                 effectPts = Math.floor(output.value * 0.33);
                 this.addPointsRubric(effectPts, `(AP)`);
-                this.addImpactTrait("Trait_AP");
             }
         }
     }

@@ -548,6 +548,7 @@ class TechniqueData extends WuxDatabaseData {
         this.isFree = this.affinity == "" && this.tier <= 0;
         this.action = json.action;
         this.forms = json.forms;
+        this.impacts = json.impacts;
         this.traits = json.traits;
         this.resourceCost = json.resourceCost;
         this.limits = json.limits;
@@ -590,6 +591,8 @@ class TechniqueData extends WuxDatabaseData {
         this.action = "" + dataArray[i];
         i++;
         this.forms = "" + dataArray[i];
+        i++;
+        this.impacts = "" + dataArray[i];
         i++;
         this.traits = "" + dataArray[i];
         i++;
@@ -666,6 +669,7 @@ class TechniqueData extends WuxDatabaseData {
         this.isFree = false;
         this.action = "";
         this.forms = "";
+        this.impacts = "";
         this.traits = "";
         this.resourceCost = "";
         this.limits = "";
@@ -917,6 +921,7 @@ class TechniqueUseEffect extends dbObj {
     importJson(json) {
         this.name = json.name;
         this.skill = json.skill;
+        this.impacts = json.impacts;
         this.effects = new TechniqueEffectDatabase(json.effects);
     }
     
@@ -927,12 +932,15 @@ class TechniqueUseEffect extends dbObj {
         i++;
         this.skill = "" + dataArray[i];
         i++;
+        this.impacts = "" + dataArray[i];
+        i++;
         this.effects = new TechniqueEffectDatabase();
     }
     
-    import(name, skill, effects) {
+    import(name, skill, impacts, effects) {
         this.name = name;
         this.skill = skill;
+        this.impacts = impacts;
         if (effects != undefined) {
             this.effects = effects;
         } else {
@@ -2065,7 +2073,8 @@ class TechniqueDisplayData {
 
     setTraits(technique) {
         this.forms = WuxDef.GetValues(technique.forms, ";", "Trait_");
-        this.traits = WuxDef.GetValues(technique.traits, ";");
+        this.traits = WuxDef.GetValues(technique.impacts, ";", "Trait_");
+        this.traits = this.traits.concat(WuxDef.GetValues(technique.traits, ";"));
     }
 
     setFlavorText(technique) {
@@ -2202,14 +2211,14 @@ class TechniqueDisplayData {
             }
             if (this.technique.effects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
-                effectData.import(this.technique.name, this.technique.skill, this.technique.effects);
+                effectData.import(this.technique.name, this.technique.skill, this.technique.impacts, this.technique.effects);
 
                 output += `{{checkData=${effectData.getCheckTech(this.sheetname, this.technique.isCustom)}}}`;
                 output += `{{targetData=${effectData.getUseTech(this.sheetname, this.technique.isCustom)}}}`;
             }
             if (this.technique.secondaryEffects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
-                effectData.import(this.technique.name, this.technique.skill, this.technique.secondaryEffects);
+                effectData.import(this.technique.name, this.technique.skill, this.technique.impacts, this.technique.secondaryEffects);
 
                 output += `{{checkData2=${effectData.getCheckTech(this.sheetname, this.technique.isCustom)}}}`;
                 output += `{{targetData2=${effectData.getUseTech(this.sheetname, this.technique.isCustom)}}}`;

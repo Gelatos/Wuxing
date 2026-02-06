@@ -433,12 +433,7 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                     commandCheckTechnique(msg, content);
                     break;
                 case "!utech":
-                    if (state.WuxConflictManager.conflictType == "Social") {
-                        sendChat(msg.sender, `!sutech ${content}$$?{Advantage|0}`);
-                    }
-                    else {
-                        commandUseTechnique(msg, content);
-                    }
+                    commandUseTechnique(msg, content);
                     break;
                 case "!sutech":
                     commandUseTechnique(msg, content);
