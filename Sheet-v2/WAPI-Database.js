@@ -922,6 +922,7 @@ class TechniqueUseEffect extends dbObj {
         this.name = json.name;
         this.skill = json.skill;
         this.impacts = json.impacts;
+        this.traits = undefined;
         this.effects = new TechniqueEffectDatabase(json.effects);
     }
     
@@ -933,6 +934,7 @@ class TechniqueUseEffect extends dbObj {
         this.skill = "" + dataArray[i];
         i++;
         this.impacts = "" + dataArray[i];
+        this.traits = undefined;
         i++;
         this.effects = new TechniqueEffectDatabase();
     }
@@ -952,7 +954,21 @@ class TechniqueUseEffect extends dbObj {
         super.createEmpty();
         this.name = "";
         this.skill = "";
+        this.impacts = "";
+        this.traits = undefined;
         this.effects = new TechniqueEffectDatabase();
+    }
+    
+    getTraits() {
+        if (this.traits != undefined) {
+            return this.traits;
+        }
+        
+        this.traits = this.impacts.split(";");
+        for (let i = 0; i < this.traits.length; i++) {
+            this.traits[i] = this.traits[i].trim();
+        }
+        return this.traits;
     }
 
     getUseTech(sheetName, isCustom) {

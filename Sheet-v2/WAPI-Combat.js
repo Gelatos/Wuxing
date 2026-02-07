@@ -951,6 +951,18 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
         }
 
         // add advantages based on what statuses the target has
+        if (techSkillCheckResolver.technique.getTraits().includes("Social")) {
+            let agreeable = techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Agreeable");
+            if (agreeable != false && rally > 0) {
+                advantage += agreeable;
+                techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Agreeable: +${agreeable} Advantage.`);
+            }
+            let oppositional = techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Oppositional");
+            if (oppositional != false && rally > 0) {
+                advantage -= oppositional;
+                techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Oppositional: +${oppositional} Disadvantage.`);
+            }
+        }
         if (techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(targetAttributeHandler, "Stat_Hindered")) {
             advantage += 1;
             if (removeStatus) {
