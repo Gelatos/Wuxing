@@ -963,18 +963,41 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                         buildSkill = function (skill) {
                             let skillDefinition = skill.createDefinition(WuxDef.Get("Skill"));
+                            let interactHeader = buildInteractiveSkillHeader(skill, skillDefinition);
+                            let expertiseHeader = buildInteractiveExpertiseHeader(skillDefinition);
+                            
+                            return WuxSheetMain.HiddenField(skillDefinition.getAttribute(WuxDef._learn), 
+                                    `<div class="wuxIsKeySkill">${interactHeader}</div>`) + 
+                                WuxSheetMain.HiddenAuxField(skillDefinition.getAttribute(WuxDef._learn), 
+                                    `${interactHeader}`) + 
+                                WuxSheetMain.HiddenField(skillDefinition.getAttribute(WuxDef._rank),
+                                    `<div class="wuxMarginLeft50">${expertiseHeader}</div>`);
+                        },
+
+                        buildInteractiveSkillHeader = function (skill, skillDefinition) {
                             let attributesLine = ` (${WuxDef.GetAbbreviation(skill.abilityScore)}`;
                             if (skill.abilityScore2 != "") {
                                 attributesLine += `/${WuxDef.GetAbbreviation(skill.abilityScore2)}`;
                             }
                             attributesLine += ")";
-                            let interactHeader = `<span class="wuxHeader">${skill.name} ${attributesLine}</span><span class="wuxFloatRight" name="${skillDefinition.getAttribute()}">0</span>`;
+                            let interactHeader = `<span class="wuxHeader">${skill.name} ${attributesLine}</span>`;
+                            interactHeader += `<span class="wuxFloatRight" name="${skillDefinition.getAttribute()}">0</span>`;
 
-                            let contents = WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(skillDefinition.getAttribute(WuxDef._rank), skillDefinition.getAttribute(WuxDef._info),
+                            return WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                skillDefinition.getAttribute(WuxDef._rank),
+                                skillDefinition.getAttribute(WuxDef._info),
                                 interactHeader, WuxDefinition.TooltipDescription(skillDefinition));
-                            
-                            return WuxSheetMain.HiddenField(skillDefinition.getAttribute(WuxDef._learn), `<div class="wuxIsKeySkill">${contents}</div>`) + 
-                                WuxSheetMain.HiddenAuxField(skillDefinition.getAttribute(WuxDef._learn), `${contents}`)
+                        },
+
+                        buildInteractiveExpertiseHeader = function (skillDefinition) {
+                            let expertiseDef = WuxDef.Get("Title_SkillExpertise");
+                            let interactHeader = `<span class="wuxHeader">${expertiseDef.getTitle()}</span>`;
+
+                            return WuxSheetMain.InteractionElement.Build(false, 
+                                WuxSheetMain.InteractionElement.CheckboxBlockIcon(
+                                    skillDefinition.getAttribute(WuxDef._expertise),
+                                    interactHeader)
+                            );
                         }
                     return {
                         Build: build

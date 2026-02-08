@@ -225,6 +225,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
         },
         listenerUpdateSkillBuildPoints = function () {
             let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Skill"), WuxDef._rank);
+            groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Skill"), WuxDef._expertise));
             let output = `WuxWorkerSkills.UpdateBuildPoints(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
