@@ -857,8 +857,9 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             case "Favor":
             case "Request":
                 let favorDef = WuxDef.Get("Soc_Favor");
-                attributeHandler.addMod(favorDef.getVariable());
-                attributeHandler.addMod(favorDef.getVariable(WuxDef._max));
+                let favorVar = favorDef.getVariable();
+                let favorMaxVar = favorDef.getVariable(WuxDef._max);
+                attributeHandler.addMod([favorVar, favorMaxVar]);
                 break;
             case "EN":
                 attributeHandler.addMod(WuxDef.GetVariable("EN"));
@@ -952,13 +953,13 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
 
         // add advantages based on what statuses the target has
         if (techSkillCheckResolver.technique.getTraits().includes("Social")) {
-            let agreeable = techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Agreeable");
-            if (agreeable != false && rally > 0) {
+            let agreeable = techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(targetAttributeHandler, "Stat_Agreeable");
+            if (agreeable != false && agreeable > 0) {
                 advantage += agreeable;
                 techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Agreeable: +${agreeable} Advantage.`);
             }
-            let oppositional = techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Oppositional");
-            if (oppositional != false && rally > 0) {
+            let oppositional = techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(targetAttributeHandler, "Stat_Oppositional");
+            if (oppositional != false && oppositional > 0) {
                 advantage -= oppositional;
                 techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Oppositional: +${oppositional} Disadvantage.`);
             }
@@ -1401,10 +1402,20 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
         let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
         if (techniqueEffect.formula.hasWorker(WuxDef.GetVariable("TargetFavor"))) {
             let favorDef = WuxDef.Get("Soc_Favor");
-            let favorValue = attrGetters.getObjByTarget(techniqueEffect).parseInt(favorDef.getVariable());
-            let favorMax = attrGetters.getObjByTarget(techniqueEffect).parseInt(favorDef.getVariable(WuxDef._max));
-            roll.addModToRoll(Math.min(favorValue, favorMax));
+            let favorVar = favorDef.getVariable();
+            let favorValue = attrGetters.target.parseInt(favorVar);
+            let favorMax = attrGetters.target.parseInt(favorVar, 0, true);
+            roll.addModToRoll(Math.min(favorValue, favorMax), "Favor");
         }
+        let agreeable = techUseResolver.targetTokenEffect.tokenTargetData.hasStatus(attrGetters.target, "Stat_Agreeable");
+        if (agreeable != false && agreeable > 0) {
+            roll.addModToRoll(agreeable * 5, "Agreeable");
+        }
+        let oppositional = techUseResolver.targetTokenEffect.tokenTargetData.hasStatus(attrGetters.target, "Stat_Oppositional");
+        if (oppositional != false && oppositional > 0) {
+            roll.addModToRoll(oppositional * -5, "Oppositional");
+        }
+        
         let message = `Request Check: ${Format.ShowTooltip(roll.total, roll.message)}`;
         techUseResolver.addMessage(message);
     }

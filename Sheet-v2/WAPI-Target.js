@@ -466,6 +466,7 @@ class TokenTargetData extends TargetData {
     }
 
     setMaxFavor(attributeHandler, value) {
+        Debug.Log(`Setting Bar 3 to ${value}`);
         this.token.set(`bar3_max`, value);
     }
 
@@ -1374,6 +1375,9 @@ var TargetReference = TargetReference || (function () {
                 case "!tss":
                     commandSetRequestCheck(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
+                case "!tinfluence":
+                    commandSetInfluence(msg, TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
                 case "!ten":
                     commandAddEnergy(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
@@ -1586,8 +1590,16 @@ var TargetReference = TargetReference || (function () {
             } else {
                 output += tokenOptionButton("Prep4 Social", `tconflictstate Social@?{Set team index|0}`);
                 output += tokenOptionButton("Reset Social", "tresetSocial");
-                output += tokenOptionButton("Request Threshold", "tss ?{Set the difficulty of the request|" +
-                    "Simple DC 15|Inconvenient DC 30|Disruptive DC 40|Serious DC 50|Life-Changing DC 60}");
+                let requestTypes = WuxDef.Filter([new DatabaseFilterData("group", "RequestType")]);
+                let requestList = "";
+                for (let i = 0; i < requestTypes.length; i++) {
+                    if (requestList != "") {
+                        requestList += "|";
+                    }
+                    requestList += requestTypes[i].getTitle();
+                }
+                output += tokenOptionButton("Request Threshold", `tss ?{Set the difficulty of the request|${requestList}}`);
+                output += tokenOptionButton("Set Influence", "tinfluence ?{Set the influence level of the character|0}");
             }
 
             let senderMessage = new SystemInfoMessage(output);
@@ -1677,32 +1689,56 @@ var TargetReference = TargetReference || (function () {
         },
 
         commandSetRequestCheck = function (msg, targets, content) {
-            let sender = msg.who;
+            let requestTypes = WuxDef.Filter([new DatabaseFilterData("group", "RequestType")]);
+            let favorValue = 0;
+            for (let i = 0; i < requestTypes.length; i++) {
+                if (content == requestTypes[i].getTitle()) {
+                    favorValue = requestTypes[i].formula.getValue();
+                    break;
+                }
+            }
+            
+            if (favorValue == 0) {
+                Debug.LogError(`Could not find request type ${content}`);
+                return;
+            }
+            
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                switch (content) {
-                    case "Simple DC 15":
-                        tokenTargetData.setMaxFavor(attributeHandler, 7);
-                        break;
-                    case "Inconvenient DC 30":
-                        tokenTargetData.setMaxFavor(attributeHandler, 15);
-                        break;
-                    case "Disruptive DC 40":
-                        tokenTargetData.setMaxFavor(attributeHandler, 20);
-                        break;
-                    case "Serious DC 50":
-                        tokenTargetData.setMaxFavor(attributeHandler, 25);
-                        break;
-                    case "Life-Changing DC 60":
-                        tokenTargetData.setMaxFavor(attributeHandler, 30);
-                        break;
-                }
-                let senderMessage = new SystemInfoMessage(`This request has been set as ${content}.`);
-                senderMessage.setSender(sender);
-                WuxMessage.Send(senderMessage);
-
+                tokenTargetData.setMaxFavor(attributeHandler, favorValue);
                 attributeHandler.run();
             });
+            sendTokenUpdateMessage(msg, targets, ` Request set to ${content}. Max Favor set to ${favorValue}.`);
+        },
+        
+        commandSetInfluence = function (msg, targets, content) {
+            let rank = parseInt(content);
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                if (rank > 0) {
+                    tokenTargetData.removeStatus(attributeHandler, "Stat_Oppositional");
+                    tokenTargetData.addStatus(attributeHandler, "Stat_Agreeable", rank);
+                }
+                else if (rank < 0) {
+                    tokenTargetData.removeStatus(attributeHandler, "Stat_Agreeable");
+                    tokenTargetData.addStatus(attributeHandler, "Stat_Oppositional", rank);
+                }
+                else {
+                    tokenTargetData.removeStatus(attributeHandler, "Stat_Agreeable");
+                    tokenTargetData.removeStatus(attributeHandler, "Stat_Oppositional");
+                }
+                attributeHandler.run();
+            });
+            
+            if (rank > 0) {
+                sendTokenUpdateMessage(msg, targets, `: Added ${WuxDef.GetTitle("Stat_Agreeable")} Rank ${rank}`);
+            }
+            else if (rank < 0) {
+                sendTokenUpdateMessage(msg, targets, `: Added ${WuxDef.GetTitle("Stat_Oppositional")} Rank ${rank}`);
+            }
+            else {
+                sendTokenUpdateMessage(msg, targets, `: Removed all Influence modifiers`);
+            }
         },
 
         commandAddEnergy = function (msg, targets, content) {
@@ -1785,6 +1821,7 @@ var TargetReference = TargetReference || (function () {
                 tokenTargetData.emptyFavor(attributeHandler);
                 tokenTargetData.setWillToFull(attributeHandler);
                 tokenTargetData.emptyImpatience(attributeHandler);
+                tokenTargetData.removeAllStatus(attributeHandler);
                 attributeHandler.run();
             });
 

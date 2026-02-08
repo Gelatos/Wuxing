@@ -3825,8 +3825,6 @@ class CombatDetails {
         this.armorvalue = 0;
         this.mvSpeed = 0;
         this.dashSpeed = 0;
-        this.supportiveInfluence = 0;
-        this.opposingInfluence = 0;
     }
 
     importJson(json) {
@@ -3852,8 +3850,6 @@ class CombatDetails {
         this.armorvalue = json.armorvalue;
         this.mvSpeed = json.mvSpeed;
         this.dashSpeed = json.dashSpeed;
-        this.supportiveInfluence = json.supportiveInfluence != undefined ? json.supportiveInfluence : 0;
-        this.opposingInfluence = json.opposingInfluence != undefined ? json.opposingInfluence : 0;
     }
 
     printTooltip() {
@@ -3895,13 +3891,6 @@ class CombatDetails {
                     for (let i = 0; i < this.maxsurges; i++) {
                         output += i < this.surges ? `⛊` : `⛉`;
                     }
-                }
-                output += ` Influences:`;
-                for (let i = 0; i < 3; i++) {
-                    output += i < this.supportiveInfluence ? `▲` : `△`;
-                }
-                for (let i = 0; i < 3; i++) {
-                    output += i < this.opposingInfluence ? `▼` : `▽`;
                 }
                 break;
         }
@@ -4077,13 +4066,6 @@ class CombatDetailsHandler {
         this.combatDetails.maxsurges = tokenNoteReference.surges.max;
         this.combatDetails.vitality = tokenNoteReference.vitality.current;
         this.combatDetails.maxvitality = tokenNoteReference.vitality.max;
-        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
-    }
-
-    onUpdateInfluences(attrHandler, support, oppose) {
-        this.setData(attrHandler);
-        this.combatDetails.supportiveInfluence = support;
-        this.combatDetails.opposingInfluence = oppose;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
     
