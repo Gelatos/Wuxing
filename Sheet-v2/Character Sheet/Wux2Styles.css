@@ -6125,6 +6125,11 @@ Quest Box
     max-width: 220px;
 }
 
+.wuxMaxWidth300
+{
+    max-width: 300px;
+}
+
 .wuxHeight30,
 textarea.wuxHeight30
 {

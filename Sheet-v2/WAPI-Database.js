@@ -954,9 +954,15 @@ class TechniqueUseEffect extends dbObj {
         super.createEmpty();
         this.name = "";
         this.skill = "";
+        this.skillType = "";
         this.impacts = "";
         this.traits = undefined;
         this.effects = new TechniqueEffectDatabase();
+    }
+    
+    setup() {
+        this.getTraits();
+        this.getSkillData();
     }
     
     getTraits() {
@@ -969,6 +975,17 @@ class TechniqueUseEffect extends dbObj {
             this.traits[i] = this.traits[i].trim();
         }
         return this.traits;
+    }
+    
+    getSkillData() {
+        let skillData = this.skill.split(":");
+        this.skill = skillData[0];
+        if (skillData.length > 1) {
+            this.skillType = skillData[1];
+        }
+        else {
+            this.skillType = "";
+        }
     }
 
     getUseTech(sheetName, isCustom) {
@@ -2049,7 +2066,25 @@ class TechniqueDisplayData {
     }
 
     setTechTargetData(technique) {
-        this.targetData = technique.skill == "" ? "No Check" : technique.skill;
+        this.targetData = "";
+        if (technique.skill == "") {
+            this.targetData = "No Check";
+        }  
+        else {
+            let skillData = technique.skill.split(":");
+            if (skillData.length > 1) {
+                if (skillData[1] == "group") {
+                    this.targetData = `Any ${skillData[0]}`;
+                }
+                else if (skillData[1] == "attr") {
+                    this.targetData = WuxDef.GetTitle(Format.GetDefinitionName("Attribute", skillData[0]));
+                }
+            }
+            else {
+                this.targetData = skillData[0];
+            }
+        }
+        
         if (technique.range != "") {
             if (this.targetData != "") {
                 this.targetData += "; ";

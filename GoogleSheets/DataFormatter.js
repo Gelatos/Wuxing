@@ -285,23 +285,18 @@ var NameDatabase = NameDatabase || (function () {
         let races = {};
         let maxY = 0;
         let racesRow = arr[0];
-        Debug.Log(`racesRow: ${JSON.stringify(racesRow)}`);
         for (let i = 1; i < racesRow.length; i++) {
             if (racesRow[i] == "") {
-                Debug.Log(`Skipping empty race maxY ${i}`);
                 maxY = i;
                 break;
             }
             races[i] = "" + racesRow[i];
-            Debug.Log("Adding races " + racesRow[i]);
         }
 
         for (let x = 1; x < arr.length; x++) {
             let region = "" + arr[x][0];
-            Debug.Log("Adding region " + region);
             for (let y = 1; y < maxY; y++) {
                 let odds = parseInt("" + arr[x][y]);
-                Debug.Log("Adding region " + region + " odds: " + odds);
                 if (!isNaN(odds) && odds != 0) {
                     if (!regionDatabase.region.hasOwnProperty(region)) {
                         regionDatabase.region[region] = {options: [], total: 0};
@@ -1366,9 +1361,17 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
 
         buildChecksSection = function () {
             let contents = "";
-
+            
+            let subGroups = WuxDef.Filter([new DatabaseFilterData("group", "SkillGroup")]);
+            let skillGroupText = "";
+            for (let i = 0; i < subGroups.length; i++) {
+                if (skillGroupText != "") {
+                    skillGroupText += "|";
+                }
+                skillGroupText += subGroups[i].getTitle();
+            }
             let showStatValue = `!cshowgroup @{${WuxDef.GetVariable("SheetName")}}@@@?{What will you show?|Defenses|Senses}`;
-            let rollSkillValue = `!cskillgroupcheck @{${WuxDef.GetVariable("SheetName")}}@@@?{Choose a Skill Group to Roll|Fight|Cast|Athletics|Persuade|Cunning|Craft|Device|Investigate|Lore};?{Advantage|0}`;
+            let rollSkillValue = `!cskillgroupcheck @{${WuxDef.GetVariable("SheetName")}}@@@?{Choose a Skill Group to Roll|${skillGroupText}};?{Advantage|0}`;
             contents += `<button class="wuxButton wuxSizePercent" type="roll" value="${showStatValue}"><span>Show Stat</span></button>`;
             contents += `<button class="wuxButton wuxSizePercent" type="roll" value="${rollSkillValue}"><span>Roll Skill</span></button>`;
 
@@ -2496,14 +2499,14 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
             for (let key in sortingGroups) {
                 keys += `${key}, `;
             }
-            Debug.Log(`Tried to find property ${property} but it does not exist in the database. Valid properties are ${keys}`);
+            // Debug.Log(`Tried to find property ${property} but it does not exist in the database. Valid properties are ${keys}`);
         }
         if (!sortingGroups[property].hasOwnProperty(propertyValue)) {
             let keys = "";
             for (let key in sortingGroups[property]) {
                 keys += `${key}, `;
             }
-            Debug.Log(`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
+            // Debug.Log(`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
         }
         return sortingGroups[property][propertyValue];
     };
@@ -2828,7 +2831,6 @@ function GetGearForAssessment(sheet, row, assessColumn) {
         finalRow++;
         newItem = GetUsableItemFromSheetRow(sheet, finalRow, assessColumn);
         if (newItem.name == baseItem.name) {
-            Debug.Log(`Adding technique data at row ${finalRow}`);
             baseItem.technique.importEffectsFromTechnique(newItem.technique);
         } else {
             break;
@@ -2953,7 +2955,6 @@ class TechniqueAssessment {
         let values = [];
         values[0] = [this.assessment, `${this.pointVarianceRange()}\n${this.points}; ${this.pointBreakdown[0].points}`];
         for (let i = 1; i < this.pointBreakdown.length; i++) {
-            Debug.Log(`Index ${i} has ${JSON.stringify(this.pointBreakdown[i])}`)
             values.push(["", `${this.pointBreakdown[i].points}; ${this.pointBreakdown[i].rubric}`]);
         }
 
@@ -3051,7 +3052,6 @@ class TechniqueAssessment {
                 assessor.assessEffect(effect, attributeHandler);
             });
         }
-        Debug.Log(`Assessing ${this.technique.name} with ${this.points} points`);
         this.getStructureAssessment();
         let customPoints = this.sheet.getRange(this.row, this.assessColumn + 2, 1, 1).getValues()[0];
         customPoints = isNaN(parseInt(customPoints)) ? 0 : parseInt(customPoints);
@@ -3135,7 +3135,6 @@ class TechniqueAssessment {
         } else if (technique.action == "Swift") {
             let lookupName = WuxDef.GetAbbreviation("Job") + "_" + technique.techSet;
             let def = WuxDef.Get(lookupName);
-            Debug.Log(`Looking up ${lookupName} which got ${def.name}`);
             if (WuxDef.GetTitle(lookupName) == "") {
                 points = Math.ceil(points * 0.5);
                 this.pointsCalc = "(Swift)";

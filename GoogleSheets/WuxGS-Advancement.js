@@ -912,17 +912,18 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         build = function (database) {
                             let contents = buildSkillGroup(database, "ActiveSkills");
                             contents += buildSkillGroup(database, "SocialSkills");
-                            contents += buildSkillGroup(database, "TechnicalSkills");
+                            contents += buildSkillGroup(database, "WorldSkills");
                             return contents;
                         },
 
                         buildSkillGroup = function (database, group) {
-                            let subGroups = WuxDef.Filter([new DatabaseFilterData("group", group)]);
+                            let subGroups = WuxDef.Filter([new DatabaseFilterData("subGroup", group)]);
+                            Debug.Log(`Building Skill Groups ${JSON.stringify(subGroups)}`);
 
-                            let contents = WuxSheetMain.MultiRowGroup(buildSubGroups(database, subGroups), WuxSheetMain.Table.FlexTable, 3);
+                            let contents = WuxSheetMain.MultiRowGroup(buildSubGroups(database, subGroups), WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);
 
-                            let definitionName = `Page_${group}`;
+                            let definitionName = Format.GetDefinitionName("Page", group);
                             let definition = WuxDef.Get(definitionName);
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
 
@@ -938,7 +939,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 if (subGroups[i].name == "") {
                                     continue;
                                 }
-                                groupName = subGroups[i].name;
+                                groupName = subGroups[i].getTitle();
                                 filterSettings[0].value = groupName;
                                 filteredData = database.filter(filterSettings);
                                 output.push(buildGroup(groupName, filteredData));
@@ -947,7 +948,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         buildGroup = function (groupName, filteredData) {
-                            return `<div class="wuxFlexTableItemGroup wuxMinWidth150">
+                            return `<div class="wuxFlexTableItemGroup wuxMinWidth200 wuxMaxWidth300">
 								<div class="wuxFlexTableItemHeader wuxTextLeft">${groupName}</div>
 								<div class="wuxFlexTableItemData wuxTextLeft">\n${buildSkillGroupSkills(filteredData)}\n</div>
 							</div>`;

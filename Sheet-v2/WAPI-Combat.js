@@ -790,6 +790,7 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
         this.technique = new TechniqueUseEffect();
         try {
             this.technique.importSandboxJson(data);
+            this.technique.setup();
             Debug.Log(`[TechniqueSkill] TechniqueData created`);
         }
         catch {
@@ -804,7 +805,9 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             }
             this.technique.name = techniqueData.name;
             this.technique.skill = techniqueData.skill;
+            this.technique.impacts = techniqueData.impacts;
             this.technique.effects = new TechniqueEffectDatabase(techniqueData.effects);
+            this.technique.setup();
         }
     }
 
@@ -872,11 +875,55 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             return;
         }
 
+        switch (techSkillCheckResolver.technique.skillType) {
+            case "":
+                this.getSimpleSkillCheck(techSkillCheckResolver, senderAttributeHandler);
+                break;
+            case "group":
+                this.getGroupSkillCheck(techSkillCheckResolver, senderAttributeHandler, techSkillCheckResolver.technique.skill);
+                break;
+            case "attr":
+                this.getAttrSkillCheck(techSkillCheckResolver, senderAttributeHandler);
+                break;
+            default:
+                this.getSimpleSkillCheck(techSkillCheckResolver, senderAttributeHandler);
+                break;
+        }
+    }
+
+    getSimpleSkillCheck(techSkillCheckResolver, senderAttributeHandler) {
         let skillCheckVar = WuxDef.GetVariable(Format.GetDefinitionName("Skill", techSkillCheckResolver.technique.skill));
         senderAttributeHandler.addMod(skillCheckVar);
 
         senderAttributeHandler.addGetAttrCallback(function (attrHandler) {
             techSkillCheckResolver.skillCheckValue = attrHandler.parseInt(skillCheckVar);
+        });
+    }
+
+    getGroupSkillCheck(techSkillCheckResolver, senderAttributeHandler, skillGroup) {
+        let skillFilters = WuxDef.GetGroupVariables(new DatabaseFilterData("subGroup", skillGroup));
+        Debug.Log(`${skillGroup} Skill Group: ${JSON.stringify(skillFilters)}`);
+        senderAttributeHandler.addMod(skillFilters);
+
+        senderAttributeHandler.addGetAttrCallback(function (attrHandler) {
+            techSkillCheckResolver.skillCheckValue = 0;
+            let checkValue = 0;
+            for (let i = 0; i < skillFilters.length; i++) {
+                checkValue = attrHandler.parseInt(skillFilters[i]);
+                if (checkValue > techSkillCheckResolver.skillCheckValue) {
+                    techSkillCheckResolver.skillCheckValue = checkValue;
+                }
+            }
+        });
+    }
+
+    getAttrSkillCheck(techSkillCheckResolver, senderAttributeHandler) {
+        let attributeCheckVar = WuxDef.GetVariable(Format.GetDefinitionName("Attribute", techSkillCheckResolver.technique.skill));
+        Debug.Log(`Adding mod ${attributeCheckVar}`);
+        senderAttributeHandler.addMod(attributeCheckVar);
+
+        senderAttributeHandler.addGetAttrCallback(function (attrHandler) {
+            techSkillCheckResolver.skillCheckValue = attrHandler.parseInt(attributeCheckVar);
         });
     }
 
