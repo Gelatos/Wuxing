@@ -3310,7 +3310,9 @@ class TechniqueAssessment {
                     this.will += output.value;
                     this.lowWill += output.lowValue;
                     this.highWill += output.highValue;
-                    output.value = Math.floor(output.value * 0.8);
+                    if (this.dps > 0) {
+                        output.value = Math.floor(output.value * 0.8);
+                    }
                 }
                 message = `(Will)`;
                 break;
@@ -3390,23 +3392,31 @@ class TechniqueAssessment {
         switch (subTypes[0]) {
             case "Raise":
             case "Lower":
-                points = 14;
+                if (effect.defense != "WillBreak") {
+                    points = 14;
+                }
                 this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
                 this.addImpactTrait("Trait_Influence");
                 break;
             case "Adjust":
-                points = 16;
+                if (effect.defense != "WillBreak") {
+                    points = 16;
+                }
                 this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
                 this.addImpactTrait("Trait_Influence");
                 break;
             case "Reveal":
-                points = 10;
+                if (effect.defense != "WillBreak") {
+                    points = 10;
+                }
                 this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
                 this.addImpactTrait("Trait_Assess");
                 break;
             case "RevealNeg":
             case "RevealPos":
-                points = 8;
+                if (effect.defense != "WillBreak") {
+                    points = 8;
+                }
                 this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
                 this.addImpactTrait("Trait_Assess");
                 break;
