@@ -677,9 +677,7 @@ class WuxSkillWorkerBuild extends WuxWorkerBuild {
 			if (key.endsWith(WuxDef._expertise)) {
 				// this might be a key we need to delete. Search for the base form of the key
 				let baseSkillRank = key.split(WuxDef._expertise)[0] + WuxDef._rank;
-				Debug.Log(`Assessing ${key} with ${baseSkillRank} rank: ${this.buildStats.values[baseSkillRank].value}`);
 				if (!this.buildStats.keys.includes(baseSkillRank) || this.buildStats.values[baseSkillRank].value == "0") {
-					Debug.Log(`Removing ${key}`);
 					this.buildStats.keys.splice(i, 1);
 					delete this.buildStats.values[key];
 				}
