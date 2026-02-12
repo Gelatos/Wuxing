@@ -644,7 +644,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
             let definition = WuxDef.Get("Page_Jobs");
             let output = WuxSheetNavigation.BuildAdvancementPageNavigation(definition) +
                 SideBarData.PrintJobs() +
-                MainContentData.PrintJobs(sheetsDb.job, sheetsDb.techniques);
+                MainContentData.PrintJobs(sheetsDb.job);
             return WuxSheet.PageDisplay("Jobs", output);
         },
 
@@ -831,8 +831,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                     }
                 }()),
 
-                printJobs = function (jobsDictionary, techDictionary) {
-                    return WuxSheetMain.Build(buildJobs.Build(jobsDictionary, techDictionary));
+                printJobs = function (jobsDictionary) {
+                    return WuxSheetMain.Build(buildJobs.Build(jobsDictionary));
                 },
 
                 buildJobs = buildJobs || (function () {
@@ -841,24 +841,45 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                     var
                         build = function (jobsDictionary) {
                             let output = "";
-                            let groups = WuxDef.Filter([new DatabaseFilterData("group", "JobGroup")]);
-                            for (let i = 0; i < groups.length; i++) {
-                                output += buildJobGroup(jobsDictionary.filter([new DatabaseFilterData("group", groups[i].title)]), groups[i]);
+                            let jobClasses = WuxDef.Filter([new DatabaseFilterData("group", "JobClass")]);
+                            for (let i = 0; i < jobClasses.length; i++) {
+                                let jobclass = jobClasses[i];
+                                Debug.Log("Looking for jobs with the name " + jobclass.name)
+                                output += buildJobClass(
+                                    WuxDef.Filter(new DatabaseFilterData("subGroup", jobclass.name)),
+                                    jobclass, jobsDictionary);
                             }
                             return output;
                         },
 
-                        buildJobGroup = function (jobs, jobGroup) {
+                        buildJobClass = function (archetypes, jobclassDefinition, jobsDictionary) {
+                            Debug.Log(`Found ${archetypes.length} archetypes in ${jobclassDefinition.getTitle()}`);
+                            let output = "";
+                            for (let i = 0; i < archetypes.length; i++) {
+                                let archetype = archetypes[i];
+                                let jobFilter = jobsDictionary.filter(new DatabaseFilterData("group", archetype.title));
+                                output += buildArchetype(jobFilter, archetype);
+                            }
+
+                            output = WuxSheetMain.TabBlock(output);
+                            return WuxSheetMain.CollapsibleTab(jobclassDefinition.getAttribute(WuxDef._tab, WuxDef._expand), jobclassDefinition.title, output);
+                        },
+
+                        buildArchetype = function (jobs, archetypeDefinition) {
+                            Debug.Log(`Found ${jobs.length} jobs in ${archetypeDefinition.getTitle()}`);
                             let jobData = [];
                             for (let i = 0; i < jobs.length; i++) {
                                 jobData.push(buildJob(jobs[i]));
                             }
 
-                            let output = WuxSheetMain.MultiRowGroup(jobData, WuxSheetMain.Table.FlexTable, 2);
-                            output = WuxSheetMain.TabBlock(output);
+                            let output = WuxSheetMain.Desc(archetypeDefinition.getDescription()) +
+                                WuxSheetMain.MultiRowGroup(jobData, WuxSheetMain.Table.FlexTable, 2);
 
-                            return WuxSheetMain.CollapsibleTab(jobGroup.getAttribute(WuxDef._tab, WuxDef._expand), `${jobGroup.title}s`, output);
-
+                            let hiddenField = archetypeDefinition.getAttribute(WuxDef._expand);
+                            let header = WuxSheetMain.Header(
+                                WuxSheetMain.CollapsibleHeader(
+                                    `<span>${(archetypeDefinition.getTitle())}</span>`, hiddenField));
+                            return header + WuxSheetMain.HiddenAuxField(hiddenField, output);
                         },
 
                         buildJob = function (job) {
@@ -1358,7 +1379,26 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     if (style.affinity != "") {
                         output += `<span>Affinity: ${style.affinity}</span>\n`;
                     }
-                    output += `<span><em>Main Skills: ${style.skills != "" ? style.skills : "None"}</em></span>\n`;
+                    if (style.skills == "") {
+                        output += `<span><em>Main Skills: None</em></span>\n`;
+                    }
+                    else {
+                        let skillsOutput = "";
+                        let skillSplit = style.skills.split(";");
+                        for (let i = 0; i < skillsOutput.length; i++) {
+                            if (skillsOutput != "") {
+                                skillsOutput += "; ";
+                            }
+                            let skillData = skillSplit[i].split(":");
+                            if (skillData.length > 1 && skillData[1] == "group") {
+                                skillsOutput += `Any ${skillData[0]}`;
+                            }
+                            else {
+                                skillsOutput += `${skillData[0]}`;
+                            }
+                        }
+                        output += `<span class="wuxStyleTooltipContainer"><em>Main Skills: ${skillsOutput}</em></span>\n`;
+                    }
                     output += `<span class="wuxStyleTooltipContainer"><em>Traits: ${getStyleTraits(style)}</em></span>\n`;
                     output += `<span>${styleDef.getDescription()}</span>`;
                     return WuxSheetMain.Desc(output);
@@ -1368,25 +1408,28 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     let output = "";
                     let traits = WuxDef.GetValues(style.effects, ";");
                     for(let i = 0; i < traits.length; i++) {
-                        let trait = traits[i];
-                        let subGroup = "";
-                        if (trait.subGroup != "") {
-                            subGroup = `<span class="wuxDescription"><em>${trait.subGroup}</em></span>`;
-                        }
-                        let description = "";
-                        for (let j = 0; j < trait.descriptions.length; j++) {
-                            description += `<span class="wuxDescription">${trait.descriptions[j]}</span>`;
-                        }
-                        output += `<span class="wuxTooltip">
-                            <span class="wuxTooltipText">${trait.getTitle()}</span>
-                            <div class="wuxTooltipContent">
-                                <div class="wuxHeader2">${trait.getTitle()}</div>
-                                ${subGroup}
-                                ${description}
-                            </div>
-                        </span>`;
+                        output += printDefinitionTooltip(traits[i]);
                     }
                     return output;
+                },
+                
+                printDefinitionTooltip = function (definition) {
+                    let subGroup = "";
+                    if (definition.subGroup != "") {
+                        subGroup = `<span class="wuxDescription"><em>${definition.subGroup}</em></span>`;
+                    }
+                    let description = "";
+                    for (let j = 0; j < definition.descriptions.length; j++) {
+                        description += `<span class="wuxDescription">${definition.descriptions[j]}</span>`;
+                    }
+                    return `<span class="wuxTooltip">
+                        <span class="wuxTooltipText">${definition.getTitle()}</span>
+                        <div class="wuxTooltipContent">
+                            <div class="wuxHeader2">${definition.getTitle()}</div>
+                            ${subGroup}
+                            ${description}
+                        </div>
+                    </span>`;
                 },
 
                 buildTechniqueStyleGroupTab = function (contents, groupName, title) {

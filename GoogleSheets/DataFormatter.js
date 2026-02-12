@@ -553,7 +553,7 @@ class SheetDatabaseObject {
         this.lore = SheetsDatabase.CreateLores(this.readDatabase("Lores", 2));
     }
     setJobs() {
-        this.job = SheetsDatabase.CreateJobs(this.readDatabase("Jobs", 10));
+        this.job = SheetsDatabase.CreateJobs(this.readDatabase("Jobs", 2));
     }
     setGear() {
         this.gear = this.getGear();
@@ -1543,6 +1543,17 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return `<div class="wuxSectionBlock wuxLayoutItem">\n<div class="wuxTabContent">\n${contents}\n</div>\n</div>`;
         },
 
+        collapsibleHeader = function (headerName, hiddenField, additionalButtons) {
+            let headerButtons = `<span class="wuxStyleHeaderButtonContainer">
+                        ${additionalButtons != undefined ? additionalButtons : ""}
+                        ${WuxSheetMain.HiddenSpanFieldToggle(hiddenField,
+                WuxSheetMain.Button(hiddenField, "<span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show", "wuxStyleHeaderButton"),
+                WuxSheetMain.Button(hiddenField, "<span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide", "wuxStyleHeaderButton")
+            )}
+            </span>`;
+            return headerButtons + headerName;
+        },
+
         sectionBlock = function (contents) {
             return `<div class="wuxSectionBlock">\n${contents}\n</div>`;
         },
@@ -2019,6 +2030,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         TabHeader: tabHeader,
         CollapsibleTab: collapsibleTab,
         TabBlock: tabBlock,
+        CollapsibleHeader: collapsibleHeader,
         SectionBlock: sectionBlock,
         SectionBlockHeader: sectionBlockHeader,
         SectionBlockHeaderFooter: sectionBlockHeaderFooter,
@@ -2560,7 +2572,10 @@ function onEdit(e) {
     if (TryGearAssessment(sheet, e)) {
         return;
     }
-    TryConsumableAssessment(sheet, e);
+    if (TryConsumableAssessment(sheet, e)) {
+        return;
+    }
+    TryDatabaseAssessment(sheet, e);
 }
 
 function TryTechniqueAssessment(sheet, e) {
@@ -2582,6 +2597,14 @@ function TryGearAssessment(sheet, e) {
 function TryConsumableAssessment(sheet, e) {
     if (sheet.getSheetName() == "Consumables") {
         AssessConsumableAtRow(sheet, e.range.getRow());
+        return true;
+    }
+    return false;
+}
+
+function TryDatabaseAssessment(sheet) {
+    if (sheet.getSheetName() == "Database") {
+        SetDatabaseFromPosition(SpreadsheetApp.getActiveSpreadsheet(), sheet);
         return true;
     }
     return false;
@@ -3889,15 +3912,17 @@ function SetStyleKeywords(rowData, effectCell) {
     if (techniqueFilter.length == 0) {
         effectCell.setValue("");
     } else {
-        let styleAssessment = new StyleAssessment(style, techniqueFilter);
-        styleAssessment.print(effectCell);
+        let styleAssessment = new StyleAssessment(style, techniqueFilter, effectCell);
+        styleAssessment.print();
     }
 }
 
 class StyleAssessment {
     
-    constructor (style, techniqueFilter) {
+    constructor (style, techniqueFilter, effectCell) {
         this.baseTechniqueKeywords = {};
+        this.effectCell = effectCell;
+        
         if (style.baseStyle != "") {
             let baseTechniqueFilters = WuxTechs.Filter(new DatabaseFilterData("style", style.baseStyle));
             this.baseTechniqueKeywords = this.getStyleTechniqueKeywords(baseTechniqueFilters);
@@ -3905,8 +3930,8 @@ class StyleAssessment {
         this.techniqueKeywords = this.getStyleTechniqueKeywords(techniqueFilter);
     }
 
-    print(effectCell) {
-        effectCell.setValue(this.printKeywords());
+    print() {
+        this.effectCell.setValue(this.printKeywords());
     }
 
     printKeywords() {
@@ -3985,6 +4010,10 @@ function SetDatabaseFromPosition(ss, sheet) {
     if (sheet.getSheetName() == "Database") {
         const range = sheet.getActiveRange();
         let col = range.getColumn();
+        
+        let effectCell = sheet.getRange(3, col, 1, 1);
+        effectCell.setValue("Calculating...")
+        
         let dbAssessment = new DatabaseAssessment(ss, sheet);
         dbAssessment.printDataBasedOnColumn(col);
         return true;

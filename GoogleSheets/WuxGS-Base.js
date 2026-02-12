@@ -1296,14 +1296,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         headerButtons = WuxSheetMain.Button(refreshField,
                             "<span class='wuxStyleHeaderButtonIcon'>&#8635;</span> Update", "wuxStyleHeaderButton");
                     }
-                    headerButtons = `<span class="wuxStyleHeaderButtonContainer">
-                        ${headerButtons}
-                        ${WuxSheetMain.HiddenSpanFieldToggle(hiddenField,
-                        WuxSheetMain.Button(hiddenField, "<span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show", "wuxStyleHeaderButton"),
-                        WuxSheetMain.Button(hiddenField, "<span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide", "wuxStyleHeaderButton")
-                    )}
-                    </span>`;
-                    return headerButtons + styleName;
+                    return WuxSheetMain.CollapsibleHeader(styleName, hiddenField, headerButtons);
                 },
 
                 repeatingTechniquesSection = function (header, hiddenField, repeaterFieldName, alwaysShow) {
