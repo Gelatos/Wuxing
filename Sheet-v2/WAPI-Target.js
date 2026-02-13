@@ -1378,6 +1378,12 @@ var TargetReference = TargetReference || (function () {
                 case "!tinfluence":
                     commandSetInfluence(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
+                case "!tpp":
+                    commandAddTrainingPoints(msg, TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
+                case "!txp":
+                    commandAddExperience(msg, TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
                 case "!ten":
                     commandAddEnergy(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
@@ -1602,6 +1608,13 @@ var TargetReference = TargetReference || (function () {
                 output += tokenOptionButton("Set Influence", "tinfluence ?{Set the influence level of the character|0}");
             }
 
+            if (playerIsGM(msg.playerid)) {
+                output += tokenOptionSpacer();
+                output += tokenOptionTitle("General Options");
+                output += tokenOptionButton("Give TP", `tpp ?{Amount of TP|0}`);
+                output += tokenOptionButton("Give XP", `txp ?{Amount of XP|0}`);
+            }
+
             let senderMessage = new SystemInfoMessage(output);
             senderMessage.setSender(sender);
             WuxMessage.Send(senderMessage, sender);
@@ -1739,6 +1752,35 @@ var TargetReference = TargetReference || (function () {
             else {
                 sendTokenUpdateMessage(msg, targets, `: Removed all Influence modifiers`);
             }
+        },
+
+        commandAddTrainingPoints = function (msg, targets, content) {
+            let value = parseInt(content);
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.addModNoCap("PP", attributeHandler, value,
+                    function (results, attrHandler, attributeVar) {
+                        attrHandler.addUpdate(attributeVar, results.newValue, false);
+                    });
+                attributeHandler.run();
+            });
+
+            sendTokenUpdateMessage(msg, targets, `: ${value >= 0 ? "+" : "-"}${value} PP`);
+        },
+
+        commandAddExperience = function (msg, targets, content) {
+            let value = parseInt(content);
+            let xpDefinition = WuxDef.Get("XP");
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.addModNoCap("XP", attributeHandler, value,
+                    function (results, attrHandler, attributeVar) {
+                        attrHandler.addUpdate(attributeVar, results.newValue, false);
+                    });
+                attributeHandler.run();
+            });
+
+            sendTokenUpdateMessage(msg, targets, `: ${value >= 0 ? "+" : "-"}${value} ${xpDefinition.getTitle()}`);
         },
 
         commandAddEnergy = function (msg, targets, content) {
