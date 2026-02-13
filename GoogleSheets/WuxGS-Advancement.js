@@ -844,7 +844,6 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let jobClasses = WuxDef.Filter([new DatabaseFilterData("group", "JobClass")]);
                             for (let i = 0; i < jobClasses.length; i++) {
                                 let jobclass = jobClasses[i];
-                                Debug.Log("Looking for jobs with the name " + jobclass.name)
                                 output += buildJobClass(
                                     WuxDef.Filter(new DatabaseFilterData("subGroup", jobclass.name)),
                                     jobclass, jobsDictionary);
@@ -853,7 +852,6 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         buildJobClass = function (archetypes, jobclassDefinition, jobsDictionary) {
-                            Debug.Log(`Found ${archetypes.length} archetypes in ${jobclassDefinition.getTitle()}`);
                             let output = "";
                             for (let i = 0; i < archetypes.length; i++) {
                                 let archetype = archetypes[i];
@@ -866,7 +864,6 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         buildArchetype = function (jobs, archetypeDefinition) {
-                            Debug.Log(`Found ${jobs.length} jobs in ${archetypeDefinition.getTitle()}`);
                             let jobData = [];
                             for (let i = 0; i < jobs.length; i++) {
                                 jobData.push(buildJob(jobs[i]));
@@ -912,8 +909,26 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         buildJobDescription = function (job) {
+                            let skillsOutput = "";
+                            let skillSplit = job.skills.split(";");
+                            for (let i = 0; i < skillSplit.length; i++) {
+                                if (skillsOutput != "") {
+                                    skillsOutput += "; ";
+                                }
+                                let skillData = skillSplit[i].split(":");
+                                if (skillData.length > 1 && skillData[1] == "group") {
+                                    skillsOutput += `Any ${skillData[0]}`;
+                                }
+                                else {
+                                    skillsOutput += `${skillData[0]}`;
+                                }
+                            }
+                            if (skillsOutput == "") {
+                                skillsOutput = "None";
+                            }
+                            
                             return WuxSheetMain.Desc(`<span>Category: ${job.category}</span>
-                            <span>Main Skills: ${job.skills != "" ? job.skills : "None"}</span>
+                            <span>Main Skills: ${skillsOutput}</span>
                             <span>${job.description}</span>`);
                         }
                     ;
@@ -1285,32 +1300,46 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     let contents = "";
                     let filteredData = WuxDef.Filter([new DatabaseFilterData("group", "StyleGroup")]);
                     for (let i = 0; i < filteredData.length; i++) {
-                        let subFilteredData = WuxDef.Filter([
-                            new DatabaseFilterData("subGroup", filteredData[i].getTitle()),
-                            new DatabaseFilterData("group", "StyleSubGroup")
-                        ]);
-
-                        let styleOutput = "";
-                        for (let j = 0; j < subFilteredData.length; j++) {
-
-                            let techFilterData = stylesDatabase.filter([
-                                new DatabaseFilterData("group", "Style"),
-                                new DatabaseFilterData("subGroup", subFilteredData[j].getTitle())
-                            ]);
-                            let techStyles = [];
-                            for (let k = 0; k < techFilterData.length; k++) {
-                                techStyles.push(buildStyleGroupFlexTableEntry(techFilterData[k], stylesDatabase));
-                            }
-                            if (techStyles.length == 0) {
-                                continue;
-                            }
-                            styleOutput += WuxSheetMain.Header(subFilteredData[j].getTitle());
-                            styleOutput += WuxSheetMain.Table.FlexTable(techStyles);
-                        }
-                        contents += buildTechniqueStyleGroupTab(styleOutput, filteredData[i].name, filteredData[i].getTitle());
+                        contents += buildStyleGroupContents(filteredData[i], stylesDatabase);
                     }
 
                     return contents;
+                },
+                
+                buildStyleGroupContents = function (styleCategoryDefinition, stylesDatabase) {
+                    let stylesFilter = WuxDef.Filter([
+                        new DatabaseFilterData("subGroup", styleCategoryDefinition.getTitle()),
+                        new DatabaseFilterData("group", "StyleSubGroup")
+                    ]);
+
+                    let styleOutput = "";
+                    for (let i = 0; i < stylesFilter.length; i++) {
+                        styleOutput += buildSubStyleGroupContents(stylesFilter[i], stylesDatabase);
+                    }
+                    return buildTechniqueStyleGroupTab(styleOutput, styleCategoryDefinition.name, styleCategoryDefinition.getTitle());
+                },
+                
+                buildSubStyleGroupContents = function (subStyleCategoryDefinition, stylesDatabase) {
+                    let techFilterData = stylesDatabase.filter([
+                        new DatabaseFilterData("group", "Style"),
+                        new DatabaseFilterData("subGroup", subStyleCategoryDefinition.getTitle())
+                    ]);
+                    
+                    let techStyles = [];
+                    for (let i = 0; i < techFilterData.length; i++) {
+                        techStyles.push(buildStyleGroupFlexTableEntry(techFilterData[i], stylesDatabase));
+                    }
+                    if (techStyles.length == 0) {
+                        return "";
+                    }
+                    let output = WuxSheetMain.Table.FlexTable(techStyles);
+                    
+                    let hiddenField = subStyleCategoryDefinition.getAttribute(WuxDef._expand);
+                    let header = WuxSheetMain.Header(
+                        WuxSheetMain.CollapsibleHeader(
+                            `<span>${(subStyleCategoryDefinition.getTitle())}</span>`, hiddenField));
+                    return header + WuxSheetMain.HiddenAuxField(hiddenField, output);
+                    
                 },
 
                 buildStyleGroupFlexTableEntry = function (style, stylesDatabase) {
@@ -1385,7 +1414,7 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     else {
                         let skillsOutput = "";
                         let skillSplit = style.skills.split(";");
-                        for (let i = 0; i < skillsOutput.length; i++) {
+                        for (let i = 0; i < skillSplit.length; i++) {
                             if (skillsOutput != "") {
                                 skillsOutput += "; ";
                             }
@@ -1397,7 +1426,7 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                                 skillsOutput += `${skillData[0]}`;
                             }
                         }
-                        output += `<span class="wuxStyleTooltipContainer"><em>Main Skills: ${skillsOutput}</em></span>\n`;
+                        output += `<span><em>Main Skills: ${skillsOutput}</em></span>\n`;
                     }
                     output += `<span class="wuxStyleTooltipContainer"><em>Traits: ${getStyleTraits(style)}</em></span>\n`;
                     output += `<span>${styleDef.getDescription()}</span>`;
