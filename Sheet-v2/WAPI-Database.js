@@ -2537,6 +2537,8 @@ class BaseTechniqueEffectDisplayData {
                 else {
                     return `${this.formatTargetGain(effect)} ${formula} ranks in the ${state.title} ${state.group}`; 
                 }
+            case "Trigger":
+                return `If ${this.formatTarget(effect)} has ${state.getTitle()}, trigger the effects.`;
             case "Remove":
                 return `${this.formatTargetLose(effect)} the ${state.title} ${state.group}`;
             case "Remove Any":

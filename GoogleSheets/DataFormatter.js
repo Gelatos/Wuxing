@@ -2885,7 +2885,7 @@ function getNamedColumn(sheet, name) {
         }
     }
 
-    return -1; // Return -1 if "Assess" column is not found
+    return -1; // Return -1 if column is not found
 }
 
 class TechniqueAssessment {
@@ -3114,14 +3114,8 @@ class TechniqueAssessment {
         attributeHandler.current[WuxDef.GetVariable("Attr_INT")] = 2;
         attributeHandler.addMod(WuxDef.GetVariable("Attr_RSN"));
         attributeHandler.current[WuxDef.GetVariable("Attr_RSN")] = 2;
-        attributeHandler.addMod(WuxDef.GetVariable("Power"));
-        attributeHandler.current[WuxDef.GetVariable("Power")] = 3;
-        attributeHandler.addMod(WuxDef.GetVariable("Accuracy"));
-        attributeHandler.current[WuxDef.GetVariable("Accuracy")] = 3;
-        attributeHandler.addMod(WuxDef.GetVariable("Artistry"));
-        attributeHandler.current[WuxDef.GetVariable("Artistry")] = 3;
-        attributeHandler.addMod(WuxDef.GetVariable("Charisma"));
-        attributeHandler.current[WuxDef.GetVariable("Charisma")] = 3;
+        attributeHandler.addMod(WuxDef.GetVariable("SB_MAX"));
+        attributeHandler.current[WuxDef.GetVariable("SB_MAX")] = 3;
         attributeHandler.addMod(WuxDef.GetVariable("Recall"));
         attributeHandler.current[WuxDef.GetVariable("Recall")] = 3;
         attributeHandler.addMod(WuxDef.GetVariable("CR"));
@@ -3286,7 +3280,7 @@ class TechniqueAssessment {
                 this.addImpactTrait("Trait_Atk");
                 break;
             case "Status":
-                output.value = Math.max(Math.floor(output.value * 0.5), 1);
+                output.value = Math.max(Math.floor(output.value * 0.25), 1);
                 message = `(Status)`;
 
                 if (effect.defense != "WillBreak") {
@@ -3351,7 +3345,7 @@ class TechniqueAssessment {
                     this.lowWill += output.lowValue;
                     this.highWill += output.highValue;
                     if (this.dps > 0) {
-                        output.value = Math.floor(output.value * 0.65);
+                        output.value = Math.floor(output.value * 0.5);
                     }
                 }
                 message = `(Will)`;
@@ -3501,7 +3495,7 @@ class TechniqueAssessment {
 
         this.addPointsRubric(value, message);
         this.addTargetedPointsRubric(effect, value);
-        this.addImpactTrait(`${effect.effect}`);
+        this.addImpactTrait(`Trait_Terrain:${effect.effect}`);
     }
 
     getStructureAssessmentData(effect, attributeHandler) {
@@ -3600,15 +3594,24 @@ class TechniqueAssessment {
                     this.addDefensePointsRubric(effect, value, message);
                     this.addTargetedPointsRubric(effect, value);
                     this.addImpactTrait(`Trait_Apply:${state.name}`);
-                }
 
-                if (effect.effect != "Stat_Engaged") {
-                    this.statusCount++;
-                    if (this.statusCount > 1) {
-                        value = Math.floor(this.statusCount * 4);
-                        this.addPointsRubric(value, `(MultiStat)`);
+                    if (effect.effect != "Stat_Engaged") {
+                        this.statusCount++;
+                        if (this.statusCount > 1) {
+                            value = Math.floor(this.statusCount * 4);
+                            this.addPointsRubric(value, `(MultiStat)`);
+                        }
                     }
                 }
+                break;
+            case "Trigger":
+                value = Math.floor(parseInt(state.points) * 0.5);
+                message = `(Trigger ${state.getTitle()})`;
+
+                this.addPointsRubric(value, message);
+                this.addDefensePointsRubric(effect, value, message);
+                this.addTargetedPointsRubric(effect, value);
+                this.addImpactTrait(`Trait_Trigger:${state.name}`);
                 break;
             case "Remove":
                 value = Math.floor(parseInt(state.points) * 0.75);
@@ -3905,11 +3908,16 @@ function SetAllStyleKeywords(sheet, startRow) {
     const lastCol = sheet.getLastColumn();
     let effectColumn = getNamedColumn(sheet, "Effects");
     let skillColumn = getNamedColumn(sheet, "Skills");
+    let affinityColumn = getNamedColumn(sheet, "Affinity");
     let rowIndex = startRow;
     while (rowIndex <= lastRow) {
         let effectCell = sheet.getRange(rowIndex, effectColumn, 1, 1);
         effectCell.setValue("Calculating...")
         let skillCell = sheet.getRange(rowIndex, skillColumn, 1, 1);
+        let affinityCell = undefined;
+        if (affinityColumn >= 0) {
+            affinityCell = sheet.getRange(rowIndex, affinityColumn, 1, 1);
+        }
         
         let rowData = sheet.getRange(rowIndex, 1, 1, lastCol).getValues()[0];
         if (rowData[0] == "" || rowData[0].startsWith("#")) {
@@ -3918,12 +3926,12 @@ function SetAllStyleKeywords(sheet, startRow) {
             continue;
         }
 
-        SetStyleKeywords(rowData, effectCell, skillCell)
+        SetStyleKeywords(rowData, effectCell, skillCell, affinityCell)
         rowIndex++;
     }
 }
 
-function SetStyleKeywords(rowData, effectCell, skillCell) {
+function SetStyleKeywords(rowData, effectCell, skillCell, affinityCell) {
     
     let style = new TechniqueStyle(rowData);
     let techniqueFilter = WuxTechs.Filter(new DatabaseFilterData("style", style.name));
@@ -3931,29 +3939,43 @@ function SetStyleKeywords(rowData, effectCell, skillCell) {
     if (techniqueFilter.length == 0) {
         effectCell.setValue("");
     } else {
-        let styleAssessment = new StyleAssessment(style, techniqueFilter, effectCell, skillCell);
+        let styleAssessment = new StyleAssessment(
+            style, techniqueFilter, effectCell, skillCell, affinityCell);
         styleAssessment.print();
     }
 }
 
 class StyleAssessment {
     
-    constructor (style, techniqueFilter, effectCell, skillCell) {
+    constructor (style, techniqueFilter, effectCell, skillCell, affinityCell) {
         this.baseTechniqueKeywords = {};
         this.effectCell = effectCell;
         this.skillCell = skillCell;
+        this.affinityCell = affinityCell;
+        this.skills = [];
+        this.affinities = [];
         
         if (style.baseStyle != "") {
             let baseTechniqueFilters = WuxTechs.Filter(new DatabaseFilterData("style", style.baseStyle));
             this.baseTechniqueKeywords = this.getStyleTechniqueKeywords(baseTechniqueFilters);
         }
         this.techniqueKeywords = this.getStyleTechniqueKeywords(techniqueFilter);
-        this.skills = this.getStyleTechniqueSkills(techniqueFilter);
+
+        if (this.skillCell != undefined) {
+            this.skills = this.getStyleTechniqueSkills(techniqueFilter);
+        }
+
+        if (this.affinityCell != undefined) {
+            this.affinities = this.getStyleTechniqueAffinities(techniqueFilter);
+        }
     }
 
     print() {
         this.effectCell.setValue(this.printKeywords());
         this.skillCell.setValue(this.printSkills());
+        if (this.affinityCell != undefined) {
+            this.affinityCell.setValue(this.printAffinity());
+        }
     }
 
     printKeywords() {
@@ -3992,6 +4014,21 @@ class StyleAssessment {
                 output += "; ";
             }
             output += this.skills[i];
+        }
+        return output;
+    }
+
+    printAffinity() {
+        let output = "";
+        for(let i = 0; i < this.affinities.length; i++)
+        {
+            if (this.affinities[i].trim() == "") {
+                continue;
+            }
+            if (output != "") {
+                output += "; ";
+            }
+            output += this.affinities[i];
         }
         return output;
     }
@@ -4037,10 +4074,24 @@ class StyleAssessment {
         for (let i = 0; i < techniqueFilters.length; i++) {
             if (!skills.includes(techniqueFilters[i].skill)) {
                 skills.push(techniqueFilters[i].skill);
-                
+
             }
         }
         return skills;
+    }
+
+    getStyleTechniqueAffinities(techniqueFilters) {
+        let affinities = [];
+        for (let i = 0; i < techniqueFilters.length; i++) {
+            let affinitySplit = techniqueFilters[i].affinity.split(";");
+            for (let j = 0; j < affinitySplit.length; j++) {
+                let affinity = affinitySplit[j].trim();
+                if (!affinities.includes(affinity)) {
+                    affinities.push(affinity);
+                }
+            }
+        }
+        return affinities;
     }
 }
 

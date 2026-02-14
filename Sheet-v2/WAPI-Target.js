@@ -902,6 +902,7 @@ class TokenTargetData extends TargetData {
             this.addStatus(attributeHandler, "Stat_Aflame", 1);
             let roll = new DamageRoll();
             roll.rollDice(aegis, 6);
+            roll.addModToRoll(aegis);
             roll.setDamageType(WuxDef.GetTitle("Dmg_Burn"));
             this.addDamageRoll(roll);
         }
@@ -912,6 +913,7 @@ class TokenTargetData extends TargetData {
             this.addStatus(attributeHandler, "Stat_Chilled", 1);
             let roll = new DamageRoll();
             roll.rollDice(aegis, 6);
+            roll.addModToRoll(aegis);
             roll.setDamageType(WuxDef.GetTitle("Dmg_Cold"));
             this.addDamageRoll(roll);
         }
@@ -922,7 +924,19 @@ class TokenTargetData extends TargetData {
             this.setStatus(attributeHandler, "Stat_Jolted", 1);
             let roll = new DamageRoll();
             roll.rollDice(aegis, 6);
+            roll.addModToRoll(aegis);
             roll.setDamageType(WuxDef.GetTitle("Dmg_Shock"));
+            this.addDamageRoll(roll);
+        }
+    }
+    takeThornAegisEffect(attributeHandler) {
+        let aegis = this.getStatusRank(attributeHandler, "Stat_Thorn Aegis");
+        if (aegis > 0) {
+            this.setStatus(attributeHandler, "Stat_Vined", 1);
+            let roll = new DamageRoll();
+            roll.rollDice(aegis, 6);
+            roll.addModToRoll(aegis);
+            roll.setDamageType(WuxDef.GetTitle("Dmg_Piercing"));
             this.addDamageRoll(roll);
         }
     }
@@ -1746,7 +1760,7 @@ var TargetReference = TargetReference || (function () {
             output += tokenOptionButton("Add Energy", "ten ?{How much energy to add?|1}");
             output += tokenOptionButton("Add Surge", "thealsurge ?{How much surge to add?|1}");
             output += tokenOptionButton("Add Vitality", "thealvit ?{How much vitality to add?|1}");
-            let conditionals = `Aflame|Angered|Bleeding|Burn Aegis|Cold Aegis|Frightened|Shock Aegis|Willbreak Cast`;
+            let conditionals = `Aflame|Angered|Bleeding|Burn Aegis|Cold Aegis|Frightened|Shock Aegis|Thorn Aegis|Willbreak Cast`;
             output += tokenOptionButton("Take Condition Effect", `tconditional ?{Choose your conditional|${conditionals}`);
 
             output += tokenOptionSpacer();
@@ -2028,7 +2042,6 @@ var TargetReference = TargetReference || (function () {
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
                 
-                // `Aflame|Bleeding|Burn Aegis|Cold Aegis|Jolt Aegis|Willbreak Cast`
                 switch (content) {
                     case "Aflame":
                         tokenTargetData.takeAflameEffect(attributeHandler);
@@ -2050,6 +2063,9 @@ var TargetReference = TargetReference || (function () {
                         break;
                     case "Shock Aegis":
                         tokenTargetData.takeShockAegisEffect(attributeHandler);
+                        break;
+                    case "Thorn Aegis":
+                        tokenTargetData.takeThornAegisEffect(attributeHandler);
                         break;
                     case "Willbreak Cast":
                         tokenTargetData.takeCastWillbreakEffect(attributeHandler);

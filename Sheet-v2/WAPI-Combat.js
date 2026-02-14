@@ -1479,6 +1479,13 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
             case "Choose":
                 tokenEffect.tryAddStatusResult(techniqueEffect.effect, "add", roll.total, attrHandler);
                 break;
+            case "Trigger":
+                switch (techniqueEffect.subType) {
+                    case "Stat_Aflame":
+                        tokenEffect.takeAflameEffect(attrHandler);
+                        break;
+                }
+                break;
             case "Remove":
                 tokenEffect.tryAddStatusResult(techniqueEffect.effect, "remove", roll.total);
                 break;
