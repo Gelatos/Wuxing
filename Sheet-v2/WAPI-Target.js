@@ -662,6 +662,10 @@ class TokenTargetData extends TargetData {
         if (chilled != false && chilled > 0) {
             speed -= chilled;
         }
+        let vined = this.hasStatus(attrHandler, "Stat_Vined");
+        if (vined != false && vined > 0) {
+            speed -= vined;
+        }
         return Math.max(speed, 1);
     }
 
@@ -836,6 +840,34 @@ class TokenTargetData extends TargetData {
             }
         });
     }
+    
+    takeAflameEffect(attributeHandler) {
+        let aflame = this.hasStatus(attributeHandler, "Stat_Aflame");
+        if (aflame != false && aflame > 0) {
+            let roll = new DamageRoll();
+            roll.rollDice(aflame, 6);
+            roll.setDamageType(WuxDef.GetTitle("Dmg_Fire"));
+            this.addDamageRoll(roll);
+        }
+    }
+    takeBleedingEffect(attributeHandler) {
+        let bleeding = this.hasStatus(attributeHandler, "Stat_Bleeding");
+        if (bleeding != false && bleeding > 0) {
+            let roll = new DamageRoll();
+            roll.rollDice(bleeding, 6);
+            roll.setDamageType(WuxDef.GetTitle("Dmg_Tension"));
+            roll.setTraits("AP");
+            this.addDamageRoll(roll);
+        }
+    }
+    takeDoubtEffect(attributeHandler) {
+        if (this.hasStatus(attributeHandler, "Stat_Doubt")) {
+            let roll = new DamageRoll();
+            roll.addModToRoll(5 + (5 * attributeHandler.parseInt(WuxDef.GetVariable("CR"))));
+            roll.setDamageType("Will");
+            this.addDamageRoll(roll);
+        }
+    }
 
 
     getModifyResults(name) {
@@ -997,6 +1029,10 @@ class TokenTargetEffectsData {
                 default:
                     if (!damageRoll.traits.includes("AP")) {
                         let armorTotal = attrGetter.parseInt(WuxDef.GetVariable("Cmb_Armor"));
+                        let ironPlates = this.hasStatus(attrSetter, "Stat_Iron Plates");
+                        if (ironPlates != false && ironPlates > 0) {
+                            armorTotal += ironPlates;
+                        }
                         if (tokenTargetEffect.tokenTargetData.hasStatus(attrSetter, "Stat_Armored")) {
                             armorTotal += 2 * attrGetter.parseInt(WuxDef.GetVariable("CR"));
                         }
@@ -1010,6 +1046,11 @@ class TokenTargetEffectsData {
                         damageRoll.addModToRoll(-1 * Math.floor(damageRoll.total / 2), "Shielded");
                         tokenTargetEffect.effectMessages.push(`Removed Shielded status.`);
                         tokenTargetEffect.tokenTargetData.removeStatus(attrSetter, "Stat_Shielded");
+                    }
+                    if (tokenTargetEffect.tokenTargetData.hasStatus(attrSetter, "Stat_Rock Shield")) {
+                        damageRoll.addModToRoll(-1 * Math.floor(damageRoll.total / 2), "Rock Shield");
+                        tokenTargetEffect.effectMessages.push(`Removed Rock Shield status.`);
+                        tokenTargetEffect.tokenTargetData.removeStatus(attrSetter, "Stat_Rock Shield");
                     }
                     let mantle = tokenTargetEffect.tokenTargetData.hasStatus(attrSetter, "Stat_Mantle");
                     if (mantle != false && mantle > 0) {

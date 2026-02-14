@@ -236,27 +236,9 @@ var WuxConflictManager = WuxConflictManager || (function () {
                     WuxDef.GetVariable("Cmb_Armor"), WuxDef.GetVariable("CR")]);
 
                 attributeHandler.addGetAttrCallback(function (attrGetter) {
-                    let aflame = tokenTargetData.hasStatus(attrGetter, "Stat_Aflame");
-                    if (aflame != false && aflame > 0) {
-                        let roll = new DamageRoll();
-                        roll.rollDice(aflame, 6);
-                        roll.setDamageType(WuxDef.GetTitle("Dmg_Fire"));
-                        tokenEffect.addDamageRoll(roll);
-                    }
-                    let bleeding = tokenTargetData.hasStatus(attrGetter, "Stat_Bleeding");
-                    if (bleeding != false && bleeding > 0) {
-                        let roll = new DamageRoll();
-                        roll.rollDice(bleeding, 6);
-                        roll.setDamageType(WuxDef.GetTitle("Dmg_Tension"));
-                        roll.setTraits("AP");
-                        tokenEffect.addDamageRoll(roll);
-                    }
-                    if (tokenTargetData.hasStatus(attrGetter, "Stat_Doubt")) {
-                        let roll = new DamageRoll();
-                        roll.addModToRoll(5 + (5 * attrGetter.parseInt(WuxDef.GetVariable("CR"))));
-                        roll.setDamageType("Will");
-                        tokenEffect.addDamageRoll(roll);
-                    }
+                    tokenTargetData.takeAflameEffect(attrGetter);
+                    tokenTargetData.takeBleedingEffect(attrGetter);
+                    tokenTargetData.takeDoubtEffect(attrGetter);
                 });
                 
                 attributeHandler.addFinishCallback(function (attrGetter) {
@@ -974,6 +956,10 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             advantage -= 1;
             techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Sickened: +1 Disadvantage`);
         }
+        if (techSkillCheckResolver.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Soaked")) {
+            advantage -= 1;
+            techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Soaked: +1 Disadvantage`);
+        }
         if (techSkillCheckResolver.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Encouraged")) {
             advantage -= 1;
             if (removeStatus) {
@@ -1209,12 +1195,9 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
             let defenseDef = WuxDef.Get(techniqueEffect.defense);
             message = `Vs. ${defenseDef.getTitle()}`;
             dcValue = targetAttrHandler.parseInt(defenseDef.getVariable());
-            if (techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(targetAttrHandler, "Stat_Dodge")) {
+            if (techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(targetAttrHandler, "Stat_Dodge") && techniqueEffect.defense == "Def_Evasion") {
                 techSkillCheckResolver.targetTokenEffect.tokenTargetData.removeStatus(targetAttrHandler, "Stat_Dodge");
-                if (techniqueEffect.defense == "Def_Evasion") {
-                    dcValue += 6;
-                }
-                techSkillCheckResolver.addMessage(`${techSkillCheckResolver.targetTokenEffect.tokenTargetData.displayName}: +6 Evasion. Removed Dodge status.`);
+                techSkillCheckResolver.addMessage(`${techSkillCheckResolver.targetTokenEffect.tokenTargetData.displayName}: +5 Evasion. Removed Dodge status.`);
             }
 
             if (techSkillCheckResolver.targetTokenEffect.tokenTargetData.getDowned()) {
@@ -1470,15 +1453,20 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
     addStatusEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
         let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
         let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
+        let attrHandler = attrSetters.getObjByTarget(techniqueEffect);
 
         switch (techniqueEffect.subType) {
             case "Set":
-                tokenEffect.addStatusResult(techniqueEffect.effect, "set", roll.total);
+                if (techUseResolver.applyStatusEffectConditions(techniqueEffect, techUseResolver, tokenEffect, roll, attrHandler)) {
+                    tokenEffect.addStatusResult(techniqueEffect.effect, "set", roll.total);
+                }
                 break;
             case "Add":
             case "Self":
             case "Choose":
-                tokenEffect.addStatusResult(techniqueEffect.effect, "add", roll.total);
+                if (techUseResolver.applyStatusEffectConditions(techniqueEffect, techUseResolver, tokenEffect, roll, attrHandler)) {
+                    tokenEffect.addStatusResult(techniqueEffect.effect, "add", roll.total);
+                }
                 break;
             case "Remove":
                 tokenEffect.addStatusResult(techniqueEffect.effect, "remove", roll.total);
@@ -1491,6 +1479,55 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                 tokenEffect.setRemoveStatusType(attrSetters.getObjByTarget(techniqueEffect), "Emotion");
                 break;
         }
+    }
+    applyStatusEffectConditions(techniqueEffect, techUseResolver, tokenEffect, roll, attrHandler) {
+        let vined;
+        let aflame;
+        switch(techniqueEffect.effect) {
+            case "Stat_Aflame":
+                if (tokenEffect.hasStatus(attrHandler, "Stat_Chilled")) {
+                    techUseResolver.addMessage("Aflame removes Chilled from target");
+                    roll.addModToRoll(roll.total, "Soaked");
+                }
+                vined = tokenEffect.hasStatus(attrHandler, "Stat_Vined");
+                if (vined != false && vined > 0) {
+                    techUseResolver.addMessage("Target is Vined. Adding Vine ranks to Aflame and taking damage.");
+                    roll.addModToRoll(vined, "Vined");
+                    tokenEffect.addStatusResult("Stat_Vined", "remove", vined);
+                    tokenEffect.takeAflameEffect(attrHandler);
+                }
+                break;
+            case "Stat_Vined":
+                if (tokenEffect.hasStatus(attrHandler, "Stat_Soaked")) {
+                    techUseResolver.addMessage("Target is Soaked. Doubling Vined ranks.");
+                    roll.addModToRoll(roll.total, "Soaked");
+                }
+                aflame = tokenEffect.hasStatus(attrHandler, "Stat_Soaked");
+                if (aflame != false && aflame > 0) {
+                    techUseResolver.addMessage("Target is Aflame. Adding Vine ranks to Aflame and taking damage.");
+                    tokenEffect.addStatusResult("Aflame", "set", roll.total);
+                    tokenEffect.takeAflameEffect(attrHandler);
+                    return false;
+                }
+                break;
+            case "Stat_Chilled":
+                if (tokenEffect.hasStatus(attrHandler, "Stat_Aflame")) {
+                    techUseResolver.addMessage("Aflame removes Chilled from target");
+                    return false;
+                }
+                if (tokenEffect.hasStatus(attrHandler, "Stat_Soaked")) {
+                    techUseResolver.addMessage("Target is Soaked. Doubling Chilled ranks.");
+                    roll.addModToRoll(roll.total, "Soaked");
+                }
+                break;
+            case "Stat_Iron Plates":
+                if (tokenEffect.hasStatus(attrHandler, "Stat_Rock Shield")) {
+                    techUseResolver.addMessage("Target has Rock Shield. Doubling Iron Plate ranks.");
+                    roll.addModToRoll(roll.total, "Rock Shield");
+                }
+                break;
+        }
+        return true;
         
     }
     
