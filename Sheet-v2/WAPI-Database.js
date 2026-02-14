@@ -2437,13 +2437,18 @@ class BaseTechniqueEffectDisplayData {
 
     formatHpEffect(effect) {
         let hp = WuxDef.GetTitle("HP");
-        switch (effect.subType) {
+        let subTypeParts = effect.subType.split(":");
+        let subType = subTypeParts[0];
+        switch (subType) {
             case "Heal":
                 return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${hp}`;
             case "Surge":
                 return `If ${this.formatTarget(effect)} has a surge, they must spend one and heal ${this.formatCalcBonus(effect)} ${hp}`;
             case "Burst Damage":
                 return `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage per rank of your Burst condition. You then lose the Burst condition.`;
+            case "Status":
+                let statusEffect = WuxDef.GetTitle(Format.GetDefinitionName("Status", subTypeParts[1]));
+                return `If ${this.formatTarget(effect)} has ${statusEffect}, ${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
             default:
                 return `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
         }

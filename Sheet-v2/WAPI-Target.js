@@ -501,7 +501,10 @@ class TokenTargetData extends TargetData {
     }
 
     applyResultsToHp(results, attrHandler, attributeVar, tokenTargetData) {
-        tokenTargetData.setBarValue(1, results.newValue);
+        tokenTargetData.refreshCombatDetails(attrHandler);
+        if (this.combatDetails.displayStyle == "Battle") {
+            tokenTargetData.setBarValue(1, results.newValue);
+        }
         return results;
     }
 
@@ -658,12 +661,12 @@ class TokenTargetData extends TargetData {
         if (this.hasStatus(attrHandler, "Stat_Encumbered")) {
             speed -= 1;
         }
-        let chilled = this.hasStatus(attrHandler, "Stat_Chilled");
-        if (chilled != false && chilled > 0) {
+        let chilled = this.getStatusRank(attrHandler, "Stat_Chilled");
+        if (chilled > 0) {
             speed -= chilled;
         }
-        let vined = this.hasStatus(attrHandler, "Stat_Vined");
-        if (vined != false && vined > 0) {
+        let vined = this.getStatusRank(attrHandler, "Stat_Vined");
+        if (vined > 0) {
             speed -= vined;
         }
         return Math.max(speed, 1);
@@ -757,6 +760,13 @@ class TokenTargetData extends TargetData {
             return tokenNoteReference.statusHandler.hasStatus(statusDefinitionName);
         }
     }
+    getStatusRank(attrHandler, statusDefinitionName) {
+        let value = this.hasStatus(attrHandler, statusDefinitionName);
+        if (!value) {
+            return 0;
+        }
+        return value;
+    }
     setStatus(attributeHandler, statusDefinitionName, rank) {
         this.modifyStatus(attributeHandler, statusDefinitionName, "set", rank);
     }
@@ -842,17 +852,26 @@ class TokenTargetData extends TargetData {
     }
     
     takeAflameEffect(attributeHandler) {
-        let aflame = this.hasStatus(attributeHandler, "Stat_Aflame");
-        if (aflame != false && aflame > 0) {
+        let aflame = this.getStatusRank(attributeHandler, "Stat_Aflame");
+        if (aflame > 0) {
             let roll = new DamageRoll();
             roll.rollDice(aflame, 6);
             roll.setDamageType(WuxDef.GetTitle("Dmg_Fire"));
             this.addDamageRoll(roll);
         }
     }
+    takeAngeredEffect(attributeHandler) {
+        if (this.hasStatus(attributeHandler, "Stat_Angered")) {
+            this.takeCastWillbreakEffect(attributeHandler);
+            let roll = new DamageRoll();
+            roll.addModToRoll(5 * attributeHandler.parseInt(WuxDef.GetVariable("CR")));
+            roll.setDamageType("Will");
+            this.addDamageRoll(roll);
+        }
+    }
     takeBleedingEffect(attributeHandler) {
-        let bleeding = this.hasStatus(attributeHandler, "Stat_Bleeding");
-        if (bleeding != false && bleeding > 0) {
+        let bleeding = this.getStatusRank(attributeHandler, "Stat_Bleeding");
+        if (bleeding > 0) {
             let roll = new DamageRoll();
             roll.rollDice(bleeding, 6);
             roll.setDamageType(WuxDef.GetTitle("Dmg_Tension"));
@@ -867,6 +886,52 @@ class TokenTargetData extends TargetData {
             roll.setDamageType("Will");
             this.addDamageRoll(roll);
         }
+    }
+    takeFrightenedEffect(attributeHandler) {
+        if (this.hasStatus(attributeHandler, "Stat_Frightened")) {
+            this.takeCastWillbreakEffect(attributeHandler);
+            let roll = new DamageRoll();
+            roll.addModToRoll(10 + (5 * attributeHandler.parseInt(WuxDef.GetVariable("CR"))));
+            roll.setDamageType("Will");
+            this.addDamageRoll(roll);
+        }
+    }
+    takeBurnAegisEffect(attributeHandler) {
+        let aegis = this.getStatusRank(attributeHandler, "Stat_Burn Aegis");
+        if (aegis > 0) {
+            this.addStatus(attributeHandler, "Stat_Aflame", 1);
+            let roll = new DamageRoll();
+            roll.rollDice(aegis, 6);
+            roll.setDamageType(WuxDef.GetTitle("Dmg_Burn"));
+            this.addDamageRoll(roll);
+        }
+    }
+    takeColdAegisEffect(attributeHandler) {
+        let aegis = this.getStatusRank(attributeHandler, "Stat_Cold Aegis");
+        if (aegis > 0) {
+            this.addStatus(attributeHandler, "Stat_Chilled", 1);
+            let roll = new DamageRoll();
+            roll.rollDice(aegis, 6);
+            roll.setDamageType(WuxDef.GetTitle("Dmg_Cold"));
+            this.addDamageRoll(roll);
+        }
+    }
+    takeShockAegisEffect(attributeHandler) {
+        let aegis = this.getStatusRank(attributeHandler, "Stat_Shock Aegis");
+        if (aegis > 0) {
+            this.setStatus(attributeHandler, "Stat_Jolted", 1);
+            let roll = new DamageRoll();
+            roll.rollDice(aegis, 6);
+            roll.setDamageType(WuxDef.GetTitle("Dmg_Shock"));
+            this.addDamageRoll(roll);
+        }
+    }
+    takeCastWillbreakEffect(attributeHandler) {
+        let roll = new DamageRoll();
+        roll.addModToRoll(5 + (5 * attributeHandler.parseInt(WuxDef.GetVariable("CR"))));
+        roll.setDamageType(WuxDef.GetTitle("Dmg_Tension"));
+        roll.setTraits("AP");
+        this.addDamageRoll(roll);
     }
 
 
@@ -1029,8 +1094,8 @@ class TokenTargetEffectsData {
                 default:
                     if (!damageRoll.traits.includes("AP")) {
                         let armorTotal = attrGetter.parseInt(WuxDef.GetVariable("Cmb_Armor"));
-                        let ironPlates = this.hasStatus(attrSetter, "Stat_Iron Plates");
-                        if (ironPlates != false && ironPlates > 0) {
+                        let ironPlates = this.getStatusRank(attrSetter, "Stat_Iron Plates");
+                        if (ironPlates > 0) {
                             armorTotal += ironPlates;
                         }
                         if (tokenTargetEffect.tokenTargetData.hasStatus(attrSetter, "Stat_Armored")) {
@@ -1052,8 +1117,8 @@ class TokenTargetEffectsData {
                         tokenTargetEffect.effectMessages.push(`Removed Rock Shield status.`);
                         tokenTargetEffect.tokenTargetData.removeStatus(attrSetter, "Stat_Rock Shield");
                     }
-                    let mantle = tokenTargetEffect.tokenTargetData.hasStatus(attrSetter, "Stat_Mantle");
-                    if (mantle != false && mantle > 0) {
+                    let mantle = tokenTargetEffect.tokenTargetData.getStatusRank(attrSetter, "Stat_Mantle");
+                    if (mantle > 0) {
                         let mantleShielding = Math.ceil(damageRoll.total / 2);
                         let mantleNewValue = mantle - mantleShielding;
                         tokenTargetEffect.effectMessages.push(`${tokenTargetEffect.tokenTargetData.displayName}'s mantle takes ` + 
@@ -1075,7 +1140,64 @@ class TokenTargetEffectsData {
             }
         });
     }
-    
+
+    tryAddStatusResult(statusDefinitionName, type, rank, attrHandler) {
+        if (type == "add" || type == "set") {
+            let aflame;
+            switch (statusDefinitionName) {
+                case "Stat_Aflame":
+                    if (this.tokenTargetData.hasStatus(attrHandler, "Stat_Chilled")) {
+                        this.effectMessages.push("Aflame removes Chilled from target");
+                        rank *= 2;
+                    }
+                    let vined = this.tokenTargetData.getStatusRank(attrHandler, "Stat_Vined");
+                    if (vined > 0) {
+                        this.effectMessages.push("Target is Vined. Adding Vine ranks to Aflame and taking damage.");
+                        rank += vined;
+                        this.addStatusResult("Stat_Vined", "remove", vined);
+                        this.tokenTargetData.takeAflameEffect(attrHandler);
+                    }
+                    break;
+                case "Stat_Vined":
+                    if (this.tokenTargetData.hasStatus(attrHandler, "Stat_Soaked")) {
+                        this.effectMessages.push("Target is Soaked. Doubling Vined ranks.");
+                        rank *= 2;
+                    }
+                    aflame = this.tokenTargetData.getStatusRank(attrHandler, "Stat_Soaked");
+                    if (aflame > 0) {
+                        this.effectMessages.push("Target is Aflame. Adding Vine ranks to Aflame and taking damage.");
+                        this.addStatusResult("Aflame", "add", rank);
+                        this.tokenTargetData.takeAflameEffect(attrHandler);
+                        return;
+                    }
+                    break;
+                case "Stat_Chilled":
+                    if (this.tokenTargetData.hasStatus(attrHandler, "Stat_Aflame")) {
+                        this.effectMessages.push("Aflame removes Chilled from target");
+                        return;
+                    }
+                    if (this.tokenTargetData.hasStatus(attrHandler, "Stat_Soaked")) {
+                        this.effectMessages.push("Target is Soaked. Doubling Chilled ranks.");
+                        rank *= 2;
+                    }
+                    break;
+                case "Stat_Cold Aegis":
+                    if (this.tokenTargetData.hasStatus(attrHandler, "Stat_Iron Plates")) {
+                        this.effectMessages.push("Target has Iron Plates. Doubling Cold Aegis ranks.");
+                        rank *= 2;
+                    }
+                    break;
+                case "Stat_Iron Plates":
+                    if (this.tokenTargetData.hasStatus(attrHandler, "Stat_Rock Shield")) {
+                        this.effectMessages.push("Target has Rock Shield. Doubling Iron Plate ranks.");
+                        rank *= 2;
+                    }
+                    break;
+            }
+        }
+        
+        this.addStatusResult(statusDefinitionName, type, rank);
+    }
     addStatusResult(statusDefinitionName, type, rank) {
         if (this.statusEffects[statusDefinitionName] == undefined) {
             this.statusEffects[statusDefinitionName] = {
@@ -1084,7 +1206,7 @@ class TokenTargetEffectsData {
             };
             return;
         }
-        
+
         switch (type) {
             case "add":
                 let existingType = this.statusEffects[statusDefinitionName].type;
@@ -1119,7 +1241,6 @@ class TokenTargetEffectsData {
                     let statusDefinitionName = statusName;
                     let task = statusInfo.type;
                     let rank = statusInfo.rank;
-                    Debug.Log(`Performing status effect: ${task} ${statusDefinitionName} ${rank}`);
                     switch (task) {
                         case "set":
                             statusObj.setStatus(statusDefinitionName, rank);
@@ -1458,6 +1579,8 @@ var TargetReference = TargetReference || (function () {
                     content = getTeamTargets(content);
                     commandHealVitality(msg, content.targets, content.content);
                     break;
+                case "!tconditional":
+                    commandTargetConditional(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                 case "!tresetsocial":
                     commandResetSocial(msg, TokenReference.GetTokenTargetDataArray(msg));
                     break;
@@ -1623,6 +1746,8 @@ var TargetReference = TargetReference || (function () {
             output += tokenOptionButton("Add Energy", "ten ?{How much energy to add?|1}");
             output += tokenOptionButton("Add Surge", "thealsurge ?{How much surge to add?|1}");
             output += tokenOptionButton("Add Vitality", "thealvit ?{How much vitality to add?|1}");
+            let conditionals = `Aflame|Angered|Bleeding|Burn Aegis|Cold Aegis|Frightened|Shock Aegis|Willbreak Cast`;
+            output += tokenOptionButton("Take Condition Effect", `tconditional ?{Choose your conditional|${conditionals}`);
 
             output += tokenOptionSpacer();
             output += tokenOptionTitle("Combat Move Options");
@@ -1896,6 +2021,59 @@ var TargetReference = TargetReference || (function () {
             });
 
             sendTokenUpdateMessage(msg, targets, `: ${content} Vitality`);
+        },
+
+        commandTargetConditional = function (msg, targets, content) {
+            let messages = [];
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                
+                // `Aflame|Bleeding|Burn Aegis|Cold Aegis|Jolt Aegis|Willbreak Cast`
+                switch (content) {
+                    case "Aflame":
+                        tokenTargetData.takeAflameEffect(attributeHandler);
+                        break;
+                    case "Angered":
+                        tokenTargetData.takeAngeredEffect(attributeHandler);
+                        break;
+                    case "Bleeding":
+                        tokenTargetData.takeBleedingEffect(attributeHandler);
+                        break;
+                    case "Burn Aegis":
+                        tokenTargetData.takeBurnAegisEffect(attributeHandler);
+                        break;
+                    case "Cold Aegis":
+                        tokenTargetData.takeColdAegisEffect(attributeHandler);
+                        break;
+                    case "Frightened":
+                        tokenTargetData.takeFrightenedEffect(attributeHandler);
+                        break;
+                    case "Shock Aegis":
+                        tokenTargetData.takeShockAegisEffect(attributeHandler);
+                        break;
+                    case "Willbreak Cast":
+                        tokenTargetData.takeCastWillbreakEffect(attributeHandler);
+                        break;
+                }
+                
+                attributeHandler.addFinishCallback(function (attrGetter) {
+                    let newAttributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                    newAttributeHandler.addAttribute([WuxDef.GetVariable("Status"),
+                        WuxDef.GetVariable("HP"), WuxDef.GetVariable("WILL"),
+                        WuxDef.GetVariable("Cmb_Armor"), WuxDef.GetVariable("CR")]);
+
+                    tokenTargetData.performDamageRolls(attrGetter, newAttributeHandler);
+                    newAttributeHandler.addFinishCallback(function () {
+                        messages = messages.concat(tokenTargetData.effectMessages);
+                    })
+                    newAttributeHandler.run();
+                });
+                attributeHandler.run();
+            });
+
+            let systemMessage = new SystemInfoMessage(messages);
+            systemMessage.setSender("System");
+            WuxMessage.Send(systemMessage);
         },
 
         commandResetSocial = function (msg, targets) {

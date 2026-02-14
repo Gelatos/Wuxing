@@ -637,10 +637,7 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
         willBreakTechEffect.name = "T0";
         willBreakTechEffect.target = "Self";
         willBreakTechEffect.type = "HP";
-        let damageCalc = (5 + (attrHandler.parseInt(WuxDef.GetVariable("CR")) * 5));
-        willBreakTechEffect.formula = new FormulaData("" + damageCalc);
-        willBreakTechEffect.effect = "Tension";
-        willBreakTechEffect.traits = "AP";
+        willBreakTechEffect.subType = "Cast WillBreak";
         
         let willBreakEffect = new TechniqueWillBreakEffects("Magic", 
             techniqueConsumptionResolver.sourceSheetName, techniqueConsumptionResolver.tokenEffect.tokenTargetData.tokenId);
@@ -942,8 +939,8 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
 
         // add advantages based on sender statuses
         if (techSkillCheckResolver.technique.action != "Assist") {
-            let downed = techSkillCheckResolver.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Downed");
-            if (downed != false && downed > 0) {
+            let downed = techSkillCheckResolver.senderTokenEffect.tokenTargetData.getStatusRank(senderAttributeHandler, "Stat_Downed");
+            if (downed > 0) {
                 advantage -= downed;
                 techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Downed: +${downed} Disadvantage`);
             }
@@ -967,16 +964,16 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             }
             techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Encouraged: +1 Advantage. Removed Encouraged status.`);
         }
-        let distracted = techSkillCheckResolver.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Distracted");
-        if (distracted != false && distracted > 0) {
+        let distracted = techSkillCheckResolver.senderTokenEffect.tokenTargetData.getStatusRank(senderAttributeHandler, "Stat_Distracted");
+        if (distracted > 0) {
             advantage -= distracted;
             if (removeStatus) {
                 techSkillCheckResolver.targetTokenEffect.tokenTargetData.removeStatus(targetAttributeHandler, "Stat_Distracted");
             }
             techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Distracted: +${distracted} Disadvantage. Removed Distracted status.`);
         }
-        let rally = techSkillCheckResolver.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Rally");
-        if (rally != false && rally > 0) {
+        let rally = techSkillCheckResolver.senderTokenEffect.tokenTargetData.getStatusRank(senderAttributeHandler, "Stat_Rally");
+        if (rally > 0) {
             advantage += rally;
             if (removeStatus) {
                 techSkillCheckResolver.targetTokenEffect.tokenTargetData.removeStatus(targetAttributeHandler, "Stat_Rally");
@@ -986,13 +983,13 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
 
         // add advantages based on what statuses the target has
         if (techSkillCheckResolver.technique.getTraits().includes("Social")) {
-            let agreeable = techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(targetAttributeHandler, "Stat_Agreeable");
-            if (agreeable != false && agreeable > 0) {
+            let agreeable = techSkillCheckResolver.targetTokenEffect.tokenTargetData.getStatusRank(targetAttributeHandler, "Stat_Agreeable");
+            if (agreeable > 0) {
                 advantage += agreeable;
                 techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Agreeable: +${agreeable} Advantage.`);
             }
-            let oppositional = techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(targetAttributeHandler, "Stat_Oppositional");
-            if (oppositional != false && oppositional > 0) {
+            let oppositional = techSkillCheckResolver.targetTokenEffect.tokenTargetData.getStatusRank(targetAttributeHandler, "Stat_Oppositional");
+            if (oppositional > 0) {
                 advantage -= oppositional;
                 techSkillCheckResolver.addMessage(`${techSkillCheckResolver.senderTokenEffect.tokenTargetData.displayName} is Oppositional: +${oppositional} Disadvantage.`);
             }
@@ -1274,8 +1271,10 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
     addHPEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
         let roll = "";
         let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
+        let subTypeParts = techniqueEffect.subType.split(":");
+        let subType = subTypeParts[0];
         
-        switch (techniqueEffect.subType) {
+        switch (subType) {
             case "Surge":
                 let surgeValue = attrGetters.getObjByTarget(techniqueEffect).parseInt(WuxDef.GetVariable("Surge"));
                 if (surgeValue <= 0) {
@@ -1324,6 +1323,22 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                 roll.setTraits(techniqueEffect.traits);
                 tokenEffect.addDamageRoll(roll);
                 
+                break;
+            case "Status":
+                let statusEffectName = Format.GetDefinitionName("Status", subTypeParts[1]);
+                if (tokenEffect.hasStatus(attrSetters.getObjByTarget(techniqueEffect), statusEffectName)) {
+                    let statusEffect = WuxDef.GetTitle(statusEffectName);
+                    techUseResolver.addMessage(`Adding bonus damage from ${statusEffect} conditional`);
+                    
+                    let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
+                    let damageType = techUseResolver.getDamageType(attrGetters, techniqueEffect);
+                    roll.setDamageType(damageType);
+                    roll.setTraits(techniqueEffect.traits);
+                    tokenEffect.addDamageRoll(roll);
+                }
+                break;
+            case "Cast WillBreak":
+                tokenEffect.takeCastWillbreakEffect(attrSetters.getObjByTarget(techniqueEffect));
                 break;
             default:
                 roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
@@ -1437,12 +1452,12 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
             let favorMax = attrGetters.target.parseInt(favorVar, 0, true);
             roll.addModToRoll(Math.min(favorValue, favorMax), "Favor");
         }
-        let agreeable = techUseResolver.targetTokenEffect.tokenTargetData.hasStatus(attrGetters.target, "Stat_Agreeable");
-        if (agreeable != false && agreeable > 0) {
+        let agreeable = techUseResolver.targetTokenEffect.tokenTargetData.getStatusRank(attrGetters.target, "Stat_Agreeable");
+        if (agreeable > 0) {
             roll.addModToRoll(agreeable * 5, "Agreeable");
         }
-        let oppositional = techUseResolver.targetTokenEffect.tokenTargetData.hasStatus(attrGetters.target, "Stat_Oppositional");
-        if (oppositional != false && oppositional > 0) {
+        let oppositional = techUseResolver.targetTokenEffect.tokenTargetData.getStatusRank(attrGetters.target, "Stat_Oppositional");
+        if (oppositional > 0) {
             roll.addModToRoll(oppositional * -5, "Oppositional");
         }
         
@@ -1457,19 +1472,15 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
 
         switch (techniqueEffect.subType) {
             case "Set":
-                if (techUseResolver.applyStatusEffectConditions(techniqueEffect, techUseResolver, tokenEffect, roll, attrHandler)) {
-                    tokenEffect.addStatusResult(techniqueEffect.effect, "set", roll.total);
-                }
+                tokenEffect.tryAddStatusResult(techniqueEffect.effect, "set", roll.total, attrHandler);
                 break;
             case "Add":
             case "Self":
             case "Choose":
-                if (techUseResolver.applyStatusEffectConditions(techniqueEffect, techUseResolver, tokenEffect, roll, attrHandler)) {
-                    tokenEffect.addStatusResult(techniqueEffect.effect, "add", roll.total);
-                }
+                tokenEffect.tryAddStatusResult(techniqueEffect.effect, "add", roll.total, attrHandler);
                 break;
             case "Remove":
-                tokenEffect.addStatusResult(techniqueEffect.effect, "remove", roll.total);
+                tokenEffect.tryAddStatusResult(techniqueEffect.effect, "remove", roll.total);
                 break;
             case "Remove Any":
             case "Remove All":
@@ -1479,56 +1490,6 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                 tokenEffect.setRemoveStatusType(attrSetters.getObjByTarget(techniqueEffect), "Emotion");
                 break;
         }
-    }
-    applyStatusEffectConditions(techniqueEffect, techUseResolver, tokenEffect, roll, attrHandler) {
-        let vined;
-        let aflame;
-        switch(techniqueEffect.effect) {
-            case "Stat_Aflame":
-                if (tokenEffect.hasStatus(attrHandler, "Stat_Chilled")) {
-                    techUseResolver.addMessage("Aflame removes Chilled from target");
-                    roll.addModToRoll(roll.total, "Soaked");
-                }
-                vined = tokenEffect.hasStatus(attrHandler, "Stat_Vined");
-                if (vined != false && vined > 0) {
-                    techUseResolver.addMessage("Target is Vined. Adding Vine ranks to Aflame and taking damage.");
-                    roll.addModToRoll(vined, "Vined");
-                    tokenEffect.addStatusResult("Stat_Vined", "remove", vined);
-                    tokenEffect.takeAflameEffect(attrHandler);
-                }
-                break;
-            case "Stat_Vined":
-                if (tokenEffect.hasStatus(attrHandler, "Stat_Soaked")) {
-                    techUseResolver.addMessage("Target is Soaked. Doubling Vined ranks.");
-                    roll.addModToRoll(roll.total, "Soaked");
-                }
-                aflame = tokenEffect.hasStatus(attrHandler, "Stat_Soaked");
-                if (aflame != false && aflame > 0) {
-                    techUseResolver.addMessage("Target is Aflame. Adding Vine ranks to Aflame and taking damage.");
-                    tokenEffect.addStatusResult("Aflame", "set", roll.total);
-                    tokenEffect.takeAflameEffect(attrHandler);
-                    return false;
-                }
-                break;
-            case "Stat_Chilled":
-                if (tokenEffect.hasStatus(attrHandler, "Stat_Aflame")) {
-                    techUseResolver.addMessage("Aflame removes Chilled from target");
-                    return false;
-                }
-                if (tokenEffect.hasStatus(attrHandler, "Stat_Soaked")) {
-                    techUseResolver.addMessage("Target is Soaked. Doubling Chilled ranks.");
-                    roll.addModToRoll(roll.total, "Soaked");
-                }
-                break;
-            case "Stat_Iron Plates":
-                if (tokenEffect.hasStatus(attrHandler, "Stat_Rock Shield")) {
-                    techUseResolver.addMessage("Target has Rock Shield. Doubling Iron Plate ranks.");
-                    roll.addModToRoll(roll.total, "Rock Shield");
-                }
-                break;
-        }
-        return true;
-        
     }
     
     addAttributeValue(techniqueEffect, attrName, techUseResolver, attrGetters, attrSetters) {
