@@ -2067,11 +2067,12 @@ class TechniqueDisplayData {
 
     setTechTargetData(technique) {
         this.targetData = "";
-        if (technique.skill == "") {
+        if (technique.skill == "" && technique.action != "Passive") {
             this.targetData = "No Check";
         }  
         else {
             let skillData = technique.skill.split(":");
+            skillData[0] = skillData[0].trim();
             if (skillData.length > 1) {
                 if (skillData[1] == "group") {
                     this.targetData = `Any ${skillData[0]}`;
@@ -2102,6 +2103,9 @@ class TechniqueDisplayData {
                 else {
                     this.targetData += `${technique.target} ${technique.size}`;
                 }
+            }
+            else {
+                this.targetData += `${technique.target}`;
             }
         }
     }
@@ -3325,25 +3329,26 @@ class DieRoll {
 
     dropRollDice(dieCount, dieType, keepCount, keepHigh) {
         this.rollDice(dieCount, dieType);
+        
+        this.keeps = this.rolls.slice();
         if (keepHigh) {
-            this.sortRollsDescending();
+            this.keeps = this.keeps.sort((a, b) => b - a).slice(0, keepCount);
         } else {
-            this.sortRollsAscending();
+            this.keeps = this.keeps.sort((a, b) => a - b).slice(0, keepCount);
         }
 
-        this.message = "Rolls(";
-        for (let i = 0; i < this.rolls.length; i++) {
-            if (i < keepCount) {
-                this.keeps.push(this.rolls[i]);
-                this.message += `[${this.rolls[i]}]`;
-            } else {
-                this.message += `${this.rolls[i]}`;
-            }
-            if (i < this.rolls.length - 1) {
-                this.message += `, `;
-            }
-        }
-        this.message += `)`;
+        let used = {};
+        let result = this.rolls
+            .map(n => {
+                if (this.keeps.includes(n) && (used[n] || 0) < this.keeps.filter(x => x === n).length) {
+                    used[n] = (used[n] || 0) + 1;
+                    return `[${n}]`;
+                }
+                return `${n}`;
+            })
+            .join(", ");
+        
+        this.message = `Rolls(${result})`;
         this.total = this.totalValues(this.keeps);
     }
 

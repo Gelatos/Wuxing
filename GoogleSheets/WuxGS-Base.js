@@ -208,7 +208,11 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             // add CR
                             let crDef = WuxDef.Get("CR");
                             let contents = `${WuxSheetMain.Header(`${crDef.title}`)}`;
-                            contents += WuxDefinition.BuildNumberLabelInput(crDef, crDef.getAttribute(), `Max: <span name="${crDef.getAttribute(WuxDef._max)}"></span>`);
+                            contents += WuxDefinition.BuildNumberLabelInput(crDef, crDef.getAttribute(), 
+                                `Max: <span name="${crDef.getAttribute(WuxDef._max)}"></span>`);
+
+                            let potencyDefinition = WuxDef.Get("SB_MAX");
+                            contents += WuxDefinition.BuildText(potencyDefinition, WuxSheetMain.Span(potencyDefinition.getAttribute()));
                             output.push(WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150"));
 
                             let groups = ["General", "Combat", "Social"];

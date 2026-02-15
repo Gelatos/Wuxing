@@ -1439,6 +1439,9 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     for(let i = 0; i < traits.length; i++) {
                         output += printDefinitionTooltip(traits[i]);
                     }
+                    if (output == "") {
+                        return "None";
+                    }
                     return output;
                 },
                 
