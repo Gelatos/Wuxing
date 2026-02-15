@@ -2048,6 +2048,12 @@ div.wuxStyleHeaderButton:hover span {
     background: #cacbcf;
 }
 
+/*.wuxRepeatingFlexSection .wuxFeature*/
+/*{*/
+/*    min-width: 220px;*/
+/*    max-width: 220px;*/
+/*}*/
+
 .sheet-rolltemplate-technique,
 .sheet-rolltemplate-usetechnique
 {
@@ -2475,7 +2481,8 @@ button[type=roll].wuxFeatureHeaderNameButton::before
     position: relative;
     display: block; 
     padding: 5px 10px;
-
+    width: calc(100% - 20px);
+    
     font-size: 11px;
 }
 
