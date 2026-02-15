@@ -294,6 +294,9 @@ class TokenTargetData extends TargetData {
     setTurnIcon(value) {
         this.setIcon("status_yellow", value);
     }
+    setAdvantageIcon(value) {
+        this.setIcon("status_pink", value);
+    }
 
     getIcon(iconName) {
         if (!this.validateToken()) {
@@ -368,6 +371,17 @@ class TokenTargetData extends TargetData {
                 attrHandler.addUpdate(attributeVar, results.newValue, false);
             }
         );
+    }
+    getAdvantage() {
+        let value = this.getIcon("status_pink");
+        if (value == undefined || value == "" || value == false) {
+            return 0;
+        }
+        value = parseInt(value);
+        if (isNaN(value)) {
+            return 0;
+        }
+        return value;
     }
 
     // Combat Details
@@ -501,8 +515,7 @@ class TokenTargetData extends TargetData {
     }
 
     applyResultsToHp(results, attrHandler, attributeVar, tokenTargetData) {
-        tokenTargetData.refreshCombatDetails(attrHandler);
-        if (this.combatDetails.displayStyle == "Battle") {
+        if (state.WuxConflictManager.conflictType == "Battle") {
             tokenTargetData.setBarValue(1, results.newValue);
         }
         return results;
@@ -1108,7 +1121,7 @@ class TokenTargetEffectsData {
                 default:
                     if (!damageRoll.traits.includes("AP")) {
                         let armorTotal = attrGetter.parseInt(WuxDef.GetVariable("Cmb_Armor"));
-                        let ironPlates = this.getStatusRank(attrSetter, "Stat_Iron Plates");
+                        let ironPlates = tokenTargetEffect.tokenTargetData.getStatusRank(attrSetter, "Stat_Iron Plates");
                         if (ironPlates > 0) {
                             armorTotal += ironPlates;
                         }
@@ -1554,6 +1567,9 @@ var TargetReference = TargetReference || (function () {
                 case "!tinfluence":
                     commandSetInfluence(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
+                case "!tsetadv":
+                    commandSetAdvantage(msg, TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
                 case "!tpp":
                     commandAddTrainingPoints(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
@@ -1748,51 +1764,59 @@ var TargetReference = TargetReference || (function () {
                 output += tokenOptionButton("Reset Token", "treset");
                 output += tokenOptionButton("Remove From Conflict", "actrem");
             }
-
-            output += tokenOptionSpacer();
-            output += tokenOptionTitle("Combat Stat Options");
             if (!playerIsGM(msg.playerid)) {
                 output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@0`);
-            } else {
-                output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@?{Set team index|0}`);
-                output += tokenOptionButton("Full Heal", "tfullheal");
-            }
-            output += tokenOptionButton("Add Energy", "ten ?{How much energy to add?|1}");
-            output += tokenOptionButton("Add Surge", "thealsurge ?{How much surge to add?|1}");
-            output += tokenOptionButton("Add Vitality", "thealvit ?{How much vitality to add?|1}");
-            let conditionals = `Aflame|Angered|Bleeding|Burn Aegis|Cold Aegis|Frightened|Shock Aegis|Thorn Aegis|Willbreak Cast`;
-            output += tokenOptionButton("Take Condition Effect", `tconditional ?{Choose your conditional|${conditionals}`);
-
-            output += tokenOptionSpacer();
-            output += tokenOptionTitle("Combat Move Options");
-            output += tokenOptionButton("Reset Move", "tmovereset");
-            output += tokenOptionButton("Add Move Charge", "tmove ?{How much move charge to add?|1}");
-            output += tokenOptionButton("Add Dash", "tdash");
-
-            output += tokenOptionSpacer();
-            output += tokenOptionTitle("Social Stat Options");
-            if (!playerIsGM(msg.playerid)) {
                 output += tokenOptionButton("Prep4 Social", `tconflictstate Social@0`);
             } else {
+                output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@?{Set team index|0}`);
                 output += tokenOptionButton("Prep4 Social", `tconflictstate Social@?{Set team index|0}`);
-                output += tokenOptionButton("Reset Social", "tresetSocial");
-                let requestTypes = WuxDef.Filter([new DatabaseFilterData("group", "RequestType")]);
-                let requestList = "";
-                for (let i = 0; i < requestTypes.length; i++) {
-                    if (requestList != "") {
-                        requestList += "|";
-                    }
-                    requestList += requestTypes[i].getTitle();
-                }
-                output += tokenOptionButton("Request Threshold", `tss ?{Set the difficulty of the request|${requestList}}`);
-                output += tokenOptionButton("Set Influence", "tinfluence ?{Set the influence level of the character|0}");
             }
 
+            output += tokenOptionSpacer();
+            output += tokenOptionTitle("General Options");
+            output += tokenOptionButton("Set Advantage", `tsetadv ?{Set Advantage value. Negative values become disadvantage|1}`);
             if (playerIsGM(msg.playerid)) {
-                output += tokenOptionSpacer();
-                output += tokenOptionTitle("General Options");
                 output += tokenOptionButton("Give TP", `tpp ?{Amount of TP|0}`);
                 output += tokenOptionButton("Give XP", `txp ?{Amount of XP|0}`);
+            }
+
+            let conditionals = `Aflame|Angered|Bleeding|Burn Aegis|Cold Aegis|Frightened|Shock Aegis|Thorn Aegis|Willbreak Cast`;
+            switch (state.WuxConflictManager.conflictType) {
+                case "Battle":
+                    output += tokenOptionSpacer();
+                    output += tokenOptionTitle("Combat Stat Options");
+                    if (playerIsGM(msg.playerid)) {
+                        output += tokenOptionButton("Full Heal", "tfullheal");
+                    }
+                    output += tokenOptionButton("Add Energy", "ten ?{How much energy to add?|1}");
+                    output += tokenOptionButton("Add Surge", "thealsurge ?{How much surge to add?|1}");
+                    output += tokenOptionButton("Add Vitality", "thealvit ?{How much vitality to add?|1}");
+                    output += tokenOptionButton("Take Condition Effect", `tconditional ?{Choose your conditional|${conditionals}`);
+
+                    output += tokenOptionSpacer();
+                    output += tokenOptionTitle("Combat Move Options");
+                    output += tokenOptionButton("Reset Move", "tmovereset");
+                    output += tokenOptionButton("Add Move Charge", "tmove ?{How much move charge to add?|1}");
+                    output += tokenOptionButton("Add Dash", "tdash");
+                    break;
+                case "Social":
+                    output += tokenOptionSpacer();
+                    output += tokenOptionTitle("Social Stat Options");
+                    if (playerIsGM(msg.playerid)) {
+                        output += tokenOptionButton("Reset Social", "tresetSocial");
+                    }
+                    let requestTypes = WuxDef.Filter([new DatabaseFilterData("group", "RequestType")]);
+                    let requestList = "";
+                    for (let i = 0; i < requestTypes.length; i++) {
+                        if (requestList != "") {
+                            requestList += "|";
+                        }
+                        requestList += requestTypes[i].getTitle();
+                    }
+                    output += tokenOptionButton("Add Energy", "ten ?{How much energy to add?|1}");
+                    output += tokenOptionButton("Take Condition Effect", `tconditional ?{Choose your conditional|${conditionals}`);
+                    output += tokenOptionButton("Request Threshold", `tss ?{Set the difficulty of the request|${requestList}}`);
+                    output += tokenOptionButton("Set Influence", "tinfluence ?{Set the influence level of the character|0}");
             }
 
             let senderMessage = new SystemInfoMessage(output);
@@ -1932,6 +1956,20 @@ var TargetReference = TargetReference || (function () {
             else {
                 sendTokenUpdateMessage(msg, targets, `: Removed all Influence modifiers`);
             }
+        },
+
+        commandSetAdvantage = function (msg, targets, content) {
+            let value = parseInt(content);
+            if (!isNaN(value) || value == 0) {
+                value = false;
+            }
+            _.each(targets, function (tokenTargetData) {
+                let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                tokenTargetData.setAdvantageIcon(content);
+                attributeHandler.run();
+            });
+
+            sendTokenUpdateMessage(msg, targets, `: ${content} EN`);
         },
 
         commandAddTrainingPoints = function (msg, targets, content) {

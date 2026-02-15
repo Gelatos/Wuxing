@@ -214,6 +214,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
         resetCombatStateVariables = function () {
             TargetReference.ClearActiveTargetData();
             state.WuxConflictManager.round = 0;
+            state.WuxConflictManager.conflictType = "";
             setDefaultTeams();
         },
 
@@ -936,6 +937,13 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
     
     getAdvantageBonus(techSkillCheckResolver, senderAttributeHandler, targetAttributeHandler, removeStatus) {
         let advantage = techSkillCheckResolver.advantage;
+        
+        // add the source token's advantage
+        let tokenAdvantage = techSkillCheckResolver.senderTokenEffect.tokenTargetData.getAdvantage();
+        if (tokenAdvantage != 0) {
+            advantage += tokenAdvantage;
+            techSkillCheckResolver.senderTokenEffect.tokenTargetData.setAdvantageIcon(false);
+        }
 
         // add advantages based on sender statuses
         if (techSkillCheckResolver.technique.action != "Assist") {
