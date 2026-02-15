@@ -155,6 +155,26 @@
 										<option value="Human">Human</option>
 										<option value="Spirit">Spirit</option>
 									</select>
+									<div class="wuxHeader2">Elemental Affinity<div class="wuxTooltipButtonContainer">
+											<div class="wuxTooltipButton wuxFloatRight">
+												<div class="wuxTooltipText">i</div>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Elemental Affinity</div>
+
+													<span class="wuxDescription">Characters that are able to cast spells have an elemental affinity that ties them to one of the five primary elements. Some techniques require an elemental affinity before they may be taken.</span>
+													<span class="wuxDescription">Your chosen affinity grants weaknesses and resistances to certain elemental damage types.</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<select class="wuxInput" name="attr_affinityaspect" value="0">
+										<option value="0">Unaspected</option>
+										<option value="Wood">Wood Affinity</option>
+										<option value="Fire">Fire Affinity</option>
+										<option value="Earth">Earth Affinity</option>
+										<option value="Metal">Metal Affinity</option>
+										<option value="Water">Water Affinity</option>
+									</select><span class="wuxDescription" name="attr_affinity_learn"></span>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<div class="wuxHeader">
@@ -410,98 +430,6 @@
 										<div class="wuxMultiRow">
 											<div class="wuxInteractiveBlock">
 												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-affinity_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-affinity_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-affinity_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-affinity_rank" />
-														<span class="wuxHeader">Affinity</span>
-														<span class="wuxSubheader">[Cost 0 Perk Point]</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxMultiRow">
-											<div class="wuxDescription wuxMarginLeft50"><em>Human or Spirit only</em></div>
-											<div class="wuxDescription wuxMarginLeft50">Gain an elemental affinity. Most humans and all spirits should start with an elemental affinity.</div><input type="hidden" class="wuxHiddenField-flag" name="attr_tch-affinity_rank" value="0">
-											<div class="wuxHiddenField">
-												<div class="wuxMarginLeft50">
-													<select class="wuxInput" name="attr_affinity" value="0">
-														<option value="0">-</option>
-														<option value="Wood">Wood Affinity</option>
-														<option value="Fire">Fire Affinity</option>
-														<option value="Earth">Earth Affinity</option>
-														<option value="Metal">Metal Affinity</option>
-														<option value="Water">Water Affinity</option>
-													</select>
-													<span class="wuxDescription" name="attr_affinity_learn"></span>
-												</div>
-											</div>
-										</div>
-										<div class="wuxMultiRow">
-											<div class="wuxInteractiveBlock">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-heroic_vitality_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
-														<span class="wuxHeader">Heroic Vitality</span>
-														<span class="wuxSubheader">[Cost 0 Perk Point]</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxMultiRow">
-											<div class="wuxDescription wuxMarginLeft50">Gain +1 Vitality. Player characters should start with this perk unless the GM states otherwise.</div>
-										</div>
-										<div class="wuxMultiRow">
-											<div class="wuxInteractiveBlock">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-elite_vitality_ii_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_vitality_ii_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_vitality_ii_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_vitality_ii_rank" />
-														<span class="wuxHeader">Elite Vitality II</span>
-														<span class="wuxSubheader">[Cost 0 Perk Point]</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxMultiRow">
-											<div class="wuxDescription wuxMarginLeft50">Gain +1 Vitality. This is granted to especially durable characters. This perk is not intended for player characters.</div>
-										</div>
-										<div class="wuxMultiRow">
-											<div class="wuxInteractiveBlock">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-elite_potency_ii_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_potency_ii_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_potency_ii_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_potency_ii_rank" />
-														<span class="wuxHeader">Elite Potency II</span>
-														<span class="wuxSubheader">[Cost 0 Perk Point]</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxMultiRow">
-											<div class="wuxDescription wuxMarginLeft50">Gain a major increase to Potency. This perk is not intended for player characters.</div>
-										</div>
-									</div>
-									<div class="wuxFlexTableItemGroup wuxMinWidth350">
-										<div class="wuxMultiRow">
-											<div class="wuxInteractiveBlock">
-												<div class="wuxInteractiveInnerBlock">
 													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-second_affinity_rank" />
 													<div class="wuxInteractiveContent">
 														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-second_affinity_rank" />
@@ -562,6 +490,65 @@
 														<span class="wuxInteractiveAuxIcon">&#9634;</span>
 														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_potency_rank" />
 														<span class="wuxHeader">Elite Potency</span>
+														<span class="wuxSubheader">[Cost 0 Perk Point]</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription wuxMarginLeft50">Gain a major increase to Potency. This perk is not intended for player characters.</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup wuxMinWidth350">
+										<div class="wuxMultiRow">
+											<div class="wuxInteractiveBlock">
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-heroic_vitality_rank" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
+														<span class="wuxHeader">Heroic Vitality</span>
+														<span class="wuxSubheader">[Cost 0 Perk Point]</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription wuxMarginLeft50">Gain +1 Vitality. Player characters should start with this perk unless the GM states otherwise.</div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxInteractiveBlock">
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-elite_vitality_ii_rank" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_vitality_ii_rank" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_vitality_ii_rank" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_vitality_ii_rank" />
+														<span class="wuxHeader">Elite Vitality II</span>
+														<span class="wuxSubheader">[Cost 0 Perk Point]</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription wuxMarginLeft50">Gain +1 Vitality. This is granted to especially durable characters. This perk is not intended for player characters.</div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxInteractiveBlock">
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-elite_potency_ii_rank" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_potency_ii_rank" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_potency_ii_rank" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_potency_ii_rank" />
+														<span class="wuxHeader">Elite Potency II</span>
 														<span class="wuxSubheader">[Cost 0 Perk Point]</span>
 													</div>
 												</div>
@@ -4027,97 +4014,6 @@
 										<div class="wuxMultiRow">
 											<div class="wuxInteractiveBlock">
 												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-affinity_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-affinity_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-affinity_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-affinity_rank" />
-														<span class="wuxHeader">Affinity</span>
-														<span class="wuxSubheader">[Cost 0 Perk Point]</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxMultiRow">
-											<div class="wuxDescription wuxMarginLeft50">Gain an elemental affinity. Most humans and all spirits should start with an elemental affinity.</div><input type="hidden" class="wuxHiddenField-flag" name="attr_tch-affinity_rank" value="0">
-											<div class="wuxHiddenField">
-												<div class="wuxMarginLeft50">
-													<select class="wuxInput" name="attr_affinity" value="0">
-														<option value="0">-</option>
-														<option value="Wood">Wood Affinity</option>
-														<option value="Fire">Fire Affinity</option>
-														<option value="Earth">Earth Affinity</option>
-														<option value="Metal">Metal Affinity</option>
-														<option value="Water">Water Affinity</option>
-													</select>
-													<span class="wuxDescription" name="attr_affinity_learn"></span>
-												</div>
-											</div>
-										</div>
-										<div class="wuxMultiRow">
-											<div class="wuxInteractiveBlock">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-heroic_vitality_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
-														<span class="wuxHeader">Heroic Vitality</span>
-														<span class="wuxSubheader">[Cost 0 Perk Point]</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxMultiRow">
-											<div class="wuxDescription wuxMarginLeft50">Gain +1 Vitality. Player characters should start with this perk unless the GM states otherwise.</div>
-										</div>
-										<div class="wuxMultiRow">
-											<div class="wuxInteractiveBlock">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-elite_vitality_ii_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_vitality_ii_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_vitality_ii_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_vitality_ii_rank" />
-														<span class="wuxHeader">Elite Vitality II</span>
-														<span class="wuxSubheader">[Cost 0 Perk Point]</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxMultiRow">
-											<div class="wuxDescription wuxMarginLeft50">Gain +1 Vitality. This is granted to especially durable characters. This perk is not intended for player characters.</div>
-										</div>
-										<div class="wuxMultiRow">
-											<div class="wuxInteractiveBlock">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-elite_potency_ii_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_potency_ii_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_potency_ii_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_potency_ii_rank" />
-														<span class="wuxHeader">Elite Potency II</span>
-														<span class="wuxSubheader">[Cost 0 Perk Point]</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="wuxMultiRow">
-											<div class="wuxDescription wuxMarginLeft50">Gain a major increase to Potency. This perk is not intended for player characters.</div>
-										</div>
-									</div>
-									<div class="wuxFlexTableItemGroup wuxMinWidth350">
-										<div class="wuxMultiRow">
-											<div class="wuxInteractiveBlock">
-												<div class="wuxInteractiveInnerBlock">
 													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-second_affinity_rank" />
 													<div class="wuxInteractiveContent">
 														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-second_affinity_rank" />
@@ -4177,6 +4073,65 @@
 														<span class="wuxInteractiveAuxIcon">&#9634;</span>
 														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_potency_rank" />
 														<span class="wuxHeader">Elite Potency</span>
+														<span class="wuxSubheader">[Cost 0 Perk Point]</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription wuxMarginLeft50">Gain a major increase to Potency. This perk is not intended for player characters.</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup wuxMinWidth350">
+										<div class="wuxMultiRow">
+											<div class="wuxInteractiveBlock">
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-heroic_vitality_rank" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-heroic_vitality_rank" />
+														<span class="wuxHeader">Heroic Vitality</span>
+														<span class="wuxSubheader">[Cost 0 Perk Point]</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription wuxMarginLeft50">Gain +1 Vitality. Player characters should start with this perk unless the GM states otherwise.</div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxInteractiveBlock">
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-elite_vitality_ii_rank" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_vitality_ii_rank" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_vitality_ii_rank" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_vitality_ii_rank" />
+														<span class="wuxHeader">Elite Vitality II</span>
+														<span class="wuxSubheader">[Cost 0 Perk Point]</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription wuxMarginLeft50">Gain +1 Vitality. This is granted to especially durable characters. This perk is not intended for player characters.</div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxInteractiveBlock">
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_tch-elite_potency_ii_rank" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_potency_ii_rank" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_potency_ii_rank" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_tch-elite_potency_ii_rank" />
+														<span class="wuxHeader">Elite Potency II</span>
 														<span class="wuxSubheader">[Cost 0 Perk Point]</span>
 													</div>
 												</div>
@@ -18185,7 +18140,46 @@
 												</div>
 											</div>
 										</div>
-										<span class="wuxDescription"><span name="attr_full_name"></span></span>
+										<span class="wuxDescription"><span name="attr_full_name"></span></span><input type="hidden" class="wuxHiddenField-flag" name="attr_affinityaspect" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxHeader2">Elemental Affinity<div class="wuxTooltipButtonContainer">
+													<div class="wuxTooltipButton wuxFloatRight">
+														<div class="wuxTooltipText">i</div>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Elemental Affinity</div>
+
+															<span class="wuxDescription">Characters that are able to cast spells have an elemental affinity that ties them to one of the five primary elements. Some techniques require an elemental affinity before they may be taken.</span>
+															<span class="wuxDescription">Your chosen affinity grants weaknesses and resistances to certain elemental damage types.</span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<span class="wuxDescription"><span name="attr_affinity"></span></span>
+										</div>
+
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_affinityaspect" value="0">
+										<div class="wuxHiddenAuxField">
+											<div class="wuxHeader2">Spirit Affinity<div class="wuxTooltipButtonContainer">
+													<div class="wuxTooltipButton wuxFloatRight">
+														<div class="wuxTooltipText">i</div>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Spirit Affinity</div>
+
+															<span class="wuxDescription">Unaspected characters can have their primary aspect changed if a spirit manifests into them.</span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<select class="wuxInput" name="attr_affinity" value="0">
+												<option value="0">Unaspected</option>
+												<option value="Wood">Wood Affinity</option>
+												<option value="Fire">Fire Affinity</option>
+												<option value="Earth">Earth Affinity</option>
+												<option value="Metal">Metal Affinity</option>
+												<option value="Water">Water Affinity</option>
+											</select>
+										</div>
+
 									</div>
 									<div class="wuxFlexTableItemGroup">
 										<div class="wuxHeader">
@@ -43778,7 +43772,7 @@ You are in the spirit realm. If you have a physical body it is treated as uncons
 															<span class="wuxSubMenuText">l&nbsp;</span>
 															<input type="hidden" class="wuxSubMenu-flag" name="attr_tch-manifest_casting_submenu" value="0">
 															<div class="wuxSubMenuContent">
-																<button class="wuxButton wuxSubMenuOptionButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Manifest Casting}}{{type-Passive=1}}{{Resources=Passive Action}}{{Targeting=No Check}}{{Requirement=You must be manifesting in a creature that can cast magic.}}{{Effect0Name=Effects}}{{Effect0Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
+																<button class="wuxButton wuxSubMenuOptionButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Manifest Casting}}{{type-Passive=1}}{{Resources=Passive Action}}{{Requirement=You must be manifesting in a creature that can cast magic.}}{{Effect0Name=Effects}}{{Effect0Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
 }}{{Effect0=Creatures you are manifesting within may equip techniques as if they have your affinity.}}{{checkData=!chtech Manifest Casting$$&#64;{sheetname}}}{{targetData=!utech Manifest Casting$$&#64;{sheetname}}}">
 																	<span>Use</span>
 																</button>
@@ -43791,7 +43785,7 @@ You are in the spirit realm. If you have a physical body it is treated as uncons
 																			<div class="wuxFeatureHeaderName"><span>Manifest Casting</span></div>
 
 																			<div class="wuxFeatureHeaderInfo"><span>Passive Action</span></span></div>
-																			<div class="wuxFeatureHeaderInfo"><span>No Check</span></span></div>
+																			<div class="wuxFeatureHeaderInfo"><span></span></span></div>
 
 																		</div>
 																		<input type="hidden" class="wuxFeatureDefenseIcon-flag" value="" />
@@ -43834,14 +43828,14 @@ You are in the spirit realm. If you have a physical body it is treated as uncons
 
 															</div>
 														</div>
-														<button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Manifest Casting}}{{type-Passive=1}}{{Resources=Passive Action}}{{Targeting=No Check}}{{Requirement=You must be manifesting in a creature that can cast magic.}}{{Effect0Name=Effects}}{{Effect0Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
+														<button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Manifest Casting}}{{type-Passive=1}}{{Resources=Passive Action}}{{Requirement=You must be manifesting in a creature that can cast magic.}}{{Effect0Name=Effects}}{{Effect0Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
 }}{{Effect0=Creatures you are manifesting within may equip techniques as if they have your affinity.}}{{checkData=!chtech Manifest Casting$$&#64;{sheetname}}}{{targetData=!utech Manifest Casting$$&#64;{sheetname}}}">
 															<span>Manifest Casting</span>
 														</button>
 													</div>
 
 													<div class="wuxFeatureHeaderInfo"><span>Passive Action</span></span></div>
-													<div class="wuxFeatureHeaderInfo"><span>No Check</span></span></div>
+													<div class="wuxFeatureHeaderInfo"><span></span></span></div>
 
 												</div>
 												<input type="hidden" class="wuxFeatureDefenseIcon-flag" value="" />
@@ -48917,7 +48911,7 @@ on("change:pgs-character_creator_finish", function (eventinfo) {
 WuxWorkerCharacterCreation.FinishBuild();
 
 });
-on("change:affinity change:affinity2", function (eventinfo) {
+on("change:affinityaspect change:affinity2", function (eventinfo) {
 WuxWorkerCharacterCreation.SetAffinityValue(eventinfo);
 
 });
@@ -48988,9 +48982,6 @@ WuxWorkerAdvancement.SetAdvancementPointsUpdate(eventinfo);
 on("change:adv-ap_perktransfer", function (eventinfo) {
 WuxWorkerAdvancement.SetAdvancementPerkTransferPointsUpdate(eventinfo);
 
-});
-on("change:tch-affinity_rank", function (eventinfo) {
-WuxWorkerPerks.UpdateBuildPoints(eventinfo, 0)
 });
 on("change:tch-second_affinity_rank", function (eventinfo) {
 WuxWorkerPerks.UpdateBuildPoints(eventinfo, 1)
@@ -49093,6 +49084,10 @@ WuxWorkerGeneral.UpdateCharacterSheetName(eventinfo)
 });
 on("change:sheetname", function (eventinfo) {
 WuxWorkerGeneral.UpdateSheetName(eventinfo)
+});
+on("change:affinity", function (eventinfo) {
+WuxWorkerGeneral.UpdatePrimaryAffinity(eventinfo);
+
 });
 on("change:note-generatecharacter", function (eventinfo) {
 WuxWorkerGeneral.GenerateCharacter()

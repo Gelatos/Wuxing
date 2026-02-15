@@ -31,7 +31,6 @@ class TargetData {
         this.tokenId = "";
         this.displayName = "";
         this.owner = "";
-        this.elem = "";
         this.teamIndex = 0;
     }
 
@@ -41,7 +40,6 @@ class TargetData {
         this.tokenId = json.tokenId;
         this.displayName = json.displayName;
         this.owner = json.owner;
-        this.elem = json.elem;
         this.teamIndex = json.teamIndex;
     }
 
@@ -69,23 +67,6 @@ class TargetData {
         this.charName = character.get("name");
         this.setOwner(character);
         this.setCharacterData();
-    }
-
-    getElementStatus(affinity) {
-        switch (affinity) {
-            case "Wood":
-                return "status_green";
-            case "Fire":
-                return "status_red";
-            case "Earth":
-                return "status_brown";
-            case "Metal":
-                return "status_purple";
-            case "Water":
-                return "status_blue";
-            default:
-                return "status_pink";
-        }
     }
 
     findCharacterByName(characterName) {
@@ -131,14 +112,12 @@ class TargetData {
         let targetData = this;
         let displayNameVar = WuxDef.GetVariable("DisplayName");
         let fullNameVar = WuxDef.GetVariable("FullName");
-        let affinityVar = WuxDef.GetVariable("Affinity");
         let teamIndexVar = WuxDef.GetVariable("TeamIndex");
-        attributeHandler.addMod([displayNameVar, fullNameVar,affinityVar, teamIndexVar]);
+        attributeHandler.addMod([displayNameVar, fullNameVar, teamIndexVar]);
         attributeHandler.addFinishCallback(function (attrHandler) {
             if (attrHandler.parseString(fullNameVar) != "GenericOverride") {
                 targetData.displayName = attrHandler.parseString(displayNameVar);
             }
-            targetData.elem = targetData.getElementStatus(attrHandler.parseString(affinityVar));
         });
         attributeHandler.run();
     }
@@ -289,7 +268,7 @@ class TokenTargetData extends TargetData {
 
     // icon settings
     setEnergyIcon(value) {
-        this.setIcon(this.elem, value);
+        this.setIcon("status_blue", value);
     }
     setTurnIcon(value) {
         this.setIcon("status_yellow", value);
@@ -548,7 +527,7 @@ class TokenTargetData extends TargetData {
             this.modifyResourceAttribute(attributeHandler, "EN", value,
                 this.addModifierToAttribute, resultsCallback);
         } else {
-            this.modifyIconAttribute(attributeHandler, this.elem, value,
+            this.modifyIconAttribute(attributeHandler, "status_blue", value,
                 function (results, value, attributeHandler, tokenTargetData) {
                     results.max = 9;
                     return tokenTargetData.addModifierToAttribute(results, value, attributeHandler, tokenTargetData);
@@ -565,7 +544,7 @@ class TokenTargetData extends TargetData {
             this.modifyResourceAttribute(attributeHandler, "EN", startEnVar,
                 this.setModifierToAttribute, resultsCallback);
         } else {
-            this.modifyIconAttribute(attributeHandler, this.elem, startEnVar,
+            this.modifyIconAttribute(attributeHandler, "status_blue", startEnVar,
                 function (results, value, attributeHandler, tokenTargetData) {
                     results.max = 9;
                     return tokenTargetData.setModifierToAttribute(results, value, attributeHandler);
@@ -582,7 +561,7 @@ class TokenTargetData extends TargetData {
             this.modifyResourceAttribute(attributeHandler, "EN", roundEnVar,
                 this.addModifierToAttribute, resultsCallback);
         } else {
-            this.modifyIconAttribute(attributeHandler, this.elem, roundEnVar,
+            this.modifyIconAttribute(attributeHandler, "status_blue", roundEnVar,
                 function (results, value, attributeHandler, tokenTargetData) {
                     results.max = 9;
                     return tokenTargetData.addModifierToAttribute(results, value, attributeHandler, tokenTargetData);
@@ -2198,6 +2177,7 @@ var TargetReference = TargetReference || (function () {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
                 tokenTargetData.refreshCombatDetails(attributeHandler);
 
+                let affinityVar = WuxDef.GetVariable("Affinity");
                 let crVar = WuxDef.GetVariable("CR");
                 let jobVar = WuxDef.GetVariable("Forme_JobSlot", 1);
                 
@@ -2215,10 +2195,11 @@ var TargetReference = TargetReference || (function () {
                 let armorVar = WuxDef.GetVariable("Cmb_Armor");
                 let speedVar = WuxDef.GetVariable("Cmb_Mv");
                 let dashVar = WuxDef.GetVariable("Cmb_MvDash");
-                attributeHandler.addAttribute([crVar, jobVar, 
+                attributeHandler.addAttribute([affinityVar, crVar, jobVar, 
                     braceVar, wardingVar, reflexVar, evasionVar, resolveVar, insightVar, egoVar,
                     surgeVar, vitalityVar, hvVar, armorVar]);
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
+                    tokenTargetData.combatDetails.onUpdateAffinity(attrHandler, attrHandler.parseString(affinityVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateCR(attrHandler, attrHandler.parseInt(crVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateJob(attrHandler, attrHandler.parseString(jobVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateDefenses(attrHandler, 

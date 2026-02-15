@@ -3860,6 +3860,7 @@ class CombatDetails {
     createEmpty() {
         this.displayStyle = "";
         this.displayName = "";
+        this.affinity = "";
         this.cr = 0;
         this.job = "";
         this.jobDefenses = "";
@@ -3877,6 +3878,7 @@ class CombatDetails {
     importJson(json) {
         this.displayStyle = json.displayStyle != undefined ? json.displayStyle : "";
         this.displayName = json.displayName != undefined ? json.displayName : "";
+        this.affinity = json.affinity != undefined ? json.affinity : "";
         this.cr = json.cr != undefined ? json.cr : 1;
         this.job = json.job != undefined ? json.job : "";
         this.jobDefenses = json.jobDefenses != undefined ? json.jobDefenses : "";
@@ -3900,7 +3902,7 @@ class CombatDetails {
     }
 
     printTooltip() {
-        let output = `${this.displayName} [CR${this.cr}] ${this.job}`;
+        let output = `${this.displayName} [CR${this.cr}] ${this.affinity} ${this.job}`;
         output += ` =========================== `;
         // output += `${this.jobDefenses} - `;
         output += `${this.defenses.printDefenses(this.cr)} - `;
@@ -4027,6 +4029,12 @@ class CombatDetailsHandler {
     onUpdateDisplayName(attrHandler, value) {
         this.setData(attrHandler);
         this.combatDetails.displayName = value;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+
+    onUpdateAffinity(attrHandler, value) {
+        this.setData(attrHandler);
+        this.combatDetails.affinity = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 

@@ -21,7 +21,9 @@ var BuilderBackend = BuilderBackend || (function () {
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerCharacterCreationSetAffinity = function () {
-            let groupVariableNames = [WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity")];
+            let groupVariableNames = [
+                WuxDef.GetVariable("AffinityAspect"),
+                WuxDef.GetVariable("AdvancedAffinity")];
             let output = `WuxWorkerCharacterCreation.SetAffinityValue(eventinfo);\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
@@ -250,6 +252,7 @@ var OverviewBuilder = OverviewBuilder || (function () {
             output += listenerUpdateDisplayName();
             output += listenerUpdateCharacterSheetName();
             output += listenerUpdateSheetName();
+            output += listenerSetAffinity();
             output += listenerGenerateCharacter();
             output += listenerUseGeneration();
             output += listenerClearBackground();
@@ -273,6 +276,12 @@ var OverviewBuilder = OverviewBuilder || (function () {
         listenerUpdateSheetName = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("SheetName")}`];
             let output = `WuxWorkerGeneral.UpdateSheetName(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerSetAffinity = function () {
+            let groupVariableNames = [WuxDef.GetVariable("Affinity")];
+            let output = `WuxWorkerGeneral.UpdatePrimaryAffinity(eventinfo);\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },

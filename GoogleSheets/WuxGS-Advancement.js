@@ -167,6 +167,12 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             contents += WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName"));
                             contents += WuxDefinition.BuildSelect(WuxDef.Get("Ancestry"), WuxDef.GetAttribute("Ancestry"),
                                 WuxDef.Filter([new DatabaseFilterData("group", "AncestryType")]));
+                            let affinityFilter = [WuxDef.Get("Unaspected")].concat(
+                                WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])
+                            );
+                            contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("AffinityAspect"), 
+                                affinityFilter, false);
+                            contents += WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn));
                             return WuxSheetMain.Table.FlexTableGroup(contents);
                         },
 
@@ -285,14 +291,6 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             }
                             descContents += `<div class="wuxDescription wuxMarginLeft50">${technique.flavorText}</div>`;
 
-                            if (technique.name == "Affinity") {
-                                descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(WuxDef._rank),
-                                    `<div class="wuxMarginLeft50">
-                                        ${WuxSheetMain.Select(WuxDef.GetAttribute("Affinity"),
-                                        WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]))}
-                                        ${WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn))}
-                                    </div>`);
-                            }
                             if (technique.name == "Second Affinity") {
                                 descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(WuxDef._rank),
                                     `<div class="wuxMarginLeft50">

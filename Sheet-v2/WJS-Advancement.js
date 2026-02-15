@@ -37,15 +37,22 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 		},
 		setAffinityValue = function (eventinfo) {
 			Debug.Log(`Setting ${eventinfo.sourceAttribute}`);
+			
+			let isPrimary = eventinfo.sourceAttribute == WuxDef.GetVariable("Affinity");
 			let attributeHandler = new WorkerAttributeHandler();
 			let affinityVariable = eventinfo.sourceAttribute;
+
+			let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
 
 			attributeHandler.addMod(affinityVariable);
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				let variable = `${affinityVariable}${WuxDef._learn}`;
 				let desc = WuxDef.GetDescription(`${WuxDef.GetAbbreviation()}${eventinfo.newValue}`);
-				Debug.Log(`Setting ${variable} to ${desc}`);
+				if (isPrimary) {
+					combatDetailsHandler.onUpdateAffinity(attrHandler, eventinfo.newValue);
+				}
 				attrHandler.addUpdate(variable, desc);
+				
 			});
 			attributeHandler.run();
 		},

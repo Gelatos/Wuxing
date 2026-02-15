@@ -113,7 +113,20 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
                         basics = function () {
                             let contents = "";
-                            contents += WuxDefinition.BuildText(WuxDef.Get("FullName"), WuxSheetMain.Span(WuxDef.GetAttribute("FullName")));
+                            contents += WuxDefinition.BuildText(WuxDef.Get("FullName"), 
+                                WuxSheetMain.Span(WuxDef.GetAttribute("FullName")));
+                            
+                            let hiddenAttr = WuxDef.GetAttribute("AffinityAspect");
+                            let affinityFilter = [WuxDef.Get("Unaspected")].concat(
+                                WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])
+                            );
+                            contents += WuxSheetMain.HiddenFieldToggle(hiddenAttr,
+                                WuxDefinition.BuildText(WuxDef.Get("Affinity"),
+                                    WuxSheetMain.Span(WuxDef.GetAttribute("Affinity"))),
+                                WuxDefinition.BuildSelect(WuxDef.Get("AffinityAspect"), 
+                                    WuxDef.GetAttribute("Affinity"), affinityFilter, false)
+                            );
+                            
                             return WuxSheetMain.Table.FlexTableGroup(contents);
                         },
 
