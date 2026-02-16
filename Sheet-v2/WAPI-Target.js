@@ -842,104 +842,6 @@ class TokenTargetData extends TargetData {
             }
         });
     }
-    
-    takeAflameEffect(attributeHandler) {
-        let aflame = this.getStatusRank(attributeHandler, "Stat_Aflame");
-        if (aflame > 0) {
-            let roll = new DamageRoll();
-            roll.rollDice(aflame, 6);
-            roll.setDamageType(WuxDef.GetTitle("Dmg_Fire"));
-            this.addDamageRoll(roll);
-        }
-    }
-    takeAngeredEffect(attributeHandler) {
-        if (this.hasStatus(attributeHandler, "Stat_Angered")) {
-            this.takeCastWillbreakEffect(attributeHandler);
-            let roll = new DamageRoll();
-            roll.addModToRoll(5 * attributeHandler.parseInt(WuxDef.GetVariable("CR")));
-            roll.setDamageType("Will");
-            this.addDamageRoll(roll);
-        }
-    }
-    takeBleedingEffect(attributeHandler) {
-        let bleeding = this.getStatusRank(attributeHandler, "Stat_Bleeding");
-        if (bleeding > 0) {
-            let roll = new DamageRoll();
-            roll.rollDice(bleeding, 6);
-            roll.setDamageType(WuxDef.GetTitle("Dmg_Tension"));
-            roll.setTraits("AP");
-            this.addDamageRoll(roll);
-        }
-    }
-    takeDoubtEffect(attributeHandler) {
-        if (this.hasStatus(attributeHandler, "Stat_Doubt")) {
-            let roll = new DamageRoll();
-            roll.addModToRoll(5 + (5 * attributeHandler.parseInt(WuxDef.GetVariable("CR"))));
-            roll.setDamageType("Will");
-            this.addDamageRoll(roll);
-        }
-    }
-    takeFrightenedEffect(attributeHandler) {
-        if (this.hasStatus(attributeHandler, "Stat_Frightened")) {
-            this.takeCastWillbreakEffect(attributeHandler);
-            let roll = new DamageRoll();
-            roll.addModToRoll(10 + (5 * attributeHandler.parseInt(WuxDef.GetVariable("CR"))));
-            roll.setDamageType("Will");
-            this.addDamageRoll(roll);
-        }
-    }
-    takeBurnAegisEffect(attributeHandler) {
-        let aegis = this.getStatusRank(attributeHandler, "Stat_Burn Aegis");
-        if (aegis > 0) {
-            this.addStatus(attributeHandler, "Stat_Aflame", 1);
-            let roll = new DamageRoll();
-            roll.rollDice(aegis, 6);
-            roll.addModToRoll(aegis);
-            roll.setDamageType(WuxDef.GetTitle("Dmg_Burn"));
-            this.addDamageRoll(roll);
-        }
-    }
-    takeColdAegisEffect(attributeHandler) {
-        let aegis = this.getStatusRank(attributeHandler, "Stat_Cold Aegis");
-        if (aegis > 0) {
-            this.addStatus(attributeHandler, "Stat_Chilled", 1);
-            let roll = new DamageRoll();
-            roll.rollDice(aegis, 6);
-            roll.addModToRoll(aegis);
-            roll.setDamageType(WuxDef.GetTitle("Dmg_Cold"));
-            this.addDamageRoll(roll);
-        }
-    }
-    takeShockAegisEffect(attributeHandler) {
-        let aegis = this.getStatusRank(attributeHandler, "Stat_Shock Aegis");
-        if (aegis > 0) {
-            this.setStatus(attributeHandler, "Stat_Jolted", 1);
-            let roll = new DamageRoll();
-            roll.rollDice(aegis, 6);
-            roll.addModToRoll(aegis);
-            roll.setDamageType(WuxDef.GetTitle("Dmg_Shock"));
-            this.addDamageRoll(roll);
-        }
-    }
-    takeThornAegisEffect(attributeHandler) {
-        let aegis = this.getStatusRank(attributeHandler, "Stat_Thorn Aegis");
-        if (aegis > 0) {
-            this.setStatus(attributeHandler, "Stat_Vined", 1);
-            let roll = new DamageRoll();
-            roll.rollDice(aegis, 6);
-            roll.addModToRoll(aegis);
-            roll.setDamageType(WuxDef.GetTitle("Dmg_Piercing"));
-            this.addDamageRoll(roll);
-        }
-    }
-    takeCastWillbreakEffect(attributeHandler) {
-        let roll = new DamageRoll();
-        roll.addModToRoll(5 + (5 * attributeHandler.parseInt(WuxDef.GetVariable("CR"))));
-        roll.setDamageType(WuxDef.GetTitle("Dmg_Tension"));
-        roll.setTraits("AP");
-        this.addDamageRoll(roll);
-    }
-
 
     getModifyResults(name) {
         return {
@@ -1161,7 +1063,7 @@ class TokenTargetEffectsData {
                         this.effectMessages.push("Target is Vined. Adding Vine ranks to Aflame and taking damage.");
                         rank += vined;
                         this.addStatusResult("Stat_Vined", "remove", vined);
-                        this.tokenTargetData.takeAflameEffect(attrHandler);
+                        this.takeAflameEffect(attrHandler);
                     }
                     break;
                 case "Stat_Vined":
@@ -1173,7 +1075,7 @@ class TokenTargetEffectsData {
                     if (aflame > 0) {
                         this.effectMessages.push("Target is Aflame. Adding Vine ranks to Aflame and taking damage.");
                         this.addStatusResult("Aflame", "add", rank);
-                        this.tokenTargetData.takeAflameEffect(attrHandler);
+                        this.takeAflameEffect(attrHandler);
                         return;
                     }
                     break;
@@ -1448,6 +1350,103 @@ class TokenTargetEffectsData {
                 targetEffect.effectMessages.push(`${tokenTargetData.displayName} has their Will fully healed.`);
                 tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
             });
+    }
+
+    takeAflameEffect(attributeHandler) {
+        let aflame = this.tokenTargetData.getStatusRank(attributeHandler, "Stat_Aflame");
+        if (aflame > 0) {
+            let roll = new DamageRoll();
+            roll.rollDice(aflame, 6);
+            roll.setDamageType(WuxDef.GetTitle("Dmg_Fire"));
+            this.addDamageRoll(roll);
+        }
+    }
+    takeAngeredEffect(attributeHandler) {
+        if (this.tokenTargetData.hasStatus(attributeHandler, "Stat_Angered")) {
+            this.takeCastWillbreakEffect(attributeHandler);
+            let roll = new DamageRoll();
+            roll.addModToRoll(5 * attributeHandler.parseInt(WuxDef.GetVariable("CR")));
+            roll.setDamageType("Will");
+            this.addDamageRoll(roll);
+        }
+    }
+    takeBleedingEffect(attributeHandler) {
+        let bleeding = this.tokenTargetData.getStatusRank(attributeHandler, "Stat_Bleeding");
+        if (bleeding > 0) {
+            let roll = new DamageRoll();
+            roll.rollDice(bleeding, 6);
+            roll.setDamageType(WuxDef.GetTitle("Dmg_Tension"));
+            roll.setTraits("AP");
+            this.addDamageRoll(roll);
+        }
+    }
+    takeDoubtEffect(attributeHandler) {
+        if (this.tokenTargetData.hasStatus(attributeHandler, "Stat_Doubt")) {
+            let roll = new DamageRoll();
+            roll.addModToRoll(5 + (5 * attributeHandler.parseInt(WuxDef.GetVariable("CR"))));
+            roll.setDamageType("Will");
+            this.addDamageRoll(roll);
+        }
+    }
+    takeFrightenedEffect(attributeHandler) {
+        if (this.tokenTargetData.hasStatus(attributeHandler, "Stat_Frightened")) {
+            this.takeCastWillbreakEffect(attributeHandler);
+            let roll = new DamageRoll();
+            roll.addModToRoll(10 + (5 * attributeHandler.parseInt(WuxDef.GetVariable("CR"))));
+            roll.setDamageType("Will");
+            this.addDamageRoll(roll);
+        }
+    }
+    takeBurnAegisEffect(attributeHandler) {
+        let aegis = this.tokenTargetData.getStatusRank(attributeHandler, "Stat_Burn Aegis");
+        if (aegis > 0) {
+            this.tokenTargetData.addStatus(attributeHandler, "Stat_Aflame", 1);
+            let roll = new DamageRoll();
+            roll.rollDice(aegis, 6);
+            roll.addModToRoll(aegis);
+            roll.setDamageType(WuxDef.GetTitle("Dmg_Burn"));
+            this.addDamageRoll(roll);
+        }
+    }
+    takeColdAegisEffect(attributeHandler) {
+        let aegis = this.tokenTargetData.getStatusRank(attributeHandler, "Stat_Cold Aegis");
+        if (aegis > 0) {
+            this.tokenTargetData.addStatus(attributeHandler, "Stat_Chilled", 1);
+            let roll = new DamageRoll();
+            roll.rollDice(aegis, 6);
+            roll.addModToRoll(aegis);
+            roll.setDamageType(WuxDef.GetTitle("Dmg_Cold"));
+            this.addDamageRoll(roll);
+        }
+    }
+    takeShockAegisEffect(attributeHandler) {
+        let aegis = this.tokenTargetData.getStatusRank(attributeHandler, "Stat_Shock Aegis");
+        if (aegis > 0) {
+            this.tokenTargetData.setStatus(attributeHandler, "Stat_Jolted", 1);
+            let roll = new DamageRoll();
+            roll.rollDice(aegis, 6);
+            roll.addModToRoll(aegis);
+            roll.setDamageType(WuxDef.GetTitle("Dmg_Shock"));
+            this.addDamageRoll(roll);
+        }
+    }
+    takeThornAegisEffect(attributeHandler) {
+        let aegis = this.tokenTargetData.getStatusRank(attributeHandler, "Stat_Thorn Aegis");
+        if (aegis > 0) {
+            this.tokenTargetData.setStatus(attributeHandler, "Stat_Vined", 1);
+            let roll = new DamageRoll();
+            roll.rollDice(aegis, 6);
+            roll.addModToRoll(aegis);
+            roll.setDamageType(WuxDef.GetTitle("Dmg_Piercing"));
+            this.addDamageRoll(roll);
+        }
+    }
+    takeCastWillbreakEffect(attributeHandler) {
+        let roll = new DamageRoll();
+        roll.addModToRoll(5 + (5 * attributeHandler.parseInt(WuxDef.GetVariable("CR"))));
+        roll.setDamageType(WuxDef.GetTitle("Dmg_Tension"));
+        roll.setTraits("AP");
+        this.addDamageRoll(roll);
     }
 }
 
@@ -2058,34 +2057,35 @@ var TargetReference = TargetReference || (function () {
             let messages = [];
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                let tokenEffect = new TokenTargetEffectsData(tokenTargetData);
                 
                 switch (content) {
                     case "Aflame":
-                        tokenTargetData.takeAflameEffect(attributeHandler);
+                        tokenEffect.takeAflameEffect(attributeHandler);
                         break;
                     case "Angered":
-                        tokenTargetData.takeAngeredEffect(attributeHandler);
+                        tokenEffect.takeAngeredEffect(attributeHandler);
                         break;
                     case "Bleeding":
-                        tokenTargetData.takeBleedingEffect(attributeHandler);
+                        tokenEffect.takeBleedingEffect(attributeHandler);
                         break;
                     case "Burn Aegis":
-                        tokenTargetData.takeBurnAegisEffect(attributeHandler);
+                        tokenEffect.takeBurnAegisEffect(attributeHandler);
                         break;
                     case "Cold Aegis":
-                        tokenTargetData.takeColdAegisEffect(attributeHandler);
+                        tokenEffect.takeColdAegisEffect(attributeHandler);
                         break;
                     case "Frightened":
-                        tokenTargetData.takeFrightenedEffect(attributeHandler);
+                        tokenEffect.takeFrightenedEffect(attributeHandler);
                         break;
                     case "Shock Aegis":
-                        tokenTargetData.takeShockAegisEffect(attributeHandler);
+                        tokenEffect.takeShockAegisEffect(attributeHandler);
                         break;
                     case "Thorn Aegis":
-                        tokenTargetData.takeThornAegisEffect(attributeHandler);
+                        tokenEffect.takeThornAegisEffect(attributeHandler);
                         break;
                     case "Willbreak Cast":
-                        tokenTargetData.takeCastWillbreakEffect(attributeHandler);
+                        tokenEffect.takeCastWillbreakEffect(attributeHandler);
                         break;
                 }
                 

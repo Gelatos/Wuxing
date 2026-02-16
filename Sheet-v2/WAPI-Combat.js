@@ -237,9 +237,9 @@ var WuxConflictManager = WuxConflictManager || (function () {
                     WuxDef.GetVariable("Cmb_Armor"), WuxDef.GetVariable("CR")]);
 
                 attributeHandler.addGetAttrCallback(function (attrGetter) {
-                    tokenTargetData.takeAflameEffect(attrGetter);
-                    tokenTargetData.takeBleedingEffect(attrGetter);
-                    tokenTargetData.takeDoubtEffect(attrGetter);
+                    tokenEffect.takeAflameEffect(attrGetter);
+                    tokenEffect.takeBleedingEffect(attrGetter);
+                    tokenEffect.takeDoubtEffect(attrGetter);
                 });
                 
                 attributeHandler.addFinishCallback(function (attrGetter) {

@@ -5757,7 +5757,7 @@ var WuxDef = WuxDef || (function() {
             "Stat_Vined":{"name":"Stat_Vined","fieldName":"stat_vined","group":"Status","description":"","variable":"sts-vined{0}","title":"Vined","subGroup":"Condition","descriptions":["You are covered in vines. Your Base Speed is reduced by your vined rank. When you have the Aflame condition, all ranks of vined are added to the Aflame condition and you immediately take the aflame damage; the vined condition then ends."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
-                "isResource":"","shortDescription":"","points":"2","endsOnRoundStart":false,"endsOnTrigger":false,"hasRanks":false},
+                "isResource":"","shortDescription":"","points":"2","endsOnRoundStart":false,"endsOnTrigger":false,"hasRanks":true},
             "Stat_Agreeable":{"name":"Stat_Agreeable","fieldName":"stat_agreeable","group":"Status","description":"","variable":"sts-agreeable{0}","title":"Agreeable","subGroup":"Emotion","descriptions":["The opponent's side has made a point that you are positively influenced by. Techniques with the Social Keyword used against you gain advantage equal to your Agreeable rank. Requests made against you gain [5 * rank] on their check."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
