@@ -440,11 +440,11 @@ div.wuxStyleHeaderButton:hover span {
     background: #cacbcf;
 }
 
-/*.wuxRepeatingFlexSection .wuxFeature*/
-/*{*/
-/*    min-width: 220px;*/
-/*    max-width: 220px;*/
-/*}*/
+.wuxRepeatingFlexSection .wuxFeature
+{
+    min-width: 240px;
+    max-width: 240px;
+}
 
 .sheet-rolltemplate-technique,
 .sheet-rolltemplate-usetechnique
