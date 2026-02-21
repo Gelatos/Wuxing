@@ -1338,6 +1338,7 @@ class StatusData extends WuxDatabaseData {
         this.endsOnRoundStart = json.endsOnRoundStart;
         this.endsOnTrigger = json.endsOnTrigger;
         this.hasRanks = json.hasRanks;
+        this.isBeneficial = json.isBeneficial;
     }
 
     importSheets(dataArray) {
@@ -1360,6 +1361,8 @@ class StatusData extends WuxDatabaseData {
         i++;
         this.hasRanks = ("" + dataArray[i]) != "";
         i++;
+        this.isBeneficial = ("" + dataArray[i]) != "";
+        i++;
     }
 
     createEmpty() {
@@ -1373,6 +1376,7 @@ class StatusData extends WuxDatabaseData {
         this.endsOnRoundStart = false;
         this.endsOnTrigger = false;
         this.hasRanks = false;
+        this.isBeneficial = false;
     }
 
     createDefinition(baseDefinition) {
@@ -1384,6 +1388,7 @@ class StatusData extends WuxDatabaseData {
         definition.endsOnRoundStart = this.endsOnRoundStart;
         definition.endsOnTrigger = this.endsOnTrigger;
         definition.hasRanks = this.hasRanks;
+        definition.isBeneficial = this.isBeneficial;
         return definition;
     }
     
@@ -1954,6 +1959,7 @@ class StatusDefinitionData extends DefinitionData {
         this.endsOnRoundStart = json.endsOnRoundStart;
         this.endsOnTrigger = json.endsOnTrigger;
         this.hasRanks = json.hasRanks;
+        this.isBeneficial = json.isBeneficial;
     }
 
     setImportSheetExtraData(property, value) {
@@ -1970,6 +1976,9 @@ class StatusDefinitionData extends DefinitionData {
             case "hasRanks":
                 this.hasRanks = value.toLowerCase() == "true";
                 break;
+            case "isBeneficial":
+                this.isBeneficial = value.toLowerCase() == "true";
+                break;
         }
     }
 
@@ -1980,6 +1989,7 @@ class StatusDefinitionData extends DefinitionData {
         this.endsOnRoundStart = false;
         this.endsOnTrigger = false;
         this.hasRanks = false;
+        this.isBeneficial = false;
     }
 }
 

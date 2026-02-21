@@ -3591,7 +3591,9 @@ class TechniqueAssessment {
                 }
                 else {
                     this.addPointsRubric(value, message);
-                    this.addDefensePointsRubric(effect, value, message);
+                    if (!state.isBeneficial) {
+                        this.addDefensePointsRubric(effect, value, message);
+                    }
                     this.addTargetedPointsRubric(effect, value);
                     this.addImpactTrait(`Trait_Apply:${state.name}`);
 
