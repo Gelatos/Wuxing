@@ -1229,19 +1229,21 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 buildFormeActions = function () {
                     let contents = "";
-                    let jobSlotCount = parseInt(WuxDef.Get("Forme_JobSlotCount").formula.getValue());
-                    let advancedSlotCount = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
-                    let styleSlotCount = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
+                    // let jobSlotCount = parseInt(WuxDef.Get("Forme_JobSlotCount").formula.getValue());
+                    // let advancedSlotCount = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
+                    // let styleSlotCount = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
+                    //
+                    // let repeaterSlotData = [
+                    //     {repeater: "RepeatingJobTech", slot: "Forme_JobSlot", max: jobSlotCount, slotMod: 0},
+                    //     {repeater: "RepeatingAdvTech", slot: "Forme_AdvancedSlot", max: advancedSlotCount, slotMod: 0},
+                    //     {repeater: "RepeatingAdvTech", slot: "Forme_StyleSlot", max: (styleSlotCount + advancedSlotCount), slotMod: advancedSlotCount}];
+                    //
+                    // repeaterSlotData.forEach(function (repeaterData) {
+                    //     contents += repeatingFormeTechniquesSection(repeaterData);
+                    // });
 
-                    let repeaterSlotData = [
-                        {repeater: "RepeatingJobTech", slot: "Forme_JobSlot", max: jobSlotCount, slotMod: 0},
-                        {repeater: "RepeatingAdvTech", slot: "Forme_AdvancedSlot", max: advancedSlotCount, slotMod: 0},
-                        {repeater: "RepeatingAdvTech", slot: "Forme_StyleSlot", max: (styleSlotCount + advancedSlotCount), slotMod: advancedSlotCount}];
 
-                    repeaterSlotData.forEach(function (repeaterData) {
-                        contents += repeatingFormeTechniquesSection(repeaterData);
-                    });
-                    
+                    contents += repeatingFormeSection();
                     contents += repeatingCustomTechniquesSection();
                     
                     contents = WuxSheetMain.TabBlock(contents);
@@ -1280,6 +1282,24 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         `${styleCategoryDefinition.getTitle()}`, contents);
                 },
 
+                repeatingFormeSection = function () {
+                    let repeaterDefinition = WuxDef.Get("RepeatingFormeTech");
+                    let repeatingVariable = repeaterDefinition.getVariable();
+                    let hiddenField = repeaterDefinition.getAttribute(WuxDef._expand);
+                    let refreshField = repeaterDefinition.getAttribute(WuxDef._refresh);
+
+                    let header = getStyleHeader(`<span>${repeaterDefinition.getTitle()}</span>`, hiddenField, refreshField);
+                    let actionDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible"), 
+                        printFormTechniqueSimplifiedActionDisplay());
+                    
+                    return `${WuxSheetMain.Header(header)}
+                        ${WuxSheetMain.HiddenFieldToggle(hiddenField,
+                        `<div class="wuxDescription">Contents Hidden</div>`,
+                        `${buildRepeater(repeatingVariable, actionDisplay)}
+                        ${WuxSheetMain.Row("&nbsp;")}`
+                    )}`;
+                },
+                
                 repeatingFormeTechniquesSection = function (repeaterData) {
                     let contents = "";
                     for (let i = 1; i <= repeaterData.max; i++) {
@@ -1393,28 +1413,32 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 printRepeatingTechniqueDisplaySubmenuButton = function () {
                     let submenuFieldName = WuxDef.GetAttribute("Action_Actions");
                     let contents = addSubmenuContentsStyles();
-                    return printTechniqueDisplaySubmenuButton(submenuFieldName, contents);
+                    return printTechniqueDisplaySubmenu(submenuFieldName, contents);
                 },
 
                 printSetTechniqueDisplaySubmenuButton = function (techniqueDef, displayData) {
                     let submenuFieldName = techniqueDef.getAttribute(WuxDef._submenu);
                     let contents = addSetSubmenuContentsStyles(techniqueDef, displayData);
-                    return printTechniqueDisplaySubmenuButton(submenuFieldName, contents);
+                    return printTechniqueDisplaySubmenu(submenuFieldName, contents);
                 },
 
                 printCustomTechniqueDisplaySubmenuButton = function () {
                     let submenuFieldName = WuxDef.GetAttribute("Action_Actions");
                     let contents = addCustomSubmenuContentsStyles();
-                    return printTechniqueDisplaySubmenuButton(submenuFieldName, contents);
+                    return printTechniqueDisplaySubmenu(submenuFieldName, contents);
                 },
 
-                printTechniqueDisplaySubmenuButton = function (submenuFieldName, contents) {
+                printTechniqueDisplaySubmenu = function (submenuFieldName, contents) {
                     return `<div class="wuxInlineBlock">
-                            <input type="checkbox" name="${submenuFieldName}">
-                            <span class="wuxSubMenuText">l&nbsp;</span>
+                            ${printTechniqueDisplaySubmenuButton(submenuFieldName)}
                             <input type="hidden" class="wuxSubMenu-flag" name="${submenuFieldName}" value="0">
                             <div class="wuxSubMenuContent">\n${contents}\n</div>
                     </div>`;
+                },
+
+                printTechniqueDisplaySubmenuButton = function (submenuFieldName) {
+                    return `<input type="checkbox" name="${submenuFieldName}">
+                            <span class="wuxSubMenuText">l&nbsp;</span>`;
                 },
 
                 addSubmenuContentsStyles = function () {
@@ -1454,9 +1478,30 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     <div class="wuxFeature wuxMinWidth220">
                         <input type="hidden" class="wuxFeatureHeader-flag" name="${getActionTypeAttribute("TechActionType")}">
                         <div class="wuxFeatureHeader wuxSubMenuSection">
-                            ${buildBaseFormTechniqueHeaderContents(submenuText)}
+                            ${buildBaseFormTechniqueHeaderFullContents(submenuText)}
                         </div>
                         ${buildFormBaseTechniqueRequirements()}
+                    </div>`;
+                },
+                printFormTechniqueSimplifiedActionDisplay = function () {
+                    return `
+                    <div class="wuxFeature">
+                        <input type="hidden" class="wuxFeatureHeader-flag" name="${getActionTypeAttribute("TechActionType")}">
+                        <div class="wuxFeatureHeader">
+                            ${buildBaseFormTechniqueHeaderFullContents(
+                                printTechniqueDisplaySubmenuButton(WuxDef.GetAttribute("Action_Actions", 1)), 1)}
+                        </div>
+                        ${buildFormBaseTechniqueRequirements()}
+                        ${WuxSheetMain.HiddenField(WuxDef.GetAttribute("Action_Actions", 2),
+                        `<div class="wuxFeatureHeader">
+                            ${buildBaseFormTechniqueHeaderFullContents(
+                            printTechniqueDisplaySubmenuButton(WuxDef.GetAttribute("Action_Actions", 2)), 2)}
+                        </div>`)}
+                        ${WuxSheetMain.HiddenField(WuxDef.GetAttribute("Action_Actions", 3),
+                        `<div class="wuxFeatureHeader">
+                            ${buildBaseFormTechniqueHeaderFullContents(
+                            printTechniqueDisplaySubmenuButton(WuxDef.GetAttribute("Action_Actions", 3)), 3)}
+                        </div>`)}
                     </div>`;
                 },
                 printSetTechniqueActionDisplay = function (techniqueDef, displayData, submenuText) {
@@ -1475,7 +1520,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     <div class="wuxFeature">
                         <input type="hidden" class="wuxFeatureHeader-flag" name="${getActionTypeAttribute("TechActionType")}">
                         <div class="wuxFeatureHeader">
-                            ${buildBaseFormTechniqueHeaderContents()}
+                            ${buildBaseFormTechniqueHeaderFullContents()}
                         </div>
                         ${buildFormBaseTechniqueRequirements()}
                         ${buildFormExtendedTechniqueData()}
@@ -1495,21 +1540,29 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 },
 
-                buildBaseFormTechniqueHeaderContents = function (headerPrefix) {
-                    let headerText = headerPrefix == undefined ? 
-                        printFormTechniqueHeaderDiv() : printFormTechniqueHeaderButton(headerPrefix);
-                    
-                    return `<div class="wuxFeatureHeaderDisplayBlock">
-                        <input type="hidden" name="${getActionTypeAttribute("TechAffinity")}" value="" />
-                        <input type="hidden" name="${getActionTypeAttribute("TechTier")}" value="0" />
-                        ${headerText}
-                        ${printFormTechniqueTraits("Keywords", "TechForm", 5, "Keyword")}
-                        <div class="wuxFeatureHeaderInfo"><span name="${getActionTypeAttribute("TechResourceData")}"></span></div>
+                buildBaseFormTechniqueHeaderFullContents = function (headerPrefix, tierIndex) {
+                    return `${buildBaseFormTechniqueHeaderContents(headerPrefix, tierIndex, 
+                        `${printFormTechniqueTraits("Keywords", "TechForm", 5, "Keyword")}
+                        <div class="wuxFeatureHeaderInfo"><span name="${getActionTypeAttribute("TechResourceData", tierIndex)}"></span></div>
                         <div class="wuxFeatureHeaderInfo"><span name="${getActionTypeAttribute("TechTargetingData")}"></span></div>
-                        ${printFormTechniqueTraits("Traits", "TechTrait", 5, "Impact Trait")}
-                    </div>
+                        ${printFormTechniqueTraits("Traits", "TechTrait", 5, "Impact Trait")}`)}
                     <input type="hidden" class="wuxFeatureDefenseIcon-flag" name="${getActionTypeAttribute("TechCoreDefense")}" value="" />
                     <div class="wuxFeatureDefenseIcon"></div>`;
+                },
+                buildBaseFormTechniqueHeaderSubTechContents = function (headerPrefix, tierIndex) {
+                    return buildBaseFormTechniqueHeaderContents(headerPrefix, tierIndex,
+                        `<div class="wuxFeatureHeaderInfo"><span name="${getActionTypeAttribute("TechResourceData", tierIndex)}"></span></div>`);
+                },
+                buildBaseFormTechniqueHeaderContents = function (headerPrefix, tierIndex, contents) {
+                    let headerText = headerPrefix == undefined ?
+                        printFormTechniqueHeaderDiv(tierIndex) : printFormTechniqueHeaderButton(headerPrefix, tierIndex);
+
+                    return `<div class="wuxFeatureHeaderDisplayBlock">
+                        <input type="hidden" name="${getActionTypeAttribute("TechAffinity", tierIndex)}" value="" />
+                        <input type="hidden" name="${getActionTypeAttribute("TechTier", tierIndex)}" value="0" />
+                        ${headerText}
+                        ${contents}
+                    </div>`;
                 },
                 buildBaseSetTechniqueHeaderContents = function (techniqueDef, displayData, headerPrefix) {
                     let headerText = headerPrefix == undefined ?
@@ -1529,11 +1582,11 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 printSpan = function (contents) {
                     return `<span>${contents}</span>`;
                 },
-                printFormTechniqueHeaderButton = function (headerPrefix) {
+                printFormTechniqueHeaderButton = function (headerPrefix, tierIndex) {
                     return `<div class="wuxFeatureHeaderName">
                         ${headerPrefix == undefined ? "" : headerPrefix}
-                        <button class="wuxFeatureHeaderNameButton" type="roll" value="@{${WuxDef.GetVariable("Action_Use")}}">
-                            ${getSpanActionTypeAttribute("TechName")}
+                        <button class="wuxFeatureHeaderNameButton" type="roll" value="@{${WuxDef.GetVariable("Action_Use", tierIndex)}}">
+                            ${getSpanActionTypeAttribute("TechName", tierIndex)}
                         </button>
                     </div>`;
                 },
@@ -1545,8 +1598,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         </button>
                     </div>`;
                 },
-                printFormTechniqueHeaderDiv = function () {
-                    return printTechniqueHeaderDiv(getSpanActionTypeAttribute("TechName"));
+                printFormTechniqueHeaderDiv = function (tierIndex) {
+                    return printTechniqueHeaderDiv(getSpanActionTypeAttribute("TechName", tierIndex));
                 },
                 printSetTechniqueHeaderDiv = function (displayData) {
                     return printTechniqueHeaderDiv(printSpan(displayData.name));
