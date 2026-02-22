@@ -1,3 +1,88 @@
+var WuxWorkerActionsService = WuxWorkerActionsService || (function () {
+    const iteratePassiveStyleTechniques = function (techBoosters, callback) {
+        iteratePassiveTechniques(techBoosters, function (techniqueName) {
+            let technique = WuxTechs.Get(techniqueName);
+            callback(technique);
+        });
+    }
+    const iteratePassiveGearTechniques = function (gearBoosters, callback) {
+        iteratePassiveTechniques(gearBoosters, function (itemName) {
+            let item = WuxItems.Get(itemName);
+            callback(item.technique);
+        });
+    }
+    const iteratePassiveTechniques = function (passiveTechniqueArray, callback) {
+        if (!Array.isArray(passiveTechniqueArray)) {
+            return;
+        }
+
+        passiveTechniqueArray.forEach(function (techniqueName) {
+            callback(techniqueName);
+        });
+    }
+    
+    'use strict';
+
+    const 
+        addBoostStyleTechModifiers = function (attrHandler, techBoosters) {
+            let service = this;
+            iteratePassiveStyleTechniques(techBoosters, function (technique) {
+                service.addBoostTechniqueModifiers(attrHandler, technique);
+            });
+        },
+        addBoostGearTechModifiers = function (attrHandler, gearBoosters) {
+            let service = this;
+            iteratePassiveGearTechniques(gearBoosters, function (technique) {
+                service.addBoostTechniqueModifiers(attrHandler, technique);
+            });
+        },
+        addBoostTechniqueModifiers = function (attrHandler, technique) {
+            if (technique == undefined) {
+                return;
+            }
+            // let debugOutput = `${technique.name}`;
+            technique.effects.iterate(function (techEffect) {
+                if (techEffect.type == "Boost") {
+                    let boostDef = WuxDef.Get(techEffect.effect);
+                    let value = techEffect.formula.getValue(attrHandler);
+
+                    switch (techEffect.subType) {
+                        case "Set":
+                            attrHandler.addUpdate(boostDef.getVariable(WuxDef._techset),
+                                value - boostDef.formula.getValue(attrHandler));
+                            // debugOutput += `\nSet ${boostDef.name} to ${value}`;
+                            break;
+                        default:
+                            attrHandler.addUpdate(boostDef.getVariable(WuxDef._tech),
+                                attrHandler.parseInt(boostDef.getVariable(WuxDef._tech)) + value);
+                            // debugOutput += `\nIncrease ${boostDef.name} by ${value} to ${attrHandler.parseInt(boostDef.getVariable(WuxDef._tech)) + value}`;
+                            break;
+                    }
+                }
+            });
+            // Debug.Log(debugOutput);
+        },
+        addAffinityVariables = function (attrHandler) {
+            attrHandler.addMod([WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("Ancestry")]);
+        },
+        addBoosterVariables = function (attrHandler) {
+            attrHandler.addMod([WuxDef.GetVariable("BoostStyleTech"), WuxDef.GetVariable("BoostGearTech"), WuxDef.GetVariable("BoostPerkTech")]);
+        },
+        addNameVariables = function (attrHandler) {
+            attrHandler.addMod([WuxDef.GetVariable("FullName")]);
+        };
+
+
+    return {
+        addBoostStyleTechModifiers: addBoostStyleTechModifiers,
+        addBoostGearTechModifiers: addBoostGearTechModifiers,
+        addBoostTechniqueModifiers: addBoostTechniqueModifiers,
+        addBoosterVariables: addBoosterVariables,
+        addAffinityVariables: addAffinityVariables,
+        addNameVariables: addNameVariables
+    }
+});
+
 var WuxWorkerActions = WuxWorkerActions || (function () {
     const tryAddTechniqueToBoosters = function (attrHandler, technique, boosterFieldName) {
         if (technique == undefined) {
@@ -95,9 +180,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 attrHandler.addUpdate(techniqueSetModifierDefs[i].getVariable(WuxDef._techset), 0);
             }
 
-            addBoostStyleTechModifiers(attrHandler, techBoosters);
-            addBoostGearTechModifiers(attrHandler, gearBoosters);
-            addBoostStyleTechModifiers(attrHandler, perkBoosters);
+            WuxWorkerActionsService.addBoostStyleTechModifiers(attrHandler, techBoosters);
+            WuxWorkerActionsService.addBoostGearTechModifiers(attrHandler, gearBoosters);
+            WuxWorkerActionsService.addBoostStyleTechModifiers(attrHandler, perkBoosters);
 
             // recalculate all techniques that have modifiers
             for (let i = 0; i < techniqueModifierDefs.length; i++) {
@@ -150,43 +235,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         });
     }
 
-    const addBoostStyleTechModifiers = function (attrHandler, techBoosters) {
-        iteratePassiveStyleTechniques(techBoosters, function (technique) {
-            addBoostTechniqueModifiers(attrHandler, technique);
-        });
-    }
-    const addBoostGearTechModifiers = function (attrHandler, gearBoosters) {
-        iteratePassiveGearTechniques(gearBoosters, function (technique) {
-            addBoostTechniqueModifiers(attrHandler, technique);
-        });
-    }
-    const addBoostTechniqueModifiers = function (attrHandler, technique) {
-        if (technique == undefined) {
-            return;
-        }
-        // let debugOutput = `${technique.name}`;
-        technique.effects.iterate(function (techEffect) {
-            if (techEffect.type == "Boost") {
-                let boostDef = WuxDef.Get(techEffect.effect);
-                let value = techEffect.formula.getValue(attrHandler);
-
-                switch (techEffect.subType) {
-                    case "Set":
-                        attrHandler.addUpdate(boostDef.getVariable(WuxDef._techset),
-                            value - boostDef.formula.getValue(attrHandler));
-                        // debugOutput += `\nSet ${boostDef.name} to ${value}`;
-                        break;
-                    default:
-                        attrHandler.addUpdate(boostDef.getVariable(WuxDef._tech),
-                            attrHandler.parseInt(boostDef.getVariable(WuxDef._tech)) + value);
-                        // debugOutput += `\nIncrease ${boostDef.name} by ${value} to ${attrHandler.parseInt(boostDef.getVariable(WuxDef._tech)) + value}`;
-                        break;
-                }
-            }
-        });
-        // Debug.Log(debugOutput);
-    }
-
     const iteratePassiveStyleTechniques = function (techBoosters, callback) {
         iteratePassiveTechniques(techBoosters, function (techniqueName) {
             let technique = WuxTechs.Get(techniqueName);
@@ -208,15 +256,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             callback(techniqueName);
         });
     }
-    const addAffinityVariables = function (attrHandler) {
-        attrHandler.addMod([WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("Ancestry")]);
-    };
-    const addBoosterVariables = function (attrHandler) {
-        attrHandler.addMod([WuxDef.GetVariable("BoostStyleTech"), WuxDef.GetVariable("BoostGearTech"), WuxDef.GetVariable("BoostPerkTech")]);
-    };
-    const addNameVariables = function (attrHandler) {
-        attrHandler.addMod([WuxDef.GetVariable("FullName")]);
-    };
+    
     const getAffinities = function (attrHandler) {
         return [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
             attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
@@ -294,9 +334,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             repeater.removeAllIds();
         });
 
-        addAffinityVariables(attributeHandler);
-        addBoosterVariables(attributeHandler);
-        addNameVariables(attributeHandler);
+        WuxWorkerActionsService.addAffinityVariables(attributeHandler);
+        WuxWorkerActionsService.addBoosterVariables(attributeHandler);
+        WuxWorkerActionsService.addNameVariables(attributeHandler);
         let crFieldName = WuxDef.GetVariable("CR");
         attributeHandler.addMod(crFieldName);
 
@@ -396,14 +436,24 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             getStyleSlotRepeaterIDs(repeaterSlotData, index + 1, finishCallback);
         });
     }
+    
     'use strict';
 
     const 
+        updateAllFormeActions = function (attributeHandler) {
+            let formeTech = new FormeTechniqueDatabase(attributeHandler);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                formeTech.setupPostGetAttr(attrHandler);
+                formeTech.populateTechDictionary(attrHandler);
+                
+            });
+        },
+        
         updateAllActiveStyleActions = function (attributeHandler, repeaterSlotData, cr) {
             let baseDefinitionName = "Action";
-            addBoosterVariables(attributeHandler);
-            addAffinityVariables(attributeHandler);
-            addNameVariables(attributeHandler);
+            WuxWorkerActionsService.addBoosterVariables(attributeHandler);
+            WuxWorkerActionsService.addAffinityVariables(attributeHandler);
+            WuxWorkerActionsService.addNameVariables(attributeHandler);
             
             for (let i = 0; i < repeaterSlotData.length; i++) {
                 let slotData = repeaterSlotData[i];
@@ -470,8 +520,8 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             }
 
             let boosterFieldName = WuxDef.GetVariable("BoostPerkTech");
-            addBoosterVariables(attributeHandler);
-            addNameVariables(attributeHandler);
+            WuxWorkerActionsService.addBoosterVariables(attributeHandler);
+            WuxWorkerActionsService.addNameVariables(attributeHandler);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 
                 let perkBoosters = [];
@@ -523,9 +573,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                     attributeHandler.addMod(actionsRepeater.getFieldName(id, WuxDef.GetUntypedVariable("Action", "TechName")));
                 });
 
-                addAffinityVariables(attributeHandler);
-                addBoosterVariables(attributeHandler);
-                addNameVariables(attributeHandler);
+                WuxWorkerActionsService.addAffinityVariables(attributeHandler);
+                WuxWorkerActionsService.addBoosterVariables(attributeHandler);
+                WuxWorkerActionsService.addNameVariables(attributeHandler);
                 let crFieldName = WuxDef.GetVariable("CR");
                 attributeHandler.addMod(crFieldName);
 
@@ -630,9 +680,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 for (let i = 1; i <= 9; i++) {
                     attributeHandler.addMod(equipSlotDef.getVariable(i));
                 }
-    
-                addBoosterVariables(attributeHandler);
-                addNameVariables(attributeHandler);
+
+                WuxWorkerActionsService.addBoosterVariables(attributeHandler);
+                WuxWorkerActionsService.addNameVariables(attributeHandler);
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
 
 
@@ -652,7 +702,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 actionsRepeater.iterate(function (id) {
                     attributeHandler.addMod(actionsRepeater.getFieldName(id, WuxDef.GetUntypedVariable("Action", "TechName")));
                 });
-                addBoosterVariables(attributeHandler);
+                WuxWorkerActionsService.addBoosterVariables(attributeHandler);
 
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
                     actionsRepeater.removeAllIds();
@@ -709,3 +759,104 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         SetCustomTechnique: setCustomTechnique,
     };
 }());
+
+class FormeTechniqueDatabase {
+    constructor(attributeHandler) {
+        this.techDictionary = new Dictionary();
+        this.userAffinities = "";
+        this.userCr = 0;
+        
+        if (attributeHandler == undefined) {
+            attributeHandler = new WorkerAttributeHandler();
+        }
+
+        this.formeActionsRepeaterId = "RepeatingFormeTech";
+        attributeHandler.addRepeatingSection(this.formeActionsRepeaterId);
+        attributeHandler.addMod("CR");
+
+        this.setFormeSlotsDefinitionData();
+        this.addFormeSlotVariables(attributeHandler);
+        WuxWorkerActionsService.addBoosterVariables(attributeHandler);
+        WuxWorkerActionsService.addAffinityVariables(attributeHandler);
+        WuxWorkerActionsService.addNameVariables(attributeHandler);
+
+        this.styleWorker = new WuxStyleWorkerBuild();
+        attributeHandler.addMod(this.styleWorker.attrBuildDraft);
+    }
+    setFormeSlotsDefinitionData () {
+        this.formeDefinitions = [
+            {
+                mainDef: WuxDef.Get("Forme_AdvancedSlot"),
+                max: parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue()),
+                countDef: WuxDef.Get("AdvancedSlots")
+            },
+            {
+                mainDef: WuxDef.Get("Forme_StyleSlot"),
+                max: parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue()),
+                countDef: WuxDef.Get("StyleSlots")
+            },
+            {
+                mainDef: WuxDef.Get("Forme_JobSlot"),
+                max: parseInt(WuxDef.Get("Forme_JobSlotCount").formula.getValue()),
+                countDef: WuxDef.Get("JobSlots")
+            }
+        ];
+    }
+    addFormeSlotVariables(attrHandler) {
+        this.formeDefinitions.forEach(function (slot) {
+            attrHandler.addMod(slot.countDef.getVariable());
+            for (let i = 1; i <= slot.max; i++) {
+                attrHandler.addMod(slot.mainDef.getVariable(i));
+            }
+        });
+    };
+    
+    setupPostGetAttr(attrHandler, cr) {
+        this.styleWorker.setBuildStatsDraft(attrHandler);
+        if (cr == undefined) {
+            this.userCr = attrHandler.parseInt("CR");
+        } else {
+            this.userCr = cr;
+        }
+        this.userAffinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
+            attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
+            attrHandler.parseString(WuxDef.GetVariable("Ancestry"))];
+    }
+    
+    populateTechDictionary() {
+        let allStylesArray = this.styleWorker.getStyles();
+
+        allStylesArray.forEach((styleData) => {
+            let filteredTechs = WuxTechs.Filter(new DatabaseFilterData("style", styleData.style.name));
+            filteredTechs.forEach(tech => {
+                if (!this.techDictionary.hasOwnProperty(tech.name)) {
+                    this.techDictionary[tech.name] = {
+                        technique: tech,
+                        isSet: false,
+                        isVisible: this.checkTechniqueIsVisible(tech, styleData.rank)
+                    };
+                }
+            })
+        })
+    }
+    
+    checkTechniqueIsVisible(technique, maxTier) {
+        if (technique.tier > this.userCr || technique.tier > maxTier) {
+            return false;
+        }
+
+        if (technique.affinity.includes(";")) {
+            let affinityParts = technique.affinity.split(";").map(s => s.trim());
+            if (technique.affinity != "" && !affinityParts.some(part => this.userAffinities.includes(part))) {
+                return false;
+            }
+        }
+        else if (technique.affinity != "" && !this.userAffinities.includes(technique.affinity)) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    
+}

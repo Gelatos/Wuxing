@@ -576,6 +576,18 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 		}
 		super.changeWorkerAttribute(attributeHandler, updatingAttr, newValue);
 	}
+	
+	getStyles() {
+		let styleData = [];
+		this.iterateBuildStats(function (styleVariableData) {
+			let style = WuxStyles.GetByVariableName(styleVariableData.name);
+			let rank = parseInt(styleVariableData.value);
+			if (!isNaN(rank) && rank > 0) {
+				styleData.push({style: style, rank: rank});
+			}
+		});
+		return styleData;
+	}
 }
 
 class WuxAttributeWorkerBuild extends WuxWorkerBuild {

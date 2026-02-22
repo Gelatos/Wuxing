@@ -490,13 +490,13 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 }
                 normalSlots.push({name: attrHandler.parseString(normalStyles.getVariable(i)), index: i + maxAdvancedSlots});
             }
-
-            styleWorker.iterateBuildStats(function (styleVariableData) {
-                let style = WuxStyles.GetByVariableName(styleVariableData.name);
-                if (style.group != "" && styleVariableData.value > 0) {
+            
+            styleWorker.getStyles().forEach((styleData) => {
+                let style = styleData.style;
+                if (style.group != "" && styleData.value > 0) {
                     let newRowId = advancedRepeater.generateRowId();
                     attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Name")), style.name);
-                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Tier")), styleVariableData.value);
+                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Tier")), styleData.rank);
                     attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Actions")), 0);
                     attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_SeeTechniques")), 0);
                     let matchingSlotData = undefined;
@@ -536,7 +536,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                         equipStyleWorker.styleRepeater = advancedRepeater;
                         equipStyleWorker.selectedId = newRowId;
                         equipStyleWorker.styleFieldName = advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Actions"));
-                        equipStyleWorker.equipSlot(attrHandler, actionFieldName, matchingSlotData.index, matchingSlotData.name, style.name, styleVariableData.value);
+                        equipStyleWorker.equipSlot(attrHandler, actionFieldName, matchingSlotData.index, matchingSlotData.name, style.name, styleData.rank);
                     }
                     else {
                         attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsEquipped")), 0);
