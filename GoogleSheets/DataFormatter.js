@@ -528,6 +528,15 @@ class SheetDatabaseObject {
         return filteredData;
     }
     
+    getChangedVersionRows(sheetName, startRow) {
+        let sheet = this.ss.getSheetByName(sheetName);
+        let lastColLetter = "A";
+        let versionColumnLetter = ColumnToLetter(getNamedColumn(sheet, "Version"));
+        let filterRow = `${sheetName}!${versionColumnLetter}${startRow}:${versionColumnLetter}`;
+        let filter = `=FILTER(ROW(${filterRow}), ${filterRow}="CHANGE")`;
+        return this.readFilteredThenClear(filter, lastColLetter);
+    }
+    
     setTechniques() {
         this.techniques = SheetsDatabase.CreateTechniques(this.readDatabase("Techniques", 2));
     }
@@ -2659,6 +2668,7 @@ function AssessTechniqueAtRow(sheet, rowIndex) {
     if (rowIndex == 1) {
         return;
     }
+    let versionColumn = getNamedColumn(sheet, "Version");
     let assessColumn = getNamedColumn(sheet, "Assessment");
     let impactsColumn = getNamedColumn(sheet, "Gen Traits");
 
@@ -2667,7 +2677,7 @@ function AssessTechniqueAtRow(sheet, rowIndex) {
 
     let techniqueData = GetTechniqueForAssessment(sheet, rowIndex, assessColumn);
     if (techniqueData != undefined) {
-        let assessment = new TechniqueAssessment(techniqueData.tech, sheet, techniqueData.row, assessColumn, impactsColumn);
+        let assessment = new TechniqueAssessment(techniqueData.tech, sheet, techniqueData.row, versionColumn, assessColumn, impactsColumn);
         assessment.printCellValues();
         if (sheet.getSheetName() == "CustomTechniques") {
             assessment.printCellJson(true);
@@ -2686,6 +2696,7 @@ function AssessGearAtRow(sheet, rowIndex) {
     if (rowIndex == 1) {
         return;
     }
+    let versionColumn = getNamedColumn(sheet, "Version");
     let assessColumn = getNamedColumn(sheet, "Assessment");
     let impactsColumn = getNamedColumn(sheet, "Gen Traits");
 
@@ -2695,7 +2706,7 @@ function AssessGearAtRow(sheet, rowIndex) {
     let itemData = GetGearForAssessment(sheet, rowIndex, assessColumn);
     if (itemData != undefined) {
         if (itemData.item.hasTechnique) {
-            let techniqueAssessment = new TechniqueAssessment(itemData.item.technique, sheet, itemData.row, assessColumn, impactsColumn);
+            let techniqueAssessment = new TechniqueAssessment(itemData.item.technique, sheet, itemData.row, versionColumn, assessColumn, impactsColumn);
             techniqueAssessment.printCellValues();
         }
         if (rowIndex != itemData.row) {
@@ -2715,6 +2726,7 @@ function AssessConsumableAtRow(sheet, rowIndex) {
 
 function AssessAllTechniquesByStartRow(sheet, startRow) {
     const lastRow = sheet.getLastRow();
+    let versionColumn = getNamedColumn(sheet, "Version");
     let assessColumn = getNamedColumn(sheet, "Assessment");
     let impactsColumn = getNamedColumn(sheet, "Gen Traits");
     let rowIndex = startRow;
@@ -2727,7 +2739,7 @@ function AssessAllTechniquesByStartRow(sheet, startRow) {
         if (techniqueData != undefined) {
             rowIndex = techniqueData.finalRow;
             let assessment = new TechniqueAssessment(
-                techniqueData.tech, sheet, techniqueData.row, assessColumn, impactsColumn);
+                techniqueData.tech, sheet, techniqueData.row, versionColumn, assessColumn, impactsColumn);
             assessment.printCellValues();
         } else {
             assessingCell.setValue("");
@@ -2889,9 +2901,10 @@ function getNamedColumn(sheet, name) {
 }
 
 class TechniqueAssessment {
-    constructor(technique, sheet, row, assessColumn, impactsColumn) {
+    constructor(technique, sheet, row, versionColumn, assessColumn, impactsColumn) {
         this.sheet = sheet;
         this.row = row;
+        this.versionColumn = versionColumn;
         this.assessColumn = assessColumn;
         this.impactsColumn = impactsColumn;
 
@@ -2974,12 +2987,17 @@ class TechniqueAssessment {
 
     printCellValues() {
         this.printAssessmentNote();
+        this.printVersionChange();
         this.printAssessmentPointValues();
         this.printGeneratedImpactTraits();
     }
     printAssessmentNote() {
         let range = this.sheet.getRange(this.row, this.assessColumn, 1, 1);
         range.setNote(this.getAssessmentNote());
+    }
+    printVersionChange() {
+        let range = this.sheet.getRange(this.row, this.versionColumn, 1, 1);
+        range.setValue("CHANGE");
     }
     printAssessmentPointValues() {
         let values = [];
@@ -4171,6 +4189,9 @@ class DatabaseAssessment {
     
     setSheetDb(setDefinitions, setTech, setCharacterSheet) {
 
+        if (setTech) {
+            this.updateChangedTechniques();
+        }
         if (setDefinitions || setTech || setCharacterSheet) {
             this.sheetsDb.setTechniques();
         }
@@ -4200,6 +4221,70 @@ class DatabaseAssessment {
         }
         if (setDefinitions) {
             this.sheetsDb.setStatus();
+        }
+    }
+    
+    updateChangedTechniques() {
+        this.updateChangedTechniqueVersion("Techniques", 2, (name) => {
+            return WuxTechs.Get(name);
+        });
+        this.updateChangedTechniqueVersion("Gear", 2, (name) => {
+            let item = WuxItems.Get(name);
+            if (item == undefined) {
+                return;
+            }
+            return item.technique;
+        });
+        this.updateChangedTechniqueVersion("Consumables", 2, (name) => {
+            let item = WuxItems.Get(name);
+            if (item == undefined) {
+                return;
+            }
+            return item.technique;
+        });
+    }
+    
+    updateChangedTechniqueVersion(sheetName, startRow, getTechniqueCallback) {
+        let sheet = this.ss.getSheetByName(sheetName);
+        let versionCol = ColumnToLetter(getNamedColumn(sheet, "Version"));
+        let rowIds = this.sheetsDb.getChangedVersionRows(sheetName, startRow);
+        
+        for (let index = 0; index < rowIds.length; index++) {
+            let rowIndex = parseInt(rowIds[index][0]);
+            if (isNaN(rowIndex)) {
+                continue;
+            }
+            let nameId = `A${rowIndex}`;
+            let nameRange = sheet.getRange(nameId);
+            let tech = getTechniqueCallback(nameRange.getValue());
+            if (tech != undefined) {
+                let version = [0];
+                if (tech.version != undefined) {
+                    version = tech.version.split(".");
+                }
+
+                let value = "";
+                for (let i = 0; i < version.length; i++) {
+                    if (value != "") {
+                        value += ".";
+                    }
+                    if (i == version.length - 1) {
+                        let update = parseInt(version[version.length - 1]);
+                        if (isNaN(update)) {
+                            update = 0;
+                        }
+                        update++;
+                        value += update;
+                    }
+                    else {
+                        value += version[i];
+                    }
+                }
+                let versionId = `${versionCol}${rowIndex}`;
+                Debug.Log(`Setting ${versionId} to ${value}`);
+                let versionRange = sheet.getRange(versionId);
+                versionRange.setValue(value);
+            }
         }
     }
 
@@ -4256,6 +4341,8 @@ class DatabaseAssessment {
 
     printTechniqueDatabase() {
         let output = "";
+        
+        
 
         let techniqueClassData = JavascriptDatabase.Create(this.sheetsDb.techniques, WuxDefinition.GetTechnique);
         techniqueClassData.addPublicFunction("filterAndSortTechniquesByRequirement", WuxDefinition.FilterAndSortTechniquesByRequirement);

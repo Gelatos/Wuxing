@@ -543,6 +543,7 @@ class TechniqueData extends WuxDatabaseData {
         this.fieldName = Format.ToFieldName(this.name);
         this.techSet = json.techSet;
         this.group = json.group;
+        this.version = json.version;
         this.affinity = json.affinity;
         this.tier = parseInt(json.tier);
         this.isFree = this.affinity == "" && this.tier <= 0;
@@ -581,6 +582,8 @@ class TechniqueData extends WuxDatabaseData {
         this.techSet = "" + dataArray[i];
         i++;
         this.group = "" + dataArray[i];
+        i++;
+        this.version = "" + dataArray[i];
         i++;
         this.affinity = "" + dataArray[i];
         i++;
@@ -664,6 +667,7 @@ class TechniqueData extends WuxDatabaseData {
         this.fieldName = "";
         this.techSet = "";
         this.group = "";
+        this.version = "";
         this.affinity = "";
         this.tier = 0;
         this.isFree = false;
@@ -1560,7 +1564,9 @@ class UsableItemData extends ItemData {
         i++;
         this.components = "" + dataArray[i];
         i++;
-        let techData = [this.name, "Item", "", "", 0].concat(dataArray.slice(i));
+        let techData = [this.name, "Item", "", ("" + dataArray[i]), "", 0];
+        i++;
+        techData = techData.concat(dataArray.slice(i));
         this.technique = new TechniqueData(techData);
         this.hasTechnique = dataArray[i] != "";
         i++;
