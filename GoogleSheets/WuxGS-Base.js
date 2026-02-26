@@ -1558,6 +1558,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         printFormTechniqueHeaderDiv(tierIndex) : printFormTechniqueHeaderButton(headerPrefix, tierIndex);
 
                     return `<div class="wuxFeatureHeaderDisplayBlock">
+                        <input type="hidden" name="${getActionTypeAttribute("TechVersion", tierIndex)}" value="" />
                         <input type="hidden" name="${getActionTypeAttribute("TechAffinity", tierIndex)}" value="" />
                         <input type="hidden" name="${getActionTypeAttribute("TechTier", tierIndex)}" value="0" />
                         ${headerText}
@@ -2079,6 +2080,7 @@ var DisplayPopups = DisplayPopups || (function () {
                         ${WuxSheetMain.Header("Technique")}
                         <div class="wuxFeature">
                             <input type="hidden" class="wuxFeatureHeader-flag" name="${getPopupAttribute("TechActionType")}">
+                            <input type="hidden" name="${getPopupAttribute("TechVersion")}" value="" />
                             <input type="hidden" name="${getPopupAttribute("TechAffinity")}" value="" />
                             <input type="hidden" name="${getPopupAttribute("TechTier")}" value="0" />
                             <div class="wuxFeatureHeader">
