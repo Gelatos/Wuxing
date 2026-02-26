@@ -445,7 +445,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 formeTech.setupPostGetAttr(attrHandler);
                 formeTech.populateTechDictionary(attrHandler);
-                
+                formeTech.updateRepeaterTechniques(attrHandler);
             });
         },
         
@@ -772,6 +772,14 @@ class FormeTechniqueDatabase {
 
         this.formeActionsRepeaterId = "RepeatingFormeTech";
         attributeHandler.addRepeatingSection(this.formeActionsRepeaterId);
+        attributeHandler.repeatingSections[this.formeActionsRepeaterId].addFieldNames([
+            WuxDef.GetVariable("TechName", 1),
+            WuxDef.GetVariable("TechVersion", 1),
+            WuxDef.GetVariable("TechName", 2),
+            WuxDef.GetVariable("TechVersion", 2),
+            WuxDef.GetVariable("TechName", 3),
+            WuxDef.GetVariable("TechVersion", 3)
+        ]);
         attributeHandler.addMod("CR");
 
         this.setFormeSlotsDefinitionData();
@@ -833,14 +841,13 @@ class FormeTechniqueDatabase {
                     this.techDictionary[tech.name] = {
                         technique: tech,
                         isSet: false,
-                        isVisible: this.checkTechniqueIsVisible(tech, styleData.rank)
+                        isVisible: this.checkTechniqueIsVisibleInFilter(tech, styleData.rank)
                     };
                 }
             })
         })
     }
-    
-    checkTechniqueIsVisible(technique, maxTier) {
+    checkTechniqueIsVisibleInFilter(technique, maxTier) {
         if (technique.tier > this.userCr || technique.tier > maxTier) {
             return false;
         }
@@ -858,5 +865,55 @@ class FormeTechniqueDatabase {
         return true;
     }
     
+    updateRepeaterTechniques(attrHandler) {
+        let formeTechDatabase = this;
+        let repeater = attrHandler.repeatingSections[this.formeActionsRepeaterId];
+        let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", repeater);
+        repeater.iterate((id) => {
+            techniqueAttributeHandler.setId(id);
+            let techniqueName = techniqueAttributeHandler.getTechniqueName(1);
+            let techIndex = 1;
+            if (formeTechDatabase.techDictionary.hasOwnProperty(techniqueName)) {
+                formeTechDatabase.updateRepeaterTechnique(techniqueAttributeHandler, techniqueName, techIndex);
+                
+                // search for the techniques that use this technique as their base
+                techIndex++;
+                let techFilters = WuxTechs.Filter(new DatabaseFilterData("group", techniqueName));
+                for (let i = 0; i < techFilters.length; i++) {
+                    let techniqueName = techFilters[i].name;
+                    if (formeTechDatabase.techDictionary.hasOwnProperty(techniqueName)) {
+                        formeTechDatabase.updateRepeaterTechnique(techniqueAttributeHandler, techniqueName, techIndex);
+                        techIndex++;
+                    }
+                    if (techIndex > 3) { 
+                        break;
+                    }
+                }
+                while (techIndex <= 3) {
+                    techniqueAttributeHandler.setVisibilityAttribute(false, techIndex);
+                    techIndex++;
+                }
+            }
+            else {
+                // this technique is not valid. Remove it
+                repeater.removeId(id);
+            }
+        });
+    }
     
+    updateRepeaterTechnique(techniqueAttributeHandler, techniqueName, techIndex) {
+        let techVersion = techniqueAttributeHandler.getTechniqueVersion(techIndex);
+        let technique = this.techDictionary[techniqueName].tech;
+        if (technique.version != techVersion) {
+            // there's an update available for the technique. Update it.
+            techniqueAttributeHandler.setSimplifiedTechniqueInfo(technique, techIndex);
+        }
+        this.techDictionary[techniqueName].isSet = true;
+        techniqueAttributeHandler.setVisibilityAttribute(this.techDictionary[techniqueName].isVisible, techIndex);
+        
+    }
+    
+    addMissingTechniques(attrHandler) {
+        
+    }
 }

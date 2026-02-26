@@ -70,7 +70,8 @@ class WorkerAttributeHandler extends AttributeHandler {
 	async run() {
 		let attributeHandler = this;
 		for (const key in attributeHandler.repeatingSections) {
-			this.repeatingSections[key].ids = await getSectionIDsAsync(this.repeatingSections[key].repeatingSection);
+			attributeHandler.repeatingSections[key].ids = await getSectionIDsAsync(this.repeatingSections[key].repeatingSection);
+			attributeHandler.repeatingSections[key].addAttributeMods(attributeHandler);
 		}
 		attributeHandler.current = await getAttrsAsync(attributeHandler.mods);
 		
@@ -758,17 +759,33 @@ class DatabaseItemAttributeHandler {
 }
 
 class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
-	
+
 	setTechniqueInfo (technique, setUse) {
 		this.clearTechniqueInfo();
-
 		let displayData = new TechniqueDisplayData(technique);
-		this.attrHandler.addUpdate(this.getVariable("TechName"), displayData.name);
-		this.attrHandler.addUpdate(this.getVariable("TechAffinity"), technique.affinity);
-		this.attrHandler.addUpdate(this.getVariable("TechTier"), technique.tier);
+
+		this.setTechniqueHeaderInfo(technique, displayData);
+		this.setTechniqueEffectsInfo(technique, displayData);
+
+		if (setUse) {
+			this.setTechniqueUseRollTemplate(technique, displayData);
+		}
+	}
+	setSimplifiedTechniqueInfo (technique, suffix) {
+		this.clearTechniqueInfo();
+		let displayData = new TechniqueDisplayData(technique);
+
+		this.setTechniqueHeaderInfo(technique, displayData, suffix);
+		this.setTechniqueUseRollTemplate(technique, displayData, suffix);
+	}
+	setTechniqueHeaderInfo(technique, displayData, suffix) {
+		this.attrHandler.addUpdate(this.getVariable("TechName", suffix), displayData.name);
+		this.attrHandler.addUpdate(this.getVariable("TechVersion", suffix), technique.version);
+		this.attrHandler.addUpdate(this.getVariable("TechAffinity", suffix), technique.affinity);
+		this.attrHandler.addUpdate(this.getVariable("TechTier", suffix), technique.tier);
 		this.attrHandler.addUpdate(this.getVariable("TechCoreDefense"), displayData.coreDefense);
 		this.attrHandler.addUpdate(this.getVariable("TechActionType"), displayData.actionType);
-		this.attrHandler.addUpdate(this.getVariable("TechResourceData"), displayData.resourceData);
+		this.attrHandler.addUpdate(this.getVariable("TechResourceData", suffix), displayData.resourceData);
 		this.attrHandler.addUpdate(this.getVariable("TechTargetingData"), displayData.targetData);
 		if (displayData.forms.length > 0) {
 			this.addDefinitions(displayData.forms, this.getVariable("TechForm"), 4);
@@ -786,6 +803,8 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		if (displayData.itemTraits.length > 0) {
 			this.addDefinitions(displayData.itemTraits, this.getVariable("TechItemReq"), 2);
 		}
+	}
+	setTechniqueEffectsInfo(technique, displayData) {
 		if (displayData.flavorText != "") {
 			this.attrHandler.addUpdate(this.getVariable("TechFlavorText"), displayData.flavorText);
 		}
@@ -816,21 +835,20 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		if (displayData.definitions.length > 0) {
 			this.addDefinitions(displayData.definitions, this.getVariable("TechDef"), 4);
 		}
-		
-		if (setUse) {
-			displayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
-			displayData.technique.displayname = displayData.displayname;
-			
-			if (this.attrHandler.parseString(WuxDef.GetVariable("FullName")) == "GenericOverride") {
-				displayData.sheetname = `@{target|Pick a token|token_id}`;
-				Debug.Log(`Setting ${displayData.name} sheetname to the generic override`);
-			}
-			else {
-				displayData.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
-			}
-			
-			this.attrHandler.addUpdate(this.getVariableWithoutBase("Action_Use"), displayData.getRollTemplate(true));
+	}
+	setTechniqueUseRollTemplate(technique, displayData, suffix) {
+		displayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
+		displayData.technique.displayname = displayData.displayname;
+
+		if (this.attrHandler.parseString(WuxDef.GetVariable("FullName")) == "GenericOverride") {
+			displayData.sheetname = `@{target|Pick a token|token_id}`;
+			Debug.Log(`Setting ${displayData.name} sheetname to the generic override`);
 		}
+		else {
+			displayData.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
+		}
+
+		this.attrHandler.addUpdate(this.getVariableWithoutBase("Action_Use", suffix), displayData.getRollTemplate(true));
 	}
 	addTechniqueEffects (effects, attribute) {
 		let incrementer = 0;
@@ -927,8 +945,14 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.setVisibilityAttribute(true);
 		return true;
 	}
-	setVisibilityAttribute (isVisible) {
-		this.attrHandler.addUpdate(this.getVariable("TechIsVisible"), isVisible ? "1" : "0");
+	setVisibilityAttribute (isVisible, suffix) {
+		this.attrHandler.addUpdate(this.getVariable("TechIsVisible", suffix), isVisible ? "1" : "0");
+	}
+	getTechniqueName(techIndex) {
+		return this.attrHandler.parseString(this.getVariable("TechName", techIndex));
+	}
+	getTechniqueVersion(techIndex) {
+		return this.attrHandler.parseString(this.getVariable("TechVersion", techIndex));
 	}
 }
 
