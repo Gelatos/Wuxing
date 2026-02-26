@@ -4549,7 +4549,10 @@ class RepeatingSectionHandler {
     addAttributeMods(attributeHandler, fieldNames) {
         let repeater = this;
 
-        if (!Array.isArray(fieldNames)) {
+        if (fieldNames == undefined) {
+            fieldNames = this.fieldNames;
+        }
+        else if (!Array.isArray(fieldNames)) {
             fieldNames = [fieldNames];
         }
         this.iterate(function (id) {
