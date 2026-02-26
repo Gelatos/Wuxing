@@ -871,37 +871,42 @@ class FormeTechniqueDatabase {
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", repeater);
         repeater.iterate((id) => {
             techniqueAttributeHandler.setId(id);
-            let techniqueName = techniqueAttributeHandler.getTechniqueName(1);
-            let techIndex = 1;
-            if (formeTechDatabase.techDictionary.hasOwnProperty(techniqueName)) {
-                formeTechDatabase.updateRepeaterTechnique(techniqueAttributeHandler, techniqueName, techIndex);
-                
-                // search for the techniques that use this technique as their base
-                techIndex++;
-                let techFilters = WuxTechs.Filter(new DatabaseFilterData("group", techniqueName));
-                for (let i = 0; i < techFilters.length; i++) {
-                    let techniqueName = techFilters[i].name;
-                    if (formeTechDatabase.techDictionary.hasOwnProperty(techniqueName)) {
-                        formeTechDatabase.updateRepeaterTechnique(techniqueAttributeHandler, techniqueName, techIndex);
-                        techIndex++;
-                    }
-                    if (techIndex > 3) { 
-                        break;
-                    }
-                }
-                while (techIndex <= 3) {
-                    techniqueAttributeHandler.setVisibilityAttribute(false, techIndex);
-                    techIndex++;
-                }
-            }
-            else {
-                // this technique is not valid. Remove it
-                repeater.removeId(id);
-            }
+            formeTechDatabase.tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, repeater, id);
         });
     }
-    
-    updateRepeaterTechnique(techniqueAttributeHandler, techniqueName, techIndex) {
+
+    tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, repeater, id) {
+        let techniqueName = techniqueAttributeHandler.getTechniqueName(1);
+        let techIndex = 1;
+        if (this.techDictionary.hasOwnProperty(techniqueName)) {
+            this.updateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName, techIndex);
+
+            // search for the techniques that use this technique as their base
+            techIndex++;
+            let techFilters = WuxTechs.Filter(new DatabaseFilterData("group", techniqueName));
+            for (let i = 0; i < techFilters.length; i++) {
+                let techniqueName = techFilters[i].name;
+                if (this.techDictionary.hasOwnProperty(techniqueName)) {
+                    this.updateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName, techIndex);
+                    techIndex++;
+                }
+                if (techIndex > 3) {
+                    break;
+                }
+            }
+            while (techIndex <= 3) {
+                techniqueAttributeHandler.setVisibilityAttribute(false, techIndex);
+                techIndex++;
+            }
+        }
+        else {
+            // this technique is not valid. Remove it
+            repeater.removeId(id);
+            return false;
+        }
+        return true;
+    }
+    updateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName, techIndex) {
         let techVersion = techniqueAttributeHandler.getTechniqueVersion(techIndex);
         let technique = this.techDictionary[techniqueName].tech;
         if (technique.version != techVersion) {
