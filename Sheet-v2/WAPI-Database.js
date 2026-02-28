@@ -2059,7 +2059,7 @@ class TechniqueDisplayData {
             this.resourceData = `During a ${technique.action} Rest`;
         }
         else {
-            this.resourceData = `${technique.action} Action`;
+            this.resourceData = `${technique.action}`;
         }
         if (technique.limits != "") {
             if (this.resourceData != "") {
