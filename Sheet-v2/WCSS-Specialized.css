@@ -30,7 +30,7 @@
 .wuxPageDisplay-Location,
 .wuxPageDisplay-Chapter
 {
-	display: none;
+    display: none;
 }
 
 input[type=hidden].wuxPageDisplay-Flag[value="0"] ~ .wuxPageDisplay-0,
@@ -62,14 +62,14 @@ input[type=hidden].wuxPageDisplay-Flag[value="NPC"] ~ .wuxPageDisplay-NPC,
 input[type=hidden].wuxPageDisplay-Flag[value="Location"] ~ .wuxPageDisplay-Location,
 input[type=hidden].wuxPageDisplay-Flag[value="Chapter"] ~ .wuxPageDisplay-Chapter
 {
-	display: block;
+    display: block;
 }
 
 /*========================================
   Sticky Header
 ========================================*/
 
-.wuxStickyHeader 
+.wuxStickyHeader
 {
     width: calc(100% - 15px);
     min-height: 30px;
@@ -79,7 +79,7 @@ input[type=hidden].wuxPageDisplay-Flag[value="Chapter"] ~ .wuxPageDisplay-Chapte
     flex-flow: wrap row;
     align-content: flex-start;
 
-	background: #1d1e1f;
+    background: #1d1e1f;
     border-style: solid;
     border-width: 3px;
     border-radius: 10px 10px 0px 0px;
@@ -187,12 +187,12 @@ input[type=hidden].wuxPageDisplay-Flag[value="Chapter"] ~ .wuxPageDisplay-Chapte
 }
 
 .wuxInfoButton input[type=radio],
-.wuxInfoButton input[type=checkbox] 
+.wuxInfoButton input[type=checkbox]
 {
     position: absolute;
     top: 0px;
-	left: 0px;
-	right: 0px;
+    left: 0px;
+    right: 0px;
     width: 100%;
     height: 100%;
 
@@ -201,8 +201,8 @@ input[type=hidden].wuxPageDisplay-Flag[value="Chapter"] ~ .wuxPageDisplay-Chapte
     opacity: 0;
 }
 
-.wuxInfoButton span, 
-.wuxStickyHeader .wuxInfoButton span 
+.wuxInfoButton span,
+.wuxStickyHeader .wuxInfoButton span
 {
     display: block;
     width: 100%;
@@ -300,7 +300,7 @@ input[type=hidden].wuxPageDisplay-Flag[value="Chapter"] ~ .wuxPageDisplay-Chapte
     padding: 5px;
     margin-bottom: 5px;
 
-	background: #5A5D5E;
+    background: #5A5D5E;
     border-color: #a6a6a6;
     border-image: linear-gradient(170deg, #a6a6a600 60%, #a6a6a6FF 100%) 1;
     border-style: solid;
@@ -315,7 +315,7 @@ input[type=hidden].wuxPageDisplay-Flag[value="Chapter"] ~ .wuxPageDisplay-Chapte
     font-size: 10px;
 }
 
-.wuxEmotePostGroup .repcontainer > .repitem 
+.wuxEmotePostGroup .repcontainer > .repitem
 {
     display: inline-block;
 }
@@ -420,7 +420,7 @@ div.wuxStyleHeaderButton:hover span {
     position: relative;
     display: block;
     min-width: 160px;
-    max-width: 500px; 
+    max-width: 500px;
     width: calc(100% - 10px);
     height: min-content;
 }
@@ -436,7 +436,7 @@ div.wuxStyleHeaderButton:hover span {
 {
     font-size: 12px;
 
-    border: 3px solid black; 
+    border: 3px solid black;
     background: #cacbcf;
 }
 
@@ -449,7 +449,7 @@ div.wuxStyleHeaderButton:hover span {
 .sheet-rolltemplate-technique,
 .sheet-rolltemplate-usetechnique
 {
-    min-width: 200px; 
+    min-width: 200px;
 }
 
 input[type=hidden].wuxFeature-flag[value="1"] + .wuxFeature,
@@ -458,12 +458,12 @@ input[type=hidden].wuxFeature-flag[value="on"] + .wuxFeature
     border: 3px solid #ba7417;
 }
 
-input[type=hidden].wuxFilterFeature-flag + .wuxFeature 
+input[type=hidden].wuxFilterFeature-flag + .wuxFeature
 {
     display: block;
 }
 
-input[type=hidden].wuxFilterFeature-flag[value="1"] + .wuxFeature 
+input[type=hidden].wuxFilterFeature-flag[value="1"] + .wuxFeature
 {
     display: none;
 }
@@ -479,9 +479,9 @@ input[type=hidden].wuxFilterFeature-flag[value="1"] + .wuxFeature
 .wuxFeatureTableHeader
 {
     position: relative;
-    display: block; 
+    display: block;
     width: calc(100% - 10px);
-    padding: 0px 0px 5px 10px; 
+    padding: 0px 0px 5px 10px;
 }
 
 .wuxFeatureHeader,
@@ -489,7 +489,13 @@ input[type=hidden].wuxFilterFeature-flag[value="1"] + .wuxFeature
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeader
 {
     background: #c0e7d5;
-    border-bottom: 1px solid #efefef; 
+    border-bottom: 1px solid #efefef;
+}
+
+.wuxRepeatingFlexSection .wuxFeatureHeader
+{
+    min-width: 230px;
+    max-width: 240px;
 }
 
 input.wuxFeatureHeader-flag[value="Swift"] + .wuxFeatureHeader,
@@ -650,14 +656,14 @@ input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeader,
     position: absolute;
     display: inline-block;
     right: 0px;
-    width: 95px; 
-    padding: 5px 0px; 
+    width: 95px;
+    padding: 5px 0px;
 
-    vertical-align: top; 
-    text-align: center; 
-    
-    color: #FFF; 
-    
+    vertical-align: top;
+    text-align: center;
+
+    color: #FFF;
+
     background: #666;
     border: 0px solid #000;
     border-width: 0px 0px 3px 3px;
@@ -669,7 +675,7 @@ input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeader,
     position: relative;
     display: block;
 
-    font-size: 10px; 
+    font-size: 10px;
     font-weight: bold;
 }
 
@@ -683,20 +689,20 @@ input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeader,
 
 .wuxFeatureHeaderInteractBlock,
 .wuxFeatureHeaderInteractInnerBlock,
-.wuxFeatureTableHeaderInteractBlock 
+.wuxFeatureTableHeaderInteractBlock
 {
     position: relative;
-	display: inline-block;
-	width: 25px;
-	height: 100%;
+    display: inline-block;
+    width: 25px;
+    height: 100%;
 }
 
-input[type=hidden].wuxFeatureInteraction-flag[value="1"] + .wuxFeatureHeaderInteractBlock 
+input[type=hidden].wuxFeatureInteraction-flag[value="1"] + .wuxFeatureHeaderInteractBlock
 {
     display: none;
 }
 
-input[type=hidden].wuxFeatureInteractionButton-flag[value="1"] + .wuxFeatureHeaderInteractBlock 
+input[type=hidden].wuxFeatureInteractionButton-flag[value="1"] + .wuxFeatureHeaderInteractBlock
 {
     display: none;
 }
@@ -731,7 +737,7 @@ input[type=number].wuxFeatureHeaderInteractiveAuxIcon
 
 .wuxFeatureHeaderInteractiveIcon
 {
-	display: none;
+    display: none;
 }
 
 input[type=hidden].wuxFeatureHeaderInteractiveIcon-flag[value="on"] + .wuxFeatureHeaderInteractiveIcon,
@@ -789,7 +795,7 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderDisplayBlock
 {
     position: relative;
-    display:inline-block; 
+    display:inline-block;
     min-width: 150px;
     width: calc(100% - 60px);
 }
@@ -802,10 +808,10 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
     min-width: 36px;
     margin-right: 3px;
     z-index: 100;
-    
+
     text-align: left;
     text-shadow: none;
-    
+
     background: none;
     border: none;
     box-shadow: none;
@@ -818,13 +824,13 @@ button[type=roll].wuxFeatureHeaderNameButton span,
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderName
 {
     position: relative;
-    display: block; 
+    display: block;
 
     min-width: 150px;
     width: 100%;
-    margin-top: 5px; 
-    
-    font-size: 13px; 
+    margin-top: 5px;
+
+    font-size: 13px;
     font-weight: bold;
 }
 
@@ -845,11 +851,20 @@ button[type=roll].wuxFeatureHeaderNameButton::before
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfo
 {
     position: relative;
-    display: block; 
+    display: block;
 
     min-width: 150px;
     width: 100%;
     font-size: 11px;
+    z-index: 1;
+}
+
+.wuxRepeatingFlexSection .wuxFeatureHeaderInfo,
+.wuxRepeatingFlexSection .wuxFeatureHeaderInfoReq,
+.wuxRepeatingFlexSection .wuxFeatureHeaderInfoTrigger
+{
+    min-width: 220px;
+    max-width: 220px;
 }
 
 .wuxFeatureHeaderInfoType,
@@ -871,10 +886,10 @@ button[type=roll].wuxFeatureHeaderNameButton::before
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoTrigger
 {
     position: relative;
-    display: block; 
+    display: block;
     padding: 5px 10px;
     width: calc(100% - 20px);
-    
+
     font-size: 11px;
 }
 
@@ -902,13 +917,13 @@ button[type=roll].wuxFeatureHeaderNameButton::before
 
 input[type="checkbox"].wuxFeatureHeaderInteractBlock-flag
 {
-    opacity: 0;    
+    opacity: 0;
     position: absolute;
-	display: block;
+    display: block;
     pointer-events: inherit;
     top: 0px;
-	left: 0px;
-	right: 0px;
+    left: 0px;
+    right: 0px;
     min-height: 25px;
     z-index: 100;
 }
@@ -923,24 +938,24 @@ input[type=hidden].wuxFeatureHeaderInteractiveIcon-flag:not([value="0"]) + input
     pointer-events: none;
 }
 
-.wuxFeatureTypeEquipSlot-Weapon, 
-.wuxFeatureTypeEquipSlot-Chest, 
-.wuxFeatureTypeEquipSlot-Armor, 
-.wuxFeatureTypeEquipSlot-Head, 
-.wuxFeatureTypeEquipSlot-Arms, 
+.wuxFeatureTypeEquipSlot-Weapon,
+.wuxFeatureTypeEquipSlot-Chest,
+.wuxFeatureTypeEquipSlot-Armor,
+.wuxFeatureTypeEquipSlot-Head,
+.wuxFeatureTypeEquipSlot-Arms,
 .wuxFeatureTypeEquipSlot-Legs
 {
     display: none;
 }
 
-input.wuxFeatureTypeEquipSlot-flag[value="Weapon"] + .wuxFeatureTypeEquipSlot-Weapon, 
-input.wuxFeatureTypeEquipSlot-flag[value="Chest Armor"] + .wuxFeatureTypeEquipSlot-Chest, 
-input.wuxFeatureTypeEquipSlot-flag[value="Head Armor"] + .wuxFeatureTypeEquipSlot-Head, 
-input.wuxFeatureTypeEquipSlot-flag[value="Arms Armor"] + .wuxFeatureTypeEquipSlot-Arms, 
-input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlot-Legs, 
-input.wuxFeatureTypeEquipSlot-flag[value="Chest Armor"] + .wuxFeatureTypeEquipSlot-Armor, 
-input.wuxFeatureTypeEquipSlot-flag[value="Head Armor"] + .wuxFeatureTypeEquipSlot-Armor, 
-input.wuxFeatureTypeEquipSlot-flag[value="Arms Armor"] + .wuxFeatureTypeEquipSlot-Armor, 
+input.wuxFeatureTypeEquipSlot-flag[value="Weapon"] + .wuxFeatureTypeEquipSlot-Weapon,
+input.wuxFeatureTypeEquipSlot-flag[value="Chest Armor"] + .wuxFeatureTypeEquipSlot-Chest,
+input.wuxFeatureTypeEquipSlot-flag[value="Head Armor"] + .wuxFeatureTypeEquipSlot-Head,
+input.wuxFeatureTypeEquipSlot-flag[value="Arms Armor"] + .wuxFeatureTypeEquipSlot-Arms,
+input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlot-Legs,
+input.wuxFeatureTypeEquipSlot-flag[value="Chest Armor"] + .wuxFeatureTypeEquipSlot-Armor,
+input.wuxFeatureTypeEquipSlot-flag[value="Head Armor"] + .wuxFeatureTypeEquipSlot-Armor,
+input.wuxFeatureTypeEquipSlot-flag[value="Arms Armor"] + .wuxFeatureTypeEquipSlot-Armor,
 input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlot-Armor
 {
     display: inline-block;
@@ -959,12 +974,12 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
     display: block;
 
     width: calc(100% - 22px);
-    padding: 5px 10px; 
-    
-    line-height: 14px; 
-    font-size: 11px; 
-    
-    border-bottom: 1px solid #c6c6c6; 
+    padding: 5px 10px;
+
+    line-height: 14px;
+    font-size: 11px;
+
+    border-bottom: 1px solid #c6c6c6;
 }
 
 .wuxFeatureFunctionBlock,
@@ -1014,7 +1029,7 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureMajorEffectHeader
 {
     position: relative;
-    display: block; 
+    display: block;
     margin: 5px 0px;
 
     font-size: 11px;
@@ -1050,12 +1065,12 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 {
     position: relative;
     width: calc(100% - 30px);
-    padding: 5px 5px; 
-    margin: 0px 10px; 
-    
-    line-height: 14px; 
-    font-size: 11px; 
-    border: 1px solid black; 
+    padding: 5px 5px;
+    margin: 0px 10px;
+
+    line-height: 14px;
+    font-size: 11px;
+    border: 1px solid black;
 }
 
 .wuxFeatureCheckBlock,
@@ -1142,12 +1157,12 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
     background: #fff;
     border-radius: 6px;
     border: 2px solid black;
-  }
-  
-  .sheet-rolltemplate-usetechnique .sheet-wuxFeatureRollData:hover .sheet-wuxFeatureRollDetails
-  {
+}
+
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureRollData:hover .sheet-wuxFeatureRollDetails
+{
     visibility: visible;
-  }
+}
 
 .wuxFeatureDescriptionBlock,
 .sheet-rolltemplate-technique .sheet-wuxFeatureDescriptionBlock,
@@ -1157,7 +1172,7 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
     position: relative;
     display: block;
     width: calc(100% - 20px);
-    padding: 5px 10px; 
+    padding: 5px 10px;
 
     font-size: 11px;
 }
@@ -1217,12 +1232,12 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
    Tooltip
 ========================================*/
 
-.wuxTooltipButtonContainer 
+.wuxTooltipButtonContainer
 {
     position: absolute;
     top: 0px;
-	left: 0px;
-	right: 0px;
+    left: 0px;
+    right: 0px;
     width: 100%;
     height: 100%;
 }
@@ -1255,12 +1270,12 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 }
 
 .wuxTooltipButton input[type=radio],
-.wuxTooltipButton input[type=checkbox] 
+.wuxTooltipButton input[type=checkbox]
 {
     position: absolute;
     top: 0px;
-	left: 0px;
-	right: 0px;
+    left: 0px;
+    right: 0px;
     width: 100%;
     height: 100%;
 
@@ -1502,7 +1517,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     background: #fff;
     visibility: hidden;
 }
-  
+
 .wuxTooltip:hover .wuxTooltipContent,
 .wuxTooltipButton:hover .wuxTooltipContent,
 .sheet-rolltemplate-ctmsg .sheet-wuxTooltip:hover .sheet-wuxTooltipContent,
@@ -1530,9 +1545,9 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-technique .sheet-wuxTooltipButton:hover .sheet-wuxTooltipContent,
 .sheet-rolltemplate-usetechnique .sheet-wuxTooltip:hover .sheet-wuxTooltipContent
 {
-  visibility: visible;
+    visibility: visible;
 }
-  
+
 .wuxTooltip .wuxTooltipContent:hover,
 .wuxTooltipButton .wuxTooltipContent:hover,
 .sheet-rolltemplate-ctmsg .wuxTooltip .sheet-wuxTooltipContent:hover,
@@ -1560,7 +1575,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 .sheet-rolltemplate-technique .wuxTooltipButton .sheet-wuxTooltipContent:hover,
 .sheet-rolltemplate-usetechnique .wuxTooltip .sheet-wuxTooltipContent:hover
 {
-  visibility: hidden;
+    visibility: hidden;
 }
 
 .wuxStyleTooltipContainer {
@@ -1592,21 +1607,21 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 }
 
 
-  /*========================================
-     Heroic Techniques
-  ========================================*/
+/*========================================
+   Heroic Techniques
+========================================*/
 
-  .wuxHeroicTechniques 
-  {
+.wuxHeroicTechniques
+{
     position: relative;
     display: none;
     width: 100%;
-  }
+}
 
-  input[type=hidden].wuxHeroicTechniques-flag:not([value="Common"]) + .wuxHeroicTechniques
-  {
+input[type=hidden].wuxHeroicTechniques-flag:not([value="Common"]) + .wuxHeroicTechniques
+{
     display: block;
-  }
+}
 
 /*========================================
     Options
@@ -1630,7 +1645,7 @@ input[type=hidden].wuxDisplayStyleField-flag[value="BattleLog"] + .wuxDisplaySty
 .wuxSectionBlock .display-flag,
 .wuxSectionBlock .wuxSectionContent-flag
 {
-    opacity: 0;    
+    opacity: 0;
     position: absolute;
     top: 0px;
     right: -3px;
@@ -1643,7 +1658,7 @@ input[type=hidden].wuxDisplayStyleField-flag[value="BattleLog"] + .wuxDisplaySty
 .wuxSectionBlock .wuxSectionContent-flag
 {
     left: 0px;
-    width: 225px; 
+    width: 225px;
     min-height: 25px;
 }
 
@@ -1707,7 +1722,7 @@ input[type=hidden].wuxDisplayStyleField-flag[value="BattleLog"] + .wuxDisplaySty
     padding: 5px;
     margin-bottom: 5px;
 
-	background: #5A5D5E;
+    background: #5A5D5E;
     border-color: #a6a6a6;
     border-image: linear-gradient(170deg, #a6a6a600 60%, #a6a6a6FF 100%) 1;
     border-style: solid;
@@ -1771,16 +1786,7 @@ button[type=roll].wuxNotebookButton,
     color: #000;
     font-weight: normal;
     font-size: 10px;
-    
+
     border: 0;
 }
-
-
-
-
-
-
-
-
-
 
