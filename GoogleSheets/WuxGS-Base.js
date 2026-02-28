@@ -1285,11 +1285,12 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 repeatingFormeSection = function () {
                     let repeaterDefinition = WuxDef.Get("RepeatingFormeTech");
                     let repeatingVariable = repeaterDefinition.getVariable();
-                    let hiddenField = repeaterDefinition.getAttribute(WuxDef._expand);
-                    let refreshField = repeaterDefinition.getAttribute(WuxDef._refresh);
+                    let sectionDefinition = WuxDef.Get("Action_FormeTechniques");
+                    let hiddenField = sectionDefinition.getAttribute(WuxDef._expand);
+                    let refreshField = sectionDefinition.getAttribute(WuxDef._refresh);
 
-                    let header = getStyleHeader(`<span>${repeaterDefinition.getTitle()}</span>`, hiddenField, refreshField);
-                    let actionDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible"), 
+                    let header = getStyleHeader(`<span>${sectionDefinition.getTitle()}</span>`, hiddenField, refreshField);
+                    let actionDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible", 1), 
                         printFormTechniqueSimplifiedActionDisplay());
                     
                     return `${WuxSheetMain.Header(header)}
@@ -1492,14 +1493,14 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                                 printTechniqueDisplaySubmenuButton(WuxDef.GetAttribute("Action_Actions", 1)), 1)}
                         </div>
                         ${buildFormBaseTechniqueRequirements()}
-                        ${WuxSheetMain.HiddenField(WuxDef.GetAttribute("Action_Actions", 2),
+                        ${WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible", 2),
                         `<div class="wuxFeatureHeader">
-                            ${buildBaseFormTechniqueHeaderFullContents(
+                            ${buildBaseFormTechniqueHeaderSubTechContents(
                             printTechniqueDisplaySubmenuButton(WuxDef.GetAttribute("Action_Actions", 2)), 2)}
                         </div>`)}
-                        ${WuxSheetMain.HiddenField(WuxDef.GetAttribute("Action_Actions", 3),
+                        ${WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible", 3),
                         `<div class="wuxFeatureHeader">
-                            ${buildBaseFormTechniqueHeaderFullContents(
+                            ${buildBaseFormTechniqueHeaderSubTechContents(
                             printTechniqueDisplaySubmenuButton(WuxDef.GetAttribute("Action_Actions", 3)), 3)}
                         </div>`)}
                     </div>`;
@@ -1558,6 +1559,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         printFormTechniqueHeaderDiv(tierIndex) : printFormTechniqueHeaderButton(headerPrefix, tierIndex);
 
                     return `<div class="wuxFeatureHeaderDisplayBlock">
+                        <input type="hidden" name="${WuxDef.GetAttribute("Action_Use", tierIndex)}" value="" />
                         <input type="hidden" name="${getActionTypeAttribute("TechVersion", tierIndex)}" value="" />
                         <input type="hidden" name="${getActionTypeAttribute("TechAffinity", tierIndex)}" value="" />
                         <input type="hidden" name="${getActionTypeAttribute("TechTier", tierIndex)}" value="0" />
