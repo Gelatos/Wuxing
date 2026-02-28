@@ -514,6 +514,11 @@ var ActionBuilder = ActionBuilder || (function () {
         },
         listenerRefreshRepeatingActions = function () {
             let output = "";
+            
+            let formeTechniqueDef = WuxDef.Get("Action_FormeTechniques");
+            let refreshField = formeTechniqueDef.getVariable(WuxDef._refresh);
+            output += `${WuxSheetBackend.OnChange([refreshField], `WuxWorkerActions.RefreshAllFormeActions()`, false)}`;
+            
             for (let i = 1; i <= 3; i++) {
                 output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Forme_JobSlot", i)}${WuxDef._refresh}`],
                     `WuxWorkerActions.RefreshJobStyleActions(${i})`, false)}`;

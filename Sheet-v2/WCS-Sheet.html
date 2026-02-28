@@ -17352,6 +17352,7 @@
 												<option value="3">Tier 3</option>
 												<option value="4">Tier 4</option>
 												<option value="5">Tier 5</option>
+												<option value="6">Tier 6</option>
 											</select>
 											<span class="wuxDescription"><span><em>Main Skills: Demoralize</em></span>
 												<span class="wuxStyleTooltipContainer"><em>Traits: <span class="wuxTooltip">
@@ -23904,42 +23905,44 @@
 						<div class="wuxTabContent">
 							<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
 									<div class="wuxButton wuxStyleHeaderButton">
-										<input type="checkbox" name="attr_repeating_formetech">
+										<input type="checkbox" name="attr_act-formetechniques_refresh">
 										<span><span class='wuxStyleHeaderButtonIcon'>&#8635;</span> Update</span>
 									</div>
-									<input type="hidden" class="wuxHiddenField-flag" name="attr_repeating_formetech" value="0">
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_act-formetechniques_expand" value="0">
 									<span class="wuxHiddenInlineField">
 										<div class="wuxButton wuxStyleHeaderButton">
-											<input type="checkbox" name="attr_repeating_formetech">
+											<input type="checkbox" name="attr_act-formetechniques_expand">
 											<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
 										</div>
 									</span>
 
-									<input type="hidden" class="wuxHiddenField-flag" name="attr_repeating_formetech" value="0">
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_act-formetechniques_expand" value="0">
 									<span class="wuxHiddenInlineAuxField">
 										<div class="wuxButton wuxStyleHeaderButton">
-											<input type="checkbox" name="attr_repeating_formetech">
+											<input type="checkbox" name="attr_act-formetechniques_expand">
 											<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
 										</div>
 									</span>
 
 								</span><span>Forme Techniques</span></div>
-							<input type="hidden" class="wuxHiddenField-flag" name="attr_repeating_formetech" value="0">
+							<input type="hidden" class="wuxHiddenField-flag" name="attr_act-formetechniques_expand" value="0">
 							<div class="wuxHiddenField">
 								<div class="wuxDescription">Contents Hidden</div>
 							</div>
 
-							<input type="hidden" class="wuxHiddenField-flag" name="attr_repeating_formetech" value="0">
+							<input type="hidden" class="wuxHiddenField-flag" name="attr_act-formetechniques_expand" value="0">
 							<div class="wuxHiddenAuxField">
 								<div class="wuxNoRepControl wuxRepeatingFlexSection">
 									<fieldset class="repeating_formetech">
-										<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techisvisible" value="0">
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techisvisible1" value="0">
 										<div class="wuxHiddenField">
 
 											<div class="wuxFeature">
 												<input type="hidden" class="wuxFeatureHeader-flag" name="attr_act-techactiontype">
 												<div class="wuxFeatureHeader">
 													<div class="wuxFeatureHeaderDisplayBlock">
+														<input type="hidden" name="attr_act-use1" value="" />
+														<input type="hidden" name="attr_act-techversion1" value="" />
 														<input type="hidden" name="attr_act-techaffinity1" value="" />
 														<input type="hidden" name="attr_act-techtier1" value="0" />
 														<div class="wuxFeatureHeaderName">
@@ -24340,10 +24343,12 @@
 														</div>
 													</div>
 												</div>
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_act-actions2" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techisvisible2" value="0">
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeader">
 														<div class="wuxFeatureHeaderDisplayBlock">
+															<input type="hidden" name="attr_act-use2" value="" />
+															<input type="hidden" name="attr_act-techversion2" value="" />
 															<input type="hidden" name="attr_act-techaffinity2" value="" />
 															<input type="hidden" name="attr_act-techtier2" value="0" />
 															<div class="wuxFeatureHeaderName">
@@ -24353,302 +24358,17 @@
 																	<span name="attr_act-techname2"></span>
 																</button>
 															</div>
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform0" value="0">
-															<div class="wuxHiddenField">
-																<div class="wuxFeatureHeaderInfo">
-																	<span><strong>Keywords: </strong></span>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform0" value="0" />
-																	<div class="wuxHiddenInlineField">
-
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techform0"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techform0"></span></div>
-																				<span class="wuxDescription"><em>Keyword</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform0desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform0desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform0desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform0desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform0desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform0desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform0desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform0desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform1" value="0" />
-																	<div class="wuxHiddenInlineField">
-																		<span>; </span>
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techform1"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techform1"></span></div>
-																				<span class="wuxDescription"><em>Keyword</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform1desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform1desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform1desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform1desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform1desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform1desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform1desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform1desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform2" value="0" />
-																	<div class="wuxHiddenInlineField">
-																		<span>; </span>
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techform2"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techform2"></span></div>
-																				<span class="wuxDescription"><em>Keyword</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform2desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform2desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform2desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform2desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform2desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform2desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform2desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform2desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform3" value="0" />
-																	<div class="wuxHiddenInlineField">
-																		<span>; </span>
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techform3"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techform3"></span></div>
-																				<span class="wuxDescription"><em>Keyword</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform3desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform3desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform3desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform3desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform3desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform3desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform3desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform3desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform4" value="0" />
-																	<div class="wuxHiddenInlineField">
-																		<span>; </span>
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techform4"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techform4"></span></div>
-																				<span class="wuxDescription"><em>Keyword</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform4desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform4desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform4desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform4desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform4desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform4desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform4desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform4desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																</div>
-															</div>
-
 															<div class="wuxFeatureHeaderInfo"><span name="attr_act-techresourcedata2"></span></div>
-															<div class="wuxFeatureHeaderInfo"><span name="attr_act-techtargetingdata"></span></div>
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait0" value="0">
-															<div class="wuxHiddenField">
-																<div class="wuxFeatureHeaderInfo">
-																	<span><strong>Traits: </strong></span>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait0" value="0" />
-																	<div class="wuxHiddenInlineField">
-
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techtrait0"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techtrait0"></span></div>
-																				<span class="wuxDescription"><em>Impact Trait</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait0desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait0desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait0desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait0desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait0desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait0desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait0desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait0desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait1" value="0" />
-																	<div class="wuxHiddenInlineField">
-																		<span>; </span>
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techtrait1"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techtrait1"></span></div>
-																				<span class="wuxDescription"><em>Impact Trait</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait1desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait1desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait1desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait1desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait1desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait1desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait1desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait1desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait2" value="0" />
-																	<div class="wuxHiddenInlineField">
-																		<span>; </span>
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techtrait2"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techtrait2"></span></div>
-																				<span class="wuxDescription"><em>Impact Trait</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait2desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait2desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait2desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait2desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait2desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait2desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait2desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait2desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait3" value="0" />
-																	<div class="wuxHiddenInlineField">
-																		<span>; </span>
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techtrait3"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techtrait3"></span></div>
-																				<span class="wuxDescription"><em>Impact Trait</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait3desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait3desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait3desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait3desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait3desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait3desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait3desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait3desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait4" value="0" />
-																	<div class="wuxHiddenInlineField">
-																		<span>; </span>
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techtrait4"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techtrait4"></span></div>
-																				<span class="wuxDescription"><em>Impact Trait</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait4desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait4desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait4desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait4desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait4desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait4desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait4desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait4desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																</div>
-															</div>
-
 														</div>
-														<input type="hidden" class="wuxFeatureDefenseIcon-flag" name="attr_act-techcoredef" value="" />
-														<div class="wuxFeatureDefenseIcon"></div>
 													</div>
 												</div>
 
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_act-actions3" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techisvisible3" value="0">
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeader">
 														<div class="wuxFeatureHeaderDisplayBlock">
+															<input type="hidden" name="attr_act-use3" value="" />
+															<input type="hidden" name="attr_act-techversion3" value="" />
 															<input type="hidden" name="attr_act-techaffinity3" value="" />
 															<input type="hidden" name="attr_act-techtier3" value="0" />
 															<div class="wuxFeatureHeaderName">
@@ -24658,295 +24378,8 @@
 																	<span name="attr_act-techname3"></span>
 																</button>
 															</div>
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform0" value="0">
-															<div class="wuxHiddenField">
-																<div class="wuxFeatureHeaderInfo">
-																	<span><strong>Keywords: </strong></span>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform0" value="0" />
-																	<div class="wuxHiddenInlineField">
-
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techform0"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techform0"></span></div>
-																				<span class="wuxDescription"><em>Keyword</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform0desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform0desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform0desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform0desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform0desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform0desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform0desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform0desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform1" value="0" />
-																	<div class="wuxHiddenInlineField">
-																		<span>; </span>
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techform1"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techform1"></span></div>
-																				<span class="wuxDescription"><em>Keyword</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform1desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform1desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform1desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform1desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform1desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform1desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform1desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform1desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform2" value="0" />
-																	<div class="wuxHiddenInlineField">
-																		<span>; </span>
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techform2"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techform2"></span></div>
-																				<span class="wuxDescription"><em>Keyword</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform2desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform2desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform2desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform2desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform2desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform2desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform2desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform2desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform3" value="0" />
-																	<div class="wuxHiddenInlineField">
-																		<span>; </span>
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techform3"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techform3"></span></div>
-																				<span class="wuxDescription"><em>Keyword</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform3desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform3desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform3desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform3desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform3desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform3desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform3desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform3desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform4" value="0" />
-																	<div class="wuxHiddenInlineField">
-																		<span>; </span>
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techform4"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techform4"></span></div>
-																				<span class="wuxDescription"><em>Keyword</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform4desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform4desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform4desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform4desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform4desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform4desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techform4desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techform4desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																</div>
-															</div>
-
 															<div class="wuxFeatureHeaderInfo"><span name="attr_act-techresourcedata3"></span></div>
-															<div class="wuxFeatureHeaderInfo"><span name="attr_act-techtargetingdata"></span></div>
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait0" value="0">
-															<div class="wuxHiddenField">
-																<div class="wuxFeatureHeaderInfo">
-																	<span><strong>Traits: </strong></span>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait0" value="0" />
-																	<div class="wuxHiddenInlineField">
-
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techtrait0"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techtrait0"></span></div>
-																				<span class="wuxDescription"><em>Impact Trait</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait0desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait0desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait0desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait0desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait0desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait0desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait0desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait0desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait1" value="0" />
-																	<div class="wuxHiddenInlineField">
-																		<span>; </span>
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techtrait1"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techtrait1"></span></div>
-																				<span class="wuxDescription"><em>Impact Trait</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait1desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait1desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait1desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait1desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait1desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait1desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait1desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait1desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait2" value="0" />
-																	<div class="wuxHiddenInlineField">
-																		<span>; </span>
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techtrait2"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techtrait2"></span></div>
-																				<span class="wuxDescription"><em>Impact Trait</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait2desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait2desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait2desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait2desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait2desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait2desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait2desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait2desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait3" value="0" />
-																	<div class="wuxHiddenInlineField">
-																		<span>; </span>
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techtrait3"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techtrait3"></span></div>
-																				<span class="wuxDescription"><em>Impact Trait</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait3desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait3desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait3desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait3desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait3desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait3desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait3desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait3desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait4" value="0" />
-																	<div class="wuxHiddenInlineField">
-																		<span>; </span>
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><span name="attr_act-techtrait4"></span></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2"><span name="attr_act-techtrait4"></span></div>
-																				<span class="wuxDescription"><em>Impact Trait</em></span>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait4desc0" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait4desc0"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait4desc1" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait4desc1"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait4desc2" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait4desc2"></span>
-																				</div>
-																				<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrait4desc3" value="0" />
-																				<div class="wuxHiddenField">
-																					<span class="wuxDescription" name="attr_act-techtrait4desc3"></span>
-																				</div>
-																			</div>
-																		</span>
-																	</div>
-																</div>
-															</div>
-
 														</div>
-														<input type="hidden" class="wuxFeatureDefenseIcon-flag" name="attr_act-techcoredef" value="" />
-														<div class="wuxFeatureDefenseIcon"></div>
 													</div>
 												</div>
 
@@ -24992,6 +24425,8 @@
 													<input type="hidden" class="wuxFeatureHeader-flag" name="attr_act-techactiontype">
 													<div class="wuxFeatureHeader wuxSubMenuSection">
 														<div class="wuxFeatureHeaderDisplayBlock">
+															<input type="hidden" name="attr_act-use" value="" />
+															<input type="hidden" name="attr_act-techversion" value="" />
 															<input type="hidden" name="attr_act-techaffinity" value="" />
 															<input type="hidden" name="attr_act-techtier" value="0" />
 															<div class="wuxFeatureHeaderName">
@@ -25013,6 +24448,8 @@
 																			<input type="hidden" class="wuxFeatureHeader-flag" name="attr_act-techactiontype">
 																			<div class="wuxFeatureHeader">
 																				<div class="wuxFeatureHeaderDisplayBlock">
+																					<input type="hidden" name="attr_act-use" value="" />
+																					<input type="hidden" name="attr_act-techversion" value="" />
 																					<input type="hidden" name="attr_act-techaffinity" value="" />
 																					<input type="hidden" name="attr_act-techtier" value="0" />
 																					<div class="wuxFeatureHeaderName"><span name="attr_act-techname"></span></div>
@@ -26560,6 +25997,8 @@
 												<input type="hidden" class="wuxFeatureHeader-flag" name="attr_act-techactiontype">
 												<div class="wuxFeatureHeader wuxSubMenuSection">
 													<div class="wuxFeatureHeaderDisplayBlock">
+														<input type="hidden" name="attr_act-use" value="" />
+														<input type="hidden" name="attr_act-techversion" value="" />
 														<input type="hidden" name="attr_act-techaffinity" value="" />
 														<input type="hidden" name="attr_act-techtier" value="0" />
 														<div class="wuxFeatureHeaderName">
@@ -26582,6 +26021,8 @@
 																		<input type="hidden" class="wuxFeatureHeader-flag" name="attr_act-techactiontype">
 																		<div class="wuxFeatureHeader">
 																			<div class="wuxFeatureHeaderDisplayBlock">
+																				<input type="hidden" name="attr_act-use" value="" />
+																				<input type="hidden" name="attr_act-techversion" value="" />
 																				<input type="hidden" name="attr_act-techaffinity" value="" />
 																				<input type="hidden" name="attr_act-techtier" value="0" />
 																				<div class="wuxFeatureHeaderName"><span name="attr_act-techname"></span></div>
@@ -28110,6 +27551,8 @@
 												<input type="hidden" class="wuxFeatureHeader-flag" name="attr_act-techactiontype">
 												<div class="wuxFeatureHeader wuxSubMenuSection">
 													<div class="wuxFeatureHeaderDisplayBlock">
+														<input type="hidden" name="attr_act-use" value="" />
+														<input type="hidden" name="attr_act-techversion" value="" />
 														<input type="hidden" name="attr_act-techaffinity" value="" />
 														<input type="hidden" name="attr_act-techtier" value="0" />
 														<div class="wuxFeatureHeaderName">
@@ -28132,6 +27575,8 @@
 																		<input type="hidden" class="wuxFeatureHeader-flag" name="attr_act-techactiontype">
 																		<div class="wuxFeatureHeader">
 																			<div class="wuxFeatureHeaderDisplayBlock">
+																				<input type="hidden" name="attr_act-use" value="" />
+																				<input type="hidden" name="attr_act-techversion" value="" />
 																				<input type="hidden" name="attr_act-techaffinity" value="" />
 																				<input type="hidden" name="attr_act-techtier" value="0" />
 																				<div class="wuxFeatureHeaderName"><span name="attr_act-techname"></span></div>
@@ -29679,8 +29124,8 @@
 															<span class="wuxSubMenuText">l&nbsp;</span>
 															<input type="hidden" class="wuxSubMenu-flag" name="attr_tch-interact_submenu" value="0">
 															<div class="wuxSubMenuContent">
-																<button class="wuxButton wuxSubMenuOptionButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Interact}}{{type-Swift=1}}{{Resources=Swift Action; 2/Round}}{{Targeting=No Check}}{{Effect0Name=Effects}}{{Effect0Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
-}}{{Effect0=You use your hand or hands to manipulate an object or the terrain. You can grab an unattended or stored object, open a door, or produce some similar effect. You might have to attempt a skill check to determine if your Interact action was successful.}}{{checkData=!chtech Interact$$&#64;{sheetname}}}{{targetData=!utech Interact$$&#64;{sheetname}}}">
+																<button class="wuxButton wuxSubMenuOptionButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Interact}}{{type-Swift=1}}{{Resources=Swift Action; 2/Round; 3 EN}}{{Targeting=No Check}}{{Effect0Name=Effects}}{{Effect0Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
+}}{{Effect0=You use your hand or hands to manipulate an object or the terrain. You can grab an unattended or stored object, open a door, or produce some similar effect. You might have to attempt a skill check to determine if your Interact action was successful.}}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Interact&#37;&#37;,&#37;&#37;resourceCost&#37;&#37;&&&#37;&#37;3 EN&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Interact$$&#64;{sheetname}}}{{targetData=!utech Interact$$&#64;{sheetname}}}">
 																	<span>Use</span>
 																</button>
 																<div class="wuxHeader2">Full Technique Details</div>
@@ -29691,7 +29136,7 @@
 																		<div class="wuxFeatureHeaderDisplayBlock">
 																			<div class="wuxFeatureHeaderName"><span>Interact</span></div>
 
-																			<div class="wuxFeatureHeaderInfo"><span>Swift Action; 2/Round</span></span></div>
+																			<div class="wuxFeatureHeaderInfo"><span>Swift Action; 2/Round; 3 EN</span></span></div>
 																			<div class="wuxFeatureHeaderInfo"><span>No Check</span></span></div>
 
 																		</div>
@@ -29732,13 +29177,13 @@
 
 															</div>
 														</div>
-														<button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Interact}}{{type-Swift=1}}{{Resources=Swift Action; 2/Round}}{{Targeting=No Check}}{{Effect0Name=Effects}}{{Effect0Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
-}}{{Effect0=You use your hand or hands to manipulate an object or the terrain. You can grab an unattended or stored object, open a door, or produce some similar effect. You might have to attempt a skill check to determine if your Interact action was successful.}}{{checkData=!chtech Interact$$&#64;{sheetname}}}{{targetData=!utech Interact$$&#64;{sheetname}}}">
+														<button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Interact}}{{type-Swift=1}}{{Resources=Swift Action; 2/Round; 3 EN}}{{Targeting=No Check}}{{Effect0Name=Effects}}{{Effect0Desc=This contains the effects that will occur when this technique is used. There is no skill check necessary. 
+}}{{Effect0=You use your hand or hands to manipulate an object or the terrain. You can grab an unattended or stored object, open a door, or produce some similar effect. You might have to attempt a skill check to determine if your Interact action was successful.}}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Interact&#37;&#37;,&#37;&#37;resourceCost&#37;&#37;&&&#37;&#37;3 EN&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Interact$$&#64;{sheetname}}}{{targetData=!utech Interact$$&#64;{sheetname}}}">
 															<span>Interact</span>
 														</button>
 													</div>
 
-													<div class="wuxFeatureHeaderInfo"><span>Swift Action; 2/Round</span></span></div>
+													<div class="wuxFeatureHeaderInfo"><span>Swift Action; 2/Round; 3 EN</span></span></div>
 													<div class="wuxFeatureHeaderInfo"><span>No Check</span></span></div>
 
 												</div>
@@ -35064,6 +34509,7 @@ A request check is always performed with a request to be made of the target. Thi
 								<div class="wuxHeader">Technique</div>
 								<div class="wuxFeature">
 									<input type="hidden" class="wuxFeatureHeader-flag" name="attr_popup-techactiontype">
+									<input type="hidden" name="attr_popup-techversion" value="" />
 									<input type="hidden" name="attr_popup-techaffinity" value="" />
 									<input type="hidden" name="attr_popup-techtier" value="0" />
 									<div class="wuxFeatureHeader">
@@ -36378,6 +35824,9 @@ WuxWorkerActions.InspectTechniqueBasicSpirit(eventinfo)
 });
 on("change:repeating_customtech:act-setdata", function (eventinfo) {
 WuxWorkerActions.SetCustomTechnique(eventinfo)
+});
+on("change:act-formetechniques_refresh", function (eventinfo) {
+WuxWorkerActions.RefreshAllFormeActions()
 });
 on("change:forme-jobslot1_refresh", function (eventinfo) {
 WuxWorkerActions.RefreshJobStyleActions(1)
