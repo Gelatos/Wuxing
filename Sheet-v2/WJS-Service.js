@@ -952,7 +952,11 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		return this.attrHandler.parseString(this.getVariable("TechName", techIndex));
 	}
 	getTechniqueVersion(techIndex) {
-		return this.attrHandler.parseString(this.getVariable("TechVersion", techIndex));
+		let version = this.attrHandler.parseString(this.getVariable("TechVersion", techIndex), "undefined");
+		if (version == "undefined") {
+			return undefined;
+		}
+		return version;
 	}
 }
 
