@@ -566,6 +566,24 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 	}
 }
 
+class WuxJobWorkerBuild extends WuxWorkerBuild {
+	constructor() {
+		super("Job");
+	}
+
+	getJobStyles() {
+		let styleData = [];
+		this.iterateBuildStats(function (jobVariableData) {
+			let style = WuxStyles.GetByVariableName(jobVariableData.name);
+			let rank = parseInt(jobVariableData.value);
+			if (!isNaN(rank) && rank > 0) {
+				styleData.push({style: style, rank: rank});
+			}
+		});
+		return styleData;
+	}
+}
+
 class WuxStyleWorkerBuild extends WuxWorkerBuild {
 	constructor() {
 		super("Style");

@@ -2968,6 +2968,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     visibility: visible;
 }
 
+.wuxTooltipContent,
 .wuxTooltip .wuxTooltipContent,
 .wuxTooltipButton .wuxTooltipContent,
 .sheet-rolltemplate-ctmsg .sheet-wuxTooltip .sheet-wuxTooltipContent,
@@ -2992,7 +2993,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     position: absolute;
     width: 240px;
     padding: 5px;
-    z-index: 9999;
+    z-index: 900;
 
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: normal;
@@ -3031,7 +3032,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
 }
 
 .wuxTooltip .wuxTooltipContent,
-.wuxTooltipButton .wuxTooltipContent
+.wuxTooltipButton .wuxTooltipContent,
 .sheet-rolltemplate-ctmsg .sheet-wuxTooltip .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctmsg .sheet-wuxTooltipButton .sheet-wuxTooltipContent,
 .sheet-rolltemplate-ctwsp .sheet-wuxTooltip .sheet-wuxTooltipContent,
@@ -3087,6 +3088,7 @@ input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxTrait,
     text-align: left;
 
     background: #fff;
+    z-index: 900;
 }
 .wuxTooltip .wuxTooltipContent .wuxHeader2,
 .wuxTooltipButton .wuxTooltipContent .wuxHeader2,

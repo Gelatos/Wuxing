@@ -778,9 +778,13 @@ class FormeTechniqueDatabase {
 
         this.setFormeSlotsDefinitionData();
         this.addFormeSlotVariables(attributeHandler);
+        this.equippedSlots = [];
         WuxWorkerActionsService.AddBoosterVariables(attributeHandler);
         WuxWorkerActionsService.addAffinityVariables(attributeHandler);
         WuxWorkerActionsService.AddNameVariables(attributeHandler);
+
+        this.jobWorker = new WuxJobWorkerBuild();
+        attributeHandler.addMod(this.jobWorker.attrBuildDraft);
 
         this.styleWorker = new WuxStyleWorkerBuild();
         attributeHandler.addMod(this.styleWorker.attrBuildDraft);
@@ -814,6 +818,7 @@ class FormeTechniqueDatabase {
     };
     
     setupPostGetAttr(attrHandler, cr) {
+        this.jobWorker.setBuildStatsDraft(attrHandler);
         this.styleWorker.setBuildStatsDraft(attrHandler);
         if (cr == undefined) {
             this.userCr = attrHandler.parseInt(WuxDef.GetVariable("CR"));
@@ -824,18 +829,34 @@ class FormeTechniqueDatabase {
         this.userAffinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
             attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
             attrHandler.parseString(WuxDef.GetVariable("Ancestry"))];
+        
+        let formeTechniqueDatabase = this;
+        formeTechniqueDatabase.equippedSlots = [];
+        this.formeDefinitions.forEach(function (slot) {
+            let count = attrHandler.parseInt(slot.countDef.getVariable());
+            for (let i = 1; i <= count; i++) {
+                formeTechniqueDatabase.equippedSlots.push(attrHandler.parseString(slot.mainDef.getVariable(i)));
+            }
+        });
     }
 
     registerTechDictionary(attrHandler) {
         let formeTechDatabase = this;
-        attrHandler.addMod(formeTechDatabase.boosterFieldName, []);
+        attrHandler.addUpdate(formeTechDatabase.boosterFieldName, []);
         formeTechDatabase.iterateAllTechniquesFromLearnedStyles(function (technique, styleData) {
-            formeTechDatabase.tryAddTechniqueToTechDictionary(technique, styleData);
-            WuxWorkerActionsService.TryAddTechniqueToBoosters(attrHandler, technique, formeTechDatabase.boosterFieldName);
+            let newEntry = formeTechDatabase.tryAddTechniqueToTechDictionary(technique, styleData);
+            if (newEntry != undefined && newEntry.isActive) {
+                WuxWorkerActionsService.TryAddTechniqueToBoosters(attrHandler, technique, formeTechDatabase.boosterFieldName);
+            }
         });
         WuxWorkerActionsService.SetTechniqueBoosters(attrHandler);
     }
     iterateAllTechniquesFromLearnedStyles(callback) {
+        let allJobsArray = this.jobWorker.getJobStyles();
+        allJobsArray.forEach((styleData) => {
+            let filteredTechs = WuxTechs.Filter(new DatabaseFilterData("style", styleData.style.name));
+            filteredTechs.forEach(tech => callback(tech, styleData));
+        });
         let allStylesArray = this.styleWorker.getStyles();
         allStylesArray.forEach((styleData) => {
             let filteredTechs = WuxTechs.Filter(new DatabaseFilterData("style", styleData.style.name));
@@ -844,15 +865,18 @@ class FormeTechniqueDatabase {
     }
     tryAddTechniqueToTechDictionary(technique, styleData) {
         if (!this.techDictionary.has(technique.name)) {
-            let isActive = this.checkTechniqueIsActive(technique, styleData.rank);
-            this.techDictionary.add(technique.name, {
+            let isActive = this.equippedSlots.includes(styleData.style.name) && this.checkTechniqueIsActive(technique, styleData.rank);
+            let newEntry = {
                 technique: technique,
                 isSet: false,
                 isActive: isActive,
                 isVisible: isActive && this.checkTechniqueIsVisibleInFilter(technique),
                 isBase: technique.group == ""
-            });
+            };
+            this.techDictionary.add(technique.name, newEntry);
+            return newEntry;
         }
+        return undefined;
     }
     checkTechniqueIsActive(technique, maxTier) {
         if (technique.tier > this.userCr || technique.tier > maxTier) {
