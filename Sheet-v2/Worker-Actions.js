@@ -422,7 +422,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         attributeHandler.addGetAttrCallback(function (attrHandler) {
             formeTech.setupPostGetAttr(attrHandler);
             formeTech.registerTechDictionary(attrHandler);
-            formeTech.updateRepeaterTechniques(attrHandler);
+            formeTech.updateDataAndVisibilityOfRepeaterTechniques(attrHandler);
             formeTech.addMissingTechniques(attrHandler);
         });
     }
@@ -430,12 +430,23 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
     'use strict';
 
     const
+        
         refreshAllFormeActions = function () {
             Debug.Log(`Refreshing All Forme Actions`);
             let attributeHandler = new WorkerAttributeHandler();
             updateAllFormeActions(attributeHandler);
             let loader = new LoadingScreenHandler(attributeHandler);
             loader.run();
+        },
+        
+        updateVisibilityOfFormeActions = function (attributeHandler) {
+            let formeTech = new FormeTechniqueDatabase(attributeHandler);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                formeTech.setupPostGetAttr(attrHandler);
+                formeTech.registerTechDictionary(attrHandler);
+                formeTech.updateVisibilityOfRepeaterTechniques(attrHandler);
+            });
+            
         },
         
         updateAllActiveStyleActions = function (attributeHandler, repeaterSlotData, cr) {
@@ -724,6 +735,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
 
     return {
         RefreshAllFormeActions: refreshAllFormeActions,
+        UpdateVisibilityOfFormeActions: updateVisibilityOfFormeActions,
         UpdateAllActiveStyleActions: updateAllActiveStyleActions,
         GetAllStyleSlotRepeaterIDs: getAllStyleSlotRepeaterIDs,
         PopulateAllBasicActions: populateAllBasicActions,
@@ -899,16 +911,38 @@ class FormeTechniqueDatabase {
     checkTechniqueIsVisibleInFilter(technique) {
         return true;
     }
-    
-    updateRepeaterTechniques(attrHandler) {
+
+    updateDataAndVisibilityOfRepeaterTechniques(attrHandler) {
         let formeTechDatabase = this;
+        this.iterateRepeaterTechniques(attrHandler, function (techniqueAttributeHandler, techniqueName, repeater, id) {
+            formeTechDatabase.tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, techniqueName, repeater, id);
+        });
+    }
+    updateVisibilityOfRepeaterTechniques(attrHandler) {
+        let formeTechDatabase = this;
+        this.iterateRepeaterTechniques(attrHandler, function (techniqueAttributeHandler, techniqueName, repeater, id) {
+            formeTechDatabase.setRepeaterTechniqueVisibility(techniqueAttributeHandler, techniqueName, 1);
+
+            // search for the techniques that use this technique as their base
+            formeTechDatabase.iterateGroupedTechniques(techniqueName,
+                (technique, techIndex) => {
+                    formeTechDatabase.setRepeaterTechniqueVisibility(techniqueAttributeHandler, technique.name, techIndex);
+                },
+                (techIndex) => {
+                    techniqueAttributeHandler.setVisibilityAttribute(false, techIndex);
+                }
+            );
+        });
+    }
+
+    iterateRepeaterTechniques(attrHandler, callback) {
         let repeater = attrHandler.repeatingSections[this.formeActionsRepeaterId];
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", repeater);
         repeater.iterate((id) => {
             techniqueAttributeHandler.setId(id);
             let techniqueName = techniqueAttributeHandler.getTechniqueName(1);
             Debug.Log(`Checking repeater technique ${techniqueName}`);
-            formeTechDatabase.tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, techniqueName, repeater, id);
+            callback(techniqueAttributeHandler, techniqueName, repeater, id);
         });
     }
 
@@ -960,6 +994,9 @@ class FormeTechniqueDatabase {
             techniqueAttributeHandler.setSimplifiedTechniqueInfo(technique, techIndex);
         }
         this.techDictionary.get(techniqueName).isSet = true;
+        this.setRepeaterTechniqueVisibility(techniqueAttributeHandler, techniqueName, techIndex);
+    }
+    setRepeaterTechniqueVisibility(techniqueAttributeHandler, techniqueName, techIndex) {
         techniqueAttributeHandler.setVisibilityAttribute(this.techDictionary.get(techniqueName).isVisible, techIndex);
     }
     

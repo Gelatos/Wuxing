@@ -354,6 +354,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 }
                 equipStyleWorker.equipSlot(attrHandler, actionFieldName, emptyEquipSlot.index, emptyEquipSlot.slotFieldName);
             });
+            WuxWorkerActions.UpdateVisibilityOfFormeActions(equipStyleWorker.attributeHandler);
             let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
             loader.run();
         });
@@ -397,6 +398,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 }
             }
         });
+
+        WuxWorkerActions.UpdateVisibilityOfFormeActions(equipStyleWorker.attributeHandler);
         let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
         loader.run();
     };
@@ -466,6 +469,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 equipStyleWorker.closeMenu(attrHandler);
                 equipStyleWorker.unequipSlot(attrHandler, actionFieldName, slotIndex, equipSlotFieldName);
             });
+            WuxWorkerActions.UpdateVisibilityOfFormeActions(equipStyleWorker.attributeHandler);
             let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
             loader.run();
         });

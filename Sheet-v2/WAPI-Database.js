@@ -4518,7 +4518,6 @@ class RepeatingSectionHandler {
     }
 
     removeAllIdsAfterIteratorIndex() {
-        Debug.Log (`Removing ${this.ids.length - this.iteratorIndex} ids after iterator index ${this.iteratorIndex}`)
         while (this.ids.length > this.iteratorIndex) {
             this.removeId(this.ids[this.iteratorIndex]);
         }
