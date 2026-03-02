@@ -67,10 +67,13 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             return slotContents == "" || slotContents == "0";
         }
 
-        closeMenu(attrHandler) {
+        closeMenu(attrHandler, equipSlot) {
             attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
             attrHandler.addUpdate(this.subMenuOptionFieldName, "0");
             attrHandler.addUpdate(this.actionFieldName, "0");
+            if (equipSlot != undefined) {
+                attrHandler.addUpdate(equipSlot + WuxDef._submenu, "0");
+            }
         }
 
         equipSlot(attrHandler, actionFieldName, slotIndex, emptySlotFieldName, styleName, tier) {
@@ -248,7 +251,6 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             let combatDetailsHandler = new CombatDetailsHandler(equipStyleWorker.attributeHandler);
 
             equipStyleWorker.attributeHandler.addGetAttrCallback(function (attrHandler) {
-                equipStyleWorker.closeMenu(attrHandler);
                 let emptyEquipSlot = equipStyleWorker.getEmptyEquipSlotFieldName(attrHandler, WuxDef.Get(slotName), WuxDef.GetVariable(countFieldName));
                 if (emptyEquipSlot == undefined) {
                     emptyEquipSlot = equipStyleWorker.getLastEquipSlotFieldName(attrHandler, WuxDef.Get(slotName), WuxDef.GetVariable(countFieldName));
@@ -261,6 +263,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 equipStyleWorker.equipSlot(attrHandler, actionFieldName, emptyEquipSlot.index, emptyEquipSlot.slotFieldName);
                 Debug.Log(`Equipping Job Style ${attrHandler.parseString(equipStyleWorker.styleFieldName)}`);
                 combatDetailsHandler.onUpdateJob(attrHandler, attrHandler.parseString(equipStyleWorker.styleFieldName));
+                equipStyleWorker.closeMenu(attrHandler, emptyEquipSlot.slotFieldName);
             });
             let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
             loader.run();
@@ -279,14 +282,15 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
 
         equipStyleWorker.attributeHandler.addGetAttrCallback(function (attrHandler) {
             let styleName = attrHandler.parseString(equipStyleWorker.styleFieldName);
-            equipStyleWorker.closeMenu(attrHandler);
             let emptyEquipSlot = equipStyleWorker.getEquippedSlotFieldName(attrHandler, WuxDef.Get(slotName),
                 styleName, maxSlots);
             if (emptyEquipSlot != undefined) {
                 equipStyleWorker.unequipSlot(attrHandler, actionFieldName, emptyEquipSlot.index, emptyEquipSlot.slotFieldName);
+                equipStyleWorker.closeMenu(attrHandler, emptyEquipSlot.slotFieldName);
             }
             else {
                 Debug.Log(`No Job Slot found for ${styleName}`);
+                equipStyleWorker.closeMenu(attrHandler);
                 // attrHandler.addUpdate(equipStyleWorker.styleRepeater.getFieldName(equipStyleWorker.selectedId, WuxDef.GetVariable("Forme_IsEquipped")), "on");
             }
         });
@@ -316,7 +320,6 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             });
 
             equipStyleWorker.attributeHandler.addGetAttrCallback(function (attrHandler) {
-                equipStyleWorker.closeMenu(attrHandler);
                 Debug.Log(`Equipping ${attrHandler.parseString(equipStyleWorker.styleFieldName)}`);
                 let emptyEquipSlot = equipStyleWorker.getEmptyEquipSlotFieldName(
                     attrHandler, WuxDef.Get(arteformSlotName), WuxDef.GetVariable(arteformCountFieldName));
@@ -353,6 +356,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                     Debug.Log(`Equipping to Advanced Slot ${emptyEquipSlot.slotFieldName}`);
                 }
                 equipStyleWorker.equipSlot(attrHandler, actionFieldName, emptyEquipSlot.index, emptyEquipSlot.slotFieldName);
+                equipStyleWorker.closeMenu(attrHandler, emptyEquipSlot.slotFieldName);
             });
             let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
             loader.run();
@@ -374,7 +378,6 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             [arteformSlotName, advancedSlotName], [arteformMaxSlots, advancedMaxSlots]);
 
         equipStyleWorker.attributeHandler.addGetAttrCallback(function (attrHandler) {
-            equipStyleWorker.closeMenu(attrHandler);
             
             let styleName = attrHandler.parseString(equipStyleWorker.styleFieldName);
             Debug.Log(`Unequip ${styleName}`);
@@ -383,6 +386,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             if (emptyEquipSlot != undefined) {
                 Debug.Log(`Found Advanced Slot ${emptyEquipSlot.slotFieldName}`);
                 equipStyleWorker.unequipSlot(attrHandler, actionFieldName, emptyEquipSlot.index, emptyEquipSlot.slotFieldName);
+                equipStyleWorker.closeMenu(attrHandler, emptyEquipSlot.slotFieldName);
             }
             else {
                 emptyEquipSlot = equipStyleWorker.getEquippedSlotFieldName(attrHandler, WuxDef.Get(advancedSlotName),
@@ -390,10 +394,12 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 if (emptyEquipSlot != undefined) {
                     Debug.Log(`Found Style Slot ${emptyEquipSlot.slotFieldName} `);
                     equipStyleWorker.unequipSlot(attrHandler, actionFieldName, emptyEquipSlot.index + arteformMaxSlots, emptyEquipSlot.slotFieldName);
+                    equipStyleWorker.closeMenu(attrHandler, emptyEquipSlot.slotFieldName);
                 }
                 else {
                     // attrHandler.addUpdate(equipStyleWorker.styleRepeater.getFieldName(equipStyleWorker.selectedId, WuxDef.GetVariable("Forme_IsEquipped")), "on");
                     Debug.Log(`No Style Slot found for ${styleName}`);
+                    equipStyleWorker.closeMenu(attrHandler);
                 }
             }
         });
@@ -463,8 +469,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 let equippedStyleName = attrHandler.parseString(equipSlotFieldName);
                 equipStyleWorker.setSelectIdFromName(attrHandler, advancedRepeater, equippedStyleName);
                 equipStyleWorker.setActionFieldName(equipSlotFieldName + WuxDef._expand)
-                equipStyleWorker.closeMenu(attrHandler);
                 equipStyleWorker.unequipSlot(attrHandler, actionFieldName, slotIndex, equipSlotFieldName);
+                equipStyleWorker.closeMenu(attrHandler, equipSlotFieldName);
             });
             let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
             loader.run();
