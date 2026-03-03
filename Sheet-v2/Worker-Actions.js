@@ -915,6 +915,7 @@ class FormeTechniqueDatabase {
             formeTechDatabase.iterateGroupedTechniques(techniqueName,
                 (technique, techIndex) => {
                     formeTechDatabase.setRepeaterTechniqueVisibility(techniqueAttributeHandler, technique.name, techIndex);
+                    return true;
                 },
                 (techIndex) => {
                     techniqueAttributeHandler.setVisibilityAttribute(false, techIndex);
@@ -929,7 +930,6 @@ class FormeTechniqueDatabase {
         repeater.iterate((id) => {
             techniqueAttributeHandler.setId(id);
             let techniqueName = techniqueAttributeHandler.getTechniqueName(1);
-            Debug.Log(`Checking repeater technique ${techniqueName}`);
             callback(techniqueAttributeHandler, techniqueName, repeater, id);
         });
     }
@@ -938,6 +938,7 @@ class FormeTechniqueDatabase {
         let formeTechDatabase = this;
         if (!this.techDictionary.has(techniqueName)) {
             // this technique is not valid. Remove it
+            Debug.Log(`Removing ${techniqueName} because it no longer exists in this kit.`);
             repeater.removeId(id);
             return false;
         }
@@ -978,6 +979,7 @@ class FormeTechniqueDatabase {
         let techVersion = techniqueAttributeHandler.getTechniqueVersion(techIndex);
         let technique = this.techDictionary.get(techniqueName).technique;
         if (technique.version != techVersion) {
+            Debug.Log(`Updating ${techniqueName} as it has a new version`);
             // there's an update available for the technique. Update it.
             techniqueAttributeHandler.setSimplifiedTechniqueInfo(technique, techIndex);
         }
