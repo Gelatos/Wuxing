@@ -4342,8 +4342,6 @@ class DatabaseAssessment {
     printTechniqueDatabase() {
         let output = "";
         
-        
-
         let techniqueClassData = JavascriptDatabase.Create(this.sheetsDb.techniques, WuxDefinition.GetTechnique);
         techniqueClassData.addPublicFunction("filterAndSortTechniquesByRequirement", WuxDefinition.FilterAndSortTechniquesByRequirement);
         output += techniqueClassData.print("WuxTechs") + "\n";
