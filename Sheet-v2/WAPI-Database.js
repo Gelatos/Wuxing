@@ -551,6 +551,9 @@ class TechniqueData extends WuxDatabaseData {
         this.forms = json.forms;
         this.impacts = json.impacts;
         this.traits = json.traits;
+        this.en = json.en;
+        this.willPower = json.willPower;
+        this.boon = json.boon;
         this.resourceCost = json.resourceCost;
         this.limits = json.limits;
         this.skill = json.skill;
@@ -600,12 +603,12 @@ class TechniqueData extends WuxDatabaseData {
         this.traits = "" + dataArray[i];
         i++;
         // Dodging some sheet logic
-        let enCost = parseInt(dataArray[i]);
+        this.en = parseInt(dataArray[i]);
         i++;
-        let isMagic = "" + parseInt(dataArray[i]);
+        this.willPower = this.getWillpowerCost(parseInt(dataArray[i]));
         i++;
-        let boonCost = parseInt(dataArray[i]);
-        this.resourceCost = this.buildResourceCost(enCost, isMagic, boonCost);
+        this.boon = parseInt(dataArray[i]);
+        this.resourceCost = this.buildResourceCost();
         i++;
         this.limits = "" + dataArray[i];
         i++;
@@ -634,31 +637,35 @@ class TechniqueData extends WuxDatabaseData {
         this.addEffect(this.techniqueEffect);
     }
     
-    buildResourceCost(enCost, isMagic, boonCost) {
+    buildResourceCost() {
         let parts = [];
 
-        if (!isNaN(enCost)) {
-            parts.push(`${enCost} EN`);
+        if (this.en > 0) {
+            parts.push(`${this.en} EN`);
         }
-
-        if (!isNaN(isMagic)) {
-            if (this.tier <= 0) {
-                parts.push(`${isMagic} WILL`);
-            }
-            else {
-                let willCost = (this.action === "Full" ? 5 : 3) * this.tier * isMagic;
-                parts.push(`${willCost} WILL`);
-            }
+        if (this.willPower > 0) {
+            parts.push(`${this.willPower} WILL`);
         }
-
-        if (!isNaN(boonCost)) {
-            parts.push(`${boonCost} Boon`);
+        if (this.boon > 0) {
+            parts.push(`${this.boon} Boon`);
         }
         
         if (parts.length > 0) {
             return parts.join("; ");
         }
         return "";
+    }
+    
+    getWillpowerCost(isMagic) {
+        if (isNaN(isMagic)) {
+            return 0;
+        }
+        
+        if (this.tier <= 0) {
+            return isMagic;
+        }
+
+        return (this.action === "Full" ? 5 : 3) * this.tier * isMagic;
     }
 
     createEmpty() {
@@ -675,6 +682,9 @@ class TechniqueData extends WuxDatabaseData {
         this.forms = "";
         this.impacts = "";
         this.traits = "";
+        this.en = 0;
+        this.willPower = 0;
+        this.boon = 0;
         this.resourceCost = "";
         this.limits = "";
         this.skill = "";
@@ -2079,6 +2089,15 @@ class TechniqueDisplayData {
                 this.resourceData += `${resource[0]} ${resourceName}`
             }
         }
+        if (technique.en > 0) {
+            this.commonResources.push(`${technique.en} EN`);
+        }
+        if (technique.willPower > 0) {
+            this.commonResources.push(`${technique.willPower} WILL`);
+        }
+        if (technique.boon > 0) {
+            this.commonResources.push(`${technique.boon} Boon`);
+        }
     }
 
     setTechTargetData(technique) {
@@ -2213,6 +2232,7 @@ class TechniqueDisplayData {
         this.coreDefense = "";
 
         this.resourceData = "";
+        this.commonResources = [];
         this.targetData = "";
         this.forms = [];
         this.traits = [];

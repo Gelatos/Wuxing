@@ -30,7 +30,6 @@
 		{{#type-Other}}
 		<div class="wuxFeatureHeader">
 		{{/type-Other}}
-            <span class="wuxFeatureHeaderInfoType">{{Displayname}}</span>
 			<div class="wuxFeatureHeaderDisplayBlock">
 				<span class="wuxFeatureHeaderName">{{Name}}</span>
 				{{#FormTrait0}}
@@ -319,6 +318,7 @@
             </div>
         </div>
         {{/Def0}}
+        <div>{{Displayname}}</div>
         <div>
             {{#consumeData}}[Consume Resources]({{consumeData}}){{/consumeData}}
             {{#checkData}}[Check]({{checkData}}$$@{target||token_id}){{/checkData}}
