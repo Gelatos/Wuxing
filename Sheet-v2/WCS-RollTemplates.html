@@ -30,7 +30,6 @@
 		{{#type-Other}}
 		<div class="wuxFeatureHeader">
 		{{/type-Other}}
-            <span class="wuxFeatureHeaderInfoType">{{Displayname}}</span>
 			<div class="wuxFeatureHeaderDisplayBlock">
 				<span class="wuxFeatureHeaderName">{{Name}}</span>
 				{{#FormTrait0}}
@@ -320,6 +319,7 @@
         </div>
         {{/Def0}}
         <div>
+            <span>{{Displayname}}</span>
             {{#consumeData}}[Consume Resources]({{consumeData}}){{/consumeData}}
             {{#checkData}}[Check]({{checkData}}$$@{target||token_id}){{/checkData}}
             {{#targetData}}[Target Effects]({{targetData}}$$@{target||token_id}$${{^hascheck}}0{{/hascheck}}{{#hascheck}}?{Advantage|{{hascheck}}}{{/hascheck}}){{/targetData}}
