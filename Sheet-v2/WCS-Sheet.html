@@ -23946,8 +23946,10 @@
 														<input type="hidden" name="attr_act-techaffinity1" value="" />
 														<input type="hidden" name="attr_act-techtier1" value="0" />
 														<div class="wuxFeatureHeaderName">
-															<input type="checkbox" name="attr_act-actions1">
-															<span class="wuxSubMenuText">l&nbsp;</span>
+															<div class="wuxPictosButton">
+																<input type="checkbox" name="attr_act-inspect1">
+																<span>s&nbsp;</span>
+															</div>
 															<button class="wuxFeatureHeaderNameButton" type="roll" value="@{act-use1}">
 																<span name="attr_act-techname1"></span>
 															</button>
@@ -24352,8 +24354,10 @@
 															<input type="hidden" name="attr_act-techaffinity2" value="" />
 															<input type="hidden" name="attr_act-techtier2" value="0" />
 															<div class="wuxFeatureHeaderName">
-																<input type="checkbox" name="attr_act-actions2">
-																<span class="wuxSubMenuText">l&nbsp;</span>
+																<div class="wuxPictosButton">
+																	<input type="checkbox" name="attr_act-inspect2">
+																	<span>s&nbsp;</span>
+																</div>
 																<button class="wuxFeatureHeaderNameButton" type="roll" value="@{act-use2}">
 																	<span name="attr_act-techname2"></span>
 																</button>
@@ -24372,8 +24376,10 @@
 															<input type="hidden" name="attr_act-techaffinity3" value="" />
 															<input type="hidden" name="attr_act-techtier3" value="0" />
 															<div class="wuxFeatureHeaderName">
-																<input type="checkbox" name="attr_act-actions3">
-																<span class="wuxSubMenuText">l&nbsp;</span>
+																<div class="wuxPictosButton">
+																	<input type="checkbox" name="attr_act-inspect3">
+																	<span>s&nbsp;</span>
+																</div>
 																<button class="wuxFeatureHeaderNameButton" type="roll" value="@{act-use3}">
 																	<span name="attr_act-techname3"></span>
 																</button>
@@ -35803,24 +35809,16 @@ WuxWorkerGear.UnequipSetGear(eventinfo, 9, "gear-equipmentslot9")
 on("change:gear-equipmentslot9_info", function (eventinfo) {
 WuxWorkerGear.InspectSetGear(eventinfo, 9, "gear-equipmentslot9")
 });
-on("change:repeating_basicaction:act-inspect", function (eventinfo) {
-WuxWorkerActions.InspectTechniqueBasicAction(eventinfo)
+on("change:repeating_formetech:act-inspect1", function (eventinfo) {
+WuxWorkerActions.InspectFormeTechnique(eventinfo, 1)
 });
 
-on("change:repeating_basicrecovery:act-inspect", function (eventinfo) {
-WuxWorkerActions.InspectTechniqueBasicRecovery(eventinfo)
+on("change:repeating_formetech:act-inspect2", function (eventinfo) {
+WuxWorkerActions.InspectFormeTechnique(eventinfo, 2)
 });
 
-on("change:repeating_basicattack:act-inspect", function (eventinfo) {
-WuxWorkerActions.InspectTechniqueBasicAttack(eventinfo)
-});
-
-on("change:repeating_basicsocial:act-inspect", function (eventinfo) {
-WuxWorkerActions.InspectTechniqueBasicSocial(eventinfo)
-});
-
-on("change:repeating_basicspirit:act-inspect", function (eventinfo) {
-WuxWorkerActions.InspectTechniqueBasicSpirit(eventinfo)
+on("change:repeating_formetech:act-inspect3", function (eventinfo) {
+WuxWorkerActions.InspectFormeTechnique(eventinfo, 3)
 });
 on("change:repeating_customtech:act-setdata", function (eventinfo) {
 WuxWorkerActions.SetCustomTechnique(eventinfo)

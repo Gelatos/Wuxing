@@ -497,16 +497,14 @@ var ActionBuilder = ActionBuilder || (function () {
             return output;
         },
         listenerInspectRepeatingStyles = function () {
-            return `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingBasicActions")}:${WuxDef.GetVariable("Action_Inspect")}`],
-                `WuxWorkerActions.InspectTechniqueBasicAction(eventinfo)`, true)}
-                ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingBasicRecovery")}:${WuxDef.GetVariable("Action_Inspect")}`],
-                `WuxWorkerActions.InspectTechniqueBasicRecovery(eventinfo)`, true)}
-                ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingBasicAttack")}:${WuxDef.GetVariable("Action_Inspect")}`],
-                `WuxWorkerActions.InspectTechniqueBasicAttack(eventinfo)`, true)}
-                ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingBasicSocial")}:${WuxDef.GetVariable("Action_Inspect")}`],
-                `WuxWorkerActions.InspectTechniqueBasicSocial(eventinfo)`, true)}
-                ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingBasicSpirit")}:${WuxDef.GetVariable("Action_Inspect")}`],
-                `WuxWorkerActions.InspectTechniqueBasicSpirit(eventinfo)`, true)}`;
+            let repeaterVar = WuxDef.GetVariable("RepeatingFormeTech");
+            let inspectDef = WuxDef.Get("Action_Inspect");
+            return `${WuxSheetBackend.OnChange([`${repeaterVar}:${inspectDef.getVariable(1)}`],
+                `WuxWorkerActions.InspectFormeTechnique(eventinfo, 1)`, true)}
+                ${WuxSheetBackend.OnChange([`${repeaterVar}:${inspectDef.getVariable(2)}`],
+                `WuxWorkerActions.InspectFormeTechnique(eventinfo, 2)`, true)}
+                ${WuxSheetBackend.OnChange([`${repeaterVar}:${inspectDef.getVariable(3)}`],
+                `WuxWorkerActions.InspectFormeTechnique(eventinfo, 3)`, true)}`;
         },
         listenerSetDataRepeatingStyles = function () {
             return `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingCustomTech")}:${WuxDef.GetVariable("Action_SetData")}`],

@@ -1431,15 +1431,15 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 printTechniqueDisplaySubmenu = function (submenuFieldName, contents) {
                     return `<div class="wuxInlineBlock">
-                            ${printTechniqueDisplaySubmenuButton(submenuFieldName)}
+                            <input type="checkbox" name="${submenuFieldName}">
+                            <span class="wuxSubMenuText">l&nbsp;</span>
                             <input type="hidden" class="wuxSubMenu-flag" name="${submenuFieldName}" value="0">
                             <div class="wuxSubMenuContent">\n${contents}\n</div>
                     </div>`;
                 },
 
-                printTechniqueDisplaySubmenuButton = function (submenuFieldName) {
-                    return `<input type="checkbox" name="${submenuFieldName}">
-                            <span class="wuxSubMenuText">l&nbsp;</span>`;
+                printTechniqueDisplayInspectButton = function (fieldName) {
+                    return WuxSheetMain.PictosButton(fieldName, `s&nbsp;`);
                 },
 
                 addSubmenuContentsStyles = function () {
@@ -1490,18 +1490,18 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         <input type="hidden" class="wuxFeatureHeader-flag" name="${getActionTypeAttribute("TechActionType")}">
                         <div class="wuxFeatureHeader">
                             ${buildBaseFormTechniqueHeaderFullContents(
-                                printTechniqueDisplaySubmenuButton(WuxDef.GetAttribute("Action_Actions", 1)), 1)}
+                            printTechniqueDisplayInspectButton(WuxDef.GetAttribute("Action_Inspect", 1)), 1)}
                         </div>
                         ${buildFormBaseTechniqueRequirements()}
                         ${WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible", 2),
                         `<div class="wuxFeatureHeader">
                             ${buildBaseFormTechniqueHeaderSubTechContents(
-                            printTechniqueDisplaySubmenuButton(WuxDef.GetAttribute("Action_Actions", 2)), 2)}
+                            printTechniqueDisplayInspectButton(WuxDef.GetAttribute("Action_Inspect", 2)), 2)}
                         </div>`)}
                         ${WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible", 3),
                         `<div class="wuxFeatureHeader">
                             ${buildBaseFormTechniqueHeaderSubTechContents(
-                            printTechniqueDisplaySubmenuButton(WuxDef.GetAttribute("Action_Actions", 3)), 3)}
+                            printTechniqueDisplayInspectButton(WuxDef.GetAttribute("Action_Inspect", 3)), 3)}
                         </div>`)}
                     </div>`;
                 },

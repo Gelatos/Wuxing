@@ -1685,6 +1685,15 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return `<div class="wuxButton${className}">\n<input type="checkbox" name="${fieldName}">\n<span>${contents}</span>\n </div>`;
         },
 
+        pictosButton = function (fieldName, contents, className) {
+            if (className == undefined) {
+                className = "";
+            } else {
+                className = " " + className;
+            }
+            return `<div class="wuxPictosButton${className}">\n<input type="checkbox" name="${fieldName}">\n<span>${contents}</span>\n </div>`;
+        },
+
         multiRowGroup = function (contents, containerCallback, rowSize) {
             let output = "";
             let rowContents = "";
@@ -2060,6 +2069,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         Textarea: textarea,
         Select: select,
         Button: button,
+        PictosButton: pictosButton,
         MultiRowGroup: multiRowGroup,
         HiddenField: hiddenField,
         HiddenAuxField: hiddenAuxField,

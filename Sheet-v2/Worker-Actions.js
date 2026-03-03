@@ -324,14 +324,17 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             populateStyleTechniques(attrHandler, actionRepeatingWorker, styleName, 9);
         });
     };
-    const populateInspectionElements = function (attrHandler, popupRepeater, sectionRepeater, inspectionTitle, selectedId) {
+    const populateInspectionElements = function (attrHandler, popupRepeater, sectionRepeater, inspectionTitle, selectedId, techNameField) {
 
         attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), inspectionTitle);
 
         let selectedElement = null;
         sectionRepeater.iterate(function (id) {
-            let techniqueName = attrHandler.parseString(sectionRepeater.getFieldName(id, WuxDef.GetUntypedVariable("Action", "TechName")));
+            let techniqueName = attrHandler.parseString(sectionRepeater.getFieldName(id, techNameField));
             let technique = WuxTechs.Get(techniqueName);
+            if (technique == undefined) {
+                return;
+            }
             if (technique.techSet != "") {
                 let newRowId = popupRepeater.getNextId();
                 attrHandler.addUpdate(popupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), technique.name);
@@ -352,20 +355,20 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         return selectedElement;
     };
 
-    const inspectTechnique = function (repeatingSectionName, inspectionField, inspectionTitle) {
+    const inspectTechnique = function (repeatingSectionName, inspectionField, suffix, inspectionTitle) {
         let styleRepeater = new WorkerRepeatingSectionHandler(repeatingSectionName);
         let selectedId = styleRepeater.getIdFromFieldName(inspectionField);
 
         styleRepeater.getIds(function (techRepeater) {
+            let fieldName = WuxDef.GetUntypedVariable("Action", "TechName", suffix);
             WuxWorkerInspectPopup.OpenTechniqueInspection(function (attrHandler) {
-                    techRepeater.iterate(function (id) {
-                        attrHandler.addMod(techRepeater.getFieldName(id, WuxDef.GetUntypedVariable("Action", "TechName")));
-                    });
+                    Debug.Log(`Adding ${fieldName} to getters`);
+                    attrHandler.addMod(techRepeater.getFieldName(selectedId, fieldName));
                 },
                 function (attrHandler, itemPopupRepeater) {
                     attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
                     attrHandler.addUpdate(techRepeater.getFieldName(selectedId, WuxDef.GetVariable("Action_Actions")), "0");
-                    return populateInspectionElements(attrHandler, itemPopupRepeater, techRepeater, inspectionTitle, selectedId);
+                    return populateInspectionElements(attrHandler, itemPopupRepeater, techRepeater, inspectionTitle, selectedId, fieldName);
                 }
             );
         });
@@ -548,20 +551,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             });
         },
 
-        inspectTechniqueBasicAction = function (eventinfo) {
-            inspectTechnique("RepeatingBasicActions", eventinfo.sourceAttribute, "All Basic Action Techniques");
-        },
-        inspectTechniqueBasicRecovery = function (eventinfo) {
-            inspectTechnique("RepeatingBasicRecovery", eventinfo.sourceAttribute, "All Basic Recovery Techniques");
-        },
-        inspectTechniqueBasicAttack = function (eventinfo) {
-            inspectTechnique("RepeatingBasicAttack", eventinfo.sourceAttribute, "All Basic Attack Techniques");
-        },
-        inspectTechniqueBasicSocial = function (eventinfo) {
-            inspectTechnique("RepeatingBasicSocial", eventinfo.sourceAttribute, "All Basic Social Techniques");
-        },
-        inspectTechniqueBasicSpirit = function (eventinfo) {
-            inspectTechnique("RepeatingBasicSpirit", eventinfo.sourceAttribute, "All Basic Spirit Techniques");
+        inspectFormeTechnique = function (eventinfo, suffix) {
+            Debug.Log(`Opening Forme Technique Popup with id ${eventinfo.sourceAttribute}`);
+            inspectTechnique("RepeatingFormeTech", eventinfo.sourceAttribute, suffix, "All Forme Techniques");
         },
 
         populateStyleActions = function (repeatingSectionName, repeatingSectionIndex, styleName, tier) {
@@ -740,11 +732,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         GetAllStyleSlotRepeaterIDs: getAllStyleSlotRepeaterIDs,
         PopulateAllBasicActions: populateAllBasicActions,
         PopulatePerkTechniques: populatePerkTechniques,
-        InspectTechniqueBasicAction: inspectTechniqueBasicAction,
-        InspectTechniqueBasicRecovery: inspectTechniqueBasicRecovery,
-        InspectTechniqueBasicAttack: inspectTechniqueBasicAttack,
-        InspectTechniqueBasicSocial: inspectTechniqueBasicSocial,
-        InspectTechniqueBasicSpirit: inspectTechniqueBasicSpirit,
+        InspectFormeTechnique: inspectFormeTechnique,
         PopulateStyleActions: populateStyleActions,
         RefreshJobStyleActions: refreshJobStyleActions,
         RefreshAdvancedStyleActions: refreshAdvancedStyleActions,
