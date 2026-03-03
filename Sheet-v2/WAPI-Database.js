@@ -2065,12 +2065,8 @@ class TechniqueDisplayData {
 
     setTechSetResourceData(technique) {
         this.resourceData = "";
-        if (technique.action == "Brief" || technique.action == "Short" || technique.action == "Long") {
-            this.resourceData = `During a ${technique.action} Rest`;
-        }
-        else {
-            this.resourceData = `${technique.action}`;
-        }
+        
+        this.resourceData += this.printSkillCheck();
         if (technique.limits != "") {
             if (this.resourceData != "") {
                 this.resourceData += "; ";
@@ -2102,24 +2098,6 @@ class TechniqueDisplayData {
 
     setTechTargetData(technique) {
         this.targetData = "";
-        if (technique.skill == "" && technique.action != "Passive") {
-            this.targetData = "No Check";
-        }  
-        else {
-            let skillData = technique.skill.split(":");
-            skillData[0] = skillData[0].trim();
-            if (skillData.length > 1) {
-                if (skillData[1] == "group") {
-                    this.targetData = `Any ${skillData[0]}`;
-                }
-                else if (skillData[1] == "attr") {
-                    this.targetData = WuxDef.GetTitle(Format.GetDefinitionName("Attribute", skillData[0]));
-                }
-            }
-            else {
-                this.targetData = skillData[0];
-            }
-        }
         
         if (technique.range != "") {
             if (this.targetData != "") {
@@ -2144,6 +2122,23 @@ class TechniqueDisplayData {
             }
         }
     }
+    printSkillCheck() {
+        if (technique.skill == "" && technique.action != "Passive") {
+            return "No Check";
+        }
+        
+        let skillData = technique.skill.split(":");
+        skillData[0] = skillData[0].trim();
+        if (skillData.length > 1) {
+            if (skillData[1] == "group") {
+                return `Any ${skillData[0]}`;
+            }
+            else if (skillData[1] == "attr") {
+                return WuxDef.GetTitle(Format.GetDefinitionName("Attribute", skillData[0]));
+            }
+        }
+        return skillData[0];
+    }
 
     numberToWord(num) {
         const words = ["Zero", "One", "Two", "Three", "Four", "Five", "Six"];
@@ -2162,7 +2157,11 @@ class TechniqueDisplayData {
     }
 
     setTraits(technique) {
-        this.forms = WuxDef.GetValues(technique.forms, ";", "Trait_");
+        this.forms = [`Trait_Action-${technique.action}`];
+        if (technique.coreDefense != "") {
+            this.forms = this.forms.push(`Trait_A-${technique.coreDefense}`);
+        }
+        this.forms = this.forms.concat(WuxDef.GetValues(technique.forms, ";", "Trait_"));
         this.traits = WuxDef.GetValues(technique.impacts, ";", "Trait_");
         this.traits = this.traits.concat(WuxDef.GetValues(technique.traits, ";"));
     }
@@ -4538,6 +4537,7 @@ class RepeatingSectionHandler {
     }
 
     removeAllIdsAfterIteratorIndex() {
+        Debug.Log (`Removing ${this.ids.length - this.iteratorIndex} ids after iterator index ${this.iteratorIndex}`)
         while (this.ids.length > this.iteratorIndex) {
             this.removeId(this.ids[this.iteratorIndex]);
         }
@@ -4568,10 +4568,7 @@ class RepeatingSectionHandler {
     addAttributeMods(attributeHandler, fieldNames) {
         let repeater = this;
 
-        if (fieldNames == undefined) {
-            fieldNames = this.fieldNames;
-        }
-        else if (!Array.isArray(fieldNames)) {
+        if (!Array.isArray(fieldNames)) {
             fieldNames = [fieldNames];
         }
         this.iterate(function (id) {
