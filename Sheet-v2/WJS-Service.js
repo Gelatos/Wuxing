@@ -571,7 +571,7 @@ class WuxJobWorkerBuild extends WuxWorkerBuild {
 		super("Job");
 	}
 
-	getJobStyles() {
+	getStyles() {
 		let styleData = [];
 		this.iterateBuildStats(function (jobVariableData) {
 			let style = WuxStyles.GetByVariableName(jobVariableData.name);
@@ -763,13 +763,17 @@ class DatabaseItemAttributeHandler {
 	};
 	addDefinitions (definitionData, prefix, descriptionMaxIndex) {
 		for (let i = 0; i < definitionData.length; i++) {
-			this.attrHandler.addUpdate(`${prefix}${i}`, definitionData[i].getTitle());
+			let definition = definitionData[i];
+			if (definition == undefined) {
+				continue;
+			}
+			this.attrHandler.addUpdate(`${prefix}${i}`, definition.getTitle());
 
-			for (let j = 0; j < definitionData[i].descriptions.length; j++) {
+			for (let j = 0; j < definition.descriptions.length; j++) {
 				if (j <= descriptionMaxIndex) {
-					this.attrHandler.addUpdate(`${prefix}${i}desc${j}`, definitionData[i].descriptions[j]);
+					this.attrHandler.addUpdate(`${prefix}${i}desc${j}`, definition.descriptions[j]);
 				} else {
-					this.attrHandler.addUpdate(`${prefix}${i}desc${descriptionMaxIndex}`, definitionData[i].descriptions[j]);
+					this.attrHandler.addUpdate(`${prefix}${i}desc${descriptionMaxIndex}`, definition.descriptions[j]);
 				}
 			}
 		}
@@ -891,6 +895,7 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 	clearTechniqueInfo () {
 		this.attrHandler.addUpdate(this.getVariable("TechActionType"), "");
 		this.attrHandler.addUpdate(this.getVariable("TechName"), 0);
+		this.attrHandler.addUpdate(this.getVariable("TechVersion"), "");
 		this.attrHandler.addUpdate(this.getVariable("TechDisplayName"), "");
 		this.attrHandler.addUpdate(this.getVariable("TechAffinity"), "");
 		this.attrHandler.addUpdate(this.getVariable("TechTier"), 0);
