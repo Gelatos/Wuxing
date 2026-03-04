@@ -587,6 +587,9 @@ class TechniqueData extends WuxDatabaseData {
         this.group = "" + dataArray[i];
         i++;
         this.version = "" + dataArray[i];
+        if (this.version == "") {
+            this.version = "1";
+        }
         i++;
         this.affinity = "" + dataArray[i];
         i++;
@@ -2066,7 +2069,7 @@ class TechniqueDisplayData {
     setTechSetResourceData(technique) {
         this.resourceData = "";
         
-        this.resourceData += this.printSkillCheck();
+        this.resourceData += this.printSkillCheck(technique);
         if (technique.limits != "") {
             if (this.resourceData != "") {
                 this.resourceData += "; ";
@@ -2122,7 +2125,7 @@ class TechniqueDisplayData {
             }
         }
     }
-    printSkillCheck() {
+    printSkillCheck(technique) {
         if (technique.skill == "" && technique.action != "Passive") {
             return "No Check";
         }
@@ -2157,9 +2160,9 @@ class TechniqueDisplayData {
     }
 
     setTraits(technique) {
-        this.forms = [`Trait_Action-${technique.action}`];
+        this.forms = [WuxDef.Get(`Trait_Action-${technique.action}`)];
         if (technique.coreDefense != "") {
-            this.forms = this.forms.push(`Trait_A-${technique.coreDefense}`);
+            this.forms.push(WuxDef.Get(`Trait_A-${technique.coreDefense}`));
         }
         this.forms = this.forms.concat(WuxDef.GetValues(technique.forms, ";", "Trait_"));
         this.traits = WuxDef.GetValues(technique.impacts, ";", "Trait_");
@@ -4565,17 +4568,29 @@ class RepeatingSectionHandler {
         return `${this.repeatingSection}_${id}_${fieldName}`;
     }
 
-    addAttributeMods(attributeHandler, fieldNames) {
+    addAttributeMods(attributeHandler, fieldNames, showDebug) {
         let repeater = this;
+        
+        if (fieldNames == undefined) {
+            fieldNames = this.fieldNames;
+        }
 
         if (!Array.isArray(fieldNames)) {
             fieldNames = [fieldNames];
         }
+        let debugOutput = "";
         this.iterate(function (id) {
             for (let i = 0; i < fieldNames.length; i++) {
-                attributeHandler.addMod(repeater.getFieldName(id, fieldNames[i]));
+                let fieldName = repeater.getFieldName(id, fieldNames[i])
+                attributeHandler.addMod(fieldName);
+                if (showDebug) {
+                    debugOutput += `${fieldName}, `;
+                }
             }
         });
+        if (showDebug) {
+            Debug.Log(`Adding the following mods: ${debugOutput}`);
+        }
     }
 
     getIdFromFieldName(fieldName) {
