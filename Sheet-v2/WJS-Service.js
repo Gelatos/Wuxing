@@ -810,10 +810,10 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addUpdate(this.getVariable("TechResourceData", suffix), displayData.resourceData);
 		this.attrHandler.addUpdate(this.getVariable("TechTargetingData"), displayData.targetData);
 		if (displayData.forms.length > 0) {
-			this.addDefinitions(displayData.forms, this.getVariable("TechForm"), 4);
+			this.addDefinitions(displayData.forms, this.getVariable("TechForm"), 6);
 		}
 		if (displayData.traits.length > 0) {
-			this.addDefinitions(displayData.traits, this.getVariable("TechTrait"), 4);
+			this.addDefinitions(displayData.traits, this.getVariable("TechTrait"), 6);
 		}
 
 		if (displayData.trigger != "") {

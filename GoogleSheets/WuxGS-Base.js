@@ -1543,10 +1543,10 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 buildBaseFormTechniqueHeaderFullContents = function (headerPrefix, tierIndex) {
                     return `${buildBaseFormTechniqueHeaderContents(headerPrefix, tierIndex, 
-                        `${printFormTechniqueTraits("Keywords", "TechForm", 5, "Keyword")}
+                        `${printFormTechniqueTraits("Keywords", "TechForm", 6, "Keyword")}
                         <div class="wuxFeatureHeaderInfo"><span name="${getActionTypeAttribute("TechResourceData", tierIndex)}"></span></div>
                         <div class="wuxFeatureHeaderInfo"><span name="${getActionTypeAttribute("TechTargetingData")}"></span></div>
-                        ${printFormTechniqueTraits("Traits", "TechTrait", 5, "Impact Trait")}`)}
+                        ${printFormTechniqueTraits("Traits", "TechTrait", 6, "Impact Trait")}`)}
                     <input type="hidden" class="wuxFeatureDefenseIcon-flag" name="${getActionTypeAttribute("TechCoreDefense")}" value="" />
                     <div class="wuxFeatureDefenseIcon"></div>`;
                 },
