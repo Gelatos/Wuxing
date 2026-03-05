@@ -39,7 +39,8 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 			Debug.Log(`Setting ${eventinfo.sourceAttribute}`);
 			
 			let primaryAffinityVariable = WuxDef.GetVariable("Affinity");
-			let isPrimary = (eventinfo.sourceAttribute == primaryAffinityVariable || eventinfo.sourceAttribute == WuxDef.GetVariable("AffinityAspect"));
+			let affinityAspectVariable = WuxDef.GetVariable("AffinityAspect");
+			let isPrimary = (eventinfo.sourceAttribute == primaryAffinityVariable || eventinfo.sourceAttribute == affinityAspectVariable);
 			let attributeHandler = new WorkerAttributeHandler();
 			let affinityVariable = eventinfo.sourceAttribute;
 
@@ -56,6 +57,9 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 				attrHandler.addUpdate(variable, desc);
 				
 			});
+			if (eventinfo.sourceAttribute == primaryAffinityVariable) {
+				WuxWorkerActions.UpdateVisibilityOfFormeActions(attributeHandler);
+			}
 			attributeHandler.run();
 		},
 		setBonusAttributes = function () {
@@ -220,6 +224,7 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
 
 			WuxWorkerKnowledges.RefreshStats(attributeHandler);
 			WuxWorkerStyles.RefreshStats(attributeHandler);
+			WuxWorkerActions.UpdateVisibilityOfFormeActions(attributeHandler);
 
 			attributeHandler.run();
 		},

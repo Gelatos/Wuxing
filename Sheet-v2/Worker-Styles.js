@@ -85,15 +85,11 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             if (tier == undefined) {
                 tier = attrHandler.parseString(this.tierFieldName);
             }
-
-            WuxWorkerActions.PopulateStyleActions(actionFieldName, slotIndex, styleName, tier);
         }
 
         unequipSlot(attrHandler, actionFieldName, slotIndex, emptySlotFieldName) {
             attrHandler.addUpdate(this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Forme_IsEquipped")), "0");
             attrHandler.addUpdate(emptySlotFieldName, "0");
-
-            WuxWorkerActions.RemoveStyleActions(actionFieldName, slotIndex);
         }
 
         findMatchingEquippedSlot(attrHandler, repeater, slotContents) {
@@ -265,6 +261,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 combatDetailsHandler.onUpdateJob(attrHandler, attrHandler.parseString(equipStyleWorker.styleFieldName));
                 equipStyleWorker.closeMenu(attrHandler, emptyEquipSlot.slotFieldName);
             });
+            WuxWorkerActions.UpdateVisibilityOfFormeActions(equipStyleWorker.attributeHandler);
             let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
             loader.run();
         });
@@ -294,6 +291,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 // attrHandler.addUpdate(equipStyleWorker.styleRepeater.getFieldName(equipStyleWorker.selectedId, WuxDef.GetVariable("Forme_IsEquipped")), "on");
             }
         });
+        WuxWorkerActions.UpdateVisibilityOfFormeActions(equipStyleWorker.attributeHandler);
         let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
         loader.run();
     };

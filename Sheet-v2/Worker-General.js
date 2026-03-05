@@ -172,23 +172,21 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             let cr = parseInt(eventinfo.newValue);
             let loader = new LoadingScreenHandler();
             loader.showLoadingScreen(() => {
-                WuxWorkerActions.GetAllStyleSlotRepeaterIDs((repeaterSlotData) => {
-                    let attributeHandler = new WorkerAttributeHandler();
-                    let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
+                let attributeHandler = new WorkerAttributeHandler();
+                let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
 
-                    WuxWorkerSkills.UpdateStats(attributeHandler);
-                    WuxWorkerKnowledges.UpdateStats(attributeHandler);
-                    WuxWorkerActions.UpdateAllActiveStyleActions(attributeHandler, repeaterSlotData, cr);
-                    updateStats(attributeHandler, combatDetailsHandler);
-                    
-                    attributeHandler.addGetAttrCallback(function (attrHandler) {
-                        combatDetailsHandler.onUpdateCR(attrHandler, cr);
-                    });
-                    attributeHandler.addFinishCallback(() => {
-                        loader.hideLoadingScreen();
-                    });
-                    attributeHandler.run();
+                WuxWorkerSkills.UpdateStats(attributeHandler);
+                WuxWorkerKnowledges.UpdateStats(attributeHandler);
+                WuxWorkerActions.UpdateVisibilityOfFormeActions(attributeHandler);
+                updateStats(attributeHandler, combatDetailsHandler);
+                
+                attributeHandler.addGetAttrCallback(function (attrHandler) {
+                    combatDetailsHandler.onUpdateCR(attrHandler, cr);
                 });
+                attributeHandler.addFinishCallback(() => {
+                    loader.hideLoadingScreen();
+                });
+                attributeHandler.run();
             });
         },
         updateSurge = function (eventinfo) {
