@@ -38,7 +38,8 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 		setAffinityValue = function (eventinfo) {
 			Debug.Log(`Setting ${eventinfo.sourceAttribute}`);
 			
-			let isPrimary = eventinfo.sourceAttribute == WuxDef.GetVariable("Affinity");
+			let primaryAffinityVariable = WuxDef.GetVariable("Affinity");
+			let isPrimary = eventinfo.sourceAttribute == primaryAffinityVariable;
 			let attributeHandler = new WorkerAttributeHandler();
 			let affinityVariable = eventinfo.sourceAttribute;
 
@@ -49,6 +50,7 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 				let variable = `${affinityVariable}${WuxDef._learn}`;
 				let desc = WuxDef.GetDescription(`${WuxDef.GetAbbreviation()}${eventinfo.newValue}`);
 				if (isPrimary) {
+					attrHandler.addUpdate(primaryAffinityVariable, eventinfo.newValue);
 					combatDetailsHandler.onUpdateAffinity(attrHandler, eventinfo.newValue);
 				}
 				attrHandler.addUpdate(variable, desc);
