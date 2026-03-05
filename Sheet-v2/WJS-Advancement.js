@@ -39,7 +39,7 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 			Debug.Log(`Setting ${eventinfo.sourceAttribute}`);
 			
 			let primaryAffinityVariable = WuxDef.GetVariable("Affinity");
-			let isPrimary = eventinfo.sourceAttribute == primaryAffinityVariable;
+			let isPrimary = (eventinfo.sourceAttribute == primaryAffinityVariable || eventinfo.sourceAttribute == WuxDef.GetVariable("AffinityAspect"));
 			let attributeHandler = new WorkerAttributeHandler();
 			let affinityVariable = eventinfo.sourceAttribute;
 
