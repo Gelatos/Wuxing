@@ -289,6 +289,11 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                                 WuxDef.Filter([new DatabaseFilterData("group", "GenderType")]), true);
                             contents += WuxDefinition.BuildSelect(WuxDef.Get("Ancestry"), WuxDef.GetAttribute("Ancestry"),
                                 WuxDef.Filter([new DatabaseFilterData("group", "AncestryType")]));
+                            let affinityFilter = [WuxDef.Get("Unaspected")].concat(
+                                WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])
+                            );
+                            contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("AffinityAspect"),
+                                affinityFilter, false);
                             contents += WuxDefinition.BuildSelect(WuxDef.Get("HomeRegion"), WuxDef.GetAttribute("HomeRegion"),
                                 WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]));
                             contents += WuxDefinition.BuildSelect(WuxDef.Get("Ethnicity"), WuxDef.GetAttribute("Ethnicity"),
