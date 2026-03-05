@@ -492,7 +492,7 @@ var ActionBuilder = ActionBuilder || (function () {
             let output = "";
             output += listenerInspectRepeatingStyles();
             output += listenerSetDataRepeatingStyles();
-            output += listenerRefreshRepeatingActions();
+            output += listenerFormeButtonActions();
             output += listenerRefreshBasicActions();
             return output;
         },
@@ -510,23 +510,14 @@ var ActionBuilder = ActionBuilder || (function () {
             return `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingCustomTech")}:${WuxDef.GetVariable("Action_SetData")}`],
                 `WuxWorkerActions.SetCustomTechnique(eventinfo)`, true)}`;
         },
-        listenerRefreshRepeatingActions = function () {
+        listenerFormeButtonActions = function () {
             let output = "";
-            
+
             let formeTechniqueDef = WuxDef.Get("Action_FormeTechniques");
             let refreshField = formeTechniqueDef.getVariable(WuxDef._refresh);
             output += `${WuxSheetBackend.OnChange([refreshField], `WuxWorkerActions.RefreshAllFormeActions()`, false)}`;
-            
-            for (let i = 1; i <= 3; i++) {
-                output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Forme_JobSlot", i)}${WuxDef._refresh}`],
-                    `WuxWorkerActions.RefreshJobStyleActions(${i})`, false)}`;
-                output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Forme_AdvancedSlot", i)}${WuxDef._refresh}`],
-                    `WuxWorkerActions.RefreshAdvancedStyleActions(${i})`, false)}`;
-            }
-            for (let i = 1; i <= 9; i++) {
-                output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Forme_StyleSlot", i)}${WuxDef._refresh}`],
-                    `WuxWorkerActions.RefreshStandardStyleActions(${i+3})`, false)}`;
-            }
+            let loadFormeField = WuxDef.GetVariable("Action_FormeLoad");
+            output += `${WuxSheetBackend.OnChange([loadFormeField], `WuxWorkerActions.LoadFormeActions()`, false)}`;
             return output;
         },
         listenerRefreshBasicActions = function () {

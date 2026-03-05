@@ -23868,9 +23868,16 @@
 					<div class="wuxSectionBlock wuxLayoutItem">
 						<div class="wuxTabContent">
 							<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_act-formeloadcount" value="0">
+									<div class="wuxHiddenField">
+										<div class="wuxButton wuxStyleHeaderButton">
+											<input type="checkbox" name="attr_act-formeload">
+											<span><span class='wuxStyleHeaderButtonIcon'>&#10227;</span>Load <span name="attr_act-formeloadcount"></span> Techs</span>
+										</div>
+									</div>
 									<div class="wuxButton wuxStyleHeaderButton">
 										<input type="checkbox" name="attr_act-formetechniques_refresh">
-										<span><span class='wuxStyleHeaderButtonIcon'>&#8635;</span> Update</span>
+										<span><span class='wuxStyleHeaderButtonIcon'>&#10227;</span> Update</span>
 									</div>
 									<input type="hidden" class="wuxHiddenField-flag" name="attr_act-formetechniques_expand" value="0">
 									<span class="wuxHiddenInlineField">
@@ -37272,50 +37279,8 @@ WuxWorkerActions.SetCustomTechnique(eventinfo)
 on("change:act-formetechniques_refresh", function (eventinfo) {
 WuxWorkerActions.RefreshAllFormeActions()
 });
-on("change:forme-jobslot1_refresh", function (eventinfo) {
-WuxWorkerActions.RefreshJobStyleActions(1)
-});
-on("change:forme-advancedslot1_refresh", function (eventinfo) {
-WuxWorkerActions.RefreshAdvancedStyleActions(1)
-});
-on("change:forme-jobslot2_refresh", function (eventinfo) {
-WuxWorkerActions.RefreshJobStyleActions(2)
-});
-on("change:forme-advancedslot2_refresh", function (eventinfo) {
-WuxWorkerActions.RefreshAdvancedStyleActions(2)
-});
-on("change:forme-jobslot3_refresh", function (eventinfo) {
-WuxWorkerActions.RefreshJobStyleActions(3)
-});
-on("change:forme-advancedslot3_refresh", function (eventinfo) {
-WuxWorkerActions.RefreshAdvancedStyleActions(3)
-});
-on("change:forme-styleslot1_refresh", function (eventinfo) {
-WuxWorkerActions.RefreshStandardStyleActions(4)
-});
-on("change:forme-styleslot2_refresh", function (eventinfo) {
-WuxWorkerActions.RefreshStandardStyleActions(5)
-});
-on("change:forme-styleslot3_refresh", function (eventinfo) {
-WuxWorkerActions.RefreshStandardStyleActions(6)
-});
-on("change:forme-styleslot4_refresh", function (eventinfo) {
-WuxWorkerActions.RefreshStandardStyleActions(7)
-});
-on("change:forme-styleslot5_refresh", function (eventinfo) {
-WuxWorkerActions.RefreshStandardStyleActions(8)
-});
-on("change:forme-styleslot6_refresh", function (eventinfo) {
-WuxWorkerActions.RefreshStandardStyleActions(9)
-});
-on("change:forme-styleslot7_refresh", function (eventinfo) {
-WuxWorkerActions.RefreshStandardStyleActions(10)
-});
-on("change:forme-styleslot8_refresh", function (eventinfo) {
-WuxWorkerActions.RefreshStandardStyleActions(11)
-});
-on("change:forme-styleslot9_refresh", function (eventinfo) {
-WuxWorkerActions.RefreshStandardStyleActions(12)
+on("change:act-formeload", function (eventinfo) {
+WuxWorkerActions.LoadFormeActions()
 });
 on("change:refresh_all_techniques", function (eventinfo) {
 WuxWorkerActions.PopulateAllActions()

@@ -1294,7 +1294,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let hiddenField = sectionDefinition.getAttribute(WuxDef._expand);
                     let refreshField = sectionDefinition.getAttribute(WuxDef._refresh);
 
-                    let header = getStyleHeader(`<span>${sectionDefinition.getTitle()}</span>`, hiddenField, refreshField);
+                    let header = getFormeStyleHeader(`<span>${sectionDefinition.getTitle()}</span>`, hiddenField, refreshField);
                     let actionDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible", 1), 
                         printFormTechniqueSimplifiedActionDisplay());
                     
@@ -1352,13 +1352,24 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     contents = printTechniquesSection(header, hiddenField, contents);
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
-                
+
                 getStyleHeader = function (styleName, hiddenField, refreshField) {
                     let headerButtons = "";
                     if (refreshField != undefined) {
                         headerButtons = WuxSheetMain.Button(refreshField,
                             "<span class='wuxStyleHeaderButtonIcon'>&#8635;</span> Update", "wuxStyleHeaderButton");
                     }
+                    return WuxSheetMain.CollapsibleHeader(styleName, hiddenField, headerButtons);
+                },
+                getFormeStyleHeader = function (styleName, hiddenField, refreshField) {
+                    let headerButtons = "";
+                    let loadFormeField = WuxDef.GetAttribute("Action_FormeLoadCount");
+                    let loadFormeDef = WuxDef.Get("Action_FormeLoad");
+                    headerButtons += WuxSheetMain.HiddenField(loadFormeField, WuxSheetMain.Button(loadFormeDef.getAttribute(),
+                        `<span class='wuxStyleHeaderButtonIcon'>&#10227;</span>${loadFormeDef.getTitle(`<span name="${loadFormeField}"></span>`)}`, 
+                        "wuxStyleHeaderButton"));
+                    headerButtons += WuxSheetMain.Button(refreshField,
+                            "<span class='wuxStyleHeaderButtonIcon'>&#10227;</span> Update", "wuxStyleHeaderButton");
                     return WuxSheetMain.CollapsibleHeader(styleName, hiddenField, headerButtons);
                 },
 

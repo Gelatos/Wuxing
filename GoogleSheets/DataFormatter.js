@@ -4346,7 +4346,7 @@ class DatabaseAssessment {
             this.sheetsDb.readDatabase("RacesByRegion", 2));
         output += "\n" + nameDatabase.print("WuxNames");
 
-        this.printDataToColumn(output, "[]", 3, this.definitionColumn);
+        this.printDataToColumn(output, "]", 3, this.definitionColumn);
     }
 
     printTechniqueDatabase() {
