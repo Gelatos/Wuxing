@@ -2161,9 +2161,6 @@ class TechniqueDisplayData {
 
     setTraits(technique) {
         this.forms = [WuxDef.Get(`Trait_Action-${technique.action}`)];
-        if (technique.coreDefense != "") {
-            this.forms.push(WuxDef.Get(`Trait_A-${technique.coreDefense}`));
-        }
         this.forms = this.forms.concat(WuxDef.GetValues(technique.forms, ";", "Trait_"));
         this.traits = WuxDef.GetValues(technique.impacts, ";", "Trait_");
         this.traits = this.traits.concat(WuxDef.GetValues(technique.traits, ";"));
