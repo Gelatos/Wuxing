@@ -1777,8 +1777,25 @@ class DefinitionData extends WuxDatabaseData {
         return definition;
     }
 
-    getTitle() {
-        return this.title;
+    getTitle(mod, mod1) {
+        if (mod == undefined) {
+            return this.title;
+        }
+
+        if (mod1 != undefined) {
+            mod = [mod, mod1];
+        }
+
+        let i = 0;
+        return this.title.replace(/{(\d+)}/g, function (_, m) {
+            i = parseInt(m);
+            if (Array.isArray(mod) && i < mod.length && mod[i] != undefined) {
+                return mod[i];
+            } else if (i == 0) {
+                return mod;
+            }
+            return "";
+        });
     }
 
     getVariables(array, mod1) {

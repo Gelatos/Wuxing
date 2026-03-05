@@ -3136,7 +3136,7 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Action_FormeLoad":{"name":"Action_FormeLoad","fieldName":"formeload","group":"Action","description":"","variable":"act-formeload{0}","title":"Load {0} Techs","subGroup":"","descriptions":[""],
+            "Action_FormeLoad":{"name":"Action_FormeLoad","fieldName":"formeload","group":"Action","description":"","variable":"act-formeload{0}","title":"Load Techs ({0} more)","subGroup":"","descriptions":[""],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
