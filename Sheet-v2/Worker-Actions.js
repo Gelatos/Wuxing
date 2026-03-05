@@ -1103,18 +1103,21 @@ class FormeTechniqueDatabase {
         let unsetBaseTechniqueData = this.getUnsetBaseTechniqueData();
         let repeater = attrHandler.repeatingSections[this.formeActionsRepeaterId];
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", repeater);
-        let maxLoadCount = 4;
-        attrHandler.addUpdate(WuxDef.GetVariable("Action_FormeLoadCount"), Math.max(unsetBaseTechniqueData.length - maxLoadCount, 0));
+        let maxLoadCount = 1;
         
-        for (let i = 0; i < unsetBaseTechniqueData.length; i++) {
+        let i = 0;
+        while(i < maxLoadCount) {
+            if (unsetBaseTechniqueData.length <= 0) {
+                break;
+            }
             let id = repeater.generateRowId();
             techniqueAttributeHandler.setId(id);
-            this.tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, unsetBaseTechniqueData[i].technique.name, repeater, id);
-            this.setSortId(unsetBaseTechniqueData[i].technique.name, id);
-            if (i > maxLoadCount) {
-                return;
-            }
+            this.tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, unsetBaseTechniqueData[0].technique.name, repeater, id);
+            this.setSortId(unsetBaseTechniqueData[0].technique.name, id);
+            unsetBaseTechniqueData.splice(0, 1);
+            i++;
         }
+        attrHandler.addUpdate(WuxDef.GetVariable("Action_FormeLoadCount"), Math.max(unsetBaseTechniqueData.length, 0));
     }
     getUnsetBaseTechniqueData() {
         Debug.Log(this.techDictionary);
