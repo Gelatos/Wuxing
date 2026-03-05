@@ -428,6 +428,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             formeTech.updateDataAndVisibilityOfRepeaterTechniques(attrHandler);
             formeTech.addMissingTechniques(attrHandler);
         });
+        attributeHandler.addFinishCallback(function () {
+            formeTech.setSortOrder();
+        });
     }
     
     'use strict';
@@ -443,13 +446,16 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         },
         
         updateVisibilityOfFormeActions = function (attributeHandler) {
+            Debug.Log(`Update Visibility of Forme Actions`);
             let formeTech = new FormeTechniqueDatabase(attributeHandler);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 formeTech.setupPostGetAttr(attrHandler);
                 formeTech.registerTechDictionary(attrHandler);
                 formeTech.updateVisibilityOfRepeaterTechniques(attrHandler);
             });
-            
+            attributeHandler.addFinishCallback(function () {
+                formeTech.setSortOrder();
+            });
         },
         
         updateAllActiveStyleActions = function (attributeHandler, repeaterSlotData, cr) {
@@ -750,9 +756,72 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
     };
 }());
 
+class FormeTechniqueSort {
+    constructor() {
+        this.listSize = 0;
+    }
+
+    getSortOrder(sortStyle, techDictionary) {
+        switch (sortStyle) {
+            case "Action":
+                this.sortByActionType(techDictionary);
+                return;
+        }
+    }
+    
+    sortByActionType (techDictionary) {
+        const actionPriority = {
+            Full: 0,
+            Quick: 1,
+            Assist: 2,
+            Swift: 3,
+            Reaction: 4,
+            Brief:5,
+            Short:6,
+            Long:7,
+            Passive:8
+        };
+
+        const entries = this.getEntries(techDictionary);
+
+        // 2️⃣ Sort them
+        entries.sort(([, a], [, b]) => {
+            const aAction = a.technique?.action || "";
+            const bAction = b.technique?.action || "";
+
+            const aPriority = actionPriority[aAction] ?? 999;
+            const bPriority = actionPriority[bAction] ?? 999;
+
+            // First: action priority
+            if (aPriority !== bPriority) {
+                return aPriority - bPriority;
+            }
+
+            // Final: alphabetical (always)
+            return a.technique?.name.localeCompare(b.technique?.name);
+        });
+
+        this.updateSortOrder(techDictionary, entries);
+    }
+    
+    getEntries(techDictionary) {
+        return Object.entries(techDictionary.values)
+            .filter(([, v]) => v.isBase && v.isVisible);
+    }
+    
+    updateSortOrder(techDictionary, entries) {
+        entries.forEach(([key, value], index) => {
+            techDictionary.values[key].sortOrder = index;
+        });
+        this.listSize = entries.length;
+    }
+}
 class FormeTechniqueDatabase {
     constructor(attributeHandler) {
         this.techDictionary = new Dictionary();
+        this.techSorter = new FormeTechniqueSort();
+        this.sortList = [];
+        this.endSortList = [];
         this.userAffinities = "";
         this.userCr = 0;
         
@@ -849,10 +918,12 @@ class FormeTechniqueDatabase {
                 WuxWorkerActionsService.TryAddTechniqueToBoosters(attrHandler, technique, formeTechDatabase.boosterFieldName);
             }
         });
+        this.techSorter.getSortOrder("Action", formeTechDatabase.techDictionary);
+        this.sortList = [this.techSorter.listSize];
         WuxWorkerActionsService.SetTechniqueBoosters(attrHandler);
     }
     iterateAllTechniquesFromLearnedStyles(callback) {
-        let allJobsArray = this.jobWorker.getJobStyles();
+        let allJobsArray = this.jobWorker.getStyles();
         allJobsArray.forEach((styleData) => {
             let filteredTechs = WuxTechs.Filter(new DatabaseFilterData("style", styleData.style.name));
             filteredTechs.forEach(tech => callback(tech, styleData));
@@ -865,18 +936,27 @@ class FormeTechniqueDatabase {
     }
     tryAddTechniqueToTechDictionary(technique, styleData) {
         if (!this.techDictionary.has(technique.name)) {
-            let isActive = this.equippedSlots.includes(styleData.style.name) && this.checkTechniqueIsActive(technique, styleData.rank);
+            let isActive = this.checkTechniqueIsEquipped(technique, styleData.style.name) 
+                && this.checkTechniqueIsActive(technique, styleData.rank);
             let newEntry = {
                 technique: technique,
                 isSet: false,
                 isActive: isActive,
                 isVisible: isActive && this.checkTechniqueIsVisibleInFilter(technique),
-                isBase: technique.group == ""
+                isBase: technique.group == "",
+                sortOrder: -1
             };
             this.techDictionary.add(technique.name, newEntry);
             return newEntry;
         }
         return undefined;
+    }
+    checkTechniqueIsEquipped(technique, styleName) {
+        if (technique.forms.includes("Permanent")) {
+            return true;
+        }
+        
+        return this.equippedSlots.includes(styleName);
     }
     checkTechniqueIsActive(technique, maxTier) {
         if (technique.tier > this.userCr || technique.tier > maxTier) {
@@ -895,21 +975,42 @@ class FormeTechniqueDatabase {
         
         return true;
     }
-    
     checkTechniqueIsVisibleInFilter(technique) {
         return true;
+    }
+    
+    setSortOrder() {
+        let sortedIds = this.sortList.filter(v => v !== undefined);
+        sortedIds = sortedIds.concat(this.endSortList);
+        let sectionName = WuxDef.GetVariable(this.formeActionsRepeaterId).substring("repeating_".length);
+        setSectionOrder(sectionName, sortedIds);
+    }
+    setSortId(techniqueName, id) {
+        let techData = this.techDictionary.get(techniqueName);
+        if (techData != undefined) {
+            let sortOrderIndex = techData.sortOrder;
+            if (sortOrderIndex >= 0) {
+                this.sortList[sortOrderIndex] = id;
+            }
+            else {
+                this.endSortList.push(id);
+            }
+        }
     }
 
     updateDataAndVisibilityOfRepeaterTechniques(attrHandler) {
         let formeTechDatabase = this;
         this.iterateRepeaterTechniques(attrHandler, function (techniqueAttributeHandler, techniqueName, repeater, id) {
-            formeTechDatabase.tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, techniqueName, repeater, id);
+            if (formeTechDatabase.tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, techniqueName, repeater, id)) {
+                formeTechDatabase.setSortId(techniqueName, id);
+            }
         });
     }
     updateVisibilityOfRepeaterTechniques(attrHandler) {
         let formeTechDatabase = this;
         this.iterateRepeaterTechniques(attrHandler, function (techniqueAttributeHandler, techniqueName, repeater, id) {
             formeTechDatabase.setRepeaterTechniqueVisibility(techniqueAttributeHandler, techniqueName, 1);
+            formeTechDatabase.setSortId(techniqueName, id);
 
             // search for the techniques that use this technique as their base
             formeTechDatabase.iterateGroupedTechniques(techniqueName,
@@ -979,8 +1080,7 @@ class FormeTechniqueDatabase {
         let techVersion = techniqueAttributeHandler.getTechniqueVersion(techIndex);
         let technique = this.techDictionary.get(techniqueName).technique;
         if (technique.version != techVersion) {
-            Debug.Log(`Updating ${techniqueName} as it has a new version`);
-            // there's an update available for the technique. Update it.
+            Debug.Log(`Updating ${techniqueName} as it has a new version (${technique.version} != ${techVersion})`);
             techniqueAttributeHandler.setSimplifiedTechniqueInfo(technique, techIndex);
         }
         this.techDictionary.get(techniqueName).isSet = true;
@@ -1000,12 +1100,12 @@ class FormeTechniqueDatabase {
             let id = repeater.generateRowId();
             techniqueAttributeHandler.setId(id);
             this.tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, unsetBaseTechniqueData[i].technique.name, repeater, id);
+            this.setSortId(unsetBaseTechniqueData[i].technique.name, id);
             if (i >= 5) {
                 return;
             }
         }
     }
-    
     getUnsetBaseTechniqueData() {
         Debug.Log(this.techDictionary);
 
