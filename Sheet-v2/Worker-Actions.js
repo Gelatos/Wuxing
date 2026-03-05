@@ -844,10 +844,13 @@ class FormeTechniqueDatabase {
         attributeHandler.repeatingSections[this.formeActionsRepeaterId].addFieldNames([
             techniqueAttributeHandler.getVariable("TechName", 1),
             techniqueAttributeHandler.getVariable("TechVersion", 1),
+            techniqueAttributeHandler.getVariable("TechIsVisible", 1),
             techniqueAttributeHandler.getVariable("TechName", 2),
             techniqueAttributeHandler.getVariable("TechVersion", 2),
+            techniqueAttributeHandler.getVariable("TechIsVisible", 2),
             techniqueAttributeHandler.getVariable("TechName", 3),
-            techniqueAttributeHandler.getVariable("TechVersion", 3)
+            techniqueAttributeHandler.getVariable("TechVersion", 3),
+            techniqueAttributeHandler.getVariable("TechIsVisible", 3)
         ]);
 
         this.setFormeSlotsDefinitionData();
@@ -1103,7 +1106,7 @@ class FormeTechniqueDatabase {
         let unsetBaseTechniqueData = this.getUnsetBaseTechniqueData();
         let repeater = attrHandler.repeatingSections[this.formeActionsRepeaterId];
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", repeater);
-        let maxLoadCount = 1;
+        let maxLoadCount = 8;
         
         let i = 0;
         while(i < maxLoadCount) {

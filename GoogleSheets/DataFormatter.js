@@ -2363,6 +2363,11 @@ var WuxSheetBackend = WuxSheetBackend || (function () {
                 output += `change:${variables[i]}`;
             }
             return `on("${output}", function (${hasEvents != undefined ? "eventinfo" : ""}) {\n${contents}\n});\n`;
+            
+            // return `on("${output}", function (eventinfo) {
+            // if(eventinfo.sourceType === "sheetworker") return;
+            // ${contents}
+            // });\n`;
         }
     ;
     return {
@@ -4138,9 +4143,6 @@ function SetDatabaseFromPosition(ss, sheet) {
     if (sheet.getSheetName() == "Database") {
         const range = sheet.getActiveRange();
         let col = range.getColumn();
-        
-        let effectCell = sheet.getRange(3, col, 1, 1);
-        effectCell.setValue("Calculating...")
         
         let dbAssessment = new DatabaseAssessment(ss, sheet);
         dbAssessment.printDataBasedOnColumn(col);

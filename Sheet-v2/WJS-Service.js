@@ -61,16 +61,31 @@ class WorkerAttributeHandler extends AttributeHandler {
 	constructor(props) {
 		super(props);
 		this.repeatingSections = {};
+		this.repeatingSectionsUpdate = {};
 	}
 	
 	addRepeatingSection(definitionId, variableId) {
 		this.repeatingSections[definitionId] = new WorkerRepeatingSectionHandler(definitionId, variableId);
 	}
+	addRepeatingSectionRowUpdate(definitionId, attr, value) {
+		if (value == undefined) {
+			Debug.LogError(`[AttributeHandler][addRepeatingSectionRowData] Tried to add undefined value for ${attr}. This is not allowed.`);
+			return;
+		}
+		if (definitionId == undefined) {
+			this.addUpdate(attr, value);
+			return;
+		}
+		if (!this.repeatingSectionsUpdate.hasOwnProperty(definitionId)) {
+			this.repeatingSectionsUpdate[definitionId] = {};
+		}
+		this.repeatingSectionsUpdate[definitionId][attr] = value;
+	}
 
 	async run() {
 		let attributeHandler = this;
 		for (const key in attributeHandler.repeatingSections) {
-			attributeHandler.repeatingSections[key].ids = await getSectionIDsAsync(this.repeatingSections[key].repeatingSection);
+			attributeHandler.repeatingSections[key].ids = await getSectionIDsAsync(attributeHandler.repeatingSections[key].repeatingSection);
 			attributeHandler.repeatingSections[key].addAttributeMods(attributeHandler);
 		}
 		attributeHandler.current = await getAttrsAsync(attributeHandler.mods);
@@ -79,9 +94,26 @@ class WorkerAttributeHandler extends AttributeHandler {
 			callback(attributeHandler);
 		});
 		await setAttrsAsync(attributeHandler.update, {silent: true});
+		let repeatingUpdates = attributeHandler.getRepeaterUpdate();
+		for (let i = 0; i < repeatingUpdates.length; i++) {
+			await setAttrsAsync(repeatingUpdates[i], {silent: true});
+		}
+		
 		attributeHandler.finishCallbacks.forEach((callback) => {
 			callback(attributeHandler);
 		});
+	}
+	
+	getRepeaterUpdate() {
+		let output = [];
+		for (const key in this.repeatingSectionsUpdate) {
+			output.push(this.repeatingSectionsUpdate[key]);
+		}
+		return output;
+	}
+	
+	async sleep(ms) {
+		return new Promise(resolve => setTimeout(resolve, ms));
 	}
 }
 
@@ -756,9 +788,11 @@ class DatabaseItemAttributeHandler {
 	};
 	
 	clearDefinition (baseAttribute, index) {
-		this.attrHandler.addUpdate(this.getVariable(baseAttribute, index), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable(baseAttribute, index), 0);
 		for (let i = 0; i < 4; i++) {
-			this.attrHandler.addUpdate(this.getVariable(baseAttribute, `${index}desc${i}`), 0);
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				this.getVariable(baseAttribute, `${index}desc${i}`), 0);
 		}
 	};
 	addDefinitions (definitionData, prefix, descriptionMaxIndex) {
@@ -767,13 +801,16 @@ class DatabaseItemAttributeHandler {
 			if (definition == undefined) {
 				continue;
 			}
-			this.attrHandler.addUpdate(`${prefix}${i}`, definition.getTitle());
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			`${prefix}${i}`, definition.getTitle());
 
 			for (let j = 0; j < definition.descriptions.length; j++) {
 				if (j <= descriptionMaxIndex) {
-					this.attrHandler.addUpdate(`${prefix}${i}desc${j}`, definition.descriptions[j]);
+					this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			`${prefix}${i}desc${j}`, definition.descriptions[j]);
 				} else {
-					this.attrHandler.addUpdate(`${prefix}${i}desc${descriptionMaxIndex}`, definition.descriptions[j]);
+					this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			`${prefix}${i}desc${descriptionMaxIndex}`, definition.descriptions[j]);
 				}
 			}
 		}
@@ -801,14 +838,22 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.setTechniqueUseRollTemplate(technique, displayData, suffix);
 	}
 	setTechniqueHeaderInfo(technique, displayData, suffix) {
-		this.attrHandler.addUpdate(this.getVariable("TechName", suffix), displayData.name);
-		this.attrHandler.addUpdate(this.getVariable("TechVersion", suffix), technique.version);
-		this.attrHandler.addUpdate(this.getVariable("TechAffinity", suffix), technique.affinity);
-		this.attrHandler.addUpdate(this.getVariable("TechTier", suffix), technique.tier);
-		this.attrHandler.addUpdate(this.getVariable("TechCoreDefense"), displayData.coreDefense);
-		this.attrHandler.addUpdate(this.getVariable("TechActionType"), displayData.actionType);
-		this.attrHandler.addUpdate(this.getVariable("TechResourceData", suffix), displayData.resourceData);
-		this.attrHandler.addUpdate(this.getVariable("TechTargetingData"), displayData.targetData);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechName", suffix), displayData.name);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechVersion", suffix), technique.version);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechAffinity", suffix), technique.affinity);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechTier", suffix), technique.tier);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechCoreDefense"), displayData.coreDefense);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechActionType"), displayData.actionType);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechResourceData", suffix), displayData.resourceData);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechTargetingData"), displayData.targetData);
 		if (displayData.forms.length > 0) {
 			this.addDefinitions(displayData.forms, this.getVariable("TechForm"), 6);
 		}
@@ -817,10 +862,12 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		}
 
 		if (displayData.trigger != "") {
-			this.attrHandler.addUpdate(this.getVariable("TechTrigger"), displayData.trigger);
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechTrigger"), displayData.trigger);
 		}
 		if (displayData.requirements != "") {
-			this.attrHandler.addUpdate(this.getVariable("TechRequirements"), displayData.requirements);
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechRequirements"), displayData.requirements);
 		}
 		if (displayData.itemTraits.length > 0) {
 			this.addDefinitions(displayData.itemTraits, this.getVariable("TechItemReq"), 2);
@@ -828,7 +875,8 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 	}
 	setTechniqueEffectsInfo(technique, displayData) {
 		if (displayData.flavorText != "") {
-			this.attrHandler.addUpdate(this.getVariable("TechFlavorText"), displayData.flavorText);
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechFlavorText"), displayData.flavorText);
 		}
 		if (displayData.effects.length > 0) {
 			this.addTechniqueEffects(displayData.effects, "TechEffect");
@@ -836,11 +884,14 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		if (displayData.secondaryEffectName.trim() != "") {
 			let defName = Format.GetDefinitionName("Title", displayData.secondaryEffectName);
 			let def = WuxDef.Get(defName);
-			this.attrHandler.addUpdate(this.getVariable("TechSEffectTitle", "name"), def.getTitle());
-			this.attrHandler.addUpdate(this.getVariable("TechSEffectTitle", "desc"), def.getDescription());
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechSEffectTitle", "name"), def.getTitle());
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechSEffectTitle", "desc"), def.getDescription());
 		}
 		if (displayData.secondaryEffectDesc != "") {
-			this.attrHandler.addUpdate(this.getVariable("TechSEffectTitle"), displayData.secondaryEffectDesc);
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechSEffectTitle"), displayData.secondaryEffectDesc);
 		}
 		if (displayData.secondaryEffects.length > 0) {
 			this.addTechniqueEffects(displayData.secondaryEffects, "TechSEffect");
@@ -848,11 +899,14 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		if (displayData.endEffectName.trim() != "") {
 			let defName = Format.GetDefinitionName("Title", displayData.endEffectName);
 			let def = WuxDef.Get(defName);
-			this.attrHandler.addUpdate(this.getVariable("TechEEffectTitle", "name"), def.getTitle());
-			this.attrHandler.addUpdate(this.getVariable("TechEEffectTitle", "desc"), def.getDescription());
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechEEffectTitle", "name"), def.getTitle());
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechEEffectTitle", "desc"), def.getDescription());
 		}
 		if (displayData.endEffectDesc != "") {
-			this.attrHandler.addUpdate(this.getVariable("TechEEffectTitle"), displayData.endEffectDesc);
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechEEffectTitle"), displayData.endEffectDesc);
 		}
 		if (displayData.definitions.length > 0) {
 			this.addDefinitions(displayData.definitions, this.getVariable("TechDef"), 4);
@@ -870,7 +924,8 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			displayData.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
 		}
 
-		this.attrHandler.addUpdate(this.getVariableWithoutBase("Action_Use", suffix), displayData.getRollTemplate(true));
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariableWithoutBase("Action_Use", suffix), displayData.getRollTemplate(true));
 	}
 	addTechniqueEffects (effects, attribute) {
 		let incrementer = 0;
@@ -893,51 +948,68 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		});
 	}
 	clearTechniqueInfo () {
-		this.attrHandler.addUpdate(this.getVariable("TechActionType"), "");
-		this.attrHandler.addUpdate(this.getVariable("TechName"), 0);
-		this.attrHandler.addUpdate(this.getVariable("TechVersion"), "");
-		this.attrHandler.addUpdate(this.getVariable("TechDisplayName"), "");
-		this.attrHandler.addUpdate(this.getVariable("TechAffinity"), "");
-		this.attrHandler.addUpdate(this.getVariable("TechTier"), 0);
-		this.attrHandler.addUpdate(this.getVariable("TechCoreDefense"), 0);
-		this.attrHandler.addUpdate(this.getVariable("TechResourceData"), "");
-		this.attrHandler.addUpdate(this.getVariable("TechTargetingData"), "");
-		this.clearDefinition("TechForm", 0);
-		this.clearDefinition("TechForm", 1);
-		this.clearDefinition("TechForm", 2);
-		this.clearDefinition("TechForm", 3);
-		this.clearDefinition("TechForm", 4);
-		this.clearDefinition("TechTrait", 0);
-		this.clearDefinition("TechTrait", 1);
-		this.clearDefinition("TechTrait", 2);
-		this.clearDefinition("TechTrait", 3);
-		this.clearDefinition("TechTrait", 4);
-		this.attrHandler.addUpdate(this.getVariable("TechTrigger"), 0);
-		this.attrHandler.addUpdate(this.getVariable("TechRequirements"), 0);
-		this.clearDefinition("TechItemReq", 0);
-		this.clearDefinition("TechItemReq", 1);
-		this.clearDefinition("TechItemReq", 2);
-		this.attrHandler.addUpdate(this.getVariable("TechFlavorText"), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechActionType"), "");
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechName"), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechVersion"), "");
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechDisplayName"), "");
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechAffinity"), "");
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechTier"), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechCoreDefense"), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechResourceData"), "");
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechTargetingData"), "");
+		for (let i = 0; i < 6; i++) {
+			this.clearDefinition("TechForm", i);
+			this.clearDefinition("TechTrait", i);
+		}
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechTrigger"), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechRequirements"), 0);
+		for (let i = 0; i < 3; i++) {
+			this.clearDefinition("TechItemReq", i);
+		}
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechFlavorText"), 0);
 		this.clearTechEffects();
-		this.clearDefinition("TechDef", 0);
-		this.clearDefinition("TechDef", 1);
-		this.clearDefinition("TechDef", 2);
-		this.clearDefinition("TechDef", 3);
-		this.attrHandler.addUpdate(this.getVariable("TechSEffectTitle", "name"), 0);
-		this.attrHandler.addUpdate(this.getVariable("TechSEffectTitle", "desc"), 0);
-		this.attrHandler.addUpdate(this.getVariable("TechSEffectTitle", ""), 0);
-		this.attrHandler.addUpdate(this.getVariable("TechEEffectTitle", "name"), 0);
-		this.attrHandler.addUpdate(this.getVariable("TechEEffectTitle", "desc"), 0);
-		this.attrHandler.addUpdate(this.getVariable("TechEEffectTitle", ""), 0);
+		for (let i = 0; i < 4; i++) {
+			this.clearDefinition("TechDef", i);
+		}
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechSEffectTitle", "name"), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechSEffectTitle", "desc"), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechSEffectTitle", ""), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechEEffectTitle", "name"), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechEEffectTitle", "desc"), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechEEffectTitle", ""), 0);
 	}
 	clearTechEffects () {
 		for (let i = 0; i < 10; i++) {
-			this.attrHandler.addUpdate(this.getVariable("TechEffect", i), 0);
-			this.attrHandler.addUpdate(this.getVariable("TechEffect", `${i}name`), 0);
-			this.attrHandler.addUpdate(this.getVariable("TechEffect", `${i}desc`), "");
-			this.attrHandler.addUpdate(this.getVariable("TechSEffect", i), 0);
-			this.attrHandler.addUpdate(this.getVariable("TechSEffect", `${i}name`), 0);
-			this.attrHandler.addUpdate(this.getVariable("TechSEffect", `${i}desc`), "");
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechEffect", i), 0);
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechEffect", `${i}name`), 0);
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechEffect", `${i}desc`), "");
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechSEffect", i), 0);
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechSEffect", `${i}name`), 0);
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechSEffect", `${i}desc`), "");
 		}
 	}
 	
@@ -969,7 +1041,13 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		return true;
 	}
 	setVisibilityAttribute (isVisible, suffix) {
-		this.attrHandler.addUpdate(this.getVariable("TechIsVisible", suffix), isVisible ? "1" : "0");
+		let fieldName = this.getVariable("TechIsVisible", suffix);
+		let visibilityValue = isVisible ? "1" : "0";
+		if (this.attrHandler.parseString(fieldName) == isVisible) {
+			return;
+		}
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			fieldName, visibilityValue);
 	}
 	getTechniqueName(techIndex) {
 		return this.attrHandler.parseString(this.getVariable("TechName", techIndex));
