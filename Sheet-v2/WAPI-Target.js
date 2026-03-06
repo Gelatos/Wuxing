@@ -268,13 +268,16 @@ class TokenTargetData extends TargetData {
 
     // icon settings
     setEnergyIcon(value) {
-        this.setIcon("status_blue", value);
+        this.setIcon("status_pink", value);
     }
     setTurnIcon(value) {
         this.setIcon("status_yellow", value);
     }
     setAdvantageIcon(value) {
-        this.setIcon("status_pink", value);
+        this.setIcon("status_purple", value);
+    }
+    getAdvantageIcon() {
+        return this.getIcon("status_purple");
     }
 
     getIcon(iconName) {
@@ -352,7 +355,7 @@ class TokenTargetData extends TargetData {
         );
     }
     getAdvantage() {
-        let value = this.getIcon("status_pink");
+        let value = this.getAdvantageIcon();
         if (value == undefined || value == "" || value == false) {
             return 0;
         }
