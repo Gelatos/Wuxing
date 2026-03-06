@@ -65,7 +65,11 @@ class WorkerAttributeHandler extends AttributeHandler {
 	}
 	
 	addRepeatingSection(definitionId, variableId) {
-		this.repeatingSections[definitionId] = new WorkerRepeatingSectionHandler(definitionId, variableId);
+		let repeater = new WorkerRepeatingSectionHandler(definitionId, variableId);
+		this.repeatingSections[repeater.repeatingSection] = repeater;
+	}
+	getRepeatingSection(definitionId, variableId) {
+		return this.repeatingSections[WuxDef.GetVariable(definitionId, variableId)];
 	}
 	addRepeatingSectionRowUpdate(definitionId, attr, value) {
 		if (value == undefined) {

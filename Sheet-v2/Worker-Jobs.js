@@ -115,10 +115,10 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             attributeHandler.addRepeatingSection(styleRepeaterId);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
-                attributeHandler.repeatingSections[styleRepeaterId].removeAllIds();
+                attributeHandler.getRepeatingSection(styleRepeaterId).removeAllIds();
                 jobWorker.setBuildStatsDraft(attrHandler);
 
-                WuxWorkerStyles.AddStyles(attrHandler, jobWorker, attributeHandler.repeatingSections[styleRepeaterId]);
+                WuxWorkerStyles.AddStyles(attrHandler, jobWorker, attributeHandler.getRepeatingSection(styleRepeaterId));
 
                 jobWorker.cleanBuildStats();
                 jobWorker.setBuildStatVariables(attrHandler);

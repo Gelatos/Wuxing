@@ -1229,24 +1229,12 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     contents += buildFormeActions();
                     contents += buildGearActions();
                     contents += buildBasicActions();
+                    contents += buildDeprecatedActions();
                     return WuxSheetMain.Build(contents);
                 },
 
                 buildFormeActions = function () {
                     let contents = "";
-                    // let jobSlotCount = parseInt(WuxDef.Get("Forme_JobSlotCount").formula.getValue());
-                    // let advancedSlotCount = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
-                    // let styleSlotCount = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
-                    //
-                    // let repeaterSlotData = [
-                    //     {repeater: "RepeatingJobTech", slot: "Forme_JobSlot", max: jobSlotCount, slotMod: 0},
-                    //     {repeater: "RepeatingAdvTech", slot: "Forme_AdvancedSlot", max: advancedSlotCount, slotMod: 0},
-                    //     {repeater: "RepeatingAdvTech", slot: "Forme_StyleSlot", max: (styleSlotCount + advancedSlotCount), slotMod: advancedSlotCount}];
-                    //
-                    // repeaterSlotData.forEach(function (repeaterData) {
-                    //     contents += repeatingFormeTechniquesSection(repeaterData);
-                    // });
-
 
                     contents += repeatingFormeSection();
                     contents += repeatingCustomTechniquesSection();
@@ -1256,7 +1244,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
                         `${sectionDef.getTitle()}`, contents);
                 },
-                
+
                 buildGearActions = function () {
                     let contents = "";
                     contents += repeatingBasicTechniquesSection("RepeatingGearTech", "GearTech", true);
@@ -1285,6 +1273,35 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                     return WuxSheetMain.CollapsibleTab(styleCategoryDefinition.getAttribute(WuxDef._tab, WuxDef._expand),
                         `${styleCategoryDefinition.getTitle()}`, contents);
+                },
+
+                buildDeprecatedActions = function () {
+                    let contents = "";
+                    let refreshTechDef = WuxDef.Get("RefreshTech");
+                    contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(refreshTechDef.getAttribute(), `<span>${refreshTechDef.getTitle()}</span>`, "wuxWidth300"));
+                    
+                    let jobSlotCount = parseInt(WuxDef.Get("Forme_JobSlotCount").formula.getValue());
+                    let advancedSlotCount = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
+                    let styleSlotCount = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
+
+                    let repeaterSlotData = [
+                        {repeater: "RepeatingJobTech", slot: "Forme_JobSlot", max: jobSlotCount, slotMod: 0},
+                        {repeater: "RepeatingAdvTech", slot: "Forme_AdvancedSlot", max: advancedSlotCount, slotMod: 0},
+                        {repeater: "RepeatingAdvTech", slot: "Forme_StyleSlot", max: (styleSlotCount + advancedSlotCount), slotMod: advancedSlotCount}];
+
+                    repeaterSlotData.forEach(function (repeaterData) {
+                        contents += repeatingFormeTechniquesSection(repeaterData);
+                    });
+                    contents += repeatingBasicTechniquesSection("RepeatingBasicActions", "", true);
+                    contents += repeatingBasicTechniquesSection("RepeatingBasicRecovery", "", true);
+                    contents += repeatingBasicTechniquesSection("RepeatingBasicAttack", "", true);
+                    contents += repeatingBasicTechniquesSection("RepeatingBasicSocial", "", true);
+                    contents += repeatingBasicTechniquesSection("RepeatingBasicSpirit", "", true);
+                    contents = WuxSheetMain.TabBlock(contents);
+
+                    let sectionDef = WuxDef.Get("StyleCategory_Deprecated");
+                    return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
+                        `${sectionDef.getTitle()}`, contents);
                 },
 
                 repeatingFormeSection = function () {

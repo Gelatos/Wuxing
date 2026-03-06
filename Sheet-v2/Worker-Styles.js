@@ -598,10 +598,10 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             attributeHandler.addRepeatingSection(styleRepeaterId);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
-                attributeHandler.repeatingSections[styleRepeaterId].removeAllIds();
+                attributeHandler.getRepeatingSection(styleRepeaterId).removeAllIds();
                 styleWorker.setBuildStatsDraft(attrHandler);
 
-                addStyles(attrHandler, styleWorker, attributeHandler.repeatingSections[styleRepeaterId]);
+                addStyles(attrHandler, styleWorker, attributeHandler.getRepeatingSection(styleRepeaterId));
 
                 styleWorker.cleanBuildStats();
                 styleWorker.setBuildStatVariables(attrHandler);

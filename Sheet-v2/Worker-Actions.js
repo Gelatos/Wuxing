@@ -628,14 +628,30 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             let loader = new LoadingScreenHandler(attributeHandler);
             loader.run();
         },
-        populateAllActions = function () {
-            Debug.Log("Populating all style actions");
+        removeAllOldStyleData = function () {
+            Debug.Log("Killing all old style repeaters");
+            let maxAdvancedSlots = 3;
+            let maxNormalSlots = 6;
+            let repeaterNames = [
+                {name: "RepeatingBasicActions"}, 
+                {name: "RepeatingBasicRecovery"}, {name: "RepeatingBasicAttack"},
+                {name: "RepeatingBasicSocial"}, {name: "RepeatingBasicSpirit"}];
+            for (let i = 1; i <= maxNormalSlots; i++) {
+                if (i <= maxAdvancedSlots) {
+                    repeaterNames.push({name: "RepeatingJobTech", id: i});
+                    repeaterNames.push({name: "RepeatingAdvTech", id: i});
+                }
+                repeaterNames.push({name: "RepeatingAdvTech", id: i+3});
+            }
             let attributeHandler = new WorkerAttributeHandler();
-            populateBasicActions(attributeHandler, "RepeatingBasicActions", "Basic Action");
-            populateBasicActions(attributeHandler, "RepeatingBasicRecovery", "Basic Recovery");
-            populateBasicActions(attributeHandler, "RepeatingBasicAttack", "Basic Attack");
-            populateBasicActions(attributeHandler, "RepeatingBasicSocial", "Basic Social");
-            populateBasicActions(attributeHandler, "RepeatingBasicSpirit", "Basic Spirit");
+            for (let i = 0; i < repeaterNames.length; i++) {
+                attributeHandler.addRepeatingSection(repeaterNames[i].name, repeaterNames[i].id);
+            }
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                for (let i = 0; i < repeaterNames.length; i++) {
+                    attrHandler.getRepeatingSection(repeaterNames[i].name, repeaterNames[i].id).removeAllIds();
+                }
+            });
             let loader = new LoadingScreenHandler(attributeHandler);
             loader.run();
         },
@@ -748,7 +764,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         RefreshJobStyleActions: refreshJobStyleActions,
         RefreshAdvancedStyleActions: refreshAdvancedStyleActions,
         RefreshStandardStyleActions: refreshStandardStyleActions,
-        PopulateAllActions: populateAllActions,
+        RemoveAllOldStyleData: removeAllOldStyleData,
         RefreshBasicActions: refreshBasicActions,
         RefreshBasicRecovery: refreshBasicRecovery,
         RefreshBasicAttack: refreshBasicAttack,
@@ -841,7 +857,7 @@ class FormeTechniqueDatabase {
         this.formeActionsRepeaterId = "RepeatingFormeTech";
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attributeHandler, "Action");
         attributeHandler.addRepeatingSection(this.formeActionsRepeaterId);
-        attributeHandler.repeatingSections[this.formeActionsRepeaterId].addFieldNames([
+        attributeHandler.getRepeatingSection(this.formeActionsRepeaterId).addFieldNames([
             techniqueAttributeHandler.getVariable("TechName", 1),
             techniqueAttributeHandler.getVariable("TechVersion", 1),
             techniqueAttributeHandler.getVariable("TechIsVisible", 1),
@@ -1034,7 +1050,7 @@ class FormeTechniqueDatabase {
     }
 
     iterateRepeaterTechniques(attrHandler, callback) {
-        let repeater = attrHandler.repeatingSections[this.formeActionsRepeaterId];
+        let repeater = attrHandler.getRepeatingSection(this.formeActionsRepeaterId);
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", repeater);
         repeater.iterate((id) => {
             techniqueAttributeHandler.setId(id);
@@ -1104,7 +1120,7 @@ class FormeTechniqueDatabase {
     }
     addMissingTechniques(attrHandler) {
         let unsetBaseTechniqueData = this.getUnsetBaseTechniqueData();
-        let repeater = attrHandler.repeatingSections[this.formeActionsRepeaterId];
+        let repeater = attrHandler.getRepeatingSection(this.formeActionsRepeaterId);
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", repeater);
         let maxLoadCount = 8;
         
