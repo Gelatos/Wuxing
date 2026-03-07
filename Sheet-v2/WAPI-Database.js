@@ -2150,6 +2150,10 @@ class TechniqueDisplayData {
                 this.targetData += "; ";
             }
             this.targetData += `Range: ${technique.range}`;
+            this.range = technique.range;
+        }
+        else {
+            this.range = 0;
         }
         if (technique.target != "") {
             if (this.targetData != "") {
@@ -2157,15 +2161,16 @@ class TechniqueDisplayData {
             }
             if (technique.size > 0) {
                 if (technique.target.includes("Target") || technique.target.includes("Object")) {
-                    this.targetData += `${this.numberToWord(technique.size)} ${technique.target}`;
+                    this.targetType += `${this.numberToWord(technique.size)} ${technique.target}`;
                 }
                 else {
-                    this.targetData += `${technique.target} ${technique.size}`;
+                    this.targetType += `${technique.target} ${technique.size}`;
                 }
             }
             else {
-                this.targetData += `${technique.target}`;
+                this.targetType += `${technique.target}`;
             }
+            this.targetData += this.targetType;
         }
     }
     printSkillCheck(technique) {
@@ -2278,6 +2283,8 @@ class TechniqueDisplayData {
         this.willCost = 0;
         this.boonCost = 0;
         this.targetData = "";
+        this.targetType = "";
+        this.range = "";
         this.forms = [];
         this.traits = [];
 
@@ -2309,8 +2316,23 @@ class TechniqueDisplayData {
         if (this.resourceData != "") {
             output += `{{Resources=${this.resourceData}}}`;
         }
+        if (this.enCost != "") {
+            output += `{{En=${this.enCost}}}`;
+        }
+        if (this.willCost != "") {
+            output += `{{Will=${this.willCost}}}`;
+        }
+        if (this.boonCost != "") {
+            output += `{{Boon=${this.boonCost}}}`;
+        }
         if (this.targetData != "") {
             output += `{{Targeting=${this.targetData}}}`;
+        }
+        if (this.range != "") {
+            output += `{{Range=${this.range}}}`;
+        }
+        if (this.targetType != "") {
+            output += `{{Target=${this.targetType}}}`;
         }
         if (this.forms.length > 0) {
             output += this.rollTemplateDefinitions(this.forms, "FormTrait");
@@ -2364,7 +2386,6 @@ class TechniqueDisplayData {
         }
         return output;
     }
-
     rollTemplateDefinitions(definition, traitType) {
         let output = "";
         for (let i = 0; i < definition.length; i++) {
@@ -2372,7 +2393,6 @@ class TechniqueDisplayData {
         }
         return output;
     }
-
     rollTemplateEffects() {
         let output = "";
         output += this.iterateRollTemplateEffects(this.effects, "Effect");
@@ -2394,7 +2414,6 @@ class TechniqueDisplayData {
         }
         return output;
     }
-    
     iterateRollTemplateEffects(effectArray, prefix) {
         let output = "";
         let incrementer = 0;
