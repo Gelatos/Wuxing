@@ -4270,32 +4270,10 @@ class DatabaseAssessment {
             let nameRange = sheet.getRange(nameId);
             let tech = getTechniqueCallback(nameRange.getValue());
             if (tech != undefined) {
-                let version = [0];
-                if (tech.version != undefined) {
-                    version = tech.version.split(".");
-                }
-
-                let value = "";
-                for (let i = 0; i < version.length; i++) {
-                    if (value != "") {
-                        value += ".";
-                    }
-                    if (i == version.length - 1) {
-                        let update = parseInt(version[version.length - 1]);
-                        if (isNaN(update)) {
-                            update = 0;
-                        }
-                        update++;
-                        value += update;
-                    }
-                    else {
-                        value += version[i];
-                    }
-                }
+                tech.incrementVersion();
                 let versionId = `${versionCol}${rowIndex}`;
-                Debug.Log(`Setting ${versionId} to ${value}`);
                 let versionRange = sheet.getRange(versionId);
-                versionRange.setValue(value);
+                versionRange.setValue(tech.version);
             }
         }
     }

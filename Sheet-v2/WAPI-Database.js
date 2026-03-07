@@ -586,10 +586,7 @@ class TechniqueData extends WuxDatabaseData {
         i++;
         this.group = "" + dataArray[i];
         i++;
-        this.version = "" + dataArray[i];
-        if (this.version == "") {
-            this.version = "1";
-        }
+        this.updateVersion("" + dataArray[i])
         i++;
         this.affinity = "" + dataArray[i];
         i++;
@@ -638,6 +635,41 @@ class TechniqueData extends WuxDatabaseData {
         
         this.techniqueEffect = new TechniqueEffect(dataArray.slice(i));
         this.addEffect(this.techniqueEffect);
+    }
+    
+    updateVersion(newVersion) {
+        let version = this.getVersionParts(newVersion);
+        // let baseVersionValue = 0;
+        // if (parseInt(version[0]) != baseVersionValue) {
+        //     version[0] = baseVersionValue;
+        //     for (let i = 1; i < version.length; i++) {
+        //         version[i] = 0;
+        //     }
+        // }
+        this.version = version.join(".");
+    }
+    incrementVersion() {
+        let version = this.getVersionParts();
+        let baseValue = parseInt(version[version.length - 1]);
+        if (isNaN(baseValue)) {
+            version[version.length - 1] = 0;
+        }
+        else {
+            version[version.length - 1] = baseValue + 1;
+        }
+        this.version = version.join(".");
+    }
+    getVersionParts(newVersion) {
+        if (newVersion != undefined) {
+            if (newVersion == "") {
+                return ["1"];
+            }
+            return newVersion.split(".");
+        }
+        if (this.version != undefined) {
+            return this.version.split(".");
+        }
+        return [];
     }
     
     buildResourceCost() {
@@ -2105,15 +2137,9 @@ class TechniqueDisplayData {
                 this.resourceData += `${resource[0]} ${resourceName}`
             }
         }
-        if (technique.en > 0) {
-            this.commonResources.push(`${technique.en} EN`);
-        }
-        if (technique.willPower > 0) {
-            this.commonResources.push(`${technique.willPower} WILL`);
-        }
-        if (technique.boon > 0) {
-            this.commonResources.push(`${technique.boon} Boon`);
-        }
+        this.enCost = technique.en;
+        this.willCost = technique.willPower;
+        this.boonCost = technique.boon;
     }
 
     setTechTargetData(technique) {
@@ -2248,7 +2274,9 @@ class TechniqueDisplayData {
         this.coreDefense = "";
 
         this.resourceData = "";
-        this.commonResources = [];
+        this.enCost = 0;
+        this.willCost = 0;
+        this.boonCost = 0;
         this.targetData = "";
         this.forms = [];
         this.traits = [];
