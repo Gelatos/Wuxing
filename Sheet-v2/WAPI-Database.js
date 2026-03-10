@@ -3972,6 +3972,12 @@ class CombatDetails {
         this.maxvitality = 1;
         this.healvalue = 0;
         this.armorvalue = 0;
+        this.burnResist = 0;
+        this.coldResist = 0;
+        this.energyResist = 0;
+        this.forceResist = 0;
+        this.piercingResist = 0;
+        this.psycheResist = 0;
         this.mvSpeed = 0;
         this.dashSpeed = 0;
     }
@@ -3998,6 +4004,12 @@ class CombatDetails {
         this.maxvitality = json.maxvitality != undefined ? json.maxvitality : 1;
         this.healvalue = json.healvalue;
         this.armorvalue = json.armorvalue;
+        this.burnResist = json.burnResist != undefined ? json.burnResist : 0;
+        this.coldResist = json.coldResist != undefined ? json.coldResist : 0;
+        this.energyResist = json.energyResist != undefined ? json.energyResist : 0;
+        this.forceResist = json.forceResist != undefined ? json.forceResist : 0;
+        this.piercingResist = json.piercingResist != undefined ? json.piercingResist : 0;
+        this.psycheResist = json.psycheResist != undefined ? json.psycheResist : 0;
         this.mvSpeed = json.mvSpeed;
         this.dashSpeed = json.dashSpeed;
     }
@@ -4005,46 +4017,67 @@ class CombatDetails {
     printTooltip() {
         let output = `${this.displayName} [CR${this.cr}] ${this.affinity} ${this.job}`;
         output += ` =========================== `;
-        // output += `${this.jobDefenses} - `;
         output += `${this.defenses.printDefenses(this.cr)} - `;
         switch (this.displayStyle) {
             case "Battle":
-                output += `Vit:`;
-                if (this.maxvitality == 0) {
-                    output += `♡`;
-                }
-                else {
-                    for (let i = 0; i < this.maxvitality; i++) {
-                        output += i < this.vitality ? `♥` : `♡`;
-                    }
-                }
-                output += `.Surges:`;
-                if (this.maxsurges == 0) {
-                    output += `⛉`;
-                }
-                else {
-                    for (let i = 0; i < this.maxsurges; i++) {
-                        output += i < this.surges ? `⛊` : `⛉`;
-                    }
-                }
-                output += ` HV:${this.healvalue}`;
-                output += `.Armor:${this.armorvalue}`;
-                output += `.Mv:${this.mvSpeed}`;
-                output += `.Dash:${this.dashSpeed}`;
+                output += this.printVitality();
+                output += `.${this.printSurges()}`;
+                output += ` Armor:${this.armorvalue}`;
+                output += `;RV:${this.healvalue}`;
+                output += `;Mv:${this.mvSpeed}`;
+                output += `;Dash:${this.dashSpeed}`;
+                output += this.printResistances();
+                
                 break;
             case "Social":
-                output += `Surges:`;
-                if (this.maxsurges == 0) {
-                    output += `⛉`;
-                }
-                else {
-                    for (let i = 0; i < this.maxsurges; i++) {
-                        output += i < this.surges ? `⛊` : `⛉`;
-                    }
-                }
+                output += this.printSurges();
+                output += this.printResistances();
                 break;
         }
         return output;
+    }
+    printVitality() {
+        return `Vit:${this.printIcons(this.vitality, this.maxvitality, `♥`, `♡`)}`;
+    }
+    printSurges() {
+        return `Surges:${this.printIcons(this.surges, this.maxsurges, `⛊`, `⛉`)}`;
+    }
+    printIcons(current, max, filledIcon, emptyIcon) {
+        let output = "";
+        if (max == 0) {
+            output += emptyIcon;
+        }
+        else {
+            for (let i = 0; i < max; i++) {
+                output += i < current ? filledIcon : emptyIcon;
+            }
+        }
+        return output;
+    }
+    printResistances() {
+        let resistances = "";
+        if (this.burnResist != 0) {
+            resistances += `;Burn:${this.burnResist}`;
+        }
+        if (this.coldResist != 0) {
+            resistances += `;Cold:${this.coldResist}`;
+        }
+        if (this.energyResist != 0) {
+            resistances += `;Energy:${this.energyResist}`;
+        }
+        if (this.forceResist != 0) {
+            resistances += `;Force:${this.forceResist}`;
+        }
+        if (this.piercingResist != 0) {
+            resistances += `;Piercing:${this.piercingResist}`;
+        }
+        if (this.psycheResist == 0) {
+            resistances += `;Psyche:${this.psycheResist}`;
+        }
+        if (resistances != "") {
+            resistances = ` Resistances-${resistances}`;
+        }
+        return resistances;
     }
 }
 
@@ -4177,6 +4210,16 @@ class CombatDetailsHandler {
     onUpdateArmorValue(attrHandler, armorValue) {
         this.setData(attrHandler);
         this.combatDetails.armorvalue = armorValue;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+    onUpdateResistanceValues(attrHandler, burn, cold, energy, force, piercing, psyche) {
+        this.setData(attrHandler);
+        this.combatDetails.burnResist = burn;
+        this.combatDetails.coldResist = cold;
+        this.combatDetails.energyResist = energy;
+        this.combatDetails.forceResist = force;
+        this.combatDetails.piercingResist = piercing;
+        this.combatDetails.psycheResist = psyche;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
