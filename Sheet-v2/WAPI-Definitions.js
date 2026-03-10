@@ -462,7 +462,7 @@ var WuxDef = WuxDef || (function() {
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "WaterF":{"name":"WaterF","fieldName":"waterf","group":"AffinityTypeDesc","description":"","variable":"","title":"","subGroup":"","descriptions":["A Water affinity grants the following:\nHP bonus equal to your 10 + Character Rank x 5.\nWillpower bonus equal to 10 + your Character Rank x 5.\nCold Resistance bonus equal to your Potency."],
+            "WaterF":{"name":"WaterF","fieldName":"waterf","group":"AffinityTypeDesc","description":"","variable":"","title":"","subGroup":"","descriptions":["A Water affinity grants the following:\nHP bonus equal to your 5 + Character Rank x 5.\nWillpower bonus equal to 5 + your Character Rank x 5.\nDash Speed bonus equal to 2.\nCold Resistance bonus equal to your Potency."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
@@ -1029,9 +1029,9 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "Ter_Light":{"name":"Ter_Light","fieldName":"light","group":"TerrainFxType","description":"","variable":"ter-light{0}","title":"Light","subGroup":"","descriptions":["This area is bathed in light. This eliminates darkness in the area."],
                 "abbreviation":"","baseFormula":"","modifiers":"","formula":{"workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":3,"multiplier":1,"max":0}]
-                },
+                        "definitionName":[]
+                        ,
+                        "value":3,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
             "Ter_Slippery":{"name":"Ter_Slippery","fieldName":"slippery","group":"TerrainFxType","description":"","variable":"ter-slippery{0}","title":"Slippery","subGroup":"","descriptions":["Once per round, when you move over a space that is slippery, make a DC10 Agility check. On failure, your movement ends and you gain the Prone condition."],
@@ -1604,10 +1604,10 @@ var WuxDef = WuxDef || (function() {
                             "definitionName":["CR"],
                             "value":0,"multiplier":1,"max":0},
                         {"variableName":["atr-prc"],
-                            "definitionName":["Attr_PRC"],
-                            "value":0,"multiplier":1,"max":0},
-                        {"variableName":["def-disruption_expertise"]
+                            "definitionName":["Attr_PRC"]
                             ,
+                            "value":0,"multiplier":1,"max":0},
+                        {"variableName":["def-disruption_expertise"],
                             "definitionName":[],
                             "value":0,"multiplier":1,"max":0},
                         {"variableName":["def-disruption_tech"],

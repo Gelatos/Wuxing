@@ -518,8 +518,9 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 						attrHandler.addUpdate(piercingResVar, crValue * 3);
 						break;
 					case "Water":
-						attrHandler.addUpdate(hpVar, 10 + (5 * crValue));
-						attrHandler.addUpdate(willVar, 10 + (5 * crValue));
+						attrHandler.addUpdate(hpVar, 5 + (5 * crValue));
+						attrHandler.addUpdate(willVar, 5 + (5 * crValue));
+						attrHandler.addUpdate(dashSpeedVar, 2);
 						attrHandler.addUpdate(coldResVar, crValue * 3);
 						break;
 
