@@ -1596,6 +1596,11 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         <input type="hidden" name="${getActionTypeAttribute("TechVersion", tierIndex)}" value="" />
                         <input type="hidden" name="${getActionTypeAttribute("TechAffinity", tierIndex)}" value="" />
                         <input type="hidden" name="${getActionTypeAttribute("TechTier", tierIndex)}" value="0" />
+                        <input type="hidden" name="${getActionTypeAttribute("TechEnCost", tierIndex)}" value="0" />
+                        <input type="hidden" name="${getActionTypeAttribute("TechWillCost", tierIndex)}" value="0" />
+                        <input type="hidden" name="${getActionTypeAttribute("TechBoonCost", tierIndex)}" value="0" />
+                        <input type="hidden" name="${getActionTypeAttribute("TechTargetType", tierIndex)}" value="0" />
+                        <input type="hidden" name="${getActionTypeAttribute("TechRange", tierIndex)}" value="0" />
                         ${headerText}
                         ${contents}
                     </div>`;
@@ -2118,6 +2123,11 @@ var DisplayPopups = DisplayPopups || (function () {
                             <input type="hidden" name="${getPopupAttribute("TechVersion")}" value="" />
                             <input type="hidden" name="${getPopupAttribute("TechAffinity")}" value="" />
                             <input type="hidden" name="${getPopupAttribute("TechTier")}" value="0" />
+                            <input type="hidden" name="${getPopupAttribute("TechEnCost")}" value="0" />
+                            <input type="hidden" name="${getPopupAttribute("TechWillCost")}" value="0" />
+                            <input type="hidden" name="${getPopupAttribute("TechBoonCost")}" value="0" />
+                            <input type="hidden" name="${getPopupAttribute("TechTargetType")}" value="0" />
+                            <input type="hidden" name="${getPopupAttribute("TechRange")}" value="0" />
                             <div class="wuxFeatureHeader">
                                 <div class="wuxFeatureHeaderDisplayBlock">
                                     <span class="wuxFeatureHeaderName" name="${getPopupAttribute("TechName")}"></span>

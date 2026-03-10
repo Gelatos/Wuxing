@@ -854,10 +854,20 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.getVariable("TechCoreDefense"), displayData.coreDefense);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechActionType"), displayData.actionType);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechResourceData", suffix), displayData.resourceData);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechEnCost", suffix), displayData.enCost);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechWillCost", suffix), displayData.willCost);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechBoonCost", suffix), displayData.boonCost);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechTargetingData"), displayData.targetData);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechTargetType", suffix), displayData.targetType);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechRange", suffix), displayData.range);
 		if (displayData.forms.length > 0) {
 			this.addDefinitions(displayData.forms, this.getVariable("TechForm"), 6);
 		}
@@ -968,8 +978,18 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.getVariable("TechCoreDefense"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechResourceData"), "");
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechEnCost"), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechWillCost"), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechBoonCost"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechTargetingData"), "");
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechTargetType"), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechRange"), 0);
 		for (let i = 0; i < 6; i++) {
 			this.clearDefinition("TechForm", i);
 			this.clearDefinition("TechTrait", i);
