@@ -466,49 +466,61 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 
 				let crValue = attrHandler.parseInt(crVariable);
-				let initiativeVar = WuxDef.GetVariable("Initiative", WuxDef._affinity);
-				let hvVar = WuxDef.GetVariable("Combat_HV", WuxDef._affinity);
-				let surgeVar = WuxDef.GetVariable("Combat_Surge", WuxDef._affinity);
-				let armorVar = WuxDef.GetVariable("Combat_Armor", WuxDef._affinity);
-				let resistanceVar = WuxDef.GetVariable("Combat_Resistance", WuxDef._affinity);
-				let resistance = new ResistanceData();
+				let hpVar = WuxDef.GetVariable("HP", WuxDef._affinity);
+				let willVar = WuxDef.GetVariable("WILL", WuxDef._affinity);
+				let startEnVar = WuxDef.GetVariable("StartEN", WuxDef._affinity);
+				let surgeVar = WuxDef.GetVariable("Surge", WuxDef._affinity);
+				let mvSpeedVar = WuxDef.GetVariable("Cmb_Mv", WuxDef._affinity);
+				let dashSpeedVar = WuxDef.GetVariable("Cmb_MvDash", WuxDef._affinity);
+				let hvVar = WuxDef.GetVariable("Cmb_HV", WuxDef._affinity);
+				let armorVar = WuxDef.GetVariable("Cmb_Armor", WuxDef._affinity);
+				let burnResVar = WuxDef.GetVariable("Cmb_BurnResist", WuxDef._affinity);
+				let coldResVar = WuxDef.GetVariable("Cmb_ColdResist", WuxDef._affinity);
+				let energyResVar = WuxDef.GetVariable("Cmb_EnergyResist", WuxDef._affinity);
+				let forceResVar = WuxDef.GetVariable("Cmb_ForceResist", WuxDef._affinity);
+				let piercingResVar = WuxDef.GetVariable("Cmb_PiercingResist", WuxDef._affinity);
 
-				attrHandler.addUpdate(initiativeVar, 0);
+				attrHandler.addUpdate(hpVar, 0);
+				attrHandler.addUpdate(willVar, 0);
 				attrHandler.addUpdate(hvVar, 0);
+				attrHandler.addUpdate(startEnVar, 0);
 				attrHandler.addUpdate(surgeVar, 0);
+				attrHandler.addUpdate(mvSpeedVar, 0);
+				attrHandler.addUpdate(dashSpeedVar, 0);
 				attrHandler.addUpdate(armorVar, 0);
-				attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+				attrHandler.addUpdate(burnResVar, 0);
+				attrHandler.addUpdate(coldResVar, 0);
+				attrHandler.addUpdate(energyResVar, 0);
+				attrHandler.addUpdate(forceResVar, 0);
+				attrHandler.addUpdate(piercingResVar, 0);
 
 				switch (attrHandler.get(affinityVariable)) {
 					case "Wood":
-						attrHandler.addUpdate(initiativeVar, crValue);
-						attrHandler.addUpdate(hvVar, crValue * 2);
-						resistance.addResistanceValue("Cold", crValue * 2);
-						attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+						attrHandler.addUpdate(hpVar, (5 * crValue));
+						attrHandler.addUpdate(willVar, (5 * crValue));
+						attrHandler.addUpdate(attrHandler, 10 + (10 * crValue));
+						attrHandler.addUpdate(energyResVar, crValue * 3);
 						break;
 					case "Fire":
-						attrHandler.addUpdate(initiativeVar, crValue);
-						resistance.addResistanceValue("Fire", crValue * 2);
-						resistance.addResistanceValue("Burn", crValue);
-						attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+						attrHandler.addUpdate(startEnVar, 2);
+						attrHandler.addUpdate(mvSpeedVar, 1);
+						attrHandler.addUpdate(dashSpeedVar, 2);
+						attrHandler.addUpdate(burnResVar, crValue * 3);
 						break;
 					case "Earth":
-						resistance.addResistanceValue("Fire", crValue * 2);
-						resistance.addResistanceValue("Piercing", crValue);
-						resistance.addResistanceValue("Shock", crValue * 2);
-						attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+						attrHandler.addUpdate(hpVar, 10 + (5 * crValue));
+						attrHandler.addUpdate(surgeVar, 1);
+						attrHandler.addUpdate(forceResVar, crValue * 3);
 						break;
 					case "Metal":
-						attrHandler.addUpdate(armorVar, crValue);
-						resistance.addResistanceValue("Force", crValue);
-						resistance.addResistanceValue("Piercing", crValue);
-						attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+						attrHandler.addUpdate(startEnVar, 1);
+						attrHandler.addUpdate(armorVar, crValue * 2);
+						attrHandler.addUpdate(piercingResVar, crValue * 3);
 						break;
 					case "Water":
-						attrHandler.addUpdate(surgeVar, 1);
-						resistance.addResistanceValue("Cold", crValue * 2);
-						resistance.addResistanceValue("Force", crValue);
-						attrHandler.addUpdate(resistanceVar, JSON.stringify(resistance));
+						attrHandler.addUpdate(hpVar, 10 + (5 * crValue));
+						attrHandler.addUpdate(willVar, 10 + (5 * crValue));
+						attrHandler.addUpdate(coldResVar, crValue * 3);
 						break;
 
 				}
