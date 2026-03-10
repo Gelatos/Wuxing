@@ -43,7 +43,6 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             let output = "";
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Technique", WuxDef._page, WuxDef._learn));
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("CombatDetails"));
-            output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Status"));
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("JobSlots"));
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("AdvancedSlots"));
             output += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("StyleSlots"));

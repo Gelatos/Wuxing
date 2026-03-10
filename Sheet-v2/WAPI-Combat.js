@@ -232,8 +232,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
             TargetReference.IterateOverActiveTargetData(function (tokenTargetData) {
                 let tokenEffect = new TokenTargetEffectsData(tokenTargetData);
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                attributeHandler.addAttribute([WuxDef.GetVariable("Status"),
-                    WuxDef.GetVariable("HP"), WuxDef.GetVariable("WILL"),
+                attributeHandler.addAttribute([WuxDef.GetVariable("HP"), WuxDef.GetVariable("WILL"),
                     WuxDef.GetVariable("Cmb_Armor"), WuxDef.GetVariable("CR")]);
 
                 attributeHandler.addGetAttrCallback(function (attrGetter) {
@@ -244,8 +243,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
                 
                 attributeHandler.addFinishCallback(function (attrGetter) {
                     let newAttributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                    newAttributeHandler.addAttribute([WuxDef.GetVariable("Status"),
-                        WuxDef.GetVariable("HP"), WuxDef.GetVariable("WILL"),
+                    newAttributeHandler.addAttribute([WuxDef.GetVariable("HP"), WuxDef.GetVariable("WILL"),
                         WuxDef.GetVariable("Cmb_Armor"), WuxDef.GetVariable("CR")]);
                     
                     tokenEffect.performDamageRolls(attrGetter, newAttributeHandler);
@@ -337,7 +335,6 @@ var WuxConflictManager = WuxConflictManager || (function () {
             tokenTargetData.setTurnIcon(false);
             
             let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-            attributeHandler.addAttribute([WuxDef.GetVariable("Status")]);
             
             if (tokenTargetData.hasStatus(attributeHandler, "Stat_Jolted")) {
                 tokenTargetData.removeStatus(attributeHandler, "Stat_Jolted");
@@ -808,7 +805,6 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
     }
 
     tryGetSenderAttributes(techSkillCheckResolver, senderAttributeHandler) {
-        senderAttributeHandler.addMod(WuxDef.GetVariable("Status"));
         senderAttributeHandler.addMod(WuxDef.GetVariable("CR"));
     }
 
@@ -917,7 +913,6 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
     }
 
     tryGetDefensesAndAttributes(techSkillCheckResolver, targetAttributeHandler) {
-        targetAttributeHandler.addMod(WuxDef.GetVariable("Status"));
         targetAttributeHandler.addMod(WuxDef.GetVariable("CR"));
         techSkillCheckResolver.targetTokenEffect.tokenTargetData.refreshCombatDetails(targetAttributeHandler);
         techSkillCheckResolver.technique.effects.iterate(function (techniqueEffect) {

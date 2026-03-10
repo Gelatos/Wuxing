@@ -3713,10 +3713,6 @@ class StatusHandler {
         this.emotions = {};
     }
     
-    saveStatusesToCharacterSheet(attributeHandler) {
-        attributeHandler.addUpdate(WuxDef.GetVariable("Status"), JSON.stringify(this));
-    }
-    
     printStatusSummary() {
         let output = ` ==========STATUS========== `;
         let statuses = Object.values(this.statusEffects);
@@ -4023,9 +4019,9 @@ class CombatDetails {
                 output += this.printVitality();
                 output += `.${this.printSurges()}`;
                 output += ` Armor:${this.armorvalue}`;
-                output += `;RV:${this.healvalue}`;
-                output += `;Mv:${this.mvSpeed}`;
-                output += `;Dash:${this.dashSpeed}`;
+                output += `;.Regen:${this.healvalue}`;
+                output += `;.Mv:${this.mvSpeed}`;
+                output += `;.Dash:${this.dashSpeed}`;
                 output += this.printResistances();
                 
                 break;
@@ -4057,22 +4053,22 @@ class CombatDetails {
     printResistances() {
         let resistances = "";
         if (this.burnResist != 0) {
-            resistances += `;Burn:${this.burnResist}`;
+            resistances += `;.Burn:${this.burnResist}`;
         }
         if (this.coldResist != 0) {
-            resistances += `;Cold:${this.coldResist}`;
+            resistances += `;.Cold:${this.coldResist}`;
         }
         if (this.energyResist != 0) {
-            resistances += `;Energy:${this.energyResist}`;
+            resistances += `;.Energy:${this.energyResist}`;
         }
         if (this.forceResist != 0) {
-            resistances += `;Force:${this.forceResist}`;
+            resistances += `;.Force:${this.forceResist}`;
         }
         if (this.piercingResist != 0) {
-            resistances += `;Piercing:${this.piercingResist}`;
+            resistances += `;.Piercing:${this.piercingResist}`;
         }
-        if (this.psycheResist == 0) {
-            resistances += `;Psyche:${this.psycheResist}`;
+        if (this.psycheResist != 0) {
+            resistances += `;.Psyche:${this.psycheResist}`;
         }
         if (resistances != "") {
             resistances = ` Resistances-${resistances}`;
@@ -4119,15 +4115,15 @@ class CombatDetailsDefenses {
     
     printDefenses(cr) {
         let output = "Defs:";
-        output += `${WuxDef.GetAbbreviation("Def_Evasion")}${this.evasion};`;
-        output += `${WuxDef.GetAbbreviation("Def_Brace")}${this.brace};`;
-        output += `${WuxDef.GetAbbreviation("Def_Warding")}${this.warding};`;
-        output += `${WuxDef.GetAbbreviation("Def_Reflex")}${this.reflex};`;
+        output += `${WuxDef.GetAbbreviation("Def_Evasion")}${this.evasion};.`;
+        output += `${WuxDef.GetAbbreviation("Def_Brace")}${this.brace};.`;
+        output += `${WuxDef.GetAbbreviation("Def_Warding")}${this.warding};.`;
+        output += `${WuxDef.GetAbbreviation("Def_Reflex")}${this.reflex}`;
         
         output += " Sens:";
-        output += `${WuxDef.GetAbbreviation("Def_Resolve")}${this.resolve};`;
-        output += `${WuxDef.GetAbbreviation("Def_Insight")}${this.insight};`;
-        output += `${WuxDef.GetAbbreviation("Def_Ego")}${this.ego};`;
+        output += `${WuxDef.GetAbbreviation("Def_Resolve")}${this.resolve};.`;
+        output += `${WuxDef.GetAbbreviation("Def_Insight")}${this.insight};.`;
+        output += `${WuxDef.GetAbbreviation("Def_Ego")}${this.ego}`;
         
         return output;
     }
