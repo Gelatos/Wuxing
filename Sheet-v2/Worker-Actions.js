@@ -126,14 +126,21 @@ var WuxWorkerActionsService = WuxWorkerActionsService || (function () {
     
             let healValueVar = WuxDef.GetVariable("Cmb_HV");
             let armorDefVar = WuxDef.GetVariable("Cmb_Armor");
+            let burnResVar = WuxDef.GetVariable("Cmb_BurnResist");
+            let coldResVar = WuxDef.GetVariable("Cmb_ColdResist");
+            let energyResVar = WuxDef.GetVariable("Cmb_EnergyResist");
+            let forceResVar = WuxDef.GetVariable("Cmb_ForceResist");
+            let piercingResVar = WuxDef.GetVariable("Cmb_PiercingResist");
+            let psycheResVar = WuxDef.GetVariable("Cmb_PsycheResist");
             let mvVar = WuxDef.GetVariable("Cmb_Mv");
             let mvDashVar = WuxDef.GetVariable("Cmb_MvDash");
             let surgeDef = WuxDef.Get("Surge");
             let vitalityDef = WuxDef.Get("Cmb_Vitality");
     
             let attributeHandler = new WorkerAttributeHandler();
-            attributeHandler.addMod([healValueVar, armorDefVar, mvVar, mvDashVar,
-                surgeDef.getVariable(), surgeDef.getVariable(WuxDef._max),
+            attributeHandler.addMod([healValueVar, armorDefVar, 
+                burnResVar, coldResVar, energyResVar, forceResVar, piercingResVar, psycheResVar,
+                mvVar, mvDashVar, surgeDef.getVariable(), surgeDef.getVariable(WuxDef._max),
                 vitalityDef.getVariable(), vitalityDef.getVariable(WuxDef._max)]);
             let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
             // grab all formulas that get modified based on techniques (_tech)
@@ -187,6 +194,10 @@ var WuxWorkerActionsService = WuxWorkerActionsService || (function () {
                 combatDetailsHandler.onUpdateVitality(attrHandler, attrHandler.parseInt(vitalityDef.getVariable()));
                 combatDetailsHandler.onUpdateMaxVitality(attrHandler, attrHandler.parseInt(vitalityDef.getVariable(WuxDef._max)));
                 combatDetailsHandler.onUpdateArmorValue(attrHandler, attrHandler.parseInt(armorDefVar));
+                combatDetailsHandler.onUpdateResistanceValues(attrHandler, attrHandler.parseInt(burnResVar),
+                    attrHandler.parseInt(coldResVar), attrHandler.parseInt(energyResVar),
+                    attrHandler.parseInt(forceResVar), attrHandler.parseInt(piercingResVar),
+                    attrHandler.parseInt(psycheResVar));
                 combatDetailsHandler.onUpdateMoveSpeedValue(attrHandler, attrHandler.parseInt(mvVar));
                 combatDetailsHandler.onUpdateDashSpeedValue(attrHandler, attrHandler.parseInt(mvDashVar));
     

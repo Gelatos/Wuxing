@@ -2196,11 +2196,18 @@ var TargetReference = TargetReference || (function () {
                 let vitalityVar = WuxDef.GetVariable("Cmb_Vitality");
                 let hvVar = WuxDef.GetVariable("Cmb_HV");
                 let armorVar = WuxDef.GetVariable("Cmb_Armor");
+                let burnResVar = WuxDef.GetVariable("Cmb_BurnResist");
+                let coldResVar = WuxDef.GetVariable("Cmb_ColdResist");
+                let energyResVar = WuxDef.GetVariable("Cmb_EnergyResist");
+                let forceResVar = WuxDef.GetVariable("Cmb_ForceResist");
+                let piercingResVar = WuxDef.GetVariable("Cmb_PiercingResist");
+                let psycheResVar = WuxDef.GetVariable("Cmb_PsycheResist");
                 let speedVar = WuxDef.GetVariable("Cmb_Mv");
                 let dashVar = WuxDef.GetVariable("Cmb_MvDash");
                 attributeHandler.addAttribute([affinityVar, crVar, jobVar, 
                     braceVar, wardingVar, reflexVar, evasionVar, resolveVar, insightVar, egoVar,
-                    surgeVar, vitalityVar, hvVar, armorVar]);
+                    surgeVar, vitalityVar, hvVar, armorVar, 
+                    burnResVar, coldResVar, energyResVar, forceResVar, piercingResVar, psycheResVar]);
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
                     tokenTargetData.combatDetails.onUpdateAffinity(attrHandler, attrHandler.parseString(affinityVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateCR(attrHandler, attrHandler.parseInt(crVar, 0, false));
@@ -2220,6 +2227,10 @@ var TargetReference = TargetReference || (function () {
                     tokenTargetData.combatDetails.onUpdateMaxVitality(attrHandler, attrHandler.parseInt(vitalityVar, 0, true));
                     tokenTargetData.combatDetails.onUpdateHealValue(attrHandler, attrHandler.parseInt(hvVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateArmorValue(attrHandler, attrHandler.parseInt(armorVar, 0, false));
+                    tokenTargetData.combatDetails.onUpdateResistanceValues(attrHandler, attrHandler.parseInt(burnResVar, 0, false),
+                        attrHandler.parseInt(coldResVar, 0, false), attrHandler.parseInt(energyResVar, 0, false),
+                        attrHandler.parseInt(forceResVar, 0, false), attrHandler.parseInt(piercingResVar, 0, false),
+                        attrHandler.parseInt(psycheResVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateMoveSpeedValue(attrHandler, attrHandler.parseInt(speedVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateDashSpeedValue(attrHandler, attrHandler.parseInt(dashVar, 0, false));
                     tokenTargetData.setCombatDetails(attrHandler);
