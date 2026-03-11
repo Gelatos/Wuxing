@@ -232,8 +232,7 @@ var WuxConflictManager = WuxConflictManager || (function () {
             TargetReference.IterateOverActiveTargetData(function (tokenTargetData) {
                 let tokenEffect = new TokenTargetEffectsData(tokenTargetData);
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                attributeHandler.addAttribute([WuxDef.GetVariable("HP"), WuxDef.GetVariable("WILL"),
-                    WuxDef.GetVariable("Cmb_Armor"), WuxDef.GetVariable("CR")]);
+                tokenTargetData.refreshCombatDetails(attributeHandler);
 
                 attributeHandler.addGetAttrCallback(function (attrGetter) {
                     tokenEffect.takeAflameEffect(attrGetter);
@@ -243,31 +242,9 @@ var WuxConflictManager = WuxConflictManager || (function () {
                 
                 attributeHandler.addFinishCallback(function (attrGetter) {
                     let newAttributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                    newAttributeHandler.addAttribute([WuxDef.GetVariable("HP"), WuxDef.GetVariable("WILL"),
-                        WuxDef.GetVariable("Cmb_Armor"), WuxDef.GetVariable("CR")]);
-                    
                     tokenEffect.performDamageRolls(attrGetter, newAttributeHandler);
+                    removeStartOfRoundStatuses(tokenTargetData, newAttributeHandler, messages);
                     
-                    if (tokenTargetData.hasStatus(newAttributeHandler, "Stat_Armored")) {
-                        tokenTargetData.removeStatus(newAttributeHandler, "Stat_Armored");
-                        messages.push(`${tokenTargetData.displayName} is no longer Armored`);
-                    }
-                    if (tokenTargetData.hasStatus(newAttributeHandler, "Stat_Dodge")) {
-                        tokenTargetData.removeStatus(newAttributeHandler, "Stat_Dodge");
-                        messages.push(`${tokenTargetData.displayName} is no longer Dodging`);
-                    }
-                    if (tokenTargetData.hasStatus(newAttributeHandler, "Stat_Hindered")) {
-                        tokenTargetData.removeStatus(newAttributeHandler, "Stat_Hindered");
-                        messages.push(`${tokenTargetData.displayName} is no longer Hindered`);
-                    }
-                    if (tokenTargetData.hasStatus(newAttributeHandler, "Stat_Rally")) {
-                        tokenTargetData.removeStatus(newAttributeHandler, "Stat_Rally");
-                        messages.push(`${tokenTargetData.displayName} is no longer Rallied`);
-                    }
-                    if (tokenTargetData.hasStatus(newAttributeHandler, "Stat_Distracted")) {
-                        tokenTargetData.removeStatus(newAttributeHandler, "Stat_Distracted");
-                        messages.push(`${tokenTargetData.displayName} is no longer Distracted`);
-                    }
                     newAttributeHandler.addFinishCallback(function () {
                         messages = messages.concat(tokenEffect.effectMessages);
                     })
@@ -299,6 +276,28 @@ var WuxConflictManager = WuxConflictManager || (function () {
                 attributeHandler.run();
             });
             return messages;
+        },
+        removeStartOfRoundStatuses = function (tokenTargetData, attrHandler, messages) {
+            if (tokenTargetData.hasStatus(attrHandler, "Stat_Armored")) {
+                tokenTargetData.removeStatus(attrHandler, "Stat_Armored");
+                messages.push(`${tokenTargetData.displayName} is no longer Armored`);
+            }
+            if (tokenTargetData.hasStatus(attrHandler, "Stat_Dodge")) {
+                tokenTargetData.removeStatus(attrHandler, "Stat_Dodge");
+                messages.push(`${tokenTargetData.displayName} is no longer Dodging`);
+            }
+            if (tokenTargetData.hasStatus(attrHandler, "Stat_Hindered")) {
+                tokenTargetData.removeStatus(attrHandler, "Stat_Hindered");
+                messages.push(`${tokenTargetData.displayName} is no longer Hindered`);
+            }
+            if (tokenTargetData.hasStatus(attrHandler, "Stat_Rally")) {
+                tokenTargetData.removeStatus(attrHandler, "Stat_Rally");
+                messages.push(`${tokenTargetData.displayName} is no longer Rallied`);
+            }
+            if (tokenTargetData.hasStatus(attrHandler, "Stat_Distracted")) {
+                tokenTargetData.removeStatus(attrHandler, "Stat_Distracted");
+                messages.push(`${tokenTargetData.displayName} is no longer Distracted`);
+            }
         },
         sendStartRoundMessage = function (messages) {
             state.WuxConflictManager.activeTeamIndex = state.WuxConflictManager.startRoundTeamIndex;
@@ -458,7 +457,7 @@ class TechniqueWillBreakEffects {
     addWillResetEffect(willDamage) {
         let willResetEffect = new TechniqueEffect();
         willResetEffect.name = "Will Overflow";
-        willResetEffect.type = "WILL";
+        willResetEffect.type = "Psyche";
         willResetEffect.subType = "Overflow";
         willResetEffect.formula = new FormulaData(willDamage);
         this.add(willResetEffect);
@@ -805,45 +804,8 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
     }
 
     tryGetSenderAttributes(techSkillCheckResolver, senderAttributeHandler) {
+        this.senderTokenEffect.tokenTargetData.refreshCombatDetails(senderAttributeHandler);
         senderAttributeHandler.addMod(WuxDef.GetVariable("CR"));
-    }
-
-    tryGetAttributesFromTechniqueEffect(techniqueEffect, attributeHandler) {
-        switch (techniqueEffect.type) {
-            case "HP":
-                attributeHandler.addMod(WuxDef.GetVariable("HP"));
-                switch (techniqueEffect.subType) {
-                    case "Surge":
-                        attributeHandler.addMod(WuxDef.GetVariable("Surge"));
-                        break;
-                    case "":
-                        attributeHandler.addMod(WuxDef.GetVariable("Cmb_Armor"));
-                        break;
-                }
-                if (techniqueEffect.formula.hasWorker(WuxDef.GetVariable("TargetHV"))) {
-                    attributeHandler.addMod(WuxDef.GetVariable("Cmb_HV"));
-                }
-                break;
-            case "WILL":
-                attributeHandler.addMod(WuxDef.GetVariable("WILL"));
-                break;
-            case "Vitality":
-                attributeHandler.addMod(WuxDef.GetVariable("Cmb_Vitality"));
-                break;
-            case "Impatience":
-                attributeHandler.addMod(WuxDef.GetVariable("Soc_Impatience"));
-                break;
-            case "Favor":
-            case "Request":
-                let favorDef = WuxDef.Get("Soc_Favor");
-                let favorVar = favorDef.getVariable();
-                let favorMaxVar = favorDef.getVariable(WuxDef._max);
-                attributeHandler.addMod([favorVar, favorMaxVar]);
-                break;
-            case "EN":
-                attributeHandler.addMod(WuxDef.GetVariable("EN"));
-                break;
-        }
     }
 
     tryGetSenderSkillCheck(techSkillCheckResolver, senderAttributeHandler) {
@@ -904,6 +866,7 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
     }
 
     getTargetData(techSkillCheckResolver, senderAttributeHandler) {
+        this.targetTokenEffect.tokenTargetData.refreshCombatDetails(senderAttributeHandler);
         senderAttributeHandler.addFinishCallback(function (senderAttrHandler) {
             let targetAttributeHandler = new SandboxAttributeHandler(techSkillCheckResolver.targetTokenEffect.tokenTargetData.charId);
             techSkillCheckResolver.tryGetDefensesAndAttributes(techSkillCheckResolver, targetAttributeHandler);
@@ -915,15 +878,6 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
     tryGetDefensesAndAttributes(techSkillCheckResolver, targetAttributeHandler) {
         targetAttributeHandler.addMod(WuxDef.GetVariable("CR"));
         techSkillCheckResolver.targetTokenEffect.tokenTargetData.refreshCombatDetails(targetAttributeHandler);
-        techSkillCheckResolver.technique.effects.iterate(function (techniqueEffect) {
-            if (techniqueEffect.defense.startsWith("Def_")) {
-                let defenseDef = WuxDef.Get(techniqueEffect.defense);
-                targetAttributeHandler.addMod(defenseDef.getVariable());
-            }
-            if (techniqueEffect.target != "Self") {
-                techSkillCheckResolver.tryGetAttributesFromTechniqueEffect(techniqueEffect, targetAttributeHandler);
-            }
-        });
     }
 
     performEffects(techSkillCheckResolver, senderAttrHandler, targetAttributeHandler) {
@@ -1047,7 +1001,7 @@ class TechniqueCheckResolver extends TechniqueSkillCheckResolver {
             if (isNaN(dcValue)) {
                 let defenseDef = WuxDef.Get(techniqueEffect.defense);
                 defenseName = defenseDef.getTitle();
-                dcValue = targetAttrHandler.parseInt(defenseDef.getVariable());
+                dcValue = techCheckResolver.targetTokenEffect.tokenTargetData.combatDetails.getDefense(techniqueEffect.defense);
             }
             
             let skillCheckDifference = dcValue - techCheckResolver.skillCheckValue;
@@ -1121,12 +1075,6 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
         super.tryGetSenderAttributes(techUseResolver, senderAttributeHandler);
         techUseResolver.senderTokenEffect.tokenTargetData.refreshCombatDetails(senderAttributeHandler);
         techUseResolver.technique.effects.iterate(function (techniqueEffect) {
-            if (techniqueEffect.target == "Self") {
-                techUseResolver.tryGetAttributesFromTechniqueEffect(techniqueEffect, senderAttributeHandler);
-            }
-            if (techniqueEffect.effect == "Dmg_Weapon") {
-                senderAttributeHandler.addMod(WuxDef.GetVariable("WeaponDamage"));
-            }
             senderAttributeHandler.addMod(techniqueEffect.formula.getAttributes());
         });
     }
@@ -1194,7 +1142,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
         if (isNaN(dcValue)) {
             let defenseDef = WuxDef.Get(techniqueEffect.defense);
             message = `Vs. ${defenseDef.getTitle()}`;
-            dcValue = targetAttrHandler.parseInt(defenseDef.getVariable());
+            dcValue = techSkillCheckResolver.targetTokenEffect.tokenTargetData.combatDetails.getDefense(techniqueEffect.defense);
             if (techSkillCheckResolver.targetTokenEffect.tokenTargetData.hasStatus(targetAttrHandler, "Stat_Dodge") && techniqueEffect.defense == "Def_Evasion") {
                 techSkillCheckResolver.targetTokenEffect.tokenTargetData.removeStatus(targetAttrHandler, "Stat_Dodge");
                 techSkillCheckResolver.addMessage(`${techSkillCheckResolver.targetTokenEffect.tokenTargetData.displayName}: +5 Evasion. Removed Dodge status.`);
@@ -1273,13 +1221,13 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
     
     addHPEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
         let roll = "";
-        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
+        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect);
         let subTypeParts = techniqueEffect.subType.split(":");
         let subType = subTypeParts[0];
         
         switch (subType) {
             case "Surge":
-                let surgeValue = attrGetters.getObjByTarget(techniqueEffect).parseInt(WuxDef.GetVariable("Surge"));
+                let surgeValue = techUseResolver.getTargetTokenEffect(techniqueEffect).tokenTargetData.combatDetails.getSurge();
                 if (surgeValue <= 0) {
                     if(!tokenEffect.hasSurged()) {
                         techUseResolver.addMessage("Cannot Surge, no Surge available");
@@ -1293,8 +1241,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                 
                 roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
                 if (techniqueEffect.formula.hasWorker(WuxDef.GetVariable("TargetHV"))) {
-                    let hvValue = attrGetters.getObjByTarget(techniqueEffect).parseInt(WuxDef.GetVariable("Cmb_HV"));
-                    Debug.Log(`Adding HV Value of ${hvValue} to Surge Heal`);
+                    let hvValue = techUseResolver.getTargetTokenEffect(techniqueEffect).getRegenValue();
                     roll.addModToRoll(hvValue, "HV");
                 }
                 roll.setDamageType("HP Heal");
@@ -1357,23 +1304,17 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
         }
     }
     
-    getDamageType(attrGetters, techniqueEffect) {
+    getDamageType(techniqueEffect) {
         let damageType = WuxDef.GetTitle(techniqueEffect.effect);
         if (damageType == "Weapon") {
-            damageType = attrGetters.sender.parseString(WuxDef.GetVariable("WeaponDamage"));
-            if (damageType == "" || damageType == 0) {
-                damageType = WuxDef.GetTitle("Dmg_Force");
-            }
-            else {
-                damageType = WuxDef.GetTitle(damageType);
-            }
+            damageType = this.senderTokenEffect.tokenTargetData.combatDetails.getWeaponDamage();
         }
         return damageType;
     }
 
     addWillEffect(techniqueEffect, techUseResolver, attrGetters) {
         let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
-        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
+        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect);
 
         switch (techniqueEffect.subType) {
             case "Heal":
@@ -1386,7 +1327,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                 roll.setDamageType("Will Overflow");
                 break;
             default:
-                roll.setDamageType("Will");
+                roll.setDamageType("Psyche");
                 break;
         }
         tokenEffect.addDamageRoll(roll);
@@ -1394,7 +1335,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
     
     addEnergyEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
         let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
-        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
+        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect);
         tokenEffect.tokenTargetData.addEnergy(attrSetters.getObjByTarget(techniqueEffect), roll.total);
     }
 
@@ -1432,7 +1373,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
 
     addImpatienceEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
         let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
-        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
+        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect);
 
         switch (techniqueEffect.subType) {
             case "Heal":
@@ -1449,10 +1390,8 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
     addRequestCheck(techniqueEffect, techUseResolver, attrGetters) {
         let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
         if (techniqueEffect.formula.hasWorker(WuxDef.GetVariable("TargetFavor"))) {
-            let favorDef = WuxDef.Get("Soc_Favor");
-            let favorVar = favorDef.getVariable();
-            let favorValue = attrGetters.target.parseInt(favorVar);
-            let favorMax = attrGetters.target.parseInt(favorVar, 0, true);
+            let favorValue = techUseResolver.targetTokenEffect.getFavor();
+            let favorMax = techUseResolver.targetTokenEffect.getMaxFavor();
             roll.addModToRoll(Math.min(favorValue, favorMax), "Favor");
         }
         let agreeable = techUseResolver.targetTokenEffect.tokenTargetData.getStatusRank(attrGetters.target, "Stat_Agreeable");
@@ -1469,7 +1408,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
     }
     
     addStatusEffect(techniqueEffect, techUseResolver, attrGetters, attrSetters) {
-        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect, techUseResolver);
+        let tokenEffect = techUseResolver.getTargetTokenEffect(techniqueEffect);
         let roll = techUseResolver.calculateFormula(techniqueEffect, attrGetters.sender);
         let attrHandler = attrSetters.getObjByTarget(techniqueEffect);
 
@@ -1524,12 +1463,12 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
         return roll;
     }
     
-    getTargetTokenEffect(techniqueEffect, techUseResolver) {
+    getTargetTokenEffect(techniqueEffect) {
         if (techniqueEffect.target == "Self") {
-            return techUseResolver.senderTokenEffect;
+            return this.senderTokenEffect;
         }
         else {
-            return techUseResolver.targetTokenEffect;
+            return this.targetTokenEffect;
         }
     }
 
