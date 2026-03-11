@@ -963,12 +963,16 @@ class TokenTargetEffectsData {
 
     performDamageRolls(attrGetter, attrSetter, willBreakEffect) {
         let tokenTargetEffect = this;
+        let hasShielded = false;
+        let hasRockShield = false;
+        
         this.damageRolls.forEach(function (damageRoll) {
             switch (damageRoll.damageType) {
                 case "HP Heal":
                     tokenTargetEffect.takeHpHealing(attrSetter, damageRoll);
                     break;
-                case "Will":
+                case "Psyche":
+                    tokenTargetEffect.modifyDamageRollResistanceCheck(damageRoll);
                     tokenTargetEffect.takeWillDamage(attrSetter, damageRoll, willBreakEffect);
                     break;
                 case "Will Overflow":
@@ -981,53 +985,110 @@ class TokenTargetEffectsData {
                     tokenTargetEffect.takeWillFullHealing(attrSetter);
                     break;
                 default:
-                    if (!damageRoll.traits.includes("AP")) {
-                        let armorTotal = attrGetter.parseInt(WuxDef.GetVariable("Cmb_Armor"));
-                        let ironPlates = tokenTargetEffect.tokenTargetData.getStatusRank(attrSetter, "Stat_Iron Plates");
-                        if (ironPlates > 0) {
-                            armorTotal += ironPlates;
-                        }
-                        if (tokenTargetEffect.tokenTargetData.hasStatus(attrSetter, "Stat_Armored")) {
-                            armorTotal += 2 * attrGetter.parseInt(WuxDef.GetVariable("CR"));
-                        }
-                        
-                        if (armorTotal > damageRoll.total / 2) {
-                            armorTotal = Math.floor(damageRoll.total / 2);
-                        }
-                        damageRoll.addModToRoll(-1 * armorTotal, "Armor");
+                    tokenTargetEffect.modifyDamageRollArmorAndResistanceCheck(damageRoll, attrSetter);
+                    if (tokenTargetEffect.modifyDamageRollShieldedCheck(damageRoll, attrSetter, "Stat_Shielded", "Shielded")) {
+                        hasShielded = true;
                     }
-                    if (tokenTargetEffect.tokenTargetData.hasStatus(attrSetter, "Stat_Shielded")) {
-                        damageRoll.addModToRoll(-1 * Math.floor(damageRoll.total / 2), "Shielded");
-                        tokenTargetEffect.effectMessages.push(`Removed Shielded status.`);
-                        tokenTargetEffect.tokenTargetData.removeStatus(attrSetter, "Stat_Shielded");
-                    }
-                    if (tokenTargetEffect.tokenTargetData.hasStatus(attrSetter, "Stat_Rock Shield")) {
-                        damageRoll.addModToRoll(-1 * Math.floor(damageRoll.total / 2), "Rock Shield");
-                        tokenTargetEffect.effectMessages.push(`Removed Rock Shield status.`);
-                        tokenTargetEffect.tokenTargetData.removeStatus(attrSetter, "Stat_Rock Shield");
-                    }
-                    let mantle = tokenTargetEffect.tokenTargetData.getStatusRank(attrSetter, "Stat_Mantle");
-                    if (mantle > 0) {
-                        let mantleShielding = Math.ceil(damageRoll.total / 2);
-                        let mantleNewValue = mantle - mantleShielding;
-                        tokenTargetEffect.effectMessages.push(`${tokenTargetEffect.tokenTargetData.displayName}'s mantle takes ` + 
-                            `${Format.ShowTooltip(damageRoll.total, damageRoll.message)} ${damageRoll.damageType} damage.`);
-                        if (mantleNewValue <= 0) {
-                            tokenTargetEffect.effectMessages.push(`${tokenTargetEffect.tokenTargetData.displayName}'s mantle is broken!`);
-                            tokenTargetEffect.tokenTargetData.removeStatus(attrSetter, "Stat_Mantle");
-                            damageRoll.addModToRoll(-1 * mantle, "Mantle");
-                        } else {
-                            tokenTargetEffect.tokenTargetData.setStatus(attrSetter, "Stat_Mantle", mantleNewValue);
-                            damageRoll.addModToRoll(-1 * mantleShielding, "Mantle");
-                        }
-
+                    if (tokenTargetEffect.modifyDamageRollShieldedCheck(damageRoll, attrSetter, "Stat_Rock Shield", "Rock Shield")) {
+                        hasRockShield = true;
                     }
                     
+                    tokenTargetEffect.modifyDamageRollMantleCheck(damageRoll, attrSetter);
                     if (damageRoll.total > 0) {
                         tokenTargetEffect.takeHpDamage(attrSetter, damageRoll);
                     }
             }
         });
+        
+        if (hasShielded) {
+            tokenTargetEffect.effectMessages.push(`Removed Shielded status.`);
+            tokenTargetEffect.tokenTargetData.removeStatus(attrSetter, "Stat_Shielded");
+        }
+        if (hasRockShield) {
+            tokenTargetEffect.effectMessages.push(`Removed Rock Shield status.`);
+            tokenTargetEffect.tokenTargetData.removeStatus(attrSetter, "Stat_Rock Shield");
+        }
+    }
+    modifyDamageRollArmorAndResistanceCheck(damageRoll, attrSetter) {
+        let damageReductionTotal = 0;
+        let damageReductionModifiers = "";
+        if (!damageRoll.traits.includes("AP")) {
+            damageReductionTotal = this.tokenTargetData.combatDetails.getArmor();
+            let ironPlates = this.tokenTargetData.getStatusRank(attrSetter, "Stat_Iron Plates");
+            if (ironPlates > 0) {
+                damageReductionTotal += ironPlates;
+            }
+            if (this.tokenTargetData.hasStatus(attrSetter, "Stat_Armored")) {
+                damageReductionTotal += 2 * this.tokenTargetData.combatDetails.getCr();
+            }
+
+            if (damageReductionTotal > 0) {
+                damageReductionModifiers += "Armor";
+            }
+        }
+        
+        let resistance = this.tokenTargetData.combatDetails.getResistance(damageRoll.damageType);
+        if (resistance != 0) {
+            damageReductionTotal += resistance;
+            if (damageReductionModifiers != "") {
+                damageReductionModifiers += "+";
+            }
+            if (resistance > 0) {
+                damageReductionModifiers += `${damageRoll.damageType} Resist`;
+            }
+            else {
+                damageReductionModifiers += `${damageRoll.damageType} Weakness`;
+            }
+        }
+        
+        if (damageReductionTotal != 0) {
+            if (damageReductionTotal > damageRoll.total / 2) {
+                damageReductionTotal = Math.floor(damageRoll.total / 2);
+            }
+            damageRoll.addModToRoll(-1 * damageReductionTotal, damageReductionModifiers);
+        }
+    }
+    modifyDamageRollResistanceCheck(damageRoll) {
+        let resistance = this.tokenTargetData.combatDetails.getResistance(damageRoll.damageType);
+        if (resistance != 0) {
+            let damageReductionModifiers = "";
+            if (resistance > 0) {
+                damageReductionModifiers = `${damageRoll.damageType} Resist`;
+            }
+            else {
+                damageReductionModifiers = `${damageRoll.damageType} Weakness`;
+            }
+            if (resistance > damageRoll.total / 2) {
+                resistance = Math.floor(damageRoll.total / 2);
+            }
+            damageRoll.addModToRoll(-1 * resistance, damageReductionModifiers);
+        }
+    }
+    getDamageRollResistanceModifiers(damageRoll, attrSetter) {
+        
+    }
+    modifyDamageRollShieldedCheck(damageRoll, attrSetter, statusName, modName) {
+        if (this.tokenTargetData.hasStatus(attrSetter, statusName)) {
+            damageRoll.addModToRoll(-1 * Math.floor(damageRoll.total / 2), modName);
+            return true;
+        }
+    }
+    modifyDamageRollMantleCheck(damageRoll, attrSetter) {
+        let mantle = this.tokenTargetData.getStatusRank(attrSetter, "Stat_Mantle");
+        if (mantle > 0) {
+            let mantleShielding = Math.ceil(damageRoll.total / 2);
+            let mantleNewValue = mantle - mantleShielding;
+            this.effectMessages.push(`${this.tokenTargetData.displayName}'s mantle takes ` +
+                `${Format.ShowTooltip(damageRoll.total, damageRoll.message)} ${damageRoll.damageType} damage.`);
+            if (mantleNewValue <= 0) {
+                this.effectMessages.push(`${this.tokenTargetData.displayName}'s mantle is broken!`);
+                this.tokenTargetData.removeStatus(attrSetter, "Stat_Mantle");
+                damageRoll.addModToRoll(-1 * mantle, "Mantle");
+            } else {
+                this.tokenTargetData.setStatus(attrSetter, "Stat_Mantle", mantleNewValue);
+                damageRoll.addModToRoll(-1 * mantleShielding, "Mantle");
+            }
+        }
     }
 
     tryAddStatusResult(statusDefinitionName, type, rank, attrHandler) {
@@ -1311,8 +1372,8 @@ class TokenTargetEffectsData {
         if (this.tokenTargetData.hasStatus(attributeHandler, "Stat_Angered")) {
             this.takeCastWillbreakEffect(attributeHandler);
             let roll = new DamageRoll();
-            roll.addModToRoll(5 * attributeHandler.parseInt(WuxDef.GetVariable("CR")));
-            roll.setDamageType("Will");
+            roll.addModToRoll(5 + (5 * this.tokenTargetData.combatDetails.getCr()));
+            roll.setDamageType("Psyche");
             this.addDamageRoll(roll);
         }
     }
@@ -1329,8 +1390,8 @@ class TokenTargetEffectsData {
     takeDoubtEffect(attributeHandler) {
         if (this.tokenTargetData.hasStatus(attributeHandler, "Stat_Doubt")) {
             let roll = new DamageRoll();
-            roll.addModToRoll(5 + (5 * attributeHandler.parseInt(WuxDef.GetVariable("CR"))));
-            roll.setDamageType("Will");
+            roll.addModToRoll(5 + (5 * this.tokenTargetData.combatDetails.getCr()));
+            roll.setDamageType("Psyche");
             this.addDamageRoll(roll);
         }
     }
@@ -1338,8 +1399,8 @@ class TokenTargetEffectsData {
         if (this.tokenTargetData.hasStatus(attributeHandler, "Stat_Frightened")) {
             this.takeCastWillbreakEffect(attributeHandler);
             let roll = new DamageRoll();
-            roll.addModToRoll(10 + (5 * attributeHandler.parseInt(WuxDef.GetVariable("CR"))));
-            roll.setDamageType("Will");
+            roll.addModToRoll(10 + (5 * this.tokenTargetData.combatDetails.getCr()));
+            roll.setDamageType("Psyche");
             this.addDamageRoll(roll);
         }
     }
@@ -2025,8 +2086,6 @@ var TargetReference = TargetReference || (function () {
                 
                 attributeHandler.addFinishCallback(function (attrGetter) {
                     let newAttributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-                    newAttributeHandler.addAttribute([WuxDef.GetVariable("HP"), WuxDef.GetVariable("WILL"),
-                        WuxDef.GetVariable("Cmb_Armor"), WuxDef.GetVariable("CR")]);
 
                     tokenTargetData.performDamageRolls(attrGetter, newAttributeHandler);
                     newAttributeHandler.addFinishCallback(function () {
