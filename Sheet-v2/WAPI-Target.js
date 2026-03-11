@@ -214,6 +214,18 @@ class TokenTargetData extends TargetData {
         return barLink != undefined && barLink != "";
     }
 
+    getBarValue(barIndex) {
+        if (!this.validateToken()) {
+            return 0;
+        }
+        return this.token.get(`bar${barIndex}_value`);
+    }
+    getBarMax(barIndex) {
+        if (!this.validateToken()) {
+            return 0;
+        }
+        return this.token.get(`bar${barIndex}_max`);
+    }
     setBarValue(barIndex, value) {
         if (!this.validateToken()) {
             return false;
@@ -367,11 +379,16 @@ class TokenTargetData extends TargetData {
     }
 
     // Combat Details
+    getCombatDetails(attributeHandler) {
+        this.refreshCombatDetails(attributeHandler);
+        return this.combatDetails;
+    }
     refreshCombatDetails(attributeHandler) {
         if (attributeHandler == undefined) {
             return;
         }
         this.combatDetails = new CombatDetailsHandler(attributeHandler);
+        this.combatDetails.setData(attributeHandler);
         
     }
     setCombatDetails(attrHandler, tokenNoteReference, statusHandler) {
@@ -447,15 +464,30 @@ class TokenTargetData extends TargetData {
     }
 
     applyResultsToImpatience(results, attrHandler, attributeVar, tokenTargetData) {
-        tokenTargetData.setBarValue(1, results.newValue);
+        if (state.WuxConflictManager.conflictType == "Social") {
+            tokenTargetData.setBarValue(1, results.newValue);
+        }
         return results;
     }
 
+    getFavor() {
+        if (state.WuxConflictManager.conflictType == "Social") {
+            return this.getBarValue(3);
+        }
+        return 0;
+    }
+    getMaxFavor() {
+        if (state.WuxConflictManager.conflictType == "Social") {
+            return this.getBarMax(3);
+        }
+        return 0;
+    }
+    
     setMaxFavor(attributeHandler, value) {
         Debug.Log(`Setting Bar 3 to ${value}`);
         this.token.set(`bar3_max`, value);
     }
-
+    
     addFavor(attributeHandler, value, resultsCallback) {
         resultsCallback = resultsCallback == undefined ? this.applyResultsToFavor : resultsCallback;
         this.modifyBarAttribute(attributeHandler, 3, value,
@@ -469,7 +501,9 @@ class TokenTargetData extends TargetData {
     }
 
     applyResultsToFavor(results, attrHandler, attributeVar, tokenTargetData) {
-        tokenTargetData.setBarValue(3, results.newValue);
+        if (state.WuxConflictManager.conflictType == "Social") {
+            tokenTargetData.setBarValue(3, results.newValue);
+        }
         return results;
     }
 
@@ -703,7 +737,7 @@ class TokenTargetData extends TargetData {
         resultsCallback = resultsCallback == undefined ? tokenTargetData.applyResultsVitality : resultsCallback;
         tokenTargetData.refreshCombatDetails(attributeHandler);
 
-        if (tokenTargetData.isBarLinked(1)) {
+        if (tokenTargetData.isCharacter()) {
             this.modifyResourceAttribute(attributeHandler, "Cmb_Vitality", value,
                 tokenTargetData.addModifierToAttribute, resultsCallback);
         } else {
@@ -1081,7 +1115,6 @@ class TokenTargetEffectsData {
                 break;
         }
     }
-
     performStatusResults(attrSetter) {
         let tokenTargetEffect = this;
         tokenTargetEffect.tokenTargetData.refreshCombatDetails(attrSetter);
@@ -1114,11 +1147,9 @@ class TokenTargetEffectsData {
     hasSurged() {
         return this.spentSurge;
     }
-
     setSpendSurge() {
         this.spentSurge = true;
     }
-
     spendSurge(attributeHandler) {
         this.spentSurge = true;
 
@@ -2103,9 +2134,10 @@ var TargetReference = TargetReference || (function () {
                 let psycheResVar = WuxDef.GetVariable("Cmb_PsycheResist");
                 let speedVar = WuxDef.GetVariable("Cmb_Mv");
                 let dashVar = WuxDef.GetVariable("Cmb_MvDash");
+                let weaponDamageVar = WuxDef.GetVariable("WeaponDamageVal");
                 attributeHandler.addAttribute([affinityVar, crVar, jobVar, 
                     braceVar, wardingVar, reflexVar, evasionVar, resolveVar, insightVar, egoVar,
-                    surgeVar, vitalityVar, hvVar, armorVar, 
+                    surgeVar, vitalityVar, hvVar, armorVar, speedVar, dashVar, weaponDamageVar,
                     burnResVar, coldResVar, energyResVar, forceResVar, piercingResVar, psycheResVar]);
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
                     tokenTargetData.combatDetails.onUpdateAffinity(attrHandler, attrHandler.parseString(affinityVar, 0, false));
@@ -2132,6 +2164,7 @@ var TargetReference = TargetReference || (function () {
                         attrHandler.parseInt(psycheResVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateMoveSpeedValue(attrHandler, attrHandler.parseInt(speedVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateDashSpeedValue(attrHandler, attrHandler.parseInt(dashVar, 0, false));
+                    tokenTargetData.combatDetails.onUpdateWeaponDamageType(attrHandler, attrHandler.parseInt(weaponDamageVar, 0, false));
                     tokenTargetData.setCombatDetails(attrHandler);
                 });
                 attributeHandler.run();

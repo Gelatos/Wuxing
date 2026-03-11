@@ -164,20 +164,23 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
     };
     
     const setWeaponDamageValues = function (attrHandler, itemName) {
+        let combatDetailsHandler = new CombatDetailsHandler(attrHandler);
         let item = WuxItems.Get(itemName);
         if (item.hasTechnique) {
             for (let i = 0; i < item.technique.effects.keys.length; i++) {
                 let techEffect = item.technique.effects.get(item.technique.effects.keys[i]);
                 if (techEffect.type == "HP" && techEffect.subType == "") {
                     attrHandler.addUpdate(WuxDef.GetVariable("WeaponDamage"), techEffect.effect);
-                    attrHandler.addUpdate(WuxDef.GetVariable("WeaponDamageVal"), `${WuxDef.GetTitle(techEffect.effect)}`);
+                    attrHandler.addUpdate(WuxDef.GetVariable("WeaponDamageVal"), WuxDef.GetTitle(techEffect.effect));
+                    combatDetailsHandler.onUpdateWeaponDamageType(attrHandler, WuxDef.GetTitle(techEffect.effect));
                     return;
                 }
             }
         }
 
         attrHandler.addUpdate(WuxDef.GetVariable("WeaponDamage"), "0");
-        attrHandler.addUpdate(WuxDef.GetVariable("WeaponDamageVal"), "Force");
+        attrHandler.addUpdate(WuxDef.GetVariable("WeaponDamageVal"), WuxDef.GetTitle("Def_Force"));
+        combatDetailsHandler.onUpdateWeaponDamageType(attrHandler, WuxDef.GetTitle("Def_Force"));
     }
     const unequipItem = function (eventinfo, countFieldNames, slotNames, maxSlots) {
         let actionFieldName = "RepeatingGearTech";

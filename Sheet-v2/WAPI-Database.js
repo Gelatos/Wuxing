@@ -3976,6 +3976,7 @@ class CombatDetails {
         this.psycheResist = 0;
         this.mvSpeed = 0;
         this.dashSpeed = 0;
+        this.weaponDamage = "";
     }
 
     importJson(json) {
@@ -4008,6 +4009,7 @@ class CombatDetails {
         this.psycheResist = json.psycheResist != undefined ? json.psycheResist : 0;
         this.mvSpeed = json.mvSpeed;
         this.dashSpeed = json.dashSpeed;
+        this.weaponDamage = json.weaponDamage != undefined ? json.weaponDamage : "Force";
     }
 
     printTooltip() {
@@ -4139,6 +4141,65 @@ class CombatDetailsHandler {
         attributeHandler.addMod([this.combatDetailsVar]);
         this.combatDetails = new CombatDetails();
     }
+    
+    getCr() {
+        return this.combatDetails.cr;
+    }
+    getArmor() {
+        return this.combatDetails.armorvalue;
+    }
+    getSurge() {
+        return this.combatDetails.surges;
+    }
+    getVitality() {
+        return this.combatDetails.vitality;
+    }
+    getRegenValue() {
+        return this.combatDetails.healvalue;
+    }
+    getWeaponDamage() {
+        return this.combatDetails.weaponDamage;
+    }
+    getResistance(resistance) {
+        switch (resistance) {
+            case "Burn":
+                return this.combatDetails.burnResist;
+            case "Cold":
+                return this.combatDetails.coldResist;
+            case "Energy":
+                return this.combatDetails.energyResist;
+            case "Force":
+                return this.combatDetails.forceResist;
+            case "Piercing":
+                return this.combatDetails.piercingResist;
+            case "Psyche":
+                return this.combatDetails.psycheResist;
+            default:
+                return 0;
+        }
+    }
+    
+    getDefense(defense) {
+        switch (defense) {
+            case "Def_Brace":
+                return this.combatDetails.defenses.brace;
+            case "Def_Evasion":
+                return this.combatDetails.defenses.evasion;
+            case "Def_Reflex":
+                return this.combatDetails.defenses.reflex;
+            case "Def_Warding":
+                return this.combatDetails.defenses.warding;
+            case "Def_Ego":
+                return this.combatDetails.defenses.ego;
+            case "Def_Resolve":
+                return this.combatDetails.defenses.resolve;
+            case "Def_Insight":
+                return this.combatDetails.defenses.insight;
+            default:
+                return 0;
+        }
+    }
+    
 
     printTooltip(attrHandler, displayname) {
         this.setData(attrHandler);
@@ -4255,6 +4316,12 @@ class CombatDetailsHandler {
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
     
+    onUpdateWeaponDamageType(attrHandler, value) {
+        this.setData(attrHandler);
+        this.combatDetails.weaponDamage = value;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+    
     onUpdateNoteStats(attrHandler, tokenNoteReference) {
         this.setData(attrHandler);
         this.combatDetails.surges = tokenNoteReference.surges.current;
@@ -4265,7 +4332,7 @@ class CombatDetailsHandler {
     }
     
     setData(attrHandler) {
-        if (this.combatDetails.cr == 0) {
+        if (this.combatDetails.cr == 0 && attrHandler != undefined) {
             this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
         }
     }
