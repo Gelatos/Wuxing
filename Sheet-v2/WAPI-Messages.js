@@ -243,13 +243,11 @@ class setLanguageObj {
         jsonString = jsonString.replace(/&&/g, ":");
         jsonString = jsonString.replace(/<</g, "{");
         jsonString = jsonString.replace(/>>/g, "}")
-        Debug.Log("This is what we're ending with \n" + jsonString);
         return JSON.parse(jsonString);
     }
 
     stringify() {
         let jsonString = JSON.stringify(this);
-        Debug.Log("This is what we're starting with \n" + jsonString);
         jsonString = jsonString.replace(/"/g, "%%");
         jsonString = jsonString.replace(/:/g, "&&");
         jsonString = jsonString.replace(/{/g, "<<");
