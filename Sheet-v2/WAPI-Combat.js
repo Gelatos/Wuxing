@@ -414,6 +414,9 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                 case "!utech":
                     commandUseTechnique(msg, content);
                     break;
+                case "!utech2":
+                    commandUseSecondaryTechnique(msg, content);
+                    break;
                 case "!sutech":
                     commandUseTechnique(msg, content);
                     break;
@@ -422,14 +425,22 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
 
         commandConsumeTechnique = function (msg, content) {
             let techniqueConsumptionResolver = new TechniqueConsumptionResolver(msg, content);
+            techniqueConsumptionResolver.initialize();
             techniqueConsumptionResolver.run();
         },
         commandCheckTechnique = function (msg, content) {
             let techniqueCheckResolver = new TechniqueCheckResolver(msg, content);
+            techniqueCheckResolver.initialize();
             techniqueCheckResolver.run();
         },
         commandUseTechnique = function (msg, content) {
             let techUseResolver = new TechniqueUseResolver(msg, content);
+            techUseResolver.initialize();
+            techUseResolver.run();
+        },
+        commandUseSecondaryTechnique = function (msg, content) {
+            let techUseResolver = new TechniqueUseResolver(msg, content, true);
+            techUseResolver.initialize();
             techUseResolver.run();
         }
     ;
@@ -481,7 +492,6 @@ class TechniqueResolverData {
         this.createEmpty();
         this.msg = msg;
         this.content = content;
-        this.splitContent(content);
     }
     
     createEmpty() {
@@ -490,6 +500,10 @@ class TechniqueResolverData {
         this.sourceSheetName = "";
         this.senderTokenTargetData = {};
         this.messages = [];
+    }
+    
+    initialize() {
+        this.splitContent(this.content);
     }
     
     splitContent(content) {
@@ -727,9 +741,10 @@ class TechniqueTargetObjectCollection {
 }
 
 class TechniqueSkillCheckResolver extends TechniqueResolverData {
-    constructor(msg, content) {
+    constructor(msg, content, useSecondaryTechniques) {
         super(msg, content);
         this.startTime = Date.now();
+        this.useSecondaryTechniques = (useSecondaryTechniques == true);
     }
 
     createEmpty() {
@@ -767,10 +782,8 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
         try {
             this.technique.importSandboxJson(data);
             this.technique.setup();
-            Debug.Log(`[TechniqueSkill] TechniqueData created`);
         }
         catch {
-            Debug.Log(`[TechniqueSkill] Forming TechniqueData from a name`);
             let techniqueData = WuxTechs.Get(data);
             if (techniqueData == undefined) {
                 let item = WuxItems.Get(data);
@@ -782,7 +795,14 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             this.technique.name = techniqueData.name;
             this.technique.skill = techniqueData.skill;
             this.technique.impacts = techniqueData.impacts;
-            this.technique.effects = new TechniqueEffectDatabase(techniqueData.effects);
+            Debug.Log(`Getting technique data from name with useSecondary at ${this.useSecondaryTechniques}`);
+            if (this.useSecondaryTechniques) {
+                Debug.Log("Setting techniques from the secondary Effects")
+                this.technique.effects = new TechniqueEffectDatabase(techniqueData.secondaryEffects);
+            }
+            else {
+                this.technique.effects = new TechniqueEffectDatabase(techniqueData.effects);
+            }
             this.technique.setup();
         }
     }

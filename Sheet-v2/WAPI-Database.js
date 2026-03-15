@@ -639,13 +639,13 @@ class TechniqueData extends WuxDatabaseData {
     
     updateVersion(newVersion) {
         let version = this.getVersionParts(newVersion);
-        // let baseVersionValue = 0;
-        // if (parseInt(version[0]) != baseVersionValue) {
-        //     version[0] = baseVersionValue;
-        //     for (let i = 1; i < version.length; i++) {
-        //         version[i] = 0;
-        //     }
-        // }
+        let baseVersionValue = 0;
+        if (parseInt(version[0]) != baseVersionValue) {
+            version[0] = baseVersionValue;
+            for (let i = 1; i < version.length; i++) {
+                version[i] = 0;
+            }
+        }
         this.version = version.join(".");
     }
     incrementVersion() {
@@ -1039,6 +1039,9 @@ class TechniqueUseEffect extends dbObj {
 
     getUseTech(sheetName, isCustom) {
         return `!utech ${this.getRollActionData(sheetName, isCustom)}`;
+    }
+    getUseTech2(sheetName, isCustom) {
+        return `!utech2 ${this.getRollActionData(sheetName, isCustom)}`;
     }
 
     getCheckTech(sheetName, isCustom) {
@@ -2378,7 +2381,7 @@ class TechniqueDisplayData {
                 effectData.import(this.technique.name, this.technique.skill, this.technique.impacts, this.technique.secondaryEffects);
 
                 output += `{{checkData2=${effectData.getCheckTech(this.sheetname, this.technique.isCustom)}}}`;
-                output += `{{targetData2=${effectData.getUseTech(this.sheetname, this.technique.isCustom)}}}`;
+                output += `{{targetData2=${effectData.getUseTech2(this.sheetname, this.technique.isCustom)}}}`;
             }
             if (this.technique.hasAdv != 0) {
                 output += `{{hascheck=${this.technique.hasAdv}}`;
