@@ -2379,8 +2379,6 @@ class TechniqueDisplayData {
             if (this.technique.secondaryEffects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
                 effectData.import(this.technique.name, this.technique.skill, this.technique.impacts, this.technique.secondaryEffects);
-
-                output += `{{checkData2=${effectData.getCheckTech(this.sheetname, this.technique.isCustom)}}}`;
                 output += `{{targetData2=${effectData.getUseTech2(this.sheetname, this.technique.isCustom)}}}`;
             }
             if (this.technique.hasAdv != 0) {
