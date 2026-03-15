@@ -1105,7 +1105,7 @@ class TokenTargetEffectsData {
                         this.effectMessages.push("Target is Vined. Adding Vine ranks to Aflame and taking damage.");
                         rank += vined;
                         this.addStatusResult("Stat_Vined", "remove", vined);
-                        this.takeAflameEffect(attrHandler);
+                        this.takeAflameEffect(attrHandler, vined);
                     }
                     break;
                 case "Stat_Vined":
@@ -1117,7 +1117,7 @@ class TokenTargetEffectsData {
                     if (aflame > 0) {
                         this.effectMessages.push("Target is Aflame. Adding Vine ranks to Aflame and taking damage.");
                         this.addStatusResult("Aflame", "add", rank);
-                        this.takeAflameEffect(attrHandler);
+                        this.takeAflameEffect(attrHandler, rank);
                         return;
                     }
                     break;
@@ -1359,8 +1359,11 @@ class TokenTargetEffectsData {
             });
     }
 
-    takeAflameEffect(attributeHandler) {
+    takeAflameEffect(attributeHandler, extraValue) {
         let aflame = this.tokenTargetData.getStatusRank(attributeHandler, "Stat_Aflame");
+        if (extraValue != undefined && isNaN(parseInt(extraValue))) {
+            aflame += parseInt(extraValue);
+        }
         if (aflame > 0) {
             let roll = new DamageRoll();
             roll.rollDice(aflame, 6);
