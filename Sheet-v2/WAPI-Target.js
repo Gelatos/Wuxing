@@ -172,6 +172,13 @@ class TokenTargetData extends TargetData {
         }
         return true;
     }
+    validateTokenBar(barIndex) {
+        if (!this.validateToken()) {
+            return false;
+        }
+        let tokenValue = this.token.get(`bar${barIndex}_value`);
+        return tokenValue != undefined && tokenValue != "";
+    }
 
     // token bar
     initToken() {
@@ -183,7 +190,7 @@ class TokenTargetData extends TargetData {
     }
 
     setBar(barIndex, variableObj, showBar, showText) {
-        if (!this.validateToken()) {
+        if (!this.validateTokenBar(barIndex)) {
             return false;
         }
         if (variableObj == undefined) {
@@ -215,19 +222,19 @@ class TokenTargetData extends TargetData {
     }
 
     getBarValue(barIndex) {
-        if (!this.validateToken()) {
+        if (!this.validateTokenBar(barIndex)) {
             return 0;
         }
         return this.token.get(`bar${barIndex}_value`);
     }
     getBarMax(barIndex) {
-        if (!this.validateToken()) {
+        if (!this.validateTokenBar(barIndex)) {
             return 0;
         }
         return this.token.get(`bar${barIndex}_max`);
     }
     setBarValue(barIndex, value) {
-        if (!this.validateToken()) {
+        if (!this.validateTokenBar(barIndex)) {
             return false;
         }
         this.token.set(`bar${barIndex}_value`, value);
@@ -320,13 +327,15 @@ class TokenTargetData extends TargetData {
             return false;
         }
         this.token.set("status_dead", value);
-        
+
+        let subAttributeHandler = new SandboxAttributeHandler(attributeHandler.characterId);
         if (value == true) {
-            this.addStatus(attributeHandler, "Status_Downed", 1);
+            this.addStatus(subAttributeHandler, "Status_Downed", 1);
         }
         else {
-            this.removeStatus(attributeHandler, "Status_Downed");
+            this.removeStatus(subAttributeHandler, "Status_Downed");
         }
+        subAttributeHandler.run();
     }
 
     // Modifiers
