@@ -1055,22 +1055,22 @@ class TechniqueUseEffect extends dbObj {
         return `${this.name}$$${sheetName}`;
     }
 
-    sanitizeSheetRollAction(sheetRoll) {
-        sheetRoll = sheetRoll.replace(/"/g, "%%");
-        sheetRoll = sheetRoll.replace(/:/g, "&&");
-        sheetRoll = sheetRoll.replace(/{/g, "<<");
-        sheetRoll = sheetRoll.replace(/}/g, ">>");
-        sheetRoll = sheetRoll.replace(/%/g, "&#37;");
-        sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
-        sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
-        sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
-        sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
-        sheetRoll = sheetRoll.replace(/@/g, "&#64;");
-        sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
-        sheetRoll = sheetRoll.replace(/]/g, "&#93;");
-        sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
-        sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
-        return sheetRoll;
+    sanitizeSheetRollAction(jsonString) {
+        jsonString = jsonString.replace(/"/g, "%%");
+        jsonString = jsonString.replace(/:/g, "&&");
+        jsonString = jsonString.replace(/{/g, "<<");
+        jsonString = jsonString.replace(/}/g, ">>");
+        jsonString = jsonString.replace(/%/g, "&#37;");
+        jsonString = jsonString.replace(/\(/g, "&#40;");
+        jsonString = jsonString.replace(/\)/g, "&#41;");
+        jsonString = jsonString.replace(/\*/g, "&#42;");
+        jsonString = jsonString.replace(/\?/g, "&#63;");
+        jsonString = jsonString.replace(/@/g, "&#64;");
+        jsonString = jsonString.replace(/\[/g, "&#91;");
+        jsonString = jsonString.replace(/]/g, "&#93;");
+        jsonString = jsonString.replace(/\(/g, "&#40;");
+        jsonString = jsonString.replace(/\)/g, "&#41;");
+        return jsonString;
     }
 
     unsanitizeSheetRollAction(jsonString) {
@@ -5186,59 +5186,6 @@ var Format = Format || (function () {
 
         showTooltip = function (message, tooltip) {
             return `[${message}](#" class="showtip" title="${sanitizeSheetRoll(tooltip)})`;
-        },
-
-
-        // Chat Formatting
-        // ------------------------
-
-        sanitizeMacroJSON = function (macro) {
-            macro = macro.replace(/"/g, "%#");
-            macro = macro.replace(/\{/gi, "&#123;");
-            macro = macro.replace(/}/gi, "&#125;");
-            return macro;
-        },
-
-        parseMacroJSON = function (macro) {
-            macro = macro.replace(/%#/g, '"');
-            return JSON.parse(macro);
-        },
-
-        sanitizeMacroRollTemplate = function (roll) {
-            let sheetRoll = roll;
-            sheetRoll = sheetRoll.replace(/\{/gi, "&#123;");
-            sheetRoll = sheetRoll.replace(/}/gi, "&#125;");
-            return sheetRoll;
-        },
-
-        sanitizeSheetRoll = function (roll) {
-            let sheetRoll = roll;
-            sheetRoll = sheetRoll.replace(/%/g, "&#37;");
-            sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
-            sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
-            sheetRoll = sheetRoll.replace(/</g, "&#60;");
-            sheetRoll = sheetRoll.replace(/>/g, "&#62;");
-            sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
-            sheetRoll = sheetRoll.replace(/@/g, "&#64;");
-            sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
-            sheetRoll = sheetRoll.replace(/]/g, "&#93;");
-            sheetRoll = sheetRoll.replace(/\n/g, "<br />");
-            return sheetRoll;
-        },
-
-        sanitizeSheetRollAction = function (roll) {
-            let sheetRoll = roll;
-            sheetRoll = sheetRoll.replace(/%/g, "&#37;");
-            sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
-            sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
-            sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
-            sheetRoll = sheetRoll.replace(/:/g, "");
-            sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
-            sheetRoll = sheetRoll.replace(/@/g, "&#64;");
-            sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
-            sheetRoll = sheetRoll.replace(/]/g, "&#93;");
-            sheetRoll = sheetRoll.replace(/\n/g, "&&");
-            return sheetRoll;
         }
 
     ;
@@ -5251,12 +5198,7 @@ var Format = Format || (function () {
         StringToArray: stringToArray,
         ArrayToString: arrayToString,
         SortArrayDecrementing: sortArrayDecrementing,
-        ShowTooltip: showTooltip,
-        SanitizeMacroJSON: sanitizeMacroJSON,
-        ParseMacroJSON: parseMacroJSON,
-        SanitizeMacroRollTemplate: sanitizeMacroRollTemplate,
-        SanitizeSheetRoll: sanitizeSheetRoll,
-        SanitizeSheetRollAction: sanitizeSheetRollAction
+        ShowTooltip: showTooltip
     };
 }());
 
