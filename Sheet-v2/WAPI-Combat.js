@@ -1148,10 +1148,6 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                 techSkillCheckResolver.addMessage(`${techSkillCheckResolver.targetTokenEffect.tokenTargetData.displayName}: +5 Evasion. Removed Dodge status.`);
             }
 
-            if (techSkillCheckResolver.targetTokenEffect.tokenTargetData.getDowned()) {
-                message += " (Downed -5)";
-                dcValue -= 5;
-            }
             if (dcValue < 0) {
                 dcValue = 0;
             }
