@@ -3187,7 +3187,12 @@ class TechniqueAssessment {
         if (technique.action == "Full") {
             points += 3 + (2 * energy) + this.basePoints;
             this.pointsCalc = "(Full)";
-        } else if (technique.action == "Swift") {
+        }
+        else if (technique.action == "Assist") {
+            points += 3;
+            this.pointsCalc = "(Assist)";
+        }
+        else if (technique.action == "Swift") {
             let lookupName = WuxDef.GetAbbreviation("Job") + "_" + technique.techSet;
             let def = WuxDef.Get(lookupName);
             if (WuxDef.GetTitle(lookupName) == "") {
@@ -3230,6 +3235,9 @@ class TechniqueAssessment {
 
     assessEffect(effect, attributeHandler) {
         switch (effect.type) {
+            case "Damage":
+                this.getDamageAssessment(effect, attributeHandler);
+                break;
             case "HP":
                 this.getHPAssessment(effect, attributeHandler);
                 break;
@@ -3272,6 +3280,58 @@ class TechniqueAssessment {
             case "EN":
                 this.getEnAssessment(effect, attributeHandler);
                 break;
+        }
+    }
+
+    getDamageAssessment(effect, attributeHandler) {
+        let output = this.getDiceFormula(effect, attributeHandler);
+        let subTypeParts = effect.subType.split(":");
+        let subType = subTypeParts[0];
+
+        let message;
+        if (effect.effect == "Psyche") {
+            if (effect.target == "Self") {
+                output.value = Math.floor(output.value * -0.5);
+            } else {
+                this.will += output.value;
+                this.lowWill += output.lowValue;
+                this.highWill += output.highValue;
+                if (this.dps > 0) {
+                    output.value = Math.floor(output.value * 0.5);
+                }
+            }
+        } 
+        else {
+            if (effect.target == "Self") {
+                output.value = Math.floor(output.value * -0.5);
+            } else {
+                this.dps += output.value;
+                this.lowDps += output.lowValue;
+                this.highDps += output.highValue;
+            }
+            message = `(HP)`;
+
+            if (effect.defense == "WillBreak") {
+                this.addImpactTrait(`Trait_Will:Trait_Atk`);
+            }
+            else {
+                this.addPointsRubric(output.value, message);
+                this.addImpactTrait("Trait_Atk");
+            }
+            this.addDefensePointsRubric(effect, output.value, message);
+            this.addTargetedPointsRubric(effect, output.value);
+        }
+
+        if (effect.traits != "") {
+            let effectPts;
+            if (effect.traits.includes("Brutal")) {
+                effectPts = Math.floor(output.value * 0.33);
+                this.addPointsRubric(effectPts, `(Brutal)`);
+            }
+            if (effect.traits.includes("AP")) {
+                effectPts = Math.floor(output.value * 0.33);
+                this.addPointsRubric(effectPts, `(AP)`);
+            }
         }
     }
 
@@ -3724,20 +3784,16 @@ class TechniqueAssessment {
     addDefensePointsRubric(effect, points) {
         let pointMod = 0;
 
-        let hasDefenseTypes = ["HP", "WILL", "Favor", "Status", "Move", "EN"];
+        let hasDefenseTypes = ["Damage", "Favor", "Status", "Move"];
         if (hasDefenseTypes.some(type => type == effect.type)) {
-            switch (effect.defense) {
-                case "Def_Evasion":
+            switch (this.technique.coreDefense) {
+                case "Evasion":
                     pointMod = Math.ceil(points * 0.25);
                     this.addPointsRubric(pointMod, `(Evasion)`);
                     break;
-                case "Def_Fortitude":
-                    pointMod = Math.ceil(points * 0.15);
-                    this.addPointsRubric(pointMod, `(Fortitude)`);
-                    break;
-                case "Def_Scrutiny":
-                    pointMod = Math.ceil(points * 0.15);
-                    this.addPointsRubric(pointMod, `(Scrutiny)`);
+                case "Insight":
+                    pointMod = Math.ceil(points * 0.25);
+                    this.addPointsRubric(pointMod, `(Insight)`);
                     break;
                 case "":
                     if (effect.target != "Self") {

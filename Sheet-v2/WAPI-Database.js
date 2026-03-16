@@ -875,6 +875,7 @@ class TechniqueEffect extends dbObj {
         i++;
         this.effect = "" + dataArray[i];
         switch(this.type) {
+            case "Damage":
             case "HP":
             case "Resistance":
                 this.effect = `${WuxDef.GetAbbreviation("DamageType")}_${this.effect}`;
@@ -2470,6 +2471,9 @@ class BaseTechniqueEffectDisplayData {
     formatEffect(effect) {
         let output= this.formatTemporaryEffect(effect);
         switch (effect.type) {
+            case "Damage":
+                output += this.formatDamageEffect(effect);
+                break;
             case "HP":
                 output += this.formatHpEffect(effect);
                 break;
@@ -2543,6 +2547,10 @@ class BaseTechniqueEffectDisplayData {
                 return "Until the end of the next Long Rest, ";
         }
         return "";
+    }
+
+    formatDamageEffect(effect) {
+        return `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
     }
 
     formatHpEffect(effect) {
@@ -2895,6 +2903,7 @@ class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
     formatEffect(effect) {
         let output= this.formatTemporaryEffect(effect);
         switch (effect.type) {
+            case "Damage":
             case "HP":
             case "WILL":
             case "Favor":
