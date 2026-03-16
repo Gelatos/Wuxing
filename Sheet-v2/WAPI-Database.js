@@ -640,6 +640,7 @@ class TechniqueData extends WuxDatabaseData {
     updateVersion(newVersion) {
         let version = this.getVersionParts(newVersion);
         let baseVersionValue = 0;
+        
         if (parseInt(version[0]) != baseVersionValue) {
             version[0] = baseVersionValue;
             for (let i = 1; i < version.length; i++) {
@@ -662,9 +663,14 @@ class TechniqueData extends WuxDatabaseData {
     getVersionParts(newVersion) {
         if (newVersion != undefined) {
             if (newVersion == "") {
-                return ["1"];
+                return ["0", "1"];
             }
-            return newVersion.split(".");
+            let output = newVersion.split(".");
+            if (output.length < 2) {
+                output[0] = 0;
+                output[1] = newVersion;
+            }
+            return output;
         }
         if (this.version != undefined) {
             return this.version.split(".");
