@@ -639,7 +639,7 @@ class TechniqueData extends WuxDatabaseData {
     
     updateVersion(newVersion) {
         let version = this.getVersionParts(newVersion);
-        let baseVersionValue = 0;
+        let baseVersionValue = 1;
         
         if (parseInt(version[0]) != baseVersionValue) {
             version[0] = baseVersionValue;
@@ -977,6 +977,7 @@ class TechniqueUseEffect extends dbObj {
     importJson(json) {
         this.name = json.name;
         this.skill = json.skill;
+        this.coreDefense = json.coreDefense;
         this.impacts = json.impacts;
         this.traits = undefined;
         this.effects = new TechniqueEffectDatabase(json.effects);
@@ -989,15 +990,23 @@ class TechniqueUseEffect extends dbObj {
         i++;
         this.skill = "" + dataArray[i];
         i++;
+        this.coreDefense = "" + dataArray[i];
+        i++;
         this.impacts = "" + dataArray[i];
         this.traits = undefined;
         i++;
         this.effects = new TechniqueEffectDatabase();
     }
     
-    import(name, skill, impacts, effects) {
+    importFromTechnique(technique, useSecondaryEffect) {
+        this.import(technique.name, technique.skill, technique.coreDefense, technique.impacts, 
+            useSecondaryEffect ? techniqueData.secondaryEffects : technique.effects);
+    }
+    
+    import(name, skill, coreDefense, impacts, effects) {
         this.name = name;
         this.skill = skill;
+        this.coreDefense = coreDefense;
         this.impacts = impacts;
         if (effects != undefined) {
             this.effects = effects;
@@ -1011,6 +1020,7 @@ class TechniqueUseEffect extends dbObj {
         this.name = "";
         this.skill = "";
         this.skillType = "";
+        this.coreDefense = "";
         this.impacts = "";
         this.traits = undefined;
         this.effects = new TechniqueEffectDatabase();
@@ -2378,14 +2388,14 @@ class TechniqueDisplayData {
             }
             if (this.technique.effects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
-                effectData.import(this.technique.name, this.technique.skill, this.technique.impacts, this.technique.effects);
+                effectData.importFromTechnique(this.technique, false);
 
                 output += `{{checkData=${effectData.getCheckTech(this.sheetname, this.technique.isCustom)}}}`;
                 output += `{{targetData=${effectData.getUseTech(this.sheetname, this.technique.isCustom)}}}`;
             }
             if (this.technique.secondaryEffects.keys.length > 0) {
                 let effectData = new TechniqueUseEffect();
-                effectData.import(this.technique.name, this.technique.skill, this.technique.impacts, this.technique.secondaryEffects);
+                effectData.import(this.technique, true);
                 output += `{{targetData2=${effectData.getUseTech2(this.sheetname, this.technique.isCustom)}}}`;
             }
             if (this.technique.hasAdv != 0) {
@@ -4197,19 +4207,19 @@ class CombatDetailsHandler {
     
     getDefense(defense) {
         switch (defense) {
-            case "Def_Brace":
+            case "Brace":
                 return this.combatDetails.defenses.brace;
-            case "Def_Evasion":
+            case "Evasion":
                 return this.combatDetails.defenses.evasion;
-            case "Def_Reflex":
+            case "Reflex":
                 return this.combatDetails.defenses.reflex;
-            case "Def_Warding":
+            case "Warding":
                 return this.combatDetails.defenses.warding;
-            case "Def_Ego":
+            case "Ego":
                 return this.combatDetails.defenses.ego;
-            case "Def_Resolve":
+            case "Resolve":
                 return this.combatDetails.defenses.resolve;
-            case "Def_Insight":
+            case "Insight":
                 return this.combatDetails.defenses.insight;
             default:
                 return 0;

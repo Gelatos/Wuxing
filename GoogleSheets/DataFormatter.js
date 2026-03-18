@@ -2936,6 +2936,9 @@ class TechniqueAssessment {
 
         this.basePoints = 8;
         this.points = 0;
+        this.defenseModifier = 0;
+        this.defenseModName = "";
+        this.setDefenseModifier();
         this.pointsCalc = "";
         this.pointsRubric = "";
         this.willbreakPoints = 0;
@@ -2968,6 +2971,24 @@ class TechniqueAssessment {
         this.requestVariance = false;
 
         this.assessTechnique();
+    }
+    
+    setDefenseModifier() {
+        let modNames = [];
+        let accurateDefenses = ["Evasion", "Insight"];
+        if (accurateDefenses.some(type => type == this.technique.coreDefense)) {
+            this.defenseModifier += 0.25;
+            modNames.push("Effective");
+        }
+        if (this.technique.impacts.includes("Truehit")) {
+            this.defenseModifier += 0.4;
+            modNames.push("Truehit");
+        }
+        if (this.technique.impacts.includes("Accurate")) {
+            this.defenseModifier += 0.1;
+            modNames.push("Accurate");
+        }
+        this.defenseModName = modNames.join(", ");
     }
 
     setAssessment(value) {
@@ -3782,26 +3803,9 @@ class TechniqueAssessment {
     }
 
     addDefensePointsRubric(effect, points) {
-        let pointMod = 0;
-
         let hasDefenseTypes = ["Damage", "Favor", "Status", "Move"];
         if (hasDefenseTypes.some(type => type == effect.type)) {
-            switch (this.technique.coreDefense) {
-                case "Evasion":
-                    pointMod = Math.ceil(points * 0.25);
-                    this.addPointsRubric(pointMod, `(Evasion)`);
-                    break;
-                case "Insight":
-                    pointMod = Math.ceil(points * 0.25);
-                    this.addPointsRubric(pointMod, `(Insight)`);
-                    break;
-                case "":
-                    if (effect.target != "Self") {
-                        pointMod = Math.ceil(points * 0.4);
-                        this.addPointsRubric(pointMod, `(No Def)`);
-                    }
-                    break;
-            }
+            this.addPointsRubric(Math.ceil(points * this.defenseModifier), `(${this.defenseModName})`);
         }
     }
 

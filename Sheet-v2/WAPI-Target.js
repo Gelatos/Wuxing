@@ -772,7 +772,11 @@ class TokenTargetData extends TargetData {
     // Status
     hasStatus(attrHandler, statusDefinitionName) {
         let tokenTargetData = this;
-        let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
+        let tokenNote = tokenTargetData.getTokenNote();
+        if (!tokenNote) {
+            return false;
+        }
+        let tokenNoteReference = new TokenNoteReference(tokenNote);
         return tokenNoteReference.statusHandler.hasStatus(statusDefinitionName);
     }
     getStatusRank(attrHandler, statusDefinitionName) {
@@ -948,6 +952,7 @@ class TokenTargetEffectsData {
         this.tokenTargetData = tokenTargetData;
         this.effectMessages = [];
         this.damageRolls = [];
+        this.halveAllDamage = false;
         this.statusEffects = {};
         this.spentSurge = false;
         this.removeStatusMessage = "";
@@ -981,6 +986,7 @@ class TokenTargetEffectsData {
                     tokenTargetEffect.takeHpHealing(attrSetter, damageRoll);
                     break;
                 case "Psyche":
+                    tokenTargetEffect.modifyDamageRollHalveDamage(damageRoll);
                     tokenTargetEffect.modifyDamageRollResistanceCheck(damageRoll);
                     tokenTargetEffect.takeWillDamage(attrSetter, damageRoll, willBreakEffect);
                     break;
@@ -994,6 +1000,7 @@ class TokenTargetEffectsData {
                     tokenTargetEffect.takeWillFullHealing(attrSetter);
                     break;
                 default:
+                    tokenTargetEffect.modifyDamageRollHalveDamage(damageRoll);
                     tokenTargetEffect.modifyDamageRollArmorAndResistanceCheck(damageRoll, attrSetter);
                     if (tokenTargetEffect.modifyDamageRollShieldedCheck(damageRoll, attrSetter, "Stat_Shielded", "Shielded")) {
                         hasShielded = true;
@@ -1016,6 +1023,11 @@ class TokenTargetEffectsData {
         if (hasRockShield) {
             tokenTargetEffect.effectMessages.push(`Removed Rock Shield status.`);
             tokenTargetEffect.tokenTargetData.removeStatus(attrSetter, "Stat_Rock Shield");
+        }
+    }
+    modifyDamageRollHalveDamage(damageRoll) {
+        if (this.halveAllDamage) {
+            damageRoll.addModToRoll(-1 * Math.floor(damageRoll.total / 2), "Failed Check");
         }
     }
     modifyDamageRollArmorAndResistanceCheck(damageRoll, attrSetter) {
@@ -1494,7 +1506,7 @@ class TokenNoteReference {
     }
 
     createEmpty() {
-        this.statusHandler = {};
+        this.statusHandler = new StatusHandler();
         this.surges = {current: 0, max: 0};
         this.vitality = {current: 0, max: 0};
         this.teamIndex = 0;
