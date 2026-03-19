@@ -191,7 +191,7 @@ class Database extends Dictionary {
             for (let key in this.sortingGroups[property]) {
                 keys += `${key}, `;
             }
-            Debug.Log (`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
+            // Debug.Log (`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
             return [];
         }
         return this.sortingGroups[property][propertyValue];
@@ -401,6 +401,7 @@ class TechniqueEffectDatabase extends Database {
             return new TechniqueEffect(data);
         };
         super(data, ["type"], dataCreation);
+        this.useDefaultWillBreak = false;
     }
 
     importJson(json) {
@@ -446,6 +447,14 @@ class TechniqueEffectDatabase extends Database {
         jsonString = jsonString.replace(/<</g, "{");
         jsonString = jsonString.replace(/>>/g, "}");
         return JSON.parse(jsonString);
+    }
+
+    getDefaultWillbreak() {
+        let techniqueEffect = new TechniqueEffect();
+        techniqueEffect.defense = "WillBreak";
+        techniqueEffect.type = "Status";
+        techniqueEffect.effect = "Flustered";
+        return techniqueEffect;
     }
 }
 
@@ -634,12 +643,13 @@ class TechniqueData extends WuxDatabaseData {
         i++;
         
         this.techniqueEffect = new TechniqueEffect(dataArray.slice(i));
+        this.techniqueEffect.updateSheetImportFormula(this);
         this.addEffect(this.techniqueEffect);
     }
     
     updateVersion(newVersion) {
         let version = this.getVersionParts(newVersion);
-        let baseVersionValue = 1;
+        let baseVersionValue = 2;
         
         if (parseInt(version[0]) != baseVersionValue) {
             version[0] = baseVersionValue;
@@ -804,11 +814,32 @@ class TechniqueData extends WuxDatabaseData {
                 this.endEffectConditionName = effect.defense;
                 this.endEffectConditionEffect = effect.effect;
                 return;
+            case "WillBreak":
+                effect.setName(`T${this.getEffectDbLength()}`);
+                this.addToEffectsDb(effect);
+                if (effect.traits != "") {
+                    this.addDefinition(`Trait_${effect.traits}`);
+                }
+                if (this.secondEffectConditionName != "") {
+                    this.secondaryEffects.useDefaultWillBreak = false;
+                }
+                else {
+                    this.effects.useDefaultWillBreak = false;
+                }
+                return;
             default:
                 effect.setName(`T${this.getEffectDbLength()}`);
                 this.addToEffectsDb(effect);
                 if (effect.traits != "") {
                     this.addDefinition(`Trait_${effect.traits}`);
+                }
+                if (effect.type == "Damage" && effect.effect == "Psyche") {
+                    if (this.secondEffectConditionName != "") {
+                        this.secondaryEffects.useDefaultWillBreak = true;
+                    }
+                    else {
+                        this.effects.useDefaultWillBreak = true;
+                    }
                 }
                 return;
         }
@@ -870,6 +901,9 @@ class TechniqueEffect extends dbObj {
         this.dVal = "" + dataArray[i];
         i++;
         this.dType = "" + dataArray[i];
+        if (this.dType == "" && this.dVal != "") {
+            this.dType = "3";
+        }
         i++;
         this.formula = new FormulaData("" + dataArray[i]);
         i++;
@@ -877,7 +911,6 @@ class TechniqueEffect extends dbObj {
         switch(this.type) {
             case "Damage":
             case "HP":
-            case "Resistance":
                 this.effect = `${WuxDef.GetAbbreviation("DamageType")}_${this.effect}`;
                 break;
             case "Status":
@@ -890,6 +923,18 @@ class TechniqueEffect extends dbObj {
         i++;
         this.traits = "" + dataArray[i];
         i++;
+    }
+    updateSheetImportFormula(baseTechnique) {
+        let formulaString = this.formula.formulaString;
+        if (formulaString == "0") {
+            formulaString = "";
+        }
+        else if (formulaString == "" && this.type == "Damage") {
+            if (baseTechnique != undefined) {
+                formulaString = `SB_MAX${baseTechnique.action == "Full" ? "*2" : ""}`;
+            }
+        }
+        this.formula = new FormulaData(formulaString);
     }
 
     createEmpty() {
@@ -2254,20 +2299,26 @@ class TechniqueDisplayData {
     setEffects(technique) {
         let techDisplayData = this;
         techDisplayData.effects = [];
-        techDisplayData.iterateTechniqueEffects(technique.effects, function (effectData) {
+        techDisplayData.iterateTechniqueEffects(technique, technique.effects, function (effectData) {
             techDisplayData.effects.push(effectData);
         });
+        if (technique.effects.useDefaultWillBreak) {
+            techDisplayData.effects.push(new TechniqueEffectDisplayData([technique.effects.getDefaultWillbreak()], technique));
+        }
         techDisplayData.secondaryEffectName = technique.secondEffectConditionName;
         techDisplayData.secondaryEffectDesc = technique.secondEffectConditionEffect;
         techDisplayData.secondaryEffects = [];
-        techDisplayData.iterateTechniqueEffects(technique.secondaryEffects, function (effectData) {
+        techDisplayData.iterateTechniqueEffects(technique, technique.secondaryEffects, function (effectData) {
             techDisplayData.secondaryEffects.push(effectData);
         });
+        if (technique.secondaryEffects.useDefaultWillBreak) {
+            techDisplayData.secondaryEffects.push(new TechniqueEffectDisplayData([technique.effects.getDefaultWillbreak()], technique));
+        }
         techDisplayData.endEffectName = technique.endEffectConditionName;
         techDisplayData.endEffectDesc = technique.endEffectConditionEffect;
     }
     
-    iterateTechniqueEffects(effectDictionary, callback) {
+    iterateTechniqueEffects(technique, effectDictionary, callback) {
         let filteredTechniqueEffects = [];
         let defense = "";
         effectDictionary.iterate(function (effect) {
@@ -2276,7 +2327,7 @@ class TechniqueDisplayData {
             }
             else {
                 if (filteredTechniqueEffects.length > 0) {
-                    callback(new TechniqueEffectDisplayData(filteredTechniqueEffects));
+                    callback(new TechniqueEffectDisplayData(filteredTechniqueEffects, technique));
                     filteredTechniqueEffects = [];
                 }
                 filteredTechniqueEffects.push(effect);
@@ -2284,7 +2335,7 @@ class TechniqueDisplayData {
             }
         });
         if (filteredTechniqueEffects.length > 0) {
-            callback(new TechniqueEffectDisplayData(filteredTechniqueEffects));
+            callback(new TechniqueEffectDisplayData(filteredTechniqueEffects, technique));
         }
     }
 
@@ -2735,7 +2786,18 @@ class BaseTechniqueEffectDisplayData {
             case "Charge":
                 return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} Move Charge.`;
             case "Jump":
-                return `${this.formatTarget(effect)} jumps ${this.formatCalcBonus(effect)} spaces ${effect.effect}`;
+                let jump = "";
+                if (effect.effect != "") {
+                    jump += `${effect.effect} spaces high`;
+                } 
+                let calc = this.formatCalcBonus(effect);
+                if (calc > 0) {
+                    if (jump != "") {
+                        jump += " and ";
+                    }
+                    jump += `${calc} spaces wide`;
+                }
+                return `${this.formatTarget(effect)} jumps ${jump}`;
             case "Pushed":
                 return `${this.formatTargetCopula(effect)} Pushed ${this.formatCalcBonus(effect)} spaces ${effect.effect == "" ? "from you." : effect.effect}`;
             case "Pulled":
@@ -2804,7 +2866,7 @@ class BaseTechniqueEffectDisplayData {
 
 class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
 
-    constructor(techniqueEffects) {
+    constructor(techniqueEffects, technique) {
         super();
         if (techniqueEffects == undefined) {
             return;
@@ -2814,11 +2876,11 @@ class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
         this.checkDescription = "";
         this.effects = [];
 
-        this.importDefenseData(techniqueEffects[0]);
+        this.importDefenseData(techniqueEffects[0], technique);
         this.importEffectData(techniqueEffects);
     }
 
-    importDefenseData(techniqueEffect) {
+    importDefenseData(techniqueEffect, technique) {
         let defense = techniqueEffect.defense;
         let definition;
 
@@ -2853,6 +2915,12 @@ class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
                 this.check = definition.getTitle();
                 this.checkDescription = definition.getDescription();
             }
+            else if (defense == "Core") {
+                definition = WuxDef.Get(Format.GetDefinitionName("Defense", technique.coreDefense));
+                let definition2 = WuxDef.Get("Title_TechDefense");
+                this.check = definition2.getTitle(definition.getTitle());
+                this.checkDescription = `${definition2.getDescription()}\n${definition.getDescription()}`;
+            }
             else {
                 definition = WuxDef.Get(defense);
                 if (definition.group == "Result") {
@@ -2860,7 +2928,7 @@ class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
                     this.checkDescription = `${definition.getDescription()}`;
                 } else {
                     let definition2 = WuxDef.Get("Title_TechDefense");
-                    this.check = `${definition2.getTitle()}${definition.getTitle()}`;
+                    this.check = definition2.getTitle(definition.getTitle());
                     this.checkDescription = `${definition2.getDescription()}\n${definition.getDescription()}`;
                 }
             }
@@ -3116,6 +3184,7 @@ class FormulaData {
     }
 
     createEmpty() {
+        this.formulaString = "";
         this.workers = [];
     }
 
@@ -3124,13 +3193,13 @@ class FormulaData {
     }
 
     importFormula(data) {
-        data = "" + data;
-        if (data == "" || data == undefined) {
+        this.formulaString = "" + data;
+        if (this.formulaString == "" || this.formulaString == undefined) {
             return;
         }
 
         let formulaData = this;
-        this.iterateFormulaComponentsForImport(data, function (definitionName, definitionNameModifier, multiplier, max) {
+        this.iterateFormulaComponentsForImport(this.formulaString, function (definitionName, definitionNameModifier, multiplier, max) {
             if (isNaN(parseInt(definitionName))) {
                 let definition = [];
                 let modDefinition = {};
