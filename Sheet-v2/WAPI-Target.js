@@ -172,13 +172,6 @@ class TokenTargetData extends TargetData {
         }
         return true;
     }
-    validateTokenBar(barIndex) {
-        if (!this.validateToken()) {
-            return false;
-        }
-        let tokenValue = this.token.get(`bar${barIndex}_value`);
-        return tokenValue != undefined && tokenValue != "";
-    }
 
     // token bar
     initToken() {
@@ -190,7 +183,7 @@ class TokenTargetData extends TargetData {
     }
 
     setBar(barIndex, variableObj, showBar, showText) {
-        if (!this.validateTokenBar(barIndex)) {
+        if (!this.validateToken()) {
             return false;
         }
         if (variableObj == undefined) {
@@ -222,19 +215,29 @@ class TokenTargetData extends TargetData {
     }
 
     getBarValue(barIndex) {
-        if (!this.validateTokenBar(barIndex)) {
+        if (!this.validateToken()) {
             return 0;
         }
-        return this.token.get(`bar${barIndex}_value`);
+        let value = this.token.get(`bar${barIndex}_value`);
+        if (value == "" || value == undefined) {
+            return 0;
+        }
+        
+        return value;
     }
     getBarMax(barIndex) {
-        if (!this.validateTokenBar(barIndex)) {
+        if (!this.validateToken()) {
             return 0;
         }
-        return this.token.get(`bar${barIndex}_max`);
+        let value = this.token.get(`bar${barIndex}_max`);
+        if (value == "" || value == undefined) {
+            return 0;
+        }
+
+        return value;
     }
     setBarValue(barIndex, value) {
-        if (!this.validateTokenBar(barIndex)) {
+        if (!this.validateToken()) {
             return false;
         }
         this.token.set(`bar${barIndex}_value`, value);
@@ -330,10 +333,10 @@ class TokenTargetData extends TargetData {
 
         let subAttributeHandler = new SandboxAttributeHandler(attributeHandler.characterId);
         if (value == true) {
-            this.addStatus(subAttributeHandler, "Status_Downed", 1);
+            this.addStatus(subAttributeHandler, "Stat_Downed", 1);
         }
         else {
-            this.removeStatus(subAttributeHandler, "Status_Downed");
+            this.removeStatus(subAttributeHandler, "Stat_Downed");
         }
         subAttributeHandler.run();
     }
@@ -991,6 +994,7 @@ class TokenTargetEffectsData {
                     tokenTargetEffect.takeWillDamage(attrSetter, damageRoll, willBreakEffect);
                     break;
                 case "Will Overflow":
+                    Debug.Log("Overflow action");
                     tokenTargetEffect.takeWillOverflowDamage(attrSetter, damageRoll);
                     break;
                 case "Will Heal":
@@ -1299,11 +1303,10 @@ class TokenTargetEffectsData {
 
         this.tokenTargetData.addWill(attributeHandler, -1 * damageRoll.total,
             function (results, attrHandler, attributeVar, tokenTargetData) {
-                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} will damage.`);
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} psyche damage.`);
                 if (results.remainder < 0) {
                     // the target can take a will break
                     if (willBreakEffect != undefined) {
-                        willBreakEffect.addWillResetEffect(results.remainder * -1);
                         targetEffect.effectMessages.push(`<span class="sheet-wuxInlineRow">[Use Will Break Effect](${willBreakEffect.printWillBreakString()})</span> `)
                     }
                 }
@@ -1341,13 +1344,14 @@ class TokenTargetEffectsData {
 
                 if (surgeResults.current > 0) {
                     surgeResults.newValue = surgeResults.current - 1;
-                    results.newValue = results.max + value;
-                    if (results.newValue <= 0) {
-                        results.newValue = 1; // we do not allow multiple willbreaks to occur. Willpower always restores to at least 1
-                    }
+                    results.newValue = results.max;
+                    Debug.Log("Setting will results to " + results.newValue);
+                    // if (results.newValue <= 0) {
+                    //     results.newValue = 1; // we do not allow multiple willbreaks to occur. Willpower always restores to at least 1
+                    // }
                     targetEffect.effectMessages.push(`${targetEffect.tokenTargetData.displayName} consumes a Surge. ` +
                         `${targetEffect.tokenTargetData.displayName} fully heals Will ` +
-                        `then takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} damage.`);
+                        (damageRoll.total > 0 ? `then takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} damage.` : ""));
                 } else {
                     surgeResults.newValue = 0;
                     results.newValue = 0;

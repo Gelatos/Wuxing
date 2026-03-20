@@ -2975,10 +2975,16 @@ class TechniqueAssessment {
     
     setDefenseModifier() {
         let modNames = [];
-        let accurateDefenses = ["Evasion", "Insight"];
-        if (accurateDefenses.some(type => type == this.technique.coreDefense)) {
-            this.defenseModifier += 0.25;
-            modNames.push("Effective");
+        if (this.technique.coreDefense == "") {
+            this.defenseModifier += 0.65;
+            modNames.push("Unavoidable");
+        }
+        else {
+            let accurateDefenses = ["Evasion", "Insight"];
+            if (accurateDefenses.some(type => type == this.technique.coreDefense)) {
+                this.defenseModifier += 0.25;
+                modNames.push("Effective");
+            }
         }
         if (this.technique.impacts.includes("Truehit")) {
             this.defenseModifier += 0.4;
@@ -2998,6 +3004,13 @@ class TechniqueAssessment {
             this.assessment = "Too Weak";
         } else if (value < 40) {
             this.assessment = "Weak";
+            if (value > 32) {
+                this.assessment += " 3";
+            } else if (value > 26) {
+                this.assessment += " 2";
+            } else {
+                this.assessment += " 1";
+            }
         } else if (value < 60) {
             this.assessment = "Average";
             if (value > 52) {
@@ -3110,6 +3123,9 @@ class TechniqueAssessment {
     }
 
     pointVarianceRange() {
+        if (this.technique.action == "Passive") {
+            return "0 < 15 < 30";
+        }
         let farPts = Math.floor(this.averagePoints * 3 / 10);
         let closePts = Math.floor(this.averagePoints / 10);
         return `${this.averagePoints - farPts} > ${closePts == 0 ? this.averagePoints : `${this.averagePoints - closePts} < ${this.averagePoints + closePts}`} < ${this.averagePoints + farPts}`;
@@ -3148,7 +3164,13 @@ class TechniqueAssessment {
             this.setAssessment();
         } else {
             let difference = assessor.points - this.averagePoints;
-            let assessmentPercentage = 50 + (difference * 100 / this.averagePoints);
+            let assessmentPercentage = 0;
+            if (this.technique.action == "Passive") {
+                assessmentPercentage = 20 + (assessor.points * 2);
+            }
+            else {
+                assessmentPercentage = 50 + (difference * 100 / this.averagePoints);
+            }
             this.setAssessment(assessmentPercentage);
             this.getVarianceCalculation();
         }
@@ -3170,6 +3192,16 @@ class TechniqueAssessment {
         attributeHandler.current[WuxDef.GetVariable("Attr_RSN")] = 2;
         attributeHandler.addMod(WuxDef.GetVariable("SB_MAX"));
         attributeHandler.current[WuxDef.GetVariable("SB_MAX")] = 3;
+        attributeHandler.addMod(WuxDef.GetVariable("SB_ExcellentDef"));
+        attributeHandler.current[WuxDef.GetVariable("SB_ExcellentDef")] = 5;
+        attributeHandler.addMod(WuxDef.GetVariable("SB_GreatDef"));
+        attributeHandler.current[WuxDef.GetVariable("SB_GreatDef")] = 4;
+        attributeHandler.addMod(WuxDef.GetVariable("SB_GoodDef"));
+        attributeHandler.current[WuxDef.GetVariable("SB_GoodDef")] = 3;
+        attributeHandler.addMod(WuxDef.GetVariable("SB_MedDef"));
+        attributeHandler.current[WuxDef.GetVariable("SB_MedDef")] = 2;
+        attributeHandler.addMod(WuxDef.GetVariable("SB_LowDef"));
+        attributeHandler.current[WuxDef.GetVariable("SB_LowDef")] = 1;
         attributeHandler.addMod(WuxDef.GetVariable("Recall"));
         attributeHandler.current[WuxDef.GetVariable("Recall")] = 3;
         attributeHandler.addMod(WuxDef.GetVariable("CR"));
@@ -3256,6 +3288,9 @@ class TechniqueAssessment {
 
     assessEffect(effect, attributeHandler) {
         switch (effect.type) {
+            case "Boost":
+                this.getBoostAssessment(effect, attributeHandler);
+                break;
             case "Damage":
                 this.getDamageAssessment(effect, attributeHandler);
                 break;
@@ -3304,13 +3339,72 @@ class TechniqueAssessment {
         }
     }
 
+    getBoostAssessment(effect, attributeHandler) {
+        attributeHandler.current[WuxDef.GetVariable("CR")] = 2;
+        let output = this.getDiceFormula(effect, attributeHandler);
+        attributeHandler.current[WuxDef.GetVariable("CR")] = 1;
+        let def = WuxDef.Get(effect.effect);
+        let message = `(${def.getTitle()})`;
+        switch (effect.effect) {
+            case "HP":
+            case "WILL":
+                output.value = Math.ceil(output.value * 0.1);
+                break;
+            case "Cmb_HV":
+                output.value = Math.ceil(output.value * 0.2);
+                break;
+            case "Def_Brace":
+            case "Def_Warding":
+            case "Def_Ego":
+            case "Def_Resolve":
+                // 2 = 2, 3 = 4, 4 = 6, 5 = 8
+                output.value = Math.ceil(output.value + Math.max(Math.ceil(output.value * 0.75 - 1.5), 0));
+                break;
+            case "Def_Evasion":
+            case "Def_Insight":
+                output.value = 1 + Math.ceil(output.value + Math.max(Math.ceil(output.value * 0.75 - 1.5), 0));
+                break;
+            case "StartEN":
+                output.value = Math.ceil(output.value * 2);
+                break;
+            case "Cmb_Mv":
+                output.value = Math.ceil(output.value * 2);
+                break;
+            case "Cmb_MvDash":
+                output.value = Math.ceil(output.value * 1.25);
+                break;
+        }
+
+        this.addPointsRubric(output.value, message);
+    }
+
     getDamageAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
         let subTypeParts = effect.subType.split(":");
         let subType = subTypeParts[0];
 
         let message;
-        if (effect.effect == "Psyche") {
+        if (subType == "Burst Damage") {
+            output.value = Math.max(Math.floor(output.value * 0.25), 1);
+            message = `(Burst)`;
+
+            if (effect.defense != "WillBreak") {
+                this.addPointsRubric(output.value, message);
+            }
+            this.addTargetedPointsRubric(effect, output.value);
+            this.addImpactTrait("Trait_Atk");
+        }
+        else if (subType == "Status") {
+            output.value = Math.max(Math.floor(output.value * 0.25), 1);
+            message = `(Status)`;
+
+            if (effect.defense != "WillBreak") {
+                this.addPointsRubric(output.value, message);
+            }
+            this.addTargetedPointsRubric(effect, output.value);
+            this.addImpactTrait("Trait_Atk");
+        }
+        else if (effect.effect == "Psyche") {
             if (effect.target == "Self") {
                 output.value = Math.floor(output.value * -0.5);
             } else {
@@ -3664,6 +3758,10 @@ class TechniqueAssessment {
                 output.value = 2;
                 impactTrait = `Trait_ForceMove-${effect.subType}`;
                 break;
+            case "Jump":
+                let height = parseInt(effect.effect);
+                output.value += (isNaN(height) ? 0 : height) * 2;
+                break;
         }
         let message = `(${effect.subType == "" ? "Move" : effect.subType})`;
 
@@ -3805,7 +3903,15 @@ class TechniqueAssessment {
     addDefensePointsRubric(effect, points) {
         let hasDefenseTypes = ["Damage", "Favor", "Status", "Move"];
         if (hasDefenseTypes.some(type => type == effect.type)) {
-            this.addPointsRubric(Math.ceil(points * this.defenseModifier), `(${this.defenseModName})`);
+            if (effect.defense == "Core") {
+                let pointTotal = Math.ceil(points * this.defenseModifier);
+                if (pointTotal != 0) {
+                    this.addPointsRubric(pointTotal, `(${this.defenseModName})`);
+                }
+            } else if (effect.defense == "") {
+                let pointTotal = Math.ceil(points * 0.65);
+                this.addPointsRubric(pointTotal, `(Unavoidable)`);
+            }
         }
     }
 

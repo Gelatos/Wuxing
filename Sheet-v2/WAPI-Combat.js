@@ -458,6 +458,7 @@ class TechniqueWillBreakEffects {
         this.sourceSheetName = sourceSheetName;
         this.targetTokenId = targetTokenId;
         this.willBreakEffects = new TechniqueEffectDatabase();
+        this.addWillResetEffect();
     }
 
     add(techniqueEffect) {
@@ -465,12 +466,13 @@ class TechniqueWillBreakEffects {
         this.willBreakEffects.add(techniqueEffect.name, techniqueEffect);
     }
     
-    addWillResetEffect(willDamage) {
+    addWillResetEffect() {
         let willResetEffect = new TechniqueEffect();
         willResetEffect.name = "Will Overflow";
-        willResetEffect.type = "Psyche";
+        willResetEffect.type = "WILL";
         willResetEffect.subType = "Overflow";
-        willResetEffect.formula = new FormulaData(willDamage);
+        willResetEffect.formula = new FormulaData(0);
+        Debug.Log("Adding will reset effect");
         this.add(willResetEffect);
     }
 
@@ -483,7 +485,7 @@ class TechniqueWillBreakEffects {
 
     printWillBreakString() {
         let techUseEffect = this.getTechUseEffect();
-        return techUseEffect.getUseTech(this.sourceSheetName, true) + `$$0$$${this.targetTokenId}`;
+        return techUseEffect.getUseTech(this.sourceSheetName, true) + `$$${this.targetTokenId}$$0`;
     }
 }
 
@@ -1020,6 +1022,9 @@ class TechniqueCheckResolver extends TechniqueSkillCheckResolver {
     }
     
     getPassChance(defense, senderAttrHandler, targetAttrHandler) {
+        if (defense == "") {
+            return;
+        }
         let defenseName = `DC ${defense}`;
         let dcValue = parseInt(defense);
         if (isNaN(dcValue)) {
@@ -1121,6 +1126,10 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
             techUseResolver.rollSkillCheck(attrSetters);
             techUseResolver.checkDc(attrSetters);
             
+            if (techUseResolver.technique.effects.useDefaultWillBreak) {
+                willBreakEffect.add(techUseResolver.technique.effects.getDefaultWillbreak());
+            }
+            
             techUseResolver.technique.effects.iterate(function (techniqueEffect) {
                 if (techniqueEffect.defense == "WillBreak") {
                     willBreakEffect.add(techniqueEffect);
@@ -1181,6 +1190,9 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
     }
     
     checkPassDefense(defense, targetAttrHandler) {
+        if (defense == "") {
+            return true;
+        }
         let message = "";
         let dcValue = parseInt(defense);
         if (isNaN(dcValue)) {
@@ -1259,7 +1271,41 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
     addDamageEffect(techniqueEffect, attrGetters, attrSetters) {
         let roll = "";
         let tokenEffect = this.getTargetTokenEffect(techniqueEffect);
+        let subTypeParts = techniqueEffect.subType.split(":");
+        let subType = subTypeParts[0];
         
+        if (subType == "Burst Damage") {
+            let burstDamageRank = this.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.sender, "Stat_Burst");
+            if (burstDamageRank == false || burstDamageRank <= 0) {
+                this.addMessage(`No Burst condition. No bonus damage.`);
+                return;
+            }
+
+            let modifiedTechniqueEffect = new TechniqueEffect(techniqueEffect);
+            modifiedTechniqueEffect.dVal *= burstDamageRank;
+            modifiedTechniqueEffect.formula.setMultipliers(burstDamageRank);
+            this.senderTokenEffect.tokenTargetData.removeStatus(attrSetters.sender, "Stat_Burst");
+            this.addMessage(`Removed Burst (Rank ${burstDamageRank}) condition.`);
+
+            roll = this.calculateFormula(modifiedTechniqueEffect, attrGetters.sender);
+            let burstDamageType = this.getDamageType(attrGetters, techniqueEffect);
+            roll.setDamageType(burstDamageType);
+            roll.setTraits(techniqueEffect.traits);
+            tokenEffect.addDamageRoll(roll);
+        }
+        else if (subType == "Status") {
+            let statusEffectName = Format.GetDefinitionName("Status", subTypeParts[1]);
+            if (tokenEffect.hasStatus(attrSetters.getObjByTarget(techniqueEffect), statusEffectName)) {
+                let statusEffect = WuxDef.GetTitle(statusEffectName);
+                this.addMessage(`Adding bonus damage from ${statusEffect} conditional`);
+
+                let roll = this.calculateFormula(techniqueEffect, attrGetters.sender);
+                let damageType = this.getDamageType(attrGetters, techniqueEffect);
+                roll.setDamageType(damageType);
+                roll.setTraits(techniqueEffect.traits);
+                tokenEffect.addDamageRoll(roll);
+            }
+        }
         if (techniqueEffect.effect == "Psyche") {
             let roll = this.calculateFormula(techniqueEffect, attrGetters.sender);
             roll.setDamageType("Psyche");
@@ -1383,6 +1429,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                 roll.setDamageType("Will Full Heal");
                 break;
             case "Overflow":
+                Debug.Log("Overflow registered");
                 roll.setDamageType("Will Overflow");
                 break;
             default:
