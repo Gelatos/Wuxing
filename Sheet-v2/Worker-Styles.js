@@ -366,7 +366,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         let advancedCountFieldName = "StyleSlots";
         let arteformSlotName = "Forme_AdvancedSlot";
         let advancedSlotName = "Forme_StyleSlot";
-        let arteformMaxSlots = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
+        // let arteformMaxSlots = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
         let advancedMaxSlots = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
         let actionFieldName = "RepeatingAdvTech";
 
@@ -380,15 +380,15 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             
             let styleName = attrHandler.parseString(equipStyleWorker.styleFieldName);
             Debug.Log(`Unequip ${styleName}`);
-            let emptyEquipSlot = equipStyleWorker.getEquippedSlotFieldName(attrHandler, WuxDef.Get(arteformSlotName),
-                styleName, arteformMaxSlots);
-            if (emptyEquipSlot != undefined) {
-                Debug.Log(`Found Advanced Slot ${emptyEquipSlot.slotFieldName}`);
-                equipStyleWorker.unequipSlot(attrHandler, actionFieldName, emptyEquipSlot.index, emptyEquipSlot.slotFieldName);
-                equipStyleWorker.closeMenu(attrHandler, emptyEquipSlot.slotFieldName);
-            }
-            else {
-                emptyEquipSlot = equipStyleWorker.getEquippedSlotFieldName(attrHandler, WuxDef.Get(advancedSlotName),
+            // let emptyEquipSlot = equipStyleWorker.getEquippedSlotFieldName(attrHandler, WuxDef.Get(arteformSlotName),
+            //     styleName, arteformMaxSlots);
+            // if (emptyEquipSlot != undefined) {
+            //     Debug.Log(`Found Advanced Slot ${emptyEquipSlot.slotFieldName}`);
+            //     equipStyleWorker.unequipSlot(attrHandler, actionFieldName, emptyEquipSlot.index, emptyEquipSlot.slotFieldName);
+            //     equipStyleWorker.closeMenu(attrHandler, emptyEquipSlot.slotFieldName);
+            // }
+            // else {
+                let emptyEquipSlot = equipStyleWorker.getEquippedSlotFieldName(attrHandler, WuxDef.Get(advancedSlotName),
                     styleName, advancedMaxSlots);
                 if (emptyEquipSlot != undefined) {
                     Debug.Log(`Found Style Slot ${emptyEquipSlot.slotFieldName} `);
@@ -400,7 +400,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                     Debug.Log(`No Style Slot found for ${styleName}`);
                     equipStyleWorker.closeMenu(attrHandler);
                 }
-            }
+            // }
         });
 
         WuxWorkerActions.UpdateVisibilityOfFormeActions(equipStyleWorker.attributeHandler);
@@ -488,15 +488,15 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             let jobStyles = WuxDef.Get("Forme_JobSlot");
             let advancedStyles = WuxDef.Get("Forme_AdvancedSlot");
             let normalStyles = WuxDef.Get("Forme_StyleSlot");
-            let maxAdvancedSlots = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
+            // let maxAdvancedSlots = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
             let maxNormalSlots = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
             for (let i = 1; i <= maxNormalSlots; i++) {
-                if (i <= maxAdvancedSlots) {
-                    jobSlots.push({name: attrHandler.parseString(jobStyles.getVariable(i)), index: i});
-                    advancedSlots.push({name: attrHandler.parseString(advancedStyles.getVariable(i)), index: i});
-                    normalSlots.push({name: attrHandler.parseString(advancedStyles.getVariable(i)), index: i});
-                }
-                normalSlots.push({name: attrHandler.parseString(normalStyles.getVariable(i)), index: i + maxAdvancedSlots});
+                // if (i <= maxAdvancedSlots) {
+                    // advancedSlots.push({name: attrHandler.parseString(advancedStyles.getVariable(i)), index: i});
+                    // normalSlots.push({name: attrHandler.parseString(advancedStyles.getVariable(i)), index: i});
+                // }
+                jobSlots.push({name: attrHandler.parseString(jobStyles.getVariable(i)), index: i});
+                normalSlots.push({name: attrHandler.parseString(normalStyles.getVariable(i)), index: i});
             }
 
             styleWorker.iterateBuildStats(function (styleVariableData) {
@@ -518,15 +518,16 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                                 }
                             });
                             break;
+                        case "Expert":
                         case "Advanced":
-                            actionFieldName = "RepeatingAdvTech";
-                            attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsAdvanced")), "on");
-                            advancedSlots.forEach(function (slot) {
-                                if(slot.name == style.name) {
-                                    matchingSlotData = slot;
-                                }
-                            });
-                            break;
+                            // actionFieldName = "RepeatingAdvTech";
+                            // attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsAdvanced")), "on");
+                            // advancedSlots.forEach(function (slot) {
+                            //     if(slot.name == style.name) {
+                            //         matchingSlotData = slot;
+                            //     }
+                            // });
+                            // break;
                         case "Style":
                             actionFieldName = "RepeatingAdvTech";
                             attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsAdvanced")), 0);
@@ -583,14 +584,14 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             let styleWorker = new WuxStyleWorkerBuild();
             attributeHandler.addMod(styleWorker.attrBuildDraft);
 
-            let maxAdvancedStyles = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
+            // let maxAdvancedStyles = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
             let maxNormalStyles = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
-            let advancedStylesDef = WuxDef.Get("Forme_AdvancedSlot");
+            // let advancedStylesDef = WuxDef.Get("Forme_AdvancedSlot");
             let normalStylesDef = WuxDef.Get("Forme_StyleSlot");
             for (let i = 1; i <= maxNormalStyles; i++) {
-                if (i <= maxAdvancedStyles) {
-                    attributeHandler.addMod(advancedStylesDef.getVariable(i));
-                }
+                // if (i <= maxAdvancedStyles) {
+                //     attributeHandler.addMod(advancedStylesDef.getVariable(i));
+                // }
                 attributeHandler.addMod(normalStylesDef.getVariable(i));
             }
 

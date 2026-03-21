@@ -406,14 +406,11 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         let jobStylesVar = "RepeatingJobTech";
         let normalStylesVar = "RepeatingAdvTech";
 
-        let maxAdvancedSlots = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
+        // let maxAdvancedSlots = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
         let maxNormalSlots = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
+        repeaterSlotIds.push({name: jobStylesVar, index: 1, repeaterData: {}});
         for (let i = 1; i <= maxNormalSlots; i++) {
-            if (i <= maxAdvancedSlots) {
-                repeaterSlotIds.push({name: jobStylesVar, index: i, repeaterData: {}});
-                repeaterSlotIds.push({name: normalStylesVar, index: i, repeaterData: {}});
-            }
-            repeaterSlotIds.push({name: normalStylesVar, index: i + maxAdvancedSlots, repeaterData: {}});
+            repeaterSlotIds.push({name: normalStylesVar, index: i, repeaterData: {}});
         }
         return repeaterSlotIds;
     }
@@ -895,11 +892,11 @@ class FormeTechniqueDatabase {
     }
     setFormeSlotsDefinitionData () {
         this.formeDefinitions = [
-            {
-                mainDef: WuxDef.Get("Forme_AdvancedSlot"),
-                max: parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue()),
-                countDef: WuxDef.Get("AdvancedSlots")
-            },
+            // {
+            //     mainDef: WuxDef.Get("Forme_AdvancedSlot"),
+            //     max: parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue()),
+            //     countDef: WuxDef.Get("AdvancedSlots")
+            // },
             {
                 mainDef: WuxDef.Get("Forme_StyleSlot"),
                 max: parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue()),

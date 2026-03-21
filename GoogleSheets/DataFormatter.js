@@ -2998,9 +2998,16 @@ class TechniqueAssessment {
     }
 
     setAssessment(value) {
+        if (this.technique.en > this.getEnergyRestriction()) {
+            this.assessment = "INVALID";
+            return;
+        }
         if (value == undefined) {
             this.assessment = "???";
-        } else if (value < 20) {
+            return;
+        }
+        
+        if (value < 20) {
             this.assessment = "Too Weak";
         } else if (value < 40) {
             this.assessment = "Weak";
@@ -3225,14 +3232,13 @@ class TechniqueAssessment {
     }
 
     getEnergy() {
-        let resources = this.technique.resourceCost.split(";");
-        for (let i = 0; i < resources.length; i++) {
-            let splits = resources[i].split(" ");
-            if (splits.length >= 2 && splits[1].trim() == "EN") {
-                return parseInt(splits[0]);
-            }
+        return this.technique.en;
+    }
+    getEnergyRestriction() {
+        if (this.technique.tier == 1) {
+            return 2;
         }
-        return 0;
+        return this.technique.tier;
     }
 
     getAveragePoint(energy, technique) {
