@@ -81,18 +81,16 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
                     }
                 });
 
-                styleWorker.iterateBuildStats(function (styleVariableData) {
-                    if (styleVariableData.value == null || styleVariableData.value <= 0) {
-                        return;
-                    }
-                    let style = WuxStyles.GetByVariableName(styleVariableData.name);
+                let styles = styleWorker.getStyles();
+                for (let i = 0; i < styles.length; i++) {
+                    let style = styles[i].style;
                     let skills = style.skills.split(";");
                     for (let i = 0; i < skills.length; i++) {
                         let skill = skills[i].trim();
                         styleSkillDictionary.add(skill, 0);
                         Debug.Log(`Adding ${skill} to key skills`);
                     }
-                });
+                }
 
                 let skillDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
                 for (let i = 0; i < skillDefinitions.length; i++) {

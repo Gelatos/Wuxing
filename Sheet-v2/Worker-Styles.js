@@ -137,13 +137,12 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         }
     }
 
-    const populateStyleInspectionTechniques = function (attrHandler, itemPopupRepeater, styleName, maxDisplayTier, affinities, showTierHeaders, restrictToAffinities) {
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), `${styleName} Techniques`);
-        let style = WuxStyles.Get(styleName);
+    const populateStyleInspectionTechniques = function (attrHandler, itemPopupRepeater, style, selectedTechnique, maxDisplayTier, affinities, showTierHeaders, restrictToAffinities) {
+        attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), `${style.name} Techniques`);
         let maxTier = Math.min(style.maxTier, maxDisplayTier);
 
         let selectedElement = null;
-        let styleTechniques = WuxTechs.FilterAndSortTechniquesByRequirement(new DatabaseFilterData("style", styleName));
+        let styleTechniques = WuxTechs.FilterAndSortTechniquesByRequirement(new DatabaseFilterData("style", style.name));
 
         for (let tier = 1; tier <= maxTier; tier++) {
 
@@ -166,7 +165,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 }
                 
                 if (showTierHeaders) {
-                    addStyleTierHeaderToInspectionPopup(attrHandler, itemPopupRepeater, affinity, styleName, tier);
+                    addStyleTierHeaderToInspectionPopup(attrHandler, itemPopupRepeater, affinity, style.name, tier);
                 }
 
                 techsByAffinity.forEach(function (styleTechnique) {
@@ -174,7 +173,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                     attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), styleTechnique.name);
                     attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectType")), "Tech");
 
-                    if (selectedElement == null) {
+                    if (selectedElement == null && (styleTechnique.name == selectedTechnique || selectedTechnique == "")) {
                         selectedElement = {
                             item: styleTechnique,
                             id: newRowId
@@ -301,15 +300,14 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         let advancedCountFieldName = "StyleSlots";
         let arteformSlotName = "Forme_AdvancedSlot";
         let advancedSlotName = "Forme_StyleSlot";
-        let arteformMaxSlots = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
         let advancedMaxSlots = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
         let actionFieldName = "RepeatingAdvTech";
 
         let equipStyleWorker = new EquipStyleWorker();
         equipStyleWorker.setEquipSetterValues(eventinfo.sourceAttribute, "RepeatingStyles");
         equipStyleWorker.setSelectIdFromEventinfo(eventinfo);
-        equipStyleWorker.setupForEquipStyle([arteformCountFieldName, advancedCountFieldName], 
-            [arteformSlotName, advancedSlotName], [arteformMaxSlots, advancedMaxSlots]);
+        equipStyleWorker.setupForEquipStyle([advancedCountFieldName], 
+            [advancedSlotName], [advancedMaxSlots]);
 
         equipStyleWorker.styleRepeater.getIds(function (equipRepeater) {
 
@@ -345,9 +343,6 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                             }
                         }
                         Debug.Log(`Equipping to Style Slot ${emptyEquipSlot.slotFieldName} `);
-                        
-                        // arteform and advanced slots share the same repeaters. So this increments by the max count
-                        emptyEquipSlot.index += arteformMaxSlots;
                     }
                 }
                 else {
@@ -362,19 +357,16 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         });
     };
     const unequipStyle = function (eventinfo) {
-        let arteformCountFieldName = "AdvancedSlots";
         let advancedCountFieldName = "StyleSlots";
-        let arteformSlotName = "Forme_AdvancedSlot";
         let advancedSlotName = "Forme_StyleSlot";
-        // let arteformMaxSlots = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
         let advancedMaxSlots = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
         let actionFieldName = "RepeatingAdvTech";
 
         let equipStyleWorker = new EquipStyleWorker();
         equipStyleWorker.setEquipSetterValues(eventinfo.sourceAttribute, "RepeatingStyles");
         equipStyleWorker.setSelectIdFromEventinfo(eventinfo);
-        equipStyleWorker.setupForEquipStyle([arteformCountFieldName, advancedCountFieldName], 
-            [arteformSlotName, advancedSlotName], [arteformMaxSlots, advancedMaxSlots]);
+        equipStyleWorker.setupForEquipStyle([advancedCountFieldName], 
+            [advancedSlotName], [advancedMaxSlots]);
 
         equipStyleWorker.attributeHandler.addGetAttrCallback(function (attrHandler) {
             
@@ -392,7 +384,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                     styleName, advancedMaxSlots);
                 if (emptyEquipSlot != undefined) {
                     Debug.Log(`Found Style Slot ${emptyEquipSlot.slotFieldName} `);
-                    equipStyleWorker.unequipSlot(attrHandler, actionFieldName, emptyEquipSlot.index + arteformMaxSlots, emptyEquipSlot.slotFieldName);
+                    equipStyleWorker.unequipSlot(attrHandler, actionFieldName, emptyEquipSlot.index, emptyEquipSlot.slotFieldName);
                     equipStyleWorker.closeMenu(attrHandler, emptyEquipSlot.slotFieldName);
                 }
                 else {
@@ -428,9 +420,10 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 let affinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
                     attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
                     attrHandler.parseString(WuxDef.GetVariable("Ancestry"))];
-                
-                return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater, 
-                    attrHandler.parseString(nameFieldName), Math.min(maxTier, cr), affinities, false, true);
+
+                let style = WuxStyles.Get(attrHandler.parseString(nameFieldName));
+                return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater,
+                    style, "", Math.min(maxTier, cr), affinities, false, true);
             }
         );
     }
@@ -483,10 +476,10 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
     const
         addStyles = function (attrHandler, styleWorker, advancedRepeater) {
             let jobSlots = [];
-            let advancedSlots = [];
+            // let advancedSlots = [];
             let normalSlots = [];
             let jobStyles = WuxDef.Get("Forme_JobSlot");
-            let advancedStyles = WuxDef.Get("Forme_AdvancedSlot");
+            // let advancedStyles = WuxDef.Get("Forme_AdvancedSlot");
             let normalStyles = WuxDef.Get("Forme_StyleSlot");
             // let maxAdvancedSlots = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
             let maxNormalSlots = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
@@ -499,12 +492,12 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 normalSlots.push({name: attrHandler.parseString(normalStyles.getVariable(i)), index: i});
             }
 
-            styleWorker.iterateBuildStats(function (styleVariableData) {
-                let style = WuxStyles.GetByVariableName(styleVariableData.name);
-                if (style.group != "" && styleVariableData.value > 0) {
+            styleWorker.getStyles().forEach((styleVariableData) => {
+                let style = styleVariableData.style;
+                if (style.group != "") {
                     let newRowId = advancedRepeater.generateRowId();
                     attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Name")), style.name);
-                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Tier")), styleVariableData.value);
+                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Tier")), styleVariableData.rank);
                     attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Actions")), 0);
                     attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_SeeTechniques")), 0);
                     let matchingSlotData = undefined;
@@ -520,14 +513,14 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                             break;
                         case "Expert":
                         case "Advanced":
-                            // actionFieldName = "RepeatingAdvTech";
-                            // attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsAdvanced")), "on");
-                            // advancedSlots.forEach(function (slot) {
-                            //     if(slot.name == style.name) {
-                            //         matchingSlotData = slot;
-                            //     }
-                            // });
-                            // break;
+                        // actionFieldName = "RepeatingAdvTech";
+                        // attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsAdvanced")), "on");
+                        // advancedSlots.forEach(function (slot) {
+                        //     if(slot.name == style.name) {
+                        //         matchingSlotData = slot;
+                        //     }
+                        // });
+                        // break;
                         case "Style":
                             actionFieldName = "RepeatingAdvTech";
                             attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsAdvanced")), 0);
@@ -551,11 +544,11 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                         attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsEquipped")), 0);
                     }
                 }
-            });            
+            });           
         },
         
         updateBuildPoints = function (eventinfo) {
-            Debug.Log("Update Styles Build Points");
+            Debug.Log("Update Technique Build Points");
             let attributeHandler = new WorkerAttributeHandler();
             let worker = new WuxStyleWorkerBuild();
             worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
@@ -601,10 +594,10 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 attributeHandler.getRepeatingSection(styleRepeaterId).removeAllIds();
                 styleWorker.setBuildStatsDraft(attrHandler);
+                styleWorker.cleanBuildStats();
 
                 addStyles(attrHandler, styleWorker, attributeHandler.getRepeatingSection(styleRepeaterId));
 
-                styleWorker.cleanBuildStats();
                 styleWorker.setBuildStatVariables(attrHandler);
                 styleWorker.saveBuildStatsToFinal(attrHandler);
                 styleWorker.revertBuildStatsDraft(attrHandler);
@@ -630,21 +623,25 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         },
 
         seeTechniques = function (eventinfo) {
-            Debug.Log("See Techniques");
+            Debug.Log(`See ${eventinfo.newValue} Techniques`);
+            let technique = WuxTechs.Get(eventinfo.newValue);
+            if (technique == undefined) {
+                return;
+            }
             
             WuxWorkerInspectPopup.OpenTechniqueInspection(function () {
                 },
                 function (attrHandler, itemPopupRepeater) {
-                    let style = eventinfo.newValue;
+                    let style = WuxStyles.Get(technique.techSet);
 
-                    attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
                     attrHandler.addUpdate(eventinfo.sourceAttribute, "0");
                     attrHandler.addUpdate(WuxDef.GetVariable(WuxDef.GetName(style, WuxDef.Get("Style")), WuxDef._expand), "0");
                     let affinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
                         attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
                         attrHandler.parseString(WuxDef.GetVariable("Ancestry"))];
 
-                    return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater, style, 9, affinities, true, false);
+                    return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater, 
+                        style, technique.name, 9, affinities, true, false);
                 }
             );
         },

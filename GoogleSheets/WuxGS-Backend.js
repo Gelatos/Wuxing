@@ -36,24 +36,24 @@ var BuilderBackend = BuilderBackend || (function () {
         },
 
         listenerUpdateStyleBuildPoints = function () {
-            let filteredData = WuxDef.Filter([new DatabaseFilterData("group", "Style")]);
-            let normalStyles = [];
-            let advancedStyles = [];
-            for (let i = 0; i < filteredData.length; i++) {
-                if (filteredData[i].mainGroup === "Style") {
-                    normalStyles.push(filteredData[i].getVariable());
-                } else if (filteredData[i].mainGroup === "Advanced") {
-                    advancedStyles.push(filteredData[i].getVariable());
-                }
+            let allStyles = WuxDef.Filter([new DatabaseFilterData("group", "Style")]);
+            let groupVariableNames = [];
+            for(let i = 0; i < allStyles.length; i++) {
+                groupVariableNames = groupVariableNames.concat(
+                    WuxTechs.GetGroupVariables(new DatabaseFilterData("style", allStyles[i].getTitle())));
             }
         
             let output = "";
-            output += WuxSheetBackend.OnChange(normalStyles,`WuxWorkerStyles.UpdateBuildPoints(eventinfo, 1)`, true);
-            output += WuxSheetBackend.OnChange(advancedStyles,`WuxWorkerStyles.UpdateBuildPoints(eventinfo, 2)`, true);
+            output += WuxSheetBackend.OnChange(groupVariableNames,`WuxWorkerStyles.UpdateBuildPoints(eventinfo, 1)`, true);
             return output;
         },
         listenerSeeStyleTechniques = function () {
-            let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Style"), WuxDef._info);
+            let allStyles = WuxDef.Filter([new DatabaseFilterData("group", "Style")]);
+            let groupVariableNames = [];
+            for(let i = 0; i < allStyles.length; i++) {
+                groupVariableNames = groupVariableNames.concat(
+                    WuxTechs.GetGroupVariables(new DatabaseFilterData("style", allStyles[i].getTitle()), WuxDef._info));
+            }
             let output = `WuxWorkerStyles.SeeTechniques(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
@@ -580,14 +580,14 @@ var PopupBuilder = PopupBuilder || (function () {
                 groupVariableNames = groupVariableNames.concat([advancedSlotDef.getVariable(i + WuxDef._submenu)]);
             }
 
-            let basicStyleFilters = WuxDef.Filter([new DatabaseFilterData("group", "BasicStyleGroup")]);
-            for (let i = 0; i < basicStyleFilters.length; i++) {
-                let techniquesFilterData = WuxTechs.Filter([new DatabaseFilterData("style", basicStyleFilters[i].getTitle())]);
-                for (let j = 0; j < techniquesFilterData.length; j++) {
-                    let techDef = techniquesFilterData[j].createDefinition(WuxDef.Get("Technique"));;
-                    groupVariableNames = groupVariableNames.concat([techDef.getVariable(WuxDef._submenu)]);
-                }
-            }
+            // let basicStyleFilters = WuxDef.Filter([new DatabaseFilterData("group", "BasicStyleGroup")]);
+            // for (let i = 0; i < basicStyleFilters.length; i++) {
+            //     let techniquesFilterData = WuxTechs.Filter([new DatabaseFilterData("style", basicStyleFilters[i].getTitle())]);
+            //     for (let j = 0; j < techniquesFilterData.length; j++) {
+            //         let techDef = techniquesFilterData[j].createDefinition(WuxDef.Get("Technique"));
+            //         groupVariableNames = groupVariableNames.concat([techDef.getVariable(WuxDef._submenu)]);
+            //     }
+            // }
 
             let actionFieldName = `${WuxDef.GetVariable("Gear")}-${WuxDef.GetVariable("ItemAction")}`;
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingEquipment")}:${actionFieldName}`]);
@@ -608,7 +608,6 @@ var PopupBuilder = PopupBuilder || (function () {
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingBasicSocial")}:${WuxDef.GetVariable("Action_Actions")}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingCustomTech")}:${WuxDef.GetVariable("Action_Actions")}`]);
             groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"), WuxDef._expand));
-            groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Style"), WuxDef._expand));
             
             let output = `WuxWorkerGeneral.OpenSubMenu(eventinfo)`;
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);

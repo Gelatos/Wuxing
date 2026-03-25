@@ -382,7 +382,7 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 		attributeHandler.addMod(crDefinition.getVariable(WuxDef._max));
 		let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
 
-		let manager = new WuxWorkerBuildManager(["Skill", "Job", "Style", "Attribute", "Perk"]);
+		let manager = new WuxWorkerBuildManager(["Skill", "Job", "Technique", "Attribute", "Perk"]);
 		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -409,7 +409,7 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 		attributeHandler.addMod(worker.attrBuildDraft);
 		attributeHandler.addMod(WuxDef.GetVariable("Level"));
 
-		let manager = new WuxWorkerBuildManager(["Skill", "Job", "Style", "Attribute", "Perk"]);
+		let manager = new WuxWorkerBuildManager(["Skill", "Job", "Technique", "Attribute", "Perk"]);
 		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -570,7 +570,7 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 		attributeHandler.addMod(WuxDef.GetVariable("BonusTraining"));
 		attributeHandler.addMod(WuxDef.GetVariable("Level"));
 
-		let manager = new WuxWorkerBuildManager(["Knowledge", "Style"]);
+		let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
 		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -622,7 +622,7 @@ class WuxJobWorkerBuild extends WuxWorkerBuild {
 
 class WuxStyleWorkerBuild extends WuxWorkerBuild {
 	constructor() {
-		super("Style");
+		super("Technique");
 	}
 
 	changeWorkerAttribute(attributeHandler, updatingAttr, newValue, perkCost) {
@@ -631,16 +631,46 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 		}
 		super.changeWorkerAttribute(attributeHandler, updatingAttr, newValue);
 	}
+
+	getBuildVariables() {
+		let allStyles = WuxDef.Filter([new DatabaseFilterData("group", "Style")]);
+		let groupVariableNames = [];
+		for(let i = 0; i < allStyles.length; i++) {
+			groupVariableNames = groupVariableNames.concat(
+				WuxTechs.GetGroupVariables(new DatabaseFilterData("style", allStyles[i].getTitle())));
+		}
+		return groupVariableNames;
+	}
 	
-	getStyles() {
-		let styleData = [];
-		this.iterateBuildStats(function (styleVariableData) {
-			let style = WuxStyles.GetByVariableName(styleVariableData.name);
-			let rank = parseInt(styleVariableData.value);
-			if (!isNaN(rank) && rank > 0) {
-				styleData.push({style: style, rank: rank});
+	getTechniques() {
+		let techniques = [];
+		this.iterateBuildStats(function (techniqueVariableData) {
+			let technique = WuxTechs.GetByVariableName(techniqueVariableData.name);
+			let rank = techniqueVariableData.value;
+			if (rank != "0") {
+				techniques.push(technique);
 			}
 		});
+		return techniques;
+	}
+
+	getStyles() {
+		let styleNames = [];
+		let styleData = [];
+		let techniques = this.getTechniques();
+		for (let i = 0; i < techniques.length; i++) {
+			let technique = techniques[i];
+			let styles = technique.techSet.split(";");
+			for (let j = 0; j < styles.length; j++) {
+				let styleName = styles[j];
+				if (!styleNames.includes(styleName)) {
+					let style = WuxStyles.Get(styleName);
+
+					styleNames.push(styleName);
+					styleData.push({style: style, rank: 10});
+				}
+			}
+		}
 		return styleData;
 	}
 }

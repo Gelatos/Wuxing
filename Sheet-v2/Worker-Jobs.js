@@ -77,8 +77,8 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
     const updateBuildPoints = function (eventinfo) {
             Debug.Log("Update Jobs");
             let attributeHandler = new WorkerAttributeHandler();
-            let worker = new WuxWorkerBuildManager("Job");
-            worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+            let worker = new WuxJobWorkerBuild();
+            worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
             WuxWorkerSkills.UpdateKeySkills(attributeHandler);
             attributeHandler.run();
         },

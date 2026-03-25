@@ -717,17 +717,17 @@ var DisplayFormeSheet = DisplayFormeSheet || (function () {
                 print = function () {
                     let contents = "";
                     contents += buildStyleSection("RepeatingJobStyles", "Page_JobStyles",
-                        [{def: "Forme_JobSlot", countAttr: WuxDef.GetAttribute("JobSlots"), max: 3}]);
+                        [{def: "Forme_JobSlot", countAttr: WuxDef.GetAttribute("JobSlots"), max: 3}], true);
                     contents += buildStyleSection("RepeatingStyles", "Page_Styles",
                         [{def: "Forme_AdvancedSlot", countAttr: WuxDef.GetAttribute("AdvancedSlots"), max: 3},
-                            {def: "Forme_StyleSlot", countAttr: WuxDef.GetAttribute("StyleSlots"), max: 6}]);
+                            {def: "Forme_StyleSlot", countAttr: WuxDef.GetAttribute("StyleSlots"), max: 6}], false);
                     return WuxSheetMain.Build(contents);
                 },
 
-                buildStyleSection = function (repeatingSectionName, sectionDefName, slotDefNames) {
+                buildStyleSection = function (repeatingSectionName, sectionDefName, slotDefNames, displayTierData) {
                     let contents = "";
 
-                    contents += WuxSheetMain.MultiRowGroup([learnedStyles(repeatingSectionName),
+                    contents += WuxSheetMain.MultiRowGroup([learnedStyles(repeatingSectionName, displayTierData),
                         addEquippedSection(slotDefNames)], WuxSheetMain.Table.FlexTable, 2);
 
                     contents = WuxSheetMain.TabBlock(contents);
@@ -736,31 +736,36 @@ var DisplayFormeSheet = DisplayFormeSheet || (function () {
                     return WuxSheetMain.CollapsibleTab(sectionDefinition.getAttribute(WuxDef._tab, WuxDef._expand), sectionDefinition.getTitle(), contents);
                 },
 
-                learnedStyles = function (repeatingSectionName) {
+                learnedStyles = function (repeatingSectionName, displayTierData) {
                     let repeatingDef = WuxDef.Get(repeatingSectionName);
 
                     let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
                         <div>
-                        ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsStyles())}
+                        ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsStyles(displayTierData))}
                         ${WuxSheetMain.Row("&nbsp;")}
                     </div>`;
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
 
-                addRepeaterContentsStyles = function () {
+                addRepeaterContentsStyles = function (displayTierData) {
+                    let tierOutput = "";
                     let nameDef = WuxDef.Get("Forme_Name");
-                    let tierDef = WuxDef.Get("Forme_Tier");
-                    let isAdvancedAttr = WuxDef.GetAttribute("Forme_IsAdvanced");
                     let actionDef = WuxDef.Get("Forme_Actions");
+                    
+                    if (displayTierData) {
+                        let tierDef = WuxDef.Get("Forme_Tier");
+                        let isAdvancedAttr = WuxDef.GetAttribute("Forme_IsAdvanced");
 
-                    let tierData = `<span>Tier </span><span name="${tierDef.getAttribute()}"></span>`;
-                    let tierOutput = WuxSheetMain.HiddenSpanField(isAdvancedAttr, `${tierData}<span>A</span>`);
-                    tierOutput += WuxSheetMain.HiddenAuxSpanField(isAdvancedAttr, tierData);
+                        let tierData = `<span>Tier </span><span name="${tierDef.getAttribute()}"></span>`;
+                        tierOutput = WuxSheetMain.HiddenSpanField(isAdvancedAttr, `${tierData}<span>A</span>`);
+                        tierOutput += WuxSheetMain.HiddenAuxSpanField(isAdvancedAttr, tierData);
+                        tierOutput = `
+                        <div class="wuxEquipableType wuxDescription">${tierOutput}</div>`;
+                    }
 
                     return WuxSheetMain.MultiRow(`
-                                ${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), addSubmenuContentsStyles())}
-                                <div class="wuxEquipableType wuxDescription">${tierOutput}</div>
-                                <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>`
+                        ${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), addSubmenuContentsStyles())}${tierOutput}
+                        <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>`
                     );
                 },
 

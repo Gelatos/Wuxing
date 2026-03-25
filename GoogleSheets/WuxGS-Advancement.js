@@ -1267,7 +1267,7 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
 
             var
                 print = function () {
-                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Style")));
+                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Technique")));
                 },
 
                 buildTechPointsSection = function (fieldName, header) {
@@ -1317,89 +1317,58 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                 },
                 
                 buildSubStyleGroupContents = function (subStyleCategoryDefinition, stylesDatabase) {
-                    let techFilterData = stylesDatabase.filter([
-                        new DatabaseFilterData("group", "Style"),
-                        new DatabaseFilterData("subGroup", subStyleCategoryDefinition.getTitle())
-                    ]);
-                    
-                    let techStyles = [];
-                    for (let i = 0; i < techFilterData.length; i++) {
-                        techStyles.push(buildStyleGroupFlexTableEntry(techFilterData[i], stylesDatabase));
-                    }
-                    if (techStyles.length == 0) {
-                        return "";
-                    }
-                    let output = WuxSheetMain.Table.FlexTable(techStyles);
-                    
                     let hiddenField = subStyleCategoryDefinition.getAttribute(WuxDef._expand);
-                    let header = WuxSheetMain.Header(
-                        WuxSheetMain.CollapsibleHeader(
-                            `<span>${(subStyleCategoryDefinition.getTitle())}</span>`, hiddenField));
-                    return header + WuxSheetMain.HiddenAuxField(hiddenField, output);
                     
+                    let collapsibleHeaderContents = `<span>${(subStyleCategoryDefinition.getTitle())}</span>`;
+                    let headerContents = WuxSheetMain.CollapsibleHeaderInverse(collapsibleHeaderContents, hiddenField);
+                    
+                    let header = WuxSheetMain.Header(headerContents);
+                    let contents = buildStyleGroupBasicEntries(subStyleCategoryDefinition, stylesDatabase);
+                    
+                    return header + WuxSheetMain.HiddenField(hiddenField, contents);
                 },
 
-                buildStyleGroupFlexTableEntry = function (style, stylesDatabase) {
-                    
-                    let contents = `${buildStyleEntry(style)}
-                    ${buildStyleGroupAdvancedEntries(style, stylesDatabase)}`;
-
-                    return `${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(contents), "Half wuxMinWidth220")}`;
-                },
-                
-                buildStyleGroupAdvancedEntries = function (style, stylesDatabase) {
+                buildStyleGroupBasicEntries = function (subStyleCategoryDefinition, stylesDatabase) {
+                    let output = "";
                     let techFilterData = stylesDatabase.filter([
-                        new DatabaseFilterData("baseStyle", style.name)
+                        new DatabaseFilterData("subGroup", "Style"),
+                        new DatabaseFilterData("group", subStyleCategoryDefinition.getTitle())
                     ]);
-                    let techStyles = [];
-                    for (let k = 0; k < techFilterData.length; k++) {
-                        techStyles.push(buildStyleEntry(techFilterData[k]));
+                    for (let i = 0; i < techFilterData.length; i++) {
+                        let style = techFilterData[i];
+                        let styleDef = style.createDefinition(WuxDef.Get("Style"));
+                        output += buildStyleEntry(styleDef, style);
+                        output += buildStyleGroupSubEntries(styleDef, style, stylesDatabase);
                     }
+                    return `<div class="wuxMarginLeft50">${output}<div>&nbsp;</div></div>`;
+                },
+                buildStyleGroupSubEntries = function (styleDef, style, stylesDatabase) {
                     
-                    if (techStyles.length == 0) {
+                    let output = "";
+                    let techFilterData = stylesDatabase.filter([new DatabaseFilterData("baseStyle", style.name)]);
+                    for (let i = 0; i < techFilterData.length; i++) {
+                        let subStyle = techFilterData[i];
+                        let subStyleDef = subStyle.createDefinition(WuxDef.Get("Style"));
+                        output += buildStyleEntry(subStyleDef, subStyle);
+                        output += buildStyleGroupSubEntries(subStyleDef, subStyle, stylesDatabase);
+                    }
+                    if (output == "") {
                         return "";
                     }
-                    let output = WuxSheetMain.Header2("Advanced Styles");
-                    output += WuxSheetMain.Table.FlexTable(techStyles);
-                    return `<div class="wuxMarginLeft50">${output}</div>`;
+
+                    let hiddenField = styleDef.getAttribute(WuxDef._expand);
+                    let headerContents = WuxSheetMain.CollapsibleHeaderInverse(`<span>${style.name} Advanced Styles</span>`, hiddenField);
+                    let header = WuxSheetMain.Header(headerContents);
+                    
+                    return `${header}${WuxSheetMain.HiddenField(hiddenField, `<div class="wuxMarginLeft50">${output}<div>&nbsp;</div></div>`)}`;
                 },
                 
-                buildStyleEntry = function (style) {
-                    let styleDef = style.createDefinition(WuxDef.Get("Style"));
-                    return `${buildStyleHeader(styleDef, style)}
-							${WuxSheetMain.SectionBlockHeaderFooter()}
-                            ${buildTierSelect(styleDef, style)}
-                            ${buildStyleDescription(styleDef, style)}`;
+                buildStyleEntry = function (styleDef, style) {
+                    return `<div class="wuxHeader2">${style.name}</div>
+                            ${buildStyleDescription(styleDef, style)}
+                            ${buildStyleTechniquesFlexTable(style)}`;
 
                 },
-
-                buildStyleHeader = function (styleDef, style) {
-                    return WuxSheetMain.Header2(`${WuxSheetMain.SubMenuButton(styleDef.getAttribute(WuxDef._expand), addSubmenuContents(styleDef, style))}
-                        ${style.name}`
-                    );
-                },
-
-                buildTierSelect = function (styleDef, style) {
-                    let tierValues = [];
-                    let def = new DefinitionData();
-                    def.title = "Unranked";
-                    def.variable = 0;
-                    tierValues.push(def);
-                    for (let i = 1; i <= style.maxTier; i++) {
-                        def = new DefinitionData();
-                        def.title = `Tier ${i}`;
-                        def.variable = i;
-                        tierValues.push(def);
-                    }
-
-                    return WuxSheetMain.Select(styleDef.getAttribute(), tierValues, false);
-                },
-
-                addSubmenuContents = function (styleDef, style) {
-                    return `${WuxSheetMain.SubMenuOptionButton(styleDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Forme_SeeTechniques")}</span>`, style.name)}
-                    `;
-                },
-
                 buildStyleDescription = function (styleDef, style) {
                     let output = "";
                     if (style.affinity != "") {
@@ -1425,9 +1394,38 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                         }
                         output += `<span><em>Main Skills: ${skillsOutput}</em></span>\n`;
                     }
-                    output += `<span class="wuxStyleTooltipContainer"><em>Traits: ${getStyleTraits(style)}</em></span>\n`;
                     output += `<span>${styleDef.getDescription()}</span>`;
                     return WuxSheetMain.Desc(output);
+                },
+
+                buildStyleTechniquesFlexTable = function (style) {
+                    let techFilterData = WuxTechs.Filter(new DatabaseFilterData("style", style.name));
+                    let techStyles = [];
+                    for (let i = 0; i < techFilterData.length; i++) {
+                        techStyles.push(buildStyleTechniquesFlexTableEntry(techFilterData[i]));
+                    }
+                    if (techStyles.length == 0) {
+                        return "";
+                    }
+                    return WuxSheetMain.MultiRowGroup(techStyles, WuxSheetMain.Table.FlexTable, 2);
+                },
+                buildStyleTechniquesFlexTableEntry = function (technique) {
+                    let contents = buildTechnique(technique);
+                    return `${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(contents), " wuxMinWidth300")}`;
+                },
+                buildTechnique = function (technique) {
+                    let techDef = technique.createDefinition(WuxDef.Get("Technique"));
+                    let infoButton = WuxSheetMain.Info.Button(techDef.getAttribute(WuxDef._info), `value="${technique.name}"`);
+                    let interactHeader = `<span class="wuxHeader">${technique.name}</span>`;
+                    let prerequisites = technique.getPrerequisites();
+                    if (prerequisites != "") {
+                        interactHeader = `<span>${interactHeader}<div class="wuxSubheader">[Prereq: ${prerequisites}]</div></span>`;
+                    }
+                    
+                    return `<div class="wuxInteractiveBlock">
+                    ${infoButton}
+                    ${WuxSheetMain.InteractionElement.CheckboxBlockIcon(techDef.getAttribute(), interactHeader)}
+                    </div>`;
                 },
                 
                 getStyleTraits = function (style) {
@@ -1506,7 +1504,7 @@ var DisplayAdvancedSheet = DisplayAdvancedSheet || (function () {
 
             var
                 print = function () {
-                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Style")));
+                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Technique")));
                 },
 
                 buildTechPointsSection = function (fieldName, header) {

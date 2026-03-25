@@ -1058,9 +1058,7 @@ var WuxDefinition = WuxDefinition || (function () {
         },
         getStyle = function (key) {
             if (values[key] == undefined) {
-                let itemData = new ItemData();
-                itemData.name = `${key} Not Found`;
-                return itemData;
+                return undefined;
             }
             return new TechniqueStyle(values[key]);
         },
@@ -1123,6 +1121,15 @@ var WuxDefinition = WuxDefinition || (function () {
             let output = [];
             for (let i = 0; i < data.length; i++) {
                 output.push(data[i].getVariable(mod1, mod2));
+            }
+            return output;
+        },
+        getGroupVariablesTechnique = function (filterData, mod1, mod2) {
+            let data = filter(filterData);
+            let output = [];
+            for (let i = 0; i < data.length; i++) {
+                let definition = data[i].createDefinition(WuxDef.Get("Technique"));
+                output.push(definition.getVariable(mod1, mod2));
             }
             return output;
         },
@@ -1243,6 +1250,7 @@ var WuxDefinition = WuxDefinition || (function () {
         GetAbbreviation: getAbbreviation,
         GetVariables: getVariables,
         GetGroupVariables: getGroupVariables,
+        GetGroupVariablesTechnique: getGroupVariablesTechnique,
         GetTitle: getTitle,
         GetDescription: getDescription,
         GetName: getName,
@@ -1488,10 +1496,10 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 return `<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="${fieldName}">\n<div class="wuxInteractiveExpandingContent">\n${contents}\n</div>`;
             },
 
-            checkboxBlockIcon = function (fieldName, contents) {
+            checkboxBlockIcon = function (fieldName, contents, extras) {
                 let flagName = "wuxInteractiveIcon-flag";
                 return `<div class="wuxInteractiveInnerBlock">
-                ${customInput("checkbox", fieldName, "wuxInteractiveContent-flag")}
+                ${customInput("checkbox", fieldName, "wuxInteractiveContent-flag", extras)}
                     <div class="wuxInteractiveContent">
                     ${customInput("hidden", fieldName, flagName)}\n<span class="wuxInteractiveIcon">&#9635;</span>
                     ${customInput("hidden", fieldName, flagName)}\n<span class="wuxInteractiveAuxIcon">&#9634;</span>
@@ -1558,6 +1566,16 @@ var WuxSheetMain = WuxSheetMain || (function () {
                         ${WuxSheetMain.HiddenSpanFieldToggle(hiddenField,
                 WuxSheetMain.Button(hiddenField, "<span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show", "wuxStyleHeaderButton"),
                 WuxSheetMain.Button(hiddenField, "<span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide", "wuxStyleHeaderButton")
+            )}
+            </span>`;
+            return headerButtons + headerName;
+        },
+        collapsibleHeaderInverse = function (headerName, hiddenField, additionalButtons) {
+            let headerButtons = `<span class="wuxStyleHeaderButtonContainer">
+                        ${additionalButtons != undefined ? additionalButtons : ""}
+                        ${WuxSheetMain.HiddenSpanFieldToggle(hiddenField,
+                WuxSheetMain.Button(hiddenField, "<span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide", "wuxStyleHeaderButton"),
+                WuxSheetMain.Button(hiddenField, "<span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show", "wuxStyleHeaderButton")
             )}
             </span>`;
             return headerButtons + headerName;
@@ -1806,8 +1824,8 @@ var WuxSheetMain = WuxSheetMain || (function () {
             'use strict';
 
             var
-                button = function (fieldName) {
-                    return `<div class="wuxInfoButton"><input type="checkbox" name="${fieldName}"><span>?</span></div>`;
+                button = function (fieldName, extras) {
+                    return `<div class="wuxInfoButton"><input type="checkbox" name="${fieldName}" ${extras}><span>?</span></div>`;
                 },
 
                 contents = function (fieldName, contents) {
@@ -2049,6 +2067,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         CollapsibleTab: collapsibleTab,
         TabBlock: tabBlock,
         CollapsibleHeader: collapsibleHeader,
+        CollapsibleHeaderInverse: collapsibleHeaderInverse,
         SectionBlock: sectionBlock,
         SectionBlockHeader: sectionBlockHeader,
         SectionBlockHeaderFooter: sectionBlockHeaderFooter,
@@ -2535,7 +2554,6 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
             for (let key in sortingGroups) {
                 keys += `${key}, `;
             }
-            // Debug.Log(`Tried to find property ${property} but it does not exist in the database. Valid properties are ${keys}`);
         }
         if (!sortingGroups[property].hasOwnProperty(propertyValue)) {
             let keys = "";
@@ -3232,34 +3250,41 @@ class TechniqueAssessment {
     }
 
     getEnergy() {
-        return this.technique.en;
+        return isNaN(parseInt(this.technique.en)) ? 0 : parseInt(this.technique.en);
     }
     getEnergyRestriction() {
-        if (this.technique.tier == 1) {
-            return 2;
+        let value = this.technique.tier + 1;
+        if (this.technique.action == "Full") {
+            return value;
         }
-        return this.technique.tier;
+        return Math.ceil(value / 2);
     }
 
     getAveragePoint(energy, technique) {
+        let pointCalc = [];
         let points = this.basePoints + (3 * energy) + (energy * (energy + 1) / 2);
         if (technique.action == "Full") {
             points += 3 + (2 * energy) + this.basePoints;
-            this.pointsCalc = "(Full)";
+            pointCalc.push("Full");
         }
         else if (technique.action == "Assist") {
             points += 3;
-            this.pointsCalc = "(Assist)";
+            pointCalc.push("Assist");
         }
         else if (technique.action == "Swift") {
             let lookupName = WuxDef.GetAbbreviation("Job") + "_" + technique.techSet;
-            let def = WuxDef.Get(lookupName);
             if (WuxDef.GetTitle(lookupName) == "") {
                 points = Math.ceil(points * 0.5);
-                this.pointsCalc = "(Swift)";
+                pointCalc.push("Swift Job");
             }
         }
+        
+        if (technique.willPower > 0) {
+            points += Math.ceil(technique.willPower / 5);
+            pointCalc.push("Magic");
+        }
 
+        this.pointsCalc = `(${pointCalc.join(",")})`;
         return points;
     }
 
@@ -4503,13 +4528,24 @@ class DatabaseAssessment {
 
     printTechniqueDatabase() {
         let output = "";
-        
+
+        let variableNameKeys = {};
         let techniqueClassData = JavascriptDatabase.Create(this.sheetsDb.techniques, WuxDefinition.GetTechnique);
+        this.sheetsDb.techniques.iterate(function (value, key) {
+            let definition = value.createDefinition(WuxDef.Get("Technique"));
+            variableNameKeys[definition.getVariable()] = key;
+        });
+        techniqueClassData.addVariable("variableNameKeys", JSON.stringify(variableNameKeys));
+        techniqueClassData.addPublicFunction("getByVariableName", function (variableName) {
+            let key = variableNameKeys[variableName];
+            return get(key);
+        });
         techniqueClassData.addPublicFunction("filterAndSortTechniquesByRequirement", WuxDefinition.FilterAndSortTechniquesByRequirement);
+        techniqueClassData.addPublicFunction("getGroupVariables", WuxDefinition.GetGroupVariablesTechnique);
         output += techniqueClassData.print("WuxTechs") + "\n";
 
         let styleDb = this.sheetsDb.getStyles();
-        let variableNameKeys = {};
+        variableNameKeys = {};
         styleDb.iterate(function (value, key) {
             let definition = value.createDefinition(WuxDef.Get("Style"));
             variableNameKeys[definition.getVariable()] = key;

@@ -1,4 +1,21 @@
-var wuxCurrentVersion = "1.0.6";
+var wuxCurrentVersion = "1.0.7";
+
+var upgrade_to_1_0_7 = function (currentVersion) {
+	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.7");
+	let manager = new WuxWorkerBuildManager(["Technique"]);
+	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+
+	attributeHandler.addGetAttrCallback(function (attrHandler) {
+		manager.iterate(function(worker) {
+			worker.setBuildStatsDraft(attrHandler);
+			attrHandler.addUpdate(worker.attrBuildDraft, JSON.stringify(worker.buildStats));
+			worker.setPointsMax(attributeHandler);
+			worker.updatePoints(attributeHandler);
+		});
+	});
+
+	attributeHandler.run();
+};
 
 var upgrade_to_1_0_6 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.6");
@@ -12,13 +29,6 @@ var upgrade_to_1_0_6 = function (currentVersion) {
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
 		attrHandler.addUpdate(affinityAspectVar, attrHandler.parseString(affinityVar));
 	});
-
-	attributeHandler.run();
-};
-
-var upgrade_to_1_0_4 = function (currentVersion) {
-	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.4");
-	attributeHandler.addUpdate(WuxDef.GetVariable("Status"), "");
 
 	attributeHandler.run();
 };
@@ -55,6 +65,7 @@ var upgrade_to_1_0_2 = function (currentVersion) {
 
 var upgrade_to_1_0_0 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.0");
+	attributeHandler.addUpdate(WuxDef.GetVariable("Loading"), "0");
 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Origin");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Builder");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Core", WuxDef._tab), "Overview");
@@ -74,7 +85,7 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 	attributeHandler.addUpdate(WuxDef.GetVariable("Training", WuxDef._max), 0);
 	trainingWorker.updateTrainingPoints(attributeHandler);
 
-	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Style", "Perk"]);
+	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Perk"]);
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 	
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -120,12 +131,13 @@ var versioning = function () {
 			case wuxCurrentVersion:
 				console.log(`Wuxing Sheet modified from 5th Edition OGL by Roll20 v${wuxCurrentVersion}`);
 				break;
+			case "1.0.6":
+				upgrade_to_1_0_7(v["version"]);
+				break;
 			case "1.0.5":
 			case "1.0.4":
-				upgrade_to_1_0_6(v["version"]);
-				break;
 			case "1.0.3":
-				upgrade_to_1_0_4(v["version"]);
+				upgrade_to_1_0_6(v["version"]);
 				break;
 			case "1.0.2":
 				upgrade_to_1_0_3(v["version"]);

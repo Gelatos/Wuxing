@@ -225,7 +225,7 @@ class Database extends Dictionary {
 class ExtendedTechniqueDatabase extends Database {
 
     constructor(data) {
-        let filters = ["style", "group", "affinity", "tier", "isFree", "action", "skill", "range"];
+        let filters = ["style", "group", "affinity", "tier", "action", "skill", "range"];
         let dataCreation = function (data) {
             return new TechniqueData(data);
         };
@@ -246,6 +246,9 @@ class ExtendedTechniqueDatabase extends Database {
             if (this.has(data.name)) {
                 this.get(data.name).importEffectsFromTechnique(data);
             } else {
+                if (data.techSet == "") {
+                    continue;
+                }
                 this.add(data.name, data);
             }
         }
@@ -555,7 +558,6 @@ class TechniqueData extends WuxDatabaseData {
         this.version = json.version;
         this.affinity = json.affinity;
         this.tier = parseInt(json.tier);
-        this.isFree = this.affinity == "" && this.tier <= 0;
         this.action = json.action;
         this.forms = json.forms;
         this.impacts = json.impacts;
@@ -602,7 +604,6 @@ class TechniqueData extends WuxDatabaseData {
         this.tier = parseInt(dataArray[i]);
         this.tier = isNaN(this.tier) ? 0 : this.tier;
         i++;
-        this.isFree = this.affinity == "" && this.tier <= 0;
         this.action = "" + dataArray[i];
         i++;
         this.forms = "" + dataArray[i];
@@ -613,10 +614,12 @@ class TechniqueData extends WuxDatabaseData {
         i++;
         // Dodging some sheet logic
         this.en = parseInt(dataArray[i]);
+        this.en = isNaN(this.en) ? 0 : this.en;
         i++;
         this.willPower = this.getWillpowerCost(parseInt(dataArray[i]));
         i++;
         this.boon = parseInt(dataArray[i]);
+        this.boon = isNaN(this.boon) ? 0 : this.boon;
         this.resourceCost = this.buildResourceCost();
         i++;
         this.limits = "" + dataArray[i];
@@ -643,7 +646,7 @@ class TechniqueData extends WuxDatabaseData {
         i++;
         
         this.techniqueEffect = new TechniqueEffect(dataArray.slice(i));
-        this.techniqueEffect.updateSheetImportFormula(this);
+        this.techniqueEffect.updateSheetImportFormula();
         this.addEffect(this.techniqueEffect);
     }
     
@@ -728,7 +731,6 @@ class TechniqueData extends WuxDatabaseData {
         this.version = "";
         this.affinity = "";
         this.tier = 0;
-        this.isFree = false;
         this.action = "";
         this.forms = "";
         this.impacts = "";
@@ -764,7 +766,6 @@ class TechniqueData extends WuxDatabaseData {
         definition.subGroup = this.techSet;
         definition.tier = this.tier;
         definition.affinity = this.affinity;
-        definition.isFree = this.isFree;
         if (this.action == "Passive") {
             definition.passiveBoosts = this.effects.getBoostEffects();
         }
@@ -862,6 +863,39 @@ class TechniqueData extends WuxDatabaseData {
             this.effects.add(effect.name, effect);
         }
     }
+    
+    getPrerequisites() {
+        let output = "";
+        let levelPrereq = this.getLevelPrerequisites();
+        if (levelPrereq > 0) {
+            output += `Level ${levelPrereq}`;
+        }
+        return output;
+    }
+    getLevelPrerequisites() {
+        switch (this.tier) {
+            case 1:
+                return 0;
+            case 2:
+                return 4;
+            case 3:
+                return 9;
+            case 4:
+                return 15;
+            case 5:
+                return 22;
+            case 6:
+                return 30;
+            case 7:
+                return 39;
+            case 8:
+                return 49;
+            case 9:
+                return 60;
+            default:
+                return 0;
+        }
+    }
 
     addDefinition(definition) {
         if (!this.definitions.includes(definition)) {
@@ -924,15 +958,13 @@ class TechniqueEffect extends dbObj {
         this.traits = "" + dataArray[i];
         i++;
     }
-    updateSheetImportFormula(baseTechnique) {
+    updateSheetImportFormula() {
         let formulaString = this.formula.formulaString;
         if (formulaString == "0") {
             formulaString = "";
         }
         else if (formulaString == "" && this.type == "Damage") {
-            if (baseTechnique != undefined) {
-                formulaString = `SB_MAX${baseTechnique.action == "Full" ? "*2" : ""}`;
-            }
+            formulaString = `SB_MAX`;
         }
         this.formula = new FormulaData(formulaString);
     }
@@ -1155,10 +1187,10 @@ class TechniqueStyle extends WuxDatabaseData {
         this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
         this.subGroup = json.subGroup;
+        this.baseStyle = json.baseStyle;
         this.affinity = json.affinity;
         this.skills = json.skills;
         this.description = json.description;
-        this.baseStyle = json.baseStyle;
         this.effects = json.effects;
         this.cr = json.cr;
         this.maxTier = json.maxTier;
@@ -1174,13 +1206,13 @@ class TechniqueStyle extends WuxDatabaseData {
         i++;
         this.subGroup = "" + dataArray[i];
         i++;
+        this.baseStyle = "" + dataArray[i];
+        i++;
         this.affinity = "" + dataArray[i];
         i++;
         this.skills = dataArray[i];
         i++;
         this.description = "" + dataArray[i];
-        i++;
-        this.baseStyle = "" + dataArray[i];
         i++;
         this.effects = dataArray[i];
         i++;
@@ -1194,11 +1226,11 @@ class TechniqueStyle extends WuxDatabaseData {
         this.fieldName = "";
         this.group = "";
         this.subGroup = "";
+        this.baseStyle = "";
         this.affinity = "";
         this.skills = "";
         this.effects = "";
         this.description = "";
-        this.baseStyle = "";
         this.cr = 0;
         this.maxTier = 0;
     }
@@ -1976,7 +2008,6 @@ class TechniqueDefinitionData extends DefinitionData {
         super.importJson(json);
         this.tier = json.tier;
         this.affinity = json.affinity;
-        this.isFree = json.isFree;
         this.passiveBoosts = json.passiveBoosts;
     }
 
@@ -1988,9 +2019,6 @@ class TechniqueDefinitionData extends DefinitionData {
             case "affinity":
                 this.affinity = value;
                 break;
-            case "isFree":
-                this.isFree = value.toLowerCase() == "true";
-                break;
             case "passiveBoosts":
                 this.passiveBoosts = value;
                 break;
@@ -2001,7 +2029,6 @@ class TechniqueDefinitionData extends DefinitionData {
         super.createEmpty();
         this.tier = 0;
         this.affinity = "";
-        this.isFree = false;
         this.passiveBoosts = [];
     }
 
@@ -2176,7 +2203,6 @@ class TechniqueDisplayData {
         this.definition = technique.createDefinition(WuxDef.Get("Technique"));
         this.fieldName = Format.ToFieldName(technique.name);
         this.actionType = technique.action;
-        this.isFree = technique.isFree;
         this.coreDefense = technique.coreDefense;
     }
 
@@ -2346,7 +2372,6 @@ class TechniqueDisplayData {
         this.displayname = "";
         this.definition = {};
         this.fieldName = "";
-        this.isFree = false;
         this.coreDefense = "";
 
         this.resourceData = "";
