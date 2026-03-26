@@ -3009,7 +3009,7 @@ class TechniqueAssessment {
             modNames.push("Truehit");
         }
         if (this.technique.impacts.includes("Accurate")) {
-            this.defenseModifier += 0.1;
+            this.defenseModifier += 0.2;
             modNames.push("Accurate");
         }
         this.defenseModName = modNames.join(", ");

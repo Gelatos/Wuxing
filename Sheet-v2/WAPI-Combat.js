@@ -1033,6 +1033,9 @@ class TechniqueCheckResolver extends TechniqueSkillCheckResolver {
         }
         
         let skillCheckDifference = dcValue - this.skillCheckValue;
+        if (this.technique.impacts.includes("Accurate")) {
+            skillCheckDifference -= 2;
+        }
         let advantage = this.getAdvantageBonus(senderAttrHandler, targetAttrHandler, false);
         let odds = this.probAtLeastKeep(advantage, skillCheckDifference);
 
@@ -1167,6 +1170,9 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
         this.skillCheck = new DieRoll();
         this.skillCheck.rollCheck(advantage);
         this.skillCheck.addModToRoll(this.skillCheckValue, this.technique.skill);
+        if (this.technique.impacts.includes("Accurate")) {
+            this.skillCheck.addModToRoll(2, "Accurate");
+        }
         this.addMessage(`${this.technique.skill} Check: ` +
             Format.ShowTooltip(`${this.skillCheck.total}`, this.skillCheck.message));
     }
