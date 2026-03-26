@@ -2653,6 +2653,9 @@ class BaseTechniqueEffectDisplayData {
             case "Status":
                 let statusEffect = WuxDef.GetTitle(Format.GetDefinitionName("Status", subTypeParts[1]));
                 return `If ${this.formatTarget(effect)} has ${statusEffect}, ${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+            case "Cond":
+                let conditionalEffect = WuxDef.GetTitle(Format.GetDefinitionName("Status", subTypeParts[1]));
+                return `If you have ${conditionalEffect}, ${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
             case "Special":
                 return effect.effect;
             default:

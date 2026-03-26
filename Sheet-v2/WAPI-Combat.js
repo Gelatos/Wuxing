@@ -1306,6 +1306,19 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                 tokenEffect.addDamageRoll(roll);
             }
         }
+        else if (subType == "Cond") {
+            let statusEffectName = Format.GetDefinitionName("Status", subTypeParts[1]);
+            if (this.senderTokenEffect.hasStatus(attrSetters.getObjByTarget(techniqueEffect), statusEffectName)) {
+                let statusEffect = WuxDef.GetTitle(statusEffectName);
+                this.addMessage(`Adding bonus damage from ${statusEffect} conditional`);
+
+                let roll = this.calculateFormula(techniqueEffect, attrGetters.sender);
+                let damageType = this.getDamageType(attrGetters, techniqueEffect);
+                roll.setDamageType(damageType);
+                roll.setTraits(techniqueEffect.traits);
+                tokenEffect.addDamageRoll(roll);
+            }
+        }
         if (techniqueEffect.effect == "Psyche") {
             let roll = this.calculateFormula(techniqueEffect, attrGetters.sender);
             roll.setDamageType("Psyche");

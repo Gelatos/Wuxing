@@ -3426,8 +3426,18 @@ class TechniqueAssessment {
             this.addImpactTrait("Trait_Atk");
         }
         else if (subType == "Status") {
-            output.value = Math.max(Math.floor(output.value * 0.25), 1);
+            output.value = Math.max(Math.floor(output.value * 0.8), 1);
             message = `(Status)`;
+
+            if (effect.defense != "WillBreak") {
+                this.addPointsRubric(output.value, message);
+            }
+            this.addTargetedPointsRubric(effect, output.value);
+            this.addImpactTrait("Trait_Atk");
+        }
+        else if (subType == "Cond") {
+            output.value = Math.max(Math.floor(output.value * 0.9), 1);
+            message = `(Conditional)`;
 
             if (effect.defense != "WillBreak") {
                 this.addPointsRubric(output.value, message);
