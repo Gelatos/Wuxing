@@ -1337,10 +1337,10 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     for (let i = 0; i < techFilterData.length; i++) {
                         let style = techFilterData[i];
                         let styleDef = style.createDefinition(WuxDef.Get("Style"));
-                        output += buildStyleEntry(styleDef, style);
+                        output += buildStyleEntry(styleDef, style, style);
                         output += buildStyleGroupSubEntries(styleDef, style, stylesDatabase);
                     }
-                    return `<div class="wuxMarginLeft50">${output}<div>&nbsp;</div></div>`;
+                    return `<div class="wuxMarginLeft50">${output}</div><div>&nbsp;</div>`;
                 },
                 buildStyleGroupSubEntries = function (styleDef, style, stylesDatabase) {
                     
@@ -1349,24 +1349,28 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     for (let i = 0; i < techFilterData.length; i++) {
                         let subStyle = techFilterData[i];
                         let subStyleDef = subStyle.createDefinition(WuxDef.Get("Style"));
-                        output += buildStyleEntry(subStyleDef, subStyle);
+                        output += buildStyleEntry(subStyleDef, subStyle, styleDef);
                         output += buildStyleGroupSubEntries(subStyleDef, subStyle, stylesDatabase);
                     }
                     if (output == "") {
                         return "";
                     }
+                    let description = `<div class="wuxDescription">These are advanced styles that are available once ${styleDef.getTitle()} is learned.</div>
+                    <div class="wuxDescription">You must learn at least one technique from ${styleDef.getTitle()} to learn techniques from any of these styles.</div>
+                    <div>&nbsp;</div>`;
+                    output = description + output;
 
                     let hiddenField = styleDef.getAttribute(WuxDef._expand);
                     let headerContents = WuxSheetMain.CollapsibleHeaderInverse(`<span>${style.name} Advanced Styles</span>`, hiddenField);
-                    let header = WuxSheetMain.Header(headerContents);
+                    let header = WuxSheetMain.Header2(headerContents);
                     
-                    return `${header}${WuxSheetMain.HiddenField(hiddenField, `<div class="wuxMarginLeft50">${output}<div>&nbsp;</div></div>`)}`;
+                    return `${header}${WuxSheetMain.HiddenField(hiddenField, `<div class="wuxMarginLeft50">${output}</div>`)}<div>&nbsp;</div>`;
                 },
                 
-                buildStyleEntry = function (styleDef, style) {
-                    return `<div class="wuxHeader2">${style.name}</div>
+                buildStyleEntry = function (styleDef, style, partentStyleDef) {
+                    return `<div class="wuxHeader">${style.name}</div>
                             ${buildStyleDescription(styleDef, style)}
-                            ${buildStyleTechniquesFlexTable(style)}`;
+                            ${buildStyleTechniquesFlexTable(styleDef, style, partentStyleDef)}`;
 
                 },
                 buildStyleDescription = function (styleDef, style) {
@@ -1398,22 +1402,22 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     return WuxSheetMain.Desc(output);
                 },
 
-                buildStyleTechniquesFlexTable = function (style) {
+                buildStyleTechniquesFlexTable = function (styleDef, style, partentStyleDef) {
                     let techFilterData = WuxTechs.Filter(new DatabaseFilterData("style", style.name));
                     let techStyles = [];
                     for (let i = 0; i < techFilterData.length; i++) {
-                        techStyles.push(buildStyleTechniquesFlexTableEntry(techFilterData[i]));
+                        techStyles.push(buildStyleTechniquesFlexTableEntry(styleDef, techFilterData[i], partentStyleDef));
                     }
                     if (techStyles.length == 0) {
                         return "";
                     }
                     return WuxSheetMain.MultiRowGroup(techStyles, WuxSheetMain.Table.FlexTable, 2);
                 },
-                buildStyleTechniquesFlexTableEntry = function (technique) {
-                    let contents = buildTechnique(technique);
+                buildStyleTechniquesFlexTableEntry = function (styleDef, technique, partentStyleDef) {
+                    let contents = buildTechnique(styleDef, technique, partentStyleDef);
                     return `${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(contents), " wuxMinWidth300")}`;
                 },
-                buildTechnique = function (technique) {
+                buildTechnique = function (styleDef, technique, partentStyleDef) {
                     let techDef = technique.createDefinition(WuxDef.Get("Technique"));
                     let infoButton = WuxSheetMain.Info.Button(techDef.getAttribute(WuxDef._info), `value="${technique.name}"`);
                     let interactHeader = `<span class="wuxHeader">${technique.name}</span>`;
@@ -1422,10 +1426,23 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                         interactHeader = `<span>${interactHeader}<div class="wuxSubheader">[Prereq: ${prerequisites}]</div></span>`;
                     }
                     
-                    return `<div class="wuxInteractiveBlock">
-                    ${infoButton}
-                    ${WuxSheetMain.InteractionElement.CheckboxBlockIcon(techDef.getAttribute(), interactHeader)}
-                    </div>`;
+                    if (styleDef.subGroup == "Style") {
+                        return `<div class="wuxInteractiveBlock">
+                        ${infoButton}
+                        ${WuxSheetMain.InteractionElement.CheckboxBlockIcon(techDef.getAttribute(), interactHeader)}
+                        </div>`;
+                    }
+                    
+                    return WuxSheetMain.HiddenFieldToggle(partentStyleDef.getAttribute(WuxDef._learn),
+                        `<div class="wuxInteractiveBlock">
+                        ${infoButton}
+                        ${WuxSheetMain.InteractionElement.CheckboxBlockIcon(techDef.getAttribute(), interactHeader)}
+                        </div>`,
+                    `<div class="wuxInteractiveBlock">${infoButton}
+                            <div class="wuxInteractiveInnerBlock">
+                                <div class="wuxInteractiveContent">${interactHeader}</div>
+                            </div></div>`
+                    );
                 },
                 
                 getStyleTraits = function (style) {

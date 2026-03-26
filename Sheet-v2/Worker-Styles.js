@@ -471,6 +471,36 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             loader.run();
         });
     }
+    const openAndUnlockAdvancedStyles = function (attributeHandler, eventinfo, styleWorker) {
+        let technique = WuxTechs.GetByVariableName(eventinfo.sourceAttribute);
+        if (technique == undefined) {
+            return;
+        }
+        let styleSplit = technique.techSet.split(";");
+        let style = WuxStyles.Get(styleSplit[0]);
+        if (style == undefined) {
+            return;
+        }
+        let styleDef = style.createDefinition(WuxDef.Get("Style"));
+        if (eventinfo.newValue != "0") {
+            attributeHandler.addUpdate(styleDef.getVariable(WuxDef._expand), "on");
+            attributeHandler.addUpdate(styleDef.getVariable(WuxDef._learn), "on");
+        }
+        else {
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                styleWorker.setBuildStatsDraft(attrHandler);
+                let styles = styleWorker.getStyles();
+                for (let i = 0; i < styles.length; i++) {
+                    if (styles[i].style.name == style.name) {
+                        attributeHandler.addUpdate(styleDef.getVariable(WuxDef._learn), "on");
+                        return;
+                    }
+                }
+
+                attributeHandler.addUpdate(styleDef.getVariable(WuxDef._learn), "0");
+            });
+        }
+    }
     'use strict';
 
     const
@@ -553,6 +583,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             let worker = new WuxStyleWorkerBuild();
             worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
             WuxWorkerSkills.UpdateKeySkills(attributeHandler);
+            openAndUnlockAdvancedStyles(attributeHandler, eventinfo, worker);
             attributeHandler.run();
         },
         

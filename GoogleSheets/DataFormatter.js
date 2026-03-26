@@ -3253,18 +3253,17 @@ class TechniqueAssessment {
         return isNaN(parseInt(this.technique.en)) ? 0 : parseInt(this.technique.en);
     }
     getEnergyRestriction() {
-        let value = this.technique.tier + 1;
         if (this.technique.action == "Full") {
-            return value;
+            return this.technique.tier + 1;
         }
-        return Math.ceil(value / 2);
+        return Math.ceil(this.technique.tier / 2) + 1;
     }
 
     getAveragePoint(energy, technique) {
         let pointCalc = [];
         let points = this.basePoints + (3 * energy) + (energy * (energy + 1) / 2);
         if (technique.action == "Full") {
-            points += 3 + (2 * energy) + this.basePoints;
+            points += this.basePoints;
             pointCalc.push("Full");
         }
         else if (technique.action == "Assist") {
@@ -3426,7 +3425,7 @@ class TechniqueAssessment {
             this.addImpactTrait("Trait_Atk");
         }
         else if (subType == "Status") {
-            output.value = Math.max(Math.floor(output.value * 0.8), 1);
+            output.value = Math.max(Math.floor(output.value * 0.7), 1);
             message = `(Status)`;
 
             if (effect.defense != "WillBreak") {
