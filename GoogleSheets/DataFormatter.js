@@ -2944,6 +2944,9 @@ class TechniqueAssessment {
         this.technique = technique;
         this.assessment = "";
         this.averagePoints = 0;
+        this.assessmentPercentage = 0;
+        this.isInvalid = false;
+        this.invalidReason = "";
         
         this.impactTraits = {};
 
@@ -2993,9 +2996,21 @@ class TechniqueAssessment {
     
     setDefenseModifier() {
         let modNames = [];
+        let defenseValue = parseInt(this.technique.coreDefense);
         if (this.technique.coreDefense == "") {
             this.defenseModifier += 0.65;
             modNames.push("Unavoidable");
+        }
+        else if (!isNaN(defenseValue)) {
+            defenseValue -= this.technique.tier + 4;
+            if (defenseValue <= 5) {
+                this.defenseModifier += 0.5;
+                modNames.push("Easy DC");
+            }
+            else if (defenseValue >= 9) {
+                this.defenseModifier -= 0.2;
+                modNames.push("Hard DC");
+            }
         }
         else {
             let accurateDefenses = ["Evasion", "Insight"];
@@ -3015,41 +3030,45 @@ class TechniqueAssessment {
         this.defenseModName = modNames.join(", ");
     }
 
-    setAssessment(value) {
+    setAssessment() {
         if (this.technique.en > this.getEnergyRestriction()) {
+            this.isInvalid = true;
+            this.invalidReason = "Too much EN expenditure for this action type";
+        }
+        if (this.isInvalid) {
             this.assessment = "INVALID";
             return;
         }
-        if (value == undefined) {
+        if (this.assessmentPercentage == undefined) {
             this.assessment = "???";
             return;
         }
         
-        if (value < 20) {
+        if (this.assessmentPercentage < 20) {
             this.assessment = "Too Weak";
-        } else if (value < 40) {
+        } else if (this.assessmentPercentage < 40) {
             this.assessment = "Weak";
-            if (value > 32) {
+            if (this.assessmentPercentage > 32) {
                 this.assessment += " 3";
-            } else if (value > 26) {
+            } else if (this.assessmentPercentage > 26) {
                 this.assessment += " 2";
             } else {
                 this.assessment += " 1";
             }
-        } else if (value < 60) {
+        } else if (this.assessmentPercentage < 60) {
             this.assessment = "Average";
-            if (value > 52) {
+            if (this.assessmentPercentage > 52) {
                 this.assessment += " 3";
-            } else if (value > 46) {
+            } else if (this.assessmentPercentage > 46) {
                 this.assessment += " 2";
             } else {
                 this.assessment += " 1";
             }
-        } else if (value < 80) {
+        } else if (this.assessmentPercentage < 80) {
             this.assessment = "Strong";
-            if (value > 72) {
+            if (this.assessmentPercentage > 72) {
                 this.assessment += " 3";
-            } else if (value > 66) {
+            } else if (this.assessmentPercentage > 66) {
                 this.assessment += " 2";
             } else {
                 this.assessment += " 1";
@@ -3067,6 +3086,10 @@ class TechniqueAssessment {
     }
     printAssessmentNote() {
         let range = this.sheet.getRange(this.row, this.assessColumn, 1, 1);
+        if (this.isInvalid) {
+            range.setNote(this.invalidReason);
+            return;
+        }
         range.setNote(this.getAssessmentNote());
     }
     printVersionChange() {
@@ -3151,9 +3174,36 @@ class TechniqueAssessment {
         if (this.technique.action == "Passive") {
             return "0 < 15 < 30";
         }
-        let farPts = Math.floor(this.averagePoints * 3 / 10);
-        let closePts = Math.floor(this.averagePoints / 10);
-        return `${this.averagePoints - farPts} > ${closePts == 0 ? this.averagePoints : `${this.averagePoints - closePts} < ${this.averagePoints + closePts}`} < ${this.averagePoints + farPts}`;
+
+        let output = "";
+        let lowPts, medPts, hiPts;
+        if (this.assessmentPercentage < 50) {
+            lowPts = this.averagePoints + Math.floor(this.averagePoints * (26 - 50)/ 100);
+            medPts = this.averagePoints + Math.floor(this.averagePoints * (32 - 50)/ 100);
+            hiPts = this.averagePoints + Math.floor(this.averagePoints * (46 - 50)/ 100);
+            output = lowPts;
+            if (medPts != lowPts) {
+                output += ` <${medPts}`;
+            }
+            if (hiPts != medPts) {
+                output += ` <${hiPts}`;
+            }
+            return `${output} <${this.averagePoints}`;
+        }
+        else {
+            lowPts = this.averagePoints + Math.floor(this.averagePoints * (60 - 50)/ 100);
+            medPts = this.averagePoints + Math.floor(this.averagePoints * (66 - 50)/ 100);
+            hiPts = this.averagePoints + Math.floor(this.averagePoints * (72 - 50)/ 100);
+            output = `${this.averagePoints} <`;
+        }
+        output += lowPts;
+        if (medPts != lowPts) {
+            output += ` <${medPts}`;
+        }
+        if (hiPts != medPts) {
+            output += ` <${hiPts}`;
+        }
+        return output;
     }
 
     assessTechnique() {
@@ -3186,17 +3236,17 @@ class TechniqueAssessment {
         this.averagePoints = this.addImpatiencePointMod(this.averagePoints);
 
         if (this.points == 0) {
+            this.assessmentPercentage = undefined;
             this.setAssessment();
         } else {
-            let difference = assessor.points - this.averagePoints;
-            let assessmentPercentage = 0;
             if (this.technique.action == "Passive") {
-                assessmentPercentage = 20 + (assessor.points * 2);
+                this.assessmentPercentage = 20 + (assessor.points * 2);
             }
             else {
-                assessmentPercentage = 50 + (difference * 100 / this.averagePoints);
+                let difference = assessor.points - this.averagePoints;
+                this.assessmentPercentage = 50 + (difference * 100 / this.averagePoints);
             }
-            this.setAssessment(assessmentPercentage);
+            this.setAssessment();
             this.getVarianceCalculation();
         }
     }
@@ -3444,7 +3494,10 @@ class TechniqueAssessment {
             this.addTargetedPointsRubric(effect, output.value);
             this.addImpactTrait("Trait_Atk");
         }
-        else if (effect.effect == "Psyche") {
+        else if (subType == "Special") {
+            this.addImpactTrait("Trait_Atk");
+        }
+        else if (effect.effect == "Dmg_Psyche") {
             if (effect.target == "Self") {
                 output.value = Math.floor(output.value * -0.5);
             } else {
@@ -3455,6 +3508,10 @@ class TechniqueAssessment {
                     output.value = Math.floor(output.value * 0.5);
                 }
             }
+            message = `(Psyche)`;
+            this.addPointsRubric(output.value, message);
+            this.addDefensePointsRubric(effect, output.value, message);
+            this.addTargetedPointsRubric(effect, output.value);
         } 
         else {
             if (effect.target == "Self") {
@@ -3810,7 +3867,9 @@ class TechniqueAssessment {
         }
         else {
             this.addPointsRubric(output.value, message);
-            this.addImpactTrait(impactTrait);
+            if (impactTrait != "") {
+                this.addImpactTrait(impactTrait);
+            }
         }
         this.addTargetedPointsRubric(effect, output.value);
     }
@@ -3831,6 +3890,12 @@ class TechniqueAssessment {
             case "Set":
             case "Add":
             case "Self":
+                let onlySingleTarget = ["Jolted", "Blinded", "Paralyzed", "Frozen"];
+                if (this.technique.target != "Target" && onlySingleTarget.includes(state.getTitle())) {
+                    this.isInvalid = true;
+                    this.invalidReason = `${state.getTitle()} can only target a single target`;
+                    return;
+                }
                 value = parseInt(state.points);
                 let formula = this.getDiceFormula(effect, attributeHandler);
                 if (formula.value > 0) {
@@ -3839,6 +3904,8 @@ class TechniqueAssessment {
                 message = `(Add ${state.getTitle()})`;
 
                 if (effect.defense == "WillBreak") {
+                    message = `${value} (Add ${state.getTitle()})`;
+                    this.addPointsRubric(0, message);
                     this.addImpactTrait(`Trait_Will-Apply:${state.name}`);
                 }
                 else {
@@ -3982,6 +4049,12 @@ class TechniqueAssessment {
             case "Line(2H)":
             case "Line(3H)":
                 pointMod = Math.floor(points * this.getAreaPointMod(0.4, 0.66));
+                this.addPointsRubric(pointMod, `(${this.target} ${this.size})`);
+                break;
+            case "Wide Line":
+            case "Wide Line(2H)":
+            case "Wide Line(3H)":
+                pointMod = Math.floor(points * this.getAreaPointMod(0.6, 0.66));
                 this.addPointsRubric(pointMod, `(${this.target} ${this.size})`);
                 break;
         }
