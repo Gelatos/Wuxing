@@ -1706,7 +1706,7 @@ class UsableItemData extends ItemData {
         i++;
         this.components = "" + dataArray[i];
         i++;
-        let techData = [this.name, "Item", "", ("" + dataArray[i]), "", 0];
+        let techData = [this.name, "Item", "", ("" + dataArray[i]), "", 2];
         i++;
         techData = techData.concat(dataArray.slice(i));
         this.technique = new TechniqueData(techData);
@@ -2636,7 +2636,22 @@ class BaseTechniqueEffectDisplayData {
     }
 
     formatDamageEffect(effect) {
-        return `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+        let subTypeParts = effect.subType.split(":");
+        let subType = subTypeParts[0];
+        switch (subType) {
+            case "Burst Damage":
+                return `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage per rank of your Burst condition. You then lose the Burst condition.`;
+            case "Status":
+                let statusEffect = WuxDef.GetTitle(Format.GetDefinitionName("Status", subTypeParts[1]));
+                return `If ${this.formatTarget(effect)} has ${statusEffect}, ${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+            case "Cond":
+                let conditionalEffect = WuxDef.GetTitle(Format.GetDefinitionName("Status", subTypeParts[1]));
+                return `If you have ${conditionalEffect}, ${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+            case "Special":
+                return effect.effect;
+            default:
+                return `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+        }
     }
 
     formatHpEffect(effect) {

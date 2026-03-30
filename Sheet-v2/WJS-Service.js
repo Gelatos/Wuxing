@@ -656,6 +656,7 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 
 	getStyles() {
 		let styleNames = [];
+		let recheckedNames = [];
 		let styleData = [];
 		let techniques = this.getTechniques();
 		for (let i = 0; i < techniques.length; i++) {
@@ -665,10 +666,24 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 				let styleName = styles[j];
 				if (!styleNames.includes(styleName)) {
 					let style = WuxStyles.Get(styleName);
-
+					if (!styleNames.includes(style.baseStyle)) {
+						recheckedNames.push(styleName);
+						continue;
+					}
 					styleNames.push(styleName);
 					styleData.push({style: style, rank: 10});
 				}
+			}
+		}
+		for (let i = 0; i < recheckedNames.length; i++) {
+			if (!styleNames.includes(recheckedNames[i])) {
+				let styleName = recheckedNames[i];
+				let style = WuxStyles.Get(styleName);
+				if (!styleNames.includes(style.baseStyle)) {
+					continue;
+				}
+				styleNames.push(styleName);
+				styleData.push({style: style, rank: 10});
 			}
 		}
 		return styleData;
