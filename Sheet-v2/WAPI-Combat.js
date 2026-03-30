@@ -298,6 +298,10 @@ var WuxConflictManager = WuxConflictManager || (function () {
                 tokenTargetData.removeStatus(attrHandler, "Stat_Distracted");
                 messages.push(`${tokenTargetData.displayName} is no longer Distracted`);
             }
+            if (tokenTargetData.hasStatus(attrHandler, "Stat_Blinded")) {
+                tokenTargetData.removeStatus(attrHandler, "Stat_Blinded");
+                messages.push(`${tokenTargetData.displayName} is no longer Blinded`);
+            }
         },
         sendStartRoundMessage = function (messages) {
             state.WuxConflictManager.activeTeamIndex = state.WuxConflictManager.startRoundTeamIndex;
@@ -938,6 +942,10 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             advantage -= 1;
             this.addMessage(`${this.senderTokenEffect.tokenTargetData.displayName} is Soaked: +1 Disadvantage`);
         }
+        if (this.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Blinded")) {
+            advantage -= 2;
+            this.addMessage(`${this.senderTokenEffect.tokenTargetData.displayName} is Blinded: +2 Disadvantage`);
+        }
         if (this.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Encouraged")) {
             advantage -= 1;
             if (removeStatus) {
@@ -997,6 +1005,10 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
         if (this.targetTokenEffect.tokenTargetData.hasStatus(targetAttributeHandler, "Stat_Paralyzed")) {
             advantage += 2;
             this.addMessage(`${this.targetTokenEffect.tokenTargetData.displayName} is Paralyzed: +2 Advantage`);
+        }
+        if (this.targetTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Blinded")) {
+            advantage += 1;
+            this.addMessage(`${this.senderTokenEffect.tokenTargetData.displayName} is Blinded: +1 Advantage`);
         }
         
         return advantage;
