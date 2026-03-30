@@ -1323,9 +1323,10 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     let headerContents = WuxSheetMain.CollapsibleHeaderInverse(collapsibleHeaderContents, hiddenField);
                     
                     let header = WuxSheetMain.Header(headerContents);
-                    let contents = buildStyleGroupBasicEntries(subStyleCategoryDefinition, stylesDatabase);
+                    let description = WuxSheetMain.Desc(subStyleCategoryDefinition.getDescription());
+                    let contents = description + buildStyleGroupBasicEntries(subStyleCategoryDefinition, stylesDatabase);
                     
-                    return header + WuxSheetMain.HiddenField(hiddenField, contents);
+                    return header + WuxSheetMain.HiddenFieldToggle(hiddenField, description, contents);
                 },
 
                 buildStyleGroupBasicEntries = function (subStyleCategoryDefinition, stylesDatabase) {
