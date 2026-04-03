@@ -685,9 +685,6 @@ class TokenTargetData extends TargetData {
     }
     performRun(attrHandler) {
         let speed = attrHandler.parseInt(WuxDef.GetVariable("Cmb_Mv"), 0, false);
-        if (this.hasStatus(attrHandler, "Stat_Encumbered")) {
-            speed -= 1;
-        }
         let chilled = this.getStatusRank(attrHandler, "Stat_Chilled");
         if (chilled > 0) {
             speed -= chilled;
@@ -700,8 +697,9 @@ class TokenTargetData extends TargetData {
     }
     performDash(attrHandler) {
         let speed = attrHandler.parseInt(WuxDef.GetVariable("Cmb_MvDash"), 0, false);
-        if (this.hasStatus(attrHandler, "Stat_Encumbered")) {
-            speed -= 2;
+        let earthblight = this.getStatusRank(attrHandler, "Stat_Earthblight");
+        if (earthblight > 0) {
+            speed -= earthblight * 2;
         }
         return Math.max(speed, 1);
     }
@@ -1063,6 +1061,14 @@ class TokenTargetEffectsData {
             }
             else {
                 damageReductionModifiers += `${damageRoll.damageType} Weakness`;
+            }
+        }
+
+        let physicalDamageTypes = ["Force", "Piercing"];
+        if (physicalDamageTypes.includes(damageRoll.damageType)) {
+            let earthBlight = this.tokenTargetData.getStatusRank(attrSetter, "Stat_Earthblight");
+            if (earthBlight > 0) {
+                damageReductionTotal -= earthBlight;
             }
         }
         

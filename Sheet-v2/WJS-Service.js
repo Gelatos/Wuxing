@@ -661,12 +661,16 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 		let techniques = this.getTechniques();
 		for (let i = 0; i < techniques.length; i++) {
 			let technique = techniques[i];
+			if (technique.impacts.includes("Permanent")) {
+				// Permanent techniques do not add their style to any style lists
+				continue;
+			}
 			let styles = technique.techSet.split(";");
 			for (let j = 0; j < styles.length; j++) {
 				let styleName = styles[j];
 				if (!styleNames.includes(styleName)) {
 					let style = WuxStyles.Get(styleName);
-					if (!styleNames.includes(style.baseStyle)) {
+					if (style.baseStyle != "" && !styleNames.includes(style.baseStyle)) {
 						recheckedNames.push(styleName);
 						continue;
 					}
@@ -761,6 +765,18 @@ class WuxPerkWorkerBuild extends WuxWorkerBuild {
 			}
 		}
 		return points;
+	}
+
+	getTechniques() {
+		let techniques = [];
+		// this.iterateBuildStats(function (techniqueVariableData) {
+		// 	let technique = WuxTechs.GetByVariableName(techniqueVariableData.name);
+		// 	let rank = techniqueVariableData.value;
+		// 	if (rank != "0") {
+		// 		techniques.push(technique);
+		// 	}
+		// });
+		return techniques;
 	}
 }
 

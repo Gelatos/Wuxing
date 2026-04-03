@@ -889,6 +889,9 @@ class FormeTechniqueDatabase {
 
         this.styleWorker = new WuxStyleWorkerBuild();
         attributeHandler.addMod(this.styleWorker.attrBuildDraft);
+
+        this.perkWorker = new WuxPerkWorkerBuild();
+        attributeHandler.addMod(this.perkWorker.attrBuildDraft);
     }
     setFormeSlotsDefinitionData () {
         this.formeDefinitions = [
@@ -921,6 +924,7 @@ class FormeTechniqueDatabase {
     setupPostGetAttr(attrHandler, cr) {
         this.jobWorker.setBuildStatsDraft(attrHandler);
         this.styleWorker.setBuildStatsDraft(attrHandler);
+        this.perkWorker.setBuildStatsDraft(attrHandler);
         if (cr == undefined) {
             this.userCr = attrHandler.parseInt(WuxDef.GetVariable("CR"));
         } else {
@@ -961,9 +965,11 @@ class FormeTechniqueDatabase {
             filteredTechs.forEach(tech => callback(tech, styleData));
         });
         let allStyleTechniques = this.styleWorker.getTechniques();
-        Debug.Log(`allStyleTechniques: ${JSON.stringify(allStyleTechniques)}`);
         allStyleTechniques.forEach((technique) => {
-            Debug.Log("FOund" + technique.name);
+            callback(technique)
+        });
+        let allPerkTechniques = this.perkWorker.getTechniques();
+        allPerkTechniques.forEach((technique) => {
             callback(technique)
         });
     }
@@ -973,7 +979,6 @@ class FormeTechniqueDatabase {
             if (styleData == undefined) {
                 isActive = this.checkTechniqueIsEquipped(technique, technique.techSet)
                     && this.checkTechniqueIsActive(technique, 10);
-                Debug.Log(`Looking at ${technique.name} and it is ${isActive ? "": "not "}active`);
             }
             else {
                 isActive = this.checkTechniqueIsEquipped(technique, styleData.style.name)

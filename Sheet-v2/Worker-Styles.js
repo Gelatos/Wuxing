@@ -522,7 +522,12 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 normalSlots.push({name: attrHandler.parseString(normalStyles.getVariable(i)), index: i});
             }
 
-            styleWorker.getStyles().forEach((styleVariableData) => {
+            let styles = styleWorker.getStyles();
+            // let styleList = [];
+            // for (let i = 0; i < styles.length; i++) {
+            //     styleList.push(styles[i].style.name);
+            // }
+            styles.forEach((styleVariableData) => {
                 let style = styleVariableData.style;
                 if (style.group != "") {
                     let newRowId = advancedRepeater.generateRowId();

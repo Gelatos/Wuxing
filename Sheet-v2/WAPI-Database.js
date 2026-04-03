@@ -2814,7 +2814,7 @@ class BaseTechniqueEffectDisplayData {
     formatStructureEffect(effect) {
         switch (effect.subType) {
             case "Count":
-                return `You create ${this.formatCalcBonus(effect)} ${effect.effect} in the targeted spaces.`;
+                return `You create ${this.formatCalcBonus(effect)} ${effect.effect} at the targeted spaces and must remain within range.`;
             case "Height":
                 return `Each ${effect.effect} is ${this.formatCalcBonus(effect)} spaces high.`;
             case "HP":

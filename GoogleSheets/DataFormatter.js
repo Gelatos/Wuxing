@@ -3176,33 +3176,32 @@ class TechniqueAssessment {
         }
 
         let output = "";
-        let lowPts, medPts, hiPts;
+        let lowestPts, lowPts, medPts, hiPts, highestPts;
         if (this.assessmentPercentage < 50) {
+            lowestPts = this.averagePoints + Math.floor(this.averagePoints * (20 - 50)/ 100);
             lowPts = this.averagePoints + Math.floor(this.averagePoints * (26 - 50)/ 100);
             medPts = this.averagePoints + Math.floor(this.averagePoints * (32 - 50)/ 100);
             hiPts = this.averagePoints + Math.floor(this.averagePoints * (46 - 50)/ 100);
-            output = lowPts;
-            if (medPts != lowPts) {
-                output += ` <${medPts}`;
-            }
-            if (hiPts != medPts) {
-                output += ` <${hiPts}`;
-            }
-            return `${output} <${this.averagePoints}`;
+            highestPts = this.averagePoints;
         }
         else {
+            lowestPts = this.averagePoints;
             lowPts = this.averagePoints + Math.floor(this.averagePoints * (60 - 50)/ 100);
             medPts = this.averagePoints + Math.floor(this.averagePoints * (66 - 50)/ 100);
             hiPts = this.averagePoints + Math.floor(this.averagePoints * (72 - 50)/ 100);
-            output = `${this.averagePoints} <`;
+            highestPts = this.averagePoints + Math.floor(this.averagePoints * (80 - 50)/ 100);
         }
-        output += lowPts;
+        output += lowestPts;
+        if (lowPts != lowestPts) {
+            output += ` <${lowPts}`;
+        }
         if (medPts != lowPts) {
             output += ` <${medPts}`;
         }
         if (hiPts != medPts) {
             output += ` <${hiPts}`;
         }
+        output += ` <${highestPts}`;
         return output;
     }
 
@@ -3283,6 +3282,8 @@ class TechniqueAssessment {
         attributeHandler.current[WuxDef.GetVariable("CR")] = 1;
         attributeHandler.addMod(WuxDef.GetVariable("Cmb_HV"));
         attributeHandler.current[WuxDef.GetVariable("Cmb_HV")] = this.basePoints - 1;
+        attributeHandler.addMod(WuxDef.GetVariable("TargetHV"));
+        attributeHandler.current[WuxDef.GetVariable("TargetHV")] = 5;
         attributeHandler.addMod(WuxDef.GetVariable("Soc_Favor"));
         attributeHandler.current[WuxDef.GetVariable("Soc_Favor")] = 15;
         attributeHandler.addMod(WuxDef.GetVariable("StrideRoll"));
@@ -3305,6 +3306,10 @@ class TechniqueAssessment {
     getEnergyRestriction() {
         if (this.technique.action == "Full") {
             return this.technique.tier + 1;
+        }
+        let restTypes = ["Brief", "Short", "Long"];
+        if (restTypes.includes(this.technique.action)) {
+            return 9;
         }
         return Math.ceil(this.technique.tier / 2) + 1;
     }
@@ -3513,6 +3518,13 @@ class TechniqueAssessment {
             this.addDefensePointsRubric(effect, output.value, message);
             this.addTargetedPointsRubric(effect, output.value);
         } 
+        else if (this.technique.forms.includes("Break")) {
+            output.value = Math.floor(output.value * 0.5);
+            message = `(Break)`;
+            this.addPointsRubric(output.value, message);
+            this.addDefensePointsRubric(effect, output.value, message);
+            this.addTargetedPointsRubric(effect, output.value);
+        }
         else {
             if (effect.target == "Self") {
                 output.value = Math.floor(output.value * -0.5);
@@ -3890,12 +3902,13 @@ class TechniqueAssessment {
             case "Set":
             case "Add":
             case "Self":
-                let onlySingleTarget = ["Jolted", "Blinded", "Paralyzed", "Frozen"];
+                let onlySingleTarget = ["Paralyzed", "Frozen"];
                 if (this.technique.target != "Target" && onlySingleTarget.includes(state.getTitle())) {
                     this.isInvalid = true;
                     this.invalidReason = `${state.getTitle()} can only target a single target`;
                     return;
                 }
+                
                 value = parseInt(state.points);
                 let formula = this.getDiceFormula(effect, attributeHandler);
                 if (formula.value > 0) {
@@ -3909,6 +3922,13 @@ class TechniqueAssessment {
                     this.addImpactTrait(`Trait_Will-Apply:${state.name}`);
                 }
                 else {
+                    let onlySingleTargetWillbreak = ["Jolted", "Blinded"];
+                    if (this.technique.target != "Target" && onlySingleTargetWillbreak.includes(state.getTitle())) {
+                        this.isInvalid = true;
+                        this.invalidReason = `${state.getTitle()} can only target a single target`;
+                        return;
+                    }
+                    
                     this.addPointsRubric(value, message);
                     if (!state.isBeneficial) {
                         this.addDefensePointsRubric(effect, value, message);
@@ -4028,13 +4048,14 @@ class TechniqueAssessment {
 
         switch (this.target) {
             case "Targets":
+            case "Spaces":
             case "Targets or Self":
                 pointMod = Math.floor(points * (this.size - 1) * 0.65);
                 this.addPointsRubric(pointMod, `(${this.size} ${this.target})`);
                 break;
             case "Blast":
-            case "Blast(2H)":
             case "Blast(3H)":
+            case "Blast(5H)":
                 pointMod = Math.floor(points * this.getAreaPointMod(0.75, 1));
                 this.addPointsRubric(pointMod, `(${this.target} ${this.size})`);
                 break;
