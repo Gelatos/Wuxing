@@ -278,7 +278,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
                         printPerkTechnique = function (perkDef, technique) {
                             let headerContents = `<div class="wuxInteractiveBlock">
-                                ${WuxSheetMain.InteractionElement.CheckboxBlockIcon(perkDef.getAttribute(WuxDef._rank),
+                                ${WuxSheetMain.InteractionElement.CheckboxBlockIcon(perkDef.getAttribute(),
                                 `<span class="wuxHeader">${technique.name}</span>
                                     <span class="wuxSubheader">[Cost ${technique.group} Perk Point]</span>`
                             )}
@@ -291,7 +291,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             descContents += `<div class="wuxDescription wuxMarginLeft50">${technique.flavorText}</div>`;
 
                             if (technique.name == "Second Affinity") {
-                                descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(WuxDef._rank),
+                                descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(),
                                     `<div class="wuxMarginLeft50">
                                         ${WuxSheetMain.Select(WuxDef.GetAttribute("AdvancedAffinity"),
                                         WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]))}
@@ -796,7 +796,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                         printPerkTechnique = function (perkDef, technique) {
                             let headerContents = `<div class="wuxInteractiveBlock">
-                                ${WuxSheetMain.InteractionElement.CheckboxBlockIcon(perkDef.getAttribute(WuxDef._rank),
+                                ${WuxSheetMain.InteractionElement.CheckboxBlockIcon(perkDef.getAttribute(),
                                 `<span class="wuxHeader">${technique.name}</span>
                                     <span class="wuxSubheader">[Cost ${technique.group} Perk Point]</span>`
                                 )}
@@ -804,7 +804,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let descContents = `<div class="wuxDescription wuxMarginLeft50">${technique.flavorText}</div>`;
                             
                             if (technique.name == "Affinity") {
-                                descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(WuxDef._rank),
+                                descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(),
                                     `<div class="wuxMarginLeft50">
                                         ${WuxSheetMain.Select(WuxDef.GetAttribute("Affinity"), 
                                         WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]))}
@@ -812,7 +812,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                     </div>`);
                             }
                             if (technique.name == "Second Affinity") {
-                                descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(WuxDef._rank),
+                                descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(),
                                     `<div class="wuxMarginLeft50">
                                         ${WuxSheetMain.Select(WuxDef.GetAttribute("AdvancedAffinity"), 
                                         WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]))}
@@ -1326,7 +1326,7 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     let description = WuxSheetMain.Desc(subStyleCategoryDefinition.getDescription());
                     let contents = description + buildStyleGroupBasicEntries(subStyleCategoryDefinition, stylesDatabase);
                     
-                    return header + WuxSheetMain.HiddenFieldToggle(hiddenField, description, contents);
+                    return header + WuxSheetMain.HiddenFieldToggle(hiddenField, contents, description);
                 },
 
                 buildStyleGroupBasicEntries = function (subStyleCategoryDefinition, stylesDatabase) {
@@ -1379,8 +1379,20 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     if (style.affinity != "") {
                         output += `<span>Affinity: ${style.affinity}</span>\n`;
                     }
+                    output += `<span><em>Main Skills: ${printStyleSkills(style)}</em></span>\n`;
+                    
+                    if (style.isPermanent) {
+                        output += `<span><em>Permanent Style.</em></span>\n<span><em>This style does not need to be equipped. All learned techniques are always available.</em></span>\n`;
+                    }
+                    let desc = styleDef.getDescription();
+                    if (desc != "") {
+                        output += `<span>&nbsp;</span>\n<span>${styleDef.getDescription()}</span>`;
+                    }
+                    return WuxSheetMain.Desc(output);
+                },
+                printStyleSkills = function (style) {
                     if (style.skills == "") {
-                        output += `<span><em>Main Skills: None</em></span>\n`;
+                        return "None";
                     }
                     else {
                         let skillsOutput = "";
@@ -1397,10 +1409,8 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                                 skillsOutput += `${skillData[0]}`;
                             }
                         }
-                        output += `<span><em>Main Skills: ${skillsOutput}</em></span>\n`;
+                        return skillsOutput;
                     }
-                    output += `<span>${styleDef.getDescription()}</span>`;
-                    return WuxSheetMain.Desc(output);
                 },
 
                 buildStyleTechniquesFlexTable = function (styleDef, style, partentStyleDef) {
