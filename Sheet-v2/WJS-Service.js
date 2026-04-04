@@ -767,15 +767,43 @@ class WuxPerkWorkerBuild extends WuxWorkerBuild {
 		return points;
 	}
 
-	getTechniques() {
+	getBuildVariables() {
+		let allStyles = WuxDef.Filter([new DatabaseFilterData("group", "PerkGroup")]);
+		let groupVariableNames = [];
+		for(let i = 0; i < allStyles.length; i++) {
+			groupVariableNames = groupVariableNames.concat(
+				WuxTechs.GetGroupVariables(new DatabaseFilterData("style", allStyles[i].getTitle())));
+		}
+		return groupVariableNames;
+	}
+
+	getBoostTechniques() {
 		let techniques = [];
-		// this.iterateBuildStats(function (techniqueVariableData) {
-		// 	let technique = WuxTechs.GetByVariableName(techniqueVariableData.name);
-		// 	let rank = techniqueVariableData.value;
-		// 	if (rank != "0") {
-		// 		techniques.push(technique);
-		// 	}
-		// });
+		this.iterateBuildStats(function (techniqueVariableData) {
+			let technique = WuxTechs.GetByVariableName(techniqueVariableData.name);
+			if (technique.forms.includes("Permanent")) {
+				return;
+			}
+			let rank = techniqueVariableData.value;
+			if (rank != "0") {
+				techniques.push(technique);
+			}
+		});
+		return techniques;
+	}
+
+	getPermanentTechniques() {
+		let techniques = [];
+		this.iterateBuildStats(function (techniqueVariableData) {
+			let technique = WuxTechs.GetByVariableName(techniqueVariableData.name);
+			if (!technique.forms.includes("Permanent")) {
+				return;
+			}
+			let rank = techniqueVariableData.value;
+			if (rank != "0") {
+				techniques.push(technique);
+			}
+		});
 		return techniques;
 	}
 }

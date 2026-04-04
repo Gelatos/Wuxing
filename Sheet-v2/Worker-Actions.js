@@ -539,46 +539,72 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         },
         
         populatePerkTechniques = function (attributeHandler) {
-
-            let perkTechniques = [];
-            let techniqueDef = WuxDef.Get("Technique");
-            let styleGroups = WuxDef.Filter([new DatabaseFilterData("group", "PerkGroup")]);
-            for (let index = 0; index < styleGroups.length; index++) {
-                perkTechniques = perkTechniques.concat(WuxTechs.Filter(new DatabaseFilterData("style", styleGroups[index].getTitle())));
-            }
         
-            for (let i = 0; i < perkTechniques.length; i++) {
-                let perkDef = perkTechniques[i].createDefinition(techniqueDef);
-                attributeHandler.addMod(perkDef.getVariable(WuxDef._rank));
-            }
-
+            let worker = new WuxPerkWorkerBuild();
+            attributeHandler.addMod([worker.attrBuildDraft]);
+            attributeHandler.addFormulaMods(worker.definition);
+            
             let boosterFieldName = WuxDef.GetVariable("BoostPerkTech");
             WuxWorkerActionsService.AddBoosterVariables(attributeHandler);
             WuxWorkerActionsService.AddNameVariables(attributeHandler);
+
             attributeHandler.addGetAttrCallback(function (attrHandler) {
-                
+                worker.setBuildStatsDraft(attrHandler);
+
                 let perkBoosters = [];
-                for (let i = 0; i < perkTechniques.length; i++) {
-                    let technique = perkTechniques[i];
-                    let perkDef = technique.createDefinition(techniqueDef);
-                    let techRank = attrHandler.parseString(perkDef.getVariable(WuxDef._rank));
-                    if (technique.name == "Affinity") {
-                        if (techRank == "0") {
-                            attrHandler.addUpdate(WuxDef.GetVariable("Affinity"), "0");
-                        }
-                    } else if (technique.name == "Second Affinity") {
-                        if (techRank == "0") {
-                            attrHandler.addUpdate(WuxDef.GetVariable("AdvancedAffinity"), "0");
-                        }
+                let allPerkTechniques = worker.getBoostTechniques();
+                allPerkTechniques.forEach((technique) => {
+                    if (technique.name == "Second Affinity") {
+                        attrHandler.addUpdate(WuxDef.GetVariable("AdvancedAffinity"), "0");
                     }
-                    else if (techRank != "0") {
+                    else {
                         perkBoosters.push(technique.name);
                     }
-                }
+                });
 
                 attrHandler.addUpdate(boosterFieldName, JSON.stringify(perkBoosters));
                 WuxWorkerActionsService.SetTechniqueBoosters(attrHandler);
             });
+
+            // let perkTechniques = [];
+            // let techniqueDef = WuxDef.Get("Technique");
+            // let styleGroups = WuxDef.Filter([new DatabaseFilterData("group", "PerkGroup")]);
+            // for (let index = 0; index < styleGroups.length; index++) {
+            //     perkTechniques = perkTechniques.concat(WuxTechs.Filter(new DatabaseFilterData("style", styleGroups[index].getTitle())));
+            // }
+            //
+            // for (let i = 0; i < perkTechniques.length; i++) {
+            //     let perkDef = perkTechniques[i].createDefinition(techniqueDef);
+            //     attributeHandler.addMod(perkDef.getVariable());
+            // }
+            //
+            // let boosterFieldName = WuxDef.GetVariable("BoostPerkTech");
+            // WuxWorkerActionsService.AddBoosterVariables(attributeHandler);
+            // WuxWorkerActionsService.AddNameVariables(attributeHandler);
+            // attributeHandler.addGetAttrCallback(function (attrHandler) {
+            //    
+            //     let perkBoosters = [];
+            //     for (let i = 0; i < perkTechniques.length; i++) {
+            //         let technique = perkTechniques[i];
+            //         let perkDef = technique.createDefinition(techniqueDef);
+            //         let techRank = attrHandler.parseString(perkDef.getVariable());
+            //         if (technique.name == "Affinity") {
+            //             if (techRank == "0") {
+            //                 attrHandler.addUpdate(WuxDef.GetVariable("Affinity"), "0");
+            //             }
+            //         } else if (technique.name == "Second Affinity") {
+            //             if (techRank == "0") {
+            //                 attrHandler.addUpdate(WuxDef.GetVariable("AdvancedAffinity"), "0");
+            //             }
+            //         }
+            //         else if (techRank != "0") {
+            //             perkBoosters.push(technique.name);
+            //         }
+            //     }
+            //
+            //     attrHandler.addUpdate(boosterFieldName, JSON.stringify(perkBoosters));
+            //     WuxWorkerActionsService.SetTechniqueBoosters(attrHandler);
+            // });
         },
 
         inspectFormeTechnique = function (eventinfo, suffix) {
@@ -968,7 +994,7 @@ class FormeTechniqueDatabase {
         allStyleTechniques.forEach((technique) => {
             callback(technique)
         });
-        let allPerkTechniques = this.perkWorker.getTechniques();
+        let allPerkTechniques = this.perkWorker.getPermanentTechniques();
         allPerkTechniques.forEach((technique) => {
             callback(technique)
         });
