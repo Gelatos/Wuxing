@@ -30,14 +30,24 @@ function SplitLargeEntry(output, splitCharacter) {
                 splitString = output.substring(0, 50000);
 
                 if (splitCharacter != "") {
-                    splitIndex = splitString.lastIndexOf(splitCharacter);
-                    if (splitIndex > 0) {
-                        splitString = output.substring(0, splitIndex + splitCharacter.length);
-                        output = output.substring(splitIndex + splitCharacter.length);
+                    let foundSplit = false;
+                    while (!foundSplit) {
+                        splitIndex = splitString.lastIndexOf(splitCharacter) + splitCharacter.length;
+                        if (splitIndex > 0) {
+                            if (splitString.substring(splitIndex, splitIndex + 1).includes(`"`)) {
+                                splitString = splitString.substring(0, splitIndex - 1 - splitCharacter.length);
+                            }
+                            else {
+                                foundSplit = true;
+                            }
+                        }
+                        else {
+                            splitIndex = 50000 - splitCharacter.length;
+                            foundSplit = true;
+                        }
                     }
-                    else {
-                        output = output.substring(50000);
-                    }
+                    splitString = output.substring(0, splitIndex);
+                    output = output.substring(splitIndex);
                 }
                 else {
                     output = output.substring(50000);
@@ -3727,6 +3737,9 @@ class TechniqueAssessment {
         }
 
         if (effect.defense == "WillBreak") {
+            output.value /= 4;
+            message = `${output.value} (Favor)`;
+            this.addPointsRubric(0, message);
             this.addImpactTrait(`Trait_Will:Trait_Favor`);
         }
         else {
@@ -3852,9 +3865,12 @@ class TechniqueAssessment {
                 break;
             case "Fly":
             case "FreeMove":
+                output.value = Math.floor(output.value * 1.5);
+                impactTrait = `Trait_Move-${effect.subType}`;
+                break;
             case "Invis":
             case "Sneak":
-                output.value = Math.floor(output.value * 1.5);
+                output.value = Math.floor(output.value * 2);
                 impactTrait = `Trait_Move-${effect.subType}`;
                 break;
             case "ForceMove":
@@ -4244,6 +4260,7 @@ function SetAllStyleKeywords(sheet, startRow) {
     let effectColumn = getNamedColumn(sheet, "Effects");
     let skillColumn = getNamedColumn(sheet, "Skills");
     let affinityColumn = getNamedColumn(sheet, "Affinity");
+    let permanentColumn = getNamedColumn(sheet, "IsPermanent");
     let rowIndex = startRow;
     while (rowIndex <= lastRow) {
         let effectCell = sheet.getRange(rowIndex, effectColumn, 1, 1);
@@ -4253,6 +4270,10 @@ function SetAllStyleKeywords(sheet, startRow) {
         if (affinityColumn >= 0) {
             affinityCell = sheet.getRange(rowIndex, affinityColumn, 1, 1);
         }
+        let permanentCell = undefined;
+        if (permanentColumn >= 0) {
+            permanentCell = sheet.getRange(rowIndex, permanentColumn, 1, 1);
+        }
         
         let rowData = sheet.getRange(rowIndex, 1, 1, lastCol).getValues()[0];
         if (rowData[0] == "" || rowData[0].startsWith("#")) {
@@ -4261,12 +4282,12 @@ function SetAllStyleKeywords(sheet, startRow) {
             continue;
         }
 
-        SetStyleKeywords(rowData, effectCell, skillCell, affinityCell)
+        SetStyleKeywords(rowData, effectCell, skillCell, affinityCell, permanentCell)
         rowIndex++;
     }
 }
 
-function SetStyleKeywords(rowData, effectCell, skillCell, affinityCell) {
+function SetStyleKeywords(rowData, effectCell, skillCell, affinityCell, permanentCell) {
     
     let style = new TechniqueStyle(rowData);
     let techniqueFilter = WuxTechs.Filter(new DatabaseFilterData("style", style.name));
@@ -4275,20 +4296,23 @@ function SetStyleKeywords(rowData, effectCell, skillCell, affinityCell) {
         effectCell.setValue("");
     } else {
         let styleAssessment = new StyleAssessment(
-            style, techniqueFilter, effectCell, skillCell, affinityCell);
+            style, techniqueFilter, effectCell, skillCell, affinityCell, permanentCell);
         styleAssessment.print();
     }
 }
 
 class StyleAssessment {
     
-    constructor (style, techniqueFilter, effectCell, skillCell, affinityCell) {
+    constructor (style, techniqueFilter, effectCell, skillCell, affinityCell, permanentCell) {
+        this.style = style;
         this.baseTechniqueKeywords = {};
         this.effectCell = effectCell;
         this.skillCell = skillCell;
         this.affinityCell = affinityCell;
+        this.permanentCell = permanentCell;
         this.skills = [];
         this.affinities = [];
+        this.isPermanent = false;
         
         if (style.baseStyle != "") {
             let baseTechniqueFilters = WuxTechs.Filter(new DatabaseFilterData("style", style.baseStyle));
@@ -4303,6 +4327,10 @@ class StyleAssessment {
         if (this.affinityCell != undefined) {
             this.affinities = this.getStyleTechniqueAffinities(techniqueFilter);
         }
+
+        if (this.permanentCell != undefined) {
+            this.isPermanent = this.getStyleTechniqueIsPermanent(techniqueFilter);
+        }
     }
 
     print() {
@@ -4311,6 +4339,7 @@ class StyleAssessment {
         if (this.affinityCell != undefined) {
             this.affinityCell.setValue(this.printAffinity());
         }
+        this.permanentCell.setValue(this.printIsPermanent())
     }
 
     printKeywords() {
@@ -4351,6 +4380,10 @@ class StyleAssessment {
             output += this.skills[i];
         }
         return output;
+    }
+
+    printIsPermanent() {
+        return this.isPermanent ? "TRUE" : "";
     }
 
     printAffinity() {
@@ -4427,6 +4460,18 @@ class StyleAssessment {
             }
         }
         return affinities;
+    }
+
+    getStyleTechniqueIsPermanent(techniqueFilters) {
+        if (this.isPermanent) {
+            return true;
+        }
+        for (let i = 0; i < techniqueFilters.length; i++) {
+            if (techniqueFilters[i].forms.includes("Permanent")) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
