@@ -165,7 +165,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 }
                 
                 if (showTierHeaders) {
-                    addStyleTierHeaderToInspectionPopup(attrHandler, itemPopupRepeater, affinity, style.name, tier);
+                    addStyleTierHeaderToInspectionPopup(attrHandler, itemPopupRepeater, affinity, style.name, style.getLevelPrerequisites(tier));
                 }
 
                 techsByAffinity.forEach(function (styleTechnique) {
@@ -189,12 +189,12 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         itemPopupRepeater.removeAllIdsAfterIteratorIndex();
         return selectedElement;
     };
-    const addStyleTierHeaderToInspectionPopup = function (attrHandler, itemPopupRepeater, affinity, styleName, tier) {
+    const addStyleTierHeaderToInspectionPopup = function (attrHandler, itemPopupRepeater, affinity, styleName, level) {
         let techHeader = "";
         let techDesc = "";
-        if (tier != 0) {
-            techHeader += `Tier ${tier}`;
-            techDesc += `These techniques are learned upon reaching ${styleName} Tier ${tier}`;
+        if (level != 0) {
+            techHeader += `Level ${level}`;
+            techDesc += `These techniques are learnable upon reaching Level ${level}`;
         }
         if (affinity != "") {
             if (affinity.includes(";")) {
