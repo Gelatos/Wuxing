@@ -979,7 +979,6 @@ class TokenTargetEffectsData {
     performDamageRolls(attrGetter, attrSetter, willBreakEffect) {
         let tokenTargetEffect = this;
         let hasShielded = false;
-        let hasRockShield = false;
         
         this.damageRolls.forEach(function (damageRoll) {
             switch (damageRoll.damageType) {
@@ -1007,9 +1006,6 @@ class TokenTargetEffectsData {
                     if (tokenTargetEffect.modifyDamageRollShieldedCheck(damageRoll, attrSetter, "Stat_Shielded", "Shielded")) {
                         hasShielded = true;
                     }
-                    if (tokenTargetEffect.modifyDamageRollShieldedCheck(damageRoll, attrSetter, "Stat_Rock Shield", "Rock Shield")) {
-                        hasRockShield = true;
-                    }
                     
                     tokenTargetEffect.modifyDamageRollMantleCheck(damageRoll, attrSetter);
                     if (damageRoll.total > 0) {
@@ -1021,10 +1017,6 @@ class TokenTargetEffectsData {
         if (hasShielded) {
             tokenTargetEffect.effectMessages.push(`Removed Shielded status.`);
             tokenTargetEffect.tokenTargetData.removeStatus(attrSetter, "Stat_Shielded");
-        }
-        if (hasRockShield) {
-            tokenTargetEffect.effectMessages.push(`Removed Rock Shield status.`);
-            tokenTargetEffect.tokenTargetData.removeStatus(attrSetter, "Stat_Rock Shield");
         }
     }
     modifyDamageRollHalveDamage(damageRoll) {
@@ -1064,12 +1056,40 @@ class TokenTargetEffectsData {
             }
         }
 
-        let physicalDamageTypes = ["Force", "Piercing"];
-        if (physicalDamageTypes.includes(damageRoll.damageType)) {
-            let earthBlight = this.tokenTargetData.getStatusRank(attrSetter, "Stat_Earthblight");
-            if (earthBlight > 0) {
-                damageReductionTotal -= earthBlight;
-            }
+        switch(damageRoll.damageType) {
+            case "Dmg_Force":
+            case "Dmg_Piercing":
+                let earthBlight = this.tokenTargetData.getStatusRank(attrSetter, "Stat_Earthblight");
+                if (earthBlight > 0) {
+                    damageReductionTotal -= earthBlight * 2;
+                }
+                let sandAegis = this.tokenTargetData.getStatusRank(attrSetter, "Stat_Sand Aegis");
+                if (sandAegis > 0) {
+                    damageReductionTotal += sandAegis * this.tokenTargetData.combatDetails.getCr();
+                }
+                break;
+            case "Dmg_Cold":
+                let chilled = this.tokenTargetData.getStatusRank(attrSetter, "Stat_Chilled");
+                if (chilled > 0) {
+                    damageReductionTotal -= chilled * 2;
+                }
+                let coldAegis = this.tokenTargetData.getStatusRank(attrSetter, "Stat_Cold Aegis");
+                if (coldAegis > 0) {
+                    damageReductionTotal += coldAegis * this.tokenTargetData.combatDetails.getCr();
+                }
+                break;
+            case "Dmg_Burn":
+                let burnAegis = this.tokenTargetData.getStatusRank(attrSetter, "Stat_Burn Aegis");
+                if (burnAegis > 0) {
+                    damageReductionTotal += burnAegis * this.tokenTargetData.combatDetails.getCr();
+                }
+                break;
+            case "Dmg_Energy":
+                let shockAegis = this.tokenTargetData.getStatusRank(attrSetter, "Stat_Shock Aegis");
+                if (shockAegis > 0) {
+                    damageReductionTotal += shockAegis * this.tokenTargetData.combatDetails.getCr();
+                }
+                break;
         }
         
         if (damageReductionTotal != 0) {
@@ -1169,8 +1189,8 @@ class TokenTargetEffectsData {
                     }
                     break;
                 case "Stat_Iron Plates":
-                    if (this.tokenTargetData.hasStatus(attrHandler, "Stat_Rock Shield")) {
-                        this.effectMessages.push("Target has Rock Shield. Doubling Iron Plate ranks.");
+                    if (this.tokenTargetData.hasStatus(attrHandler, "Stat_Sand Aegis")) {
+                        this.effectMessages.push("Target has Sand Aegis. Doubling Iron Plate ranks.");
                         rank *= 2;
                     }
                     break;
@@ -1398,7 +1418,7 @@ class TokenTargetEffectsData {
         if (aflame > 0) {
             let roll = new DamageRoll();
             roll.rollDice(aflame, 6);
-            roll.setDamageType(WuxDef.GetTitle("Dmg_Fire"));
+            roll.setDamageType(WuxDef.GetTitle("Dmg_Burn"));
             this.addDamageRoll(roll);
         }
     }
@@ -1435,50 +1455,6 @@ class TokenTargetEffectsData {
             let roll = new DamageRoll();
             roll.addModToRoll(10 + (5 * this.tokenTargetData.combatDetails.getCr()));
             roll.setDamageType("Psyche");
-            this.addDamageRoll(roll);
-        }
-    }
-    takeBurnAegisEffect(attributeHandler) {
-        let aegis = this.tokenTargetData.getStatusRank(attributeHandler, "Stat_Burn Aegis");
-        if (aegis > 0) {
-            this.tokenTargetData.addStatus(attributeHandler, "Stat_Aflame", 1);
-            let roll = new DamageRoll();
-            roll.rollDice(aegis, 6);
-            roll.addModToRoll(aegis);
-            roll.setDamageType(WuxDef.GetTitle("Dmg_Burn"));
-            this.addDamageRoll(roll);
-        }
-    }
-    takeColdAegisEffect(attributeHandler) {
-        let aegis = this.tokenTargetData.getStatusRank(attributeHandler, "Stat_Cold Aegis");
-        if (aegis > 0) {
-            this.tokenTargetData.addStatus(attributeHandler, "Stat_Chilled", 1);
-            let roll = new DamageRoll();
-            roll.rollDice(aegis, 6);
-            roll.addModToRoll(aegis);
-            roll.setDamageType(WuxDef.GetTitle("Dmg_Cold"));
-            this.addDamageRoll(roll);
-        }
-    }
-    takeShockAegisEffect(attributeHandler) {
-        let aegis = this.tokenTargetData.getStatusRank(attributeHandler, "Stat_Shock Aegis");
-        if (aegis > 0) {
-            this.tokenTargetData.setStatus(attributeHandler, "Stat_Jolted", 1);
-            let roll = new DamageRoll();
-            roll.rollDice(aegis, 6);
-            roll.addModToRoll(aegis);
-            roll.setDamageType(WuxDef.GetTitle("Dmg_Shock"));
-            this.addDamageRoll(roll);
-        }
-    }
-    takeThornAegisEffect(attributeHandler) {
-        let aegis = this.tokenTargetData.getStatusRank(attributeHandler, "Stat_Thorn Aegis");
-        if (aegis > 0) {
-            this.tokenTargetData.setStatus(attributeHandler, "Stat_Vined", 1);
-            let roll = new DamageRoll();
-            roll.rollDice(aegis, 6);
-            roll.addModToRoll(aegis);
-            roll.setDamageType(WuxDef.GetTitle("Dmg_Piercing"));
             this.addDamageRoll(roll);
         }
     }
@@ -1799,7 +1775,7 @@ var TargetReference = TargetReference || (function () {
                 output += tokenOptionButton("Give XP", `txp ?{Amount of XP|0}`);
             }
 
-            let conditionals = `Aflame|Angered|Bleeding|Burn Aegis|Cold Aegis|Frightened|Shock Aegis|Thorn Aegis|Willbreak Cast`;
+            let conditionals = `Aflame|Angered|Bleeding|Frightened|Willbreak Cast`;
             switch (state.WuxConflictManager.conflictType) {
                 case "Battle":
                     output += tokenOptionSpacer();
@@ -2098,20 +2074,8 @@ var TargetReference = TargetReference || (function () {
                     case "Bleeding":
                         tokenEffect.takeBleedingEffect(attributeHandler);
                         break;
-                    case "Burn Aegis":
-                        tokenEffect.takeBurnAegisEffect(attributeHandler);
-                        break;
-                    case "Cold Aegis":
-                        tokenEffect.takeColdAegisEffect(attributeHandler);
-                        break;
                     case "Frightened":
                         tokenEffect.takeFrightenedEffect(attributeHandler);
-                        break;
-                    case "Shock Aegis":
-                        tokenEffect.takeShockAegisEffect(attributeHandler);
-                        break;
-                    case "Thorn Aegis":
-                        tokenEffect.takeThornAegisEffect(attributeHandler);
                         break;
                     case "Willbreak Cast":
                         tokenEffect.takeCastWillbreakEffect(attributeHandler);

@@ -1192,6 +1192,7 @@ class TechniqueStyle extends WuxDatabaseData {
         this.skills = json.skills;
         this.description = json.description;
         this.effects = json.effects;
+        this.isPermanent = json.isPermanent == undefined ? false : json.isPermanent;
         this.cr = json.cr;
         this.maxTier = json.maxTier;
     }
@@ -1216,7 +1217,7 @@ class TechniqueStyle extends WuxDatabaseData {
         i++;
         this.effects = dataArray[i];
         i++;
-        this.cr = parseInt(dataArray[i]);
+        this.isPermanent = ("" + dataArray[i]) != "";
         i++;
     }
 
@@ -1231,6 +1232,7 @@ class TechniqueStyle extends WuxDatabaseData {
         this.skills = "";
         this.effects = "";
         this.description = "";
+        this.isPermanent = false;
         this.cr = 0;
         this.maxTier = 0;
     }
@@ -1243,6 +1245,30 @@ class TechniqueStyle extends WuxDatabaseData {
         definition.baseStyle = this.baseStyle;
         definition.formula = new FormulaData();
         return definition;
+    }
+    getLevelPrerequisites(tier) {
+        switch (tier) {
+            case 1:
+                return 0;
+            case 2:
+                return 4;
+            case 3:
+                return 9;
+            case 4:
+                return 15;
+            case 5:
+                return 22;
+            case 6:
+                return 30;
+            case 7:
+                return 39;
+            case 8:
+                return 49;
+            case 9:
+                return 60;
+            default:
+                return 0;
+        }
     }
 }
 
@@ -2847,20 +2873,18 @@ class BaseTechniqueEffectDisplayData {
                 return `${this.formatTargetCopula(effect)} Pulled ${this.formatCalcBonus(effect)} spaces ${effect.effect == "" ? "towards you." : effect.effect}`;
             case "ForceMove":
                 return `${this.formatTargetCopula(effect)} Force Moved ${this.formatCalcBonus(effect)} spaces${effect.effect == "" ? "." : " " + effect.effect}`;
-            case "Aloft":
-                return `${this.formatTarget(effect)} stays aloft and moves up to ${this.formatCalcBonus(effect)} spaces${effect.effect == "" ? "." : " " + effect.effect}`;
             case "Float":
                 return `${this.formatTarget(effect, " Float", " Floats")}.`;
             case "FreeMove":
                 return `${this.formatTarget(effect)} may Free Move up to ${this.formatCalcBonus(effect)} spaces${effect.effect == "" ? "." : " " + effect.effect}`;
             case "Sneak":
-                return `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces. This movement does not break the hidden status.`;
-            case "Invis":
-                return `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces. This movement does not break the hidden or invisible status.`;
+                return `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces. This movement does not break the hidden or invisible condition.`;
             case "Fall":
                 return `${this.formatTarget(effect)} falls.`;
+            case "Teleport":
+                return `${this.formatTarget(effect)} teleports up to ${this.formatCalcBonus(effect)} spaces${effect.effect != "" ? "" : " " + effect.effect}.`;
             default:
-                return `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces.`;
+                return `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces${effect.effect != "" ? "" : " " + effect.effect}.`;
         }
     }
 
