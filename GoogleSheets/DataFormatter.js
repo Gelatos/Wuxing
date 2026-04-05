@@ -4245,7 +4245,7 @@ function SetStyleEffects(sheet) {
 }
 
 function SetStyleEffectsFromPosition(sheet) {
-    if (sheet.getSheetName() == "Styles") {
+    if (sheet.getSheetName() == "Styles" || sheet.getSheetName() == "Jobs") {
         const range = sheet.getActiveRange();
         let row = range.getRow();
         SetAllStyleKeywords(sheet, row);

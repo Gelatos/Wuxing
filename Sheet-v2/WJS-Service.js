@@ -656,21 +656,25 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 
 	getStyles() {
 		let styleNames = [];
+		let permanentNames = [];
 		let recheckedNames = [];
 		let styleData = [];
 		let techniques = this.getTechniques();
 		for (let i = 0; i < techniques.length; i++) {
 			let technique = techniques[i];
-			if (technique.impacts.includes("Permanent")) {
-				// Permanent techniques do not add their style to any style lists
-				continue;
-			}
 			let styles = technique.techSet.split(";");
 			for (let j = 0; j < styles.length; j++) {
 				let styleName = styles[j];
+				if (technique.forms.includes("Permanent")) {
+					if (!permanentNames.includes(styleName)) {
+						permanentNames.push(styleName);
+					}
+					// Permanent techniques do not add their style to any style lists
+					continue;
+				}
 				if (!styleNames.includes(styleName)) {
 					let style = WuxStyles.Get(styleName);
-					if (style.baseStyle != "" && !styleNames.includes(style.baseStyle)) {
+					if (style.baseStyle != "" && !styleNames.includes(style.baseStyle) && !permanentNames.includes(style.baseStyle)) {
 						recheckedNames.push(styleName);
 						continue;
 					}
@@ -680,7 +684,7 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 			}
 		}
 		for (let i = 0; i < recheckedNames.length; i++) {
-			if (!styleNames.includes(recheckedNames[i])) {
+			if (!styleNames.includes(recheckedNames[i]) && !permanentNames.includes(recheckedNames[i])) {
 				let styleName = recheckedNames[i];
 				let style = WuxStyles.Get(styleName);
 				if (!styleNames.includes(style.baseStyle)) {

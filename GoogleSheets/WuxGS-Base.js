@@ -2124,7 +2124,6 @@ var DisplayPopups = DisplayPopups || (function () {
                     <div class="wuxHiddenField">
                         ${WuxSheetMain.Header("Technique")}
                         <div class="wuxFeature">
-                            <input type="hidden" class="wuxFeatureHeader-flag" name="${getPopupAttribute("TechActionType")}">
                             <input type="hidden" name="${getPopupAttribute("TechVersion")}" value="" />
                             <input type="hidden" name="${getPopupAttribute("TechAffinity")}" value="" />
                             <input type="hidden" name="${getPopupAttribute("TechTier")}" value="0" />
@@ -2133,6 +2132,7 @@ var DisplayPopups = DisplayPopups || (function () {
                             <input type="hidden" name="${getPopupAttribute("TechBoonCost")}" value="0" />
                             <input type="hidden" name="${getPopupAttribute("TechTargetType")}" value="0" />
                             <input type="hidden" name="${getPopupAttribute("TechRange")}" value="0" />
+                            <input type="hidden" class="wuxFeatureHeader-flag" name="${getPopupAttribute("TechActionType")}">
                             <div class="wuxFeatureHeader">
                                 <div class="wuxFeatureHeaderDisplayBlock">
                                     <span class="wuxFeatureHeaderName" name="${getPopupAttribute("TechName")}"></span>
