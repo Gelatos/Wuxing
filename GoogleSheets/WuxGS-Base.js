@@ -1,19 +1,5 @@
 // noinspection JSUnusedGlobalSymbols,HtmlUnknownAttribute,ES6ConvertVarToLetConst,JSUnresolvedReference,SpellCheckingInspection
 
-function CreateCharacterSheetTech(stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray, goodsArray, gearArray, consumablesArray) {
-    let sheetsDb = SheetsDatabase.CreateDatabaseCollection(
-        stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray, goodsArray, gearArray, consumablesArray
-    );
-    return PrintLargeEntry(BuildCharacterSheet.PrintTech(sheetsDb));
-}
-
-function CreateCharacterSheetBase(stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray, goodsArray, gearArray, consumablesArray) {
-    let sheetsDb = SheetsDatabase.CreateDatabaseCollection(
-        stylesArray, skillsArray, languageArray, loreArray, jobsArray, techniqueArray, goodsArray, gearArray, consumablesArray
-    );
-    return PrintLargeEntry(BuildCharacterSheet.PrintBase(sheetsDb));
-}
-
 var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
     'use strict';
 

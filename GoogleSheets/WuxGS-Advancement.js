@@ -1333,7 +1333,7 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
                     let output = "";
                     let techFilterData = stylesDatabase.filter([
                         new DatabaseFilterData("subGroup", "Style"),
-                        new DatabaseFilterData("group", subStyleCategoryDefinition.getTitle())
+                        new DatabaseFilterData("styleCategory", subStyleCategoryDefinition.getTitle())
                     ]);
                     for (let i = 0; i < techFilterData.length; i++) {
                         let style = techFilterData[i];
