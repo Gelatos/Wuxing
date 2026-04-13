@@ -646,6 +646,9 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 		let techniques = [];
 		this.iterateBuildStats(function (techniqueVariableData) {
 			let technique = WuxTechs.GetByVariableName(techniqueVariableData.name);
+			if (technique == undefined) {
+				return;
+			}
 			let rank = techniqueVariableData.value;
 			if (rank != "0") {
 				techniques.push(technique);
@@ -687,7 +690,7 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 			if (!styleNames.includes(recheckedNames[i]) && !permanentNames.includes(recheckedNames[i])) {
 				let styleName = recheckedNames[i];
 				let style = WuxStyles.Get(styleName);
-				if (!styleNames.includes(style.baseStyle)) {
+				if (!styleNames.includes(style.baseStyle) && !permanentNames.includes(style.baseStyle)) {
 					continue;
 				}
 				styleNames.push(styleName);
@@ -785,6 +788,9 @@ class WuxPerkWorkerBuild extends WuxWorkerBuild {
 		let techniques = [];
 		this.iterateBuildStats(function (techniqueVariableData) {
 			let technique = WuxTechs.GetByVariableName(techniqueVariableData.name);
+			if (technique == undefined) {
+				return;
+			}
 			if (technique.forms.includes("Permanent")) {
 				return;
 			}
@@ -800,6 +806,9 @@ class WuxPerkWorkerBuild extends WuxWorkerBuild {
 		let techniques = [];
 		this.iterateBuildStats(function (techniqueVariableData) {
 			let technique = WuxTechs.GetByVariableName(techniqueVariableData.name);
+			if (technique == undefined) {
+				return;
+			}
 			if (!technique.forms.includes("Permanent")) {
 				return;
 			}
