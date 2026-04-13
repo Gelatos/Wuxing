@@ -176,7 +176,7 @@ function SetItemTechDatabase(styleArray, jobArray, techniqueArray, goodsArray, g
     techniqueClassData.addPublicFunction("filterAndSortTechniquesByRequirement", WuxDefinition.FilterAndSortTechniquesByRequirement);
     output += techniqueClassData.print("WuxTechs") + "\n";
 
-    let styleDb = SheetsDatabase.CreateStyles(styleArray, techDb);
+    let styleDb = SheetsDatabase.CreateStyles(styleArray);
     let variableNameKeys = {};
     styleDb.iterate(function (value, key) {
         let definition = value.createDefinition(WuxDef.Get("Style"));
@@ -411,8 +411,8 @@ var SheetsDatabase = SheetsDatabase || (function () {
             return new SkillData(arr);
         });
     };
-    const createStyles = function (arr, techDb) {
-        return new ExtendedTechniqueStyleDatabase(arr, techDb);
+    const createStyles = function (arr) {
+        return new ExtendedTechniqueStyleDatabase(arr);
     };
     const createLanguages = function (arr) {
         return new Database(arr, ["group"], function (arr) {
@@ -476,7 +476,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         },
 
         createDefinitionTypes = function (arr) {
-            return new ExtendedDescriptionDatabase(arr);
+            return new ExtendedDefinitionDatabase(arr);
         }
     ;
     return {
@@ -551,16 +551,10 @@ class SheetDatabaseObject {
         this.techniques = SheetsDatabase.CreateTechniques(this.readDatabase("Techniques", 2));
     }
     setStyles() {
-        if (this.techniques == undefined) {
-            return;
-        }
         this.styles = this.getStyles();
     }
     getStyles() {
-        if (this.techniques == undefined) {
-            return;
-        }
-        return SheetsDatabase.CreateStyles(this.readDatabase("Styles", 2), this.techniques);
+        return SheetsDatabase.CreateStyles(this.readDatabase("Styles", 2));
     }
     setSkills() {
         this.skills = SheetsDatabase.CreateSkills(this.readDatabase("Skills", 2));
@@ -1143,6 +1137,15 @@ var WuxDefinition = WuxDefinition || (function () {
             }
             return output;
         },
+        getGroupVariablesStyle = function (filterData, mod1, mod2) {
+            let data = filter(filterData);
+            let output = [];
+            for (let i = 0; i < data.length; i++) {
+                let definition = data[i].createDefinition(WuxDef.Get("Style"));
+                output.push(definition.getVariable(mod1, mod2));
+            }
+            return output;
+        },
         getTitle = function (key) {
             let data = get(key);
             return data.title;
@@ -1261,6 +1264,7 @@ var WuxDefinition = WuxDefinition || (function () {
         GetVariables: getVariables,
         GetGroupVariables: getGroupVariables,
         GetGroupVariablesTechnique: getGroupVariablesTechnique,
+        GetGroupVariablesStyle: getGroupVariablesStyle,
         GetTitle: getTitle,
         GetDescription: getDescription,
         GetName: getName,
@@ -2611,6 +2615,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
 function onOpen() {
     SpreadsheetApp.getUi()
         .createMenu('Assessment')
+        .addItem('Assess This', 'AssessThis')
         .addItem('Assess All', 'AssessAll')
         .addItem('Assess All From Here', 'AssessAllFromPosition')
         .addToUi();
@@ -2688,9 +2693,32 @@ function AssessAllFromPosition() {
     SetDatabaseFromPosition(ss, sheet);
 }
 
+function AssessThis() {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getActiveSheet();
+    if (AssessTechniquesFromPosition(sheet)) {
+        return;
+    }
+    if (SetStyleEffectFromPosition(sheet)) {
+        return;
+    }
+
+    SetDatabaseFromPosition(ss, sheet);
+}
+
 function TryAssessAllTechniques(sheet) {
     if (sheet.getSheetName() == "Techniques" || sheet.getSheetName() == "CustomTechniques") {
         AssessAllTechniquesByStartRow(sheet, 2);
+        return true;
+    }
+    return false;
+}
+
+function AssessTechniquesFromPosition(sheet) {
+    if (sheet.getSheetName() == "Techniques" || sheet.getSheetName() == "CustomTechniques") {
+        const range = sheet.getActiveRange();
+        let row = range.getRow();
+        row = AssessTechniqueAtRow(sheet, row);
         return true;
     }
     return false;
@@ -3023,7 +3051,7 @@ class TechniqueAssessment {
             }
         }
         else {
-            let accurateDefenses = ["Evasion", "Insight"];
+            let accurateDefenses = ["Evasion", "Ego"];
             if (accurateDefenses.some(type => type == this.technique.coreDefense)) {
                 this.defenseModifier += 0.25;
                 modNames.push("Effective");
@@ -3242,7 +3270,6 @@ class TechniqueAssessment {
         }
 
         this.averagePoints = this.getAveragePoint(this.getEnergy(), this.technique);
-        this.averagePoints = this.addImpatiencePointMod(this.averagePoints);
 
         if (this.points == 0) {
             this.assessmentPercentage = undefined;
@@ -3286,6 +3313,8 @@ class TechniqueAssessment {
         attributeHandler.current[WuxDef.GetVariable("SB_MedDef")] = 2;
         attributeHandler.addMod(WuxDef.GetVariable("SB_LowDef"));
         attributeHandler.current[WuxDef.GetVariable("SB_LowDef")] = 1;
+        attributeHandler.addMod(WuxDef.GetVariable("TargetFavor"));
+        attributeHandler.current[WuxDef.GetVariable("TargetFavor")] = 5;
         attributeHandler.addMod(WuxDef.GetVariable("Recall"));
         attributeHandler.current[WuxDef.GetVariable("Recall")] = 3;
         attributeHandler.addMod(WuxDef.GetVariable("CR"));
@@ -3350,10 +3379,6 @@ class TechniqueAssessment {
 
         this.pointsCalc = `(${pointCalc.join(",")})`;
         return points;
-    }
-
-    addImpatiencePointMod(points) {
-        return Math.floor(points * (1 + (this.patience * 0.1)));
     }
 
     getVarianceCalculation() {
@@ -3450,13 +3475,13 @@ class TechniqueAssessment {
                 break;
             case "Def_Brace":
             case "Def_Warding":
-            case "Def_Ego":
+            case "Def_Insight":
             case "Def_Resolve":
                 // 2 = 2, 3 = 4, 4 = 6, 5 = 8
                 output.value = Math.ceil(output.value + Math.max(Math.ceil(output.value * 0.75 - 1.5), 0));
                 break;
             case "Def_Evasion":
-            case "Def_Insight":
+            case "Def_Ego":
                 output.value = 1 + Math.ceil(output.value + Math.max(Math.ceil(output.value * 0.75 - 1.5), 0));
                 break;
             case "StartEN":
@@ -3522,6 +3547,9 @@ class TechniqueAssessment {
                 if (this.dps > 0) {
                     output.value = Math.floor(output.value * 0.5);
                 }
+                else {
+                    output.value = Math.ceil(output.value * (1.5 - (this.patience * (this.technique.action != "Full" ? 0.5 : 0.25))));
+                }
             }
             message = `(Psyche)`;
             this.addPointsRubric(output.value, message);
@@ -3570,7 +3598,6 @@ class TechniqueAssessment {
     }
 
     getHPAssessment(effect, attributeHandler) {
-        
         let output = this.getDiceFormula(effect, attributeHandler);
         let subTypeParts = effect.subType.split(":");
         let subType = subTypeParts[0];
@@ -3707,9 +3734,16 @@ class TechniqueAssessment {
         let output = this.getDiceFormula(effect, attributeHandler);
         switch (effect.subType) {
             case "Heal":
-                output.value *= 10;
-                this.addPointsRubric(output.value, `(Heal Impatience)`);
-                this.addImpactTrait("Trait_Heal-Impatience");
+                if (effect.defense == "WillBreak") {
+                    output.value *= 5;
+                    this.addPointsRubric(0, `${output.value} (Heal Impatience)`);
+                    this.addImpactTrait("Trait_Heal-Impatience");
+                }
+                else {
+                    output.value *= 10;
+                    this.addPointsRubric(output.value, `(Heal Impatience)`);
+                    this.addImpactTrait("Trait_Heal-Impatience");
+                }
                 break;
             default:
                 this.patience += output.value;
@@ -3731,13 +3765,13 @@ class TechniqueAssessment {
                 this.favor += output.value;
                 this.lowFavor += output.lowValue;
                 this.highFavor += output.highValue;
-                output.value *= 4;
+                output.value *= (6 - (this.patience * (this.technique.action != "Full" ? 2 : 1)));
                 message = `(Favor)`;
                 break;
         }
 
         if (effect.defense == "WillBreak") {
-            output.value /= 4;
+            output.value /= 6;
             message = `${output.value} (Favor)`;
             this.addPointsRubric(0, message);
             this.addImpactTrait(`Trait_Will:Trait_Favor`);
@@ -3753,36 +3787,38 @@ class TechniqueAssessment {
     getInfluenceAssessment(effect) {
         let subTypes = effect.subType.split(":");
         let points = 0;
+        let message = "";
+        let impactTrait = "";
         switch (subTypes[0]) {
             case "Raise":
             case "Lower":
                 if (effect.defense != "WillBreak") {
                     points = 14;
                 }
-                this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
-                this.addImpactTrait("Trait_Influence");
+                message = `(${subTypes[0]} Influence)`;
+                impactTrait = "Trait_Influence";
                 break;
             case "Adjust":
                 if (effect.defense != "WillBreak") {
                     points = 16;
                 }
-                this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
-                this.addImpactTrait("Trait_Influence");
+                message = `(${subTypes[0]} Influence)`;
+                impactTrait = "Trait_Influence";
                 break;
             case "Reveal":
                 if (effect.defense != "WillBreak") {
                     points = 10;
                 }
-                this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
-                this.addImpactTrait("Trait_Assess");
+                message = `(${subTypes[0]} Reveal)`;
+                impactTrait = "Trait_Assess";
                 break;
             case "RevealNeg":
             case "RevealPos":
                 if (effect.defense != "WillBreak") {
                     points = 8;
                 }
-                this.addPointsRubric(points, `(${subTypes[0]} Influence)`);
-                this.addImpactTrait("Trait_Assess");
+                message = `(${subTypes[0]} Reveal)`;
+                impactTrait = "Trait_Assess";
                 break;
             case "Add":
                 if (subTypes.length > 1) {
@@ -3792,20 +3828,31 @@ class TechniqueAssessment {
                         points = 30;
                     }
                 }
-                this.addPointsRubric(points, `(Add ${subTypes[1]} Influence)`);
-                this.addImpactTrait("Trait_AddInfluence");
+                message = `(${subTypes[0]} Influence)`;
+                impactTrait = "Trait_AddInfluence";
                 break;
+        }
+
+        if (effect.defense == "WillBreak") {
+            message = `${points} ${message}`;
+            this.addPointsRubric(0, message);
+            this.addImpactTrait(`Trait_Will:${impactTrait}`);
+        }
+        else {
+            this.addPointsRubric(output.value, message);
+            this.addImpactTrait(impactTrait);
         }
     }
 
     getRequestAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
-        output.value += 5;
+        output.value = Math.ceil(output.value * (1.5 - (this.patience * (this.technique.action != "Full" ? 0.5 : 0.25))));
         this.request += output.value;
         this.lowRequest += output.lowValue;
         this.highRequest += output.highValue;
         let message = `(Request)`;
         this.addPointsRubric(output.value, message);
+        this.addDefensePointsRubric(effect, output.value);
         this.addImpactTrait("Trait_Request");
     }
 
@@ -3897,6 +3944,9 @@ class TechniqueAssessment {
             this.addPointsRubric(output.value, message);
             if (impactTrait != "") {
                 this.addImpactTrait(impactTrait);
+            }
+            if (effect.target != "Self") {
+                this.addDefensePointsRubric(effect, output.value);
             }
         }
         this.addTargetedPointsRubric(effect, output.value);
@@ -4044,17 +4094,14 @@ class TechniqueAssessment {
     }
 
     addDefensePointsRubric(effect, points) {
-        let hasDefenseTypes = ["Damage", "Favor", "Status", "Move"];
-        if (hasDefenseTypes.some(type => type == effect.type)) {
-            if (effect.defense == "Core") {
-                let pointTotal = Math.ceil(points * this.defenseModifier);
-                if (pointTotal != 0) {
-                    this.addPointsRubric(pointTotal, `(${this.defenseModName})`);
-                }
-            } else if (effect.defense == "") {
-                let pointTotal = Math.ceil(points * 0.65);
-                this.addPointsRubric(pointTotal, `(Unavoidable)`);
+        if (effect.defense == "Core") {
+            let pointTotal = Math.ceil(points * this.defenseModifier);
+            if (pointTotal != 0) {
+                this.addPointsRubric(pointTotal, `(${this.defenseModName})`);
             }
+        } else if (effect.defense == "") {
+            let pointTotal = Math.ceil(points * 0.65);
+            this.addPointsRubric(pointTotal, `(Unavoidable)`);
         }
     }
 
@@ -4244,6 +4291,16 @@ function SetStyleEffects(sheet) {
     return  false;
 }
 
+function SetStyleEffectFromPosition(sheet) {
+    if (sheet.getSheetName() == "Styles" || sheet.getSheetName() == "Jobs") {
+        const range = sheet.getActiveRange();
+        let row = range.getRow();
+        SetStyleKeywordAtRow(sheet, row);
+        return true;
+    }
+    return false;
+}
+
 function SetStyleEffectsFromPosition(sheet) {
     if (sheet.getSheetName() == "Styles" || sheet.getSheetName() == "Jobs") {
         const range = sheet.getActiveRange();
@@ -4263,31 +4320,42 @@ function SetAllStyleKeywords(sheet, startRow) {
     let permanentColumn = getNamedColumn(sheet, "IsPermanent");
     let rowIndex = startRow;
     while (rowIndex <= lastRow) {
-        let effectCell = sheet.getRange(rowIndex, effectColumn, 1, 1);
-        effectCell.setValue("Calculating...")
-        let skillCell = sheet.getRange(rowIndex, skillColumn, 1, 1);
-        let affinityCell = undefined;
-        if (affinityColumn >= 0) {
-            affinityCell = sheet.getRange(rowIndex, affinityColumn, 1, 1);
-        }
-        let permanentCell = undefined;
-        if (permanentColumn >= 0) {
-            permanentCell = sheet.getRange(rowIndex, permanentColumn, 1, 1);
-        }
-        
         let rowData = sheet.getRange(rowIndex, 1, 1, lastCol).getValues()[0];
         if (rowData[0] == "" || rowData[0].startsWith("#")) {
+            let effectCell = sheet.getRange(rowIndex, effectColumn, 1, 1);
             effectCell.setValue("");
             rowIndex++;
             continue;
         }
 
-        SetStyleKeywords(rowData, effectCell, skillCell, affinityCell, permanentCell)
+        SetStyleKeywords(sheet, rowIndex, rowData, effectColumn, skillColumn, affinityColumn, permanentColumn);
         rowIndex++;
     }
 }
 
-function SetStyleKeywords(rowData, effectCell, skillCell, affinityCell, permanentCell) {
+function SetStyleKeywordAtRow(sheet, startRow) {
+    const lastCol = sheet.getLastColumn();
+    let effectColumn = getNamedColumn(sheet, "Effects");
+    let skillColumn = getNamedColumn(sheet, "Skills");
+    let affinityColumn = getNamedColumn(sheet, "Affinity");
+    let permanentColumn = getNamedColumn(sheet, "IsPermanent");
+    let rowData = sheet.getRange(startRow, 1, 1, lastCol).getValues()[0];
+    SetStyleKeywords(sheet, startRow, rowData, effectColumn, skillColumn, affinityColumn, permanentColumn);
+}
+
+function SetStyleKeywords(sheet, rowIndex, rowData, effectColumn, skillColumn, affinityColumn, permanentColumn) {
+    
+    let effectCell = sheet.getRange(rowIndex, effectColumn, 1, 1);
+    effectCell.setValue("Calculating...")
+    let skillCell = sheet.getRange(rowIndex, skillColumn, 1, 1);
+    let affinityCell = undefined;
+    if (affinityColumn >= 0) {
+        affinityCell = sheet.getRange(rowIndex, affinityColumn, 1, 1);
+    }
+    let permanentCell = undefined;
+    if (permanentColumn >= 0) {
+        permanentCell = sheet.getRange(rowIndex, permanentColumn, 1, 1);
+    }
     
     let style = new TechniqueStyle(rowData);
     let techniqueFilter = WuxTechs.Filter(new DatabaseFilterData("style", style.name));
@@ -4531,7 +4599,7 @@ class DatabaseAssessment {
     printDataToColumn(data, splitCharacter, row, column) {
         let arr = SplitLargeEntry(data, splitCharacter);
         let output = [];
-        for (let i = 0; i < 99; i++) {
+        for (let i = 0; i < 150; i++) {
             if (i < arr.length) {
                 output.push([arr[i]]);
             }
@@ -4540,7 +4608,7 @@ class DatabaseAssessment {
             }
         }
 
-        let range = this.sheet.getRange(row, column, 99, 1);
+        let range = this.sheet.getRange(row, column, 150, 1);
         range.setValues(output);
     }
     
@@ -4629,7 +4697,7 @@ class DatabaseAssessment {
         this.importBasicDefinitions(definitionDatabase, "GroupDefinitions");
         this.importBasicDefinitions(definitionDatabase, "Definitions");
         this.importBasicDefinitions(definitionDatabase, "SystemDefinitions");
-        this.importDatabaseDefinitionsWithGroupCheck(definitionDatabase, this.sheetsDb.styles, WuxDef.Get("Style"));
+        this.importDatabaseDefinitions(definitionDatabase, this.sheetsDb.styles, WuxDef.Get("Style"));
         this.importDatabaseDefinitionsWithGroupCheck(definitionDatabase, this.sheetsDb.skills, WuxDef.Get("Skill"));
         this.importDatabaseDefinitions(definitionDatabase, this.sheetsDb.language, WuxDef.Get("Language"));
         let loreCategoryDef = WuxDef.Get("LoreCategory");
@@ -4710,6 +4778,7 @@ class DatabaseAssessment {
             let key = variableNameKeys[variableName];
             return get(key);
         });
+        styleClassData.addPublicFunction("getGroupVariables", WuxDefinition.GetGroupVariablesStyle);
         output += styleClassData.print("WuxStyles") + "\n";
 
         let goodsClassData = JavascriptDatabase.Create(this.sheetsDb.goods, WuxDefinition.GetGoods);

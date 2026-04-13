@@ -266,13 +266,12 @@ class ExtendedTechniqueDatabase extends Database {
 
 class ExtendedTechniqueStyleDatabase extends Database {
 
-    constructor(data, techDb) {
-        let filters = ["group", "mainGroup", "subGroup", "baseStyle"];
+    constructor(data) {
+        let filters = ["group", "styleCategory", "mainGroup", "subGroup", "baseStyle"];
         let dataCreation = function (data) {
             return new TechniqueStyle(data);
         };
         super(data, filters, dataCreation);
-        this.techDb = techDb;
 
         this.importStyles(data, dataCreation);
     }
@@ -304,20 +303,17 @@ class ExtendedTechniqueStyleDatabase extends Database {
         let data = {};
         for (let i = 0; i < dataArray.length; i++) {
             data = new TechniqueStyle(dataArray[i]);
-            this.setMaxTier(data);
             this.add(data.name, data);
         }
     }
-    
-    setMaxTier(techniqueStyle) {
-        let tier = 0;
-        let filterData = this.techDb.filter(new DatabaseFilterData("style", techniqueStyle.name));
-        for (let i = 0; i < filterData.length; i++) {
-            if (filterData[i].tier > tier) {
-                tier = filterData[i].tier;
-            }
+
+    add(key, value) {
+        super.add(key, value);
+
+        let groups = value.group.split(";");
+        for (let i = 0; i < groups.length; i++) {
+            this.addSortingGroup("styleCategory", groups[i].trim(), value);
         }
-        techniqueStyle.maxTier = tier;
     }
     
 }
@@ -346,7 +342,7 @@ class ExtendedUsableItemDatabase extends Database {
     }
 }
 
-class ExtendedDescriptionDatabase extends Database {
+class ExtendedDefinitionDatabase extends Database {
     constructor(data) {
         let dataCreation = function (data) {
             let definition = new DefinitionData(data);
@@ -2800,7 +2796,7 @@ class BaseTechniqueEffectDisplayData {
             case "Self":
                 return `${this.formatTargetGain(effect)} the ${state.title} ${state.group} targeted towards the caster`;
             case "Choose":
-                return `${this.formatTargetGain(effect)} the ${state.title} ${state.group} targeted towards a character of your choice`;
+                return `${this.formatTargetGain(effect)} the ${state.title} ${state.group} targeted towards a character of your choice. The chosen character must be one that is antagonistic to the target.`;
             default:
                 return `${this.formatTargetGain(effect)} the ${state.title} ${state.group}`;
         }

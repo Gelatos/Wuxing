@@ -137,9 +137,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         }
     }
 
-    const populateStyleInspectionTechniques = function (attrHandler, itemPopupRepeater, style, selectedTechnique, maxDisplayTier, affinities, showTierHeaders, restrictToAffinities) {
+    const populateStyleInspectionTechniques = function (attrHandler, itemPopupRepeater, style, selectedTechnique, maxTier, affinities, showTierHeaders, restrictToAffinities) {
         attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), `${style.name} Techniques`);
-        let maxTier = Math.min(style.maxTier, maxDisplayTier);
 
         let selectedElement = null;
         let styleTechniques = WuxTechs.FilterAndSortTechniquesByRequirement(new DatabaseFilterData("style", style.name));
@@ -523,62 +522,53 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             }
 
             let styles = styleWorker.getStyles();
+            
             // let styleList = [];
             // for (let i = 0; i < styles.length; i++) {
             //     styleList.push(styles[i].style.name);
             // }
             styles.forEach((styleVariableData) => {
                 let style = styleVariableData.style;
-                if (style.group != "") {
-                    let newRowId = advancedRepeater.generateRowId();
-                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Name")), style.name);
-                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Tier")), styleVariableData.rank);
-                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Actions")), 0);
-                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_SeeTechniques")), 0);
-                    let matchingSlotData = undefined;
-                    let actionFieldName = "";
-                    switch (style.group) {
-                        case "Job":
-                            actionFieldName = "RepeatingJobTech";
-                            jobSlots.forEach(function (slot) {
-                                if(slot.name == style.name) {
-                                    matchingSlotData = slot;
-                                }
-                            });
-                            break;
-                        case "Expert":
-                        case "Advanced":
-                        // actionFieldName = "RepeatingAdvTech";
-                        // attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsAdvanced")), "on");
-                        // advancedSlots.forEach(function (slot) {
-                        //     if(slot.name == style.name) {
-                        //         matchingSlotData = slot;
-                        //     }
-                        // });
-                        // break;
-                        case "Style":
-                            actionFieldName = "RepeatingAdvTech";
-                            attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsAdvanced")), 0);
-                            normalSlots.forEach(function (slot) {
-                                if(slot.name == style.name) {
-                                    matchingSlotData = slot;
-                                }
-                            });
-                            break;
-                    }
-
-                    if (matchingSlotData != undefined) {
-                        attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsEquipped")), "on");
-                        let equipStyleWorker = new EquipStyleWorker();
-                        equipStyleWorker.styleRepeater = advancedRepeater;
-                        equipStyleWorker.selectedId = newRowId;
-                        equipStyleWorker.styleFieldName = advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Actions"));
-                        equipStyleWorker.equipSlot(attrHandler, actionFieldName, matchingSlotData.index, matchingSlotData.name, style.name, styleVariableData.value);
-                    }
-                    else {
-                        attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsEquipped")), 0);
-                    }
+                Debug.Log("Assessing whether we can add " + style.name);
+                if (style.group == "" && style.subGroup == "") {
+                    return;
                 }
+                let newRowId = advancedRepeater.generateRowId();
+                attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Name")), style.name);
+                attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Tier")), styleVariableData.rank);
+                attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Actions")), 0);
+                attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_SeeTechniques")), 0);
+                let matchingSlotData = undefined;
+                let actionFieldName = "";
+                if (style.group == "Job") {
+                    actionFieldName = "RepeatingJobTech";
+                    jobSlots.forEach(function (slot) {
+                        if(slot.name == style.name) {
+                            matchingSlotData = slot;
+                        }
+                    });
+                }
+                else if (style.subGroup == "") {
+                    actionFieldName = "RepeatingAdvTech";
+                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsAdvanced")), 0);
+                    normalSlots.forEach(function (slot) {
+                        if(slot.name == style.name) {
+                            matchingSlotData = slot;
+                        }
+                    });
+                }
+
+                if (matchingSlotData == undefined) {
+                    attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsEquipped")), 0);
+                    return;
+                }
+                
+                attrHandler.addUpdate(advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsEquipped")), "on");
+                let equipStyleWorker = new EquipStyleWorker();
+                equipStyleWorker.styleRepeater = advancedRepeater;
+                equipStyleWorker.selectedId = newRowId;
+                equipStyleWorker.styleFieldName = advancedRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Actions"));
+                equipStyleWorker.equipSlot(attrHandler, actionFieldName, matchingSlotData.index, matchingSlotData.name, style.name, styleVariableData.value);
             });           
         },
         
@@ -665,8 +655,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 return;
             }
             
-            WuxWorkerInspectPopup.OpenTechniqueInspection(function () {
-                },
+            WuxWorkerInspectPopup.OpenTechniqueInspection(
+                function () {},
                 function (attrHandler, itemPopupRepeater) {
                     let style = WuxStyles.Get(technique.techSet);
 
