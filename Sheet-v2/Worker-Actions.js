@@ -861,7 +861,7 @@ class FormeTechniqueSort {
     
     getEntries(techDictionary) {
         return Object.entries(techDictionary.values)
-            .filter(([, v]) => v.isBase && v.isVisible);
+            .filter(([, v]) => v.isVisible);
     }
     
     updateSortOrder(techDictionary, entries) {
@@ -1015,7 +1015,6 @@ class FormeTechniqueDatabase {
                 isSet: false,
                 isActive: isActive,
                 isVisible: isActive && this.checkTechniqueIsVisibleInFilter(technique),
-                isBase: technique.group == "",
                 sortOrder: -1
             };
             this.techDictionary.add(technique.name, newEntry);
@@ -1083,17 +1082,6 @@ class FormeTechniqueDatabase {
         this.iterateRepeaterTechniques(attrHandler, function (techniqueAttributeHandler, techniqueName, repeater, id) {
             formeTechDatabase.setRepeaterTechniqueVisibility(techniqueAttributeHandler, techniqueName, 1);
             formeTechDatabase.setSortId(techniqueName, id);
-
-            // search for the techniques that use this technique as their base
-            formeTechDatabase.iterateGroupedTechniques(techniqueName,
-                (technique, techIndex) => {
-                    formeTechDatabase.setRepeaterTechniqueVisibility(techniqueAttributeHandler, technique.name, techIndex);
-                    return true;
-                },
-                (techIndex) => {
-                    techniqueAttributeHandler.setVisibilityAttribute(false, techIndex);
-                }
-            );
         });
     }
 
@@ -1116,62 +1104,45 @@ class FormeTechniqueDatabase {
             return false;
         }
         let techniqueData = this.techDictionary.get(techniqueName);
-        if (!techniqueData.isBase) {
-            Debug.Log(`${techniqueName} is no longer a base skill. Removing.`)
-            repeater.removeId(id);
-            return false;
-        }
         if (techniqueData.isSet) {
             Debug.Log(`${techniqueName} is already set. Removing.`)
             repeater.removeId(id);
             return false;
         }
 
-        if (!this.tryUpdateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName, 1)) {
-            return false;
-        }
-
-        // search for the techniques that use this technique as their base
-        this.iterateGroupedTechniques(techniqueName, 
-            (technique, techIndex) => {
-                return formeTechDatabase.tryUpdateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, technique.name, techIndex);
-            },
-            (techIndex) => {
-                techniqueAttributeHandler.setVisibilityAttribute(false, techIndex);
-            }
-        );
+        return this.tryUpdateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName);
         
-        return true;
+        
     }
-    tryUpdateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName, techIndex) {
+    tryUpdateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName) {
         if (this.techDictionary.has(techniqueName)) {
-            this.updateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName, techIndex);
+            this.updateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName);
             return true;
         }
         return false;
     }
-    updateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName, techIndex) {
-        let techVersion = techniqueAttributeHandler.getTechniqueVersion(techIndex);
+    updateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName) {
+        let techVersion = techniqueAttributeHandler.getTechniqueVersion();
         let technique = this.techDictionary.get(techniqueName).technique;
         if (technique.version != techVersion) {
             Debug.Log(`Updating ${techniqueName} as it has a new version (${technique.version} != ${techVersion})`);
-            techniqueAttributeHandler.setSimplifiedTechniqueInfo(technique, techIndex);
+            techniqueAttributeHandler.setSimplifiedTechniqueInfo(technique);
         }
         this.techDictionary.get(techniqueName).isSet = true;
-        this.setRepeaterTechniqueVisibility(techniqueAttributeHandler, techniqueName, techIndex);
+        this.setRepeaterTechniqueVisibility(techniqueAttributeHandler, techniqueName);
     }
-    setRepeaterTechniqueVisibility(techniqueAttributeHandler, techniqueName, techIndex) {
+    setRepeaterTechniqueVisibility(techniqueAttributeHandler, techniqueName) {
         if (this.techDictionary.has(techniqueName)) {
-            techniqueAttributeHandler.setVisibilityAttribute(this.techDictionary.get(techniqueName).isVisible, techIndex);
+            techniqueAttributeHandler.setVisibilityAttribute(this.techDictionary.get(techniqueName).isVisible);
         }
     }
     
     updateLoadTechniques(attrHandler) {
-        let unsetBaseTechniqueData = this.getUnsetBaseTechniqueData();
+        let unsetBaseTechniqueData = this.getUnsetTechniqueData();
         attrHandler.addUpdate(WuxDef.GetVariable("Action_FormeLoadCount"), unsetBaseTechniqueData.length);
     }
     addMissingTechniques(attrHandler) {
-        let unsetBaseTechniqueData = this.getUnsetBaseTechniqueData();
+        let unsetBaseTechniqueData = this.getUnsetTechniqueData();
         let repeater = attrHandler.getRepeatingSection(this.formeActionsRepeaterId);
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", repeater);
         let maxLoadCount = 8;
@@ -1190,30 +1161,11 @@ class FormeTechniqueDatabase {
         }
         attrHandler.addUpdate(WuxDef.GetVariable("Action_FormeLoadCount"), Math.max(unsetBaseTechniqueData.length, 0));
     }
-    getUnsetBaseTechniqueData() {
+    getUnsetTechniqueData() {
         Debug.Log(this.techDictionary);
 
         return Object.values(this.techDictionary.values).filter(v =>
-            v.isBase && !v.isSet
+            !v.isSet
         );
-    }
-    iterateGroupedTechniques(techniqueName, techniqueCallback, unsetIndexesCallback) {
-        let techIndex = 2;
-        let techFilters = this.getTechniquesInGroup(techniqueName);
-        for (let i = 0; i < techFilters.length; i++) {
-            if (techniqueCallback(techFilters[i], techIndex)) {
-                techIndex++;
-            }
-            if (techIndex > 3) {
-                break;
-            }
-        }
-        while (techIndex <= 3) {
-            unsetIndexesCallback(techIndex);
-            techIndex++;
-        }
-    }
-    getTechniquesInGroup(techniqueName) {
-        return WuxTechs.Filter(new DatabaseFilterData("group", techniqueName));
     }
 }
