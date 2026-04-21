@@ -892,15 +892,9 @@ class FormeTechniqueDatabase {
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attributeHandler, "Action");
         attributeHandler.addRepeatingSection(this.formeActionsRepeaterId);
         attributeHandler.getRepeatingSection(this.formeActionsRepeaterId).addFieldNames([
-            techniqueAttributeHandler.getVariable("TechName", 1),
-            techniqueAttributeHandler.getVariable("TechVersion", 1),
-            techniqueAttributeHandler.getVariable("TechIsVisible", 1),
-            techniqueAttributeHandler.getVariable("TechName", 2),
-            techniqueAttributeHandler.getVariable("TechVersion", 2),
-            techniqueAttributeHandler.getVariable("TechIsVisible", 2),
-            techniqueAttributeHandler.getVariable("TechName", 3),
-            techniqueAttributeHandler.getVariable("TechVersion", 3),
-            techniqueAttributeHandler.getVariable("TechIsVisible", 3)
+            techniqueAttributeHandler.getVariable("TechName"),
+            techniqueAttributeHandler.getVariable("TechVersion"),
+            techniqueAttributeHandler.getVariable("TechIsVisible")
         ]);
 
         this.setFormeSlotsDefinitionData();
@@ -1080,7 +1074,7 @@ class FormeTechniqueDatabase {
     updateVisibilityOfRepeaterTechniques(attrHandler) {
         let formeTechDatabase = this;
         this.iterateRepeaterTechniques(attrHandler, function (techniqueAttributeHandler, techniqueName, repeater, id) {
-            formeTechDatabase.setRepeaterTechniqueVisibility(techniqueAttributeHandler, techniqueName, 1);
+            formeTechDatabase.setRepeaterTechniqueVisibility(techniqueAttributeHandler, techniqueName);
             formeTechDatabase.setSortId(techniqueName, id);
         });
     }
@@ -1090,7 +1084,7 @@ class FormeTechniqueDatabase {
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", repeater);
         repeater.iterate((id) => {
             techniqueAttributeHandler.setId(id);
-            let techniqueName = techniqueAttributeHandler.getTechniqueName(1);
+            let techniqueName = techniqueAttributeHandler.getTechniqueName();
             callback(techniqueAttributeHandler, techniqueName, repeater, id);
         });
     }

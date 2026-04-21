@@ -949,10 +949,6 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechVersion", suffix), technique.version);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechAffinity", suffix), technique.affinity);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechTier", suffix), technique.tier);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechCoreDefense"), displayData.coreDefense);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechActionType"), displayData.actionType);
