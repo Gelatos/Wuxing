@@ -966,6 +966,8 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.getVariable("TechTargetType", suffix), displayData.targetType);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechRange", suffix), displayData.range);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechLimit", suffix), displayData.limits);
 		if (displayData.forms.length > 0) {
 			this.addDefinitions(displayData.forms, this.getVariable("TechForm"), 6);
 		}
@@ -1088,6 +1090,8 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.getVariable("TechTargetType"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechRange"), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechLimit"), 0);
 		for (let i = 0; i < 6; i++) {
 			this.clearDefinition("TechForm", i);
 			this.clearDefinition("TechTrait", i);

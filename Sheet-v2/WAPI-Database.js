@@ -2237,6 +2237,7 @@ class TechniqueDisplayData {
                 this.resourceData += "; ";
             }
             this.resourceData += technique.limits;
+            this.limits = technique.limits;
         }
         if (technique.resourceCost != "") {
             let resourceNames = technique.resourceCost.split(";");
@@ -2257,6 +2258,13 @@ class TechniqueDisplayData {
 
     setTechTargetData(technique) {
         this.targetData = "";
+
+        if (technique.target == "Self") {
+            this.range = "Self";
+            this.targetType = 0;
+            this.targetData += `Self`;
+            return;
+        }
         
         if (technique.range != "") {
             if (this.targetData != "") {
@@ -2268,6 +2276,7 @@ class TechniqueDisplayData {
         else {
             this.range = 0;
         }
+        
         if (technique.target != "") {
             if (this.targetData != "") {
                 this.targetData += "; ";
@@ -2403,6 +2412,7 @@ class TechniqueDisplayData {
         this.targetData = "";
         this.targetType = "";
         this.range = "";
+        this.limits = "";
         this.forms = [];
         this.traits = [];
 

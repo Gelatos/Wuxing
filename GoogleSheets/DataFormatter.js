@@ -2208,9 +2208,9 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
     };
     const buildExitStickyButtons = function (fieldName, showExit) {
         let output = "";
-        if (showExit) {
-            output += buildTabButton("checkbox", `${fieldName}${WuxDef._exit}`, "Exit", "Exit", false, "") + "\n";
-        }
+        // if (showExit) {
+        //     output += buildTabButton("checkbox", `${fieldName}${WuxDef._exit}`, "Exit", "Exit", false, "") + "\n";
+        // }
         output += buildTabButton("checkbox", `${fieldName}${WuxDef._finish}`, "Finish", "Finish", false, "") + "\n";
         output = buildTabButtonRow(output);
 

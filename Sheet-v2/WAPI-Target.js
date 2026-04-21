@@ -290,10 +290,10 @@ class TokenTargetData extends TargetData {
 
     // icon settings
     setEnergyIcon(value) {
-        this.setIcon("status_pink", value);
+        this.setIcon("status_yellow", value);
     }
     setTurnIcon(value) {
-        this.setIcon("status_yellow", value);
+        this.setIcon("status_purple", value);
     }
     setAdvantageIcon(value) {
         this.setIcon("status_purple", value);
