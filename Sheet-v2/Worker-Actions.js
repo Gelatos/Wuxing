@@ -667,7 +667,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             let maxAdvancedSlots = 3;
             let maxNormalSlots = 6;
             let repeaterNames = [
-                {name: "RepeatingBasicActions"}, 
+                {name: "RepeatingFormeTech"}, {name: "RepeatingBasicActions"},
                 {name: "RepeatingBasicRecovery"}, {name: "RepeatingBasicAttack"},
                 {name: "RepeatingBasicSocial"}, {name: "RepeatingBasicSpirit"}];
             for (let i = 1; i <= maxNormalSlots; i++) {
