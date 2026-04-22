@@ -2633,7 +2633,7 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
     padding: 5px 10px;
     width: calc(100% - 20px);
 
-    font-size: 11px;
+    font-size: 10px;
 }
 
 .wuxFeatureHeaderInfoReq,
@@ -2647,7 +2647,8 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTrigger,
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoTrigger
 {
-    background: #7aa9e7;
+    color: #fff;
+    background: #12710e; 
 }
 
 .wuxFeatureExpandingContent,

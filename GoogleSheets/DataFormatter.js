@@ -3412,6 +3412,7 @@ class TechniqueAssessment {
                 this.getBoostAssessment(effect, attributeHandler);
                 break;
             case "Damage":
+            case "Break":
                 this.getDamageAssessment(effect, attributeHandler);
                 break;
             case "HP":

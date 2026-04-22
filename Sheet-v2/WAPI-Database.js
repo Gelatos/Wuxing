@@ -2253,7 +2253,6 @@ class TechniqueDisplayData {
         }
         this.enCost = technique.en;
         this.willCost = technique.willPower;
-        this.boonCost = technique.boon;
     }
 
     setTechTargetData(technique) {
@@ -2324,8 +2323,41 @@ class TechniqueDisplayData {
     }
 
     setExtentionEffects(technique) {
-        this.requirements = technique.requirement;
-        this.itemTraits = WuxDef.GetValues(technique.itemTraits, ";");
+        this.requirements = "";
+        this.requirementsDesc = [];
+        
+        if (technique.boon > 0) {
+            this.requirements += "You must consume a Boon to use this technique. ";
+        }
+        
+        let itemTraits = WuxDef.GetValues(technique.itemTraits, ";");
+        if (itemTraits.length > 0) {
+            this.requirements += "You must equip gear with the trait";
+            if (itemTraits.length > 1) {
+                this.requirements += "s";
+
+                for (let i = 0; i < itemTraits.length; i++) {
+                    let item = itemTraits[i];
+                    if (i == itemTraits.length - 1) {
+                        this.requirements += ` and`;
+                        itemTraits[0].addSubDefinition(item);
+                    }
+                    else if (i > 0) {
+                        this.requirements += ", ";
+                        itemTraits[0].addSubDefinition(item);
+                    }
+                    this.requirements += ` ${item.getTitle()}`;
+                }
+            }
+            else {
+                this.requirements += ` ${itemTraits[0].getTitle()}`;
+            }
+            this.requirements += `. `;
+
+            this.requirementsDesc = [itemTraits[0].getTitle()];
+            this.requirementsDesc = this.requirementsDesc.concat(itemTraits[0].descriptions);
+        }
+        this.requirements += technique.requirement;
         this.trigger = technique.trigger;
     }
 
@@ -2408,7 +2440,6 @@ class TechniqueDisplayData {
         this.resourceData = "";
         this.enCost = 0;
         this.willCost = 0;
-        this.boonCost = 0;
         this.targetData = "";
         this.targetType = "";
         this.range = "";
@@ -2418,7 +2449,7 @@ class TechniqueDisplayData {
 
         this.trigger = "";
         this.requirements = "";
-        this.itemTraits = [];
+        this.requirementsDesc = [];
 
         this.flavorText = "";
         this.effects = [];
@@ -2428,6 +2459,10 @@ class TechniqueDisplayData {
         this.endEffectName = "";
         this.endEffectDesc = "";
         this.definitions = [];
+    }
+    
+    getRequirementsDescriptions(join) {
+        return this.requirementsDesc.join(join);
     }
 
     getRollTemplate(addTechnique) {
@@ -2449,9 +2484,6 @@ class TechniqueDisplayData {
         }
         if (this.willCost != "") {
             output += `{{Will=${this.willCost}}}`;
-        }
-        if (this.boonCost != "") {
-            output += `{{Boon=${this.boonCost}}}`;
         }
         if (this.targetData != "") {
             output += `{{Targeting=${this.targetData}}}`;
@@ -2476,9 +2508,7 @@ class TechniqueDisplayData {
         }
         if (this.requirements != "") {
             output += `{{Requirement=${this.requirements}}}`;
-        }
-        if (this.itemTraits.length > 0) {
-            output += this.rollTemplateDefinitions(this.itemTraits, "ItemTrait");
+            output += `{{Reqdesc=${this.getRequirementsDescriptions("\n")}}}`;
         }
         if (this.flavorText != "") {
             output += `{{FlavorText=${this.flavorText}}}`;
