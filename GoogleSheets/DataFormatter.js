@@ -3247,21 +3247,15 @@ class TechniqueAssessment {
         let assessor = this;
         let attributeHandler = this.getFakeAttributeHandler();
         
+        if (this.technique.forms.includes("OnEnter")) {
+            assessor.onEnterEffect = true;
+        }
+        
         this.technique.effects.iterate(function (effect) {
             assessor.pointBreakdown.push({points: 0, rubric: ""});
             assessor.assessEffect(effect, attributeHandler);
         });
 
-        if (this.technique.secondEffectConditionName == "TechOnEnter") {
-            assessor.onEnterEffect = true;
-        }
-        if (this.technique.secondaryEffects.length() > 0) {
-            assessor.pointBreakdown.push({points: 0, rubric: ""});
-            this.technique.secondaryEffects.iterate(function (effect) {
-                assessor.pointBreakdown.push({points: 0, rubric: ""});
-                assessor.assessEffect(effect, attributeHandler);
-            });
-        }
         this.getStructureAssessment();
         let customPoints = this.sheet.getRange(this.row, this.assessColumn + 2, 1, 1).getValues()[0];
         customPoints = isNaN(parseInt(customPoints)) ? 0 : parseInt(customPoints);
@@ -3456,6 +3450,9 @@ class TechniqueAssessment {
                 break;
             case "EN":
                 this.getEnAssessment(effect, attributeHandler);
+                break;
+            case "FreeFocus":
+                this.getFreeFocusAssessment(effect, attributeHandler);
                 break;
         }
     }
@@ -3961,6 +3958,10 @@ class TechniqueAssessment {
         this.addImpactTrait(`Trait_EN`);
     }
 
+    getFreeFocusAssessment() {
+        this.addPointsRubric(10, "(Free Focus)");
+    }
+
     getStatusAssessment(effect, attributeHandler) {
         let state = WuxDef.Get(effect.effect);
         let value = 0;
@@ -4144,7 +4145,7 @@ class TechniqueAssessment {
                 break;
         }
 
-        if (this.onEnterEffect) {
+        if (this.onEnterEffect && effect.type != "Terrain") {
             pointMod = 4;
             this.addPointsRubric(pointMod, `(On Enter)`);
             this.pointsRubric += "\n";

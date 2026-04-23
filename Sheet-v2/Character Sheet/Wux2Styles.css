@@ -2062,7 +2062,7 @@ div.wuxStyleHeaderButton:hover span {
     font-size: 12px;
 
     border: 3px solid black;
-    background: #cacbcf;
+    background-color: #ffeded;
 }
 
 .wuxRepeatingFlexSection .wuxFeature
@@ -2602,12 +2602,25 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
     z-index: 1;
 }
 
-.wuxRepeatingFlexSection .wuxFeatureHeaderInfo,
-.wuxRepeatingFlexSection .wuxFeatureHeaderInfoReq,
-.wuxRepeatingFlexSection .wuxFeatureHeaderInfoTrigger
+.wuxFeatureHeaderInfo,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfo,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfo,
+.wuxFeatureHeaderInfoReq,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoReq,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoReq,
+.wuxFeatureHeaderInfoTrigger,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTrigger,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoTrigger,
+.wuxFeatureHeaderInfoFlavor,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoFlavor,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoFlavor
 {
-    min-width: 220px;
-    max-width: 220px;
+    position: relative;
+    display: block;
+    padding: 2px 10px;
+    width: calc(100% - 20px);
+
+    font-size: 10px;
 }
 
 .wuxFeatureHeaderInfoType,
@@ -2623,32 +2636,27 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 
 .wuxFeatureHeaderInfoReq,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoReq,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoReq,
-.wuxFeatureHeaderInfoTrigger,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTrigger,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoTrigger
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoReq
 {
-    position: relative;
-    display: block;
-    padding: 5px 10px;
-    width: calc(100% - 20px);
-
-    font-size: 10px;
+    font-size: 11px;
+    font-weight: bold;
 }
 
 .wuxFeatureHeaderInfoReq,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoReq,
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoReq
 {
-    background: #f37b7b;
+    color: #fff;
+    background: linear-gradient(to right,
+    #8f0909,
+    #8f090933);
 }
 
 .wuxFeatureHeaderInfoTrigger,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTrigger,
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoTrigger
 {
-    color: #fff;
-    background: #12710e; 
+    background: #8dca88;
 }
 
 .wuxFeatureExpandingContent,

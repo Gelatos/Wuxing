@@ -574,10 +574,8 @@ class TechniqueData extends WuxDatabaseData {
         this.flavorText = json.flavorText;
         this.coreDefense = json.coreDefense;
         this.definitions = json.definitions;
+        this.willBreakEffect = json.willBreakEffect == undefined ? undefined : new TechniqueEffect(json.willBreakEffect);
         this.effects = new TechniqueEffectDatabase(json.effects);
-        this.secondEffectConditionName = json.secondEffectConditionName;
-        this.secondEffectConditionEffect = json.secondEffectConditionEffect;
-        this.secondaryEffects = new TechniqueEffectDatabase(json.secondaryEffects);
         this.endEffectConditionName = json.endEffectConditionName;
         this.endEffectConditionEffect = json.endEffectConditionEffect;
         this.isCustom = json.isCustom != undefined ? json.isCustom : false;
@@ -715,7 +713,7 @@ class TechniqueData extends WuxDatabaseData {
             return isMagic;
         }
 
-        return (this.action === "Full" ? 5 : 3) * this.tier * isMagic;
+        return (this.action === "Full" ? 10 : 5) * this.tier * isMagic;
     }
 
     createEmpty() {
@@ -747,10 +745,9 @@ class TechniqueData extends WuxDatabaseData {
         this.flavorText = "";
         this.coreDefense = "";
         this.definitions = [];
+        this.willBreakEffect = undefined;
+        
         this.effects = new TechniqueEffectDatabase();
-        this.secondEffectConditionName = "";
-        this.secondEffectConditionEffect = "";
-        this.secondaryEffects = new TechniqueEffectDatabase();
         this.endEffectConditionName = "";
         this.endEffectConditionEffect = "";
         this.techniqueEffect = {};
@@ -774,30 +771,6 @@ class TechniqueData extends WuxDatabaseData {
     }
 
     addEffect(effect) {
-        
-        switch (effect.type) {
-            case "Definition":
-                effect.setName(`D${this.definitions.length}`);
-                this.addDefinition(effect.effect);
-                return;
-            case "Status":
-                effect.setName(`T${this.getEffectDbLength()}`);
-                this.addToEffectsDb(effect);
-                if (effect.effect != "") {
-                    this.addDefinition(effect.effect);
-                }
-                return;
-            case "Move":
-                effect.setName(`T${this.getEffectDbLength()}`);
-                this.addToEffectsDb(effect);
-                return;
-            case "Terrain":
-                effect.setName(`T${this.getEffectDbLength()}`);
-                this.addToEffectsDb(effect);
-                this.addDefinition(effect.effect);
-                return;
-        }
-
         switch (effect.defense) {
             case "TechOnEnter":
             case "TechNewTargets":
@@ -817,12 +790,7 @@ class TechniqueData extends WuxDatabaseData {
                 if (effect.traits != "") {
                     this.addDefinition(`Trait_${effect.traits}`);
                 }
-                if (this.secondEffectConditionName != "") {
-                    this.secondaryEffects.useDefaultWillBreak = false;
-                }
-                else {
-                    this.effects.useDefaultWillBreak = false;
-                }
+                this.willBreakEffect = effect;
                 return;
             default:
                 effect.setName(`T${this.getEffectDbLength()}`);
@@ -831,33 +799,18 @@ class TechniqueData extends WuxDatabaseData {
                     this.addDefinition(`Trait_${effect.traits}`);
                 }
                 if (effect.type == "Damage" && effect.effect == "Psyche") {
-                    if (this.secondEffectConditionName != "") {
-                        this.secondaryEffects.useDefaultWillBreak = true;
-                    }
-                    else {
-                        this.effects.useDefaultWillBreak = true;
-                    }
+                    this.willBreakEffect = this.coreEffects.getDefaultWillbreak();
                 }
                 return;
         }
     }
     
     getEffectDbLength() {
-        if (this.secondEffectConditionName != "") {
-            return this.secondaryEffects.length();
-        }
-        else {
-            return this.effects.length();
-        }
+        return this.effects.length();
     }
     
     addToEffectsDb(effect) {
-        if (this.secondEffectConditionName != "") {
-            this.secondaryEffects.add(effect.name, effect);
-        }
-        else {
-            this.effects.add(effect.name, effect);
-        }
+        this.effects.add(effect.name, effect);
     }
     
     getPrerequisites() {
@@ -1071,9 +1024,8 @@ class TechniqueUseEffect extends dbObj {
         this.effects = new TechniqueEffectDatabase();
     }
     
-    importFromTechnique(technique, useSecondaryEffect) {
-        this.import(technique.name, technique.skill, technique.coreDefense, technique.impacts, 
-            useSecondaryEffect ? techniqueData.secondaryEffects : technique.effects);
+    importFromTechnique(technique) {
+        this.import(technique.name, technique.skill, technique.coreDefense, technique.impacts, technique.effects);
     }
     
     import(name, skill, coreDefense, impacts, effects) {
@@ -2213,7 +2165,6 @@ class TechniqueDisplayData {
         this.setExtentionEffects(technique);
         this.setTraits(technique);
         this.setFlavorText(technique);
-        this.setDefinitions(technique);
         this.setEffects(technique);
     }
 
@@ -2372,37 +2323,12 @@ class TechniqueDisplayData {
         this.flavorText = technique.flavorText;
     }
 
-    setDefinitions(technique) {
-        if (technique.definitions == undefined) {
-            this.definitions = [];
-            let definition = new DefinitionData();
-            definition.title = "Error! No definitions found!";
-            this.definitions.push(definition);
-        } else {
-            for (let i = 0; i < technique.definitions.length; i++) {
-                this.definitions.push(WuxDef.Get(technique.definitions[i]));
-            }
-        }
-    }
-
     setEffects(technique) {
         let techDisplayData = this;
         techDisplayData.effects = [];
         techDisplayData.iterateTechniqueEffects(technique, technique.effects, function (effectData) {
             techDisplayData.effects.push(effectData);
         });
-        if (technique.effects.useDefaultWillBreak) {
-            techDisplayData.effects.push(new TechniqueEffectDisplayData([technique.effects.getDefaultWillbreak()], technique));
-        }
-        techDisplayData.secondaryEffectName = technique.secondEffectConditionName;
-        techDisplayData.secondaryEffectDesc = technique.secondEffectConditionEffect;
-        techDisplayData.secondaryEffects = [];
-        techDisplayData.iterateTechniqueEffects(technique, technique.secondaryEffects, function (effectData) {
-            techDisplayData.secondaryEffects.push(effectData);
-        });
-        if (technique.secondaryEffects.useDefaultWillBreak) {
-            techDisplayData.secondaryEffects.push(new TechniqueEffectDisplayData([technique.effects.getDefaultWillbreak()], technique));
-        }
         techDisplayData.endEffectName = technique.endEffectConditionName;
         techDisplayData.endEffectDesc = technique.endEffectConditionEffect;
     }
@@ -2452,13 +2378,10 @@ class TechniqueDisplayData {
         this.requirementsDesc = [];
 
         this.flavorText = "";
+        this.lockedEffect = {};
         this.effects = [];
-        this.secondaryEffectName = "";
-        this.secondaryEffectDesc = "";
-        this.secondaryEffects = [];
         this.endEffectName = "";
         this.endEffectDesc = "";
-        this.definitions = [];
     }
     
     getRequirementsDescriptions(join) {
@@ -2516,9 +2439,6 @@ class TechniqueDisplayData {
         if (this.effects.length > 0) {
             output += this.rollTemplateEffects();
         }
-        if (this.definitions.length > 0) {
-            output += this.rollTemplateDefinitions(this.definitions, "Def");
-        }
         if (addTechnique) {
             if (this.technique.resourceCost != "") {
                 let consumeData = new TechniqueResources([this.technique.name, this.technique.resourceCost]);
@@ -2530,11 +2450,6 @@ class TechniqueDisplayData {
 
                 output += `{{checkData=${effectData.getCheckTech(this.sheetname, this.technique.isCustom)}}}`;
                 output += `{{targetData=${effectData.getUseTech(this.sheetname, this.technique.isCustom)}}}`;
-            }
-            if (this.technique.secondaryEffects.keys.length > 0) {
-                let effectData = new TechniqueUseEffect();
-                effectData.import(this.technique, true);
-                output += `{{targetData2=${effectData.getUseTech2(this.sheetname, this.technique.isCustom)}}}`;
             }
             if (this.technique.hasAdv != 0) {
                 output += `{{hascheck=${this.technique.hasAdv}}`;
@@ -2552,14 +2467,6 @@ class TechniqueDisplayData {
     rollTemplateEffects() {
         let output = "";
         output += this.iterateRollTemplateEffects(this.effects, "Effect");
-        if (this.secondaryEffectName != "") {
-            let def = WuxDef.Get(Format.GetDefinitionName("Title", this.secondaryEffectName));
-            output += `{{SEffectName=${def.getTitle()}}}{{SEffectDesc=${def.getDescription()}}}`;
-        }
-        if (this.secondaryEffectDesc != "") {
-            output += `{{SEffect=${this.secondaryEffectDesc}}}`;
-        }
-        output += this.iterateRollTemplateEffects(this.secondaryEffects, "SEffect");
         
         if (this.endEffectName != "") {
             let def = WuxDef.Get(`Title_${this.endEffectName}`);
@@ -2667,11 +2574,13 @@ class BaseTechniqueEffectDisplayData {
             case "EN":
                 output += this.formatEnEffect(effect);
                 break;
+            case "FreeFocus":
+                output += this.formatFreeFocusEffect(effect);
+                break;
             case "Definition":
                 // Do nothing
                 break;
-            case "Desc":
-            case "":
+            default:
                 output += this.formatDescriptionEffect(effect);
                 break;
         }
@@ -2912,6 +2821,10 @@ class BaseTechniqueEffectDisplayData {
             case "Float":
                 return `${this.formatTarget(effect, " Float", " Floats")}.`;
             case "FreeMove":
+                let spaces = this.formatCalcBonus(effect);
+                if (spaces == "") {
+                    return `${this.formatTarget(effect)} may Free Move ${effect.effect == "" ? "." : " " + effect.effect}`;
+                }
                 return `${this.formatTarget(effect)} may Free Move up to ${this.formatCalcBonus(effect)} spaces${effect.effect == "" ? "." : " " + effect.effect}`;
             case "Sneak":
                 return `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces. This movement does not break the hidden or invisible condition.`;
@@ -2927,6 +2840,10 @@ class BaseTechniqueEffectDisplayData {
     formatEnEffect(effect) {
         let effectTotal = this.formatCalcBonus(effect);
         return `${this.formatTargetGain(effect)} ${effectTotal} ${WuxDef.GetTitle("EN")};`;
+    }
+    
+    formatFreeFocusEffect(effect) {
+        return `You may maintain focus on the triggering technique without expending EN and it does not count against your limit of focus techniques.`;
     }
 
     formatDescriptionEffect(effect) {

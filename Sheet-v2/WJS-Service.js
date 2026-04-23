@@ -994,21 +994,6 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		if (displayData.effects.length > 0) {
 			this.addTechniqueEffects(displayData.effects, "TechEffect");
 		}
-		if (displayData.secondaryEffectName.trim() != "") {
-			let defName = Format.GetDefinitionName("Title", displayData.secondaryEffectName);
-			let def = WuxDef.Get(defName);
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechSEffectTitle", "name"), def.getTitle());
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechSEffectTitle", "desc"), def.getDescription());
-		}
-		if (displayData.secondaryEffectDesc != "") {
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechSEffectTitle"), displayData.secondaryEffectDesc);
-		}
-		if (displayData.secondaryEffects.length > 0) {
-			this.addTechniqueEffects(displayData.secondaryEffects, "TechSEffect");
-		}
 		if (displayData.endEffectName.trim() != "") {
 			let defName = Format.GetDefinitionName("Title", displayData.endEffectName);
 			let def = WuxDef.Get(defName);
@@ -1108,12 +1093,6 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.clearDefinition("TechDef", i);
 		}
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechSEffectTitle", "name"), 0);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechSEffectTitle", "desc"), 0);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechSEffectTitle", ""), 0);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechEEffectTitle", "name"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechEEffectTitle", "desc"), 0);
@@ -1128,12 +1107,6 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.getVariable("TechEffect", `${i}name`), 0);
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechEffect", `${i}desc`), "");
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechSEffect", i), 0);
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechSEffect", `${i}name`), 0);
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechSEffect", `${i}desc`), "");
 		}
 	}
 	

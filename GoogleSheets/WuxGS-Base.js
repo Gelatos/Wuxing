@@ -1513,6 +1513,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                             ${buildBaseFormTechniqueHeaderContents()}
                         </div>
                         ${buildFormBaseTechniqueEffects()}
+                        ${buildFormExtendedTechniqueData()}
                     </div>`;
                 },
                 printSetTechniqueActionDisplay = function (displayData) {
@@ -1523,6 +1524,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                             ${buildBaseSetTechniqueHeaderContents(displayData)}
                         </div>
                         ${buildSetBaseTechniqueRequirements(displayData)}
+                        ${buildSetExtendedTechniqueData(displayData)}
                     </div>`;
                 },
 
@@ -1719,6 +1721,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     <div class="wuxHiddenField">
                         <div class="wuxFeatureHeaderInfoReq">
                             ${buildFormTooltipSection("Requirements", "TechRequirementDesc")}
+                        </div>
+                        <div class="wuxFeatureHeaderInfo">
                             ${getSpanActionTypeAttribute("TechRequirements")}
                         </div>
                     </div>`;
@@ -1734,23 +1738,16 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return output;
                 },
                 printTrigger = function (contents) {
-                    return `<div class="wuxFeatureHeaderInfoTrigger">
-                        <span><strong>Trigger: </strong></span>
-                        ${contents}
-                    </div>`;
+                    return `<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> ${contents}</div>`;
                 },
                 printRequirement = function (title, contents, tooltipData) {
                     if (tooltipData.length > 0) {
-                        return `<div class="wuxFeatureHeaderInfoReq">
-                            ${buildSetTooltipSection(title, tooltipData)}
-                            ${contents}
-                        </div>`;
+                        return `<div class="wuxFeatureHeaderInfoReq">${buildSetTooltipSection(title, tooltipData)}</div>
+                        <div class="wuxFeatureHeaderInfo">${contents}</div>`;
                     }
                     else {
-                        return `<div class="wuxFeatureHeaderInfoReq">
-                            <strong>${title}</strong>
-                            ${contents}
-                        </div>`;
+                        return `<div class="wuxFeatureHeaderInfoReq">${title}</div>
+                        <div class="wuxFeatureHeaderInfo">${contents}</div>`;
                     }
                 },
 
@@ -1759,9 +1756,6 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         printFlavorText(getSpanActionTypeAttribute("TechFlavorText")))}
 
                     ${printMainEffects(addFormTechEffects("TechEffect"))}
-                    
-                    ${WuxSheetMain.HiddenField(getActionTypeAttribute("TechSEffectTitle", "name"),
-                        printFormSecondaryEffects())}
                     
                     ${WuxSheetMain.HiddenField(getActionTypeAttribute("TechEEffectTitle", "name"),
                         printFormEndEffects())}
@@ -1773,43 +1767,18 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 buildSetExtendedTechniqueData = function (displayData) {
                     return `${printFlavorText(printSpan(displayData.flavorText))}
                     ${printMainEffects(addSetMainEffects(displayData.effects))}
-                    ${printSetSecondaryEffects(displayData)}
                     ${printSetEndEffects(displayData)}
                     ${printSetDefinitions(displayData)}
                     `;
                 },
                 printFlavorText = function (contents) {
-                    return `<div class="wuxFeatureFunctionBlock">
-                        <div class="wuxFeatureFunctionBlockFlavorText">
-                            ${contents}
-                        </div>
+                    return `<div class="wuxFeatureHeaderInfoFlavor">
+                        ${contents}
                     </div>
                     `;
                 },
                 printMainEffects = function (contents) {
                     return `<div class="wuxFeatureEffectsBlock">${contents}</div>`;
-                },
-                printFormSecondaryEffects = function () {
-                    return printSecondaryEffects(`${addFormTechEffect("TechSEffectTitle", "", "wuxFeatureMajorEffectHeader", "wuxFeatureMajorEffectBlock")}
-                            ${addFormTechEffects("TechSEffect")}`);
-                },
-                printSetSecondaryEffects = function (displayData) {
-                    if (displayData.secondaryEffectName.trim() != "") {
-                        let output = "";
-                        let defName = Format.GetDefinitionName("Title", displayData.secondaryEffectName);
-                        let def = WuxDef.Get(defName);
-                        output += printSetTechEffectHeader(def.getTitle(), def.getDescription(), "wuxFeatureMajorEffectHeader");
-                        if (displayData.secondaryEffectDesc != "") {
-                            output += "\n" + printTechEffectBlock(displayData.secondaryEffectDesc, "wuxFeatureMajorEffectBlock");
-                        }
-                        output += "\n" + addSetMainEffects(displayData.secondaryEffects);
-
-                        return printSecondaryEffects(output);
-                    }
-                    return "";
-                },
-                printSecondaryEffects = function (contents) {
-                    return `<div class="wuxFeatureSecondaryEffectsBlock">${contents}</div>`;
                 },
                 printFormEndEffects = function () {
                     return printEndEffects(addFormTechEffect("TechEEffectTitle", "", "wuxFeatureMajorEffectHeader", "wuxFeatureMajorEffectBlock"));
@@ -2162,14 +2131,6 @@ var DisplayPopups = DisplayPopups || (function () {
                             
                             <div class="wuxFeatureEffectsBlock">
                                 ${addTechEffects()}
-                            </div>
-                            
-                            <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechSEffectTitle", "name")}" value="0" />
-                            <div class="wuxHiddenField">
-                                <div class="wuxFeatureSecondaryEffectsBlock">
-                                    ${addTechEffect("TechSEffectTitle", "", "wuxFeatureMajorEffectHeader", "wuxFeatureMajorEffectBlock")}
-                                    ${addSecondaryTechEffects()}
-                                </div>
                             </div>
                             
                             <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechEEffectTitle", "name")}" value="0" />
