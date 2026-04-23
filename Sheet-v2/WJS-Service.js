@@ -953,21 +953,17 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechActionType"), displayData.actionType);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechResourceData", suffix), displayData.resourceData);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechEnCost", suffix), displayData.enCost);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechWillCost", suffix), displayData.willCost);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechBoonCost", suffix), displayData.boonCost);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechTargetingData"), displayData.targetData);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechTargetType", suffix), displayData.targetType);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechRange", suffix), displayData.range);
+			this.getVariable("TechTargetDesc"), displayData.getTargetDescriptions("\n\n"));
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechLimit", suffix), displayData.limits);
+			this.getVariable("TechRange", suffix), displayData.range);
 		if (displayData.forms.length > 0) {
 			this.addDefinitions(displayData.forms, this.getVariable("TechForm"), 6);
 		}
@@ -1055,13 +1051,7 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechDisplayName"), "");
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechAffinity"), "");
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechTier"), 0);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechCoreDefense"), 0);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechResourceData"), "");
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechEnCost"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
@@ -1069,17 +1059,11 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechBoonCost"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechTargetingData"), "");
+			this.getVariable("TechTargetDesc"), "");
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechTargetType"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechRange"), 0);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechLimit"), 0);
-		for (let i = 0; i < 6; i++) {
-			this.clearDefinition("TechForm", i);
-			this.clearDefinition("TechTrait", i);
-		}
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechTrigger"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
@@ -1089,9 +1073,6 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechFlavorText"), 0);
 		this.clearTechEffects();
-		for (let i = 0; i < 4; i++) {
-			this.clearDefinition("TechDef", i);
-		}
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechEEffectTitle", "name"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 

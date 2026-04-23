@@ -4114,7 +4114,7 @@ class TechniqueAssessment {
         switch (this.target) {
             case "Targets":
             case "Spaces":
-            case "Targets or Self":
+            case "Objects":
                 pointMod = Math.floor(points * (this.size - 1) * 0.65);
                 this.addPointsRubric(pointMod, `(${this.size} ${this.target})`);
                 break;
@@ -4125,21 +4125,15 @@ class TechniqueAssessment {
                 this.addPointsRubric(pointMod, `(${this.target} ${this.size})`);
                 break;
             case "Radial":
-            case "Radial(2H)":
-            case "Radial(3H)":
                 pointMod = Math.floor(points * this.getAreaPointMod(0.6, 1));
                 this.addPointsRubric(pointMod, `(${this.target} ${this.size})`);
                 break;
             case "Cone":
             case "Line":
-            case "Line(2H)":
-            case "Line(3H)":
                 pointMod = Math.floor(points * this.getAreaPointMod(0.4, 0.66));
                 this.addPointsRubric(pointMod, `(${this.target} ${this.size})`);
                 break;
             case "Wide Line":
-            case "Wide Line(2H)":
-            case "Wide Line(3H)":
                 pointMod = Math.floor(points * this.getAreaPointMod(0.6, 0.66));
                 this.addPointsRubric(pointMod, `(${this.target} ${this.size})`);
                 break;

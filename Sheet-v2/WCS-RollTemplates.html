@@ -6,126 +6,38 @@
     </rolltemplate>
 
 	<rolltemplate class="sheet-rolltemplate-technique">
-		{{#type-Quick}}
-		<div class="wuxFeatureHeader wuxFeatureHeader-Quick">
-		{{/type-Quick}}
-		{{#type-Full}}
-		<div class="wuxFeatureHeader wuxFeatureHeader-Full">
-		{{/type-Full}}
-		{{#type-Reaction}}
-		<div class="wuxFeatureHeader wuxFeatureHeader-Reaction">
-		{{/type-Reaction}}
-		{{#type-Swift}}
-		<div class="wuxFeatureHeader wuxFeatureHeader-Swift">
-		{{/type-Swift}}
-		{{#type-Free}}
-		<div class="wuxFeatureHeader wuxFeatureHeader-Free">
-		{{/type-Free}}
-        {{#type-Passive}}
-        <div class="wuxFeatureHeader wuxFeatureHeader-Passive">
-        {{/type-Passive}}
-        {{#type-Assist}}
-        <div class="wuxFeatureHeader wuxFeatureHeader-Assist">
-        {{/type-Assist}}
-		{{#type-Other}}
 		<div class="wuxFeatureHeader">
-		{{/type-Other}}
-			<div class="wuxFeatureHeaderDisplayBlock">
-				<span class="wuxFeatureHeaderName">{{Name}}</span>
-				{{#FormTrait0}}
-                <div class="wuxFeatureFunctionBlockRow">
-                    <span><strong>Keywords: </strong></span>
-                    <span class="wuxTooltip"><span class="wuxTooltipText">{{FormTrait0}}</span>
-                        <span class="wuxTooltipContent">
-                            <div class="wuxHeader2">{{FormTrait0}}</div>
-                            <span class="wuxDescription">{{FormTrait0Desc}}</span>
-                        </span>
-                    </span>
-                    {{#FormTrait1}}
-                    <span>, </span><span class="wuxTooltip"><span class="wuxTooltipText">{{FormTrait1}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{FormTrait1}}</div><span class="wuxDescription">{{FormTrait1Desc}}</span></span></span>
-                    {{/FormTrait1}}
-                    {{#FormTrait2}}
-                    <span>, </span><span class="wuxTooltip"><span class="wuxTooltipText">{{FormTrait2}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{FormTrait2}}</div><span class="wuxDescription">{{FormTrait2Desc}}</span></span></span>
-                    {{/FormTrait2}}
-                    {{#FormTrait3}}
-                    <span>, </span><span class="wuxTooltip"><span class="wuxTooltipText">{{FormTrait3}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{FormTrait3}}</div><span class="wuxDescription">{{FormTrait3Desc}}</span></span></span>
-                    {{/FormTrait3}}
-                    {{#FormTrait4}}
-                    <span>, </span><span class="wuxTooltip"><span class="wuxTooltipText">{{FormTrait4}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{FormTrait4}}</div><span class="wuxDescription">{{FormTrait4Desc}}</span></span></span>
-                    {{/FormTrait4}}
-                    {{#FormTrait5}}
-                    <span>, </span><span class="wuxTooltip"><span class="wuxTooltipText">{{FormTrait5}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{FormTrait5}}</div><span class="wuxDescription">{{FormTrait5Desc}}</span></span></span>
-                    {{/FormTrait5}}
+            <div class="wuxFeatureHeaderDisplayBlock">
+                <div class="wuxFeatureHeaderDisplayTitleBlock">
+                    <div class="wuxFeatureHeaderName"><span>{{Name}}</span></div>
+                    {{#type-Quick}}
+                    <div class="wuxFeatureHeader-Quick"><span>Quick</span></div>
+                    {{/type-Quick}}
+                    {{#type-Full}}
+                    <div class="wuxFeatureHeader-Full"><span>Full</span></div>
+                    {{/type-Full}}
+                    {{#type-Reaction}}
+                    <div class="wuxFeatureHeader-Reaction"><span>Reaction</span></div>
+                    {{/type-Reaction}}
+                    {{#type-Swift}}
+                    <div class="wuxFeatureHeader-Swift"><span>Swift</span></div>
+                    {{/type-Swift}}
+                    {{#type-Passive}}
+                    <div class="wuxFeatureHeader-Passive"><span>Passive</span></div>
+                    {{/type-Passive}}
+                    {{#type-Assist}}
+                    <div class="wuxFeatureHeader-Assist"><span>Assist</span></div>
+                    {{/type-Assist}}
                 </div>
-                {{/FormTrait0}}
-			    {{#Resources}}
-				<div class="wuxFeatureHeaderInfo">
-					<span>{{Resources}}</span>
-				</div>
-				{{/Resources}}
-			    {{#Targeting}}
-				<div class="wuxFeatureHeaderInfo">
-					<span>{{Targeting}}</span>
-				</div>
-				{{/Targeting}}
-                {{#Trait0}}
-                <div class="wuxFeatureFunctionBlockRow">
-                    <span><strong>Traits: </strong></span>
-                    <span class="wuxTooltip"><span class="wuxTooltipText">{{Trait0}}</span>
-                        <span class="wuxTooltipContent">
-                            <div class="wuxHeader2">{{Trait0}}</div>
-                            <span class="wuxDescription">{{Trait0Desc}}</span>
-                        </span>
-                    </span>
-                    {{#Trait1}}
-                    <span>, </span><span class="wuxTooltip"><span class="wuxTooltipText">{{Trait1}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{Trait1}}</div><span class="wuxDescription">{{Trait1Desc}}</span></span></span>
-                    {{/Trait1}}
-                    {{#Trait2}}
-                    <span>, </span><span class="wuxTooltip"><span class="wuxTooltipText">{{Trait2}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{Trait2}}</div><span class="wuxDescription">{{Trait2Desc}}</span></span></span>
-                    {{/Trait2}}
-                    {{#Trait3}}
-                    <span>, </span><span class="wuxTooltip"><span class="wuxTooltipText">{{Trait3}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{Trait3}}</div><span class="wuxDescription">{{Trait3Desc}}</span></span></span>
-                    {{/Trait3}}
-                    {{#Trait4}}
-                    <span>, </span><span class="wuxTooltip"><span class="wuxTooltipText">{{Trait4}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{Trait4}}</div><span class="wuxDescription">{{Trait4Desc}}</span></span></span>
-                    {{/Trait4}}
-                    {{#Trait5}}
-                    <span>, </span><span class="wuxTooltip"><span class="wuxTooltipText">{{Trait5}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{Trait5}}</div><span class="wuxDescription">{{Trait5Desc}}</span></span></span>
-                    {{/Trait5}}
+                <div class="wuxFeatureHeaderDisplayInfoBlock">
+                    <div class="wuxFeatureHeaderDisplayInfoRange"><span>{{Range}}</span></div>
+                    {{#Target}}<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>{{Target}}</span></div>{{/Target}}
                 </div>
-                {{/Trait0}}
-			</div>
-
-            {{#CoreDefenseBrace}}
-            <div class="wuxFeatureDefenseIcon-Brace">&nbsp;</div>
-            {{/CoreDefenseBrace}}
-            {{#CoreDefenseFortitude}}
-            <div class="wuxFeatureDefenseIcon-Fortitude">&nbsp;</div>
-            {{/CoreDefenseFortitude}}
-            {{#CoreDefenseWarding}}
-            <div class="wuxFeatureDefenseIcon-Warding">&nbsp;</div>
-            {{/CoreDefenseWarding}}
-            {{#CoreDefenseHide}}
-            <div class="wuxFeatureDefenseIcon-Hide">&nbsp;</div>
-            {{/CoreDefenseHide}}
-            {{#CoreDefenseReflex}}
-            <div class="wuxFeatureDefenseIcon-Reflex">&nbsp;</div>
-            {{/CoreDefenseReflex}}
-            {{#CoreDefenseEvasion}}
-            <span class="wuxFeatureDefenseIcon-Evasion">&nbsp;</span>
-            {{/CoreDefenseEvasion}}
-            {{#CoreDefenseResolve}}
-            <span class="wuxFeatureDefenseIcon-Resolve">&nbsp;</span>
-            {{/CoreDefenseResolve}}
-            {{#CoreDefenseEgo}}
-            <span class="wuxFeatureDefenseIcon-Ego">&nbsp;</span>
-            {{/CoreDefenseEgo}}
-            {{#CoreDefenseInsight}}
-            <span class="wuxFeatureDefenseIcon-Insight">&nbsp;</span>
-            {{/CoreDefenseInsight}}
-            {{#CoreDefenseGuile}}
-            <span class="wuxFeatureDefenseIcon-Guile">&nbsp;</span>
-            {{/CoreDefenseGuile}}
+                <div class="wuxFeatureHeaderDisplayCostBlock">
+                    {{#En}}<div class="wuxFeatureHeaderDisplayInfoEnCost"><span>{{En}}</span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> EN</span></div>{{/En}}
+                    {{#Will}}<div class="wuxFeatureHeaderDisplayInfoWillCost"><span>{{Will}}</span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>{{/Will}}
+                </div>
+            </div>
 		</div>
         {{#Trigger}}
         <div class="wuxFeatureHeaderInfoTrigger">
@@ -134,40 +46,12 @@
         </div>
         {{/Trigger}}
         {{#Requirement}}
-        <div class="wuxFeatureHeaderInfoReq">
-            <span><strong>Requirement: </strong></span>
-            <span>{{Requirement}}</span>
-        </div>
+        <div class="wuxFeatureHeaderInfoReq"><span>Requirements</span></div>
+        <div class="wuxFeatureHeaderInfo"><span>{{Requirement}}</span></div>
         {{/Requirement}}
-        {{#ItemTrait0}}
-        <div class="wuxFeatureHeaderInfoReq">
-            <span><strong>Item Traits: </strong></span>
-            <span class="wuxTooltip"><span class="wuxTooltipText">{{ItemTrait0}}</span>
-                        <span class="wuxTooltipContent">
-                            <div class="wuxHeader2">{{ItemTrait0}}</div>
-                            <span class="wuxDescription">{{ItemTrait0Desc}}</span>
-                        </span>
-                    </span>
-            {{#ItemTrait1}}
-            <span>; or </span><span class="wuxTooltip"><span class="wuxTooltipText">{{ItemTrait1}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{ItemTrait1}}</div><span class="wuxDescription">{{ItemTrait1Desc}}</span></span></span>
-            {{/ItemTrait1}}
-            {{#ItemTrait2}}
-            <span>; or </span><span class="wuxTooltip"><span class="wuxTooltipText">{{ItemTrait2}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{ItemTrait2}}</div><span class="wuxDescription">{{ItemTrait2Desc}}</span></span></span>
-            {{/ItemTrait2}}
-            {{#ItemTrait3}}
-            <span>; or </span><span class="wuxTooltip"><span class="wuxTooltipText">{{ItemTrait3}}</span><span class="wuxTooltipContent"><div class="wuxHeader2">{{ItemTrait3}}</div><span class="wuxDescription">{{ItemTrait3Desc}}</span></span></span>
-            {{/ItemTrait3}}
-        </div>
-        {{/ItemTrait0}}
-		{{#type-FunctionBlock}}
-		<div class="wuxFeatureFunctionBlock">
-		    {{#FlavorText}}
-			<div class="wuxFeatureFunctionBlockFlavorText">
-				<span>{{FlavorText}}</span>
-			</div>
-			{{/FlavorText}}
-		</div>
-		{{/type-FunctionBlock}}
+        {{#FlavorText}}
+        <div class="wuxFeatureHeaderInfoFlavor"><span>{{FlavorText}}</span></div>
+        {{/FlavorText}}
 
         {{#Effect0}}
 		<div class="wuxFeatureEffectsBlock">

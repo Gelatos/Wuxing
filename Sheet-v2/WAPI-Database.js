@@ -2180,59 +2180,36 @@ class TechniqueDisplayData {
     }
 
     setTechSetResourceData(technique) {
-        this.resourceData = "";
-        
-        this.resourceData += this.printSkillCheck(technique);
-        if (technique.limits != "") {
-            if (this.resourceData != "") {
-                this.resourceData += "; ";
-            }
-            this.resourceData += technique.limits;
-            this.limits = technique.limits;
-        }
-        if (technique.resourceCost != "") {
-            let resourceNames = technique.resourceCost.split(";");
-            for (let i = 0; i < resourceNames.length; i++) {
-                let resource = resourceNames[i].trim().split(" ", 2);
-                let resourceName = WuxDef.GetTitle(resource[1]);
-
-                if (this.resourceData != "") {
-                    this.resourceData += "; ";
-                }
-                this.resourceData += `${resource[0]} ${resourceName}`
-            }
-        }
         this.enCost = technique.en;
         this.willCost = technique.willPower;
     }
 
     setTechTargetData(technique) {
-        this.targetData = "";
 
         if (technique.target == "Self") {
             this.range = "Self";
             this.targetType = 0;
-            this.targetData += `Self`;
+            this.targetDesc = WuxDef.Get("Title_RangeSelf").descriptions;
             return;
         }
         
+        let rangeDesc = WuxDef.Get("Title_Range");
+        
         if (technique.range != "") {
-            if (this.targetData != "") {
-                this.targetData += "; ";
-            }
-            this.targetData += `Range: ${technique.range}`;
             this.range = technique.range;
+            if (!this.range.startsWith("1")) {
+                rangeDesc = WuxDef.Get("Title_RangeDistance");
+            }
         }
         else {
-            this.range = 0;
+            this.range = 1;
         }
         
         if (technique.target != "") {
-            if (this.targetData != "") {
-                this.targetData += "; ";
-            }
+            let singleTargetTypes = ["Target", "Object", "Space"];
+            let isSingleTargetType = singleTargetTypes.some(item => technique.target.includes(item));
             if (technique.size > 0) {
-                if (technique.target.includes("Target") || technique.target.includes("Object")) {
+                if (isSingleTargetType) {
                     this.targetType += `${this.numberToWord(technique.size)} ${technique.target}`;
                 }
                 else {
@@ -2242,7 +2219,9 @@ class TechniqueDisplayData {
             else {
                 this.targetType += `${technique.target}`;
             }
-            this.targetData += this.targetType;
+
+            rangeDesc.addSubDefinition(WuxDef.Get(`Pattern_${technique.target}`));
+            this.targetDesc = rangeDesc.descriptions;
         }
     }
     printSkillCheck(technique) {
@@ -2276,6 +2255,10 @@ class TechniqueDisplayData {
     setExtentionEffects(technique) {
         this.requirements = "";
         this.requirementsDesc = [];
+
+        if (technique.limits != "") {
+            this.requirements += `Usable ${technique.limits}. `;
+        }
         
         if (technique.boon > 0) {
             this.requirements += "You must consume a Boon to use this technique. ";
@@ -2363,13 +2346,11 @@ class TechniqueDisplayData {
         this.fieldName = "";
         this.coreDefense = "";
 
-        this.resourceData = "";
         this.enCost = 0;
         this.willCost = 0;
-        this.targetData = "";
+        this.targetDesc = [];
         this.targetType = "";
         this.range = "";
-        this.limits = "";
         this.forms = [];
         this.traits = [];
 
@@ -2383,9 +2364,12 @@ class TechniqueDisplayData {
         this.endEffectName = "";
         this.endEffectDesc = "";
     }
-    
+
     getRequirementsDescriptions(join) {
         return this.requirementsDesc.join(join);
+    }
+    getTargetDescriptions(join) {
+        return this.targetDesc.join(join);
     }
 
     getRollTemplate(addTechnique) {
@@ -2399,29 +2383,17 @@ class TechniqueDisplayData {
     
     generateRollTemplate(addTechnique) {
         let output = `{{Name=${this.name}}}{{type-${this.actionType}=1}}`;
-        if (this.resourceData != "") {
-            output += `{{Resources=${this.resourceData}}}`;
-        }
         if (this.enCost != "") {
             output += `{{En=${this.enCost}}}`;
         }
         if (this.willCost != "") {
             output += `{{Will=${this.willCost}}}`;
         }
-        if (this.targetData != "") {
-            output += `{{Targeting=${this.targetData}}}`;
-        }
         if (this.range != "") {
             output += `{{Range=${this.range}}}`;
         }
         if (this.targetType != "") {
             output += `{{Target=${this.targetType}}}`;
-        }
-        if (this.forms.length > 0) {
-            output += this.rollTemplateDefinitions(this.forms, "FormTrait");
-        }
-        if (this.traits.length > 0) {
-            output += this.rollTemplateDefinitions(this.traits, "Trait");
         }
         if (this.coreDefense != "") {
             output += `{{CoreDefense${this.coreDefense}=1}}`;
@@ -2431,7 +2403,6 @@ class TechniqueDisplayData {
         }
         if (this.requirements != "") {
             output += `{{Requirement=${this.requirements}}}`;
-            output += `{{Reqdesc=${this.getRequirementsDescriptions("\n")}}}`;
         }
         if (this.flavorText != "") {
             output += `{{FlavorText=${this.flavorText}}}`;

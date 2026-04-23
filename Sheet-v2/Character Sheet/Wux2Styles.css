@@ -2038,8 +2038,7 @@ div.wuxStyleHeaderButton:hover span {
 ========================================*/
 
 .wuxFeature,
-.sheet-rolltemplate-technique,
-.sheet-rolltemplate-usetechnique,
+.sheet-rolltemplate-technique
 .wuxFeatureTable
 {
     position: relative;
@@ -2049,15 +2048,13 @@ div.wuxStyleHeaderButton:hover span {
     width: calc(100% - 10px);
     height: min-content;
 }
-.sheet-rolltemplate-technique,
-.sheet-rolltemplate-usetechnique
+.sheet-rolltemplate-technique
 {
     line-height: 12px;
 }
 
 .wuxFeature,
-.sheet-rolltemplate-technique,
-.sheet-rolltemplate-usetechnique
+.sheet-rolltemplate-technique
 {
     font-size: 12px;
 
@@ -2071,8 +2068,7 @@ div.wuxStyleHeaderButton:hover span {
     max-width: 240px;
 }
 
-.sheet-rolltemplate-technique,
-.sheet-rolltemplate-usetechnique
+.sheet-rolltemplate-technique
 {
     min-width: 200px;
 }
@@ -2093,14 +2089,14 @@ input[type=hidden].wuxFilterFeature-flag[value="1"] + .wuxFeature
     display: none;
 }
 
-.wuxRepeatingFlexSection .wuxFeature {
+.wuxRepeatingFlexSection .wuxFeature 
+{
     display: inline-block;
     flex: 1;
 }
 
 .wuxFeatureHeader,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeader,
 .wuxFeatureTableHeader
 {
     position: relative;
@@ -2109,8 +2105,7 @@ input[type=hidden].wuxFilterFeature-flag[value="1"] + .wuxFeature
 }
 
 .wuxFeatureHeader,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeader
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader
 {
     background-color: #ffeded;
     border-bottom: 1px solid #efefef;
@@ -2205,12 +2200,6 @@ input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeader,
     background-image: url("https://i.imgur.com/RRjBIkF.png");
 }
 
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeader
-{
-    background: #1d1e1f;
-    color: #FFF;
-}
-
 .wuxFeatureType,
 .sheet-rolltemplate-technique .sheet-wuxFeatureType
 {
@@ -2226,8 +2215,9 @@ input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeader,
     color: #FFF;
 
     background: #666;
-    border: 0px solid #000;
-    border-width: 0px 0px 3px 3px;
+    border-style: solid;
+    border-color: #000;
+    border-width: 0 0 3px 3px;
 }
 
 .wuxFeatureType .wuxFeatureTypeHeader,
@@ -2332,7 +2322,7 @@ button[type=roll].wuxFeatureHeaderInteractiveButton
     margin: 0px;
     padding: 0px;
 
-    font-family: pictos;
+    font-family: pictos, serif;
     font-size: 20px;
     color: #000;
 
@@ -2352,36 +2342,39 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
 }
 
 .wuxFeatureHeaderDisplayBlock,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayBlock,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderDisplayBlock
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayBlock
 {
     position: relative;
     display: flex;
     width: 100%;
 }
 
-.wuxFeatureHeaderDisplayTitleBlock
+.wuxFeatureHeaderDisplayTitleBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayTitleBlock
 {
     position: relative;
     display: inline-block;
     flex: 4;
 }
 
-.wuxFeatureHeaderDisplayInfoBlock
+.wuxFeatureHeaderDisplayInfoBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoBlock
 {
     position: relative;
     display: inline-block;
     flex: 2;
 }
 
-.wuxFeatureHeaderDisplayCostBlock
+.wuxFeatureHeaderDisplayCostBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayCostBlock
 {
     position: relative;
     display: inline-block;
     flex: 1;
 }
 
-.wuxFeatureHeaderNameButton
+.wuxFeatureHeaderNameButton,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderName
 {
     position: relative;
     display: block;
@@ -2401,8 +2394,7 @@ button[type=roll].wuxFeatureHeaderInteractiveButton::before
 .wuxFeatureHeaderName,
 .wuxFeatureHeaderNameButton span,
 button[type=roll].wuxFeatureHeaderNameButton span,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderName,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderName
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderName
 {
     position: relative;
 
@@ -2422,14 +2414,28 @@ button[type=roll].wuxFeatureHeaderNameButton::before
     content: "" !important;
 }
 
-.wuxFeatureHeaderDisplayInfoActionType
+.wuxFeatureHeaderDisplayInfoActionType,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoActionType,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Swift,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Quick,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Full,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Assist,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Reaction,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Passive
 {
     position: relative;
     display: block;
     width: 100%;
 }
 
-.wuxFeatureHeaderDisplayInfoActionType span
+.wuxFeatureHeaderDisplayInfoActionType span,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoActionType,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Swift,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Quick,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Full,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Assist,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Reaction,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Passive
 {
     margin-left: 10px;
     
@@ -2514,21 +2520,26 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 
 .wuxFeatureHeaderDisplayInfoRange,
 .wuxFeatureHeaderDisplayInfoRangeSub,
-.wuxFeatureHeaderDisplayInfoTargetType
+.wuxFeatureHeaderDisplayInfoTargetType,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoRange,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoRangeSub,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoTargetType
 {
     position: relative;
     display: block;
     width: 100%;
 }
 
-.wuxFeatureHeaderDisplayInfoRange 
+.wuxFeatureHeaderDisplayInfoRange,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoRange
 {
     font-size: 12px;
     font-weight: bold;
     text-align: center;
 }
 
-.wuxFeatureHeaderDisplayInfoRangeSub
+.wuxFeatureHeaderDisplayInfoRangeSub,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoRangeSub
 {
     position: absolute;
     left: 0;
@@ -2536,19 +2547,21 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
     height: 2px;
 }
 
-.wuxFeatureHeaderDisplayInfoTargetType
+.wuxFeatureHeaderDisplayInfoTargetType,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoTargetType
 {
     font-size: 8px;
     text-align: center;
 }
 
 .wuxFeatureHeaderDisplayInfoEnCost,
-.wuxFeatureHeaderDisplayInfoWillCost
+.wuxFeatureHeaderDisplayInfoWillCost,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoEnCost,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoWillCost
 {
     position: relative;
     display: block;
     width: 40px;
-    
     
     background-size: contain;
     background-repeat: no-repeat;
@@ -2556,20 +2569,24 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
     border: 1px solid white;
 }
 
-.wuxFeatureHeaderDisplayInfoEnCost
+.wuxFeatureHeaderDisplayInfoEnCost,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoEnCost
 {
     background-image: url("https://i.imgur.com/PNqmAzJ.png");
     background-color: gold;
 }
 
-.wuxFeatureHeaderDisplayInfoWillCost
+.wuxFeatureHeaderDisplayInfoWillCost,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoWillCost
 {
     background-image: url("https://i.imgur.com/gtLVXxB.png");
     background-color: #87c0ff;
 }
 
 .wuxFeatureHeaderDisplayInfoEnCost span,
-.wuxFeatureHeaderDisplayInfoWillCost span
+.wuxFeatureHeaderDisplayInfoWillCost span,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoEnCost,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoWillCost
 {
     padding-left: 3px;
 
@@ -2580,15 +2597,17 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 
 .wuxFeatureHeaderDisplayInfoSubtitle,
 .wuxFeatureHeaderDisplayInfoEnCost .wuxFeatureHeaderDisplayInfoSubtitle,
-.wuxFeatureHeaderDisplayInfoWillCost .wuxFeatureHeaderDisplayInfoSubtitle
+.wuxFeatureHeaderDisplayInfoWillCost .wuxFeatureHeaderDisplayInfoSubtitle,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoSubtitle,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoEnCost .sheet-wuxFeatureHeaderDisplayInfoSubtitle,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoWillCost .sheet-wuxFeatureHeaderDisplayInfoSubtitle
 {
     font-size: 7px;
     font-weight: normal;
 }
 
 .wuxFeatureHeaderInfo,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfo,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfo
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfo
 {
     position: relative;
     display: block;
@@ -2598,7 +2617,8 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
     font-size: 11px;
 }
 
-.wuxFeatureHeaderInfo span {
+.wuxFeatureHeaderInfo span 
+{
     z-index: 1;
 }
 
@@ -2657,6 +2677,12 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoTrigger
 {
     background: #8dca88;
+}
+.wuxFeatureHeaderInfoFlavor,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoFlavor,
+.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoFlavor 
+{
+    font-style: italic;
 }
 
 .wuxFeatureExpandingContent,
@@ -2717,8 +2743,6 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 .sheet-rolltemplate-technique .sheet-wuxFeatureFunctionBlock,
 .wuxFeatureEffectsBlock,
 .sheet-rolltemplate-technique .sheet-wuxFeatureEffectsBlock,
-.wuxFeatureSecondaryEffectsBlock,
-.sheet-rolltemplate-technique .sheet-wuxFeatureSecondaryEffectsBlock,
 .wuxFeatureEndEffectsBlock,
 .sheet-rolltemplate-technique .sheet-wuxFeatureEndEffectsBlock
 {
@@ -2744,12 +2768,6 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 .sheet-rolltemplate-technique .sheet-wuxFeatureEffectsBlock
 {
     background: #fdfbde;
-}
-
-.wuxFeatureSecondaryEffectsBlock,
-.sheet-rolltemplate-technique .sheet-wuxFeatureSecondaryEffectsBlock
-{
-    background: #fffccc;
 }
 
 .wuxFeatureEndEffectsBlock,
