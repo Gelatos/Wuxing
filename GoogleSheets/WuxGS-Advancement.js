@@ -269,14 +269,15 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             
                             let perkTables = ["", ""];
                             for (let i = 0; i < perkTechniques.length; i++) {
-                                let perkDef = perkTechniques[i].createDefinition(WuxDef.Get("Technique"));
-                                perkTables[i%2] += printPerkTechnique(perkDef, perkTechniques[i]);
+                                let perkTechnique = perkTechniques[i];
+                                let perkDef = perkTechnique.createDefinition(WuxDef.Get("Technique"));
+                                perkTables[i%2] += printPerkTechnique(perkDef, perkTechnique, WuxStyles.Get(perkTechnique.name));
                             }
                             return [WuxSheetMain.Table.FlexTableGroup(perkTables[0], " wuxMinWidth350"),
                                 WuxSheetMain.Table.FlexTableGroup(perkTables[1], " wuxMinWidth350")];
                         },
 
-                        printPerkTechnique = function (perkDef, technique) {
+                        printPerkTechnique = function (perkDef, technique, style) {
                             let headerContents = `<div class="wuxInteractiveBlock">
                                 ${WuxSheetMain.InteractionElement.CheckboxBlockIcon(perkDef.getAttribute(),
                                 `<span class="wuxHeader">${technique.name}</span>
@@ -284,11 +285,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             )}
                             </div>`;
 
-                            let descContents = "";
-                            if (technique.requirement) {
-                                descContents += `<div class="wuxDescription wuxMarginLeft50"><em>${technique.requirement}</em></div>`;
-                            }
-                            descContents += `<div class="wuxDescription wuxMarginLeft50">${technique.flavorText}</div>`;
+                            let descContents = `<div class="wuxDescription wuxMarginLeft50">${style.description}</div>`;
 
                             if (technique.name == "Second Affinity") {
                                 descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(),
@@ -787,21 +784,22 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                             let perkTables = ["", ""];
                             for (let i = 0; i < perkTechniques.length; i++) {
-                                let perkDef = perkTechniques[i].createDefinition(WuxDef.Get("Technique"));
-                                perkTables[i%2] += printPerkTechnique(perkDef, perkTechniques[i]);
+                                let perkTechnique = perkTechniques[i];
+                                let perkDef = perkTechnique.createDefinition(WuxDef.Get("Technique"));
+                                perkTables[i%2] += printPerkTechnique(perkDef, perkTechnique, WuxStyles.Get(perkTechnique.name));
                             }
                             return [WuxSheetMain.Table.FlexTableGroup(perkTables[0], " wuxMinWidth350"),
                                 WuxSheetMain.Table.FlexTableGroup(perkTables[1], " wuxMinWidth350")];
                         },
 
-                        printPerkTechnique = function (perkDef, technique) {
+                        printPerkTechnique = function (perkDef, technique, style) {
                             let headerContents = `<div class="wuxInteractiveBlock">
                                 ${WuxSheetMain.InteractionElement.CheckboxBlockIcon(perkDef.getAttribute(),
                                 `<span class="wuxHeader">${technique.name}</span>
                                     <span class="wuxSubheader">[Cost ${technique.group} Perk Point]</span>`
                                 )}
                             </div>`;
-                            let descContents = `<div class="wuxDescription wuxMarginLeft50">${technique.flavorText}</div>`;
+                            let descContents = `<div class="wuxDescription wuxMarginLeft50">${style.description}</div>`;
                             
                             if (technique.name == "Affinity") {
                                 descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(),
