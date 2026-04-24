@@ -1405,7 +1405,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                 roll = this.calculateFormula(techniqueEffect, attrGetters.sender);
                 if (techniqueEffect.formula.hasWorker(WuxDef.GetVariable("TargetHV"))) {
                     let hvValue = tokenEffect.tokenTargetData.combatDetails.getRegenValue();
-                    roll.addModToRoll(hvValue, "HV");
+                    roll.addModToRoll(hvValue, "Regen");
                 }
                 roll.setDamageType("HP Heal");
                 roll.setTraits(techniqueEffect.traits);
