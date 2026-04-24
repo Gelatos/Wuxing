@@ -1115,7 +1115,7 @@ class FormeTechniqueDatabase {
         let technique = this.techDictionary.get(techniqueName).technique;
         if (technique.version != techVersion) {
             Debug.Log(`Updating ${techniqueName} as it has a new version (${technique.version} != ${techVersion})`);
-            techniqueAttributeHandler.setSimplifiedTechniqueInfo(technique);
+            techniqueAttributeHandler.setTechniqueInfo(technique, true);
         }
         this.techDictionary.get(techniqueName).isSet = true;
         this.setRepeaterTechniqueVisibility(techniqueAttributeHandler, techniqueName);

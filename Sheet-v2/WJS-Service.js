@@ -957,20 +957,11 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechWillCost", suffix), displayData.willCost);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechBoonCost", suffix), displayData.boonCost);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechTargetType", suffix), displayData.targetType);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechTargetDesc"), displayData.getTargetDescriptions("\n\n"));
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechRange", suffix), displayData.range);
-		if (displayData.forms.length > 0) {
-			this.addDefinitions(displayData.forms, this.getVariable("TechForm"), 6);
-		}
-		if (displayData.traits.length > 0) {
-			this.addDefinitions(displayData.traits, this.getVariable("TechTrait"), 6);
-		}
-
 		if (displayData.trigger != "") {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechTrigger"), displayData.trigger);
@@ -987,24 +978,24 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechFlavorText"), displayData.flavorText);
 		}
-		if (displayData.effects.length > 0) {
-			this.addTechniqueEffects(displayData.effects, "TechEffect");
-		}
-		if (displayData.endEffectName.trim() != "") {
-			let defName = Format.GetDefinitionName("Title", displayData.endEffectName);
-			let def = WuxDef.Get(defName);
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechEEffectTitle", "name"), def.getTitle());
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechEEffectTitle", "desc"), def.getDescription());
-		}
-		if (displayData.endEffectDesc != "") {
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechEEffectTitle"), displayData.endEffectDesc);
-		}
-		if (displayData.definitions.length > 0) {
-			this.addDefinitions(displayData.definitions, this.getVariable("TechDef"), 4);
-		}
+		// if (displayData.effects.length > 0) {
+		// 	this.addTechniqueEffects(displayData.effects, "TechEffect");
+		// }
+		// if (displayData.endEffectName.trim() != "") {
+		// 	let defName = Format.GetDefinitionName("Title", displayData.endEffectName);
+		// 	let def = WuxDef.Get(defName);
+		// 	this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+		// 	this.getVariable("TechEEffectTitle", "name"), def.getTitle());
+		// 	this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+		// 	this.getVariable("TechEEffectTitle", "desc"), def.getDescription());
+		// }
+		// if (displayData.endEffectDesc != "") {
+		// 	this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+		// 	this.getVariable("TechEEffectTitle"), displayData.endEffectDesc);
+		// }
+		// if (displayData.definitions.length > 0) {
+		// 	this.addDefinitions(displayData.definitions, this.getVariable("TechDef"), 4);
+		// }
 	}
 	setTechniqueUseRollTemplate(technique, displayData, suffix) {
 		displayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
@@ -1056,8 +1047,6 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.getVariable("TechEnCost"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechWillCost"), 0);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechBoonCost"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechTargetDesc"), "");
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,

@@ -2201,7 +2201,7 @@ class TechniqueDisplayData {
                 rangeDesc = WuxDef.Get("Title_RangeDistance");
             }
         }
-        else if (this.target != "") {
+        else if (technique.target != "") {
             this.range = 1;
         }
         else {

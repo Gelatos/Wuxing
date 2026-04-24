@@ -1414,7 +1414,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 addRepeaterContentsTechniqueDisplay = function (isCustom, alwaysShow) {
                     let submenuText = isCustom ? printCustomTechniqueDisplaySubmenuButton() : printRepeatingTechniqueDisplaySubmenuButton();
-                    let actionDisplay = printFormTechniqueActionDisplay(submenuText);
+                    let actionDisplay = printFormTechniqueFullActionDisplay(submenuText);
                     if (alwaysShow) {
                         return  actionDisplay;
                     }
@@ -1497,15 +1497,6 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     `;
                 },
 
-                printFormTechniqueActionDisplay = function () {
-                    return `
-                    <div class="wuxFeature wuxMinWidth220">
-                        <div class="wuxFeatureHeader wuxSubMenuSection">
-                            ${buildBaseFormTechniqueHeaderContents()}
-                        </div>
-                        ${buildFormBaseTechniqueEffects()}
-                    </div>`;
-                },
                 printFormTechniqueFullActionDisplay = function () {
                     return `
                     <div class="wuxFeature">
@@ -1680,9 +1671,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     <input type="hidden" class="wuxHiddenField-flag" name="${getActionTypeAttribute("TechRequirements")}" value="0" />
                     <div class="wuxHiddenField">
                         <div class="wuxFeatureHeaderInfoReq">
-                            ${buildFormTooltipSection("Requirements", "Requirements", "TechRequirementDesc")}
-                        </div>
-                        <div class="wuxFeatureHeaderInfo">
+                            ${buildFormTooltipSection("Requirements.", "Requirements", "TechRequirementDesc")}
                             ${getSpanActionTypeAttribute("TechRequirements")}
                         </div>
                     </div>`;
@@ -1693,7 +1682,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         output = printTrigger(printSpan(displayData.trigger));
                     }
                     if (displayData.requirements != "") {
-                        output = printRequirement("Requirements", printSpan(displayData.requirements), displayData.requirementsDesc);
+                        output = printRequirement("Requirements.", printSpan(displayData.requirements), displayData.requirementsDesc);
                     }
                     return output;
                 },
@@ -1701,14 +1690,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return `<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> ${contents}</div>`;
                 },
                 printRequirement = function (title, contents, tooltipData) {
-                    if (tooltipData.length > 0) {
-                        return `<div class="wuxFeatureHeaderInfoReq">${buildSetTooltipSection(title, title, tooltipData)}</div>
-                        <div class="wuxFeatureHeaderInfo">${contents}</div>`;
-                    }
-                    else {
-                        return `<div class="wuxFeatureHeaderInfoReq">${title}</div>
-                        <div class="wuxFeatureHeaderInfo">${contents}</div>`;
-                    }
+                    return `<div class="wuxFeatureHeaderInfoReq">${tooltipData.length > 0 ? buildSetTooltipSection(title, title, tooltipData) : title}
+                    ${contents}</div>`;
                 },
 
                 buildFormExtendedTechniqueData = function () {
