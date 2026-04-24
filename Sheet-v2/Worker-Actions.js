@@ -554,12 +554,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 let perkBoosters = [];
                 let allPerkTechniques = worker.getBoostTechniques();
                 allPerkTechniques.forEach((technique) => {
-                    if (technique.name == "Second Affinity") {
-                        attrHandler.addUpdate(WuxDef.GetVariable("AdvancedAffinity"), "0");
-                    }
-                    else {
-                        perkBoosters.push(technique.name);
-                    }
+                    perkBoosters.push(technique.name);
                 });
 
                 attrHandler.addUpdate(boosterFieldName, JSON.stringify(perkBoosters));
