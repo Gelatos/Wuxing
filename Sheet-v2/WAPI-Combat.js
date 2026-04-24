@@ -1390,7 +1390,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
         
         switch (subType) {
             case "Surge":
-                let surgeValue = this.getTargetTokenEffect(techniqueEffect).tokenTargetData.combatDetails.getSurge();
+                let surgeValue = tokenEffect.tokenTargetData.combatDetails.getSurge();
                 if (surgeValue <= 0) {
                     if(!tokenEffect.hasSurged()) {
                         this.addMessage("Cannot Surge, no Surge available");
@@ -1404,7 +1404,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                 
                 roll = this.calculateFormula(techniqueEffect, attrGetters.sender);
                 if (techniqueEffect.formula.hasWorker(WuxDef.GetVariable("TargetHV"))) {
-                    let hvValue = this.getTargetTokenEffect(techniqueEffect).getRegenValue();
+                    let hvValue = tokenEffect.tokenTargetData.combatDetails.getRegenValue();
                     roll.addModToRoll(hvValue, "HV");
                 }
                 roll.setDamageType("HP Heal");
