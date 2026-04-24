@@ -1182,7 +1182,12 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                     passCheck = true;
                 }
                 else {
-                    Debug.Log("vs a defense. Seeing if passed: " + passCheck);
+                    if (techniqueEffect.type == "Damage") {
+                        passCheck = techUseResolver.passedDodge;
+                    }
+                    else {
+                        passCheck = techUseResolver.passedCheck;
+                    }
                 }
                 
                 if (passCheck) {
@@ -1225,7 +1230,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
             this.targetTokenEffect.halveAllDamage = !this.passedCheck;
         }
         else {
-            this.passedCheck = this.passedDodge;
+            this.passedCheck = false;
         }
     }
     
