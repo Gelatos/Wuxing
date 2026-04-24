@@ -2791,18 +2791,10 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 }
 
 .wuxFeatureFunctionBlock .wuxFeatureFunctionBlockRow,
-.sheet-rolltemplate-technique .sheet-wuxFeatureFunctionBlock .sheet-wuxFeatureFunctionBlockRow,
-.wuxFeatureFunctionBlock .wuxFeatureFunctionBlockFlavorText,
-.sheet-rolltemplate-technique .sheet-wuxFeatureFunctionBlock .sheet-wuxFeatureFunctionBlockFlavorText
+.sheet-rolltemplate-technique .sheet-wuxFeatureFunctionBlock .sheet-wuxFeatureFunctionBlockRow
 {
     position: relative;
     display: block;
-}
-
-.wuxFeatureFunctionBlock .wuxFeatureFunctionBlockFlavorText,
-.sheet-rolltemplate-technique .sheet-wuxFeatureFunctionBlock .sheet-wuxFeatureFunctionBlockFlavorText
-{
-    font-style: italic;
 }
 
 .wuxFeatureCheckHeader,

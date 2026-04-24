@@ -560,18 +560,16 @@ class TokenTargetData extends TargetData {
 
     // Energy
     addEnergy(attributeHandler, value, resultsCallback) {
+        if (value == undefined) {
+            return;
+        }
         resultsCallback = resultsCallback == undefined ? this.applyResultsToEnergy : resultsCallback;
 
-        if (this.isCharacter()) {
-            this.modifyResourceAttribute(attributeHandler, "EN", value,
-                this.addModifierToAttribute, resultsCallback);
-        } else {
-            this.modifyIconAttribute(attributeHandler, "status_pink", value,
-                function (results, value, attributeHandler, tokenTargetData) {
-                    results.max = 9;
-                    return tokenTargetData.addModifierToAttribute(results, value, attributeHandler, tokenTargetData);
-                }, resultsCallback);
-        }
+        this.modifyIconAttribute(attributeHandler, "status_yellow", value,
+            function (results, value, attributeHandler, tokenTargetData) {
+                results.max = 9;
+                return tokenTargetData.addModifierToAttribute(results, value, attributeHandler, tokenTargetData);
+            }, resultsCallback);
     }
 
     setEnergyToStart(attributeHandler, resultsCallback) {
@@ -583,7 +581,7 @@ class TokenTargetData extends TargetData {
             this.modifyResourceAttribute(attributeHandler, "EN", startEnVar,
                 this.setModifierToAttribute, resultsCallback);
         } else {
-            this.modifyIconAttribute(attributeHandler, "status_pink", startEnVar,
+            this.modifyIconAttribute(attributeHandler, "status_yellow", startEnVar,
                 function (results, value, attributeHandler, tokenTargetData) {
                     results.max = 9;
                     return tokenTargetData.setModifierToAttribute(results, value, attributeHandler);
@@ -600,7 +598,7 @@ class TokenTargetData extends TargetData {
             this.modifyResourceAttribute(attributeHandler, "EN", roundEnVar,
                 this.addModifierToAttribute, resultsCallback);
         } else {
-            this.modifyIconAttribute(attributeHandler, "status_pink", roundEnVar,
+            this.modifyIconAttribute(attributeHandler, "status_yellow", roundEnVar,
                 function (results, value, attributeHandler, tokenTargetData) {
                     results.max = 9;
                     return tokenTargetData.addModifierToAttribute(results, value, attributeHandler, tokenTargetData);
@@ -626,7 +624,7 @@ class TokenTargetData extends TargetData {
             this.modifyResourceAttribute(attributeHandler, "MvCharge", value,
                 tokenTargetData.addModifierToAttributeNoCap, resultsCallback);
         } else {
-            this.modifyIconAttribute(attributeHandler, "status_yellow", value,
+            this.modifyIconAttribute(attributeHandler, "status_pink", value,
                 tokenTargetData.addModifierToAttributeNoCap, resultsCallback);
         }
     }
@@ -639,7 +637,7 @@ class TokenTargetData extends TargetData {
             this.modifyResourceAttribute(attributeHandler, "MvCharge", value,
                 tokenTargetData.setModifierToAttribute, resultsCallback);
         } else {
-            this.modifyIconAttribute(attributeHandler, "status_yellow", value,
+            this.modifyIconAttribute(attributeHandler, "status_pink", value,
                 tokenTargetData.setModifierToAttribute, resultsCallback);
         }
     }
@@ -654,7 +652,7 @@ class TokenTargetData extends TargetData {
                 },
                 resultsCallback);
         } else {
-            this.modifyIconAttribute(attributeHandler, "status_yellow", 0,
+            this.modifyIconAttribute(attributeHandler, "status_pink", 0,
                 function (results, value, attrHandler, tokenTargetData) {
                     results.newValue = tokenTargetData.performRun(attrHandler);
                 },
@@ -673,7 +671,7 @@ class TokenTargetData extends TargetData {
                 },
                 resultsCallback);
         } else {
-            this.modifyIconAttribute(attributeHandler, "status_yellow", 0,
+            this.modifyIconAttribute(attributeHandler, "status_pink", 0,
                 function (results, value, attrHandler, tokenTargetData) {
                     results.newValue = results.current + tokenTargetData.performDash(attrHandler);
                 },
@@ -849,6 +847,11 @@ class TokenTargetData extends TargetData {
     }
 
     modifyBarAttribute(attributeHandler, barIndex, value, modCallback, finishCallback) {
+        let currentValue = this.token.get(`bar${barIndex}_value`);
+        if (currentValue == "" || currentValue == undefined) {
+            return;
+        }
+        
         let tokenTargetData = this;
         let results = tokenTargetData.getModifyResults(barIndex);
 
@@ -866,6 +869,9 @@ class TokenTargetData extends TargetData {
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
             results.current = parseInt(tokenTargetData.getIcon(iconName));
+            if (isNaN(results.current)) {
+                results.current = 0;
+            }
             results.max = 99;
             modCallback(results, value, attrHandler, tokenTargetData);
             finishCallback(results, attrHandler, "", tokenTargetData);
@@ -913,10 +919,16 @@ class TokenTargetData extends TargetData {
             results.newValue = results.max;
             return;
         }
+        
+        if (isNaN(value)) {
+            Debug.LogError(`[AddMod] Value for ${results.name} is returning as NaN. Aborting.`);
+            return;
+        }
 
         let newValue = parseInt(value);
         if (isNaN(newValue)) {
             // likely a variable. Look it up
+            
             newValue = attrHandler.parseInt(value, 0, false);
         }
 

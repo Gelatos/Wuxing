@@ -955,21 +955,25 @@ class TechniqueEffect extends dbObj {
 class TechniqueResources extends dbObj {
     importJson(json) {
         this.name = json.name;
-        this.resourceCost = json.resourceCost;
+        this.en = json.en;
+        this.will = json.will;
     }
 
     importSheets(dataArray) {
         let i = 0;
         this.name = "" + dataArray[i];
         i++;
-        this.resourceCost = "" + dataArray[i];
+        this.en = "" + dataArray[i];
+        i++;
+        this.will = "" + dataArray[i];
         i++;
     }
 
     createEmpty() {
         super.createEmpty();
         this.name = "";
-        this.resourceCost = "";
+        this.en = 0;
+        this.will = 0;
     }
 
     sanitizeSheetRollAction(sheetRoll) {
@@ -1081,9 +1085,6 @@ class TechniqueUseEffect extends dbObj {
 
     getUseTech(sheetName, isCustom) {
         return `!utech ${this.getRollActionData(sheetName, isCustom)}`;
-    }
-    getUseTech2(sheetName, isCustom) {
-        return `!utech2 ${this.getRollActionData(sheetName, isCustom)}`;
     }
 
     getCheckTech(sheetName, isCustom) {
@@ -2162,9 +2163,7 @@ class TechniqueDisplayData {
         this.setTechBasics(technique);
         this.setTechSetResourceData(technique);
         this.setTechTargetData(technique);
-        this.setExtentionEffects(technique);
-        this.setTraits(technique);
-        this.setFlavorText(technique);
+        this.setRequirementsData(technique);
         this.setEffects(technique);
     }
 
@@ -2177,6 +2176,8 @@ class TechniqueDisplayData {
         this.fieldName = Format.ToFieldName(technique.name);
         this.actionType = technique.action;
         this.coreDefense = technique.coreDefense;
+        this.trigger = technique.trigger;
+        this.flavorText = technique.flavorText;
     }
 
     setTechSetResourceData(technique) {
@@ -2227,23 +2228,6 @@ class TechniqueDisplayData {
             this.targetDesc = rangeDesc.descriptions;
         }
     }
-    printSkillCheck(technique) {
-        if (technique.skill == "" && technique.action != "Passive") {
-            return "No Check";
-        }
-        
-        let skillData = technique.skill.split(":");
-        skillData[0] = skillData[0].trim();
-        if (skillData.length > 1) {
-            if (skillData[1] == "group") {
-                return `Any ${skillData[0]}`;
-            }
-            else if (skillData[1] == "attr") {
-                return WuxDef.GetTitle(Format.GetDefinitionName("Attribute", skillData[0]));
-            }
-        }
-        return skillData[0];
-    }
 
     numberToWord(num) {
         const words = ["Zero", "One", "Two", "Three", "Four", "Five", "Six"];
@@ -2255,7 +2239,7 @@ class TechniqueDisplayData {
         }
     }
 
-    setExtentionEffects(technique) {
+    setRequirementsData(technique) {
         this.requirements = "";
         this.requirementsDesc = [];
 
@@ -2295,40 +2279,31 @@ class TechniqueDisplayData {
             this.requirementsDesc = this.requirementsDesc.concat(itemTraits[0].descriptions);
         }
         this.requirements += technique.requirement;
-        this.trigger = technique.trigger;
-    }
-
-    setTraits(technique) {
-        this.forms = [WuxDef.Get(`Trait_Action-${technique.action}`)];
-        this.forms = this.forms.concat(WuxDef.GetValues(technique.forms, ";", "Trait_"));
-        this.traits = WuxDef.GetValues(technique.impacts, ";", "Trait_");
-        this.traits = this.traits.concat(WuxDef.GetValues(technique.traits, ";"));
-    }
-
-    setFlavorText(technique) {
-        this.flavorText = technique.flavorText;
     }
 
     setEffects(technique) {
         let techDisplayData = this;
         techDisplayData.effects = [];
-        techDisplayData.iterateTechniqueEffects(technique, technique.effects, function (effectData) {
-            techDisplayData.effects.push(effectData);
-        });
-        techDisplayData.endEffectName = technique.endEffectConditionName;
-        techDisplayData.endEffectDesc = technique.endEffectConditionEffect;
-    }
-    
-    iterateTechniqueEffects(technique, effectDictionary, callback) {
         let filteredTechniqueEffects = [];
         let defense = "";
-        effectDictionary.iterate(function (effect) {
+        technique.effects.iterate(function (effect) {
+            switch (effect.defense) {
+                case "":
+                    // locked effect
+                    break;
+                case "Core":
+                    // defense effect
+                    break;
+                case "WillBreak":
+                    // willbreak effect
+                    break;
+            }
             if (effect.defense == defense) {
                 filteredTechniqueEffects.push(effect);
             }
             else {
                 if (filteredTechniqueEffects.length > 0) {
-                    callback(new TechniqueEffectDisplayData(filteredTechniqueEffects, technique));
+                    techDisplayData.effects.push(new TechniqueEffectDisplayData(filteredTechniqueEffects, technique));
                     filteredTechniqueEffects = [];
                 }
                 filteredTechniqueEffects.push(effect);
@@ -2336,8 +2311,11 @@ class TechniqueDisplayData {
             }
         });
         if (filteredTechniqueEffects.length > 0) {
-            callback(new TechniqueEffectDisplayData(filteredTechniqueEffects, technique));
+            techDisplayData.effects.push(new TechniqueEffectDisplayData(filteredTechniqueEffects, technique));
         }
+        techDisplayData.endEffectName = technique.endEffectConditionName;
+        techDisplayData.endEffectDesc = technique.endEffectConditionEffect;
+        techDisplayData.willBreakEffect = technique.willBreakEffect;
     }
 
     createEmpty() {
@@ -2348,20 +2326,19 @@ class TechniqueDisplayData {
         this.definition = {};
         this.fieldName = "";
         this.coreDefense = "";
+        this.trigger = "";
+        this.flavorText = "";
 
         this.enCost = 0;
         this.willCost = 0;
+        
         this.targetDesc = [];
         this.targetType = "";
         this.range = "";
-        this.forms = [];
-        this.traits = [];
 
-        this.trigger = "";
         this.requirements = "";
         this.requirementsDesc = [];
 
-        this.flavorText = "";
         this.lockedEffect = {};
         this.effects = [];
         this.endEffectName = "";
@@ -2415,7 +2392,7 @@ class TechniqueDisplayData {
         }
         if (addTechnique) {
             if (this.technique.resourceCost != "") {
-                let consumeData = new TechniqueResources([this.technique.name, this.technique.resourceCost]);
+                let consumeData = new TechniqueResources([this.technique.name, this.enCost, this.willCost]);
                 output += `{{consumeData=!ctech ${consumeData.sanitizeSheetRollAction(JSON.stringify(consumeData))}$$${this.sheetname}}}`;
             }
             if (this.technique.effects.keys.length > 0) {
@@ -4624,6 +4601,7 @@ class SandboxAttributeHandler extends AttributeHandler {
                 return parseInt(this.attributes[fieldName].get(this.maxCheck ? "max" : "current"));
             }
             else {
+                Debug.Log("Trying to parse int " + fieldName + " for char id " + this.characterId);
                 return parseInt(getAttrByName(this.characterId, fieldName, this.maxCheck ? "max" : "current"));
             }
         }

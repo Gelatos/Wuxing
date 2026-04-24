@@ -606,11 +606,12 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
         let techniqueData = new TechniqueResources();
         techniqueData.importSandboxJson(data);
         this.techniqueName = techniqueData.name;
-        
-        let resourceNames = techniqueData.resourceCost.split(";");
-        for (let i = 0; i < resourceNames.length; i++) {
-            let resource = resourceNames[i].trim().split(" ", 2);
-            this.resources[resource[1]] = parseInt(resource[0]);
+        Debug.Log(`${techniqueData.name} has a cost of ${techniqueData.en} EN and ${techniqueData.will} WILL`);
+        if (techniqueData.en != 0) {
+            this.resources["EN"] = techniqueData.en;
+        }
+        if (techniqueData.will != 0) {
+            this.resources["WILL"] = techniqueData.will;
         }
     }
     
@@ -699,7 +700,9 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
     checkIfCanConsumeResources(techniqueConsumptionResolver) {
         let success = true;
         this.iterateResources((resourceName) => {
-            if (!techniqueConsumptionResolver.newResourceValues[resourceName].isConsumable) {
+            if (techniqueConsumptionResolver.newResourceValues[resourceName] == undefined || 
+                !techniqueConsumptionResolver.newResourceValues[resourceName].isConsumable) 
+            {
                 success = false;
                 techniqueConsumptionResolver.addMessage(`Not enough ${WuxDef.GetTitle(resourceName)} to use this technique`);
             }
@@ -1163,8 +1166,8 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
             techUseResolver.rollSkillCheck(attrSetters);
             techUseResolver.checkDc(attrSetters);
             
-            if (techUseResolver.technique.effects.useDefaultWillBreak) {
-                willBreakEffect.add(techUseResolver.technique.effects.getDefaultWillbreak());
+            if (techUseResolver.technique.willBreakEffect != undefined) {
+                willBreakEffect.add(techUseResolver.technique.willBreakEffect);
             }
             
             techUseResolver.technique.effects.iterate(function (techniqueEffect) {
