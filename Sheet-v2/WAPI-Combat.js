@@ -616,7 +616,7 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
     }
     
     addInitialMessage() {
-        this.addMessage(`${this.senderTokenTargetData.displayName} consumes resources for ${this.techniqueName}`);
+        this.addMessage(`${this.senderTokenTargetData.displayName} tries to consume resources for ${this.techniqueName}`);
     }
     
     run() {
@@ -1569,6 +1569,9 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
         if (oppositional > 0) {
             roll.addModToRoll(oppositional * -5, "Oppositional");
         }
+        if (this.targetTokenEffect.tokenTargetData.hasStatus(attrGetters.target, "Stat_Flustered")) {
+            roll.addModToRoll(5, "Flustered");
+        }
         
         let message = `Request Check: ${Format.ShowTooltip(roll.total, roll.message)}`;
         this.addMessage(message);
@@ -1584,6 +1587,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                 tokenEffect.tryAddStatusResult(techniqueEffect.effect, "set", roll.total, attrHandler);
                 break;
             case "Add":
+            case "Focus":
             case "Self":
             case "Choose":
                 tokenEffect.tryAddStatusResult(techniqueEffect.effect, "add", roll.total, attrHandler);
