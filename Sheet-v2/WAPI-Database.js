@@ -1,6 +1,8 @@
 // ====== Classes
 // noinspection JSUnusedGlobalSymbols,JSUnresolvedReference,SpellCheckingInspection,ES6ConvertVarToLetConst
 
+import {forEach} from "./Underscore";
+
 class Dictionary {
 
     constructor() {
@@ -2159,6 +2161,36 @@ class TechniqueDisplayData {
         }
     }
 
+    createEmpty() {
+        this.technique = {};
+        this.name = "";
+        this.actionType = "";
+        this.displayname = "";
+        this.definition = {};
+        this.fieldName = "";
+        this.trigger = "";
+        this.flavorText = "";
+        this.isOnEnter = false;
+
+        this.enCost = 0;
+        this.willCost = 0;
+
+        this.targetDesc = [];
+        this.targetType = "";
+        this.range = "";
+
+        this.requirements = "";
+        this.requirementsDesc = [];
+
+        this.coreEffect = "";
+        this.coreDefense = "";
+        this.checkType = "";
+        this.checkDesc = "";
+        this.checkEffect = "";
+        this.endEffectDesc = "";
+        this.willBreakEffect = "";
+    }
+
     importTechnique(technique) {
         this.setTechBasics(technique);
         this.setTechSetResourceData(technique);
@@ -2175,9 +2207,9 @@ class TechniqueDisplayData {
         this.definition = technique.createDefinition(WuxDef.Get("Technique"));
         this.fieldName = Format.ToFieldName(technique.name);
         this.actionType = technique.action;
-        this.coreDefense = technique.coreDefense;
         this.trigger = technique.trigger;
         this.flavorText = technique.flavorText;
+        this.isOnEnter = technique.forms.includes("OnEnter");
     }
 
     setTechSetResourceData(technique) {
@@ -2246,6 +2278,20 @@ class TechniqueDisplayData {
         if (technique.limits != "") {
             this.requirements += `Usable ${technique.limits}. `;
         }
+
+        if (technique.forms.includes("Focus")) {
+            this.requirements += `You must maintain Focus on this technique. `;
+            let focusDefinition = WuxDef.Get("Trait_Focus");
+            this.requirementsDesc.push(focusDefinition.getTitle());
+            this.requirementsDesc = this.requirementsDesc.concat(focusDefinition.descriptions);
+        }
+
+        if (technique.forms.includes("Social")) {
+            this.requirements += `This is a Social technique. `;
+            let focusDefinition = WuxDef.Get("Trait_Social");
+            this.requirementsDesc.push(focusDefinition.getTitle());
+            this.requirementsDesc = this.requirementsDesc.concat(focusDefinition.descriptions);
+        }
         
         if (technique.boon > 0) {
             this.requirements += "You must consume a Boon to use this technique. ";
@@ -2261,88 +2307,60 @@ class TechniqueDisplayData {
                     let item = itemTraits[i];
                     if (i == itemTraits.length - 1) {
                         this.requirements += ` and`;
-                        itemTraits[0].addSubDefinition(item);
                     }
                     else if (i > 0) {
                         this.requirements += ", ";
-                        itemTraits[0].addSubDefinition(item);
                     }
                     this.requirements += ` ${item.getTitle()}`;
+                    this.requirementsDesc.push(item.getTitle());
+                    this.requirementsDesc = this.requirementsDesc.concat(item.descriptions);
                 }
             }
             else {
                 this.requirements += ` ${itemTraits[0].getTitle()}`;
             }
             this.requirements += `. `;
-
-            this.requirementsDesc = [itemTraits[0].getTitle()];
-            this.requirementsDesc = this.requirementsDesc.concat(itemTraits[0].descriptions);
         }
         this.requirements += technique.requirement;
     }
 
     setEffects(technique) {
         let techDisplayData = this;
-        techDisplayData.effects = [];
-        let filteredTechniqueEffects = [];
-        let defense = "";
+        let coreEffects = [];
+        let checkedEffects = [];
         technique.effects.iterate(function (effect) {
             switch (effect.defense) {
                 case "":
-                    // locked effect
+                    coreEffects.push(effect);
                     break;
                 case "Core":
-                    // defense effect
+                    checkedEffects.push(effect);
                     break;
-                case "WillBreak":
-                    // willbreak effect
-                    break;
-            }
-            if (effect.defense == defense) {
-                filteredTechniqueEffects.push(effect);
-            }
-            else {
-                if (filteredTechniqueEffects.length > 0) {
-                    techDisplayData.effects.push(new TechniqueEffectDisplayData(filteredTechniqueEffects, technique));
-                    filteredTechniqueEffects = [];
-                }
-                filteredTechniqueEffects.push(effect);
-                defense = effect.defense;
             }
         });
-        if (filteredTechniqueEffects.length > 0) {
-            techDisplayData.effects.push(new TechniqueEffectDisplayData(filteredTechniqueEffects, technique));
+        if (coreEffects.length > 0) {
+            techDisplayData.coreEffect = new TechniqueEffectDisplayData(coreEffects, technique, "");
         }
-        techDisplayData.endEffectName = technique.endEffectConditionName;
-        techDisplayData.endEffectDesc = technique.endEffectConditionEffect;
-        techDisplayData.willBreakEffect = technique.willBreakEffect;
-    }
-
-    createEmpty() {
-        this.technique = {};
-        this.name = "";
-        this.actionType = "";
-        this.displayname = "";
-        this.definition = {};
-        this.fieldName = "";
-        this.coreDefense = "";
-        this.trigger = "";
-        this.flavorText = "";
-
-        this.enCost = 0;
-        this.willCost = 0;
-        
-        this.targetDesc = [];
-        this.targetType = "";
-        this.range = "";
-
-        this.requirements = "";
-        this.requirementsDesc = [];
-
-        this.lockedEffect = {};
-        this.effects = [];
-        this.endEffectName = "";
-        this.endEffectDesc = "";
+        if (checkedEffects.length > 0) {
+            if (isNaN(technique.coreDefense)) {
+                this.coreDefense = technique.coreDefense;
+                this.checkType = `${technique.skill} vs. ${technique.coreDefense}`;
+                this.checkDesc = WuxDef.Get("Trait_SkillCheck-Defense").descriptions.join(". ");
+            }
+            else { 
+                this.coreDefense = 0;
+                this.checkType = `DC ${technique.coreDefense} ${technique.skill}`;
+                this.checkDesc = WuxDef.Get("Trait_SkillCheck-DC").descriptions.join(". ");
+            }
+            techDisplayData.checkEffect = new TechniqueEffectDisplayData(checkedEffects, technique, technique.coreDefense);
+        }
+        if (technique.endEffectConditionName != "") {
+            let def = WuxDef.Get(`Title_${technique.endEffectConditionName}`);
+            techDisplayData.endEffectDesc = def.getDescriptions().join("") + technique.endEffectConditionEffect;
+        }
+        if (technique.willBreakEffect != undefined) {
+        techDisplayData.willBreakEffect = new TechniqueEffectDisplayData([technique.willBreakEffect], technique);
+        }
     }
 
     getRequirementsDescriptions(join) {
@@ -2417,32 +2435,33 @@ class TechniqueDisplayData {
     }
     rollTemplateEffects() {
         let output = "";
-        output += this.iterateRollTemplateEffects(this.effects, "Effect");
+        if (this.coreEffect != "") {
+            output += this.iterateRollTemplateEffects(this.coreEffect, "Core");
+        }
+        if (this.isOnEnter) {
+            output += "{{OnEnter=1}}";
+        }
+        if (this.checkEffect != "") {
+            output += `{{Def=${this.coreDefense}}}{{CheckTitle=${this.checkType}}{{CheckTitleDesc=${this.checkDesc}}`;
+            output += this.iterateRollTemplateEffects(this.checkEffect, "Check");
+        }
+        if (this.willBreakEffect != "") {
+            output += this.iterateRollTemplateEffects(this.willBreakEffect, "Willbreak");
+        }
         
-        if (this.endEffectName != "") {
-            let def = WuxDef.Get(`Title_${this.endEffectName}`);
-            output += `{{EEffectName=${def.getTitle()}}}{{EEffectDesc=${def.getDescription()}}}`;
-        }
-        if (this.endEffectDesc != "") {
-            output += `{{EEffect=${this.endEffectDesc}}}`;
-        }
         return output;
     }
-    iterateRollTemplateEffects(effectArray, prefix) {
+    iterateRollTemplateEffects(techniqueDisplay, prefix) {
+        if (techniqueDisplay == "") {
+            return "";
+        }
         let output = "";
-        let incrementer = 0;
-        effectArray.forEach(function (effect) {
-            if (effect.check != undefined) {
-                output += `{{${prefix}${incrementer}Name=${effect.check}}}{{${prefix}${incrementer}Desc=${effect.checkDescription}}}`;
-                if (effect.effects != undefined) {
-                    effect.effects.forEach(function (desc) {
-                        output += `{{${prefix}${incrementer}=${desc}}}`;
-                        incrementer++;
-                    });
-                }
-                incrementer++;
-            }
-        });
+        for (let i = 0; i < techniqueDisplay.effects.length; i++) {
+            output+= `{{${prefix}${i}Data=${techniqueDisplay.effects[i]}}}`;
+        }
+        for (let i = 0; i < techniqueDisplay.effectTypeDesc.length; i++) {
+            output+= `{{${prefix}${i}Tooltip=${techniqueDisplay.effectTypeDesc[i]}}}`;
+        }
         return output;
     }
 
@@ -2472,71 +2491,143 @@ class TechniqueDisplayData {
 class BaseTechniqueEffectDisplayData {
     
     constructor() {
+        this.effectType = "";
+        this.effectTypeDesc = [];
+        this.effectDescription = "";
+        this.focusType = "";
+        this.evasionDefense = "";
+        this.includedAp = false;
+        this.includedBrutal = false;
+        this.includedTruehit = false;
     }
 
-    formatEffect(effect) {
-        let output= this.formatTemporaryEffect(effect);
+    formatEffect(effect, technique) {
+        if (this.effectDescription != "" && !this.effectDescription.endsWith(".")) {
+            if (this.effectType != "Damage") {
+                this.effectDescription += ". ";
+            }
+        }
         switch (effect.type) {
             case "Damage":
-                output += this.formatDamageEffect(effect);
+                if (this.effectType != "Damage") {
+                    this.effectType = effect.type;
+                    this.addDefintionToEffectDescription(WuxDef.Get(`Trait_Damage${this.evasionDefense}`));
+                }
+                this.formatDamageEffect(effect);
                 break;
             case "HP":
-                output += this.formatHpEffect(effect);
+                this.effectType = effect.type;
+                this.formatHpEffect(effect);
                 break;
             case "WILL":
-                output += this.formatWillEffect(effect);
+                this.effectType = effect.type;
+                this.formatWillEffect(effect);
                 break;
             case "Vitality":
-                output += this.formatVitalityEffect(effect);
+                if (this.effectType != "Vitality") {
+                    this.effectType = effect.type;
+                    this.addDefintionToEffectDescription(WuxDef.Get("Cmb_Vitality"));
+                }
+                this.formatVitalityEffect(effect);
                 break;
             case "Impatience":
-                output += this.formatImpatienceMeterEffect(effect);
+                if (this.effectType != "Impatience") {
+                    this.effectType = effect.type;
+                    this.addDefintionToEffectDescription(WuxDef.Get("Soc_Impatience"));
+                }
+                this.formatImpatienceMeterEffect(effect);
                 break;
             case "Favor":
-                output += this.formatFavorEffect(effect);
+                if (this.effectType != "Favor") {
+                    this.effectType = effect.type;
+                    this.addDefintionToEffectDescription(WuxDef.Get("Soc_Favor"));
+                }
+                this.formatFavorEffect(effect);
                 break;
             case "Influence":
-                output += this.formatInfluenceMeterEffect(effect);
+                if (this.effectType != "Influence") {
+                    this.effectType = effect.type;
+                    this.addDefintionToEffectDescription(WuxDef.Get("Soc_InfluenceCombat"));
+                }
+                this.formatInfluenceMeterEffect(effect);
                 break;
             case "Request":
-                output += this.formatRequestEffect(effect);
+                if (this.effectType != "Request") {
+                    this.effectType = effect.type;
+                    this.addDefintionToEffectDescription(WuxDef.Get("Soc_RequestCheck"));
+                    this.effectTypeDesc.push("Request DCs");
+                    let requestFilters = WuxDef.Filter([new DatabaseFilterData("group", "SeverityRank")]);
+                    forEach(requestFilters, filter => {
+                        this.addDefintionToEffectDescription(filter);
+                    });
+                }
+                this.formatRequestEffect(effect);
                 break;
             case "Status":
-                output += this.formatStatusEffect(effect);
+                let state = WuxDef.Get(effect.effect);
+                if (this.effectType != state.name) {
+                    this.effectType = state.name;
+                    this.addDefintionToEffectDescription(state);
+                }
+                this.formatStatusEffect(effect);
                 break;
             case "BreakFocus":
-                output += this.formatBreakFocusEffect(effect);
-                break;
-            case "Resistance":
-                output += this.formatResistanceEffect(effect);
+                if (this.effectType != "BreakFocus") {
+                    this.effectType = effect.type;
+                    this.addDefintionToEffectDescription(WuxDef.Get("Trait_Focus"));
+                }
+                this.formatBreakFocusEffect(effect);
                 break;
             case "Boost":
-                output += this.formatBoostEffect(effect);
+                this.effectType = effect.type;
+                this.formatBoostEffect(effect);
                 break;
             case "Terrain":
-                output += this.formatTerrainEffect(effect);
+                this.effectType = effect.type;
+                this.focusType = "Field";
+                this.formatTerrainEffect(effect);
                 break;
             case "Structure":
-                output += this.formatStructureEffect(effect);
+                this.effectType = effect.type;
+                this.focusType = "Structure";
+                this.formatStructureEffect(effect);
                 break;
             case "Move":
-                output += this.formatMoveEffect(effect);
+                if (this.effectType != "Move") {
+                    this.effectType = effect.type;
+                    this.addDefintionToEffectDescription(WuxDef.Get("Trait_Move"));
+                }
+                this.formatMoveEffect(effect);
                 break;
             case "EN":
-                output += this.formatEnEffect(effect);
+                if (this.effectType != "EN") {
+                    this.effectType = effect.type;
+                    this.addDefintionToEffectDescription(WuxDef.Get("EN"));
+                }
+                this.formatEnEffect(effect);
                 break;
             case "FreeFocus":
-                output += this.formatFreeFocusEffect(effect);
+                if (this.effectType != "FreeFocus") {
+                    this.effectType = effect.type;
+                    this.addDefintionToEffectDescription(WuxDef.Get("Trait_Focus"));
+                }
+                this.formatFreeFocusEffect(effect);
                 break;
-            case "Definition":
-                // Do nothing
+            case "Illusion":
+                if (this.effectType != "Illusion") {
+                    this.effectType = effect.type;
+                    this.addDefintionToEffectDescription(WuxDef.Get("Trait_Illusion"));
+                    this.focusType = "Illusion";
+                }
+                this.formatDescriptionEffect(effect);
                 break;
             default:
-                output += this.formatDescriptionEffect(effect);
+                this.effectType = effect.type;
+                this.formatDescriptionEffect(effect);
                 break;
         }
 
-        return output;
+        return this.effectDescription;
     }
 
     formatTemporaryEffect(effect) {
@@ -2560,19 +2651,52 @@ class BaseTechniqueEffectDisplayData {
     formatDamageEffect(effect) {
         let subTypeParts = effect.subType.split(":");
         let subType = subTypeParts[0];
+        
+        let traits = "";
+        if (effect.traits.includes("AP")) {
+            this.effectDescription += "[AP] ";
+            if (!this.includedAp) {
+                this.includedAp = true;
+                this.addDefintionToEffectDescription(WuxDef.Get("Trait_AP"));
+            }
+        }
+        if (effect.traits.includes("Brutal")) {
+            this.effectDescription += "[Brutal] ";
+            if (!this.includedBrutal) {
+                this.includedBrutal = true;
+                this.addDefintionToEffectDescription(WuxDef.Get("Trait_Brutal"));
+            }
+        }
+        if (effect.traits.includes("Truehit")) {
+            this.effectDescription += "[Truehit] ";
+            if (!this.includedTruehit) {
+                this.includedTruehit = true;
+                this.addDefintionToEffectDescription(WuxDef.Get("Trait_Truehit"));
+            }
+        }
         switch (subType) {
             case "Burst Damage":
-                return `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage per rank of your Burst condition. You then lose the Burst condition.`;
+                this.effectDescription += (this.effectDescription == "" ? `${this.formatTargetTake(effect)}` : " and");
+                this.effectDescription += ` ${this.formatCalcBonus(effect)} ${traits}${WuxDef.GetTitle(effect.effect)} damage per rank of your Burst condition. You then lose the Burst condition`;
+                return;
             case "Status":
-                let statusEffect = WuxDef.GetTitle(Format.GetDefinitionName("Status", subTypeParts[1]));
-                return `If ${this.formatTarget(effect)} has ${statusEffect}, ${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+                let status = WuxDef.Get(Format.GetDefinitionName("Status", subTypeParts[1]));
+                this.addDefintionToEffectDescription(status);
+                this.effectDescription += (this.effectDescription == "" ? "" : ". ");
+                this.effectDescription += `If ${this.formatTarget(effect)} has ${status.getTitle()}, ${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${traits}${WuxDef.GetTitle(effect.effect)} damage`;
+                return;
             case "Cond":
                 let conditionalEffect = WuxDef.GetTitle(Format.GetDefinitionName("Status", subTypeParts[1]));
-                return `If you have ${conditionalEffect}, ${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+                this.effectDescription += (this.effectDescription == "" ? "" : ". ");
+                this.effectDescription += `If you have ${conditionalEffect}, ${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${traits}${WuxDef.GetTitle(effect.effect)} damage`;
+                return;
             case "Special":
-                return effect.effect;
+                this.effectDescription += (this.effectDescription == "" ? "" : ". ");
+                this.effectDescription += effect.effect;
+                return;
             default:
-                return `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+                this.effectDescription += (this.effectDescription == "" ? `${this.formatTargetTake(effect)}` : " and");
+                this.effectDescription += ` ${this.formatCalcBonus(effect)} ${traits}${WuxDef.GetTitle(effect.effect)} damage`;
         }
     }
 
@@ -2582,21 +2706,16 @@ class BaseTechniqueEffectDisplayData {
         let subType = subTypeParts[0];
         switch (subType) {
             case "Heal":
-                return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${hp}`;
+                this.effectDescription += `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${hp}`;
+                return;
             case "Surge":
-                return `If ${this.formatTarget(effect)} has a surge, they must spend one and heal ${this.formatCalcBonus(effect)} ${hp}`;
-            case "Burst Damage":
-                return `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage per rank of your Burst condition. You then lose the Burst condition.`;
-            case "Status":
-                let statusEffect = WuxDef.GetTitle(Format.GetDefinitionName("Status", subTypeParts[1]));
-                return `If ${this.formatTarget(effect)} has ${statusEffect}, ${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
-            case "Cond":
-                let conditionalEffect = WuxDef.GetTitle(Format.GetDefinitionName("Status", subTypeParts[1]));
-                return `If you have ${conditionalEffect}, ${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+                this.effectDescription += `If ${this.formatTarget(effect)} has a surge, they must spend one and heal ${this.formatCalcBonus(effect)} ${hp}`;
+                return;
             case "Special":
-                return effect.effect;
+                this.effectDescription += effect.effect;
+                return;
             default:
-                return `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
+                this.effectDescription += `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle(effect.effect)} damage`;
         }
     }
 
@@ -2604,9 +2723,10 @@ class BaseTechniqueEffectDisplayData {
         let willpower = WuxDef.GetTitle("WILL");
         switch (effect.subType) {
             case "Heal":
-                return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${willpower}`;
+                this.effectDescription += `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${willpower}`;
+                return;
             default:
-                return `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${willpower} damage`;
+                this.effectDescription += `${this.formatTargetTake(effect)} ${this.formatCalcBonus(effect)} ${willpower} damage`;
         }
     }
 
@@ -2614,9 +2734,10 @@ class BaseTechniqueEffectDisplayData {
         let vitality = WuxDef.GetTitle("Cmb_Vitality");
         switch (effect.subType) {
             case "Heal":
-                return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${vitality}`;
+                this.effectDescription += `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${vitality}`;
+                return;
             default:
-                return `${this.formatTargetLose(effect)} ${this.formatCalcBonus(effect)} ${vitality}`;
+                this.effectDescription += `${this.formatTargetLose(effect)} ${this.formatCalcBonus(effect)} ${vitality}`;
         }
     }
 
@@ -2624,9 +2745,10 @@ class BaseTechniqueEffectDisplayData {
         let favorTitle = WuxDef.GetTitle("Soc_Favor");
         switch (effect.subType) {
             case "Heal":
-                return `${this.formatTargetLose(effect)} ${this.formatCalcBonus(effect)} ${favorTitle}`;
+                this.effectDescription += `${this.formatTargetLose(effect)} ${this.formatCalcBonus(effect)} ${favorTitle}`;
+                return;
             default:
-                return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${favorTitle}`;
+                this.effectDescription += `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${favorTitle}`;
         }
     }
 
@@ -2634,19 +2756,25 @@ class BaseTechniqueEffectDisplayData {
         let subTypes = effect.subType.split(":");
         switch (subTypes[0]) {
             case "Raise":
-                return `Raise the severity of an influence on your target.`;
+                this.effectDescription += `Raise the severity of an influence on your target`;
+                return;
             case "Lower":
-                return `Lower the severity of an influence on your target.`;
+                this.effectDescription += `Lower the severity of an influence on your target`;
+                return;
             case "Adjust":
-                return `Raise or lower the severity of an influence on your target.`;
+                this.effectDescription += `Raise or lower the severity of an influence on your target`;
+                return;
             case "Reveal":
-                return "A related influence to the statement is revealed to you. You learn whether the influence is supportive or oppositional.";
+                this.effectDescription += "A related influence to the statement is revealed to you. You learn whether the influence is supportive or oppositional";
+                return;
             case "RevealNeg":
-                return "A related oppositional influence to the statement is revealed to you.";
+                this.effectDescription += "A related oppositional influence to the statement is revealed to you";
+                return;
             case "RevealPos":
-                return "A related supportive influence to the statement is revealed to you.";
+                this.effectDescription += "A related supportive influence to the statement is revealed to you";
+                return;
             case "Add":
-                return `${this.formatTargetGain(effect)} the influence, "${effect.effect}" which is at ${subTypes[1]} Severity. This influence is removed if the target becomes hostile towards you or the social conflict ends. `;
+                this.effectDescription += `${this.formatTargetGain(effect)} the influence, "${effect.effect}" which is at ${subTypes[1]} Severity. This influence is removed if the target becomes hostile towards you or the social conflict ends`;
         }
     }
 
@@ -2654,72 +2782,92 @@ class BaseTechniqueEffectDisplayData {
         let impatience = WuxDef.GetTitle("Soc_Impatience");
         switch (effect.subType) {
             case "Heal":
-                return `${this.formatTargetLose(effect)} ${this.formatCalcBonus(effect)} ${impatience}`;
+                this.effectDescription += `${this.formatTargetLose(effect)} ${this.formatCalcBonus(effect)} ${impatience}`;
+                return;
             default:
-                return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${impatience}`;
+                this.effectDescription += `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${impatience}`;
         }
     }
 
     formatRequestEffect(effect) {
-        return `Make a request check on the target with ${this.formatCalcBonus(effect)}`;
+        this.effectDescription += `Make a request check on the target with ${this.formatCalcBonus(effect)}`;
     }
 
-    formatStatusEffect(effect) {
-        let state = WuxDef.Get(effect.effect);
+    formatStatusEffect(effect, state) {
         let formula = this.formatCalcBonus(effect).trim();
 
         switch (effect.subType) {
             case "Set":
                 if (formula == "") {
-                    return `${this.formatTargetGain(effect)} the ${state.title} ${state.group}`;
+                    this.effectDescription += `${this.formatTargetGain(effect)} the ${state.title} ${state.group}`;
                 }
                 else {
-                    return `${this.formatTargetGain(effect)} ${state.title} ${state.group} and the rank is set to ${formula}`; 
+                    this.effectDescription += `${this.formatTargetGain(effect)} ${state.title} ${state.group} and the rank is set to ${formula}`; 
                 }
+                return;
             case "Add":
                 if (formula == "") {
-                    return `${this.formatTargetGain(effect)} the ${state.title} ${state.group}`;
+                    this.effectDescription += `${this.formatTargetGain(effect)} the ${state.title} ${state.group}`;
                 }
                 else {
-                    return `${this.formatTargetGain(effect)} ${formula} ranks in the ${state.title} ${state.group}`; 
+                    this.effectDescription += `${this.formatTargetGain(effect)} ${formula} ranks in the ${state.title} ${state.group}`; 
                 }
+                return;
+            case "Focus":
+                if (formula == "") {
+                    this.effectDescription += `While you maintain focus on this technique, ${this.formatTargetGain(effect)} the ${state.title} ${state.group}`;
+                }
+                else {
+                    this.effectDescription += `While you maintain focus on this technique, ${this.formatTargetGain(effect)} ${formula} ranks in the ${state.title} ${state.group}`;
+                }
+
+                return;
             case "Trigger":
-                return `If ${this.formatTarget(effect)} has ${state.getTitle()}, trigger the effects.`;
+                this.effectDescription += `If ${this.formatTarget(effect)} has ${state.getTitle()}, trigger the effects`;
+                return;
             case "Remove":
-                return `${this.formatTargetLose(effect)} the ${state.title} ${state.group}`;
+                this.effectDescription += `${this.formatTargetLose(effect)} the ${state.title} ${state.group}`;
+                return;
             case "Remove Any":
-                return `${this.formatTargetLose(effect)} any condition of your choice`;
+                this.effectDescription += `${this.formatTargetLose(effect)} any condition of your choice`;
+                return;
             case "Remove All":
-                return `${this.formatTargetLose(effect)} all conditions of your choice`;
+                this.effectDescription += `${this.formatTargetLose(effect)} all conditions of your choice`;
+                return;
             case "Remove Will":
-                return `${this.formatTargetLose(effect)} all emotions of their choice`;
+                this.effectDescription += `${this.formatTargetLose(effect)} all emotions of their choice`;
+                return;
             case "Self":
-                return `${this.formatTargetGain(effect)} the ${state.title} ${state.group} targeted towards the caster`;
+                this.effectDescription += `${this.formatTargetGain(effect)} the ${state.title} ${state.group} targeted towards the caster`;
+                return;
             case "Choose":
-                return `${this.formatTargetGain(effect)} the ${state.title} ${state.group} targeted towards a character of your choice. The chosen character must be one that is antagonistic to the target.`;
+                this.effectDescription += `${this.formatTargetGain(effect)} the ${state.title} ${state.group} targeted towards a character of your choice. The chosen character must be one that is antagonistic to the target`;
+                return;
             default:
-                return `${this.formatTargetGain(effect)} the ${state.title} ${state.group}`;
+                this.effectDescription += `${this.formatTargetGain(effect)} the ${state.title} ${state.group}`;
         }
     }
     
     formatBreakFocusEffect() {
-        return `A technique of your choice that is being focused on by the target ends.`;
+        this.effectDescription += `A technique of your choice that is being focused on by the target ends`;
     }
 
     formatResistanceEffect(effect) {
         let resistance = WuxDef.GetTitle("Resistance");
         let damageType = WuxDef.GetTitle(effect.effect);
-        return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${resistance} against ${damageType} damage`;
+        this.effectDescription += `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${resistance} against ${damageType} damage`;
     }
 
     formatBoostEffect(effect) {
         switch (effect.subType) {
             case "Set":
-                return `${WuxDef.GetTitle(effect.effect)} is set to ${this.formatCalcBonus(effect)}`;
+                this.effectDescription += `${WuxDef.GetTitle(effect.effect)} is set to ${this.formatCalcBonus(effect)}`;
+                return;
             case "Penalty":
-                return `${WuxDef.GetTitle(effect.effect)} decreases by ${this.formatCalcBonus(effect)}`;
+                this.effectDescription += `${WuxDef.GetTitle(effect.effect)} decreases by ${this.formatCalcBonus(effect)}`;
+                return;
             default:
-                return `${WuxDef.GetTitle(effect.effect)} increases by ${this.formatCalcBonus(effect)}`;
+                this.effectDescription += `${WuxDef.GetTitle(effect.effect)} increases by ${this.formatCalcBonus(effect)}`;
         }
     }
 
@@ -2727,29 +2875,34 @@ class BaseTechniqueEffectDisplayData {
         let terrainType = WuxDef.GetTitle(effect.effect);
         switch (effect.subType) {
             case "Add":
-                return `The area is considered [${terrainType}].`;
+                this.effectDescription += `The area is considered [${terrainType}]`;
+                return;
             case "Remove":
-                return `Any effects in the area considered [${terrainType}] are removed.`;
+                this.effectDescription += `Any effects in the area considered [${terrainType}] are removed`;
         }
     }
 
     formatStructureEffect(effect) {
         switch (effect.subType) {
             case "Count":
-                return `You create ${this.formatCalcBonus(effect)} ${effect.effect} at the targeted spaces and must remain within range.`;
+                this.effectDescription += `You create ${this.formatCalcBonus(effect)} ${effect.effect} at the targeted spaces and must remain within range`;
+                return;
             case "Height":
-                return `Each ${effect.effect} is ${this.formatCalcBonus(effect)} spaces high.`;
+                this.effectDescription += `Each ${effect.effect} is ${this.formatCalcBonus(effect)} spaces high`;
+                return;
             case "HP":
-                return `Each ${effect.effect} has ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle("HP")}.`;
+                this.effectDescription += `Each ${effect.effect} has ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle("HP")}`;
+                return;
             default:
-                return effect.effect;
+                this.effectDescription += effect.effect;
         }
     }
 
     formatMoveEffect(effect) {
         switch (effect.subType) {
             case "Charge":
-                return `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} Move Charge.`;
+                this.effectDescription += `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} Move Charge`;
+                return;
             case "Jump":
                 let jump = "";
                 if (effect.effect != "") {
@@ -2762,43 +2915,52 @@ class BaseTechniqueEffectDisplayData {
                     }
                     jump += `${calc} spaces wide`;
                 }
-                return `${this.formatTarget(effect)} jumps ${jump}`;
+                this.effectDescription += `${this.formatTarget(effect)} jumps ${jump}`;
+                return;
             case "Pushed":
-                return `${this.formatTargetCopula(effect)} Pushed ${this.formatCalcBonus(effect)} spaces ${effect.effect == "" ? "from you." : effect.effect}`;
+                this.effectDescription += `${this.formatTargetCopula(effect)} Pushed ${this.formatCalcBonus(effect)} spaces ${effect.effect == "" ? "from you" : effect.effect}`;
+                return;
             case "Pulled":
-                return `${this.formatTargetCopula(effect)} Pulled ${this.formatCalcBonus(effect)} spaces ${effect.effect == "" ? "towards you." : effect.effect}`;
+                this.effectDescription += `${this.formatTargetCopula(effect)} Pulled ${this.formatCalcBonus(effect)} spaces ${effect.effect == "" ? "towards you." : effect.effect}`;
+                return;
             case "ForceMove":
-                return `${this.formatTargetCopula(effect)} Force Moved ${this.formatCalcBonus(effect)} spaces${effect.effect == "" ? "." : " " + effect.effect}`;
+                this.effectDescription += `${this.formatTargetCopula(effect)} Force Moved ${this.formatCalcBonus(effect)} spaces${effect.effect == "" ? "" : " " + effect.effect}`;
+                return;
             case "Float":
-                return `${this.formatTarget(effect, " Float", " Floats")}.`;
+                this.effectDescription += `${this.formatTarget(effect, " Float", " Floats")}`;
+                return;
             case "FreeMove":
                 let spaces = this.formatCalcBonus(effect);
                 if (spaces == "") {
-                    return `${this.formatTarget(effect)} may Free Move ${effect.effect == "" ? "." : " " + effect.effect}`;
+                    this.effectDescription += `${this.formatTarget(effect)} may Free Move ${effect.effect == "" ? "" : " " + effect.effect}`;
                 }
-                return `${this.formatTarget(effect)} may Free Move up to ${this.formatCalcBonus(effect)} spaces${effect.effect == "" ? "." : " " + effect.effect}`;
+                this.effectDescription += `${this.formatTarget(effect)} may Free Move up to ${this.formatCalcBonus(effect)} spaces${effect.effect == "" ? "" : " " + effect.effect}`;
+                return;
             case "Sneak":
-                return `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces. This movement does not break the hidden or invisible condition.`;
+                this.effectDescription += `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces. This movement does not break the hidden or invisible condition`;
+                return;
             case "Fall":
-                return `${this.formatTarget(effect)} falls.`;
+                this.effectDescription += `${this.formatTarget(effect)} falls`;
+                return;
             case "Teleport":
-                return `${this.formatTarget(effect)} teleports up to ${this.formatCalcBonus(effect)} spaces${effect.effect != "" ? "" : " " + effect.effect}.`;
+                this.effectDescription += `${this.formatTarget(effect)} teleports up to ${this.formatCalcBonus(effect)} spaces${effect.effect != "" ? "" : " " + effect.effect}`;
+                return;
             default:
-                return `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces${effect.effect != "" ? "" : " " + effect.effect}.`;
+                this.effectDescription += `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces${effect.effect != "" ? "" : " " + effect.effect}`;
         }
     }
 
     formatEnEffect(effect) {
         let effectTotal = this.formatCalcBonus(effect);
-        return `${this.formatTargetGain(effect)} ${effectTotal} ${WuxDef.GetTitle("EN")};`;
+        this.effectDescription += `${this.formatTargetGain(effect)} ${effectTotal} ${WuxDef.GetTitle("EN")}`;
     }
     
-    formatFreeFocusEffect(effect) {
-        return `You may maintain focus on the triggering technique without expending EN and it does not count against your limit of focus techniques.`;
+    formatFreeFocusEffect() {
+        this.effectDescription += `You may maintain focus on the triggering technique without expending EN and it does not count against your limit of focus techniques`;
     }
 
     formatDescriptionEffect(effect) {
-        return effect.effect;
+        this.effectDescription += effect.effect;
     }
 
     formatTargetTake(effect) {
@@ -2833,90 +2995,65 @@ class BaseTechniqueEffectDisplayData {
 
     formatCalcBonus(effect) {
     }
+
+    addDefintionToEffectDescription(definition) {
+        this.effectTypeDesc.push(definition.getTitle());
+        this.effectTypeDesc = this.effectTypeDesc.concat(definition.descriptions);
+    }
 }
 
 class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
 
-    constructor(techniqueEffects, technique) {
+    constructor(techniqueEffects, technique, coreDefense) {
         super();
         if (techniqueEffects == undefined) {
             return;
         }
-        
-        this.check = "";
-        this.checkDescription = "";
         this.effects = [];
 
-        this.importDefenseData(techniqueEffects[0], technique);
-        this.importEffectData(techniqueEffects);
+        this.setEvasionDefense(technique, coreDefense);
+        this.importEffectData(techniqueEffects, technique);
     }
 
-    importDefenseData(techniqueEffect, technique) {
-        let defense = techniqueEffect.defense;
-        let definition;
+    getEffectDescriptions(join) {
+        return this.effectTypeDesc.join(join);
+    }
 
-        if (isNaN(parseInt(defense))) {
-            if (defense == "") {
-                definition = WuxDef.Get("Title_TechEffect");
-                this.check = definition.getTitle();
-                this.checkDescription = definition.getDescription();
+    getEffects(join) {
+        return this.effects.join(join);
+    }
+    
+    setEvasionDefense(technique, coreDefense) {
+        this.evasionDefense = this.getDodgeDefense(technique, coreDefense);
+    }
+    getDodgeDefense(technique, coreDefense) {
+        if (coreDefense == "Brace" || coreDefense == "Warding") {
+            if (technique.impacts.includes("Truehit")) {
+                return "True";
             }
-            else if (defense == "Def_Evasion") {
-                definition = WuxDef.Get("Title_TechEvasion");
-                this.check = definition.getTitle();
-                this.checkDescription = definition.getDescription();
-            }
-            else if (defense == "TechOnEnter") {
-                definition = WuxDef.Get("Title_TechOnEnter");
-                this.check = definition.getTitle();
-                this.checkDescription = definition.getDescription();
-            }
-            else if (defense == "TechOnEndFocus") {
-                definition = WuxDef.Get("Title_TechOnEndFocus");
-                this.check = definition.getTitle();
-                this.checkDescription = definition.getDescription();
-            }
-            else if (defense == "TechNewTargets") {
-                definition = WuxDef.Get("Title_TechNewTargets");
-                this.check = definition.getTitle();
-                this.checkDescription = definition.getDescription();
-            }
-            else if (defense == "TechNewOnEnter") {
-                definition = WuxDef.Get("Title_TechNewOnEnter");
-                this.check = definition.getTitle();
-                this.checkDescription = definition.getDescription();
-            }
-            else if (defense == "Core") {
-                definition = WuxDef.Get(Format.GetDefinitionName("Defense", technique.coreDefense));
-                let definition2 = WuxDef.Get("Title_TechDefense");
-                this.check = definition2.getTitle(definition.getTitle());
-                this.checkDescription = `${definition2.getDescription()}\n${definition.getDescription()}`;
-            }
-            else {
-                definition = WuxDef.Get(defense);
-                if (definition.group == "Result") {
-                    this.check = `${definition.getTitle()}`;
-                    this.checkDescription = `${definition.getDescription()}`;
-                } else {
-                    let definition2 = WuxDef.Get("Title_TechDefense");
-                    this.check = definition2.getTitle(definition.getTitle());
-                    this.checkDescription = `${definition2.getDescription()}\n${definition.getDescription()}`;
-                }
-            }
-        } else {
-            definition = WuxDef.Get("Title_TechDC");
-            this.check = `${definition.getTitle()}${defense}`;
-            this.checkDescription = definition.getDescription();
+            return "Evasion";
         }
+        if (coreDefense == "Insight" || coreDefense == "Resolve") {
+            if (technique.impacts.includes("Truehit")) {
+                return "True";
+            }
+            return "Ego";
+        }
+        return "";
     }
 
-    importEffectData(effectData) {
+    importEffectData(effectData, technique) {
+        let currentEffect = effectData[0].type;
         for (let i = 0; i < effectData.length; i++) {
-            let formattedEffect = this.formatEffect(effectData[i]);
-            if (formattedEffect != "") {
-                this.effects.push(formattedEffect);
+            this.formatEffect(effectData[i], technique);
+            if (this.effectType != currentEffect) {
+                currentEffect = this.effectType;
+                this.effects.push(this.effectDescription);
+                this.effectDescription = "";
             }
         }
+        this.effects.push(this.effectDescription);
+        this.effectDescription = "";
     }
 
     formatCalcBonus(effect) {
@@ -2950,7 +3087,7 @@ class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
     }
 
     formatEffect(effect) {
-        let output= this.formatTemporaryEffect(effect);
+        this.effectDescription = "";
         switch (effect.type) {
             case "Damage":
             case "HP":
@@ -2958,38 +3095,39 @@ class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
             case "Favor":
                 return;
             case "Vitality":
-                output += this.formatVitalityEffect(effect);
+                this.formatVitalityEffect(effect);
                 break;
             case "Impatience":
-                output += this.formatImpatienceMeterEffect(effect);
+                this.formatImpatienceMeterEffect(effect);
                 break;
             case "Influence":
-                output += this.formatInfluenceMeterEffect(effect);
+                this.formatInfluenceMeterEffect(effect);
                 break;
             case "Request":
-                output += this.formatRequestEffect(effect);
+                this.formatRequestEffect(effect);
                 break;
             case "Status":
-                output += this.formatStatusEffect(effect);
+                let state = WuxDef.Get(effect.effect);
+                this.formatStatusEffect(effect, state);
                 break;
             case "Resistance":
-                output += this.formatResistanceEffect(effect);
+                this.formatResistanceEffect(effect);
                 break;
             case "Terrain":
-                output += this.formatTerrainEffect(effect);
+                this.formatTerrainEffect(effect);
                 break;
             case "Move":
-                output += this.formatMoveEffect(effect);
+                this.formatMoveEffect(effect);
                 break;
             case "EN":
-                output += this.formatEnEffect(effect);
+                this.formatEnEffect(effect);
                 break;
             case "Desc":
-                output += this.formatDescriptionEffect(effect);
+                this.formatDescriptionEffect(effect);
                 break;
         }
 
-        return output;
+        return this.effectDescription;
     }
 
     formatTargetTake(effect) {
@@ -3097,6 +3235,7 @@ class ItemDisplayData {
                     item = WuxGoods.Get(name);
                     break;
                 case "GoodsCat":
+                    item = WuxGoods.Get(name);
                     output.push({
                         quantity: quantity,
                         type: "Goods Category",
@@ -4181,7 +4320,7 @@ class CombatDetailsDefenses {
         return 9 + cr; // 9 = 5 (base) + 2 (job) + 2 (attribute)
     }
     
-    printDefenses(cr) {
+    printDefenses() {
         let output = "Defs:";
         output += `${WuxDef.GetAbbreviation("Def_Evasion")}${this.evasion};.`;
         output += `${WuxDef.GetAbbreviation("Def_Brace")}${this.brace};.`;
