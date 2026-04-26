@@ -585,37 +585,13 @@ class SheetDatabaseObject {
     }
 }
 
-class BaseTechniqueDisplayBuilder {
+class BaseFeatureDisplayBuilder {
     constructor() {}
-
+    
     print () {
         return `<div class="wuxFeature">
-            <div class="wuxFeatureHeader">
-                <div class="wuxFeatureHeaderDisplayBlock">
-                    <div class="wuxFeatureHeaderDisplayTitleBlock">
-                        ${this.printName()}
-                        ${this.printActionType()}
-                    </div>
-                    <div class="wuxFeatureHeaderDisplayInfoBlock">
-                        ${this.printRange()}
-                        ${this.printTargetType()}
-                    </div>
-                    <div class="wuxFeatureHeaderDisplayCostBlock">
-                        ${this.printEnCost()}
-                        ${this.printWillCost()}
-                    </div>
-                </div>
-            </div>
-            <div class="wuxFeatureInfoDisplayBlock">
-                ${this.printTrigger()}
-                ${this.printTraits()}
-                ${this.printFlavorText()}
-                ${this.printCoreEffects()}
-                ${this.printOnEnter()}
-                ${this.printCheckEffects()}
-                ${this.printEndEffects()}
-                ${this.printWillBreakEffects()}
-            </div>
+            ${this.printHeaderBlock()}
+            ${this.printInfoBlock()}
         </div>
         `;
     }
@@ -639,15 +615,78 @@ class BaseTechniqueDisplayBuilder {
         </span>`;
     }
     
+    printHeaderBlock() {}
+    printHeaderBlockField(contents) {
+        return `<div class="wuxFeatureHeader">
+            <div class="wuxFeatureHeaderDisplayBlock">
+                <div class="wuxFeatureHeaderDisplayTitleBlock">
+                    ${this.printName()}
+                    ${this.printActionType()}
+                </div>
+                ${contents}
+            </div>
+        </div>`;
+        
+    }
+
     printName() {}
     printNameField (contents) {
         return `<div class="wuxFeatureHeaderName">${contents}</div>`;
     }
-    
+
     printActionType() {}
     printActionTypeField (input, contents) {
         return `${input}
         <div class="wuxFeatureHeaderDisplayInfoActionType">${contents}</div>`;
+    }
+
+    printInfoBlock() {
+        return `<div class="wuxFeatureInfoDisplayBlock">
+            ${this.printTrigger()}
+            ${this.printTraits()}
+            ${this.printFlavorText()}
+            ${this.printCoreEffects()}
+            ${this.printOnEnter()}
+            ${this.printCheckEffects()}
+            ${this.printEndEffects()}
+            ${this.printWillBreakEffects()}
+        </div>`;
+    }
+    printInfoBlockField(contents) {
+        return `<div class="wuxFeatureInfoDisplayBlock">
+            ${contents}
+        </div>`;
+    }
+
+}
+
+class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
+    constructor() {
+        super();
+    }
+
+    printHeaderBlock() {
+        return this.printHeaderBlockField(
+        `<div class="wuxFeatureHeaderDisplayInfoBlock">
+            ${this.printRange()}
+            ${this.printTargetType()}
+        </div>
+        <div class="wuxFeatureHeaderDisplayCostBlock">
+            ${this.printEnCost()}
+            ${this.printWillCost()}
+        </div>`);
+    }
+
+    printInfoBlock() {
+        return this.printInfoBlockField(
+            `${this.printTrigger()}
+            ${this.printTraits()}
+            ${this.printFlavorText()}
+            ${this.printCoreEffects()}
+            ${this.printOnEnter()}
+            ${this.printCheckEffects()}
+            ${this.printEndEffects()}
+            ${this.printWillBreakEffects()}`);
     }
     
     printRange() {}

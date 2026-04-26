@@ -1602,97 +1602,13 @@ var DisplayPopups = DisplayPopups || (function () {
                 },
 
                 buildTechniqueTemplate = function () {
-                    return `
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechName")}">
-                    <div class="wuxHiddenField">
-                        ${WuxSheetMain.Header("Technique")}
-                        <div class="wuxFeature">
-                            <input type="hidden" name="${getPopupAttribute("TechVersion")}" value="" />
-                            <input type="hidden" name="${getPopupAttribute("TechAffinity")}" value="" />
-                            <input type="hidden" name="${getPopupAttribute("TechTier")}" value="0" />
-                            <input type="hidden" name="${getPopupAttribute("TechEnCost")}" value="0" />
-                            <input type="hidden" name="${getPopupAttribute("TechWillCost")}" value="0" />
-                            <input type="hidden" name="${getPopupAttribute("TechBoonCost")}" value="0" />
-                            <input type="hidden" name="${getPopupAttribute("TechTargetType")}" value="0" />
-                            <input type="hidden" name="${getPopupAttribute("TechRange")}" value="0" />
-                            <div class="wuxFeatureHeader">
-                                <div class="wuxFeatureHeaderDisplayBlock">
-                                    <span class="wuxFeatureHeaderName" name="${getPopupAttribute("TechName")}"></span>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechForm", 0)}" value="0" />
-                                    <div class="wuxHiddenField wuxFeatureHeaderInfo">
-                                        <span><strong>Keywords: </strong></span>
-                                        ${buildTooltipSection("TechForm", 0)}
-                                        ${buildTooltipSection("TechForm", 1)}
-                                        ${buildTooltipSection("TechForm", 2)}
-                                        ${buildTooltipSection("TechForm", 3)}
-                                        ${buildTooltipSection("TechForm", 4)}
-                                    </div>
-                                    <div class="wuxFeatureHeaderInfo"><span name="${getPopupAttribute("TechResourceData")}"></span></div>
-                                    <div class="wuxFeatureHeaderInfo"><span name="${getPopupAttribute("TechTargetingData")}"></span></div>
-                                    <div class="wuxFeatureHeaderInfo">
-                                        <span><strong>Traits: </strong></span>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechTrait", 0)}" value="0" />
-                                        <div class="wuxHiddenInlineAuxField">
-                                            <span>None</span>
-                                        </div>
-                                        ${buildTooltipSection("TechTrait", 0)}
-                                        ${buildTooltipSection("TechTrait", 1)}
-                                        ${buildTooltipSection("TechTrait", 2)}
-                                        ${buildTooltipSection("TechTrait", 3)}
-                                        ${buildTooltipSection("TechTrait", 4)}
-                                    </div>
-                                </div>
-                                <div class="wuxFeatureDefenseIcon"></div>
-                            </div>
-                            <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechTrigger")}" value="0" />
-                            <div class="wuxHiddenField">
-                                <div class="wuxFeatureHeaderInfoTrigger">
-                                    <span><strong>Trigger: </strong></span>
-                                    <span name="${getPopupAttribute("TechTrigger")}"></span>
-                                </div>
-                            </div>
-                            <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechRequirements")}" value="0" />
-                            <div class="wuxHiddenField">
-                                <div class="wuxFeatureHeaderInfoReq">
-                                    <span><strong>Requirements: </strong></span>
-                                    <span name="${getPopupAttribute("TechRequirements")}"></span>
-                                </div>
-                            </div>
-                            
-                            <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechFlavorText")}" value="0" />
-                            <div class="wuxHiddenField">
-                                <div class="wuxFeatureFunctionBlock">
-                                    <div class="wuxFeatureFunctionBlockFlavorText">
-                                        <span name="${getPopupAttribute("TechFlavorText")}"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="wuxFeatureEffectsBlock">
-                                ${addTechEffects()}
-                            </div>
-                            
-                            <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechEEffectTitle", "name")}" value="0" />
-                            <div class="wuxHiddenField">
-                                <div class="wuxFeatureEndEffectsBlock">
-                                    ${addTechEffect("TechEEffectTitle", "", "wuxFeatureMajorEffectHeader", "wuxFeatureMajorEffectBlock")}
-                                </div>
-                            </div>
-                            
-                            <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("TechDef", 0)}" value="0" />
-                            <div class="wuxHiddenField">
-                                <div class="wuxFeatureFunctionBlock">
-                                    <div class="wuxFeatureFunctionBlockRow">
-                                        <span><strong>Definitions: </strong></span>
-                                        ${buildTooltipSection("TechDef", 0)}
-                                        ${buildTooltipSection("TechDef", 1)}
-                                        ${buildTooltipSection("TechDef", 2)}
-                                        ${buildTooltipSection("TechDef", 3)}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
+                    let popupDef = WuxDef.Get("Popup");
+                    let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilder(popupDef);
+
+                    let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechName")}`);
+                    return WuxSheetMain.HiddenField(fieldName,
+                        `${WuxSheetMain.Header("Technique")}
+                        ${techniqueDisplayBuilder.print()}`);
                 },
 
                 buildTooltipSection = function (baseAttribute, index, delimiter) {
