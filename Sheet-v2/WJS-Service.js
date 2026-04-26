@@ -966,11 +966,11 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechTrigger"), displayData.trigger);
 		}
-		if (displayData.requirements != "") {
+		if (displayData.traits != "") {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-				this.getVariable("TechRequirements"), displayData.requirements);
+				this.getVariable("TechTraits"), displayData.traits);
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-				this.getVariable("TechRequirementDesc"), displayData.getRequirementsDescriptions("\n\n"));
+				this.getVariable("TechTraitsDesc"), displayData.getTraitsDescriptions("\n\n"));
 		}
 	}
 	setTechniqueEffectsInfo(technique, displayData) {
@@ -1056,9 +1056,9 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechTrigger"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechRequirements"), 0);
+			this.getVariable("TechTraits"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechRequirementDesc"), 0);
+			this.getVariable("TechTraitsDesc"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechFlavorText"), 0);
 		this.clearTechEffects();

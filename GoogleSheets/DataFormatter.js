@@ -585,6 +585,249 @@ class SheetDatabaseObject {
     }
 }
 
+class BaseTechniqueDisplayBuilder {
+    constructor() {}
+
+    print () {
+        return `<div class="wuxFeature">
+            <div class="wuxFeatureHeader">
+                <div class="wuxFeatureHeaderDisplayBlock">
+                    <div class="wuxFeatureHeaderDisplayTitleBlock">
+                        ${this.printName()}
+                        ${this.printActionType()}
+                    </div>
+                    <div class="wuxFeatureHeaderDisplayInfoBlock">
+                        ${this.printRange()}
+                        ${this.printTargetType()}
+                    </div>
+                    <div class="wuxFeatureHeaderDisplayCostBlock">
+                        ${this.printEnCost()}
+                        ${this.printWillCost()}
+                    </div>
+                </div>
+            </div>
+            ${this.printTrigger()}
+            ${this.printTraits()}
+            ${this.printFlavorText()}
+        </div>
+        `;
+    }
+    printName() {}
+    printNameField (contents) {
+        return `<div class="wuxFeatureHeaderName">${contents}</div>`;
+    }
+    
+    printActionType() {}
+    printActionTypeField (input, contents) {
+        return `${input}
+        <div class="wuxFeatureHeaderDisplayInfoActionType">${contents}</div>`;
+    }
+    
+    printRange() {}
+    printRangeField (contents) {
+        return `<div class="wuxFeatureHeaderDisplayInfoRange">${contents}</div>`
+    }
+
+    printTargetType() {}
+    printTargetTypeField (contents) {
+        return `<div class="wuxFeatureHeaderDisplayInfoTargetType">${contents}</div>`;
+    }
+    
+    printEnCost() {}
+    printEnCostField (contents) {
+        return `<div class="wuxFeatureHeaderDisplayInfoEnCost">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> EN</span></div>`;
+    }
+    printWillCost() {}
+    printWillCostField (contents) {
+        return `<div class="wuxFeatureHeaderDisplayInfoWillCost">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>`;
+    }
+
+    printTrigger() {}
+    printTriggerField (contents) {
+        return `<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> ${contents}</div>`;
+    }
+    
+    printTraits() {}
+    printTraitsField (title, contents) {
+        return `<div class="wuxFeatureHeaderInfoTraits"><strong>${title}.</strong> ${contents}</div>`;
+    }
+    
+    printFlavorText() {}
+    printFlavorTextField (contents) {
+        return `<div class="wuxFeatureHeaderInfoFlavor">${contents}</div>`;
+    }
+    
+    printTooltipField (name, tooltipName, descriptionData) {
+        return `<span class="wuxTooltip">
+            <span class="wuxTooltipText"><strong>${name}</strong></span>
+            <div class="wuxTooltipContent">
+                <div class="wuxHeader2">${tooltipName}</div>
+                ${descriptionData}
+            </div>
+        </span>`;
+    }
+}
+
+class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
+    constructor(displayData) {
+        super();
+        this.displayData = displayData;
+    }
+    printSpan (contents) {
+        return `<span>${contents}</span>`;
+    }
+    printTooltip (name, tooltipName, descriptions) {
+        if (descriptions.length > 0) {
+            let descriptionData = `<span class="wuxDescription">${descriptions.join(`</span><br /><span class="wuxDescription">`)}</span>`;
+            return this.printTooltipField(name, tooltipName, descriptionData);
+        }
+        else {
+            return name;
+        }
+    }
+    
+    printName() {
+        return this.printNameField(this.printSpan(this.displayData.name));
+    }
+    printActionType () {
+        return this.printActionTypeField(
+            `<input type="hidden" class="wuxFeatureHeader-flag" value="${this.displayData.actionType}">`,
+            this.printSpan(this.displayData.actionType));
+    }
+    printRange() {
+        return this.printRangeField(
+            this.printTooltip(this.displayData.range, "Range", this.displayData.targetDesc));
+    }
+    printTargetType() {
+        if (this.displayData.targetType == "") {
+            return "";
+        }
+        return this.printTargetTypeField(this.printSpan(this.displayData.targetType));
+    }
+    printEnCost() {
+        if (this.displayData.enCost == "") {
+            return "";
+        }
+        return this.printEnCostField(this.printSpan(this.displayData.enCost));
+    }
+    printWillCost() {
+        if (this.displayData.willCost == "") {
+            return "";
+        }
+        return this.printWillCostField(this.printSpan(this.displayData.willCost));
+    }
+    printTrigger() {
+        if (this.displayData.trigger == "") {
+            return "";
+        }
+        return this.printTriggerField(this.printSpan(this.displayData.trigger));
+    }
+    printTraits() {
+        if (this.displayData.traits == "") {
+            return "";
+        }
+        return this.printTraitsField(
+            this.printTooltip("Traits", "Traits", this.displayData.traitsDesc), 
+            this.printSpan(this.displayData.traits));
+    }
+    printFlavorText() {
+        if (this.displayData.flavorText == "") {
+            return "";
+        }
+        return this.printFlavorTextField(this.printSpan(this.displayData.flavorText));
+    }
+}
+
+class TechniqueDisplayBuilderUsable extends TechniqueDisplayBuilder {
+    printName() {
+        let contents = `<button class="wuxFeatureHeaderNameButton" type="roll" value="${this.displayData.getSheetRollTemplate(true)}">
+            ${this.printSpan(this.displayData.name)}
+        </button>`
+        return this.printNameField(contents);
+    }
+}
+
+class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
+    constructor(baseDefinition) {
+        super();
+        this.baseDefinition = baseDefinition;
+    }
+
+    getActionTypeAttribute (attribute, suffix) {
+        return this.baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
+    }
+    printSpan (fieldName) {
+        return `<span name="${fieldName}"></span>`;
+    }
+    printSpanActionTypeAttribute (attribute, suffix) {
+        return `<span name="${this.getActionTypeAttribute(attribute, suffix)}"></span>`;
+    }
+    printTooltip (name, tooltipName, descAttribute) {
+        let fieldName = this.getActionTypeAttribute(descAttribute);
+        let descriptionData = `<span class="wuxDescription" name="${fieldName}"></span>`;
+        return WuxSheetMain.HiddenSpanFieldToggle(fieldName,
+            this.printTooltipField(name, tooltipName, descriptionData),
+            `${name}`);
+    }
+    
+    printName() {
+        let contents = this.printSpanActionTypeAttribute("TechName");
+        return this.printNameField(contents);
+    }
+    printActionType () {
+        let fieldName = this.getActionTypeAttribute("TechActionType");
+        return this.printActionTypeField(
+            `<input type="hidden" class="wuxFeatureHeader-flag" name="${fieldName}">`, 
+            this.printSpan(fieldName));
+    }
+    printRange() {
+        let fieldName = this.getActionTypeAttribute("TechRange");
+        return WuxSheetMain.HiddenField(fieldName, 
+            this.printRangeField(
+                this.printTooltip(`<span name="${fieldName}"></span>`, "Range", "TechTargetDesc")
+            )
+        );
+    }
+    printTargetType() {
+        let fieldName = this.getActionTypeAttribute("TechTargetType");
+        return WuxSheetMain.HiddenField(fieldName, this.printTargetTypeField(this.printSpan(fieldName)));
+    }
+    printEnCost() {
+        let fieldName = this.getActionTypeAttribute("TechEnCost");
+        return WuxSheetMain.HiddenField(fieldName, this.printEnCostField(this.printSpan(fieldName)));
+    }
+    printWillCost() {
+        let fieldName = this.getActionTypeAttribute("TechWillCost");
+        return WuxSheetMain.HiddenField(fieldName, this.printWillCostField(this.printSpan(fieldName)));
+    }
+    printTrigger() {
+        let fieldName = this.getActionTypeAttribute("TechTrigger");
+        return WuxSheetMain.HiddenField(fieldName, this.printTriggerField(this.printSpan(fieldName)));
+    }
+    printTraits() {
+        let fieldName = this.getActionTypeAttribute("TechTraits");
+        return WuxSheetMain.HiddenField(fieldName,
+            this.printTraitsField(
+                this.printTooltip("Traits", "Traits", "TechTraitsDesc"),
+                this.printSpan(fieldName)
+            )
+        );
+    }
+    printFlavorText() {
+        let fieldName = this.getActionTypeAttribute("TechFlavorText");
+        return WuxSheetMain.HiddenField(fieldName, this.printFlavorTextField(this.printSpan(fieldName)));
+    }
+}
+
+class TechniqueRepeaterDisplayBuilderUsable extends TechniqueRepeaterDisplayBuilder {
+    printName() {
+        let contents = `<button class="wuxFeatureHeaderNameButton" type="roll" value="@{${WuxDef.GetVariable("Action_Use")}}">
+            ${this.printSpanActionTypeAttribute("TechName")}
+        </button>`
+        return this.printNameField(contents);
+    }
+}
+
 var WuxPrintTechnique = WuxPrintTechnique || (function () {
     const setTechniqueDisplayHtml = function (techDisplayData, displayOptions) {
         let contents = "";
@@ -3969,6 +4212,7 @@ class TechniqueAssessment {
         switch (effect.subType) {
             case "Set":
             case "Add":
+            case "Focus":
             case "Self":
                 let onlySingleTarget = ["Paralyzed", "Frozen"];
                 if (this.technique.target != "Target" && onlySingleTarget.includes(state.getTitle())) {

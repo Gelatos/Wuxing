@@ -1016,16 +1016,14 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 
 .wuxFeatureHeaderInfo,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfo,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfo,
-.wuxFeatureHeaderInfoReq,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoReq,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoReq,
+.wuxFeatureHeaderInfoTraits,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTraits,
 .wuxFeatureHeaderInfoTrigger,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTrigger,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoTrigger,
 .wuxFeatureHeaderInfoFlavor,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoFlavor,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoFlavor
+.wuxFeatureHeaderInfoEffect,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffect
 {
     position: relative;
     display: block;
@@ -1036,8 +1034,7 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 }
 
 .wuxFeatureHeaderInfoType,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoType,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoType
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoType
 {
     position: absolute;
     display: inline-block;
@@ -1046,18 +1043,29 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
     right: 10px;
 }
 
-.wuxFeatureHeaderInfoReq,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoReq,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoReq
+.wuxFeatureHeaderInfoTraits,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTraits,
+.wuxFeatureHeaderInfoEffect,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffect
 {
     margin: 0 15px;
     width: calc(100% - 50px);
-    
     font-size: 10px;
+}
+
+.wuxFeatureHeaderInfoTraits,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTraits
+{
     color: #fff;
-    
     border: 1px solid #5e0505;
     background: #e43e3e;
+}
+
+.wuxFeatureHeaderInfoEffect,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffect
+{
+    border: 1px solid #4a2929;
+    background: #e8c5c5;
 }
 
 .wuxFeatureHeaderInfoTrigger,

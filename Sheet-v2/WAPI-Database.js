@@ -1,8 +1,6 @@
 // ====== Classes
 // noinspection JSUnusedGlobalSymbols,JSUnresolvedReference,SpellCheckingInspection,ES6ConvertVarToLetConst
 
-import {forEach} from "./Underscore";
-
 class Dictionary {
 
     constructor() {
@@ -2179,8 +2177,8 @@ class TechniqueDisplayData {
         this.targetType = "";
         this.range = "";
 
-        this.requirements = "";
-        this.requirementsDesc = [];
+        this.traits = "";
+        this.traitsDesc = [];
 
         this.coreEffect = "";
         this.coreDefense = "";
@@ -2272,56 +2270,58 @@ class TechniqueDisplayData {
     }
 
     setRequirementsData(technique) {
-        this.requirements = "";
-        this.requirementsDesc = [];
+        this.traits = "";
+        this.traitsDesc = [];
 
         if (technique.limits != "") {
-            this.requirements += `Usable ${technique.limits}. `;
+            this.traits += `Usable ${technique.limits}. `;
         }
 
         if (technique.forms.includes("Focus")) {
-            this.requirements += `You must maintain Focus on this technique. `;
+            this.traits += `You must maintain Focus on this technique. `;
             let focusDefinition = WuxDef.Get("Trait_Focus");
-            this.requirementsDesc.push(focusDefinition.getTitle());
-            this.requirementsDesc = this.requirementsDesc.concat(focusDefinition.descriptions);
+            this.traitsDesc.push(focusDefinition.getTitle());
+            this.traitsDesc = this.traitsDesc.concat(focusDefinition.descriptions);
         }
 
         if (technique.forms.includes("Social")) {
-            this.requirements += `This is a Social technique. `;
+            this.traits += `This is a Social technique. `;
             let focusDefinition = WuxDef.Get("Trait_Social");
-            this.requirementsDesc.push(focusDefinition.getTitle());
-            this.requirementsDesc = this.requirementsDesc.concat(focusDefinition.descriptions);
+            this.traitsDesc.push(focusDefinition.getTitle());
+            this.traitsDesc = this.traitsDesc.concat(focusDefinition.descriptions);
         }
         
         if (technique.boon > 0) {
-            this.requirements += "You must consume a Boon to use this technique. ";
+            this.traits += "You must consume a Boon to use this technique. ";
         }
         
         let itemTraits = WuxDef.GetValues(technique.itemTraits, ";");
         if (itemTraits.length > 0) {
-            this.requirements += "You must equip gear with the trait";
+            this.traits += "You must equip gear with the trait";
             if (itemTraits.length > 1) {
-                this.requirements += "s";
+                this.traits += "s";
 
                 for (let i = 0; i < itemTraits.length; i++) {
                     let item = itemTraits[i];
                     if (i == itemTraits.length - 1) {
-                        this.requirements += ` and`;
+                        this.traits += ` and`;
                     }
                     else if (i > 0) {
-                        this.requirements += ", ";
+                        this.traits += ", ";
                     }
-                    this.requirements += ` ${item.getTitle()}`;
-                    this.requirementsDesc.push(item.getTitle());
-                    this.requirementsDesc = this.requirementsDesc.concat(item.descriptions);
+                    this.traits += ` ${item.getTitle()}`;
+                    this.traitsDesc.push(item.getTitle());
+                    this.traitsDesc = this.traitsDesc.concat(item.descriptions);
                 }
             }
             else {
-                this.requirements += ` ${itemTraits[0].getTitle()}`;
+                this.traits += ` ${itemTraits[0].getTitle()}`;
+                this.traitsDesc.push(itemTraits[0].getTitle());
+                this.traitsDesc = this.traitsDesc.concat(itemTraits[0].descriptions);
             }
-            this.requirements += `. `;
+            this.traits += `. `;
         }
-        this.requirements += technique.requirement;
+        this.traits += technique.requirement;
     }
 
     setEffects(technique) {
@@ -2363,8 +2363,8 @@ class TechniqueDisplayData {
         }
     }
 
-    getRequirementsDescriptions(join) {
-        return this.requirementsDesc.join(join);
+    getTraitsDescriptions(join) {
+        return this.traitsDesc.join(join);
     }
     getTargetDescriptions(join) {
         return this.targetDesc.join(join);
@@ -2399,15 +2399,13 @@ class TechniqueDisplayData {
         if (this.trigger != "") {
             output += `{{Trigger=${this.trigger}}}`;
         }
-        if (this.requirements != "") {
-            output += `{{Requirement=${this.requirements}}}`;
+        if (this.traits != "") {
+            output += `{{Traits=${this.traits}}}`;
         }
         if (this.flavorText != "") {
             output += `{{FlavorText=${this.flavorText}}}`;
         }
-        if (this.effects.length > 0) {
-            output += this.rollTemplateEffects();
-        }
+        output += this.rollTemplateEffects();
         if (addTechnique) {
             if (this.technique.resourceCost != "") {
                 let consumeData = new TechniqueResources([this.technique.name, this.enCost, this.willCost]);
@@ -2557,7 +2555,7 @@ class BaseTechniqueEffectDisplayData {
                     this.addDefintionToEffectDescription(WuxDef.Get("Soc_RequestCheck"));
                     this.effectTypeDesc.push("Request DCs");
                     let requestFilters = WuxDef.Filter([new DatabaseFilterData("group", "SeverityRank")]);
-                    forEach(requestFilters, filter => {
+                    requestFilters.forEach(filter => {
                         this.addDefintionToEffectDescription(filter);
                     });
                 }
@@ -2569,7 +2567,7 @@ class BaseTechniqueEffectDisplayData {
                     this.effectType = state.name;
                     this.addDefintionToEffectDescription(state);
                 }
-                this.formatStatusEffect(effect);
+                this.formatStatusEffect(effect, state);
                 break;
             case "BreakFocus":
                 if (this.effectType != "BreakFocus") {
