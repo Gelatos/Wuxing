@@ -606,12 +606,39 @@ class BaseTechniqueDisplayBuilder {
                     </div>
                 </div>
             </div>
-            ${this.printTrigger()}
-            ${this.printTraits()}
-            ${this.printFlavorText()}
+            <div class="wuxFeatureInfoDisplayBlock">
+                ${this.printTrigger()}
+                ${this.printTraits()}
+                ${this.printFlavorText()}
+                ${this.printCoreEffects()}
+                ${this.printOnEnter()}
+                ${this.printCheckEffects()}
+                ${this.printEndEffects()}
+                ${this.printWillBreakEffects()}
+            </div>
         </div>
         `;
     }
+
+    printTooltip (name, tooltipName, descriptions) {
+        if (descriptions.length > 0) {
+            let descriptionData = `<span class="wuxDescription">${descriptions.join(`</span><br /><span class="wuxDescription">`)}</span>`;
+            return this.printTooltipField(name, tooltipName, descriptionData);
+        }
+        else {
+            return this.printSpan(name);
+        }
+    }
+    printTooltipField (name, tooltipName, descriptionData) {
+        return `<span class="wuxTooltip">
+            <span class="wuxTooltipText"><strong>${name}</strong></span>
+            <div class="wuxTooltipContent">
+                <div class="wuxHeader2">${tooltipName}</div>
+                ${descriptionData}
+            </div>
+        </span>`;
+    }
+    
     printName() {}
     printNameField (contents) {
         return `<div class="wuxFeatureHeaderName">${contents}</div>`;
@@ -651,20 +678,47 @@ class BaseTechniqueDisplayBuilder {
     printTraitsField (title, contents) {
         return `<div class="wuxFeatureHeaderInfoTraits"><strong>${title}.</strong> ${contents}</div>`;
     }
-    
+
     printFlavorText() {}
     printFlavorTextField (contents) {
         return `<div class="wuxFeatureHeaderInfoFlavor">${contents}</div>`;
     }
+
+    printCoreEffects() {}
+    printCoreEffectsField (title, contents) {
+        return `<div class="wuxFeatureHeaderInfoEffect-Core">
+            <input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+            <div class="wuxFeatureHeaderInfoEffectTitle">${title}</div>
+            <div class="wuxFeatureHeaderInfoContents">${contents}</div>
+        </div>`;
+    }
+
+    printOnEnter() {}
+    printOnEnterField(contents) {
+        return `<div class="wuxFeatureHeaderInfoEffectOnEnter">${contents}</div>`;
+    }
+
+    printCheckEffects() {}
+    printCheckEffectsField (input, title, contents) {
+        return `<div class="wuxFeatureHeaderInfoEffect-Check">
+            ${input}
+            <div class="wuxFeatureHeaderInfoEffectTitle">${title}</div>
+            <div class="wuxFeatureHeaderInfoContents">${contents}</div>
+        </div>`;
+    }
+
+    printEndEffects() {}
+    printEndEffectsField(contents) {
+        return `<div class="wuxFeatureHeaderInfoEffect">${contents}</div>`;
+    }
     
-    printTooltipField (name, tooltipName, descriptionData) {
-        return `<span class="wuxTooltip">
-            <span class="wuxTooltipText"><strong>${name}</strong></span>
-            <div class="wuxTooltipContent">
-                <div class="wuxHeader2">${tooltipName}</div>
-                ${descriptionData}
-            </div>
-        </span>`;
+    printWillBreakEffects() {}
+    printWillBreakEffectsField (title, contents) {
+        return `<div class="wuxFeatureHeaderInfoEffect-WillBreak">
+            <input type="hidden" class="wuxFeatureHeader-flag" value="WillBreak">
+            <div class="wuxFeatureHeaderInfoEffectTitle">${title}</div>
+            <div class="wuxFeatureHeaderInfoContents">${contents}</div>
+        </div>`;
     }
 }
 
@@ -675,15 +729,6 @@ class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
     }
     printSpan (contents) {
         return `<span>${contents}</span>`;
-    }
-    printTooltip (name, tooltipName, descriptions) {
-        if (descriptions.length > 0) {
-            let descriptionData = `<span class="wuxDescription">${descriptions.join(`</span><br /><span class="wuxDescription">`)}</span>`;
-            return this.printTooltipField(name, tooltipName, descriptionData);
-        }
-        else {
-            return name;
-        }
     }
     
     printName() {
@@ -736,6 +781,48 @@ class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
         }
         return this.printFlavorTextField(this.printSpan(this.displayData.flavorText));
     }
+    printCoreEffects() {
+        if (this.displayData.coreEffect == "") {
+            return "";
+        }
+        return this.printCoreEffectsField(
+            this.printTooltip("Effects", "Effects", this.displayData.coreEffect.effectTypeDesc),
+            this.printSpan(this.displayData.getCoreEffects("\n"))
+        );
+    }
+    printOnEnter() {
+        if (!this.displayData.isOnEnter) {
+            return "";
+        }
+        let onEnterDef = WuxDef.Get("Trait_OnEnter");
+        return this.printOnEnterField(this.printTooltip("On Enter Effects", "On Enter Effects", onEnterDef.descriptions));
+    }
+
+    printCheckEffects() {
+        if (this.displayData.checkEffect == "") {
+            return "";
+        }
+        return this.printCheckEffectsField(
+            `<input type="hidden" class="wuxFeatureHeader-flag" value="${this.displayData.coreDefense}">`,
+            this.printTooltip(this.displayData.checkType, "Effects", this.displayData.checkEffect.effectTypeDesc),
+            this.printSpan(this.displayData.getCheckEffects("\n"))
+        );
+    }
+    printEndEffects() {
+        if (!this.displayData.endEffectDesc) {
+            return "";
+        }
+        return this.printEndEffectsField(this.printSpan(this.displayData.endEffectDesc));
+    }
+    printWillBreakEffects() {
+        if (this.displayData.willBreakEffect == "") {
+            return "";
+        }
+        return this.printWillBreakEffectsField(
+            this.printTooltip("Will Break Effects", "Will Break Effects", this.displayData.willBreakEffect.effectTypeDesc),
+            this.printSpan(this.displayData.getWillBreakEffects("\n"))
+        );
+    }
 }
 
 class TechniqueDisplayBuilderUsable extends TechniqueDisplayBuilder {
@@ -762,8 +849,7 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
     printSpanActionTypeAttribute (attribute, suffix) {
         return `<span name="${this.getActionTypeAttribute(attribute, suffix)}"></span>`;
     }
-    printTooltip (name, tooltipName, descAttribute) {
-        let fieldName = this.getActionTypeAttribute(descAttribute);
+    printAttributeTooltip (name, tooltipName, fieldName) {
         let descriptionData = `<span class="wuxDescription" name="${fieldName}"></span>`;
         return WuxSheetMain.HiddenSpanFieldToggle(fieldName,
             this.printTooltipField(name, tooltipName, descriptionData),
@@ -784,7 +870,7 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         let fieldName = this.getActionTypeAttribute("TechRange");
         return WuxSheetMain.HiddenField(fieldName, 
             this.printRangeField(
-                this.printTooltip(`<span name="${fieldName}"></span>`, "Range", "TechTargetDesc")
+                this.printAttributeTooltip(`<span name="${fieldName}"></span>`, "Range", this.getActionTypeAttribute("TechTargetDesc"))
             )
         );
     }
@@ -808,7 +894,7 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         let fieldName = this.getActionTypeAttribute("TechTraits");
         return WuxSheetMain.HiddenField(fieldName,
             this.printTraitsField(
-                this.printTooltip("Traits", "Traits", "TechTraitsDesc"),
+                this.printAttributeTooltip("Traits", "Traits", this.getActionTypeAttribute("TechTraitsDesc")),
                 this.printSpan(fieldName)
             )
         );
@@ -816,6 +902,48 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
     printFlavorText() {
         let fieldName = this.getActionTypeAttribute("TechFlavorText");
         return WuxSheetMain.HiddenField(fieldName, this.printFlavorTextField(this.printSpan(fieldName)));
+    }
+    printCoreEffects() {
+        let fieldName = this.getActionTypeAttribute("TechCoreEffect");
+        return WuxSheetMain.HiddenField(fieldName,
+            this.printCoreEffectsField(
+                this.printAttributeTooltip("Effects", "Effects", 
+                    this.getActionTypeAttribute("TechCoreEffect", WuxDef._info)),
+                this.printSpan(fieldName)
+            )
+        );
+    }
+    printOnEnter() {
+        let fieldName = this.getActionTypeAttribute("TechOnEnter");
+        let onEnterDef = WuxDef.Get("Trait_OnEnter");
+        return WuxSheetMain.HiddenField(fieldName,
+            this.printOnEnterField(this.printTooltip("On Enter Effects", "On Enter Effects", onEnterDef.descriptions)));
+    }
+
+    printCheckEffects() {
+        let fieldName = this.getActionTypeAttribute("TechCheckEffect");
+        return WuxSheetMain.HiddenField(fieldName,
+            this.printCheckEffectsField(
+                `<input type="hidden" class="wuxFeatureHeader-flag" name="${this.getActionTypeAttribute("TechCoreDefense")}">`,
+                this.printAttributeTooltip(this.printSpanActionTypeAttribute("TechCheckTitle"), "Effects",
+                    this.getActionTypeAttribute("TechCheckEffect", WuxDef._info)),
+                this.printSpan(fieldName)
+            )
+        );
+    }
+    printEndEffects() {
+        let fieldName = this.getActionTypeAttribute("TechEndEffect");
+        return WuxSheetMain.HiddenField(fieldName, this.printEndEffectsField(this.printSpan(fieldName)));
+    }
+    printWillBreakEffects() {
+        let fieldName = this.getActionTypeAttribute("TechWillBreakEffect");
+        return WuxSheetMain.HiddenField(fieldName,
+            this.printWillBreakEffectsField(
+                this.printAttributeTooltip("Will Break Effects", "Will Break Effects",
+                    this.getActionTypeAttribute("TechWillBreakEffect", WuxDef._info)),
+                this.printSpan(fieldName)
+            )
+        );
     }
 }
 

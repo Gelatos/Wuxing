@@ -2149,57 +2149,6 @@ input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeader,
     z-index: 0;
 }
 
-.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Brace"] + .wuxFeatureDefenseIcon,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Brace
-{
-    background-image: url("https://i.imgur.com/0dVA66J.png");
-}
-.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Fortitude"] + .wuxFeatureDefenseIcon,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Fortitude
-{
-    background-image: url("https://i.imgur.com/15XSu62.png");
-}
-.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Warding"] + .wuxFeatureDefenseIcon,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Warding
-{
-    background-image: url("https://i.imgur.com/LCZV8Hb.png");
-}
-.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Hide"] + .wuxFeatureDefenseIcon,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .wuxFeatureDefenseIcon-Hide
-{
-    background-image: url("https://i.imgur.com/7qTwPRK.png");
-}
-.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Reflex"] + .wuxFeatureDefenseIcon,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .sheet-wuxFeatureDefenseIcon-Reflex
-{
-    background-image: url("https://i.imgur.com/nPJnTat.png");
-}
-.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Evasion"] + .wuxFeatureDefenseIcon,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .wuxFeatureDefenseIcon-Evasion
-{
-    background-image: url("https://i.imgur.com/lMEhyIh.png");
-}
-.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Resolve"] + .wuxFeatureDefenseIcon,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .wuxFeatureDefenseIcon-Resolve
-{
-    background-image: url("https://i.imgur.com/3xuKr2b.png");
-}
-.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Ego"] + .wuxFeatureDefenseIcon,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .wuxFeatureDefenseIcon-Ego
-{
-    background-image: url("https://i.imgur.com/xYt4rHC.png");
-}
-.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Insight"] + .wuxFeatureDefenseIcon,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .wuxFeatureDefenseIcon-Insight
-{
-    background-image: url("https://i.imgur.com/ZlNU2WD.png");
-}
-.wuxFeatureHeader .wuxFeatureDefenseIcon-flag[value="Guile"] + .wuxFeatureDefenseIcon,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader .wuxFeatureDefenseIcon-Guile
-{
-    background-image: url("https://i.imgur.com/RRjBIkF.png");
-}
-
 .wuxFeatureType,
 .sheet-rolltemplate-technique .sheet-wuxFeatureType
 {
@@ -2475,8 +2424,8 @@ input.wuxFeatureHeader-flag[value="Quick"] + .wuxFeatureHeaderDisplayInfoActionT
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Quick
 {
     background: linear-gradient(to right,
-    #ff7b29,
-    #ffac8033);
+    #5cd39cFF,
+    #5cd39c33);
 }
 
 input.wuxFeatureHeader-flag[value="Full"] + .wuxFeatureHeaderDisplayInfoActionType,
@@ -2484,8 +2433,8 @@ input.wuxFeatureHeader-flag[value="Full"] + .wuxFeatureHeaderDisplayInfoActionTy
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Full
 {
     background: linear-gradient(to right,
-    #ff2929,
-    #ff808033);
+    #12710e,
+    #2cb12833);
 }
 
 input.wuxFeatureHeader-flag[value="Assist"] + .wuxFeatureHeaderDisplayInfoActionType,
@@ -2502,8 +2451,8 @@ input.wuxFeatureHeader-flag[value="Reaction"] + .wuxFeatureHeaderDisplayInfoActi
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Reaction
 {
     background: linear-gradient(to right,
-    #12710e,
-    #2cb12833);
+    #ff2929,
+    #ff808033);
 }
 
 input.wuxFeatureHeader-flag[value="Passive"] + .wuxFeatureHeaderDisplayInfoActionType,
@@ -2525,14 +2474,18 @@ input.wuxFeatureHeader-flag[value="Long"] + .wuxFeatureHeaderDisplayInfoActionTy
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Short,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Long
 {
-    background-color: #f0e5fb;
+    background: linear-gradient(to right,
+    #0e3070,
+    #0E307033);
 }
 
 input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActionType,
 .wuxFeatureHeader-Augment,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Augment
 {
-    background-color: #acacac;
+    background: linear-gradient(to right,
+    #2c2929,
+    #2c292933);
 }
 
 .wuxFeatureHeaderDisplayInfoRange,
@@ -2623,6 +2576,13 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
     font-weight: normal;
 }
 
+.wuxFeatureInfoDisplayBlock,
+.sheet-rolltemplate-technique .sheet-wuxFeatureInfoDisplayBlock
+{
+    position: relative;
+    display: block;
+}
+
 .wuxFeatureHeaderInfo,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfo
 {
@@ -2646,15 +2606,12 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 .wuxFeatureHeaderInfoTrigger,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTrigger,
 .wuxFeatureHeaderInfoFlavor,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoFlavor,
-.wuxFeatureHeaderInfoEffect,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffect
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoFlavor
 {
     position: relative;
     display: block;
-    padding: 2px 10px;
     width: calc(100% - 20px);
-
+    padding: 2px 10px;
     font-size: 10px;
 }
 
@@ -2669,35 +2626,239 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 }
 
 .wuxFeatureHeaderInfoTraits,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTraits,
-.wuxFeatureHeaderInfoEffect,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffect
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTraits
 {
-    margin: 0 15px;
-    width: calc(100% - 50px);
+    margin-right: 15px;
+    width: calc(100% - 35px);
     font-size: 10px;
 }
 
 .wuxFeatureHeaderInfoTraits,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTraits
 {
-    color: #fff;
     border: 1px solid #5e0505;
-    background: #e43e3e;
+    background: #cacaca;
 }
 
 .wuxFeatureHeaderInfoEffect,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffect
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffect,
+.wuxFeatureHeaderInfoEffect-Core,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffect-Core,
+.wuxFeatureHeaderInfoEffect-Check,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffect-Check,
+.wuxFeatureHeaderInfoEffect-WillBreak,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffect-WillBreak
 {
+    position: relative;
+    display: block;
+    margin-top: 5px;
+    
     border: 1px solid #4a2929;
-    background: #e8c5c5;
+    background: #faeaea;
+}
+
+.wuxFeatureHeaderInfoContents,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoContents
+{
+    padding: 2px 10px;
+
+    font-size: 10px;
+    word-break: break-word;
+    white-space: pre-line;
+    text-align: left;
+}
+
+.wuxFeatureHeaderInfoEffectTitle,
+.wuxFeatureHeaderInfoEffectOnEnter,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectOnEnter,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Core,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-0,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Brace,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Warding,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Evasion,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Ego,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Insight,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Resolve,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-WillBreak
+{
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+.wuxFeatureHeaderInfoEffectTitle span,
+.wuxFeatureHeaderInfoEffectOnEnter span,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectOnEnter,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Core,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-0,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Brace,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Warding,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Evasion,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Ego,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Insight,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Resolve,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-WillBreak
+{
+    line-height: 14px;
+    padding-left: 10px;
+
+    font-size: 10px;
+    color: #fff;
+}
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Core,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-0,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Brace,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Warding,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Evasion,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Ego,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Insight,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Resolve,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-WillBreak
+{
+    padding: 2px 0 2px 10px;
+}
+
+input.wuxFeatureHeader-flag[value="Core"] + .wuxFeatureHeaderInfoEffectTitle,
+.wuxFeatureHeaderInfoEffectTitle-Core,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Core
+{
+    background: linear-gradient(to right,
+    #433D3D,
+    #6e6666);
+}
+
+.wuxFeatureHeaderInfoEffectOnEnter,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectOnEnter
+{
+    background: linear-gradient(to right,
+    #433D3D,
+    #6e6666);
+}
+
+input.wuxFeatureHeader-flag[value="0"] + .wuxFeatureHeaderInfoEffectTitle,
+.wuxFeatureHeaderInfoEffectTitle-0,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-0
+{
+    background: linear-gradient(to right,
+    #433D3D,
+    #4f5670);
+}
+
+input.wuxFeatureHeader-flag[value="Brace"] + .wuxFeatureHeaderInfoEffectTitle,
+.wuxFeatureHeaderInfoEffectTitle-Brace,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Brace
+{
+    background:
+            url("https://i.imgur.com/0dVA66J.png") left / contain no-repeat,
+            linear-gradient(to right,
+            #00a3ff 0%,
+            #433D3D 15%);
+}
+
+input.wuxFeatureHeader-flag[value="Warding"] + .wuxFeatureHeaderInfoEffectTitle,
+.wuxFeatureHeaderInfoEffectTitle-Warding,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Warding
+{
+    background:
+            url("https://i.imgur.com/LCZV8Hb.png") left / contain no-repeat,
+            linear-gradient(to right,
+            #9900ff 0%,
+            #433D3D 15%);
+}
+
+input.wuxFeatureHeader-flag[value="Evasion"] + .wuxFeatureHeaderInfoEffectTitle,
+.wuxFeatureHeaderInfoEffectTitle-Evasion,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Evasion
+{
+    background:
+            url("https://i.imgur.com/lMEhyIh.png") left / contain no-repeat,
+            linear-gradient(to right,
+            #ff7216 0%,
+            #433D3D 15%);
+}
+
+input.wuxFeatureHeader-flag[value="Resolve"] + .wuxFeatureHeaderInfoEffectTitle,
+.wuxFeatureHeaderInfoEffectTitle-Resolve,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Resolve
+{
+    background:
+            url("https://i.imgur.com/3xuKr2b.png") left / contain no-repeat,
+            linear-gradient(to right,
+            #f700ff 0%,
+            #433D3D 15%);
+}
+
+input.wuxFeatureHeader-flag[value="Ego"] + .wuxFeatureHeaderInfoEffectTitle,
+.wuxFeatureHeaderInfoEffectTitle-Ego,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Ego
+{
+    background:
+            url("https://i.imgur.com/xYt4rHC.png") left / contain no-repeat,
+            linear-gradient(to right,
+            #dcc204 0%,
+            #433D3D 15%);
+}
+
+input.wuxFeatureHeader-flag[value="Insight"] + .wuxFeatureHeaderInfoEffectTitle,
+.wuxFeatureHeaderInfoEffectTitle-Insight,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Insight
+{
+    background:
+            url("https://i.imgur.com/ZlNU2WD.png") left / contain no-repeat,
+            linear-gradient(to right,
+            #128c04 0%,
+            #433D3D 15%);
+}
+
+input.wuxFeatureHeader-flag[value="WillBreak"] + .wuxFeatureHeaderInfoEffectTitle,
+.wuxFeatureHeaderInfoEffectTitle-WillBreak,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-WillBreak
+{
+    background:
+            linear-gradient(to right,
+            #ac0000 0%,
+            #433D3D 20%);
+}
+
+.wuxFeatureHeaderInfoEffectOnEnter,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectOnEnter
+{
+    position: relative;
+    display: block;
+    width: calc(100% - 20px);
+    height: 16px;
+    padding-left: 10px;
+    margin-top: 12px;
+    
+    font-size: 12px;
+    
+    background:
+            url("https://i.imgur.com/nPJnTat.png") left / contain no-repeat,
+            linear-gradient(to right,
+            #1a0835,
+            #1a0835);
+}
+
+.wuxFeatureHeaderInfoEffectTitle,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Core,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-0,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Brace,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Warding,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Evasion,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Ego,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Insight,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Resolve,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-WillBreak
+{
+    border-bottom: 1px solid white;
 }
 
 .wuxFeatureHeaderInfoTrigger,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTrigger,
 .sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoTrigger
 {
-    background: #8dca88;
+    color: white;
+    background: #ec2222;
 }
 .wuxFeatureHeaderInfoFlavor,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoFlavor,

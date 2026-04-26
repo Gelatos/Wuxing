@@ -2183,7 +2183,6 @@ class TechniqueDisplayData {
         this.coreEffect = "";
         this.coreDefense = "";
         this.checkType = "";
-        this.checkDesc = "";
         this.checkEffect = "";
         this.endEffectDesc = "";
         this.willBreakEffect = "";
@@ -2193,7 +2192,7 @@ class TechniqueDisplayData {
         this.setTechBasics(technique);
         this.setTechSetResourceData(technique);
         this.setTechTargetData(technique);
-        this.setRequirementsData(technique);
+        this.setTraitsData(technique);
         this.setEffects(technique);
     }
 
@@ -2269,7 +2268,7 @@ class TechniqueDisplayData {
         }
     }
 
-    setRequirementsData(technique) {
+    setTraitsData(technique) {
         this.traits = "";
         this.traitsDesc = [];
 
@@ -2342,24 +2341,47 @@ class TechniqueDisplayData {
             techDisplayData.coreEffect = new TechniqueEffectDisplayData(coreEffects, technique, "");
         }
         if (checkedEffects.length > 0) {
+            let checkDef;
             if (isNaN(technique.coreDefense)) {
                 this.coreDefense = technique.coreDefense;
                 this.checkType = `${technique.skill} vs. ${technique.coreDefense}`;
-                this.checkDesc = WuxDef.Get("Trait_SkillCheck-Defense").descriptions.join(". ");
+                checkDef = WuxDef.Get("Trait_SkillCheck-Defense");
             }
             else { 
                 this.coreDefense = 0;
                 this.checkType = `DC ${technique.coreDefense} ${technique.skill}`;
-                this.checkDesc = WuxDef.Get("Trait_SkillCheck-DC").descriptions.join(". ");
+                checkDef = WuxDef.Get("Trait_SkillCheck-DC");
             }
-            techDisplayData.checkEffect = new TechniqueEffectDisplayData(checkedEffects, technique, technique.coreDefense);
+            let checkDesc = [];
+            checkDesc.push(checkDef.getTitle());
+            checkDesc.push(checkDef.descriptions.join(". "));
+
+            if (technique.impacts.includes("Truehit")) {
+                let trueHitDef = WuxDef.Get("Trait_Truehit");
+                this.checkType += ` - ${trueHitDef.getTitle()}`;
+
+                checkDesc.push(trueHitDef.getTitle());
+                checkDesc.push(trueHitDef.descriptions.join(". "));
+            }
+            if (technique.impacts.includes("Accurate")) {
+                let accurateDef = WuxDef.Get("Trait_Accurate");
+                this.checkType += ` - ${accurateDef.getTitle()}`;
+
+                checkDesc.push(accurateDef.getTitle());
+                checkDesc.push(accurateDef.descriptions.join(". "));
+            }
+            techDisplayData.checkEffect = new TechniqueEffectDisplayData(checkedEffects, technique, technique.coreDefense, checkDesc);
         }
         if (technique.endEffectConditionName != "") {
             let def = WuxDef.Get(`Title_${technique.endEffectConditionName}`);
             techDisplayData.endEffectDesc = def.getDescriptions().join("") + technique.endEffectConditionEffect;
         }
         if (technique.willBreakEffect != undefined) {
-        techDisplayData.willBreakEffect = new TechniqueEffectDisplayData([technique.willBreakEffect], technique);
+            let checkDef = WuxDef.Get("WillBreak");
+            let willbreakDesc = [];
+            willbreakDesc.push(checkDef.getTitle());
+            willbreakDesc.push(checkDef.descriptions.join(". "));
+            techDisplayData.willBreakEffect = new TechniqueEffectDisplayData([technique.willBreakEffect], technique, willbreakDesc);
         }
     }
 
@@ -2369,6 +2391,43 @@ class TechniqueDisplayData {
     getTargetDescriptions(join) {
         return this.targetDesc.join(join);
     }
+    getCoreEffects(join) {
+        if (this.coreEffect == "") {
+            return "";
+        }
+        return this.coreEffect.effects.join(join);
+    }
+    getCoreEffectTooltips(join) {
+        if (this.coreEffect == "") {
+            return "";
+        }
+        return this.coreEffect.effectTypeDesc.join(join);
+    }
+    getCheckEffects(join) {
+        if (this.checkEffect == "") {
+            return "";
+        }
+        return this.checkEffect.effects.join(join);
+    }
+    getCheckEffectTooltips(join) {
+        if (this.checkEffect == "") {
+            return "";
+        }
+        return this.checkEffect.effectTypeDesc.join(join);
+    }
+    getWillBreakEffects(join) {
+        if (this.willBreakEffect == "") {
+            return "";
+        }
+        return this.willBreakEffect.effects.join(join);
+    }
+    getWillBreakEffectTooltips(join) {
+        if (this.willBreakEffect == "") {
+            return "";
+        }
+        return this.willBreakEffect.effectTypeDesc.join(join);
+    }
+    
 
     getRollTemplate(addTechnique) {
         let output = `&{template:technique} {{Displayname=${this.displayname}}}`;
@@ -2440,8 +2499,11 @@ class TechniqueDisplayData {
             output += "{{OnEnter=1}}";
         }
         if (this.checkEffect != "") {
-            output += `{{Def=${this.coreDefense}}}{{CheckTitle=${this.checkType}}{{CheckTitleDesc=${this.checkDesc}}`;
+            output += `{{Def=${this.coreDefense}}}{{CheckTitle=${this.checkType}}}`;
             output += this.iterateRollTemplateEffects(this.checkEffect, "Check");
+        }
+        if (this.endEffectDesc) {
+            output += `{{EndEffect=${this.endEffectDesc}}`;
         }
         if (this.willBreakEffect != "") {
             output += this.iterateRollTemplateEffects(this.willBreakEffect, "Willbreak");
@@ -2496,7 +2558,6 @@ class BaseTechniqueEffectDisplayData {
         this.evasionDefense = "";
         this.includedAp = false;
         this.includedBrutal = false;
-        this.includedTruehit = false;
     }
 
     formatEffect(effect, technique) {
@@ -2581,9 +2642,12 @@ class BaseTechniqueEffectDisplayData {
                 this.formatBoostEffect(effect);
                 break;
             case "Terrain":
-                this.effectType = effect.type;
-                this.focusType = "Field";
-                this.formatTerrainEffect(effect);
+                let terrainType = WuxDef.GetTitle(effect.effect);
+                if (this.effectType != terrainType.name) {
+                    this.effectType = terrainType.name;
+                    this.addDefintionToEffectDescription(terrainType);
+                }
+                this.formatTerrainEffect(effect, terrainType);
                 break;
             case "Structure":
                 this.effectType = effect.type;
@@ -2646,30 +2710,23 @@ class BaseTechniqueEffectDisplayData {
         return "";
     }
 
-    formatDamageEffect(effect) {
+    formatDamageEffect(effect, technique) {
         let subTypeParts = effect.subType.split(":");
         let subType = subTypeParts[0];
         
         let traits = "";
         if (effect.traits.includes("AP")) {
-            this.effectDescription += "[AP] ";
+            traits += "[AP] ";
             if (!this.includedAp) {
                 this.includedAp = true;
                 this.addDefintionToEffectDescription(WuxDef.Get("Trait_AP"));
             }
         }
         if (effect.traits.includes("Brutal")) {
-            this.effectDescription += "[Brutal] ";
+            traits += "[Brutal] ";
             if (!this.includedBrutal) {
                 this.includedBrutal = true;
                 this.addDefintionToEffectDescription(WuxDef.Get("Trait_Brutal"));
-            }
-        }
-        if (effect.traits.includes("Truehit")) {
-            this.effectDescription += "[Truehit] ";
-            if (!this.includedTruehit) {
-                this.includedTruehit = true;
-                this.addDefintionToEffectDescription(WuxDef.Get("Trait_Truehit"));
             }
         }
         switch (subType) {
@@ -2869,8 +2926,7 @@ class BaseTechniqueEffectDisplayData {
         }
     }
 
-    formatTerrainEffect(effect) {
-        let terrainType = WuxDef.GetTitle(effect.effect);
+    formatTerrainEffect(effect, terrainType) {
         switch (effect.subType) {
             case "Add":
                 this.effectDescription += `The area is considered [${terrainType}]`;
@@ -3002,12 +3058,15 @@ class BaseTechniqueEffectDisplayData {
 
 class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
 
-    constructor(techniqueEffects, technique, coreDefense) {
+    constructor(techniqueEffects, technique, coreDefense, effectDefinitions) {
         super();
         if (techniqueEffects == undefined) {
             return;
         }
         this.effects = [];
+        if (effectDefinitions != undefined) {
+            this.effectTypeDesc = this.effectTypeDesc.concat(effectDefinitions);
+        }
 
         this.setEvasionDefense(technique, coreDefense);
         this.importEffectData(techniqueEffects, technique);
@@ -3026,15 +3085,9 @@ class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
     }
     getDodgeDefense(technique, coreDefense) {
         if (coreDefense == "Brace" || coreDefense == "Warding") {
-            if (technique.impacts.includes("Truehit")) {
-                return "True";
-            }
             return "Evasion";
         }
         if (coreDefense == "Insight" || coreDefense == "Resolve") {
-            if (technique.impacts.includes("Truehit")) {
-                return "True";
-            }
             return "Ego";
         }
         return "";
@@ -3043,12 +3096,14 @@ class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
     importEffectData(effectData, technique) {
         let currentEffect = effectData[0].type;
         for (let i = 0; i < effectData.length; i++) {
-            this.formatEffect(effectData[i], technique);
-            if (this.effectType != currentEffect) {
-                currentEffect = this.effectType;
-                this.effects.push(this.effectDescription);
-                this.effectDescription = "";
+            if (effectData[i].type != currentEffect || effectData[i].type == "Boost") {
+                if (this.effectDescription != "") {
+                    currentEffect = effectData[i].type;
+                    this.effects.push(this.effectDescription);
+                    this.effectDescription = "";
+                }
             }
+            this.formatEffect(effectData[i], technique);
         }
         this.effects.push(this.effectDescription);
         this.effectDescription = "";
@@ -3112,7 +3167,8 @@ class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
                 this.formatResistanceEffect(effect);
                 break;
             case "Terrain":
-                this.formatTerrainEffect(effect);
+                let terrainType = WuxDef.GetTitle(effect.effect);
+                this.formatTerrainEffect(effect, terrainType);
                 break;
             case "Move":
                 this.formatMoveEffect(effect);

@@ -972,6 +972,36 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 				this.getVariable("TechTraitsDesc"), displayData.getTraitsDescriptions("\n\n"));
 		}
+		if (displayData.coreEffect != "") {
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				this.getVariable("TechCoreEffect"), displayData.getCoreEffects("\n"));
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				this.getVariable("TechCoreEffect", WuxDef._info), displayData.getCoreEffectTooltips("\n\n"));
+		}
+		if (displayData.isOnEnter) {
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				this.getVariable("TechOnEnter"), "1");
+		}
+		if (displayData.checkEffect != "") {
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				this.getVariable("TechCoreDefense"), displayData.coreDefense);
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				this.getVariable("TechCheckTitle"), displayData.checkType);
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				this.getVariable("TechCheckEffect"), displayData.getCheckEffects("\n"));
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				this.getVariable("TechCheckEffect", WuxDef._info), displayData.getCheckEffectTooltips("\n\n"));
+		}
+		if (displayData.endEffectDesc != "") {
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				this.getVariable("TechEndEffect"), displayData.endEffectDesc);
+		}
+		if (displayData.willBreakEffect != "") {
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				this.getVariable("TechWillBreakEffect"), displayData.getWillBreakEffects("\n"));
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				this.getVariable("TechWillBreakEffect", WuxDef._info), displayData.getWillBreakEffectTooltips("\n\n"));
+		}
 	}
 	setTechniqueEffectsInfo(technique, displayData) {
 		if (displayData.flavorText != "") {
