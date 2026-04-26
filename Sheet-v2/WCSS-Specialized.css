@@ -1108,7 +1108,7 @@ input.wuxFeatureHeader-flag[value="Brace"] + .wuxFeatureHeaderInfoEffectTitle,
     background:
             url("https://i.imgur.com/0dVA66J.png") left / contain no-repeat,
             linear-gradient(to right,
-            #00a3ff 0%,
+            #092c83 0%,
             #faeaea 10%);
 }
 
@@ -1130,7 +1130,7 @@ input.wuxFeatureHeader-flag[value="Evasion"] + .wuxFeatureHeaderInfoEffectTitle,
     background:
             url("https://i.imgur.com/lMEhyIh.png") left / contain no-repeat,
             linear-gradient(to right,
-            #ff7216 0%,
+            #e85b00 0%,
             #faeaea 10%);
 }
 
@@ -1141,7 +1141,7 @@ input.wuxFeatureHeader-flag[value="Resolve"] + .wuxFeatureHeaderInfoEffectTitle,
     background:
             url("https://i.imgur.com/3xuKr2b.png") left / contain no-repeat,
             linear-gradient(to right,
-            #f700ff 0%,
+            #8f0793 0%,
             #faeaea 10%);
 }
 
@@ -1163,7 +1163,7 @@ input.wuxFeatureHeader-flag[value="Insight"] + .wuxFeatureHeaderInfoEffectTitle,
     background:
             url("https://i.imgur.com/ZlNU2WD.png") left / contain no-repeat,
             linear-gradient(to right,
-            #128c04 0%,
+            #04638c 0%,
             #faeaea 10%);
 }
 
@@ -1194,7 +1194,9 @@ input.wuxFeatureHeader-flag[value="WillBreak"] + .wuxFeatureHeaderInfoEffectTitl
             url("https://i.imgur.com/nPJnTat.png") left / contain no-repeat,
             linear-gradient(to right,
             #1a0835,
-            #605c5c 15%);
+            #605c5c 15%,
+            #605c5c 50%,
+            #605c5c00 100%);
 }
 
 .wuxFeatureHeaderInfoEffectTitle,
