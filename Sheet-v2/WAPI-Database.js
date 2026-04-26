@@ -2642,7 +2642,7 @@ class BaseTechniqueEffectDisplayData {
                 this.formatBoostEffect(effect);
                 break;
             case "Terrain":
-                let terrainType = WuxDef.GetTitle(effect.effect);
+                let terrainType = WuxDef.Get(effect.effect);
                 if (this.effectType != terrainType.name) {
                     this.effectType = terrainType.name;
                     this.addDefintionToEffectDescription(terrainType);
@@ -2929,10 +2929,10 @@ class BaseTechniqueEffectDisplayData {
     formatTerrainEffect(effect, terrainType) {
         switch (effect.subType) {
             case "Add":
-                this.effectDescription += `The area is considered [${terrainType}]`;
+                this.effectDescription += `The area is considered [${terrainType.getTitle()}]`;
                 return;
             case "Remove":
-                this.effectDescription += `Any effects in the area considered [${terrainType}] are removed`;
+                this.effectDescription += `Any effects in the area considered [${terrainType.getTitle()}] are removed`;
         }
     }
 
@@ -3167,7 +3167,7 @@ class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
                 this.formatResistanceEffect(effect);
                 break;
             case "Terrain":
-                let terrainType = WuxDef.GetTitle(effect.effect);
+                let terrainType = WuxDef.Get(effect.effect);
                 this.formatTerrainEffect(effect, terrainType);
                 break;
             case "Move":
