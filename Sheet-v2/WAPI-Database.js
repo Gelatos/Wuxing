@@ -3281,6 +3281,20 @@ class ItemDisplayData {
         }
     }
 
+    createEmpty() {
+        this.item = {};
+        this.name = "";
+        this.displayname = "";
+        this.sheetname = "";
+        this.group = "";
+        this.stats = "";
+        this.traits = [];
+        this.description = "";
+        this.craftSkill = "";
+        this.craftMaterials = "";
+        this.craftComponents = [];
+    }
+
     importItem(item) {
         this.item = item;
         this.name = item.name;
@@ -3352,20 +3366,6 @@ class ItemDisplayData {
         }
 
         return output;
-    }
-
-    createEmpty() {
-        this.item = {};
-        this.name = "";
-        this.displayname = "";
-        this.sheetname = "";
-        this.group = "";
-        this.stats = "";
-        this.traits = [];
-        this.description = "";
-        this.craftSkill = "";
-        this.craftMaterials = "";
-        this.craftComponents = [];
     }
 }
 
