@@ -2276,16 +2276,22 @@ class TechniqueDisplayData {
             this.traits += `Usable ${technique.limits}. `;
         }
 
-        if (technique.forms.includes("Focus")) {
+        if (technique.forms.indexOf("Focus") >= 0) {
             this.traits += `You must maintain Focus on this technique. `;
             let focusDefinition = WuxDef.Get("Trait_Focus");
+            if (this.traitsDesc.length > 0) {
+                this.traitsDesc.push("");
+            }
             this.traitsDesc.push(focusDefinition.getTitle());
             this.traitsDesc = this.traitsDesc.concat(focusDefinition.descriptions);
         }
 
-        if (technique.forms.includes("Social")) {
+        if (technique.forms.indexOf("Social") >= 0) {
             this.traits += `This is a Social technique. `;
             let focusDefinition = WuxDef.Get("Trait_Social");
+            if (this.traitsDesc.length > 0) {
+                this.traitsDesc.push("");
+            }
             this.traitsDesc.push(focusDefinition.getTitle());
             this.traitsDesc = this.traitsDesc.concat(focusDefinition.descriptions);
         }
@@ -2309,12 +2315,18 @@ class TechniqueDisplayData {
                         this.traits += ", ";
                     }
                     this.traits += ` ${item.getTitle()}`;
+                    if (this.traitsDesc.length > 0) {
+                        this.traitsDesc.push("");
+                    }
                     this.traitsDesc.push(item.getTitle());
                     this.traitsDesc = this.traitsDesc.concat(item.descriptions);
                 }
             }
             else {
                 this.traits += ` ${itemTraits[0].getTitle()}`;
+                if (this.traitsDesc.length > 0) {
+                    this.traitsDesc.push("");
+                }
                 this.traitsDesc.push(itemTraits[0].getTitle());
                 this.traitsDesc = this.traitsDesc.concat(itemTraits[0].descriptions);
             }
@@ -2344,12 +2356,12 @@ class TechniqueDisplayData {
             let checkDef;
             if (isNaN(technique.coreDefense)) {
                 this.coreDefense = technique.coreDefense;
-                this.checkType = `${technique.skill} vs. ${technique.coreDefense}`;
+                this.checkType = `${this.printSkillCheck(technique)} vs. ${technique.coreDefense}`;
                 checkDef = WuxDef.Get("Trait_SkillCheck-Defense");
             }
             else { 
                 this.coreDefense = 0;
-                this.checkType = `DC ${technique.coreDefense} ${technique.skill}`;
+                this.checkType = `DC ${technique.coreDefense} ${this.printSkillCheck(technique)}`;
                 checkDef = WuxDef.Get("Trait_SkillCheck-DC");
             }
             let checkDesc = [];
@@ -2359,14 +2371,14 @@ class TechniqueDisplayData {
             if (technique.impacts.includes("Truehit")) {
                 let trueHitDef = WuxDef.Get("Trait_Truehit");
                 this.checkType += ` - ${trueHitDef.getTitle()}`;
-
-                checkDesc.push(trueHitDef.getTitle());
-                checkDesc.push(trueHitDef.descriptions.join(". "));
             }
             if (technique.impacts.includes("Accurate")) {
                 let accurateDef = WuxDef.Get("Trait_Accurate");
                 this.checkType += ` - ${accurateDef.getTitle()}`;
 
+                if (checkDesc.length > 0) {
+                    checkDesc.push("");
+                }
                 checkDesc.push(accurateDef.getTitle());
                 checkDesc.push(accurateDef.descriptions.join(". "));
             }
@@ -2383,6 +2395,31 @@ class TechniqueDisplayData {
             willbreakDesc.push(checkDef.descriptions.join(". "));
             techDisplayData.willBreakEffect = new TechniqueEffectDisplayData([technique.willBreakEffect], technique, willbreakDesc);
         }
+    }
+    printSkillCheck(technique) {
+        if (technique.skill == "" && technique.action != "Passive") {
+            return "No Check";
+        }
+
+        let skillData = technique.skill.split(":");
+        skillData[0] = skillData[0].trim();
+        if (skillData.length > 1) {
+            if (skillData[1] == "group") {
+                return `Any ${skillData[0]}`;
+            }
+            else if (skillData[1] == "attr") {
+                return WuxDef.GetTitle(Format.GetDefinitionName("Attribute", skillData[0]));
+            }
+        }
+        return skillData[0];
+    }
+
+    addDefintionToArray(definition) {
+        if (this.effectTypeDesc.length > 1) {
+            this.effectTypeDesc.push("");
+        }
+        this.effectTypeDesc.push(`[${definition.getTitle()}]`);
+        this.effectTypeDesc = this.effectTypeDesc.concat(definition.descriptions);
     }
 
     getTraitsDescriptions(join) {
@@ -2452,9 +2489,6 @@ class TechniqueDisplayData {
         if (this.targetType != "") {
             output += `{{Target=${this.targetType}}}`;
         }
-        if (this.coreDefense != "") {
-            output += `{{CoreDefense${this.coreDefense}=1}}`;
-        }
         if (this.trigger != "") {
             output += `{{Trigger=${this.trigger}}}`;
         }
@@ -2499,7 +2533,7 @@ class TechniqueDisplayData {
             output += "{{OnEnter=1}}";
         }
         if (this.checkEffect != "") {
-            output += `{{Def=${this.coreDefense}}}{{CheckTitle=${this.checkType}}}`;
+            output += `{{Def-${this.coreDefense}=1}}{{CheckTitle=${this.checkType}}}`;
             output += this.iterateRollTemplateEffects(this.checkEffect, "Check");
         }
         if (this.endEffectDesc) {
@@ -2857,7 +2891,7 @@ class BaseTechniqueEffectDisplayData {
                     this.effectDescription += `${this.formatTargetGain(effect)} the ${state.title} ${state.group}`;
                 }
                 else {
-                    this.effectDescription += `${this.formatTargetGain(effect)} ${state.title} ${state.group} and the rank is set to ${formula}`; 
+                    this.effectDescription += `${this.formatTargetGain(effect)} ${state.title} ${state.group} [Rank ${formula}]`; 
                 }
                 return;
             case "Add":
@@ -3051,7 +3085,10 @@ class BaseTechniqueEffectDisplayData {
     }
 
     addDefintionToEffectDescription(definition) {
-        this.effectTypeDesc.push(definition.getTitle());
+        if (this.effectTypeDesc.length > 1) {
+            this.effectTypeDesc.push("");
+        }
+        this.effectTypeDesc.push(`[${definition.getTitle()}]`);
         this.effectTypeDesc = this.effectTypeDesc.concat(definition.descriptions);
     }
 }
@@ -3582,7 +3619,7 @@ class FormulaData {
                             output += " + ";
                         }
                         if (definition.group == "StatBonus") {
-                            output += `${definition.getDescription()} (${definition.formula.getString()})`;
+                            output += `${definition.formula.getString()}`;
                         }
                         else {
                             if (worker.multiplier != 1) {

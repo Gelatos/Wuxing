@@ -1028,7 +1028,6 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
     display: block;
     margin-top: 5px;
     
-    border: 1px solid #4a2929;
     background: #faeaea;
 }
 
@@ -1038,6 +1037,7 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
     padding: 2px 10px;
 
     font-size: 10px;
+    color: #000;
     word-break: break-word;
     white-space: pre-line;
     text-align: left;
@@ -1058,39 +1058,21 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 {
     position: relative;
     display: block;
-    width: 100%;
 }
 
-.wuxFeatureHeaderInfoEffectTitle span,
-.wuxFeatureHeaderInfoEffectOnEnter span,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectOnEnter,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Core,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-0,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Brace,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Warding,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Evasion,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Ego,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Insight,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Resolve,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-WillBreak
+.wuxFeatureHeaderInfoEffectTitleHeader,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitleHeader
 {
     line-height: 14px;
-    padding-left: 10px;
-
+    padding-left: 20px;
+    
+    font-weight: bold;
     font-size: 10px;
-    color: #fff;
 }
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Core,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-0,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Brace,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Warding,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Evasion,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Ego,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Insight,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Resolve,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-WillBreak
+
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitleHeader
 {
-    padding: 2px 0 2px 10px;
+    padding: 2px 0 2px 20px;
 }
 
 input.wuxFeatureHeader-flag[value="Core"] + .wuxFeatureHeaderInfoEffectTitle,
@@ -1098,8 +1080,8 @@ input.wuxFeatureHeader-flag[value="Core"] + .wuxFeatureHeaderInfoEffectTitle,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Core
 {
     background: linear-gradient(to right,
-    #433D3D,
-    #6e6666);
+    #9c9a9a,
+    #faeaea 10%);
 }
 
 .wuxFeatureHeaderInfoEffectOnEnter,
@@ -1107,7 +1089,7 @@ input.wuxFeatureHeader-flag[value="Core"] + .wuxFeatureHeaderInfoEffectTitle,
 {
     background: linear-gradient(to right,
     #433D3D,
-    #6e6666);
+    #faeaea 10%);
 }
 
 input.wuxFeatureHeader-flag[value="0"] + .wuxFeatureHeaderInfoEffectTitle,
@@ -1116,7 +1098,7 @@ input.wuxFeatureHeader-flag[value="0"] + .wuxFeatureHeaderInfoEffectTitle,
 {
     background: linear-gradient(to right,
     #433D3D,
-    #4f5670);
+    #faeaea 10%);
 }
 
 input.wuxFeatureHeader-flag[value="Brace"] + .wuxFeatureHeaderInfoEffectTitle,
@@ -1127,7 +1109,7 @@ input.wuxFeatureHeader-flag[value="Brace"] + .wuxFeatureHeaderInfoEffectTitle,
             url("https://i.imgur.com/0dVA66J.png") left / contain no-repeat,
             linear-gradient(to right,
             #00a3ff 0%,
-            #433D3D 15%);
+            #faeaea 10%);
 }
 
 input.wuxFeatureHeader-flag[value="Warding"] + .wuxFeatureHeaderInfoEffectTitle,
@@ -1138,7 +1120,7 @@ input.wuxFeatureHeader-flag[value="Warding"] + .wuxFeatureHeaderInfoEffectTitle,
             url("https://i.imgur.com/LCZV8Hb.png") left / contain no-repeat,
             linear-gradient(to right,
             #9900ff 0%,
-            #433D3D 15%);
+            #faeaea 10%);
 }
 
 input.wuxFeatureHeader-flag[value="Evasion"] + .wuxFeatureHeaderInfoEffectTitle,
@@ -1149,7 +1131,7 @@ input.wuxFeatureHeader-flag[value="Evasion"] + .wuxFeatureHeaderInfoEffectTitle,
             url("https://i.imgur.com/lMEhyIh.png") left / contain no-repeat,
             linear-gradient(to right,
             #ff7216 0%,
-            #433D3D 15%);
+            #faeaea 10%);
 }
 
 input.wuxFeatureHeader-flag[value="Resolve"] + .wuxFeatureHeaderInfoEffectTitle,
@@ -1160,7 +1142,7 @@ input.wuxFeatureHeader-flag[value="Resolve"] + .wuxFeatureHeaderInfoEffectTitle,
             url("https://i.imgur.com/3xuKr2b.png") left / contain no-repeat,
             linear-gradient(to right,
             #f700ff 0%,
-            #433D3D 15%);
+            #faeaea 10%);
 }
 
 input.wuxFeatureHeader-flag[value="Ego"] + .wuxFeatureHeaderInfoEffectTitle,
@@ -1171,7 +1153,7 @@ input.wuxFeatureHeader-flag[value="Ego"] + .wuxFeatureHeaderInfoEffectTitle,
             url("https://i.imgur.com/xYt4rHC.png") left / contain no-repeat,
             linear-gradient(to right,
             #dcc204 0%,
-            #433D3D 15%);
+            #faeaea 10%);
 }
 
 input.wuxFeatureHeader-flag[value="Insight"] + .wuxFeatureHeaderInfoEffectTitle,
@@ -1182,7 +1164,7 @@ input.wuxFeatureHeader-flag[value="Insight"] + .wuxFeatureHeaderInfoEffectTitle,
             url("https://i.imgur.com/ZlNU2WD.png") left / contain no-repeat,
             linear-gradient(to right,
             #128c04 0%,
-            #433D3D 15%);
+            #faeaea 10%);
 }
 
 input.wuxFeatureHeader-flag[value="WillBreak"] + .wuxFeatureHeaderInfoEffectTitle,
@@ -1192,7 +1174,7 @@ input.wuxFeatureHeader-flag[value="WillBreak"] + .wuxFeatureHeaderInfoEffectTitl
     background:
             linear-gradient(to right,
             #ac0000 0%,
-            #433D3D 20%);
+            #faeaea 10%);
 }
 
 .wuxFeatureHeaderInfoEffectOnEnter,
@@ -1205,13 +1187,14 @@ input.wuxFeatureHeader-flag[value="WillBreak"] + .wuxFeatureHeaderInfoEffectTitl
     padding-left: 10px;
     margin-top: 12px;
     
+    color: white;
     font-size: 12px;
     
     background:
             url("https://i.imgur.com/nPJnTat.png") left / contain no-repeat,
             linear-gradient(to right,
             #1a0835,
-            #1a0835);
+            #605c5c 15%);
 }
 
 .wuxFeatureHeaderInfoEffectTitle,
@@ -1229,26 +1212,23 @@ input.wuxFeatureHeader-flag[value="WillBreak"] + .wuxFeatureHeaderInfoEffectTitl
 }
 
 .wuxFeatureHeaderInfoTrigger,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTrigger,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoTrigger
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTrigger
 {
     color: white;
     background: #ec2222;
 }
 .wuxFeatureHeaderInfoFlavor,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoFlavor,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureHeaderInfoFlavor 
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoFlavor
 {
     font-style: italic;
     background-color: #fff6f6;
 }
 
-.wuxFeatureExpandingContent,
-.sheet-rolltemplate-technique .sheet-wuxFeatureExpandingContent,
-.sheet-rolltemplate-usetechnique .sheet-wuxFeatureExpandingContent
+.sheet-rolltemplate-technique .sheet-wuxFeatureUseBlock
 {
-    position: relative;
-    display: none;
+    border-top: 2px solid white;
+    margin-top: 10px;
+    padding: 5px;
 }
 
 input[type="checkbox"].wuxFeatureHeaderInteractBlock-flag

@@ -688,35 +688,35 @@ class BaseTechniqueDisplayBuilder {
     printCoreEffectsField (title, contents) {
         return `<div class="wuxFeatureHeaderInfoEffect-Core">
             <input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-            <div class="wuxFeatureHeaderInfoEffectTitle">${title}</div>
+            <div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${title}</span></div>
             <div class="wuxFeatureHeaderInfoContents">${contents}</div>
         </div>`;
     }
 
     printOnEnter() {}
     printOnEnterField(contents) {
-        return `<div class="wuxFeatureHeaderInfoEffectOnEnter">${contents}</div>`;
+        return `<div class="wuxFeatureHeaderInfoEffectOnEnter"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${contents}</span></div>`;
     }
 
     printCheckEffects() {}
     printCheckEffectsField (input, title, contents) {
         return `<div class="wuxFeatureHeaderInfoEffect-Check">
             ${input}
-            <div class="wuxFeatureHeaderInfoEffectTitle">${title}</div>
+            <div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${title}</span></div>
             <div class="wuxFeatureHeaderInfoContents">${contents}</div>
         </div>`;
     }
 
     printEndEffects() {}
     printEndEffectsField(contents) {
-        return `<div class="wuxFeatureHeaderInfoEffect">${contents}</div>`;
+        return `<div class="wuxFeatureHeaderInfoEffect"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${contents}</span></div>`;
     }
     
     printWillBreakEffects() {}
     printWillBreakEffectsField (title, contents) {
         return `<div class="wuxFeatureHeaderInfoEffect-WillBreak">
             <input type="hidden" class="wuxFeatureHeader-flag" value="WillBreak">
-            <div class="wuxFeatureHeaderInfoEffectTitle">${title}</div>
+            <div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${title}</span></div>
             <div class="wuxFeatureHeaderInfoContents">${contents}</div>
         </div>`;
     }
@@ -4553,6 +4553,7 @@ class TechniqueAssessment {
     }
 
     addImpactTrait(traitName) {
+        return;
         let traitParts = traitName.split("-");
         let traitBase = traitParts[0];
         let traitType = "";

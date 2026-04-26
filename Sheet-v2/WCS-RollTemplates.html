@@ -39,94 +39,163 @@
                 </div>
             </div>
 		</div>
-        {{#Trigger}}
-        <div class="wuxFeatureHeaderInfoTrigger"><span><strong>Trigger. </strong></span><span>{{Trigger}}</span></div>
-        {{/Trigger}}
-        {{#Traits}}
-        <div class="wuxFeatureHeaderInfoTraits"><span><strong>Traits. </strong></span><span>{{Traits}}</span></div>
-        {{/Traits}}
-        {{#FlavorText}}
-        <div class="wuxFeatureHeaderInfoFlavor"><span>{{FlavorText}}</span></div>
-        {{/FlavorText}}
-
-        {{#Effect0}}
-		<div class="wuxFeatureEffectsBlock">
-			<div class="wuxFeatureCheckHeader">
-                <span class="wuxTooltip">
-                    <span class="wuxTooltipText">{{Effect0Name}}</span>
-                    <div class="wuxTooltipContent"><div class="wuxHeader2">{{Effect0Name}}</div><span class="wuxDescription">{{Effect0Desc}}</span></div>
-                </span>
-            </div>
-			<div class="wuxFeatureCheckBlock"><span class="wuxFeatureCheckBlockRow">{{Effect0}}</span></div>
-            {{#Effect1Name}}
-            <div class="wuxFeatureCheckHeader"><span class="wuxTooltip"><span class="wuxTooltipText">{{Effect1Name}}</span>
-            <div class="wuxTooltipContent"><div class="wuxHeader2">{{Effect1Name}}</div><span class="wuxDescription">{{Effect1Desc}}</span></div></span></div>
-            {{/Effect1Name}}
-            {{#Effect1}}
-            <div class="wuxFeatureCheckBlock"><span class="wuxFeatureCheckBlockRow">{{Effect1}}</span></div>
-            {{/Effect1}}
-            {{#Effect2Name}}
-            <div class="wuxFeatureCheckHeader"><span class="wuxTooltip"><span class="wuxTooltipText">{{Effect2Name}}</span>
-            <div class="wuxTooltipContent"><div class="wuxHeader2">{{Effect2Name}}</div><span class="wuxDescription">{{Effect2Desc}}</span></div></span></div>
-            {{/Effect2Name}}
-            {{#Effect2}}
-            <div class="wuxFeatureCheckBlock"><span class="wuxFeatureCheckBlockRow">{{Effect2}}</span></div>
-            {{/Effect2}}
-            {{#Effect3Name}}
-            <div class="wuxFeatureCheckHeader"><span class="wuxTooltip"><span class="wuxTooltipText">{{Effect3Name}}</span>
-            <div class="wuxTooltipContent"><div class="wuxHeader2">{{Effect3Name}}</div><span class="wuxDescription">{{Effect3Desc}}</span></div></span></div>
-            {{/Effect3Name}}
-            {{#Effect3}}
-            <div class="wuxFeatureCheckBlock"><span class="wuxFeatureCheckBlockRow">{{Effect3}}</span></div>
-            {{/Effect3}}
-            {{#Effect4Name}}
-            <div class="wuxFeatureCheckHeader"><span class="wuxTooltip"><span class="wuxTooltipText">{{Effect4Name}}</span>
-            <div class="wuxTooltipContent"><div class="wuxHeader2">{{Effect4Name}}</div><span class="wuxDescription">{{Effect4Desc}}</span></div></span></div>
-            {{/Effect4Name}}
-            {{#Effect4}}
-            <div class="wuxFeatureCheckBlock"><span class="wuxFeatureCheckBlockRow">{{Effect4}}</span></div>
-            {{/Effect4}}
-            {{#Effect5Name}}
-            <div class="wuxFeatureCheckHeader"><span class="wuxTooltip"><span class="wuxTooltipText">{{Effect5Name}}</span>
-            <div class="wuxTooltipContent"><div class="wuxHeader2">{{Effect5Name}}</div><span class="wuxDescription">{{Effect5Desc}}</span></div></span></div>
-            {{/Effect5Name}}
-            {{#Effect5}}
-            <div class="wuxFeatureCheckBlock"><span class="wuxFeatureCheckBlockRow">{{Effect5}}</span></div>
-            {{/Effect5}}
-            {{#Effect6Name}}
-            <div class="wuxFeatureCheckHeader"><span class="wuxTooltip"><span class="wuxTooltipText">{{Effect6Name}}</span>
-            <div class="wuxTooltipContent"><div class="wuxHeader2">{{Effect6Name}}</div><span class="wuxDescription">{{Effect6Desc}}</span></div></span></div>
-            {{/Effect6Name}}
-            {{#Effect6}}
-            <div class="wuxFeatureCheckBlock"><span class="wuxFeatureCheckBlockRow">{{Effect6}}</span></div>
-            {{/Effect6}}
-            {{#Effect7Name}}
-            <div class="wuxFeatureCheckHeader"><span class="wuxTooltip"><span class="wuxTooltipText">{{Effect7Name}}</span>
-            <div class="wuxTooltipContent"><div class="wuxHeader2">{{Effect7Name}}</div><span class="wuxDescription">{{Effect7Desc}}</span></div></span></div>
-            {{/Effect7Name}}
-            {{#Effect7}}
-            <div class="wuxFeatureCheckBlock"><span class="wuxFeatureCheckBlockRow">{{Effect7}}</span></div>
-            {{/Effect7}}
-		</div>
-        {{/Effect0}}
-        {{#EEffectName}}
-            <div class="wuxFeatureEndEffectsBlock">
-                <div class="wuxFeatureMajorEffectHeader">
-                <span class="wuxTooltip">
-                    <span class="wuxTooltipText">{{EEffectName}}</span>
-                    <div class="wuxTooltipContent"><div class="wuxHeader2">{{EEffectName}}</div><span class="wuxDescription">{{EEffectDesc}}</span></div>
-                </span>
+        <div class="wuxFeatureInfoDisplayBlock">
+            {{#Trigger}}
+            <div class="wuxFeatureHeaderInfoTrigger"><span><strong>Trigger. </strong></span><span>{{Trigger}}</span></div>
+            {{/Trigger}}
+            {{#Traits}}
+            <div class="wuxFeatureHeaderInfoTraits"><span><strong>Traits. </strong></span><span>{{Traits}}</span></div>
+            {{/Traits}}
+            {{#FlavorText}}
+            <div class="wuxFeatureHeaderInfoFlavor"><span>{{FlavorText}}</span></div>
+            {{/FlavorText}}
+            {{#Core0Data}}
+            <div class="wuxFeatureHeaderInfoEffect-Core">
+                <div class="wuxFeatureHeaderInfoEffectTitle-Core">
+                    <div class="wuxFeatureHeaderInfoEffectTitleHeader">
+                        {{^Core0Tooltip}}
+                        Effects
+                        {{/Core0Tooltip}}
+                        {{#Core0Tooltip}}
+                        <div class="wuxTooltip">
+                            <span class="wuxTooltipText"><strong>Effects</strong></span>
+                            <div class="wuxTooltipContent">
+                                <div class="wuxHeader2">Effects</div>
+                                <span class="wuxDescription">{{Core0Tooltip}}</span>
+                                {{#Core1Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Core1Tooltip}}</span>{{/Core1Tooltip}}
+                                {{#Core2Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Core2Tooltip}}</span>{{/Core2Tooltip}}
+                                {{#Core3Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Core3Tooltip}}</span>{{/Core3Tooltip}}
+                                {{#Core4Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Core4Tooltip}}</span>{{/Core4Tooltip}}
+                                {{#Core5Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Core5Tooltip}}</span>{{/Core5Tooltip}}
+                                {{#Core6Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Core6Tooltip}}</span>{{/Core6Tooltip}}
+                                {{#Core7Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Core7Tooltip}}</span>{{/Core7Tooltip}}
+                                {{#Core8Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Core8Tooltip}}</span>{{/Core8Tooltip}}
+                                {{#Core9Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Core9Tooltip}}</span>{{/Core9Tooltip}}
+                            </div>
+                        </div>
+                        {{/Core0Tooltip}}
+                    </div>
                 </div>
-                <div class="wuxFeatureMajorEffectBlock"><span>{{EEffect}}</span></div>
+                <div class="wuxFeatureHeaderInfoContents">{{Core0Data}}</div>
+                {{#Core1Data}}<div class="wuxFeatureHeaderInfoContents">{{Core1Data}}</div>{{/Core1Data}}
+                {{#Core2Data}}<div class="wuxFeatureHeaderInfoContents">{{Core2Data}}</div>{{/Core2Data}}
+                {{#Core3Data}}<div class="wuxFeatureHeaderInfoContents">{{Core3Data}}</div>{{/Core3Data}}
+                {{#Core4Data}}<div class="wuxFeatureHeaderInfoContents">{{Core4Data}}</div>{{/Core4Data}}
+                {{#Core5Data}}<div class="wuxFeatureHeaderInfoContents">{{Core5Data}}</div>{{/Core5Data}}
+                {{#Core6Data}}<div class="wuxFeatureHeaderInfoContents">{{Core6Data}}</div>{{/Core6Data}}
+                {{#Core7Data}}<div class="wuxFeatureHeaderInfoContents">{{Core7Data}}</div>{{/Core7Data}}
+                {{#Core8Data}}<div class="wuxFeatureHeaderInfoContents">{{Core8Data}}</div>{{/Core8Data}}
+                {{#Core9Data}}<div class="wuxFeatureHeaderInfoContents">{{Core9Data}}</div>{{/Core9Data}}
             </div>
-        {{/EEffectName}}
-        <div>{{Displayname}}</div>
-        <div>
-            {{#consumeData}}[Consume Resources]({{consumeData}}){{/consumeData}}
-            {{#checkData}}[Check]({{checkData}}$$@{target||token_id}){{/checkData}}
-            {{#targetData}}[Target Effects]({{targetData}}$$@{target||token_id}$${{^hascheck}}0{{/hascheck}}{{#hascheck}}?{Advantage|{{hascheck}}}{{/hascheck}}){{/targetData}}
-            {{#checkData2}}[2nd Check]({{checkData2}}$$@{target||token_id}){{/checkData2}}
-            {{#targetData2}}[2nd Target Effects]({{targetData2}}$$@{target||token_id}$${{^hascheck}}0{{/hascheck}}{{#hascheck}}?{Advantage|{{hascheck}}}{{/hascheck}}){{/targetData2}}
+            {{/Core0Data}}
+            {{#OnEnter}}
+            <div class="wuxFeatureHeaderInfoEffectOnEnter"><span class="wuxFeatureHeaderInfoEffectTitleHeader">{{OnEnter}}</span></div>
+            {{/OnEnter}}
+            {{#Check0Data}}
+            <div class="wuxFeatureHeaderInfoEffect-Check">
+                {{#Def-}}<div class="wuxFeatureHeaderInfoEffectTitle">{{/Def-}}
+                    {{#Def-0}}<div class="wuxFeatureHeaderInfoEffectTitle-0">{{/Def-0}}
+                        {{#Def-Brace}}<div class="wuxFeatureHeaderInfoEffectTitle-Brace">{{/Def-Brace}}
+                            {{#Def-Warding}}<div class="wuxFeatureHeaderInfoEffectTitle-Warding">{{/Def-Warding}}
+                                {{#Def-Evasion}}<div class="wuxFeatureHeaderInfoEffectTitle-Evasion">{{/Def-Evasion}}
+                                    {{#Def-Ego}}<div class="wuxFeatureHeaderInfoEffectTitle-Ego">{{/Def-Ego}}
+                                        {{#Def-Resolve}}<div class="wuxFeatureHeaderInfoEffectTitle-Resolve">{{/Def-Resolve}}
+                                            {{#Def-Insight}}<div class="wuxFeatureHeaderInfoEffectTitle-Insight">{{/Def-Insight}}
+                                                <div class="wuxFeatureHeaderInfoEffectTitleHeader">
+                                                    {{^Check0Tooltip}}
+                                                    {{CheckTitle}}
+                                                    {{/Check0Tooltip}}
+                                                    {{#Check0Tooltip}}
+                                                    <div class="wuxTooltip">
+                                                        <span class="wuxTooltipText"><strong>{{CheckTitle}}</strong></span>
+                                                        <div class="wuxTooltipContent">
+                                                            <div class="wuxHeader2">Effects</div>
+                                                            <span class="wuxDescription">{{Check0Tooltip}}</span>
+                                                            {{#Check1Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Check1Tooltip}}</span>{{/Check1Tooltip}}
+                                                            {{#Check2Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Check2Tooltip}}</span>{{/Check2Tooltip}}
+                                                            {{#Check3Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Check3Tooltip}}</span>{{/Check3Tooltip}}
+                                                            {{#Check4Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Check4Tooltip}}</span>{{/Check4Tooltip}}
+                                                            {{#Check5Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Check5Tooltip}}</span>{{/Check5Tooltip}}
+                                                            {{#Check6Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Check6Tooltip}}</span>{{/Check6Tooltip}}
+                                                            {{#Check7Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Check7Tooltip}}</span>{{/Check7Tooltip}}
+                                                            {{#Check8Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Check8Tooltip}}</span>{{/Check8Tooltip}}
+                                                            {{#Check9Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Check9Tooltip}}</span>{{/Check9Tooltip}}
+                                                        </div>
+                                                    </div>
+                                                    {{/Check0Tooltip}}
+                                                </div>
+                                            {{#Def-}}</div>{{/Def-}}
+                                        {{#Def-0}}</div>{{/Def-0}}
+                                    {{#Def-Brace}}</div>{{/Def-Brace}}
+                                {{#Def-Warding}}</div>{{/Def-Warding}}
+                            {{#Def-Evasion}}</div>{{/Def-Evasion}}
+                        {{#Def-Ego}}</div>{{/Def-Ego}}
+                    {{#Def-Resolve}}</div>{{/Def-Resolve}}
+                {{#Def-Insight}}</div>{{/Def-Insight}}
+                <div class="wuxFeatureHeaderInfoContents">{{Check0Data}}</div>
+                {{#Check1Data}}<div class="wuxFeatureHeaderInfoContents">{{Check1Data}}</div>{{/Check1Data}}
+                {{#Check2Data}}<div class="wuxFeatureHeaderInfoContents">{{Check2Data}}</div>{{/Check2Data}}
+                {{#Check3Data}}<div class="wuxFeatureHeaderInfoContents">{{Check3Data}}</div>{{/Check3Data}}
+                {{#Check4Data}}<div class="wuxFeatureHeaderInfoContents">{{Check4Data}}</div>{{/Check4Data}}
+                {{#Check5Data}}<div class="wuxFeatureHeaderInfoContents">{{Check5Data}}</div>{{/Check5Data}}
+                {{#Check6Data}}<div class="wuxFeatureHeaderInfoContents">{{Check6Data}}</div>{{/Check6Data}}
+                {{#Check7Data}}<div class="wuxFeatureHeaderInfoContents">{{Check7Data}}</div>{{/Check7Data}}
+                {{#Check8Data}}<div class="wuxFeatureHeaderInfoContents">{{Check8Data}}</div>{{/Check8Data}}
+                {{#Check9Data}}<div class="wuxFeatureHeaderInfoContents">{{Check9Data}}</div>{{/Check9Data}}
+            </div>
+            {{/Check0Data}}
+            {{#EndEffect}}
+            <div class="wuxFeatureHeaderInfoEffect"><span class="wuxFeatureHeaderInfoEffectTitleHeader">{{EndEffect}}</span></div>
+            {{/EndEffect}}
+            {{#Willbreak0Data}}
+            <div class="wuxFeatureHeaderInfoEffect-Core">
+                <div class="wuxFeatureHeaderInfoEffectTitle">
+                    <div class="wuxFeatureHeaderInfoEffectTitleHeader">
+                        {{^Willbreak0Tooltip}}
+                        Will Break Effects
+                        {{/Willbreak0Tooltip}}
+                        {{#Willbreak0Tooltip}}
+                        <div class="wuxTooltip">
+                            <span class="wuxTooltipText"><strong>Will Break Effects</strong></span>
+                            <div class="wuxTooltipContent">
+                                <div class="wuxHeader2">Will Break Effects</div>
+                                <span class="wuxDescription">{{Willbreak0Tooltip}}</span>
+                                {{#Willbreak1Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Willbreak1Tooltip}}</span>{{/Willbreak1Tooltip}}
+                                {{#Willbreak2Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Willbreak2Tooltip}}</span>{{/Willbreak2Tooltip}}
+                                {{#Willbreak3Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Willbreak3Tooltip}}</span>{{/Willbreak3Tooltip}}
+                                {{#Willbreak4Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Willbreak4Tooltip}}</span>{{/Willbreak4Tooltip}}
+                                {{#Willbreak5Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Willbreak5Tooltip}}</span>{{/Willbreak5Tooltip}}
+                                {{#Willbreak6Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Willbreak6Tooltip}}</span>{{/Willbreak6Tooltip}}
+                                {{#Willbreak7Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Willbreak7Tooltip}}</span>{{/Willbreak7Tooltip}}
+                                {{#Willbreak8Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Willbreak8Tooltip}}</span>{{/Willbreak8Tooltip}}
+                                {{#Willbreak9Tooltip}}<div>&nbsp;</div><span class="wuxDescription">{{Willbreak9Tooltip}}</span>{{/Willbreak9Tooltip}}
+                            </div>
+                        </div>
+                        {{/Willbreak0Tooltip}}
+                    </div>
+                </div>
+                <div class="wuxFeatureHeaderInfoContents">{{Willbreak0Data}}</div>
+                {{#Willbreak1Data}}<div class="wuxFeatureHeaderInfoContents">{{Willbreak1Data}}</div>{{/Willbreak1Data}}
+                {{#Willbreak2Data}}<div class="wuxFeatureHeaderInfoContents">{{Willbreak2Data}}</div>{{/Willbreak2Data}}
+                {{#Willbreak3Data}}<div class="wuxFeatureHeaderInfoContents">{{Willbreak3Data}}</div>{{/Willbreak3Data}}
+                {{#Willbreak4Data}}<div class="wuxFeatureHeaderInfoContents">{{Willbreak4Data}}</div>{{/Willbreak4Data}}
+                {{#Willbreak5Data}}<div class="wuxFeatureHeaderInfoContents">{{Willbreak5Data}}</div>{{/Willbreak5Data}}
+                {{#Willbreak6Data}}<div class="wuxFeatureHeaderInfoContents">{{Willbreak6Data}}</div>{{/Willbreak6Data}}
+                {{#Willbreak7Data}}<div class="wuxFeatureHeaderInfoContents">{{Willbreak7Data}}</div>{{/Willbreak7Data}}
+                {{#Willbreak8Data}}<div class="wuxFeatureHeaderInfoContents">{{Willbreak8Data}}</div>{{/Willbreak8Data}}
+                {{#Willbreak9Data}}<div class="wuxFeatureHeaderInfoContents">{{Willbreak9Data}}</div>{{/Willbreak9Data}}
+            </div>
+            {{/Willbreak0Data}}
+        </div>
+        <div class="wuxFeatureUseBlock">
+            <div>{{Displayname}}</div>
+            <div>
+                {{#consumeData}}[Consume Resources]({{consumeData}}){{/consumeData}}
+                {{#checkData}}[Check]({{checkData}}$$@{target||token_id}){{/checkData}}
+                {{#targetData}}[Target Effects]({{targetData}}$$@{target||token_id}$${{^hascheck}}0{{/hascheck}}{{#hascheck}}?{Advantage|{{hascheck}}}{{/hascheck}}){{/targetData}}
+                {{#checkData2}}[2nd Check]({{checkData2}}$$@{target||token_id}){{/checkData2}}
+                {{#targetData2}}[2nd Target Effects]({{targetData2}}$$@{target||token_id}$${{^hascheck}}0{{/hascheck}}{{#hascheck}}?{Advantage|{{hascheck}}}{{/hascheck}}){{/targetData2}}
+            </div>
         </div>
 
 

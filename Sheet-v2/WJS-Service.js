@@ -959,7 +959,7 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechTargetType", suffix), displayData.targetType);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechTargetDesc"), displayData.getTargetDescriptions("\n\n"));
+			this.getVariable("TechTargetDesc"), displayData.getTargetDescriptions("\n"));
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechRange", suffix), displayData.range);
 		if (displayData.trigger != "") {
@@ -970,13 +970,13 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 				this.getVariable("TechTraits"), displayData.traits);
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-				this.getVariable("TechTraitsDesc"), displayData.getTraitsDescriptions("\n\n"));
+				this.getVariable("TechTraitsDesc"), displayData.getTraitsDescriptions("\n"));
 		}
 		if (displayData.coreEffect != "") {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 				this.getVariable("TechCoreEffect"), displayData.getCoreEffects("\n"));
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-				this.getVariable("TechCoreEffect", WuxDef._info), displayData.getCoreEffectTooltips("\n\n"));
+				this.getVariable("TechCoreEffect", WuxDef._info), displayData.getCoreEffectTooltips("\n"));
 		}
 		if (displayData.isOnEnter) {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
@@ -990,7 +990,7 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 				this.getVariable("TechCheckEffect"), displayData.getCheckEffects("\n"));
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-				this.getVariable("TechCheckEffect", WuxDef._info), displayData.getCheckEffectTooltips("\n\n"));
+				this.getVariable("TechCheckEffect", WuxDef._info), displayData.getCheckEffectTooltips("\n"));
 		}
 		if (displayData.endEffectDesc != "") {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
@@ -1000,7 +1000,7 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 				this.getVariable("TechWillBreakEffect"), displayData.getWillBreakEffects("\n"));
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-				this.getVariable("TechWillBreakEffect", WuxDef._info), displayData.getWillBreakEffectTooltips("\n\n"));
+				this.getVariable("TechWillBreakEffect", WuxDef._info), displayData.getWillBreakEffectTooltips("\n"));
 		}
 	}
 	setTechniqueEffectsInfo(technique, displayData) {

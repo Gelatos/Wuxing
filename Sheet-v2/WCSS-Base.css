@@ -872,7 +872,8 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
     color: #A0A0A0;
 }
 
-.wuxDescription
+.wuxDescription,
+.sheet-rolltemplate-technique .sheet-wuxDescription
 {
     position: relative;
     color: #f4f6f8;
