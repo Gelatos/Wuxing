@@ -2391,9 +2391,9 @@ class TechniqueDisplayData {
         if (technique.willBreakEffect != undefined) {
             let checkDef = WuxDef.Get("WillBreak");
             let willbreakDesc = [];
-            willbreakDesc.push(checkDef.getTitle());
+            willbreakDesc.push(`${checkDef.getTitle()}`);
             willbreakDesc.push(checkDef.descriptions.join(". "));
-            techDisplayData.willBreakEffect = new TechniqueEffectDisplayData([technique.willBreakEffect], technique, willbreakDesc);
+            techDisplayData.willBreakEffect = new TechniqueEffectDisplayData([technique.willBreakEffect], technique, "", willbreakDesc);
         }
     }
     printSkillCheck(technique) {
