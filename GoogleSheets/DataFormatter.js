@@ -874,12 +874,16 @@ class TechniqueDisplayBuilderUsable extends TechniqueDisplayBuilder {
 }
 
 class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
-    constructor(baseDefinition) {
+    constructor(baseDefinition, rootSuffix) {
         super();
         this.baseDefinition = baseDefinition;
+        this.rootSuffix = rootSuffix;
     }
 
     getActionTypeAttribute (attribute, suffix) {
+        if (this.rootSuffix != undefined) {
+            suffix = `${suffix != undefined ? suffix : ""}${this.rootSuffix}`;
+        }
         return this.baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
     }
     printSpan (fieldName) {
@@ -992,6 +996,124 @@ class TechniqueRepeaterDisplayBuilderUsable extends TechniqueRepeaterDisplayBuil
             ${this.printSpanActionTypeAttribute("TechName")}
         </button>`
         return this.printNameField(contents);
+    }
+}
+
+class BaseItemDisplayBuilder extends BaseFeatureDisplayBuilder {
+    constructor() {
+        super();
+    }
+
+    printHeaderBlock() {
+        return this.printHeaderBlockField(
+            `<div class="wuxFeatureHeaderDisplayInfoBlock">
+            ${this.printBulk()}
+            ${this.printBaseValue()}
+        </div>`);
+    }
+
+    printInfoBlock() {
+        return this.printInfoBlockField(
+            `${this.printFlavorText()}
+            ${this.printTraits()}
+            ${this.printCrafting()}`);
+    }
+
+    printBulk() {}
+    printBulkField (contents) {
+        return `<div class="wuxFeatureHeaderDisplayInfoBulk">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> Bulk</span></div>`;
+    }
+    printBaseValue() {}
+    printBaseValueField (contents) {
+        return `<div class="wuxFeatureHeaderDisplayInfoCoin">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> J</span></div>`;
+    }
+
+    printFlavorText() {}
+    printFlavorTextField (contents) {
+        return `<div class="wuxFeatureHeaderInfoFlavor">${contents}</div>`;
+    }
+
+    printTraits() {}
+    printTraitsField (title, contents) {
+        return `<div class="wuxFeatureHeaderInfoTraits"><strong>${title}.</strong> ${contents}</div>`;
+    }
+
+    printCrafting() {}
+    printCraftingField (title, contents) {
+        return `<div class="wuxFeatureHeaderInfoEffect-Core">
+            <input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+            <div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${title}</span></div>
+            <div class="wuxFeatureHeaderInfoContents">${contents}</div>
+        </div>`;
+    }
+}
+
+class ItemRepeaterDisplayBuilder extends BaseItemDisplayBuilder {
+    constructor(baseDefinition, rootSuffix) {
+        super();
+        this.baseDefinition = baseDefinition;
+        this.rootSuffix = rootSuffix;
+    }
+
+    getActionTypeAttribute (attribute, suffix) {
+        if (this.rootSuffix != undefined) {
+            suffix = `${suffix != undefined ? suffix : ""}${this.rootSuffix}`;
+        }
+        return this.baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
+    }
+    printSpan (fieldName) {
+        return `<span name="${fieldName}"></span>`;
+    }
+    printSpanActionTypeAttribute (attribute, suffix) {
+        return `<span name="${this.getActionTypeAttribute(attribute, suffix)}"></span>`;
+    }
+    printAttributeTooltip (name, tooltipName, fieldName) {
+        let descriptionData = `<span class="wuxDescription" name="${fieldName}"></span>`;
+        return WuxSheetMain.HiddenSpanFieldToggle(fieldName,
+            this.printTooltipField(name, tooltipName, descriptionData),
+            `${name}`);
+    }
+
+    printName() {
+        let contents = this.printSpanActionTypeAttribute("ItemName");
+        return this.printNameField(contents);
+    }
+    printActionType () {
+        let fieldName = this.getActionTypeAttribute("ItemGroup");
+        return this.printActionTypeField(
+            `<input type="hidden" class="wuxFeatureHeader-flag" value="Item">`,
+            this.printSpan(fieldName));
+    }
+    printBulk() {
+        let fieldName = this.getActionTypeAttribute("ItemBulk");
+        return WuxSheetMain.HiddenField(fieldName, this.printBulkField(this.printSpan(fieldName)));
+    }
+    printBaseValue() {
+        let fieldName = this.getActionTypeAttribute("ItemBaseValue");
+        return WuxSheetMain.HiddenField(fieldName, this.printBaseValueField(this.printSpan(fieldName)));
+    }
+    printFlavorText() {
+        let fieldName = this.getActionTypeAttribute("ItemDescription");
+        return WuxSheetMain.HiddenField(fieldName, this.printFlavorTextField(this.printSpan(fieldName)));
+    }
+    printTraits() {
+        let fieldName = this.getActionTypeAttribute("ItemTrait");
+        return WuxSheetMain.HiddenField(fieldName,
+            this.printTraitsField(
+                this.printAttributeTooltip("Traits", "Traits", this.getActionTypeAttribute("ItemTrait", WuxDef._info)),
+                this.printSpan(fieldName)
+            )
+        );
+    }
+    printCrafting() {
+        let fieldName = this.getActionTypeAttribute("ItemCraft");
+        return WuxSheetMain.HiddenField(fieldName,
+            this.printCraftingField(
+                this.printAttributeTooltip("Crafting", "Crafting",
+                    this.getActionTypeAttribute("ItemCraft", WuxDef._info)),
+                this.printSpan(fieldName)
+            )
+        );
     }
 }
 
@@ -5063,14 +5185,14 @@ class DatabaseAssessment {
         });
         this.updateChangedTechniqueVersion("Gear", 2, (name) => {
             let item = WuxItems.Get(name);
-            if (item == undefined) {
+            if (item == undefined || !item.hasTechnique) {
                 return;
             }
             return item.technique;
         });
         this.updateChangedTechniqueVersion("Consumables", 2, (name) => {
             let item = WuxItems.Get(name);
-            if (item == undefined) {
+            if (item == undefined || !item.hasTechnique) {
                 return;
             }
             return item.technique;

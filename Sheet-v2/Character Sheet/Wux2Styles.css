@@ -2411,6 +2411,15 @@ button[type=roll].wuxFeatureHeaderNameButton::before
     padding: 2px 0 2px 10px;
 }
 
+input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeaderDisplayInfoActionType,
+.wuxFeatureHeader-Item,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Item
+{
+    background: linear-gradient(to right,
+    #6f02a6,
+    #6f02a633);
+}
+
 input.wuxFeatureHeader-flag[value="Swift"] + .wuxFeatureHeaderDisplayInfoActionType,
 .wuxFeatureHeader-Swift,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Swift
@@ -2527,17 +2536,34 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 
 .wuxFeatureHeaderDisplayInfoEnCost,
 .wuxFeatureHeaderDisplayInfoWillCost,
+.wuxFeatureHeaderDisplayInfoBulk,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoEnCost,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoWillCost
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoWillCost,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoBulk
 {
     position: relative;
     display: block;
-    width: 40px;
-    
+
     background-size: contain;
     background-repeat: no-repeat;
     background-position: right;
     border: 1px solid white;
+}
+
+.wuxFeatureHeaderDisplayInfoEnCost,
+.wuxFeatureHeaderDisplayInfoWillCost,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoEnCost,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoWillCost
+{
+    width: 40px;
+}
+
+.wuxFeatureHeaderDisplayInfoBulk,
+.wuxFeatureHeaderDisplayInfoCoin,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoBulk,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoCoin
+{
+    width: 60px;
 }
 
 .wuxFeatureHeaderDisplayInfoEnCost,
@@ -2554,10 +2580,28 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
     background-color: #87c0ff;
 }
 
+.wuxFeatureHeaderDisplayInfoBulk,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoBulk
+{
+    background-image: url("https://i.imgur.com/iKwLgxc.png");
+    background-color: #ecb285;
+}
+
+.wuxFeatureHeaderDisplayInfoCoin,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoCoin
+{
+    background-image: url("https://i.imgur.com/NB6443V.png");
+    background-color: gold;
+}
+
 .wuxFeatureHeaderDisplayInfoEnCost span,
 .wuxFeatureHeaderDisplayInfoWillCost span,
+.wuxFeatureHeaderDisplayInfoBulk span,
+.wuxFeatureHeaderDisplayInfoCoin span,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoEnCost,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoWillCost
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoWillCost,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoBulk,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoCoin
 {
     padding-left: 3px;
 
@@ -2569,9 +2613,13 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 .wuxFeatureHeaderDisplayInfoSubtitle,
 .wuxFeatureHeaderDisplayInfoEnCost .wuxFeatureHeaderDisplayInfoSubtitle,
 .wuxFeatureHeaderDisplayInfoWillCost .wuxFeatureHeaderDisplayInfoSubtitle,
+.wuxFeatureHeaderDisplayInfoBulk .wuxFeatureHeaderDisplayInfoSubtitle,
+.wuxFeatureHeaderDisplayInfoCoin .wuxFeatureHeaderDisplayInfoSubtitle,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoSubtitle,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoEnCost .sheet-wuxFeatureHeaderDisplayInfoSubtitle,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoWillCost .sheet-wuxFeatureHeaderDisplayInfoSubtitle
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoWillCost .sheet-wuxFeatureHeaderDisplayInfoSubtitle,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoBulk .sheet-wuxFeatureHeaderDisplayInfoSubtitle,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoCoin .sheet-wuxFeatureHeaderDisplayInfoSubtitle
 {
     font-size: 7px;
     font-weight: normal;

@@ -1173,42 +1173,30 @@ class ItemDataAttributeHandler extends DatabaseItemAttributeHandler {
 
 		this.attrHandler.addUpdate(this.getVariable("ItemName"), displayData.name);
 		this.attrHandler.addUpdate(this.getVariable("ItemGroup"), displayData.group);
-		this.attrHandler.addUpdate(this.getVariable("ItemStats"), displayData.stats);
+		this.attrHandler.addUpdate(this.getVariable("ItemBulk"), displayData.bulk);
+		this.attrHandler.addUpdate(this.getVariable("ItemBaseValue"), displayData.baseValue);
 
-		if (displayData.traits.length > 0) {
-			this.addDefinitions(displayData.traits, this.getVariable("ItemTrait"), 4);
-		}
 		if (displayData.description != "") {
 			this.attrHandler.addUpdate(this.getVariable("ItemDescription"), displayData.description);
 		}
-		if (displayData.craftSkill != "") {
-			this.attrHandler.addUpdate(this.getVariable("ItemCraftSkill"), displayData.craftSkill);
+		if (displayData.traits != "") {
+			this.attrHandler.addUpdate(this.getVariable("ItemTrait"), displayData.traits);
+			this.attrHandler.addUpdate(this.getVariable("ItemTrait", WuxDef._info), displayData.getTraitsDescriptions("\n"));
 		}
-		if (displayData.craftMaterials != "") {
-			this.attrHandler.addUpdate(this.getVariable("ItemCraftMats"), displayData.craftMaterials);
-		}
-		if (displayData.craftComponents.length > 0) {
-			for (let i = 0; i < displayData.craftComponents.length; i++) {
-				let component = displayData.craftComponents[i];
-				this.attrHandler.addUpdate(WuxDef.GetVariable(`Popup_ItemCraft`, i), component.name);
-				this.attrHandler.addUpdate(WuxDef.GetVariable(`Popup_ItemCraft`, i + "desc0"), component.desc);
-			}
+		if (displayData.craftData.length > 0) {
+			this.attrHandler.addUpdate(this.getVariable("ItemCraft"), displayData.getCraftingDescriptions("\n"));
+			this.attrHandler.addUpdate(this.getVariable("ItemCraft", WuxDef._info), displayData.getCraftingTooltip("\n"));
 		}
 	}
 	clearItemInfo () {
 		this.attrHandler.addUpdate(this.getVariable("ItemName"), 0);
 		this.attrHandler.addUpdate(this.getVariable("ItemGroup"), "");
-		this.attrHandler.addUpdate(this.getVariable("ItemStats"), "");
-		this.clearDefinition("ItemTrait", 0);
-		this.clearDefinition("ItemCraft", 1);
-		this.clearDefinition("ItemCraft", 2);
-		this.clearDefinition("ItemCraft", 3);
+		this.attrHandler.addUpdate(this.getVariable("ItemBulk"), "");
+		this.attrHandler.addUpdate(this.getVariable("ItemBaseValue"), "");
 		this.attrHandler.addUpdate(this.getVariable("ItemDescription"), 0);
-		this.attrHandler.addUpdate(this.getVariable("ItemCraftSkill"), 0);
-		this.attrHandler.addUpdate(this.getVariable("ItemCraftMats"), "");
-		this.clearDefinition("ItemCraft", 0);
-		this.clearDefinition("ItemCraft", 1);
-		this.clearDefinition("ItemCraft", 2);
-		this.clearDefinition("ItemCraft", 3);
+		this.attrHandler.addUpdate(this.getVariable("ItemTrait"), 0);
+		this.attrHandler.addUpdate(this.getVariable("ItemTrait", WuxDef._info), 0);
+		this.attrHandler.addUpdate(this.getVariable("ItemCraft"), 0);
+		this.attrHandler.addUpdate(this.getVariable("ItemCraft", WuxDef._info), 0);
 	}
 }

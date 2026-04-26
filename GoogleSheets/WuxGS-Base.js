@@ -1532,73 +1532,13 @@ var DisplayPopups = DisplayPopups || (function () {
                 },
 
                 buildItemTemplate = function () {
-                    return `
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("ItemName")}">
-                    <div class="wuxHiddenField">
-                        ${WuxSheetMain.Header("Item Data")}
-                        <div class="wuxFeature">
-                            <div class="wuxFeatureHeader wuxFeatureHeader-Item">
-                                <div class="wuxFeatureHeaderDisplayBlock">
-                                    <span class="wuxFeatureHeaderName" name="${getPopupAttribute("ItemName")}"></span>
-                                    <div class="wuxFeatureHeaderInfo"><span name="${getPopupAttribute("ItemGroup")}"></span></div>
-                                    <div class="wuxFeatureHeaderInfo"><span name="${getPopupAttribute("ItemStats")}"></span></div>
-                                    <div class="wuxFeatureHeaderInfo">
-                                        <span><strong>Traits: </strong></span>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("ItemTrait", 0)}" value="0" />
-                                        <div class="wuxHiddenInlineAuxField">
-                                            <span>None</span>
-                                        </div>
-                                        ${buildTooltipSection("ItemTrait", 0)}
-                                        ${buildTooltipSection("ItemTrait", 1)}
-                                        ${buildTooltipSection("ItemTrait", 2)}
-                                        ${buildTooltipSection("ItemTrait", 3)}
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("ItemDescription")}" value="0" />
-                            <div class="wuxHiddenField">
-                                <div class="wuxFeatureFunctionBlock">
-                                    <div class="wuxFeatureFunctionBlockFlavorText">
-                                        <span name="${getPopupAttribute("ItemDescription")}"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("ItemCraftSkill")}" value="0" />
-                            <div class="wuxHiddenField">
-                                <div class="wuxFeatureHeaderInfoReq">
-                                    <div class="wuxFeatureHeaderInfo"><strong>Crafting Recipe</strong></div>
-                                    <div class="wuxFeatureHeaderInfo"><span name="${getPopupAttribute("ItemCraftSkill")}"></span></div>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("ItemCraftMats")}" value="0" />
-                                    <div class="wuxHiddenField">
-                                        <div class="wuxFeatureHeaderInfo">
-                                            <span><strong>Base Materials:</strong></span>
-                                            <span name="${getPopupAttribute("ItemCraftMats")}"></span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="wuxFeatureHeaderInfo">
-                                        <span><strong>Components: </strong></span>
-                                        <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute("ItemCraft", 0)}" value="0" />
-                                        <div class="wuxHiddenInlineAuxField">
-                                            <span>None</span>
-                                        </div>
-                                        ${buildTooltipSection("ItemCraft", 0)}
-                                        ${buildTooltipSection("ItemCraft", 1)}
-                                        ${buildTooltipSection("ItemCraft", 2)}
-                                        ${buildTooltipSection("ItemCraft", 3)}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    `;
-                },
+                    let popupDef = WuxDef.Get("Popup");
+                    let itemRepeaterDisplayBuilder = new ItemRepeaterDisplayBuilder(popupDef);
 
-                getPopupAttribute = function (attribute, suffix) {
-                    let baseDefinition = WuxDef.Get("Popup");
-                    return baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
+                    let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("ItemName")}`);
+                    return WuxSheetMain.HiddenField(fieldName,
+                        `${WuxSheetMain.Header("Item Data")}
+                        ${itemRepeaterDisplayBuilder.print()}`);
                 },
 
                 buildTechniqueTemplate = function () {
@@ -1609,73 +1549,6 @@ var DisplayPopups = DisplayPopups || (function () {
                     return WuxSheetMain.HiddenField(fieldName,
                         `${WuxSheetMain.Header("Technique")}
                         ${techniqueDisplayBuilder.print()}`);
-                },
-
-                buildTooltipSection = function (baseAttribute, index, delimiter) {
-                    return `<input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute(baseAttribute, index)}" value="0" />
-                    <div class="wuxHiddenInlineField">
-                        ${index == 0 ? "" : `<span>${delimiter == undefined ? "; " : delimiter}</span>`}
-                        <span class="wuxTooltip">
-                            <span class="wuxTooltipText" name="${getPopupAttribute(baseAttribute, index)}">-</span>
-                            <div class="wuxTooltipContent">
-                                <div class="wuxHeader2"><span name="${getPopupAttribute(baseAttribute, index)}">-</span></div>
-                                <span class="wuxDescription"><em>Technique Trait</em></span>
-                                <span class="wuxDescription" name="${getPopupAttribute(baseAttribute, index + "desc0")}"></span>
-                                <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute(baseAttribute, index + "desc1")}" value="0" />
-                                <div class="wuxHiddenField">
-                                    <span class="wuxDescription" name="${getPopupAttribute(baseAttribute, index + "desc1")}"></span>
-                                </div>
-                                <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute(baseAttribute, index + "desc2")}" value="0" />
-                                <div class="wuxHiddenField">
-                                    <span class="wuxDescription" name="${getPopupAttribute(baseAttribute, index + "desc2")}"></span>
-                                </div>
-                            </div>
-                        </span>
-                    </div>`;
-                },
-
-                addTechEffects = function () {
-                    let effects = [];
-                    for (let i = 0; i < 10; i++) {
-                        effects.push(addTechEffect("TechEffect", i));
-                    }
-                    return effects.join("\n");
-                },
-
-                addSecondaryTechEffects = function () {
-                    let effects = [];
-                    for (let i = 0; i < 10; i++) {
-                        effects.push(addTechEffect("TechSEffect", i));
-                    }
-                    return effects.join("\n");
-                },
-
-                addTechEffect = function (attrName, index, headerName, blockName) {
-                    if (headerName == undefined) {
-                        headerName = "wuxFeatureCheckHeader";
-                    }
-                    if (blockName == undefined) {
-                        blockName = "wuxFeatureCheckBlock";
-                    }
-                    return `<input type="hidden" name="${getPopupAttribute(attrName, `${index}desc`)}" value="0" />
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute(attrName, `${index}name`)}" value="0" />
-                    <div class="wuxHiddenField">
-                        <div class="${headerName}">
-                            <span class="wuxTooltip">
-                                <span class="wuxTooltipText" name="${getPopupAttribute(attrName, `${index}name`)}">Name</span>
-                                <div class="wuxTooltipContent">
-                                    <div class="wuxHeader2"><span name="${getPopupAttribute(attrName, `${index}name`)}">Name</span></div>
-                                    <span class="wuxDescription" name="${getPopupAttribute(attrName, `${index}desc`)}"></span>
-                                </div>
-                            </span>
-                        </div>
-                    </div>
-                    <input type="hidden" class="wuxHiddenField-flag" name="${getPopupAttribute(attrName, index)}" value="0" />
-                    <div class="wuxHiddenField">
-                        <div class="${blockName}">
-                            <span class="wuxFeatureCheckBlockRow" name="${getPopupAttribute(attrName, index)}">Effect</span>
-                        </div>
-                    </div>`;
                 },
 
                 buildAddButton = function () {

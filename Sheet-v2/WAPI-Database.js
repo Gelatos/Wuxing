@@ -1665,6 +1665,7 @@ class UsableItemData extends ItemData {
         this.dc = json.dc;
         this.time = json.time;
         this.components = json.components;
+        this.commonTechniques = json.commonTechniques;
         this.technique = new TechniqueData(json.technique);
         this.hasTechnique = json.hasTechnique;
     }
@@ -1680,6 +1681,8 @@ class UsableItemData extends ItemData {
         this.time = isNaN(parseInt(dataArray[i])) ? 1 : parseInt(dataArray[i]);
         i++;
         this.components = "" + dataArray[i];
+        i++;
+        this.commonTechniques = "" + dataArray[i];
         i++;
         let techData = [this.name, "Item", "", ("" + dataArray[i]), "", 2];
         i++;
@@ -1698,6 +1701,7 @@ class UsableItemData extends ItemData {
         this.dc = 0;
         this.time = 0;
         this.components = "";
+        this.commonTechniques = "";
         this.technique = new TechniqueData();
         this.hasTechnique = false;
     }
@@ -3288,11 +3292,14 @@ class ItemDisplayData {
         this.sheetname = "";
         this.group = "";
         this.stats = "";
-        this.traits = [];
+        this.bulk = "";
+        this.baseValue = "";
+        this.traits = "";
+        this.traitsDesc = [];
         this.description = "";
-        this.craftSkill = "";
-        this.craftMaterials = "";
         this.craftComponents = [];
+        this.craftData = [];
+        this.craftDesc = [];
     }
 
     importItem(item) {
@@ -3301,27 +3308,53 @@ class ItemDisplayData {
         this.displayname = item.displayname;
         this.sheetname = item.sheetname;
         this.group = `${item.group}${item.category != "" ? ` (${item.category})` : ""}`;
+        this.bulk = item.bulk;
+        this.baseValue = item.value;
         this.stats = `Base Value: ${item.value}; Bulk: ${item.bulk}`;
-        this.traits = WuxDef.GetValues(item.traits, ";", "Trait_");
         this.description = item.description;
+        this.setTraitsData();
         
         if (item.itemType == "UsableItem") {
-            this.craftSkill = `DC ${item.dc} ${item.skill} Check; Time: ${item.time}`;
-            this.craftMaterials = item.skill == "Build" ? `${item.bulk}` : "";
             if (item.components != "") {
-                this.craftComponents = this.getComponents(item.components);
+                this.setComponents(item.components);
+            }
+        }
+        this.setCrafting();
+    }
+
+    setTraitsData() {
+        this.traits = "";
+        this.traitsDesc = [];
+        let traitDefinitions = WuxDef.GetValues(this.item.traits, ";", "Trait_");
+
+        if (traitDefinitions.length > 0) {
+            for (let i = 0; i < traitDefinitions.length; i++) {
+                let item = traitDefinitions[i];
+                if (traitDefinitions.length > 1) {
+                    if (i == traitDefinitions.length - 1) {
+                        this.traits += ` and`;
+                    } else if (i > 0) {
+                        this.traits += ", ";
+                    }
+                }
+                this.traits += ` ${item.getTitle()}`;
+                if (this.traitsDesc.length > 0) {
+                    this.traitsDesc.push("");
+                }
+                this.traitsDesc.push(`[${item.getTitle()}]`);
+                this.traitsDesc = this.traitsDesc.concat(item.descriptions);
             }
         }
     }
 
-    getComponents(components) {
+    setComponents(components) {
         let setDelimiter = ";";
         let quantityDelimiter = " ";
         let typeDelimiter = "_";
         
         components = components.split(setDelimiter);
 
-        let output = [];
+        this.craftComponents = [];
         let splitter = "";
         let quantity = "";
         let type = "";
@@ -3341,13 +3374,7 @@ class ItemDisplayData {
                     break;
                 case "GoodsCat":
                     item = WuxGoods.Get(name);
-                    output.push({
-                        quantity: quantity,
-                        type: "Goods Category",
-                        item: item,
-                        name: `${quantity} ${item.name}`,
-                        desc: item.description
-                    });
+                    type = "Goods Category";
                     break;
                 default:
                     item = WuxItems.Get(name);
@@ -3355,7 +3382,7 @@ class ItemDisplayData {
             }
             
             if (item != undefined) {
-                output.push({
+                this.craftComponents.push({
                     quantity: quantity,
                     type: type,
                     item: item,
@@ -3364,8 +3391,74 @@ class ItemDisplayData {
                 });
             }
         }
+    }
+    
+    setCrafting() {
+        this.craftData = [];
+        this.craftDesc = [];
+        let isBlueprint = this.item.skill == "Build";
+        
+        this.addDefinitionToCraftDesc(WuxDef.Get(isBlueprint ? "System_CraftingBlueprint" : "System_CraftingRecipe"));
+        
+        if (this.item.dc == 0) {
+            this.craftData.push(`${this.item.skill} Training`);
+            this.addDefinitionToCraftDesc(WuxDef.Get(isBlueprint ? "System_CraftSkillCheckBlueprintTraining" : "System_CraftSkillCheckTraining"));
+        }
+        else {
+            this.craftData.push(`DC ${this.item.dc} ${this.item.skill} Check`);
+            this.addDefinitionToCraftDesc(WuxDef.Get(isBlueprint ? "System_CraftSkillCheckBlueprint" : "System_CraftSkillCheck"));
+            this.addDefinitionToCraftDesc(WuxDef.Get("System_CraftSkillCheck"));
+        }
+        
+        this.craftData.push(`Time: ${this.item.time}`);
+        this.addDefinitionToCraftDesc(WuxDef.Get(isBlueprint ? "System_CraftTimeBlueprint" : "System_CraftTime"));
+        
+        let craftComponentData = "";
+        this.addDefinitionToCraftDesc(WuxDef.Get("System_CraftingComponent"));
+        if (isBlueprint) {
+            craftComponentData += `${this.item.bulk} bulk materials`;
+            this.addDefinitionToCraftDesc(WuxDef.Get("System_CraftMaterials"));
+        }
+        
+        for (let i = 0; i < this.craftComponents.length; i++) {
+            let item = this.craftComponents[i];
+            if (this.craftComponents.length > 1) {
+                if (i == this.craftComponents.length - 1) {
+                    craftComponentData += ` and`;
+                } else if (i > 0) {
+                    craftComponentData += ", ";
+                }
+            }
+            craftComponentData += ` ${item.name}`;
+            this.addComponentToCraftDesc(item);
+        }
 
-        return output;
+        if (craftComponentData != "") {   
+            this.craftData.push(`Components: ${craftComponentData}`);
+        }
+    }
+    addDefinitionToCraftDesc(definition) {
+        this.addToCraftDesc(definition.getTitle(), definition.descriptions);
+    }
+    addComponentToCraftDesc(item) {
+        this.addToCraftDesc(item.item.name, item.desc);
+    }
+    addToCraftDesc(name, descriptions) {
+        if (this.craftDesc.length > 0) {
+            this.craftDesc.push("");
+        }
+        this.craftDesc.push(`[${name}]`);
+        this.craftDesc = this.craftDesc.concat(descriptions);
+    }
+
+    getTraitsDescriptions(join) {
+        return this.traitsDesc.join(join);
+    }
+    getCraftingDescriptions(join) {
+        return this.craftData.join(join);
+    }
+    getCraftingTooltip(join) {
+        return this.craftDesc.join(join);
     }
 }
 
