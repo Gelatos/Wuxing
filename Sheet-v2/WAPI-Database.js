@@ -2282,18 +2282,18 @@ class TechniqueDisplayData {
             if (this.traitsDesc.length > 0) {
                 this.traitsDesc.push("");
             }
-            this.traitsDesc.push(focusDefinition.getTitle());
+            this.traitsDesc.push(`[${focusDefinition.getTitle()}]`);
             this.traitsDesc = this.traitsDesc.concat(focusDefinition.descriptions);
         }
 
         if (technique.forms.indexOf("Social") >= 0) {
             this.traits += `This is a Social technique. `;
-            let focusDefinition = WuxDef.Get("Trait_Social");
+            let socialDefinition = WuxDef.Get("Trait_Social");
             if (this.traitsDesc.length > 0) {
                 this.traitsDesc.push("");
             }
-            this.traitsDesc.push(focusDefinition.getTitle());
-            this.traitsDesc = this.traitsDesc.concat(focusDefinition.descriptions);
+            this.traitsDesc.push(`[${socialDefinition.getTitle()}]`);
+            this.traitsDesc = this.traitsDesc.concat(socialDefinition.descriptions);
         }
         
         if (technique.boon > 0) {
@@ -2318,7 +2318,7 @@ class TechniqueDisplayData {
                     if (this.traitsDesc.length > 0) {
                         this.traitsDesc.push("");
                     }
-                    this.traitsDesc.push(item.getTitle());
+                    this.traitsDesc.push(`[${item.getTitle()}]`);
                     this.traitsDesc = this.traitsDesc.concat(item.descriptions);
                 }
             }
@@ -2327,7 +2327,7 @@ class TechniqueDisplayData {
                 if (this.traitsDesc.length > 0) {
                     this.traitsDesc.push("");
                 }
-                this.traitsDesc.push(itemTraits[0].getTitle());
+                this.traitsDesc.push(`[${itemTraits[0].getTitle()}]`);
                 this.traitsDesc = this.traitsDesc.concat(itemTraits[0].descriptions);
             }
             this.traits += `. `;
@@ -2365,7 +2365,7 @@ class TechniqueDisplayData {
                 checkDef = WuxDef.Get("Trait_SkillCheck-DC");
             }
             let checkDesc = [];
-            checkDesc.push(checkDef.getTitle());
+            checkDesc.push(`[${checkDef.getTitle()}]`);
             checkDesc.push(checkDef.descriptions.join(". "));
 
             if (technique.impacts.includes("Truehit")) {
@@ -2379,7 +2379,7 @@ class TechniqueDisplayData {
                 if (checkDesc.length > 0) {
                     checkDesc.push("");
                 }
-                checkDesc.push(accurateDef.getTitle());
+                checkDesc.push(`[${accurateDef.getTitle()}]`);
                 checkDesc.push(accurateDef.descriptions.join(". "));
             }
             techDisplayData.checkEffect = new TechniqueEffectDisplayData(checkedEffects, technique, technique.coreDefense, checkDesc);

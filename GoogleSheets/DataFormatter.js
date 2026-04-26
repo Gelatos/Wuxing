@@ -786,7 +786,7 @@ class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
             return "";
         }
         return this.printCoreEffectsField(
-            this.printTooltip("Effects", "Effects", this.displayData.coreEffect.effectTypeDesc),
+            this.printTooltip("Effects", "Core Effects", this.displayData.coreEffect.effectTypeDesc),
             this.printSpan(this.displayData.getCoreEffects("\n"))
         );
     }
@@ -804,7 +804,7 @@ class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
         }
         return this.printCheckEffectsField(
             `<input type="hidden" class="wuxFeatureHeader-flag" value="${this.displayData.coreDefense}">`,
-            this.printTooltip(this.displayData.checkType, "Effects", this.displayData.checkEffect.effectTypeDesc),
+            this.printTooltip(this.displayData.checkType, "Skill Check Effects", this.displayData.checkEffect.effectTypeDesc),
             this.printSpan(this.displayData.getCheckEffects("\n"))
         );
     }
@@ -907,7 +907,7 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         let fieldName = this.getActionTypeAttribute("TechCoreEffect");
         return WuxSheetMain.HiddenField(fieldName,
             this.printCoreEffectsField(
-                this.printAttributeTooltip("Effects", "Effects", 
+                this.printAttributeTooltip("Effects", "Core Effects", 
                     this.getActionTypeAttribute("TechCoreEffect", WuxDef._info)),
                 this.printSpan(fieldName)
             )
@@ -925,7 +925,7 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         return WuxSheetMain.HiddenField(fieldName,
             this.printCheckEffectsField(
                 `<input type="hidden" class="wuxFeatureHeader-flag" name="${this.getActionTypeAttribute("TechCoreDefense")}">`,
-                this.printAttributeTooltip(this.printSpanActionTypeAttribute("TechCheckTitle"), "Effects",
+                this.printAttributeTooltip(this.printSpanActionTypeAttribute("TechCheckTitle"), "Skill Check Effects",
                     this.getActionTypeAttribute("TechCheckEffect", WuxDef._info)),
                 this.printSpan(fieldName)
             )
