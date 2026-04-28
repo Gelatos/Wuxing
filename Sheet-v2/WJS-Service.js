@@ -948,8 +948,12 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.getVariable("TechName", suffix), displayData.name);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechVersion", suffix), technique.version);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechActionType"), displayData.actionType);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechActionName"), displayData.actionName);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechActionTooltip"), displayData.getActionsDescriptions("\n"));
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechEnCost", suffix), displayData.enCost);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
@@ -1041,8 +1045,12 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.getVariableWithoutBase("Action_Use", suffix), displayData.getRollTemplate(true));
 	}
 	clearTechniqueInfo () {
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechActionType"), "");
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechActionName"), "");
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechActionTooltip"), "");
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechName"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 

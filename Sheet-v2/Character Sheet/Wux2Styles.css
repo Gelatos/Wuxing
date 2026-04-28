@@ -2381,23 +2381,12 @@ button[type=roll].wuxFeatureHeaderNameButton::before
     position: relative;
     display: block;
     width: 100%;
-}
-
-.wuxFeatureHeaderDisplayInfoActionType span,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoActionType,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Swift,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Quick,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Full,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Assist,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Reaction,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Passive
-{
-    padding-left: 10px;
+    padding: 2px 0 2px 10px;
     line-height: 14px;
-    
+
     font-size: 10px;
     font-weight: bold;
-    color: #fff;
+    color: #000;
 }
 
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoActionType,
@@ -2408,7 +2397,7 @@ button[type=roll].wuxFeatureHeaderNameButton::before
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Reaction,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Passive
 {
-    padding: 2px 0 2px 10px;
+    padding: 3px 0 3px 10px;
 }
 
 input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeaderDisplayInfoActionType,
@@ -2416,8 +2405,8 @@ input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeaderDisplayInfoActionTy
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Item
 {
     background: linear-gradient(to right,
-    #6f02a6,
-    #6f02a633);
+    #6f02a6 80%,
+    #6f02a600);
 }
 
 input.wuxFeatureHeader-flag[value="Swift"] + .wuxFeatureHeaderDisplayInfoActionType,
@@ -2425,8 +2414,8 @@ input.wuxFeatureHeader-flag[value="Swift"] + .wuxFeatureHeaderDisplayInfoActionT
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Swift
 {
     background: linear-gradient(to right,
-    #cfaf04,
-    #cfaf0433);
+    #ffdf29 80%,
+    #cfaf0400);
 }
 
 input.wuxFeatureHeader-flag[value="Quick"] + .wuxFeatureHeaderDisplayInfoActionType,
@@ -2434,8 +2423,8 @@ input.wuxFeatureHeader-flag[value="Quick"] + .wuxFeatureHeaderDisplayInfoActionT
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Quick
 {
     background: linear-gradient(to right,
-    #5cd39cFF,
-    #5cd39c33);
+    #00ffd9 80%,
+    #5cd39c00);
 }
 
 input.wuxFeatureHeader-flag[value="Full"] + .wuxFeatureHeaderDisplayInfoActionType,
@@ -2443,8 +2432,8 @@ input.wuxFeatureHeader-flag[value="Full"] + .wuxFeatureHeaderDisplayInfoActionTy
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Full
 {
     background: linear-gradient(to right,
-    #12710e,
-    #2cb12833);
+    #0adf00 80%,
+    #2cb12800);
 }
 
 input.wuxFeatureHeader-flag[value="Assist"] + .wuxFeatureHeaderDisplayInfoActionType,
@@ -2452,8 +2441,8 @@ input.wuxFeatureHeader-flag[value="Assist"] + .wuxFeatureHeaderDisplayInfoAction
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Assist
 {
     background: linear-gradient(to right,
-    #ff29d4,
-    #ff80ee33);
+    #fb93e7 80%,
+    #ff80ee00);
 }
 
 input.wuxFeatureHeader-flag[value="Reaction"] + .wuxFeatureHeaderDisplayInfoActionType,
@@ -2461,8 +2450,8 @@ input.wuxFeatureHeader-flag[value="Reaction"] + .wuxFeatureHeaderDisplayInfoActi
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Reaction
 {
     background: linear-gradient(to right,
-    #ff2929,
-    #ff808033);
+    #ffabab 80%,
+    #ff808000);
 }
 
 input.wuxFeatureHeader-flag[value="Passive"] + .wuxFeatureHeaderDisplayInfoActionType,
@@ -2470,8 +2459,8 @@ input.wuxFeatureHeader-flag[value="Passive"] + .wuxFeatureHeaderDisplayInfoActio
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Passive
 {
     background: linear-gradient(to right,
-    #292020,
-    #68635f33);
+    #292020 80%,
+    #68635f00);
 }
 
 input.wuxFeatureHeader-flag[value="Brief"] + .wuxFeatureHeaderDisplayInfoActionType,
@@ -2890,8 +2879,12 @@ input.wuxFeatureHeader-flag[value="WillBreak"] + .wuxFeatureHeaderInfoEffectTitl
 .wuxFeatureHeaderInfoTrigger,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTrigger
 {
-    color: white;
-    background: #ec2222;
+    color: #000;
+    background: #ffabab;
+    border-style: solid;
+    border-color: #ff2929;
+    border-width: 3px 0 3px 0;
+    
 }
 .wuxFeatureHeaderInfoFlavor,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoFlavor

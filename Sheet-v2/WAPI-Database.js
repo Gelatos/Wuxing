@@ -2165,14 +2165,18 @@ class TechniqueDisplayData {
 
     createEmpty() {
         this.technique = {};
-        this.name = "";
-        this.actionType = "";
-        this.displayname = "";
         this.definition = {};
+        
+        this.name = "";
+        this.displayname = "";
         this.fieldName = "";
         this.trigger = "";
         this.flavorText = "";
         this.isOnEnter = false;
+
+        this.actionType = ""
+        this.actionName = "";
+        this.actionsDesc = [];
 
         this.enCost = 0;
         this.willCost = 0;
@@ -2194,6 +2198,7 @@ class TechniqueDisplayData {
 
     importTechnique(technique) {
         this.setTechBasics(technique);
+        this.setActionName(technique);
         this.setTechSetResourceData(technique);
         this.setTechTargetData(technique);
         this.setTraitsData(technique);
@@ -2207,10 +2212,40 @@ class TechniqueDisplayData {
         this.sheetname = technique.sheetname;
         this.definition = technique.createDefinition(WuxDef.Get("Technique"));
         this.fieldName = Format.ToFieldName(technique.name);
-        this.actionType = technique.action;
         this.trigger = technique.trigger;
         this.flavorText = technique.flavorText;
         this.isOnEnter = technique.forms.includes("OnEnter");
+    }
+    
+    setActionName(technique) {
+        this.actionsDesc = [];
+        this.actionType = technique.action;
+        
+        let actionTypeDef = WuxDef.Get(`Title_${technique.action}Action`);
+        this.actionsDesc.push(`[${actionTypeDef.getTitle()}]`);
+        this.actionsDesc = this.actionsDesc.concat(actionTypeDef.descriptions);
+        
+        this.actionName = technique.action;
+        if (technique.limits != "") {
+            this.actionName += ` - ${technique.limits}`;
+            
+            let limitDefinition;
+            if (technique.limits == "Focus") {
+                limitDefinition = WuxDef.Get("Trait_Focus");
+            }
+            else if (technique.limits.indexOf("/Round") > 0) {
+                limitDefinition = WuxDef.Get("Trait_PerRound");
+            }
+            else if (technique.limits.indexOf("/Turn") > 0) {
+                limitDefinition = WuxDef.Get("Trait_PerTurn");
+            }
+            else if (technique.limits.indexOf("/Conflict") > 0) {
+                limitDefinition = WuxDef.Get("Trait_PerConflict");
+            }
+            this.actionsDesc.push("");
+            this.actionsDesc.push(`[${limitDefinition.getTitle()}]`);
+            this.actionsDesc = this.actionsDesc.concat(limitDefinition.descriptions);
+        }
     }
 
     setTechSetResourceData(technique) {
@@ -2275,20 +2310,6 @@ class TechniqueDisplayData {
     setTraitsData(technique) {
         this.traits = "";
         this.traitsDesc = [];
-
-        if (technique.limits != "") {
-            this.traits += `Usable ${technique.limits}. `;
-        }
-
-        if (technique.forms.indexOf("Focus") >= 0) {
-            this.traits += `You must maintain Focus on this technique. `;
-            let focusDefinition = WuxDef.Get("Trait_Focus");
-            if (this.traitsDesc.length > 0) {
-                this.traitsDesc.push("");
-            }
-            this.traitsDesc.push(`[${focusDefinition.getTitle()}]`);
-            this.traitsDesc = this.traitsDesc.concat(focusDefinition.descriptions);
-        }
 
         if (technique.forms.indexOf("Social") >= 0) {
             this.traits += `This is a Social technique. `;
@@ -2426,6 +2447,9 @@ class TechniqueDisplayData {
         this.effectTypeDesc = this.effectTypeDesc.concat(definition.descriptions);
     }
 
+    getActionsDescriptions(join) {
+        return this.actionsDesc.join(join);
+    }
     getTraitsDescriptions(join) {
         return this.traitsDesc.join(join);
     }
@@ -2480,7 +2504,7 @@ class TechniqueDisplayData {
     }
     
     generateRollTemplate(addTechnique) {
-        let output = `{{Name=${this.name}}}{{type-${this.actionType}=1}}`;
+        let output = `{{Name=${this.name}}}{{type-${this.actionType}=1}}{{action=${this.actionName}}`;
         if (this.enCost != "") {
             output += `{{En=${this.enCost}}}`;
         }
@@ -3126,9 +3150,15 @@ class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
     }
     getDodgeDefense(technique, coreDefense) {
         if (coreDefense == "Brace" || coreDefense == "Warding") {
+            if (technique.impacts.includes("Truehit")) {
+                return "True";
+            }
             return "Evasion";
         }
         if (coreDefense == "Insight" || coreDefense == "Resolve") {
+            if (technique.impacts.includes("Truehit")) {
+                return "True";
+            }
             return "Ego";
         }
         return "";

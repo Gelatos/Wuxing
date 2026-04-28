@@ -904,10 +904,11 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         return this.printNameField(contents);
     }
     printActionType () {
-        let fieldName = this.getActionTypeAttribute("TechActionType");
         return this.printActionTypeField(
-            `<input type="hidden" class="wuxFeatureHeader-flag" name="${fieldName}">`, 
-            this.printSpan(fieldName));
+            `<input type="hidden" class="wuxFeatureHeader-flag" name="${this.getActionTypeAttribute("TechActionType")}">`,
+            this.printAttributeTooltip(`<span name="${this.getActionTypeAttribute("TechActionName")}"></span>`, 
+                "Action", this.getActionTypeAttribute("TechActionTooltip"))
+        )
     }
     printRange() {
         let fieldName = this.getActionTypeAttribute("TechRange");

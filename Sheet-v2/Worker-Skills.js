@@ -48,7 +48,7 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
                     skillExpertise = attrHandler.parseString(skillDefinitions[i].getVariable(WuxDef._expertise));
                     if (skillRank == "on") {
                         if (skillExpertise == "on") {
-                            skillPointValue = 3;
+                            skillPointValue = WuxDef.Get("SkillExpertise").formula.getValue();
                         }
                         skillPointValue += 2 + attrHandler.parseInt(WuxDef.GetVariable("CR"));
                     }

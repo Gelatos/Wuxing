@@ -1022,7 +1022,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         buildInteractiveExpertiseHeader = function (skillDefinition) {
-                            let expertiseDef = WuxDef.Get("Title_SkillExpertise");
+                            let expertiseDef = WuxDef.Get("SkillExpertise");
                             let interactHeader = `<span class="wuxHeader">${expertiseDef.getTitle()}</span>`;
 
                             return WuxSheetMain.InteractionElement.Build(false, 

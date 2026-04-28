@@ -437,6 +437,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 formeTech.setupPostGetAttr(attrHandler);
                 formeTech.registerTechDictionary(attrHandler);
                 formeTech.updateDataAndVisibilityOfRepeaterTechniques(attrHandler);
+                formeTech.addMissingTechniques(attrHandler);
                 formeTech.updateLoadTechniques(attrHandler);
             });
             attributeHandler.addFinishCallback(function () {
