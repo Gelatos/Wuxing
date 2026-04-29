@@ -780,13 +780,14 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         addPerkData = function (styleGroup) {
-                            let perkTechniques = WuxTechs.Filter(new DatabaseFilterData("style", styleGroup));
+                            let perkTechniqueStyles = WuxStyles.Filter(new DatabaseFilterData("group", styleGroup));
 
                             let perkTables = ["", ""];
-                            for (let i = 0; i < perkTechniques.length; i++) {
-                                let perkTechnique = perkTechniques[i];
+                            for (let i = 0; i < perkTechniqueStyles.length; i++) {
+                                let perkStyle = perkTechniqueStyles[i];
+                                let perkTechnique = WuxTechs.Get(perkStyle.name);
                                 let perkDef = perkTechnique.createDefinition(WuxDef.Get("Technique"));
-                                perkTables[i%2] += printPerkTechnique(perkDef, perkTechnique, WuxStyles.Get(perkTechnique.name));
+                                perkTables[i%2] += printPerkTechnique(perkDef, perkTechnique, perkStyle);
                             }
                             return [WuxSheetMain.Table.FlexTableGroup(perkTables[0], " wuxMinWidth350"),
                                 WuxSheetMain.Table.FlexTableGroup(perkTables[1], " wuxMinWidth350")];
