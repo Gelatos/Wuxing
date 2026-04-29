@@ -205,9 +205,11 @@ var AdvancementBackend = AdvancementBackend || (function () {
                 let perkTechniques = WuxTechs.Filter(new DatabaseFilterData("style", styleGroups[index].getTitle()));
 
                 for (let i = 0; i < perkTechniques.length; i++) {
-                    let perkDef = perkTechniques[i].createDefinition(techniqueDefinition);
+                    let perkTech = perkTechniques[i];
+                    let perkDef = perkTech.createDefinition(techniqueDefinition);
+                    let perkStyle = WuxStyles.Get(perkTech.name);
                     output += WuxSheetBackend.OnChange([perkDef.getVariable()],
-                        `WuxWorkerPerks.UpdateBuildPoints(eventinfo, ${perkTechniques[i].group})`, true);
+                        `WuxWorkerPerks.UpdateBuildPoints(eventinfo, ${perkStyle.effects})`, true);
                 }
             }
 

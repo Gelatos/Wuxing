@@ -281,7 +281,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             let headerContents = `<div class="wuxInteractiveBlock">
                                 ${WuxSheetMain.InteractionElement.CheckboxBlockIcon(perkDef.getAttribute(),
                                 `<span class="wuxHeader">${technique.name}</span>
-                                    <span class="wuxSubheader">[Cost ${technique.group} Perk Point]</span>`
+                                    <span class="wuxSubheader">[Cost ${style.effects} Perk Point]</span>`
                             )}
                             </div>`;
 
@@ -796,7 +796,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let headerContents = `<div class="wuxInteractiveBlock">
                                 ${WuxSheetMain.InteractionElement.CheckboxBlockIcon(perkDef.getAttribute(),
                                 `<span class="wuxHeader">${technique.name}</span>
-                                    <span class="wuxSubheader">[Cost ${technique.group} Perk Point]</span>`
+                                    <span class="wuxSubheader">[Cost ${style.effects} Perk Point]</span>`
                                 )}
                             </div>`;
                             let descContents = `<div class="wuxDescription wuxMarginLeft50">${style.description}</div>`;
