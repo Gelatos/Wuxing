@@ -686,7 +686,8 @@ class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
             ${this.printOnEnter()}
             ${this.printCheckEffects()}
             ${this.printEndEffects()}
-            ${this.printWillBreakEffects()}`);
+            ${this.printWillBreakEffects()}
+            ${this.printEnhancementEffects()}`);
     }
     
     printRange() {}
@@ -755,6 +756,17 @@ class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
     printWillBreakEffectsField (title, contents) {
         return `<div class="wuxFeatureHeaderInfoEffect-WillBreak">
             <input type="hidden" class="wuxFeatureHeader-flag" value="WillBreak">
+            <div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${title}</span></div>
+            <div class="wuxFeatureHeaderInfoContents">${contents}</div>
+        </div>`;
+    }
+
+    printEnhancementEffects() {}
+    printEnhancementEffectsField(contents) {
+        let enhancementDef = WuxDef.Get("Title_TechEnhancement");
+        let title = this.printTooltip(enhancementDef.getTitle(), enhancementDef.getTitle(), enhancementDef.descriptions);
+        return `<div class="wuxFeatureHeaderInfoEffect-Enhance">
+            <input type="hidden" class="wuxFeatureHeader-flag" value="Enhance">
             <div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${title}</span></div>
             <div class="wuxFeatureHeaderInfoContents">${contents}</div>
         </div>`;
@@ -862,6 +874,14 @@ class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
             this.printSpan(this.displayData.getWillBreakEffects("\n"))
         );
     }
+    printEnhancementEffects() {
+        if (this.displayData.enhancementEffects == "") {
+            return "";
+        }
+        return this.printEnhancementEffectsField(
+            this.printSpan(this.displayData.getEnhanceEffects("\n"))
+        );
+    }
 }
 
 class TechniqueDisplayBuilderUsable extends TechniqueDisplayBuilder {
@@ -901,7 +921,8 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
     
     printName() {
         let contents = this.printSpanActionTypeAttribute("TechName");
-        return this.printNameField(contents);
+        return `<input type="hidden" name="${this.getActionTypeAttribute("TechTrueName")}">
+        ${this.printNameField(contents)}`;
     }
     printActionType () {
         return this.printActionTypeField(
@@ -989,6 +1010,14 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
             )
         );
     }
+    printEnhancementEffects() {
+        let fieldName = this.getActionTypeAttribute("TechEnhanceEffect");
+        return WuxSheetMain.HiddenField(fieldName,
+            this.printEnhancementEffectsField(
+                this.printSpan(fieldName)
+            )
+        );
+    }
 }
 
 class TechniqueRepeaterDisplayBuilderUsable extends TechniqueRepeaterDisplayBuilder {
@@ -997,6 +1026,24 @@ class TechniqueRepeaterDisplayBuilderUsable extends TechniqueRepeaterDisplayBuil
             ${this.printSpanActionTypeAttribute("TechName")}
         </button>`
         return this.printNameField(contents);
+    }
+    printEnhancementEffects() {
+        let fieldName = this.getActionTypeAttribute("TechEnhanceEffect");
+
+        let rankUpField = this.getActionTypeAttribute("TechRankUp");
+        let rankUpButton = WuxSheetMain.HiddenSpanFieldToggle(this.getActionTypeAttribute("TechRankUp", WuxDef._info),
+            WuxSheetMain.Button(rankUpField, "<span class='wuxFeatureButtonIcon'>&#43;</span> Increase Rank", "wuxFeatureButton"),
+            WuxSheetMain.Button(rankUpField, "<span class='wuxFeatureButtonIcon'>&#43;</span> Increase Rank", "wuxFeatureButtonDisabled"));
+        let rankDownField = this.getActionTypeAttribute("TechRankDown");
+        let rankDownButton = WuxSheetMain.HiddenSpanFieldToggle(this.getActionTypeAttribute("TechRankDown", WuxDef._info),
+            WuxSheetMain.Button(rankDownField, "<span class='wuxFeatureButtonIcon'>&#8722;</span> Decrease Rank", "wuxFeatureButton"),
+            WuxSheetMain.Button(rankDownField, "<span class='wuxFeatureButtonIcon'>&#8722;</span> Decrease Rank", "wuxFeatureButtonDisabled"));
+        let contents = `<div class="wuxFeatureHeaderInfoEffect-EnhanceButtons">${rankUpButton}${rankDownButton}</div>`;
+        
+        return WuxSheetMain.HiddenField(fieldName,
+            `${this.printEnhancementEffectsField(this.printSpan(fieldName))}
+            ${contents}`
+        );
     }
 }
 
@@ -3653,7 +3700,6 @@ class TechniqueAssessment {
         this.printAssessmentNote();
         this.printVersionChange();
         this.printAssessmentPointValues();
-        this.printGeneratedImpactTraits();
     }
     printAssessmentNote() {
         let range = this.sheet.getRange(this.row, this.assessColumn, 1, 1);
@@ -3676,10 +3722,6 @@ class TechniqueAssessment {
 
         let range = this.sheet.getRange(this.row, this.assessColumn, this.pointBreakdown.length, 2);
         range.setValues(values);
-    }
-    printGeneratedImpactTraits() {
-        let range = this.sheet.getRange(this.row, this.impactsColumn, 1, 1);
-        range.setValue(this.getImpactTraits());
     }
 
     printCellJson(isCustom) {
@@ -3753,10 +3795,10 @@ class TechniqueAssessment {
             lowPts = this.averagePoints + Math.floor(this.averagePoints * (26 - 50)/ 100);
             medPts = this.averagePoints + Math.floor(this.averagePoints * (32 - 50)/ 100);
             hiPts = this.averagePoints + Math.floor(this.averagePoints * (46 - 50)/ 100);
-            highestPts = this.averagePoints;
+            highestPts = `${this.averagePoints}.`;
         }
         else {
-            lowestPts = this.averagePoints;
+            lowestPts = `${this.averagePoints}.`;
             lowPts = this.averagePoints + Math.floor(this.averagePoints * (60 - 50)/ 100);
             medPts = this.averagePoints + Math.floor(this.averagePoints * (66 - 50)/ 100);
             hiPts = this.averagePoints + Math.floor(this.averagePoints * (72 - 50)/ 100);
@@ -3783,11 +3825,17 @@ class TechniqueAssessment {
         if (this.technique.forms.includes("OnEnter")) {
             assessor.onEnterEffect = true;
         }
-        
+
         this.technique.effects.iterate(function (effect) {
             assessor.pointBreakdown.push({points: 0, rubric: ""});
             assessor.assessEffect(effect, attributeHandler);
         });
+
+        for (const key in this.technique.enhancementEffects) {
+            let effect = this.technique.enhancementEffects[key];
+            assessor.pointBreakdown.push({points: 0, rubric: ""});
+            assessor.assessEffect(effect, attributeHandler);
+        };
 
         this.getStructureAssessment();
         let customPoints = this.sheet.getRange(this.row, this.assessColumn + 2, 1, 1).getValues()[0];
@@ -3796,7 +3844,7 @@ class TechniqueAssessment {
             this.addPointsRubric(customPoints, `(Custom)`)
         }
 
-        this.averagePoints = this.getAveragePoint(this.getEnergy(), this.technique);
+        this.setAveragePoint(this.getEnergy(), this.technique);
 
         if (this.points == 0) {
             this.assessmentPercentage = undefined;
@@ -3870,42 +3918,55 @@ class TechniqueAssessment {
         return isNaN(parseInt(this.technique.en)) ? 0 : parseInt(this.technique.en);
     }
     getEnergyRestriction() {
-        if (this.technique.action == "Full") {
-            return this.technique.tier + 1;
-        }
         let restTypes = ["Brief", "Short", "Long"];
         if (restTypes.includes(this.technique.action)) {
             return 9;
         }
-        return Math.ceil(this.technique.tier / 2) + 1;
+        return this.technique.tier + 2;
     }
 
-    getAveragePoint(energy, technique) {
-        let pointCalc = [];
-        let points = this.basePoints + (3 * energy) + (energy * (energy + 1) / 2);
+    setAveragePoint(energy, technique) {
+        let techniquePointsCalc = this.getAveragePoints(energy, technique);
+
+        this.averagePoints = techniquePointsCalc.points;
+        this.pointsCalc = `(${techniquePointsCalc.pointCalc.join(",")})`;
+    }
+    
+    getAveragePoints(energy, technique) {
+        let output = {
+            points: 0,
+            pointCalc: []
+        }
+        
+        output.points = this.basePoints + (energy > 0 ? 1 : 0) + (3 * energy) + Math.floor(energy * energy / 3);
         if (technique.action == "Full") {
-            points += this.basePoints;
-            pointCalc.push("Full");
+            output.points += this.basePoints;
+            output.pointCalc.push("Full");
         }
         else if (technique.action == "Assist") {
-            points += 3;
-            pointCalc.push("Assist");
+            output.points += 3;
+            output.pointCalc.push("Assist");
         }
         else if (technique.action == "Swift") {
             let lookupName = WuxDef.GetAbbreviation("Job") + "_" + technique.techSet;
             if (WuxDef.GetTitle(lookupName) == "") {
-                points = Math.ceil(points * 0.5);
-                pointCalc.push("Swift Job");
+                output.points = Math.ceil(points * 0.5);
+                output.pointCalc.push("Swift Job");
             }
         }
-        
-        if (technique.willPower > 0) {
-            points += Math.ceil(technique.willPower / 5);
-            pointCalc.push("Magic");
-        }
 
-        this.pointsCalc = `(${pointCalc.join(",")})`;
-        return points;
+        if (technique.willPower > 0) {
+            output.points += Math.ceil(technique.willPower / 5);
+            output.pointCalc.push("Magic");
+        }
+        
+        return output;
+    }
+    
+    getEnhancementPoints() {
+        let points = this.getAveragePoints(this.getEnergy(), this.technique);
+        let enhancePoints = this.getAveragePoints(this.getEnergy() + 1, this.technique);
+        return enhancePoints.points - points.points;
     }
 
     getVarianceCalculation() {
@@ -4055,16 +4116,6 @@ class TechniqueAssessment {
             this.addTargetedPointsRubric(effect, output.value);
             this.addImpactTrait("Trait_Atk");
         }
-        else if (subType == "Cond") {
-            output.value = Math.max(Math.floor(output.value * 0.9), 1);
-            message = `(Conditional)`;
-
-            if (effect.defense != "WillBreak") {
-                this.addPointsRubric(output.value, message);
-            }
-            this.addTargetedPointsRubric(effect, output.value);
-            this.addImpactTrait("Trait_Atk");
-        }
         else if (subType == "Special") {
             this.addImpactTrait("Trait_Atk");
         }
@@ -4083,9 +4134,15 @@ class TechniqueAssessment {
                 }
             }
             message = `(Psyche)`;
-            this.addPointsRubric(output.value, message);
-            this.addDefensePointsRubric(effect, output.value, message);
-            this.addTargetedPointsRubric(effect, output.value);
+            if (effect.defense == "Enhance") {
+                this.addPointsRubric(0, `${output.value} (max ${this.getEnhancementPoints()})`);
+                return;
+            }
+            else {
+                this.addPointsRubric(output.value, message);
+                this.addDefensePointsRubric(effect, output.value, message);
+                this.addTargetedPointsRubric(effect, output.value);
+            }
         } 
         else if (this.technique.forms.includes("Break")) {
             output.value = Math.floor(output.value * 0.5);
@@ -4104,7 +4161,12 @@ class TechniqueAssessment {
             }
             message = `(HP)`;
 
-            if (effect.defense == "WillBreak") {
+            if (effect.defense == "Enhance") {
+                let enhancePoints = this.getTargetPointsRubric(effect, output.value);
+                this.addPointsRubric(0, `${enhancePoints.points + output.value} (max ${this.getEnhancementPoints()})`);
+                return;
+            }
+            else if (effect.defense == "WillBreak") {
                 this.addImpactTrait(`Trait_Will:Trait_Atk`);
             }
             else {
@@ -4502,6 +4564,7 @@ class TechniqueAssessment {
         switch (effect.subType) {
             case "Set":
             case "Add":
+            case "Enhancing":
             case "Focus":
             case "Self":
                 let onlySingleTarget = ["Paralyzed", "Frozen"];
@@ -4518,6 +4581,10 @@ class TechniqueAssessment {
                 }
                 message = `(Add ${state.getTitle()})`;
 
+                if (effect.defense == "Enhance") {
+                    this.addPointsRubric(0, `${value} (max ${this.getEnhancementPoints()})`);
+                    return;
+                }
                 if (effect.defense == "WillBreak") {
                     message = `${value} (Add ${state.getTitle()})`;
                     this.addPointsRubric(0, message);
@@ -4642,44 +4709,54 @@ class TechniqueAssessment {
     }
 
     addTargetedPointsRubric(effect, points) {
-
-        let pointMod = 0;
+        let output = this.getTargetPointsRubric(effect, points);
+        if (output.points == 0) {
+            return;
+        }
+        this.addPointsRubric(output.points, `(${output.name})`);
+        this.pointsRubric += "\n";
+    }
+    
+    getTargetPointsRubric(effect, points) {
+        let output = {
+            points: 0,
+            name: 0
+        }
 
         switch (this.target) {
             case "Targets":
             case "Spaces":
             case "Objects":
-                pointMod = Math.floor(points * (this.size - 1) * 0.65);
-                this.addPointsRubric(pointMod, `(${this.size} ${this.target})`);
+                output.points = Math.floor(points * (this.size - 1) * 0.65);
+                output.name = `${this.size} ${this.target}`;
                 break;
             case "Blast":
             case "Blast(3H)":
             case "Blast(5H)":
-                pointMod = Math.floor(points * this.getAreaPointMod(0.75, 1));
-                this.addPointsRubric(pointMod, `(${this.target} ${this.size})`);
+                output.points = Math.floor(points * this.getAreaPointMod(0.75, 1));
+                output.name = `${this.target} ${this.size}`;
                 break;
             case "Radial":
-                pointMod = Math.floor(points * this.getAreaPointMod(0.6, 1));
-                this.addPointsRubric(pointMod, `(${this.target} ${this.size})`);
+                output.points = Math.floor(points * this.getAreaPointMod(0.6, 1));
+                output.name = `${this.target} ${this.size}`;
                 break;
             case "Cone":
             case "Line":
-                pointMod = Math.floor(points * this.getAreaPointMod(0.4, 0.66));
-                this.addPointsRubric(pointMod, `(${this.target} ${this.size})`);
+                output.points = Math.floor(points * this.getAreaPointMod(0.4, 0.66));
+                output.name = `${this.target} ${this.size}`;
                 break;
             case "Wide Line":
-                pointMod = Math.floor(points * this.getAreaPointMod(0.6, 0.66));
-                this.addPointsRubric(pointMod, `(${this.target} ${this.size})`);
+                output.points = Math.floor(points * this.getAreaPointMod(0.6, 0.66));
+                output.name = `${this.target} ${this.size}`;
                 break;
         }
 
         if (this.onEnterEffect && effect.type != "Terrain") {
-            pointMod = 4;
-            this.addPointsRubric(pointMod, `(On Enter)`);
-            this.pointsRubric += "\n";
-        } else if (pointMod > 0) {
-            this.pointsRubric += "\n";
+            output.points += 4;
+            output.name += `${output.name != "" ? "; " : ""}On Enter`;
         }
+        
+        return output;
     }
 
     getAreaPointMod(baseMod, incrementMod) {

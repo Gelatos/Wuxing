@@ -780,7 +780,7 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
 
     createEmpty() {
         super.createEmpty();
-        this.technique = {};
+        this.technique;
         this.skillCheck = 0;
         this.skillCheckValue = 0;
         this.advantage = 0;
@@ -790,6 +790,10 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
 
     initializeData(contentData) {
         super.initializeData(contentData);
+        if (this.technique == undefined) {
+            Debug.LogError(`[TechniqueUseResolver] Malformed Technique: ${contentData}`);
+            return;
+        }
         if (this.senderTokenTargetData == undefined) {
             Debug.LogError(`[TechniqueUseResolver] No sender token target data found for content: ${contentData}`);
             return;
@@ -814,13 +818,21 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             this.technique.setup();
         }
         catch {
-            let techniqueData = WuxTechs.Get(data);
-            if (techniqueData == undefined) {
-                let item = WuxItems.Get(data);
+            data = data.split("-");
+            let techniqueData = WuxTechs.Get(data[0]);
+            if (techniqueData != undefined) {
+                techniqueData.rank = parseInt(data[1]);
+                Debug.Log("Setting rank to " + techniqueData.rank);
+            }
+            else {
+                let item = WuxItems.Get(data[0]);
                 if (item == undefined) {
                     return;
                 }
                 techniqueData = item.technique;
+            }
+            if (techniqueData == undefined) {
+                return;
             }
             this.technique.importFromTechnique(techniqueData, this.useSecondaryTechniques);
             this.technique.setup();

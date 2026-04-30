@@ -452,7 +452,8 @@ class TechniqueEffectDatabase extends Database {
         let techniqueEffect = new TechniqueEffect();
         techniqueEffect.defense = "WillBreak";
         techniqueEffect.type = "Status";
-        techniqueEffect.effect = "Flustered";
+        techniqueEffect.subType = "Set";
+        techniqueEffect.effect = "Stat_Flustered";
         return techniqueEffect;
     }
 }
@@ -545,6 +546,45 @@ class WuxDatabaseData extends dbObj {
 }
 
 class TechniqueData extends WuxDatabaseData {
+    createEmpty() {
+        super.createEmpty();
+        this.name = "";
+        this.fieldName = "";
+        this.techSet = "";
+        this.group = "";
+        this.version = "";
+        this.affinity = "";
+        this.tier = 0;
+        this.action = "";
+        this.forms = "";
+        this.impacts = "";
+        this.en = 0;
+        this.willPower = 0;
+        this.boon = 0;
+        this.resourceCost = "";
+        this.limits = "";
+        this.skill = "";
+        this.hasAdv = 0;
+        this.range = "";
+        this.target = "";
+        this.size = 0;
+        this.requirement = "";
+        this.itemTraits = "";
+        this.trigger = "";
+        this.flavorText = "";
+        this.coreDefense = "";
+        this.definitions = [];
+        this.willBreakEffect = undefined;
+
+        this.effects = new TechniqueEffectDatabase();
+        this.enhancementEffects = {};
+        this.endEffectConditionName = "";
+        this.endEffectConditionEffect = "";
+        this.techniqueEffect = {};
+        this.isCustom = false;
+        this.rank = 0;
+    }
+    
     importJson(json) {
         this.createEmpty();
         this.name = json.name;
@@ -557,7 +597,6 @@ class TechniqueData extends WuxDatabaseData {
         this.action = json.action;
         this.forms = json.forms;
         this.impacts = json.impacts;
-        this.traits = json.traits;
         this.en = json.en;
         this.willPower = json.willPower;
         this.boon = json.boon;
@@ -576,11 +615,11 @@ class TechniqueData extends WuxDatabaseData {
         this.definitions = json.definitions;
         this.willBreakEffect = json.willBreakEffect == undefined ? undefined : new TechniqueEffect(json.willBreakEffect);
         this.effects = new TechniqueEffectDatabase(json.effects);
+        this.enhancementEffects = json.enhancementEffects;
         this.endEffectConditionName = json.endEffectConditionName;
         this.endEffectConditionEffect = json.endEffectConditionEffect;
         this.isCustom = json.isCustom != undefined ? json.isCustom : false;
     }
-
     importSheets(dataArray) {
         this.createEmpty();
         let i = 0;
@@ -604,8 +643,6 @@ class TechniqueData extends WuxDatabaseData {
         i++;
         this.impacts = "" + dataArray[i];
         i++;
-        this.traits = "" + dataArray[i];
-        i++;
         // Dodging some sheet logic
         this.en = parseInt(dataArray[i]);
         this.en = isNaN(this.en) ? 0 : this.en;
@@ -614,7 +651,6 @@ class TechniqueData extends WuxDatabaseData {
         i++;
         this.boon = parseInt(dataArray[i]);
         this.boon = isNaN(this.boon) ? 0 : this.boon;
-        this.resourceCost = this.buildResourceCost();
         i++;
         this.limits = "" + dataArray[i];
         i++;
@@ -646,7 +682,7 @@ class TechniqueData extends WuxDatabaseData {
     
     updateVersion(newVersion) {
         let version = this.getVersionParts(newVersion);
-        let baseVersionValue = 2;
+        let baseVersionValue = 3;
         
         if (parseInt(version[0]) != baseVersionValue) {
             version[0] = baseVersionValue;
@@ -684,26 +720,6 @@ class TechniqueData extends WuxDatabaseData {
         }
         return [];
     }
-    
-    buildResourceCost() {
-        let parts = [];
-
-        if (this.en > 0) {
-            parts.push(`${this.en} EN`);
-        }
-        if (this.willPower > 0) {
-            parts.push(`${this.willPower} WILL`);
-        }
-        if (this.boon > 0) {
-            parts.push(`${this.boon} Boon`);
-        }
-        
-        if (parts.length > 0) {
-            return parts.join("; ");
-        }
-        return "";
-    }
-    
     getWillpowerCost(isMagic) {
         if (isNaN(isMagic)) {
             return 0;
@@ -716,42 +732,45 @@ class TechniqueData extends WuxDatabaseData {
         return (this.action === "Full" ? 10 : 5) * this.tier * isMagic;
     }
 
-    createEmpty() {
-        super.createEmpty();
-        this.name = "";
-        this.fieldName = "";
-        this.techSet = "";
-        this.group = "";
-        this.version = "";
-        this.affinity = "";
-        this.tier = 0;
-        this.action = "";
-        this.forms = "";
-        this.impacts = "";
-        this.traits = "";
-        this.en = 0;
-        this.willPower = 0;
-        this.boon = 0;
-        this.resourceCost = "";
-        this.limits = "";
-        this.skill = "";
-        this.hasAdv = 0;
-        this.range = "";
-        this.target = "";
-        this.size = 0;
-        this.requirement = "";
-        this.itemTraits = "";
-        this.trigger = "";
-        this.flavorText = "";
-        this.coreDefense = "";
-        this.definitions = [];
-        this.willBreakEffect = undefined;
-        
-        this.effects = new TechniqueEffectDatabase();
-        this.endEffectConditionName = "";
-        this.endEffectConditionEffect = "";
-        this.techniqueEffect = {};
-        this.isCustom = false;
+    setRank(rank) {
+        this.rank = rank;
+    }
+    getMaxRank(cr) {
+        return 3 + cr - this.en;
+    }
+    getRankEnhanceValue() {
+        return this.rank - 1;
+    }
+    getName() {
+        return `${this.name}${this.rank > 1 ? ` ${Format.Romanize(this.rank)}` : ""}`;
+    }
+    getEN() {
+        return this.en + (this.rank > 1 ? this.getRankEnhanceValue() : 0);
+    }
+    getEffects() {
+        if (this.rank > 1) {
+            let tech = this;
+            let output = new TechniqueEffectDatabase();
+            this.effects.iterate(function (effect) {
+                if (effect.subType == "Enhancing") {
+                    let enhancement = tech.enhancementEffects[effect.type];
+                    if (enhancement != undefined) {
+                        let enhanceDVal = isNaN(parseInt(enhancement.dVal)) ? 0 : parseInt(enhancement.dVal);
+                        if (enhanceDVal > 0) {
+                            effect.dVal = isNaN(parseInt(effect.dVal)) ? 0 : parseInt(effect.dVal);
+                            effect.dVal += enhancement.dVal * tech.getRankEnhanceValue();
+                        }
+                        let formulaMod = parseInt(enhancement.formula);
+                        if (!isNaN(formulaMod)) {
+                            effect.formula.importFormula(formulaMod * tech.getRankEnhanceValue());
+                        }
+                    }
+                }
+                output.add(effect.name, effect);
+            });
+            return output;
+        }
+        return this.effects;
     }
 
     createDefinition(baseDefinition) {
@@ -792,14 +811,17 @@ class TechniqueData extends WuxDatabaseData {
                 }
                 this.willBreakEffect = effect;
                 return;
+            case "Enhance":
+                this.enhancementEffects[effect.type] = effect;
+                return;
             default:
                 effect.setName(`T${this.getEffectDbLength()}`);
                 this.addToEffectsDb(effect);
                 if (effect.traits != "") {
                     this.addDefinition(`Trait_${effect.traits}`);
                 }
-                if (effect.type == "Damage" && effect.effect == "Psyche") {
-                    this.willBreakEffect = this.coreEffects.getDefaultWillbreak();
+                if (effect.type == "Damage" && effect.effect == "Dmg_Psyche") {
+                    this.willBreakEffect = this.effects.getDefaultWillbreak();
                 }
                 return;
         }
@@ -1029,11 +1051,12 @@ class TechniqueUseEffect extends dbObj {
     }
     
     importFromTechnique(technique) {
-        this.import(technique.name, technique.skill, technique.coreDefense, technique.impacts, technique.effects);
+        this.import(technique.name, technique.rank, technique.skill, technique.coreDefense, technique.impacts, technique.getEffects());
     }
     
-    import(name, skill, coreDefense, impacts, effects) {
+    import(name, rank, skill, coreDefense, impacts, effects) {
         this.name = name;
+        this.rank = rank;
         this.skill = skill;
         this.coreDefense = coreDefense;
         this.impacts = impacts;
@@ -1095,7 +1118,7 @@ class TechniqueUseEffect extends dbObj {
         if (isCustom) {
             return `${this.sanitizeSheetRollAction(JSON.stringify(this))}$$${sheetName}`;
         }
-        return `${this.name}$$${sheetName}`;
+        return `${this.name}-${this.rank}$$${sheetName}`;
     }
 
     sanitizeSheetRollAction(sheetRoll) {
@@ -2156,9 +2179,12 @@ class ItemDefinitionData extends DefinitionData {
 // Display
 class TechniqueDisplayData {
 
-    constructor(technique) {
+    constructor(technique, rank) {
         this.createEmpty();
         if (technique != undefined) {
+            if (rank != undefined) {
+                technique.rank = rank;
+            }
             this.importTechnique(technique);
         }
     }
@@ -2170,6 +2196,8 @@ class TechniqueDisplayData {
         this.name = "";
         this.displayname = "";
         this.fieldName = "";
+        this.enCost = 0;
+        this.willCost = 0;
         this.trigger = "";
         this.flavorText = "";
         this.isOnEnter = false;
@@ -2177,9 +2205,6 @@ class TechniqueDisplayData {
         this.actionType = ""
         this.actionName = "";
         this.actionsDesc = [];
-
-        this.enCost = 0;
-        this.willCost = 0;
 
         this.targetDesc = [];
         this.targetType = "";
@@ -2194,12 +2219,12 @@ class TechniqueDisplayData {
         this.checkEffect = "";
         this.endEffectDesc = "";
         this.willBreakEffect = "";
+        this.enhanceEffect = "";
     }
 
     importTechnique(technique) {
         this.setTechBasics(technique);
         this.setActionName(technique);
-        this.setTechSetResourceData(technique);
         this.setTechTargetData(technique);
         this.setTraitsData(technique);
         this.setEffects(technique);
@@ -2207,10 +2232,13 @@ class TechniqueDisplayData {
 
     setTechBasics(technique) {
         this.technique = technique;
-        this.name = technique.name;
+        this.definition = technique.createDefinition(WuxDef.Get("Technique"));
         this.displayname = technique.displayname;
         this.sheetname = technique.sheetname;
-        this.definition = technique.createDefinition(WuxDef.Get("Technique"));
+        
+        this.name = technique.getName();
+        this.enCost = technique.getEN();
+        this.willCost = technique.willPower;
         this.fieldName = Format.ToFieldName(technique.name);
         this.trigger = technique.trigger;
         this.flavorText = technique.flavorText;
@@ -2248,11 +2276,6 @@ class TechniqueDisplayData {
         }
     }
 
-    setTechSetResourceData(technique) {
-        this.enCost = technique.en;
-        this.willCost = technique.willPower;
-    }
-
     setTechTargetData(technique) {
 
         if (technique.target == "Self") {
@@ -2282,7 +2305,7 @@ class TechniqueDisplayData {
             let isSingleTargetType = singleTargetTypes.some(item => technique.target.includes(item));
             if (technique.size > 0) {
                 if (isSingleTargetType) {
-                    this.targetType += `${this.numberToWord(technique.size)} ${technique.target}`;
+                    this.targetType += `${Format.NumberToWord(technique.size)} ${technique.target}`;
                 }
                 else {
                     this.targetType += `${technique.target} ${technique.size}`;
@@ -2294,16 +2317,6 @@ class TechniqueDisplayData {
 
             rangeDesc.addSubDefinition(WuxDef.Get(`Pattern_${technique.target}`));
             this.targetDesc = rangeDesc.descriptions;
-        }
-    }
-
-    numberToWord(num) {
-        const words = ["Zero", "One", "Two", "Three", "Four", "Five", "Six"];
-
-        if (Number.isInteger(num) && num >= 0 && num <= 6) {
-            return words[num];
-        } else {
-            return num;
         }
     }
 
@@ -2364,7 +2377,8 @@ class TechniqueDisplayData {
         let techDisplayData = this;
         let coreEffects = [];
         let checkedEffects = [];
-        technique.effects.iterate(function (effect) {
+        let enhancingEffects = [];
+        technique.getEffects().iterate(function (effect) {
             switch (effect.defense) {
                 case "":
                     coreEffects.push(effect);
@@ -2372,6 +2386,9 @@ class TechniqueDisplayData {
                 case "Core":
                     checkedEffects.push(effect);
                     break;
+            }
+            if (effect.subType == "Enhancing") {
+                enhancingEffects.push(effect);
             }
         });
         if (coreEffects.length > 0) {
@@ -2419,6 +2436,9 @@ class TechniqueDisplayData {
             willbreakDesc.push(`${checkDef.getTitle()}`);
             willbreakDesc.push(checkDef.descriptions.join(". "));
             techDisplayData.willBreakEffect = new TechniqueEffectDisplayData([technique.willBreakEffect], technique, "", willbreakDesc);
+        }
+        if (enhancingEffects.length > 0) {
+            techDisplayData.enhanceEffect = new TechniqueEffectDisplayEnhancmenteData(enhancingEffects, technique);
         }
     }
     printSkillCheck(technique) {
@@ -2492,6 +2512,12 @@ class TechniqueDisplayData {
         }
         return this.willBreakEffect.effectTypeDesc.join(join);
     }
+    getEnhanceEffects(join) {
+        if (this.enhanceEffect == "") {
+            return "";
+        }
+        return this.enhanceEffect.effects.join(join);
+    }
     
 
     getRollTemplate(addTechnique) {
@@ -2504,7 +2530,7 @@ class TechniqueDisplayData {
     }
     
     generateRollTemplate(addTechnique) {
-        let output = `{{Name=${this.name}}}{{type-${this.actionType}=1}}{{action=${this.actionName}}`;
+        let output = `{{Name=${this.name}}}{{type-${this.actionType}=1}}{{action=${this.actionName}}}`;
         if (this.enCost != "") {
             output += `{{En=${this.enCost}}}`;
         }
@@ -2528,7 +2554,7 @@ class TechniqueDisplayData {
         }
         output += this.rollTemplateEffects();
         if (addTechnique) {
-            if (this.technique.resourceCost != "") {
+            if (this.enCost > 0 || this.willCost > 0) {
                 let consumeData = new TechniqueResources([this.technique.name, this.enCost, this.willCost]);
                 output += `{{consumeData=!ctech ${consumeData.sanitizeSheetRollAction(JSON.stringify(consumeData))}$$${this.sheetname}}}`;
             }
@@ -2923,6 +2949,7 @@ class BaseTechniqueEffectDisplayData {
                 }
                 return;
             case "Add":
+            case "Enhancing":
                 if (formula == "") {
                     this.effectDescription += `${this.formatTargetGain(effect)} the ${state.title} ${state.group}`;
                 }
@@ -2952,7 +2979,7 @@ class BaseTechniqueEffectDisplayData {
                 this.effectDescription += `${this.formatTargetLose(effect)} all conditions of your choice`;
                 return;
             case "Remove Will":
-                this.effectDescription += `${this.formatTargetLose(effect)} all emotions of their choice`;
+                this.effectDescription += `${this.formatTargetLose(effect)} all emotions of ${this.formatTargetOwnership(effect)} choice`;
                 return;
             case "Self":
                 this.effectDescription += `${this.formatTargetGain(effect)} the ${state.title} ${state.group} targeted towards the caster`;
@@ -3108,6 +3135,10 @@ class BaseTechniqueEffectDisplayData {
         }
         return `Target${targetSuffix}`;
     }
+    
+    formatTargetOwnership(effect) {
+        return effect.target == "Self" ? "your" : "their";
+    }
 
     formatCalcBonus(effect) {
     }
@@ -3167,14 +3198,16 @@ class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
     importEffectData(effectData, technique) {
         let currentEffect = effectData[0].type;
         for (let i = 0; i < effectData.length; i++) {
-            if (effectData[i].type != currentEffect || effectData[i].type == "Boost") {
+            let effect = effectData[i];
+            if (effect.type != currentEffect || effect.type == "Boost") {
                 if (this.effectDescription != "") {
-                    currentEffect = effectData[i].type;
+                    currentEffect = effect.type;
                     this.effects.push(this.effectDescription);
                     this.effectDescription = "";
                 }
             }
-            this.formatEffect(effectData[i], technique);
+            
+            this.formatEffect(effect, technique);
         }
         this.effects.push(this.effectDescription);
         this.effectDescription = "";
@@ -3182,6 +3215,68 @@ class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
 
     formatCalcBonus(effect) {
         let output = this.formatEffectDice(effect);
+        if (effect.formula.workers.length == 0) {
+            return output;
+        }
+        
+        let formulaString;
+        try {
+            formulaString = effect.formula.getString();
+        } catch (e) {
+            formulaString = `Something went wrong: ${JSON.stringify(effect.formula)}`;
+        }
+        if (formulaString != "" && output != "") {
+            output += " + ";
+        }
+        return output + formulaString;
+    }
+
+    formatEffectDice(effect) {
+        if (effect.dVal != "" && effect.dVal > 0) {
+            return `${effect.dVal}d${effect.dType}`;
+        }
+        return "";
+    }
+}
+
+class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayData {
+
+    constructor(techniqueEffects, technique) {
+        super();
+        if (techniqueEffects == undefined) {
+            return;
+        }
+        this.effects = [];
+        this.importEffectData(techniqueEffects, technique);
+    }
+
+    importEffectData(effectData, technique) {
+        for (let i = 0; i < effectData.length; i++) {
+            let effect = effectData[i];
+            let enhanceEffect = technique.enhancementEffects[effect.type];
+            effect.dVal = enhanceEffect.dVal;
+            effect.formula = enhanceEffect.formula;
+
+            this.formatEffect(effect, technique);
+            this.effects.push(this.effectDescription);
+            this.effectDescription = "";
+        }
+    }
+
+    formatDamageEffect(effect, technique) {
+        this.effectDescription += `Increase ${WuxDef.GetTitle(effect.effect)} damage by ${this.formatCalcBonus(effect)}`;
+    }
+    
+    formatStatusEffect(effect, state) {
+        this.effectDescription += `Increase ${WuxDef.GetTitle(effect.effect)} ranks by ${this.formatCalcBonus(effect)}`;
+    }
+
+    formatCalcBonus(effect) {
+        let output = this.formatEffectDice(effect);
+        if (effect.formula.workers.length == 0) {
+            return output;
+        }
+        
         let formulaString;
         try {
             formulaString = effect.formula.getString();
@@ -3287,6 +3382,10 @@ class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
 
     formatCalcBonus(effect) {
         let output = this.formatEffectDice(effect);
+        if (effect.formula.workers.length == 0) {
+            return output;
+        }
+        
         let formulaString;
         try {
             formulaString = effect.formula.getString();
@@ -3500,6 +3599,7 @@ class FormulaData {
         this.createEmpty();
         if (data != undefined) {
             if (data.workers == undefined) {
+                this.formulaString = "" + data;
                 this.importFormula(data);
             } else {
                 this.importJson(data);
@@ -3517,13 +3617,12 @@ class FormulaData {
     }
 
     importFormula(data) {
-        this.formulaString = "" + data;
-        if (this.formulaString == "" || this.formulaString == undefined) {
+        if (data == "" || data == undefined) {
             return;
         }
 
         let formulaData = this;
-        this.iterateFormulaComponentsForImport(this.formulaString, function (definitionName, definitionNameModifier, multiplier, max) {
+        this.iterateFormulaComponentsForImport(data, function (definitionName, definitionNameModifier, multiplier, max) {
             if (isNaN(parseInt(definitionName))) {
                 let definition = [];
                 let modDefinition = {};
@@ -3603,7 +3702,7 @@ class FormulaData {
 
     addAttributes(attributes) {
         for (let i = 0; i < attributes.length; i++) {
-            if (attributes[i] != "") {
+            if (attributes[i] != "" && attributes[i] != "0") {
                 this.workers.push(this.makeWorker([attributes[i]], [], 0, 1, 0));
             }
         }
@@ -3738,48 +3837,48 @@ class FormulaData {
             if (worker.definitionName.length > 0) {
                 definition = WuxDef.Get(worker.definitionName[0]);
                 if (definition != undefined) {
-                        if (output != "") {
-                            output += " + ";
-                        }
-                        if (definition.group == "StatBonus") {
-                            output += `${definition.formula.getString()}`;
-                        }
-                        else {
-                            if (worker.multiplier != 1) {
-                                if (isNaN(parseFloat(worker.multiplier))) {
-                                    let text = "";
-                                    if (worker.multiplier == "adv-cr") {
-                                        text = WuxDef.GetTitle("CR");
-                                    }
-                                    output += `[${definition.title} x ${text}]`;
+                    if (output != "") {
+                        output += " + ";
+                    }
+                    if (definition.group == "StatBonus") {
+                        output += `${definition.formula.getString()}`;
+                    } else {
+                        if (worker.multiplier != 1) {
+                            if (isNaN(parseFloat(worker.multiplier))) {
+                                let text = "";
+                                if (worker.multiplier == "adv-cr") {
+                                    text = WuxDef.GetTitle("CR");
                                 }
-                                else if (worker.multiplier > 1) {
-                                    output += `[${definition.title} x ${worker.multiplier}]`;
-                                } else {
-                                    switch (worker.multiplier) {
-                                        case 0.5:
-                                            output += `[½ ${definition.title}]`;
-                                            break;
-                                        case 0.33:
-                                            output += `[⅓ ${definition.title}]`;
-                                            break;
-                                        case 0.25:
-                                            output += `[¼ ${definition.title}]`;
-                                            break;
-                                        case 0.2:
-                                            output += `[⅕ ${definition.title}]`;
-                                            break;
-                                    }
-                                }
+                                output += `[${definition.title} x ${text}]`;
+                            } else if (worker.multiplier > 1) {
+                                output += `[${definition.title} x ${worker.multiplier}]`;
                             } else {
-                                output += `[${definition.title}]`;
+                                switch (worker.multiplier) {
+                                    case 0.5:
+                                        output += `[½ ${definition.title}]`;
+                                        break;
+                                    case 0.33:
+                                        output += `[⅓ ${definition.title}]`;
+                                        break;
+                                    case 0.25:
+                                        output += `[¼ ${definition.title}]`;
+                                        break;
+                                    case 0.2:
+                                        output += `[⅕ ${definition.title}]`;
+                                        break;
+                                }
                             }
-                        }
-
-                        if (worker.max > 0) {
-                            output += `(max:${worker.max})`;
+                        } else {
+                            output += `[${definition.title}]`;
                         }
                     }
+
+                    if (worker.max > 0) {
+                        output += `(max:${worker.max})`;
+                    }
+                }
+            } else if (worker.value == 0) {
+                // do nothing
             } else {
                 if (output != "") {
                     output += " + ";
@@ -5553,6 +5652,16 @@ var Format = Format || (function () {
                 roman = (key[+digits.pop() + (i * 10)] || "") + roman;
             return Array(+digits.join("") + 1).join("M") + roman;
         },
+
+        numberToWord = function (num) {
+            const words = ["Zero", "One", "Two", "Three", "Four", "Five", "Six"];
+    
+            if (Number.isInteger(num) && num >= 0 && num <= 6) {
+                return words[num];
+            } else {
+                return num;
+            }
+        },
         
         getDefinitionName = function (baseDefinitionName, definitionName) {
             if (baseDefinitionName == undefined || baseDefinitionName == "") {
@@ -5666,6 +5775,7 @@ var Format = Format || (function () {
         ToUpperCamelCase: toUpperCamelCase,
         ToFieldName: toFieldName,
         Romanize: romanize,
+        NumberToWord: numberToWord,
         GetDefinitionName: getDefinitionName,
         StringToArray: stringToArray,
         ArrayToString: arrayToString,

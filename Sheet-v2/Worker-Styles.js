@@ -505,31 +505,20 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
     const
         addStyles = function (attrHandler, styleWorker, advancedRepeater) {
             let jobSlots = [];
-            // let advancedSlots = [];
             let normalSlots = [];
             let jobStyles = WuxDef.Get("Forme_JobSlot");
-            // let advancedStyles = WuxDef.Get("Forme_AdvancedSlot");
             let normalStyles = WuxDef.Get("Forme_StyleSlot");
-            // let maxAdvancedSlots = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
             let maxNormalSlots = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
             for (let i = 1; i <= maxNormalSlots; i++) {
-                // if (i <= maxAdvancedSlots) {
-                    // advancedSlots.push({name: attrHandler.parseString(advancedStyles.getVariable(i)), index: i});
-                    // normalSlots.push({name: attrHandler.parseString(advancedStyles.getVariable(i)), index: i});
-                // }
                 jobSlots.push({name: attrHandler.parseString(jobStyles.getVariable(i)), index: i});
                 normalSlots.push({name: attrHandler.parseString(normalStyles.getVariable(i)), index: i});
             }
 
+            styleWorker.initializeData();
             let styles = styleWorker.getStyles();
             
-            // let styleList = [];
-            // for (let i = 0; i < styles.length; i++) {
-            //     styleList.push(styles[i].style.name);
-            // }
             styles.forEach((styleVariableData) => {
                 let style = styleVariableData.style;
-                Debug.Log("Assessing whether we can add " + style.name);
                 if (style.group == "" && style.subGroup == "") {
                     return;
                 }
@@ -603,14 +592,9 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             let styleWorker = new WuxStyleWorkerBuild();
             attributeHandler.addMod(styleWorker.attrBuildDraft);
 
-            // let maxAdvancedStyles = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
             let maxNormalStyles = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
-            // let advancedStylesDef = WuxDef.Get("Forme_AdvancedSlot");
             let normalStylesDef = WuxDef.Get("Forme_StyleSlot");
             for (let i = 1; i <= maxNormalStyles; i++) {
-                // if (i <= maxAdvancedStyles) {
-                //     attributeHandler.addMod(advancedStylesDef.getVariable(i));
-                // }
                 attributeHandler.addMod(normalStylesDef.getVariable(i));
             }
 

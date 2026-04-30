@@ -1408,9 +1408,6 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let baseDefinition = WuxDef.Get("Action");
                     return baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
                 },
-                getSpanActionTypeAttribute = function (attribute, suffix) {
-                    return `<span name="${getActionTypeAttribute(attribute, suffix)}"></span>`;
-                },
 
                 addRepeaterContentsTechniqueDisplay = function (isCustom, alwaysShow) {
                     let actionDisplay = printFormTechniqueFullActionDisplay();
@@ -1545,7 +1542,7 @@ var DisplayPopups = DisplayPopups || (function () {
                     let popupDef = WuxDef.Get("Popup");
                     let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilder(popupDef);
 
-                    let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechName")}`);
+                    let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechTrueName")}`);
                     return WuxSheetMain.HiddenField(fieldName,
                         `${WuxSheetMain.Header("Technique")}
                         ${techniqueDisplayBuilder.print()}`);

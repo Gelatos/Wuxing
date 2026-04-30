@@ -607,6 +607,20 @@ class WuxJobWorkerBuild extends WuxWorkerBuild {
 		super("Job");
 	}
 
+	setBuildStatsDraft(attributeHandler) {
+		super.setBuildStatsDraft(attributeHandler);
+		this.initializeData();
+	}
+
+	setBuildStatsFinal(attrHandler) {
+		super.setBuildStatsFinal(attrHandler);
+		this.initializeData();
+	}
+
+	initializeData() {
+
+	}
+
 	getStyles() {
 		let styleData = [];
 		this.iterateBuildStats(function (jobVariableData) {
@@ -623,6 +637,34 @@ class WuxJobWorkerBuild extends WuxWorkerBuild {
 class WuxStyleWorkerBuild extends WuxWorkerBuild {
 	constructor() {
 		super("Technique");
+		this.techniqueData = {};
+	}
+	
+	setBuildStatsDraft(attributeHandler) {
+		super.setBuildStatsDraft(attributeHandler);
+		this.initializeData();
+	}
+
+	setBuildStatsFinal(attrHandler) {
+		super.setBuildStatsFinal(attrHandler);
+		this.initializeData();
+	}
+
+	initializeData() {
+		let worker = this;
+		this.iterateBuildStats(function (techniqueVariableData) {
+			let technique = WuxTechs.GetByVariableName(techniqueVariableData.name);
+			if (technique == undefined) {
+				return;
+			}
+			let rank = parseInt(techniqueVariableData.value);
+			if (isNaN(rank)) {
+				rank = 1;
+			}
+			if (rank > 0) {
+				worker.techniqueData[technique.name] = {technique: technique, rank: rank};
+			}
+		});
 	}
 
 	changeWorkerAttribute(attributeHandler, updatingAttr, newValue, perkCost) {
@@ -644,17 +686,18 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 	
 	getTechniques() {
 		let techniques = [];
-		this.iterateBuildStats(function (techniqueVariableData) {
-			let technique = WuxTechs.GetByVariableName(techniqueVariableData.name);
-			if (technique == undefined) {
-				return;
-			}
-			let rank = techniqueVariableData.value;
-			if (rank != "0") {
-				techniques.push(technique);
-			}
-		});
+		for (let key in this.techniqueData) {
+			techniques.push(this.techniqueData[key].technique);
+		}
 		return techniques;
+	}
+
+	getAllTechniqueData() {
+		return this.techniqueData;
+	}
+
+	getTechniqueData(techniqueName) {
+		return this.techniqueData[techniqueName];
 	}
 
 	getStyles() {
@@ -927,6 +970,7 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 
 	setTechniqueInfo (technique, setUse) {
 		this.clearTechniqueInfo();
+		Debug.Log(`Got ${technique.name} with rank ${technique.rank}`);
 		let displayData = new TechniqueDisplayData(technique);
 
 		this.setTechniqueHeaderInfo(technique, displayData);
@@ -936,15 +980,10 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.setTechniqueUseRollTemplate(technique, displayData);
 		}
 	}
-	setSimplifiedTechniqueInfo (technique, suffix) {
-		this.clearTechniqueInfo();
-		let displayData = new TechniqueDisplayData(technique);
-
-		this.setTechniqueHeaderInfo(technique, displayData, suffix);
-		this.setTechniqueUseRollTemplate(technique, displayData, suffix);
-	}
 	setTechniqueHeaderInfo(technique, displayData, suffix) {
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechTrueName", suffix), technique.name);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechName", suffix), displayData.name);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechVersion", suffix), technique.version);
@@ -973,6 +1012,12 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 				this.getVariable("TechTraits"), displayData.traits);
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 				this.getVariable("TechTraitsDesc"), displayData.getTraitsDescriptions("\n"));
+		}
+	}
+	setTechniqueEffectsInfo(technique, displayData) {
+		if (displayData.flavorText != "") {
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechFlavorText"), displayData.flavorText);
 		}
 		if (displayData.coreEffect != "") {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
@@ -1004,30 +1049,16 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 				this.getVariable("TechWillBreakEffect", WuxDef._info), displayData.getWillBreakEffectTooltips("\n"));
 		}
-	}
-	setTechniqueEffectsInfo(technique, displayData) {
-		if (displayData.flavorText != "") {
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechFlavorText"), displayData.flavorText);
+		if (displayData.enhanceEffect != "") {
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				this.getVariable("TechEnhanceEffect"), displayData.getEnhanceEffects("\n"));
+			let cr = this.attrHandler.parseInt(WuxDef.GetVariable("CR"), 1);
+			Debug.Log(`${technique.name} is at rank ${technique.rank} with max ${technique.getMaxRank(cr)}`);
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				this.getVariable("TechRankUp", WuxDef._info), (technique.rank < technique.getMaxRank(cr) ? "1" : "0"));
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				this.getVariable("TechRankDown", WuxDef._info), (technique.rank > 1 ? "1" : "0"));
 		}
-		// if (displayData.effects.length > 0) {
-		// 	this.addTechniqueEffects(displayData.effects, "TechEffect");
-		// }
-		// if (displayData.endEffectName.trim() != "") {
-		// 	let defName = Format.GetDefinitionName("Title", displayData.endEffectName);
-		// 	let def = WuxDef.Get(defName);
-		// 	this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-		// 	this.getVariable("TechEEffectTitle", "name"), def.getTitle());
-		// 	this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-		// 	this.getVariable("TechEEffectTitle", "desc"), def.getDescription());
-		// }
-		// if (displayData.endEffectDesc != "") {
-		// 	this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-		// 	this.getVariable("TechEEffectTitle"), displayData.endEffectDesc);
-		// }
-		// if (displayData.definitions.length > 0) {
-		// 	this.addDefinitions(displayData.definitions, this.getVariable("TechDef"), 4);
-		// }
 	}
 	setTechniqueUseRollTemplate(technique, displayData, suffix) {
 		displayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
@@ -1051,7 +1082,9 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.getVariable("TechActionName"), "");
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechActionTooltip"), "");
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechTrueName"), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechName"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechVersion"), "");
@@ -1095,16 +1128,12 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.getVariable("TechWillBreakEffect"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechWillBreakEffect", WuxDef._info), 0);
-	}
-	clearTechEffects () {
-		for (let i = 0; i < 10; i++) {
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechEffect", i), 0);
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechEffect", `${i}name`), 0);
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechEffect", `${i}desc`), "");
-		}
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechEnhanceEffect"), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechRankUp", WuxDef._info), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechRankDown", WuxDef._info), 0);
 	}
 	
 	calcAndSetVisibility(affinities, maxTier, cr) {
@@ -1144,7 +1173,7 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			fieldName, visibilityValue);
 	}
 	getTechniqueName(techIndex) {
-		return this.attrHandler.parseString(this.getVariable("TechName", techIndex));
+		return this.attrHandler.parseString(this.getVariable("TechTrueName", techIndex));
 	}
 	getTechniqueVersion(techIndex) {
 		let version = this.attrHandler.parseString(this.getVariable("TechVersion", techIndex), "undefined");

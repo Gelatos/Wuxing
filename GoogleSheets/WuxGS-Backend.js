@@ -492,21 +492,29 @@ var ActionBuilder = ActionBuilder || (function () {
     var
         print = function () {
             let output = "";
-            output += listenerInspectRepeatingStyles();
+            output += listenerRankRepeatingStyles();
             output += listenerSetDataRepeatingStyles();
             output += listenerFormeButtonActions();
             output += listenerRefreshBasicActions();
             return output;
         },
-        listenerInspectRepeatingStyles = function () {
-            let repeaterVar = WuxDef.GetVariable("RepeatingFormeTech");
-            let inspectDef = WuxDef.Get("Action_Inspect");
-            return `${WuxSheetBackend.OnChange([`${repeaterVar}:${inspectDef.getVariable(1)}`],
-                `WuxWorkerActions.InspectFormeTechnique(eventinfo, 1)`, true)}
-                ${WuxSheetBackend.OnChange([`${repeaterVar}:${inspectDef.getVariable(2)}`],
-                `WuxWorkerActions.InspectFormeTechnique(eventinfo, 2)`, true)}
-                ${WuxSheetBackend.OnChange([`${repeaterVar}:${inspectDef.getVariable(3)}`],
-                `WuxWorkerActions.InspectFormeTechnique(eventinfo, 3)`, true)}`;
+        listenerRankRepeatingStyles = function () {
+            let repeaters = ["RepeatingFormeTech"];
+            let baseDef = WuxDef.Get("Action");
+            let rankUpVar = baseDef.getVariable(`-${WuxDef.GetVariable("TechRankUp")}`);
+            let rankDownVar = baseDef.getVariable(`-${WuxDef.GetVariable("TechRankDown")}`);
+            
+            let output = "";
+            for (let i = 0; i < repeaters.length; i++) {
+                let repeaterName = repeaters[i];
+                let repeaterVar =  WuxDef.GetVariable(repeaterName);
+                output += `${WuxSheetBackend.OnChange([`${repeaterVar}:${rankUpVar}`],
+                    `WuxWorkerActions.RankUpTechnique(eventinfo, "${repeaterName}")`, true)}
+                ${WuxSheetBackend.OnChange([`${repeaterVar}:${rankDownVar}`],
+                    `WuxWorkerActions.RankDownTechnique(eventinfo, "${repeaterName}")`, true)}`;
+            }
+            
+            return output;
         },
         listenerSetDataRepeatingStyles = function () {
             return `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RepeatingCustomTech")}:${WuxDef.GetVariable("Action_SetData")}`],
