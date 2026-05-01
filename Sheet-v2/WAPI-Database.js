@@ -931,11 +931,12 @@ class TechniqueEffect extends dbObj {
     }
     updateSheetImportFormula() {
         let formulaString = this.formula.formulaString;
+        let autoAddTypes = ["Damage", "Favor"];
         if (formulaString == "0") {
             formulaString = "";
         }
-        else if (formulaString == "" && this.type == "Damage") {
-            formulaString = `SB_MAX`;
+        else if (formulaString == "" && autoAddTypes.includes(this.type)) {
+            formulaString = `Potency`;
         }
         this.formula = new FormulaData(formulaString);
     }
@@ -2297,7 +2298,7 @@ class TechniqueDisplayData {
             this.range = 1;
         }
         else {
-            this.range = 0;
+            this.range = "";
         }
         
         if (technique.target != "") {
@@ -2934,6 +2935,10 @@ class BaseTechniqueEffectDisplayData {
 
     formatRequestEffect(effect) {
         this.effectDescription += `Make a request check on the target with ${this.formatCalcBonus(effect)}`;
+        if (effect.subType == "Bargain") {
+            this.effectDescription += `. When making your request, you may attempt to bargain at the same time by offering goods, services, or favors. You may also choose to threaten and offering them things they do not want at the risk of angering them. This may increase the results of your request check. `;
+            
+        }
     }
 
     formatStatusEffect(effect, state) {

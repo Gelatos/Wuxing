@@ -788,7 +788,7 @@ class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
     printActionType () {
         return this.printActionTypeField(
             `<input type="hidden" class="wuxFeatureHeader-flag" value="${this.displayData.actionType}">`,
-            this.printSpan(this.displayData.actionType));
+            this.printSpan(this.displayData.actionName));
     }
     printRange() {
         return this.printRangeField(
@@ -875,7 +875,7 @@ class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
         );
     }
     printEnhancementEffects() {
-        if (this.displayData.enhancementEffects == "") {
+        if (this.displayData.enhanceEffect == "") {
             return "";
         }
         return this.printEnhancementEffectsField(
@@ -3878,6 +3878,8 @@ class TechniqueAssessment {
         attributeHandler.current[WuxDef.GetVariable("Attr_RSN")] = 2;
         attributeHandler.addMod(WuxDef.GetVariable("SB_MAX"));
         attributeHandler.current[WuxDef.GetVariable("SB_MAX")] = 3;
+        attributeHandler.addMod(WuxDef.GetVariable("Potency"));
+        attributeHandler.current[WuxDef.GetVariable("Potency")] = 3;
         attributeHandler.addMod(WuxDef.GetVariable("SB_ExcellentDef"));
         attributeHandler.current[WuxDef.GetVariable("SB_ExcellentDef")] = 5;
         attributeHandler.addMod(WuxDef.GetVariable("SB_GreatDef"));
@@ -3907,7 +3909,7 @@ class TechniqueAssessment {
         attributeHandler.addMod(WuxDef.GetVariable("Cmb_Mv"));
         attributeHandler.current[WuxDef.GetVariable("Cmb_Mv")] = 5;
         attributeHandler.addMod(WuxDef.GetVariable("Cmb_MvDash"));
-        attributeHandler.current[WuxDef.GetVariable("Cmb_MvDash")] = 3;
+        attributeHandler.current[WuxDef.GetVariable("Cmb_MvDash")] = 4;
         attributeHandler.addMod(WuxDef.GetVariable("MvPotency"));
         attributeHandler.current[WuxDef.GetVariable("MvPotency")] = 7;
 
@@ -3921,6 +3923,9 @@ class TechniqueAssessment {
         let restTypes = ["Brief", "Short", "Long"];
         if (restTypes.includes(this.technique.action)) {
             return 9;
+        }
+        if (this.technique.action == "Assist") {
+            return 0;
         }
         return this.technique.tier + 2;
     }
@@ -3950,7 +3955,7 @@ class TechniqueAssessment {
         else if (technique.action == "Swift") {
             let lookupName = WuxDef.GetAbbreviation("Job") + "_" + technique.techSet;
             if (WuxDef.GetTitle(lookupName) == "") {
-                output.points = Math.ceil(points * 0.5);
+                output.points = Math.ceil(output.points * 0.5);
                 output.pointCalc.push("Swift Job");
             }
         }
@@ -4350,7 +4355,9 @@ class TechniqueAssessment {
         let message;
         switch (effect.subType) {
             case "Heal":
-                output.value *= 6;
+                if (effect.defense != "WillBreak") {
+                    output.value *= 6;
+                }
                 message = `(Heal Favor)`;
                 this.addImpactTrait("Trait_Heal-Favor");
                 break;
@@ -4358,13 +4365,14 @@ class TechniqueAssessment {
                 this.favor += output.value;
                 this.lowFavor += output.lowValue;
                 this.highFavor += output.highValue;
-                output.value *= (6 - (this.patience * (this.technique.action != "Full" ? 2 : 1)));
+                if (effect.defense != "WillBreak") {
+                    output.value *= (6 - (this.patience * (this.technique.action != "Full" ? 2 : 1)));
+                }
                 message = `(Favor)`;
                 break;
         }
 
         if (effect.defense == "WillBreak") {
-            output.value /= 6;
             message = `${output.value} (Favor)`;
             this.addPointsRubric(0, message);
             this.addImpactTrait(`Trait_Will:Trait_Favor`);
@@ -4432,7 +4440,7 @@ class TechniqueAssessment {
             this.addImpactTrait(`Trait_Will:${impactTrait}`);
         }
         else {
-            this.addPointsRubric(output.value, message);
+            this.addPointsRubric(points, message);
             this.addImpactTrait(impactTrait);
         }
     }
@@ -4440,6 +4448,10 @@ class TechniqueAssessment {
     getRequestAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
         output.value = Math.ceil(output.value * (1.5 - (this.patience * (this.technique.action != "Full" ? 0.5 : 0.25))));
+        
+        if (effect.subType == "Bargain") {
+            output.value += 3;
+        }
         this.request += output.value;
         this.lowRequest += output.lowValue;
         this.highRequest += output.highValue;
@@ -4674,7 +4686,7 @@ class TechniqueAssessment {
                 this.addImpactTrait(`Trait_Cleanse-All`);
                 break;
             case "Remove Will":
-                value = 16;
+                value = 14;
                 message = `(Remove Will)`;
 
                 this.addPointsRubric(value, message);
