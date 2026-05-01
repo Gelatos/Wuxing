@@ -670,8 +670,9 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 		updateBuildPoints = function (eventinfo) {
 			Debug.Log("Update Knowledge");
 			let attributeHandler = new WorkerAttributeHandler();
-			let worker = new WuxWorkerBuildManager("Knowledge");
-			worker.onChangeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			let worker = new WuxWorkerBuild("Knowledge");
+			worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			updateStats(attributeHandler);
 			attributeHandler.run();
 		},
 

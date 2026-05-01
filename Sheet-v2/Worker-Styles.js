@@ -565,7 +565,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             Debug.Log("Update Technique Build Points");
             let attributeHandler = new WorkerAttributeHandler();
             let worker = new WuxStyleWorkerBuild();
-            worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+            let technique = WuxTechs.GetByVariableName(eventinfo.sourceAttribute);
+            worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue, technique.techSet);
             WuxWorkerSkills.UpdateKeySkills(attributeHandler);
             openAndUnlockAdvancedStyles(attributeHandler, eventinfo, worker);
             attributeHandler.run();

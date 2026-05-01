@@ -1219,8 +1219,6 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let contents = "";
                     contents += buildFormeActions();
                     contents += buildGearActions();
-                    contents += buildBasicActions();
-                    contents += buildDeprecatedActions();
                     return WuxSheetMain.Build(contents);
                 },
 

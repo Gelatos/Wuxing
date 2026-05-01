@@ -3259,6 +3259,9 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
         for (let i = 0; i < effectData.length; i++) {
             let effect = effectData[i];
             let enhanceEffect = technique.enhancementEffects[effect.type];
+            if (enhanceEffect == undefined) {
+                continue;
+            }
             effect.dVal = enhanceEffect.dVal;
             effect.formula = enhanceEffect.formula;
 
@@ -5406,15 +5409,16 @@ class WorkerBuildStats extends Dictionary {
     }
 
     getPointsTotal() {
-        let points = 0;
         if (this.keys == undefined) {
-            return points;
+            return 0;
         }
+        let points = 0;
         for (let i = 0; i < this.keys.length; i++) {
-            if (this.values[this.keys[i]].value == "on") {
+            let val = this.values[this.keys[i]];
+            if (val.value == "on") {
                 points++;
             } else {
-                points += isNaN(parseInt(this.values[this.keys[i]].value)) ? 0 : parseInt(this.values[this.keys[i]].value);
+                points += isNaN(parseInt(val.value)) ? 0 : parseInt(val.value);
             }
         }
         return points;

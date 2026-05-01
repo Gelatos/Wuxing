@@ -177,12 +177,6 @@ class WuxWorkerBuildManager {
 		});
 	}
 
-	onChangeWorkerAttribute(attributeHandler, updatingAttr, newValue) {
-		this.iterate(function (worker) {
-			worker.changeWorkerAttribute(attributeHandler, updatingAttr, newValue);
-		});
-	}
-
 	commitChanges(attributeHandler) {
 		this.iterate(function (worker) {
 			worker.commitChanges(attributeHandler);
@@ -237,16 +231,19 @@ class WuxWorkerBuild {
 		attributeHandler.addUpdate(this.definition.getVariable(), buildPointsMax - buildPoints);
 		attributeHandler.addUpdate(this.definition.getVariable(WuxDef._error), buildPoints == buildPointsMax ? "0" : buildPoints < buildPointsMax ? "1" : "-1");
 	}
-
-	updateBuildStats(attributeHandler, updatingAttr, newValue) {
+	
+	addBuildStat(attributeHandler, updatingAttr, newValue) {
 		let workerBuildStat = new WorkerBuildStat([updatingAttr, newValue]);
 		this.buildStats.add(updatingAttr, workerBuildStat);
+	}
+
+	updateBuildStats(attributeHandler, updatingAttr, newValue) {
+		this.addBuildStat(attributeHandler, updatingAttr, newValue);
 		attributeHandler.addUpdate(this.attrBuildDraft, JSON.stringify(this.buildStats));
 	}
 
 	updateMaxBuildStats(attributeHandler, updatingAttr, newValue) {
-		let workerBuildStat = new WorkerBuildStat([updatingAttr, newValue]);
-		this.buildStats.add(updatingAttr, workerBuildStat);
+		this.addBuildStat(attributeHandler, updatingAttr, newValue);
 		attributeHandler.addUpdate(this.attrBuildFinal, JSON.stringify(this.buildStats));
 	}
 
@@ -634,10 +631,58 @@ class WuxJobWorkerBuild extends WuxWorkerBuild {
 	}
 }
 
+class StyleWorkerBuildStat extends WorkerBuildStat {
+	importJson(json) {
+		super.importJson(json);
+		this.group = json.group;
+	}
+
+	importSheets(dataArray) {
+		let i = 0;
+		this.name = "" + dataArray[i];
+		i++;
+		this.value = "" + dataArray[i];
+		i++;
+		this.group = "" + dataArray[i];
+		i++;
+	}
+
+	createEmpty() {
+		super.createEmpty();
+		this.group = "";
+	}
+}
+
+class StyleWorkerBuildStats extends WorkerBuildStats {
+	constructor() {
+		super();
+	}
+
+	getPointsTotal() {
+		if (this.keys == undefined) {
+			return 0;
+		}
+		let points = 0;
+		for (let i = 0; i < this.keys.length; i++) {
+			let val = this.values[this.keys[i]];
+			if (val.group == "Basic") {
+				continue;
+			}
+			if (val.value == "on") {
+				points++;
+				continue;
+			}
+			points += isNaN(parseInt(val.value)) ? 0 : parseInt(val.value);
+		}
+		return points;
+	}
+}
+
 class WuxStyleWorkerBuild extends WuxWorkerBuild {
 	constructor() {
 		super("Technique");
-		this.techniqueData = {};
+		this.styledTechniqueData = {};
+		this.basicTechniqueData = {};
 	}
 	
 	setBuildStatsDraft(attributeHandler) {
@@ -661,16 +706,28 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 			if (isNaN(rank)) {
 				rank = 1;
 			}
+			if (technique.style == "Basic") {
+				worker.basicTechniqueData[technique.name] = {technique: technique, rank: rank};
+				return;
+			}
 			if (rank > 0) {
-				worker.techniqueData[technique.name] = {technique: technique, rank: rank};
+				worker.styledTechniqueData[technique.name] = {technique: technique, rank: rank};
 			}
 		});
 	}
 
-	changeWorkerAttribute(attributeHandler, updatingAttr, newValue, perkCost) {
-		if (newValue == "on" && perkCost > 0) {
-			newValue = perkCost;
-		}
+	setBuildStats(buildStatVersion, attributeHandler) {
+		this.buildStats = new StyleWorkerBuildStats();
+		this.buildStats.import(attributeHandler.parseJSON(buildStatVersion));
+	}
+
+	addBuildStat(attributeHandler, updatingAttr, newValue) {
+		let workerBuildStat = new StyleWorkerBuildStat([updatingAttr, newValue.value, newValue.group]);
+		this.buildStats.add(updatingAttr, workerBuildStat);
+	}
+
+	changeWorkerAttribute(attributeHandler, updatingAttr, value, group) {
+		let newValue = {value: value, group: group};
 		super.changeWorkerAttribute(attributeHandler, updatingAttr, newValue);
 	}
 
@@ -686,18 +743,29 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 	
 	getTechniques() {
 		let techniques = [];
-		for (let key in this.techniqueData) {
-			techniques.push(this.techniqueData[key].technique);
+		for (let key in this.styledTechniqueData) {
+			techniques.push(this.styledTechniqueData[key].technique);
 		}
 		return techniques;
 	}
 
-	getAllTechniqueData() {
-		return this.techniqueData;
+	getAllStyleTechniqueData() {
+		return this.styledTechniqueData;
+	}
+
+	getAllBasicTechniqueData() {
+		return this.basicTechniqueData;
 	}
 
 	getTechniqueData(techniqueName) {
-		return this.techniqueData[techniqueName];
+		if (this.styledTechniqueData.hasOwnProperty(techniqueName)) {
+			return this.styledTechniqueData[techniqueName];
+		}
+		if (this.basicTechniqueData.hasOwnProperty(techniqueName)) {
+			return this.basicTechniqueData[techniqueName];
+		}
+		return undefined;
+		
 	}
 
 	getStyles() {

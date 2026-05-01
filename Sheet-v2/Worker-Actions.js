@@ -400,9 +400,21 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             styleWorker.setBuildStatsDraft(attrHandler);
             let techniqueName = attrHandler.parseString(techniqueNameField);
             Debug.Log(`Ranking ${rankChange > 0 ? "Up" : "Down"} ${techniqueName}`);
+            let technique;
+            let newRank;
+            let updatingAttr;
             let techniqueData = styleWorker.getTechniqueData(techniqueName);
-            let technique = techniqueData.technique;
-            let newRank = techniqueData.rank + rankChange;
+            if (techniqueData != undefined) {
+                technique = techniqueData.technique;
+                newRank = techniqueData.rank + rankChange;
+                updatingAttr = technique.createDefinition(WuxDef.Get("Technique")).getVariable();
+            }
+            else {
+                technique = WuxTechs.Get(techniqueName);
+                newRank = 1 + rankChange;
+                updatingAttr = technique.createDefinition(WuxDef.Get("Technique")).getVariable();
+                styleWorker.changeWorkerAttribute(attributeHandler, updatingAttr, newRank, technique.techSet);
+            }
 
             if (rankChange > 0) {
                 let maxRank = technique.getMaxRank(attrHandler.parseInt(crField));
@@ -412,8 +424,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 newRank = Math.max(newRank, 1);
             }
             Debug.Log(`${techniqueName} set to rank ${newRank}`);
-            let updatingAttr = technique.createDefinition(WuxDef.Get("Technique")).getVariable();
-            styleWorker.updateBuildStats(attrHandler, updatingAttr, newRank);
+            styleWorker.updateBuildStats(attrHandler, updatingAttr, {value: newRank, group: technique.techSet});
             styleWorker.updatePoints(attrHandler);
 
             let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", techniquesRepeater);
@@ -1012,6 +1023,7 @@ class FormeTechniqueDatabase {
     registerTechDictionary(attrHandler) {
         let formeTechDatabase = this;
         attrHandler.addUpdate(formeTechDatabase.boosterFieldName, []);
+        formeTechDatabase.addAllBasicTechniques();
         formeTechDatabase.iterateAllTechniquesFromLearnedStyles(function (technique, techniqueRank) {
             let newEntry = formeTechDatabase.tryAddTechniqueToTechDictionary(technique, techniqueRank);
             if (newEntry != undefined && newEntry.isActive) {
@@ -1022,13 +1034,29 @@ class FormeTechniqueDatabase {
         this.sortList = [this.techSorter.listSize];
         WuxWorkerActionsService.SetTechniqueBoosters(attrHandler);
     }
+    addAllBasicTechniques() {
+        let allBasicTechniques = this.styleWorker.getAllBasicTechniqueData();
+        let filteredTechs = WuxTechs.Filter(new DatabaseFilterData("style", "Basic"));
+        filteredTechs.forEach(technique => {
+            if (!this.techDictionary.has(technique.name)) {
+                let isActive = this.checkTechniqueIsActive(technique);
+                let techniqueData = allBasicTechniques[technique.name];
+                let techniqueRank = 1;
+                if (techniqueData != undefined) {
+                    techniqueRank = techniqueData.rank;
+                }
+                let newEntry = this.createTechDictionaryTechnique(technique, techniqueRank, isActive);
+                this.techDictionary.add(technique.name, newEntry);
+            }
+        });
+    }
     iterateAllTechniquesFromLearnedStyles(callback) {
         let allJobsArray = this.jobWorker.getStyles();
         allJobsArray.forEach((styleData) => {
             let filteredTechs = WuxTechs.Filter(new DatabaseFilterData("style", styleData.style.name));
             filteredTechs.forEach(tech => callback(tech, 1));
         });
-        let allStyleTechniques = this.styleWorker.getAllTechniqueData();
+        let allStyleTechniques = this.styleWorker.getAllStyleTechniqueData();
         for (const key in allStyleTechniques) {
             let techniqueData = allStyleTechniques[key];
             callback(techniqueData.technique, techniqueData.rank);
@@ -1042,18 +1070,22 @@ class FormeTechniqueDatabase {
         if (!this.techDictionary.has(technique.name)) {
             let isActive = this.checkTechniqueIsEquipped(technique, technique.techSet)
                 && this.checkTechniqueIsActive(technique);
-            let newEntry = {
-                technique: technique,
-                techniqueRank: techniqueRank,
-                isSet: false,
-                isActive: isActive,
-                isVisible: isActive && this.checkTechniqueIsVisibleInFilter(technique),
-                sortOrder: -1
-            };
+            let newEntry = this.createTechDictionaryTechnique(technique, techniqueRank, isActive);
             this.techDictionary.add(technique.name, newEntry);
             return newEntry;
         }
         return undefined;
+    }
+    createTechDictionaryTechnique(technique, techniqueRank, isActive) {
+        return {
+            technique: technique,
+            techniqueRank: techniqueRank,
+            isSet: false,
+            isActive: isActive,
+            isVisible: isActive && this.checkTechniqueIsVisibleInFilter(technique),
+            sortOrder: -1
+        };
+        
     }
     checkTechniqueIsEquipped(technique, styleName) {
         if (technique.forms.includes("Permanent")) {
@@ -1191,7 +1223,7 @@ class FormeTechniqueDatabase {
         let unsetBaseTechniqueData = this.getUnsetTechniqueData();
         let repeater = attrHandler.getRepeatingSection(this.formeActionsRepeaterId);
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", repeater);
-        let maxLoadCount = 8;
+        let maxLoadCount = unsetBaseTechniqueData.length;
         
         let i = 0;
         while(i < maxLoadCount) {
