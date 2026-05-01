@@ -970,7 +970,6 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 
 	setTechniqueInfo (technique, setUse) {
 		this.clearTechniqueInfo();
-		Debug.Log(`Got ${technique.name} with rank ${technique.rank}`);
 		let displayData = new TechniqueDisplayData(technique);
 
 		this.setTechniqueHeaderInfo(technique, displayData);

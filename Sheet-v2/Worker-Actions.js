@@ -1059,8 +1059,19 @@ class FormeTechniqueDatabase {
         if (technique.forms.includes("Permanent")) {
             return true;
         }
-        
-        return this.equippedSlots.includes(styleName);
+
+        if (styleName.includes(";")) {
+            let styleParts = styleName.split(";").map(s => s.trim());
+            if (!styleParts.some(part => this.equippedSlots.includes(part))) {
+                Debug.Log(`${technique.name} is not equipped`);
+                return false;
+            }
+        }
+        else if (styleName != "" && !this.equippedSlots.includes(styleName)) {
+            Debug.Log(`${technique.name} is not equipped`);
+            return false;
+        }
+        return true;
     }
     checkTechniqueIsActive(technique) {
         if (technique.tier > this.userCr) {
@@ -1069,7 +1080,7 @@ class FormeTechniqueDatabase {
 
         if (technique.affinity.includes(";")) {
             let affinityParts = technique.affinity.split(";").map(s => s.trim());
-            if (technique.affinity != "" && !affinityParts.some(part => this.userAffinities.includes(part))) {
+            if (!affinityParts.some(part => this.userAffinities.includes(part))) {
                 return false;
             }
         }
