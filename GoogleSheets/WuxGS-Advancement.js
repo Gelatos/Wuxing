@@ -285,7 +285,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             )}
                             </div>`;
 
-                            let descContents = `<div class="wuxDescription wuxMarginLeft50">${style.description}</div>`;
+                            let descContents = `<div class="wuxDescription wuxMarginLeft50">${style.getDescription()}</div>`;
 
                             if (technique.name == "Second Affinity") {
                                 descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(),
@@ -786,6 +786,9 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             for (let i = 0; i < perkTechniqueStyles.length; i++) {
                                 let perkStyle = perkTechniqueStyles[i];
                                 let perkTechnique = WuxTechs.Get(perkStyle.name);
+                                if (perkTechnique == undefined) {
+                                    continue;
+                                }
                                 let perkDef = perkTechnique.createDefinition(WuxDef.Get("Technique"));
                                 perkTables[i%2] += printPerkTechnique(perkDef, perkTechnique, perkStyle);
                             }
@@ -800,7 +803,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                     <span class="wuxSubheader">[Cost ${style.effects} Perk Point]</span>`
                                 )}
                             </div>`;
-                            let descContents = `<div class="wuxDescription wuxMarginLeft50">${style.description}</div>`;
+                            let descContents = `<div class="wuxDescription wuxMarginLeft50">${style.getDescription()}</div>`;
                             
                             if (technique.name == "Affinity") {
                                 descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(),
@@ -876,37 +879,34 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         buildJob = function (job) {
-                            let jobDef = job.createDefinition(WuxDef.Get("Job"));
+                            let jobDefinition = job.createDefinition(WuxDef.Get("Job"));
 
-                            let contents = `${buildJobHeader(jobDef, job)}
+                            let contents = `${buildJobHeader(job, jobDefinition)}
 							${WuxSheetMain.SectionBlockHeaderFooter()}
-                            ${buildTierSelect(jobDef)}
-                            ${buildJobDescription(job)}`;
+                            ${buildJobDescription(job)}
+                            ${buildTechniquesButton(job, jobDefinition)}`;
 
                             return `${WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.SectionBlock(contents), "Half wuxMinWidth220")}`;
                         },
 
-                        buildJobHeader = function (jobDef, job) {
-                            return WuxSheetMain.Header2(`${WuxSheetMain.SubMenuButton(jobDef.getAttribute(WuxDef._expand), addSubmenuContents(jobDef, job))}
-								${job.name}`
-                            );
-                        },
+                        buildJobHeader = function (job, jobDefinition) {
+                            let interactHeader = `<span class="wuxHeader">${job.name}</span>`;
 
-                        buildTierSelect = function (jobDef) {
-                            return WuxSheetMain.Select(jobDef.getAttribute(),
-                                WuxDef.Filter([new DatabaseFilterData("group", "JobTier")]), false);
-                        },
-
-                        addSubmenuContents = function (jobDef, job) {
-                            return `${WuxSheetMain.SubMenuOptionButton(
-                                jobDef.getAttribute(WuxDef._info), `<span>${WuxDef.GetTitle("Forme_SeeTechniques")}</span>`, 
-                                job.name)}
-                            `;
+                            return WuxSheetMain.InteractionElement.BuildCheckboxInput(
+                                jobDefinition.getAttribute(), interactHeader);
                         },
 
                         buildJobDescription = function (job) {
+                            return WuxSheetMain.Desc(`<span>Category: ${job.category}</span>
+                            <span>Difficulty: ${Format.PrintIcons(job.difficulty, 3, `★`, `☆`)}</span>
+                            <span>Main Skills: ${printTechniqueSkills(job.skills)}</span>
+                            <span>&nbsp;</span>
+                            <span>${job.getDescription("</span><span>")}</span>`);
+                        },
+
+                        printTechniqueSkills = function (skills) {
                             let skillsOutput = "";
-                            let skillSplit = job.skills.split(";");
+                            let skillSplit = skills.split(";");
                             for (let i = 0; i < skillSplit.length; i++) {
                                 if (skillsOutput != "") {
                                     skillsOutput += "; ";
@@ -922,10 +922,13 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             if (skillsOutput == "") {
                                 skillsOutput = "None";
                             }
-                            
-                            return WuxSheetMain.Desc(`<span>Category: ${job.category}</span>
-                            <span>Main Skills: ${skillsOutput}</span>
-                            <span>${job.description}</span>`);
+                            return skillsOutput;
+                        },
+                        
+                        buildTechniquesButton = function (job, jobDefinition) {
+                            return WuxSheetMain.Button(jobDefinition.getAttribute(WuxDef._info), 
+                                `<span>${WuxDef.GetTitle("Forme_SeeTechniques")}</span>`,
+                                "", job.name);
                         }
                     ;
                     return {
@@ -950,7 +953,6 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                         buildSkillGroup = function (database, group) {
                             let subGroups = WuxDef.Filter([new DatabaseFilterData("subGroup", group)]);
-                            Debug.Log(`Building Skill Groups ${JSON.stringify(subGroups)}`);
 
                             let contents = WuxSheetMain.MultiRowGroup(buildSubGroups(database, subGroups), WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);
@@ -958,28 +960,27 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let definitionName = Format.GetDefinitionName("Page", group);
                             let definition = WuxDef.Get(definitionName);
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
-
                         },
 
                         buildSubGroups = function (database, subGroups) {
                             let output = [];
                             let groupName = "";
-                            let filterSettings = [new DatabaseFilterData("subGroup", "")];
-                            let filteredData = {};
+                            let filterSettings = new DatabaseFilterData("subGroup", "");
                             subGroups = subGroups.sort();
                             for (let i = 0; i < subGroups.length; i++) {
                                 if (subGroups[i].name == "") {
                                     continue;
                                 }
                                 groupName = subGroups[i].getTitle();
-                                filterSettings[0].value = groupName;
-                                filteredData = database.filter(filterSettings);
-                                output.push(buildGroup(groupName, filteredData));
+                                filterSettings.value = groupName;
+                                Debug.Log(`Filtering Skills with: ${groupName}`);
+                                output.push(buildGroup(groupName, database.filter(filterSettings)));
                             }
                             return output;
                         },
 
                         buildGroup = function (groupName, filteredData) {
+                            Debug.Log(`SkillGroup: ${JSON.stringify(filteredData)}`);
                             return `<div class="wuxFlexTableItemGroup wuxMinWidth200 wuxMaxWidth300">
 								<div class="wuxFlexTableItemHeader wuxTextLeft">${groupName}</div>
 								<div class="wuxFlexTableItemData wuxTextLeft">\n${buildSkillGroupSkills(filteredData)}\n</div>
@@ -999,9 +1000,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let interactHeader = buildInteractiveSkillHeader(skill, skillDefinition);
                             let expertiseHeader = buildInteractiveExpertiseHeader(skillDefinition);
                             
-                            return WuxSheetMain.HiddenField(skillDefinition.getAttribute(WuxDef._learn), 
-                                    `<div class="wuxIsKeySkill">${interactHeader}</div>`) + 
-                                WuxSheetMain.HiddenAuxField(skillDefinition.getAttribute(WuxDef._learn), 
+                            return WuxSheetMain.HiddenFieldToggle(skillDefinition.getAttribute(WuxDef._learn), 
+                                    `<div class="wuxIsKeySkill">${interactHeader}</div>`,
                                     `${interactHeader}`) + 
                                 WuxSheetMain.HiddenField(skillDefinition.getAttribute(WuxDef._rank),
                                     `<div class="wuxMarginLeft50">${expertiseHeader}</div>`);

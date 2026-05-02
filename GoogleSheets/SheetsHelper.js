@@ -1,6 +1,4 @@
 function SheetsFunctions() {
-    SetDefinitionsDatabase();
-    SetItemTechDatabase();
     Test();
     ConcatSheetsDatabase();
     onOpen();

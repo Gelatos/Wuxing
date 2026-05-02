@@ -164,7 +164,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 }
                 
                 if (showTierHeaders) {
-                    addStyleTierHeaderToInspectionPopup(attrHandler, itemPopupRepeater, affinity, style.name, style.getLevelPrerequisites(tier));
+                    addStyleTierHeaderToInspectionPopup(attrHandler, itemPopupRepeater, affinity, style.name, Format.GetLevelPrerequisites(tier));
                 }
 
                 techsByAffinity.forEach(function (styleTechnique) {
