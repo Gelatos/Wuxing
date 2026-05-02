@@ -6,16 +6,18 @@ class Dictionary {
     constructor() {
         this.keys = [];
         this.values = {};
+        this.dataCreationCallback = {};
     }
 
     import(data, dataCreationCallback) {
+        this.dataCreationCallback = dataCreationCallback;
         if (data != undefined) {
             if (Array.isArray(data)) {
-                this.importSheets(data, dataCreationCallback);
+                this.importSheets(data, this.dataCreationCallback);
             } else if (typeof data == "string") {
-                this.importStringifiedJson(data, dataCreationCallback);
+                this.importStringifiedJson(data, this.dataCreationCallback);
             } else {
-                this.importJson(data, dataCreationCallback);
+                this.importJson(data, this.dataCreationCallback);
             }
         }
     }
@@ -222,6 +224,42 @@ class Database extends Dictionary {
     }
 }
 
+class WuxDataDatabase extends Database {
+
+    constructor(data, dataCreation, filters) {
+        if (filters == undefined) {
+            filters = ["group"];
+        }
+        super(data, filters, dataCreation);
+    }
+
+    importSheets(dataArray) {
+        let data = {};
+        for (let i = 0; i < dataArray.length; i++) {
+            data = this.dataCreationCallback(dataArray[i]);
+            if (this.has(data.name)) {
+                this.values[data.name].descriptions.push(data.descriptions[0]);
+            } else {
+                if (data.group == "") {
+                    continue;
+                }
+                this.add(data.name, data);
+            }
+        }
+    }
+
+    add(key, value) {
+        super.add(key, value);
+
+        if (value.group.indexOf(";") >= 0) {
+            let groups = value.group.split(";");
+            for (let i = 0; i < groups.length; i++) {
+                this.addSortingGroup("group", groups[i].trim(), value);
+            }
+        }
+    }
+}
+
 class ExtendedTechniqueDatabase extends Database {
 
     constructor(data) {
@@ -315,7 +353,6 @@ class ExtendedTechniqueStyleDatabase extends Database {
             this.addSortingGroup("styleCategory", groups[i].trim(), value);
         }
     }
-    
 }
 
 class ExtendedUsableItemDatabase extends Database {
@@ -501,7 +538,7 @@ class WuxDatabaseData extends dbObj {
         this.name = json.name;
         this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
-        this.description = json.description;
+        this.descriptions = json.descriptions;
     }
 
     importSheets(dataArray) {
@@ -511,7 +548,7 @@ class WuxDatabaseData extends dbObj {
         this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i];
         i++;
-        this.description = "" + dataArray[i];
+        this.descriptions = [("" + dataArray[i])];
         i++;
         return i;
     }
@@ -520,7 +557,7 @@ class WuxDatabaseData extends dbObj {
         this.name = "";
         this.fieldName = "";
         this.group = "";
-        this.description = "";
+        this.descriptions = [];
         this.variable = "";
     }
 
@@ -532,15 +569,18 @@ class WuxDatabaseData extends dbObj {
         definition.title = this.name;
         definition.group = baseDefinition.name;
         definition.subGroup = "";
-        definition.descriptions = this.getDescriptions();
+        definition.descriptions = this.descriptions;
         definition.formula = baseDefinition.formula;
         definition.linkedGroups = [];
         definition.isResource = baseDefinition.isResource;
         return definition;
     }
 
-    getDescriptions() {
-        return [this.description];
+    getDescription(join) {
+        if (join == undefined) {
+            join = "\n";
+        }
+        return this.descriptions.join(join);
     }
 
 }
@@ -837,35 +877,11 @@ class TechniqueData extends WuxDatabaseData {
     
     getPrerequisites() {
         let output = "";
-        let levelPrereq = this.getLevelPrerequisites();
+        let levelPrereq = Format.GetLevelPrerequisites(this.tier);
         if (levelPrereq > 0) {
             output += `Level ${levelPrereq}`;
         }
         return output;
-    }
-    getLevelPrerequisites() {
-        switch (this.tier) {
-            case 1:
-                return 0;
-            case 2:
-                return 4;
-            case 3:
-                return 9;
-            case 4:
-                return 15;
-            case 5:
-                return 22;
-            case 6:
-                return 30;
-            case 7:
-                return 39;
-            case 8:
-                return 49;
-            case 9:
-                return 60;
-            default:
-                return 0;
-        }
     }
 
     addDefinition(definition) {
@@ -1219,30 +1235,6 @@ class TechniqueStyle extends WuxDatabaseData {
         definition.formula = new FormulaData();
         return definition;
     }
-    getLevelPrerequisites(tier) {
-        switch (tier) {
-            case 1:
-                return 0;
-            case 2:
-                return 4;
-            case 3:
-                return 9;
-            case 4:
-                return 15;
-            case 5:
-                return 22;
-            case 6:
-                return 30;
-            case 7:
-                return 39;
-            case 8:
-                return 49;
-            case 9:
-                return 60;
-            default:
-                return 0;
-        }
-    }
 }
 
 class SkillData extends WuxDatabaseData {
@@ -1382,8 +1374,9 @@ class JobData extends WuxDatabaseData {
         this.fieldName = "";
         this.group = "";
         this.category = "";
+        this.difficulty = 0;
         this.skills = "";
-        this.description = "";
+        this.descriptions = [];
         this.defenses = "";
         this.techniques = [];
     }
@@ -1394,8 +1387,9 @@ class JobData extends WuxDatabaseData {
         this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
         this.category = json.category;
+        this.difficulty = json.difficulty;
         this.skills = json.skills;
-        this.description = json.description;
+        this.descriptions = json.descriptions;
         this.defenses = json.defenses;
         this.techniques = json.techniques;
     }
@@ -1410,9 +1404,12 @@ class JobData extends WuxDatabaseData {
         i++;
         this.category = "" + dataArray[i];
         i++;
+        this.difficulty = parseInt(dataArray[i]);
+        this.difficulty = isNaN(this.difficulty) ? 0 : this.difficulty;
+        i++;
         this.skills = "" + dataArray[i];
         i++;
-        this.description = "" + dataArray[i];
+        this.descriptions = [("" + dataArray[i])];
         i++;
         this.defenses = "" + dataArray[i];
         i++;
@@ -1465,10 +1462,6 @@ class JobData extends WuxDatabaseData {
         style.maxTier = 6;
         return style;
     }
-}
-
-class ArchetypeData extends WuxDatabaseData {
-
 }
 
 class StatusData extends WuxDatabaseData {
@@ -1547,54 +1540,6 @@ class StatusData extends WuxDatabaseData {
         }
         else if (this.endsOnTrigger) {
             output.push(`This ${this.group} ends when it is triggered.`);
-        }
-        return output;
-    }
-}
-
-class RoleData extends WuxDatabaseData {
-    importJson(json) {
-        this.createEmpty();
-
-    }
-
-    importSheets(dataArray) {
-        this.createEmpty();
-        let i = 0;
-        this.name = "" + dataArray[i];
-        i++;
-        this.fieldName = Format.ToFieldName(this.name);
-        this.group = "" + dataArray[i];
-        i++;
-        this.description = "" + dataArray[i];
-        i++;
-        this.techniques = this.createTechnique(dataArray.slice(i));
-        i++;
-
-    }
-
-    createEmpty() {
-        super.createEmpty();
-        this.name = "";
-        this.fieldName = "";
-        this.group = "";
-        this.description = "";
-        this.techniques = [];
-    }
-
-    createTechnique(modArray) {
-        let output = [];
-        let i = 0;
-        let data = "";
-        let dataSplit = {};
-        while (true) {
-            if (modArray[i] == undefined || modArray[i] == "") {
-                break;
-            }
-            data = "" + modArray[i];
-            dataSplit = data.split(";");
-            output.push({name: dataSplit[0], level: dataSplit.length > 1 ? dataSplit[1] : 0});
-            i++;
         }
         return output;
     }
@@ -1961,14 +1906,6 @@ class DefinitionData extends WuxDatabaseData {
 
     getAttribute(mod, mod1) {
         return `attr_${this.getVariable(mod, mod1)}`;
-    }
-
-    getDescription() {
-        let output = "";
-        this.descriptions.forEach((description) => {
-            output += description + "\n";
-        });
-        return output;
     }
 
     getFormulaMods(modifiers) {
@@ -4561,22 +4498,10 @@ class CombatDetails {
         return output;
     }
     printVitality() {
-        return `Vit:${this.printIcons(this.vitality, this.maxvitality, `♥`, `♡`)}`;
+        return `Vit:${Format.PrintIcons(this.vitality, this.maxvitality, `♥`, `♡`)}`;
     }
     printSurges() {
-        return `Surges:${this.printIcons(this.surges, this.maxsurges, `⛊`, `⛉`)}`;
-    }
-    printIcons(current, max, filledIcon, emptyIcon) {
-        let output = "";
-        if (max == 0) {
-            output += emptyIcon;
-        }
-        else {
-            for (let i = 0; i < max; i++) {
-                output += i < current ? filledIcon : emptyIcon;
-            }
-        }
-        return output;
+        return `Surges:${Format.PrintIcons(this.surges, this.maxsurges, `⛊`, `⛉`)}`;
     }
     printResistances() {
         let resistances = "";
@@ -5680,6 +5605,44 @@ var Format = Format || (function () {
 
         },
 
+        getLevelPrerequisites = function (tier) {
+        switch (tier) {
+            case 1:
+                return 0;
+            case 2:
+                return 4;
+            case 3:
+                return 9;
+            case 4:
+                return 15;
+            case 5:
+                return 22;
+            case 6:
+                return 30;
+            case 7:
+                return 39;
+            case 8:
+                return 49;
+            case 9:
+                return 60;
+            default:
+                return 0;
+        }
+    },
+
+        printIcons = function(current, max, filledIcon, emptyIcon) {
+            let output = "";
+            if (max == 0) {
+                output += emptyIcon;
+            }
+            else {
+                for (let i = 0; i < max; i++) {
+                    output += i < current ? filledIcon : emptyIcon;
+                }
+            }
+            return output;
+        },
+
         // Array Formatting
         // ------------------------
 
@@ -5786,6 +5749,8 @@ var Format = Format || (function () {
         Romanize: romanize,
         NumberToWord: numberToWord,
         GetDefinitionName: getDefinitionName,
+        GetLevelPrerequisites: getLevelPrerequisites,
+        PrintIcons: printIcons,
         StringToArray: stringToArray,
         ArrayToString: arrayToString,
         SortArrayDecrementing: sortArrayDecrementing,

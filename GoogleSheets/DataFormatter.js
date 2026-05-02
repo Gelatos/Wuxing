@@ -76,143 +76,6 @@ function ColumnToLetter(col) {
     return letter;
 }
 
-function SetDefinitionsDatabase(definitionTypesArray, groupDefinitionArray, definitionArray, systemDefinitionArray,
-                                styleArray, skillsArray, languageArray, loreArray, jobsArray, statusArray, namesArray, regionArray) {
-    
-    let definitionDatabase = SheetsDatabase.CreateDefinitionTypes(definitionTypesArray);
-    definitionDatabase.importSheets(groupDefinitionArray, function (arr) {
-        let definition = new DefinitionData(arr);
-        let baseDefinition = definitionDatabase.get(definition.group);
-        if (baseDefinition != undefined && baseDefinition.group == "Type") {
-            return definition.createDefinition(baseDefinition);
-        }
-        return definition;
-    });
-    definitionDatabase.importSheets(definitionArray, function (arr) {
-        let definition = new DefinitionData(arr);
-        let baseDefinition = definitionDatabase.get(definition.group);
-        if (baseDefinition != undefined && baseDefinition.group == "Type") {
-            return definition.createDefinition(baseDefinition);
-        }
-        return definition;
-    });
-    definitionDatabase.importSheets(systemDefinitionArray, function (arr) {
-        let definition = new DefinitionData(arr);
-        let baseDefinition = definitionDatabase.get(definition.group);
-        if (baseDefinition != undefined && baseDefinition.group == "Type") {
-            return definition.createDefinition(baseDefinition);
-        }
-        return definition;
-    });
-    definitionDatabase.importSheets(styleArray, function (arr) {
-        let style = new TechniqueStyle(arr);
-        if (style.group == "") {
-            return undefined;
-        }
-        return style.createDefinition(definitionDatabase.get("Style"));
-    });
-    definitionDatabase.importSheets(skillsArray, function (arr) {
-        let skill = new SkillData(arr);
-        if (skill.group == "") {
-            return undefined;
-        }
-        return skill.createDefinition(definitionDatabase.get("Skill"));
-    });
-    definitionDatabase.importSheets(languageArray, function (arr) {
-        let language = new LanguageData(arr);
-        return language.createDefinition(definitionDatabase.get("Language"));
-    });
-    definitionDatabase.importSheets(loreArray, function (arr) {
-        let lore = new LoreData(arr);
-        if (lore.group == lore.name) {
-            return lore.createDefinition(definitionDatabase.get("LoreCategory"));
-        } else {
-            return lore.createDefinition(definitionDatabase.get("Lore"));
-        }
-    });
-    definitionDatabase.importSheets(jobsArray, function (arr) {
-        let job = new JobData(arr);
-        return job.createDefinition(definitionDatabase.get("Job"));
-    });
-    definitionDatabase.importSheets(jobsArray, function (arr) {
-        let job = new JobData(arr);
-        return job.createDefinition(definitionDatabase.get("JobStyle"));
-    });
-    definitionDatabase.importSheets(statusArray, function (arr) {
-        let status = new StatusData(arr);
-        return status.createDefinition(definitionDatabase.get("Status"));
-    });
-
-    let definitionClassData = JavascriptDatabase.Create(definitionDatabase, WuxDefinition.GetDefinition);
-    definitionClassData.addPublicFunction("getAttribute", WuxDefinition.GetAttribute);
-    definitionClassData.addPublicFunction("getVariable", WuxDefinition.GetVariable);
-    definitionClassData.addPublicFunction("getUntypedAttribute", WuxDefinition.GetUntypedAttribute);
-    definitionClassData.addPublicFunction("getUntypedVariable", WuxDefinition.GetUntypedVariable);
-    definitionClassData.addPublicFunction("getAbbreviation", WuxDefinition.GetAbbreviation);
-    definitionClassData.addPublicFunction("getVariables", WuxDefinition.GetVariables);
-    definitionClassData.addPublicFunction("getGroupVariables", WuxDefinition.GetGroupVariables);
-    definitionClassData.addPublicFunction("getTitle", WuxDefinition.GetTitle);
-    definitionClassData.addPublicFunction("getDescription", WuxDefinition.GetDescription);
-    definitionClassData.addPublicFunction("getName", WuxDefinition.GetName);
-    let variableMods = definitionDatabase.filter(new DatabaseFilterData("group", "VariableMod"));
-    for (let i = 0; i < variableMods.length; i++) {
-        definitionClassData.addPublicVariable(variableMods[i].variable, `"${variableMods[i].variable}"`);
-    }
-
-    let output = "";
-    output += definitionClassData.print("WuxDef");
-
-    let nameDatabase = NameDatabase.Create(namesArray, regionArray);
-    output += "\n" + nameDatabase.print("WuxNames");
-
-    return PrintLargeEntry(output, "]");
-}
-
-function SetItemTechDatabase(styleArray, jobArray, techniqueArray, goodsArray, gearArray, consumablesArray) {
-    let output = "";
-
-    let techDb = SheetsDatabase.CreateTechniques(techniqueArray);
-    let techniqueClassData = JavascriptDatabase.Create(techDb, WuxDefinition.GetTechnique);
-    techniqueClassData.addPublicFunction("filterAndSortTechniquesByRequirement", WuxDefinition.FilterAndSortTechniquesByRequirement);
-    output += techniqueClassData.print("WuxTechs") + "\n";
-
-    let styleDb = SheetsDatabase.CreateStyles(styleArray);
-    let variableNameKeys = {};
-    styleDb.iterate(function (value, key) {
-        let definition = value.createDefinition(WuxDef.Get("Style"));
-        variableNameKeys[definition.getVariable()] = key;
-    });
-    let jobDb = SheetsDatabase.CreateJobs(jobArray);
-    jobDb.iterate(function (job, key) {
-        let jobStyle = job.convertToStyle();
-        styleDb.add(jobStyle.name, jobStyle);
-        let definition = job.createDefinition(WuxDef.Get("Job"));
-        variableNameKeys[definition.getVariable()] = key;
-    });
-    let styleClassData = JavascriptDatabase.Create(styleDb, WuxDefinition.GetStyle);
-    styleClassData.addVariable("variableNameKeys", JSON.stringify(variableNameKeys));
-    styleClassData.addPublicFunction("getByVariableName", function (variableName) {
-        let key = variableNameKeys[variableName];
-        return get(key);
-    });
-    output += styleClassData.print("WuxStyles") + "\n";
-
-    let goodsClassData = JavascriptDatabase.Create(SheetsDatabase.CreateGoods(goodsArray), WuxDefinition.GetGoods);
-    output += goodsClassData.print("WuxGoods") + "\n";
-
-    let itemsDatabase = SheetsDatabase.CreateGear(gearArray);
-    itemsDatabase.importSheets(consumablesArray, function (data) {
-        let item = new UsableItemData(data);
-        let valueAssessment = new GearValueAssessment(item);
-        item.value = valueAssessment.assessment;
-        return item;
-    });
-    let itemClassData = JavascriptDatabase.Create(itemsDatabase, WuxDefinition.GetItem);
-    output += itemClassData.print("WuxItems") + "\n";
-
-    return PrintLargeEntry(output, "}");
-}
-
 function Test() {
     return JSON.stringify(WuxDef.Get("Tech_Overhead Chop").jsonData);
     // let data = new DefinitionData(definitionArray[0]);
@@ -407,27 +270,19 @@ var SheetsDatabase = SheetsDatabase || (function () {
         return new ExtendedTechniqueDatabase(arr);
     };
     const createSkills = function (arr) {
-        return new Database(arr, ["group", "subGroup"], function (arr) {
-            return new SkillData(arr);
-        });
+        return new WuxDataDatabase(arr, arr => {return new SkillData(arr)}, ["group", "subGroup"]);
     };
     const createStyles = function (arr) {
         return new ExtendedTechniqueStyleDatabase(arr);
     };
     const createLanguages = function (arr) {
-        return new Database(arr, ["group"], function (arr) {
-            return new LanguageData(arr);
-        });
+        return new WuxDataDatabase(arr, arr => {return new LanguageData(arr)});
     };
     const createLores = function (arr) {
-        return new Database(arr, ["group"], function (arr) {
-            return new LoreData(arr);
-        });
+        return new WuxDataDatabase(arr, arr => {return new LoreData(arr)});
     };
     const createJobs = function (arr) {
-        return new Database(arr, ["group"], function (arr) {
-            return new JobData(arr);
-        });
+        return new WuxDataDatabase(arr, arr => {return new JobData(arr)});
     };
     const createGoods = function (arr) {
         return new Database(arr, ["group"], function (arr) {
@@ -1165,433 +1020,13 @@ class ItemRepeaterDisplayBuilder extends BaseItemDisplayBuilder {
     }
 }
 
-var WuxPrintTechnique = WuxPrintTechnique || (function () {
-    const setTechniqueDisplayHtml = function (techDisplayData, displayOptions) {
-        let contents = "";
-        contents += techniqueDisplayHeader.Print(techDisplayData, displayOptions);
-        contents += techniqueDisplayContents.Print(techDisplayData, displayOptions);
-
-        return setTechniqueDisplayFeatureDiv(techDisplayData, displayOptions, contents);
-    };
-    const setTechniqueDisplayFeatureDiv = function (techDisplayData, displayOptions, contents) {
-        return `<div ${setFeatureStyle("wuxFeature", displayOptions)}>${contents}</div>\n`;
-    };
-
-    var techniqueDisplayHeader = techniqueDisplayHeader || (function () {
-        const setTechniqueDisplayHeaderExpandSection = function (techDisplayData, displayOptions) {
-            if (displayOptions.hasCSS) {
-                // add the collapsible field
-                let attributeName = techDisplayData.definition.getAttribute(WuxDef._expand);
-                let isChecked = displayOptions.autoExpand ? `checked value="on"` : "";
-
-                return `<div class="wuxFeatureHeaderInteractBlock">
-                <div class="wuxFeatureHeaderInteractInnerBlock">
-                <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="${attributeName}" ${isChecked}>
-                <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${attributeName}" ${isChecked}>
-                <span class="wuxFeatureHeaderInteractiveIcon">&#9662;</span>
-                <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${attributeName}" ${isChecked}>
-                <span class="wuxFeatureHeaderInteractiveAuxIcon">&#9656;</span>
-                </div>
-                ${setTechniqueDisplayHeaderUseSection(techDisplayData, displayOptions)}
-            </div>`;
-            }
-            return "";
-        };
-        const setTechniqueDisplayHeaderSelectSection = function (techDisplayData, displayOptions) {
-            if (displayOptions.hasSelect) {
-                return `
-            ${WuxSheetMain.CustomInput("hidden", techDisplayData.definition.getAttribute(WuxDef._subfilter), "wuxFeatureInteraction-flag", ` value="0"`)}
-            <div class="wuxFeatureHeaderInteractBlock">
-            <input class="wuxFeatureHeaderInteractBlock-flag" type="checkbox" name="${techDisplayData.definition.getAttribute()}">
-            <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${techDisplayData.definition.getAttribute()}">
-            <span class="wuxFeatureHeaderInteractiveIcon">&#9635;</span>
-            <input type="hidden" class="wuxFeatureHeaderInteractiveIcon-flag" name="${techDisplayData.definition.getAttribute()}">
-            <span class="wuxFeatureHeaderInteractiveAuxIcon">&#9634;</span>
-            </div>`;
-            }
-            return "";
-        };
-        const setTechniqueDisplayHeaderUseSection = function (techDisplayData, displayOptions) {
-
-            // add technique data for the api
-            techDisplayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
-            techDisplayData.technique.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
-            techDisplayData.technique.displayname = techDisplayData.displayname;
-            let useDefinition = WuxDef.Get("Title_UseTechnique");
-
-            return `
-        ${WuxSheetMain.CustomInput("hidden", displayOptions.techniqueDefinition.getAttribute(WuxDef._subfilter), "wuxHiddenField-flag", ` value="0"`)}
-        <div class="wuxHiddenAuxField">
-            <button class="wuxFeatureHeaderInteractiveButton wuxTooltip" type="roll" value='${techDisplayData.getRollTemplate(true)}'>
-                9
-                <div class="wuxTooltipContent">
-                    ${WuxDefinition.TooltipDescription(useDefinition)}
-                </div>
-            </button>
-        </div>
-        `;
-        };
-        const setTechniqueDisplayHeaderNameFields = function (techDisplayData, displayOptions) {
-            let contents = `<div ${setFeatureStyle("wuxFeatureHeaderDisplayBlock", displayOptions)}>
-            <span ${setFeatureStyle("wuxFeatureHeaderName", displayOptions)}>${techDisplayData.name}</span>
-            <div ${setFeatureStyle("wuxFeatureHeaderInfo", displayOptions)}>${techDisplayData.resourceData}</div>
-            <div ${setFeatureStyle("wuxFeatureHeaderInfo", displayOptions)}>${techDisplayData.targetData}</div>\n`;
-            contents += setTechniqueDisplayHeaderBlockTraits(techDisplayData, displayOptions);
-            contents += `\n</div>`;
-            return contents;
-        };
-        const setTechniqueDisplayHeaderBlockTraits = function (techDisplayData, displayOptions) {
-            if (techDisplayData.traits.length > 0) {
-                return setFeatureLineWithHeader("wuxFeatureHeaderInfo", "Traits", setDefinitions(techDisplayData.traits, "; ", displayOptions), displayOptions);
-            }
-            return `<div ${setFeatureStyle("wuxFeatureHeaderInfo", displayOptions)}><span><strong>Traits:</strong> None</span></div>`;
-        };
-        const setTechniqueDisplayHeaderExtentFeatures = function (techDisplayData, displayOptions) {
-            let output = "";
-            if (techDisplayData.trigger != "") {
-                output += setFeatureLineWithHeader("wuxFeatureHeaderInfoTrigger", "Trigger", techDisplayData.trigger, displayOptions);
-            }
-            if (techDisplayData.requirements != "") {
-                output += setFeatureLineWithHeader("wuxFeatureHeaderInfoReq", "Requirements", techDisplayData.requirements, displayOptions);
-            }
-            if (techDisplayData.itemTraits.length > 0) {
-                output += setFeatureLineWithHeader("wuxFeatureHeaderInfoReq", "Req. Tool Traits", setDefinitions(techDisplayData.itemTraits, "<span> or </span>", displayOptions), displayOptions);
-            }
-            return output;
-        };
-        'use strict';
-
-        const print = function (techDisplayData, displayOptions) {
-            let output = "";
-            output += setTechniqueDisplayHeaderExpandSection(techDisplayData, displayOptions);
-            output += setTechniqueDisplayHeaderSelectSection(techDisplayData, displayOptions);
-            // output += setTechniqueDisplayHeaderUseSection(techDisplayData, displayOptions);
-            output += setTechniqueDisplayHeaderNameFields(techDisplayData, displayOptions);
-
-            output = `<div ${setFeatureStyle(["wuxFeatureHeader", `wuxFeatureHeader-${techDisplayData.actionType}`], displayOptions)}>\n${output}\n</div>\n`;
-            output += setTechniqueDisplayHeaderExtentFeatures(techDisplayData, displayOptions);
-            return output;
-        };
-
-        return {
-            Print: print
-        }
-    })();
-
-    var techniqueDisplayContents = techniqueDisplayContents || (function () {
-        const setTechniqueDisplayFunctionBlock = function (techDisplayData, displayOptions) {
-
-            let output = "";
-            output += setTechniqueDisplayFunctionBlockFlavorText(techDisplayData, displayOptions);
-
-            if (output != "") {
-                return `<div ${setFeatureStyle("wuxFeatureFunctionBlock", displayOptions)}>\n${output}\n</div>\n`;
-            }
-            return "";
-        };
-        const setTechniqueDisplayFunctionBlockFlavorText = function (techDisplayData, displayOptions) {
-            if (techDisplayData.flavorText != "") {
-                return setFeatureLine("wuxFeatureFunctionBlockFlavorText", techDisplayData.flavorText, displayOptions);
-            }
-            return "";
-        };
-        const setTechniqueDisplayFunctionBlockDefinitions = function (techDisplayData, displayOptions) {
-            if (techDisplayData.definitions.length > 0) {
-                return `<div ${setFeatureStyle("wuxFeatureFunctionBlock", displayOptions)}>
-            ${setFeatureLineWithHeader("wuxFeatureFunctionBlockRow", "Definitions", setDefinitions(techDisplayData.definitions, "<span>, </span>", displayOptions), displayOptions)}
-            </div>\n`;
-            }
-            return "";
-        };
-        var techniqueDisplayContentEffects = techniqueDisplayContentEffects || (function () {
-            const setTechniqueDisplayCheckBlock = function (effectsOutput, displayOptions) {
-                return `<div ${setFeatureStyle("wuxFeatureCheckBlock", displayOptions)}>
-        <span ${setFeatureStyle("wuxFeatureCheckBlockRow", displayOptions)}>${effectsOutput}</span>
-        </div>\n`;
-            };
-            'use strict';
-
-            const printEffects = function (techDisplayData, displayOptions) {
-                let output = "";
-                let defenseDisplay = "";
-                techDisplayData.effects.forEach(function (effectData) {
-                    if (effectData.check != undefined) {
-                        defenseDisplay = WuxSheetMain.Tooltip.Text(effectData.check, WuxSheetMain.Header2(effectData.check) + WuxSheetMain.Desc(effectData.checkDescription));
-
-                        output += setFeatureLine("wuxFeatureCheckHeader", defenseDisplay, displayOptions);
-                        effectData.effects.forEach(function (effect) {
-                            output += setTechniqueDisplayCheckBlock(effect, displayOptions);
-                        });
-                    }
-                });
-
-                if (output != "") {
-                    return `<div ${setFeatureStyle("wuxFeatureEffectsBlock", displayOptions)}>\n${output}\n</div>\n`;
-                }
-                return output;
-            };
-
-            return {
-                PrintEffects: printEffects
-            };
-        })();
-        'use strict';
-
-        const print = function (techDisplayData, displayOptions) {
-            let output = "";
-
-            output += setTechniqueDisplayFunctionBlock(techDisplayData, displayOptions);
-            output += techniqueDisplayContentEffects.PrintEffects(techDisplayData, displayOptions);
-            output += setTechniqueDisplayFunctionBlockDefinitions(techDisplayData, displayOptions);
-
-            if (displayOptions.hasCSS) {
-                let attributeName = techDisplayData.definition.getAttribute(WuxDef._expand);
-                let isChecked = displayOptions.autoExpand ? ` checked value="on"` : "";
-
-                return `<input type="hidden" class="wuxFeatureHeaderInteractBlock-flag" name="${attributeName}"${isChecked}>\n<div class="wuxFeatureExpandingContent">\n${output}\n</div>\n`;
-            } else {
-                return output;
-            }
-        };
-        return {
-            Print: print
-        }
-    })();
-    const setFeatureLineWithHeader = function (featureStyle, header, contents, displayOptions) {
-        if (contents != "") {
-            return `<div ${setFeatureStyle(featureStyle, displayOptions)}>\n<span><strong>${header}: </strong></span>\n<span>${contents}</span>\n</div>\n`;
-        }
-        return "";
-    };
-    const setFeatureLine = function (featureStyle, contents, displayOptions) {
-        if (contents != "") {
-            return `<div ${setFeatureStyle(featureStyle, displayOptions)}>\n<span>${contents}</span>\n</div>\n`;
-        }
-        return "";
-    };
-    const setDefinitions = function (definitions, delimiter, displayOptions) {
-        if (definitions.length > 0) {
-            let output = "";
-            for (let i = 0; i < definitions.length; i++) {
-                if (output != "") {
-                    output += delimiter;
-                }
-                if (displayOptions.hasCSS) {
-                    output += WuxSheetMain.Tooltip.Text(definitions[i].title, WuxDefinition.TooltipDescription(definitions[i]));
-                } else {
-                    output += `<a style="margin-right: 10px; text-decoration: underline dotted;" title="${definitions[i].description}">${definitions[i].name}</a>`;
-                }
-            }
-            return output;
-        }
-        return "";
-    };
-    const setFeatureStyle = function (style, displayOptions) {
-        if (displayOptions.hasCSS) {
-            if (Array.isArray(style)) {
-                let output = "";
-                for (let i = 0; i < style.length; i++) {
-                    if (output != "") {
-                        output += " ";
-                    }
-                    output += style[i];
-                }
-                return `class="${output}"`;
-            } else {
-                return `class="${style}"`;
-            }
-        } else {
-            if (Array.isArray(style)) {
-                let output = "";
-                for (let i = 0; i < style.length; i++) {
-                    if (output != "") {
-                        output += " ";
-                    }
-                    output += getFeatureStyleSheetStyle(style[i]);
-                }
-                return `style="${output}"`;
-            } else {
-                return `style="${getFeatureStyleSheetStyle(style)}"`;
-            }
-        }
-    };
-    const getFeatureStyleSheetStyle = function (style) {
-        switch (style) {
-            case "wuxFeature":
-                return `position: relative;
-display: inline-block;
-min-width: 300px; 
-max-width: 500px; 
-width: calc(100% - 10px);
-
-font-size: 12px;
-
-border: 3px solid black; 
-background: #cacbcf;
-
-flex: 1;`;
-            case "wuxFeatureHeader":
-                return `position: relative;
-display: block; 
-width: calc(100% - 10px);
-padding: 0px 0px 5px 10px; 
-background: #c0e7d5;
-border-bottom: 1px solid #efefef; `;
-            case "wuxFeatureHeader-Quick":
-                return `background-color: #fbe5e5;`;
-            case "wuxFeatureHeader-Full":
-                return `background-color: #d7a0a0;`;
-            case "wuxFeatureHeader-Reaction":
-                return `background-color: #e5eafb;`;
-            case "wuxFeatureHeader-Free":
-                return `background-color: #e5fbf1;`;
-            case "wuxFeatureHeader-None":
-                return `background-color: #f0e5fb;`;
-            case "wuxFeatureHeader-Augment":
-                return `background-color: #acacac;`;
-            case "wuxFeatureType":
-                return `position: absolute;
-display: inline-block;
-right: 0px;
-width: 55px; 
-padding: 5px; 
-
-vertical-align: top; 
-text-align: center; 
-
-color: #FFF; 
-
-background: #000000;`;
-            case "wuxFeatureType-Active":
-                return `background-color: #b60003;`;
-            case "wuxFeatureType-Passive":
-                return `background-color: #4db600;`;
-            case "wuxFeatureType-Support":
-                return `background-color: #00b0b6;`;
-            case "wuxFeatureType-Job":
-                return `background-color: #7800b6;`;
-            case "wuxFeatureType-Permanent":
-                return `background-color: #b66f00;`;
-            case "wuxFeatureTypeHeader":
-                return `position: relative;
-display: block;
-
-font-size: 9px; 
-font-weight: bold;`;
-            case "wuxFeatureTypeFooter":
-                return `position: relative;
-display: block;
-font-size: 7px;`;
-            case "wuxFeatureHeaderDisplayBlock":
-                return `position: relative;
-display:inline-block; 
-width: calc(100% - 115px);`;
-            case "wuxFeatureHeaderName":
-                return `position: relative;
-display: block; 
-
-width: 100%;
-margin-top: 5px; 
-
-font-size: 13px; 
-font-weight: bold;`;
-            case "wuxFeatureHeaderInfo":
-                return `position: relative;
-display: block; 
-
-font-size: 11px;`;
-            case "wuxFeatureHeaderInfoType":
-                return `position: relative;
-font-weight: bold;`;
-            case "wuxFeatureExpandingContent":
-                return `position: relative;`;
-            case "wuxFeatureFunctionBlock":
-                return `position: relative;
-display: block;
-
-width: calc(100% - 22px);
-padding: 5px 10px; 
-
-line-height: 14px; 
-font-size: 11px; 
-
-border-bottom: 1px solid #c6c6c6; 
-background: #fbf9e5;`;
-            case "wuxFeatureFunctionBlockRow":
-                return `position: relative;
-display: block;`;
-            case "wuxFeatureCheckBlock":
-                return ``;
-            case "wuxFeatureCheckBlockRow":
-                return `position: relative;
-display: inline-block;
-
-width: calc(100% - 22px);`;
-            case "wuxFeatureCheckBlockRange":
-                return `position: relative;
-display: inline-block;
-
-padding-right: 10px;`;
-            case "wuxFeatureCheckBlockTarget":
-                return `position: relative;
-display: inline-block;
-
-width: calc(65% - 5px);`;
-            case "wuxFeatureDescriptionBlock":
-                return `position: relative;
-display: block;
-width: calc(100% - 20px);
-padding: 5px 10px; 
-
-font-size: 11px;`;
-            case "wuxFeatureDescriptionBlockDesc":
-                return `display: inline-block;
-white-space: pre-line;
-word-break: break-word;`;
-            default:
-                return "";
-        }
-    };
-    'use strict';
-
-    const getDisplayOptions = function () {
-            return {
-
-                techniqueDefinition: {},
-                autoExpand: false,
-                hasCSS: false,
-                hasUseInteraction: false,
-                showTrigger: false,
-                showKiCharge: false
-            }
-        },
-
-        get = function (technique, displayOptions) {
-            if (technique == undefined) {
-                return "";
-            }
-            if (displayOptions == undefined) {
-                displayOptions = getDisplayOptions();
-                displayOptions.hasCSS = true;
-            }
-            let techDisplayData = new TechniqueDisplayData(technique);
-            return setTechniqueDisplayHtml(techDisplayData, displayOptions);
-        };
-    return {
-        GetDisplayOptions: getDisplayOptions,
-        Get: get
-    };
-}());
-
 var WuxDefinition = WuxDefinition || (function () {
     const definitionContents = function (definitionData) {
         let expandContents = "";
         if (definitionData.subGroup != "") {
             expandContents += WuxSheetMain.Desc(`<em>${definitionData.subGroup}</em>`);
         }
-        for (let i = 0; i < definitionData.descriptions.length; i++) {
-            expandContents += "\n" + WuxSheetMain.Desc(definitionData.descriptions[i]);
-        }
+        expandContents += `\n${WuxSheetMain.Desc(definitionData.getDescription(`</span><span class="wuxDescription">`))}`;
         if (definitionData.formula.hasFormula()) {
             switch (definitionData.group) {
                 case "Skill":
@@ -2042,6 +1477,12 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 return `<div class="wuxInteractiveBlock${isExpanding ? " wuxInteractiveExpandingBlock" : ""}">\n${contents}\n</div>`;
             },
 
+            buildCheckboxInput = function (fieldName, contents) {
+                return `<div class="wuxInteractiveBlock">
+                ${checkboxBlockIcon(fieldName, contents)}
+                </div>`;
+            },
+
             buildTooltipCheckboxInput = function (fieldName, infoFieldName, contents, infoContents) {
                 return `<div class="wuxInteractiveBlock">
                 ${WuxSheetMain.Info.Button(infoFieldName)}
@@ -2115,6 +1556,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
 
         return {
             Build: build,
+            BuildCheckboxInput: buildCheckboxInput,
             BuildTooltipCheckboxInput: buildTooltipCheckboxInput,
             BuildTooltipRadioInput: buildTooltipRadioInput,
             BuildTooltipSelectInput: buildTooltipSelectInput,
@@ -2288,13 +1730,10 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return output;
         },
 
-        button = function (fieldName, contents, className) {
-            if (className == undefined) {
-                className = "";
-            } else {
-                className = " " + className;
-            }
-            return `<div class="wuxButton${className}">\n<input type="checkbox" name="${fieldName}">\n<span>${contents}</span>\n </div>`;
+        button = function (fieldName, contents, className, value) {
+            className = className == undefined ? "" : ` ${className}`;
+            value = value == undefined ? "" : ` value="${value}"`;
+            return `<div class="wuxButton${className}">\n<input type="checkbox" name="${fieldName}"${value}>\n<span>${contents}</span>\n </div>`;
         },
 
         pictosButton = function (fieldName, contents, className) {
