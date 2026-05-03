@@ -263,7 +263,7 @@ class WuxDataDatabase extends Database {
 class ExtendedTechniqueDatabase extends Database {
 
     constructor(data) {
-        let filters = ["style", "group", "affinity", "tier", "action", "skill", "range"];
+        let filters = ["style", "group", "affinity", "tier", "action", "skill", "keywords", "rangeType"];
         let dataCreation = function (data) {
             return new TechniqueData(data);
         };
@@ -298,6 +298,10 @@ class ExtendedTechniqueDatabase extends Database {
         let styles = value.techSet.split(";");
         for (let i = 0; i < styles.length; i++) {
             this.addSortingGroup("style", styles[i].trim(), value);
+        }
+        let forms = value.forms.split(";");
+        for (let i = 0; i < forms.length; i++) {
+            this.addSortingGroup("keywords", forms[i].trim(), value);
         }
     }
 }
@@ -606,6 +610,7 @@ class TechniqueData extends WuxDatabaseData {
         this.skill = "";
         this.hasAdv = 0;
         this.range = "";
+        this.rangeType = "";
         this.target = "";
         this.size = 0;
         this.requirement = "";
@@ -645,6 +650,7 @@ class TechniqueData extends WuxDatabaseData {
         this.skill = json.skill;
         this.hasAdv = json.hasAdv;
         this.range = json.range;
+        this.rangeType = json.rangeType;
         this.target = json.target;
         this.size = parseInt(json.size);
         this.requirement = json.requirement;
@@ -701,6 +707,7 @@ class TechniqueData extends WuxDatabaseData {
         this.range = "" + dataArray[i];
         i++;
         this.target = "" + dataArray[i];
+        this.setRangeType();
         i++;
         this.size = parseInt(dataArray[i]);
         i++;
@@ -770,6 +777,34 @@ class TechniqueData extends WuxDatabaseData {
         }
 
         return (this.action === "Full" ? 10 : 5) * this.tier * isMagic;
+    }
+    setRangeType() {
+        let rangeParts = this.range.split("-");
+        let shortRange = parseInt(rangeParts[0]);
+        let longRange = rangeParts.length > 1 ? parseInt(rangeParts[1]) : 0;
+
+        if (longRange >= 8) {
+            this.rangeType = "Long Range";
+            return;
+        }
+        if (shortRange == 1) {
+            if (longRange >= 2) {
+                this.rangeType = "Short Range";
+                return;
+            }
+            this.rangeType = "Melee";
+            return;
+        }
+        if (longRange > 2) {
+            this.rangeType = "Short Range";
+            return;
+        }
+        
+        if (rangeParts[0] == "" || rangeParts[0] == "Self" || this.target == "Self") {
+            this.rangeType = "Self";
+        }
+        
+        this.rangeType = "Special";
     }
 
     setRank(rank) {
@@ -2587,6 +2622,20 @@ class BaseTechniqueEffectDisplayData {
     }
 
     formatEffect(effect, technique) {
+        // Combat
+        // Social
+        // Influence
+        // Request
+        // Favor
+        // Status (all of them?)
+        // Break Focus
+        // Terrain
+        // Structure
+        // Move
+        // Illusion
+        
+        // Affinites (all of them)
+        
         if (this.effectDescription != "" && !this.effectDescription.endsWith(".")) {
             if (this.effectType != "Damage") {
                 this.effectDescription += ". ";
