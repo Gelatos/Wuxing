@@ -1244,54 +1244,6 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
                         `${sectionDef.getTitle()}`, contents);
                 },
-                
-                buildBasicActions = function () {
-                    let contents = "";
-                    contents += printBasicActionGroup(WuxDef.Get("StyleCategory_Basic"));
-                    contents += printBasicActionGroup(WuxDef.Get("StyleCategory_Combat"));
-                    contents += printBasicActionGroup(WuxDef.Get("StyleCategory_Social"));
-                    return contents;
-                },
-                printBasicActionGroup = function (styleCategoryDefinition) {
-                    let contents = "";
-                    let basicStyleFilters = WuxDef.Filter([new DatabaseFilterData("subGroup", styleCategoryDefinition.name)]);
-                    for (let i = 0; i < basicStyleFilters.length; i++) {
-                        contents += setBasicTechniquesSection(basicStyleFilters[i]);
-                    }
-                    contents = WuxSheetMain.TabBlock(contents);
-
-                    return WuxSheetMain.CollapsibleTab(styleCategoryDefinition.getAttribute(WuxDef._tab, WuxDef._expand),
-                        `${styleCategoryDefinition.getTitle()}`, contents);
-                },
-
-                buildDeprecatedActions = function () {
-                    let contents = "";
-                    let refreshTechDef = WuxDef.Get("RefreshTech");
-                    contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(refreshTechDef.getAttribute(), `<span>${refreshTechDef.getTitle()}</span>`, "wuxWidth300"));
-                    
-                    let jobSlotCount = parseInt(WuxDef.Get("Forme_JobSlotCount").formula.getValue());
-                    // let advancedSlotCount = parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue());
-                    let styleSlotCount = parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue());
-
-                    let repeaterSlotData = [
-                        {repeater: "RepeatingJobTech", slot: "Forme_JobSlot", max: jobSlotCount, slotMod: 0},
-                        // {repeater: "RepeatingAdvTech", slot: "Forme_AdvancedSlot", max: advancedSlotCount, slotMod: 0},
-                        {repeater: "RepeatingAdvTech", slot: "Forme_StyleSlot", max: (styleSlotCount), slotMod: 0}];
-
-                    repeaterSlotData.forEach(function (repeaterData) {
-                        contents += repeatingDeprecatedFormeTechniquesSection(repeaterData);
-                    });
-                    contents += repeatingBasicTechniquesSection("RepeatingBasicActions", "", true);
-                    contents += repeatingBasicTechniquesSection("RepeatingBasicRecovery", "", true);
-                    contents += repeatingBasicTechniquesSection("RepeatingBasicAttack", "", true);
-                    contents += repeatingBasicTechniquesSection("RepeatingBasicSocial", "", true);
-                    contents += repeatingBasicTechniquesSection("RepeatingBasicSpirit", "", true);
-                    contents = WuxSheetMain.TabBlock(contents);
-
-                    let sectionDef = WuxDef.Get("StyleCategory_Deprecated");
-                    return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
-                        `${sectionDef.getTitle()}`, contents);
-                },
 
                 repeatingFormeSection = function () {
                     let repeaterDefinition = WuxDef.Get("RepeatingFormeTech");
@@ -1311,20 +1263,6 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         ${WuxSheetMain.Row("&nbsp;")}`
                     )}`;
                 },
-                
-                repeatingDeprecatedFormeTechniquesSection = function (repeaterData) {
-                    let contents = "";
-                    for (let i = 1; i <= repeaterData.max; i++) {
-                        let repeatingFieldName = WuxDef.GetVariable(repeaterData.repeater, i + repeaterData.slotMod);
-                        let slotFieldName = WuxDef.GetAttribute(repeaterData.slot, i);
-                        let hiddenField = slotFieldName + WuxDef._expand;
-                        let header = getStyleHeader(`<span name="${slotFieldName}"></span>`, hiddenField, slotFieldName + WuxDef._refresh);
-                        contents += WuxSheetMain.HiddenField(slotFieldName,
-                            repeatingTechniquesSection(header, hiddenField, repeatingFieldName, false)
-                        );
-                    }
-                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
-                },
 
                 repeatingBasicTechniquesSection = function (repeaterName, refreshName, alwaysShow) {
                     if (alwaysShow == undefined) {
@@ -1335,14 +1273,6 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let hiddenField = WuxDef.GetAttribute(refreshName, WuxDef._expand);
                     let header = getStyleHeader(`<span>${repeatingDef.getTitle()}</span>`, hiddenField, WuxDef.GetAttribute(refreshName, WuxDef._refresh));
                     let contents = repeatingTechniquesSection(header, hiddenField, repeatingDef.getVariable(), alwaysShow);
-                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
-                },
-
-                setBasicTechniquesSection = function (styleGroupDef) {
-                    let slotFieldName = styleGroupDef.getAttribute();
-                    let hiddenField = slotFieldName + WuxDef._expand;
-                    let header = getStyleHeader(`<span>${styleGroupDef.getTitle()}</span>`, hiddenField);
-                    let contents = setTechniquesSection(header, hiddenField, styleGroupDef);
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
 
@@ -1388,11 +1318,6 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     )}`;
                 },
 
-                setTechniquesSection = function (header, hiddenField, styleGroupDef) {
-                    let techniquesFilterData = WuxTechs.Filter([new DatabaseFilterData("style", styleGroupDef.getTitle())]);
-                    return printTechniquesSection (header, hiddenField, addTechniquesByFilter(techniquesFilterData));
-                },
-
                 printTechniquesSection = function (header, hiddenField, contents) {
                     return `${WuxSheetMain.Header(header)}
                         ${WuxSheetMain.HiddenFieldToggle(hiddenField,
@@ -1418,19 +1343,6 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     }
                     return WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible"), actionDisplay);
                 },
-                
-                addTechniquesByFilter = function (techniques) {
-                    let output = "";
-                    for (let i = 0; i < techniques.length; i++) {
-                        let displayData = new TechniqueDisplayData(techniques[i]);
-                        displayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
-                        displayData.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
-                        
-                        let techniqueDef = techniques[i].createDefinition(WuxDef.Get("Technique"));
-                        output += printSetTechniqueActionDisplay(displayData);
-                    }
-                    return output;
-                },
 
                 printFormTechniqueFullActionDisplay = function () {
                     let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilderUsable(WuxDef.Get("Action"));
@@ -1438,11 +1350,6 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return `<input type="hidden" name="${WuxDef.GetAttribute("Action_Use")}" value="" />
                     <input type="hidden" name="${getActionTypeAttribute("TechVersion")}" value="" />
                     ${techniqueDisplayBuilder.print()}`;
-                },
-                
-                printSetTechniqueActionDisplay = function (displayData) {
-                    let techniqueDisplayBuilder = new TechniqueDisplayBuilderUsable(displayData);
-                    return techniqueDisplayBuilder.print();
                 },
 
                 buildRepeater = function (repeaterName, repeaterData) {
