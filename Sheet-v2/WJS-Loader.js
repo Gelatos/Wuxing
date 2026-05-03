@@ -1,12 +1,29 @@
-var wuxCurrentVersion = "1.0.7";
+var wuxCurrentVersion = "1.0.8";
+
+var upgrade_to_1_0_8 = function (currentVersion) {
+	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.8");
+	WuxWorkerActions.UpdateAllFormeActions(attributeHandler);
+	attributeHandler.run();
+}
 
 var upgrade_to_1_0_7 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.7");
+	
+	attributeHandler.addUpdate(WuxDef.GetVariable("Soc_Impatience"), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("Soc_Impatience", WuxDef._max), 16);
+
+	let affinityAspectVar = WuxDef.GetVariable("AffinityAspect");
+	attributeHandler.addUpdate(affinityAspectVar, 0);
+	let affinityVar = WuxDef.GetVariable("Affinity");
+	attributeHandler.addMod(affinityVar);
+	
 	let manager = new WuxWorkerBuildManager(["Technique"]);
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
 		manager.iterate(function(worker) {
+			attrHandler.addUpdate(affinityAspectVar, attrHandler.parseString(affinityVar));
+			
 			worker.setBuildStatsDraft(attrHandler);
 			attrHandler.addUpdate(worker.attrBuildDraft, JSON.stringify(worker.buildStats));
 			worker.setPointsMax(attributeHandler);
@@ -14,52 +31,6 @@ var upgrade_to_1_0_7 = function (currentVersion) {
 		});
 	});
 
-	attributeHandler.run();
-};
-
-var upgrade_to_1_0_6 = function (currentVersion) {
-	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.6");
-	attributeHandler.addUpdate(WuxDef.GetVariable("Soc_Impatience"), 0);
-	attributeHandler.addUpdate(WuxDef.GetVariable("Soc_Impatience", WuxDef._max), 16);
-	
-	let affinityAspectVar = WuxDef.GetVariable("AffinityAspect");
-	attributeHandler.addUpdate(affinityAspectVar, 0);
-	let affinityVar = WuxDef.GetVariable("Affinity");
-	attributeHandler.addMod(affinityVar);
-	attributeHandler.addGetAttrCallback(function (attrHandler) {
-		attrHandler.addUpdate(affinityAspectVar, attrHandler.parseString(affinityVar));
-	});
-
-	attributeHandler.run();
-};
-
-var upgrade_to_1_0_3 = function (currentVersion) {
-	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.3");
-	let surgeDef = WuxDef.Get("Surge");
-	attributeHandler.addFormulaMods(surgeDef);
-
-	attributeHandler.addGetAttrCallback(function (attrHandler) {
-		let surgeVal = surgeDef.formula.getValue(attrHandler);
-		attrHandler.addUpdate(surgeDef.getVariable(), surgeVal);
-		attrHandler.addUpdate(surgeDef.getVariable(WuxDef._max), surgeVal);
-	});
-
-	attributeHandler.run();
-};
-var upgrade_to_1_0_2 = function (currentVersion) {
-	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.2");
-	let statBonusFilter = WuxDef.Filter([new DatabaseFilterData("group", "StatBonus")]);
-	for (let i = 0; i < statBonusFilter.length; i++) {
-		attributeHandler.addFormulaMods(statBonusFilter[i]);
-	}
-	attributeHandler.addGetAttrCallback(function (attrHandler) {
-		for (let i = 0; i < statBonusFilter.length; i++) {
-			attrHandler.addUpdate(statBonusFilter[i].getVariable(), statBonusFilter[i].formula.getValue(attrHandler));
-		}
-	});
-	attributeHandler.addUpdate(WuxDef.GetVariable("EN"), 0);
-	attributeHandler.addUpdate(WuxDef.GetVariable("EN", WuxDef._max), 9);
-	attributeHandler.addUpdate(WuxDef.GetVariable("MvCharge"), 0);
 	attributeHandler.run();
 };
 
@@ -71,6 +42,14 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Core", WuxDef._tab), "Overview");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Training", WuxDef._tab), "Training");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet_Advancement", WuxDef._tab), "Advancement");
+	attributeHandler.addUpdate(WuxDef.GetVariable("EN"), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("EN", WuxDef._max), 9);
+	attributeHandler.addUpdate(WuxDef.GetVariable("MvCharge"), 0);
+
+	let statBonusFilter = WuxDef.Filter([new DatabaseFilterData("group", "StatBonus")]);
+	for (let i = 0; i < statBonusFilter.length; i++) {
+		attributeHandler.addFormulaMods(statBonusFilter[i]);
+	}
 
 	let advancementWorker = new WuxAdvancementWorkerBuild();
 	advancementWorker.setBuildStatsDraft(attributeHandler);
@@ -108,6 +87,10 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 			worker.setPointsMax(attributeHandler);
 			worker.updatePoints(attributeHandler);
 		});
+
+		for (let i = 0; i < statBonusFilter.length; i++) {
+			attrHandler.addUpdate(statBonusFilter[i].getVariable(), statBonusFilter[i].formula.getValue(attrHandler));
+		}
 	});
 	
 	attributeHandler.run();
@@ -131,20 +114,17 @@ var versioning = function () {
 			case wuxCurrentVersion:
 				console.log(`Wuxing Sheet modified from 5th Edition OGL by Roll20 v${wuxCurrentVersion}`);
 				break;
-			case "1.0.6":
-				upgrade_to_1_0_7(v["version"]);
+			case "1.0.7":
+				upgrade_to_1_0_8(v["version"]);
 				break;
+			case "1.0.6":
 			case "1.0.5":
 			case "1.0.4":
 			case "1.0.3":
-				upgrade_to_1_0_6(v["version"]);
-				break;
 			case "1.0.2":
-				upgrade_to_1_0_3(v["version"]);
-				break;
-			case "1.0.0":
 			case "1.0.1":
-				upgrade_to_1_0_2(v["version"]);
+			case "1.0.0":
+				upgrade_to_1_0_7(v["version"]);
 				break;
 			default:
 				upgrade_to_1_0_0(v["version"]);
