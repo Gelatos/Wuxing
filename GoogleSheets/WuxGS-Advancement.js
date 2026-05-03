@@ -973,14 +973,12 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 }
                                 groupName = subGroups[i].getTitle();
                                 filterSettings.value = groupName;
-                                Debug.Log(`Filtering Skills with: ${groupName}`);
                                 output.push(buildGroup(groupName, database.filter(filterSettings)));
                             }
                             return output;
                         },
 
                         buildGroup = function (groupName, filteredData) {
-                            Debug.Log(`SkillGroup: ${JSON.stringify(filteredData)}`);
                             return `<div class="wuxFlexTableItemGroup wuxMinWidth200 wuxMaxWidth300">
 								<div class="wuxFlexTableItemHeader wuxTextLeft">${groupName}</div>
 								<div class="wuxFlexTableItemData wuxTextLeft">\n${buildSkillGroupSkills(filteredData)}\n</div>

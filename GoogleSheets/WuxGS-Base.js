@@ -1233,11 +1233,10 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
                         `${sectionDef.getTitle()}`, contents);
                 },
-
                 buildGearActions = function () {
                     let contents = "";
-                    contents += repeatingBasicTechniquesSection("RepeatingGearTech", "GearTech", true);
-                    contents += repeatingBasicTechniquesSection("RepeatingConsumables", "", true);
+                    contents += repeatingBasicTechniquesSection("RepeatingGearTech", "GearTech");
+                    contents += repeatingBasicTechniquesSection("RepeatingConsumables", "");
                     contents = WuxSheetMain.TabBlock(contents);
 
                     let sectionDef = WuxDef.Get("StyleCategory_Gear");
@@ -1249,55 +1248,59 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let repeaterDefinition = WuxDef.Get("RepeatingFormeTech");
                     let repeatingVariable = repeaterDefinition.getVariable();
                     let sectionDefinition = WuxDef.Get("Action_FormeTechniques");
-                    let hiddenField = sectionDefinition.getAttribute(WuxDef._expand);
                     let refreshField = sectionDefinition.getAttribute(WuxDef._refresh);
+                    let filterField = sectionDefinition.getAttribute(WuxDef._filter);
 
-                    let header = getFormeSectionHeader(`<span>${sectionDefinition.getTitle()}</span>`, hiddenField, refreshField);
+                    let header = getFormeSectionHeader(
+                        `<span>${sectionDefinition.getTitle()}</span>`, refreshField, filterField);
+                    
+                    let displayFiltersContents = "";
+                    
                     let actionDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible"), 
                         printFormTechniqueFullActionDisplay());
+                    let displayTechniquesContents = buildRepeater(repeatingVariable, actionDisplay);
                     
                     return `${WuxSheetMain.Header(header)}
-                        ${WuxSheetMain.HiddenFieldToggle(hiddenField,
-                        `<div class="wuxDescription">Contents Hidden</div>`,
-                        `${buildRepeater(repeatingVariable, actionDisplay)}
-                        ${WuxSheetMain.Row("&nbsp;")}`
-                    )}`;
+                    ${WuxSheetMain.HiddenFieldToggle(filterField, displayFiltersContents, displayTechniquesContents)}
+                    ${WuxSheetMain.Row("&nbsp;")}`;
                 },
-
-                repeatingBasicTechniquesSection = function (repeaterName, refreshName, alwaysShow) {
-                    if (alwaysShow == undefined) {
-                        alwaysShow = false;
-                    }
-                    let repeatingDef = WuxDef.Get(repeaterName);
-
-                    let hiddenField = WuxDef.GetAttribute(refreshName, WuxDef._expand);
-                    let header = getStyleHeader(`<span>${repeatingDef.getTitle()}</span>`, hiddenField, WuxDef.GetAttribute(refreshName, WuxDef._refresh));
-                    let contents = repeatingTechniquesSection(header, hiddenField, repeatingDef.getVariable(), alwaysShow);
-                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
-                },
-
                 repeatingCustomTechniquesSection = function () {
                     let repeatingDef = WuxDef.Get("RepeatingCustomTech");
                     let hiddenField = WuxDef.GetAttribute("CustomTech", WuxDef._expand);
-                    let header = getStyleHeader(`<span>${repeatingDef.getTitle()}</span>`, hiddenField);
+                    let setDataTechniqueAttr = WuxDef.GetAttribute("Action_SetData");
+                    
+                    let header = `<span>${repeatingDef.getTitle()}</span>`;
+
+                    let actionDisplay = WuxSheetMain.HiddenFieldToggle(
+                        setDataTechniqueAttr,
+                        printFormTechniqueFullActionDisplay(), 
+                        WuxSheetMain.Input("text", setDataTechniqueAttr));
+                    
                     let contents = `<div class="wuxRepeatingFlexSection">
                             <fieldset class="${repeatingDef.getVariable()}">
-                            ${addRepeaterContentsTechniqueDisplay(true, true)}
+                            ${actionDisplay}
                             </fieldset>
                         </div>`;
-                    contents = printTechniquesSection(header, hiddenField, contents);
-                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
+
+                    return `${WuxSheetMain.Header(header)}
+                    ${contents}
+                    ${WuxSheetMain.Row("&nbsp;")}`;
+                    
+                    // return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
+                },
+                repeatingBasicTechniquesSection = function (repeaterName) {
+                    let repeatingDef = WuxDef.Get(repeaterName);
+
+                    let header = `<span>${repeatingDef.getTitle()}</span>`;
+                    let actionDisplay = printFormTechniqueFullActionDisplay();
+                    let displayTechniquesContents = buildRepeater(repeatingDef.getVariable(), actionDisplay);
+                    
+                    return `${WuxSheetMain.Header(header)}
+                    ${displayTechniquesContents}
+                    ${WuxSheetMain.Row("&nbsp;")}`;
                 },
 
-                getStyleHeader = function (styleName, hiddenField, refreshField) {
-                    let headerButtons = "";
-                    if (refreshField != undefined) {
-                        headerButtons = WuxSheetMain.Button(refreshField,
-                            "<span class='wuxStyleHeaderButtonIcon'>&#8635;</span> Update", "wuxStyleHeaderButton");
-                    }
-                    return WuxSheetMain.CollapsibleHeader(styleName, hiddenField, headerButtons);
-                },
-                getFormeSectionHeader = function (styleName, hiddenField, refreshField) {
+                getFormeSectionHeader = function (headerName, refreshField, filterField) {
                     let headerButtons = "";
                     let loadFormeField = WuxDef.GetAttribute("Action_FormeLoadCount");
                     let loadFormeDef = WuxDef.Get("Action_FormeLoad");
@@ -1305,51 +1308,25 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         `<span class='wuxStyleHeaderButtonIcon'>&#10227;</span>${loadFormeDef.getTitle(`<span name="${loadFormeField}"></span>`)}`, 
                         "wuxStyleHeaderButton"));
                     headerButtons += WuxSheetMain.Button(refreshField,
-                            "<span class='wuxStyleHeaderButtonIcon'>&#10227;</span> Update", "wuxStyleHeaderButton");
-                    return WuxSheetMain.CollapsibleHeader(styleName, hiddenField, headerButtons);
+                        "<span class='wuxStyleHeaderButtonIcon'>&#10227;</span> Update", "wuxStyleHeaderButton");
+                    headerButtons += WuxSheetMain.Button(filterField,
+                        "<span class='wuxStyleHeaderButtonIcon'>&#9776;</span> Filter", "wuxStyleHeaderButton");
+
+                    headerButtons = `<span class="wuxStyleHeaderButtonContainer">${headerButtons}</span>`;
+                    return headerButtons + headerName;
                 },
 
-                repeatingTechniquesSection = function (header, hiddenField, repeaterFieldName, alwaysShow) {
-                    return `${WuxSheetMain.Header(header)}
-                        ${WuxSheetMain.HiddenFieldToggle(hiddenField,
-                        `<div class="wuxDescription">Contents Hidden</div>`,
-                        `${buildRepeater(repeaterFieldName, addRepeaterContentsTechniqueDisplay(false, alwaysShow))}
-                        ${WuxSheetMain.Row("&nbsp;")}`
-                    )}`;
-                },
+                printFormTechniqueFullActionDisplay = function () {
+                    let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilderUsable(WuxDef.Get("Action"));
 
-                printTechniquesSection = function (header, hiddenField, contents) {
-                    return `${WuxSheetMain.Header(header)}
-                        ${WuxSheetMain.HiddenFieldToggle(hiddenField,
-                        `<div class="wuxDescription">Contents Hidden</div>`,
-                        `<div class="wuxRepeatingFlexSection">${contents}</div>
-                        ${WuxSheetMain.Row("&nbsp;")}`
-                    )}`;
+                    return `<input type="hidden" name="${WuxDef.GetAttribute("Action_Use")}" value="" />
+                    <input type="hidden" name="${getActionTypeAttribute("TechVersion")}" value="" />
+                    ${techniqueDisplayBuilder.print()}`;
                 },
 
                 getActionTypeAttribute = function (attribute, suffix) {
                     let baseDefinition = WuxDef.Get("Action");
                     return baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
-                },
-
-                addRepeaterContentsTechniqueDisplay = function (isCustom, alwaysShow) {
-                    let actionDisplay = printFormTechniqueFullActionDisplay();
-                    if (isCustom) {
-                        let setDataTechniqueAttr = WuxDef.GetAttribute("Action_SetData");
-                        return WuxSheetMain.HiddenFieldToggle(setDataTechniqueAttr, actionDisplay, WuxSheetMain.Input("text", setDataTechniqueAttr));
-                    }
-                    if (alwaysShow) {
-                        return  actionDisplay;
-                    }
-                    return WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible"), actionDisplay);
-                },
-
-                printFormTechniqueFullActionDisplay = function () {
-                    let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilderUsable(WuxDef.Get("Action"));
-                    
-                    return `<input type="hidden" name="${WuxDef.GetAttribute("Action_Use")}" value="" />
-                    <input type="hidden" name="${getActionTypeAttribute("TechVersion")}" value="" />
-                    ${techniqueDisplayBuilder.print()}`;
                 },
 
                 buildRepeater = function (repeaterName, repeaterData) {
