@@ -221,14 +221,17 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             attributeHandler.run();
         },
         closePopup = function () {
-            let nameFieldName = WuxDef.GetVariable("Popup_InspectPopupName");
             let attributeHandler = new WorkerAttributeHandler();
+            let nameFieldName = WuxDef.GetVariable("Popup_PopupName");
             attributeHandler.addMod(nameFieldName);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 switch (attrHandler.parseString(nameFieldName)) {
                     case WuxDef.GetTitle("Popup_ItemInspectionName"):
                     case WuxDef.GetTitle("Popup_TechniqueInspectionName"):
                         WuxWorkerInspectPopup.ClosePopup();
+                        break;
+                    case WuxDef.GetTitle("Popup_FilterTechniquePopupName"):
+                        WuxWorkerFilterPopup.Close();
                         break;
                 }
             });

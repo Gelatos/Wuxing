@@ -496,6 +496,7 @@ var ActionBuilder = ActionBuilder || (function () {
             output += listenerSetDataRepeatingStyles();
             output += listenerFormeButtonActions();
             output += listenerRefreshBasicActions();
+            output += listenerTechniquesFilterPopup();
             return output;
         },
         listenerRankRepeatingStyles = function () {
@@ -532,22 +533,18 @@ var ActionBuilder = ActionBuilder || (function () {
         },
         listenerRefreshBasicActions = function () {
             let output = "";
-            
+
             output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("RefreshTech")}`],
                 `WuxWorkerActions.RemoveAllOldStyleData()`, false)}`;
-            output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("GearTech", WuxDef._refresh)}`],
-                `WuxWorkerActions.PopulateGearActions()`, false)}`;
-            output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("BasicActions", WuxDef._refresh)}`],
-                `WuxWorkerActions.RefreshBasicActions()`, false)}`;
-            output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("BasicRecovery", WuxDef._refresh)}`],
-                `WuxWorkerActions.RefreshBasicRecovery()`, false)}`;
-            output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("BasicAttack", WuxDef._refresh)}`],
-                `WuxWorkerActions.RefreshBasicAttack()`, false)}`;
-            output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("BasicSocial", WuxDef._refresh)}`],
-                `WuxWorkerActions.RefreshBasicSocial()`, false)}`;
-            output += `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("BasicSpirit", WuxDef._refresh)}`],
-                `WuxWorkerActions.RefreshBasicSpirit()`, false)}`;
             return output;
+        },
+        listenerTechniquesFilterPopup = function () {
+            return `${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Action_FormeTechniques", WuxDef._filter)],
+                `WuxWorkerFilterPopup.OpenFormeTechnique()`, true)}
+                ${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Popup_FilterPopupActive", WuxDef._filter)],
+                `WuxWorkerFilterPopup.Close()`, true)}`;
         }
     return {
         Print: print

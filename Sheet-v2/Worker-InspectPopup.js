@@ -1,15 +1,36 @@
 // noinspection ES6ConvertVarToLetConst
 
+class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
+    constructor(attrHandler) {
+        super(attrHandler);
+    }
+
+    show(popupTitleDefinitionName) {
+        super.show(popupTitleDefinitionName);
+        this.resetInspectionVariables();
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupActive"), "on");
+    }
+
+    hide() {
+        super.hide();
+        this.resetInspectionVariables();
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupActive"), "0");
+    }
+    resetInspectionVariables() {
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), "");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectId"), "");
+    };
+}
+
 var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
-    const showPopup = function (updateCallback, getAttrCallback) {
+    const showPopup = function (popupTitleDefinitionName, updateCallback, getAttrCallback) {
         let attributeHandler = new WorkerAttributeHandler();
 
         getInspectionVariables(attributeHandler);
         updateCallback(attributeHandler);
         attributeHandler.addGetAttrCallback(function (attrHandler) {
-            clearInspectionVariables(attrHandler);
-            attrHandler.addUpdate(WuxDef.GetVariable("Popup_PopupActive"), "on");
-            attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupActive"), "on");
+            let inspectPopup = new InspectPopupAttributeHandler(attrHandler);
+            inspectPopup.show(popupTitleDefinitionName);
         });
         attributeHandler.addGetAttrCallback(getAttrCallback);
         attributeHandler.run();
@@ -18,18 +39,13 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         let attributeHandler = new WorkerAttributeHandler();
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
-            clearInspectionVariables(attrHandler);
+            let inspectPopup = new InspectPopupAttributeHandler(attrHandler);
+            inspectPopup.hide();
         });
         attributeHandler.run();
     };
     const getInspectionVariables = function (attrHandler) {
         attrHandler.addMod([WuxDef.GetVariable("Popup_InspectSelectType"), WuxDef.GetVariable("Popup_InspectSelectId")]);
-    };
-    const clearInspectionVariables = function (attrHandler) {
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), "");
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectId"), "");
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_PopupActive"), "0");
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupActive"), "0");
     };
     const setInspectionSelection = function (attrHandler, repeaterName, id) {
         let currentType = attrHandler.parseString(WuxDef.GetVariable("Popup_InspectSelectType"));
@@ -138,8 +154,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
 
             let itemPopupValuesRepeatingSection = new WorkerRepeatingSectionHandler(repeaterName);
             itemPopupValuesRepeatingSection.getIds(function (itemPopupRepeater) {
-                showPopup(updateCallback, function (attrHandler) {
-                    attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupName"), WuxDef.GetTitle("Popup_ItemInspectionName"));
+                showPopup("Popup_ItemInspectionName", updateCallback, function (attrHandler) {
                     attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
 
                     let selectedItem = setSelectedItemCallback(attrHandler, itemPopupRepeater);
@@ -162,8 +177,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
 
             let techniquePopupValuesRepeatingSection = new WorkerRepeatingSectionHandler(repeaterName);
             techniquePopupValuesRepeatingSection.getIds(function (techniquePopupRepeater) {
-                showPopup(updateCallback, function (attrHandler) {
-                    attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupName"), WuxDef.GetTitle("Popup_TechniqueInspectionName"));
+                showPopup("Popup_TechniqueInspectionName", updateCallback, function (attrHandler) {
                     attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
 
                     let selectedItem = setSelectedItemCallback(attrHandler, techniquePopupRepeater);
@@ -250,7 +264,8 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 WuxDef.GetVariable("FullName")]);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
-                clearInspectionVariables(attrHandler);
+                let inspectPopup = new InspectPopupAttributeHandler(attrHandler);
+                inspectPopup.hide();
                 performAddSelectedInspectElement(attrHandler);
             });
             attributeHandler.run();

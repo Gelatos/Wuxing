@@ -2405,7 +2405,7 @@ input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeaderDisplayInfoActionTy
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Item
 {
     background: linear-gradient(to right,
-    #6f02a6 80%,
+    #c761ff 80%,
     #6f02a600);
 }
 
@@ -2526,9 +2526,11 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 .wuxFeatureHeaderDisplayInfoEnCost,
 .wuxFeatureHeaderDisplayInfoWillCost,
 .wuxFeatureHeaderDisplayInfoBulk,
+.wuxFeatureHeaderDisplayInfoCoin,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoEnCost,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoWillCost,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoBulk
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoBulk,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoCoin
 {
     position: relative;
     display: block;
@@ -6962,21 +6964,41 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     background: #0056b3;
 }
 
-.wuxInspectionPopupContents {
+.wuxInspectionPopupContents,
+.wuxFilterPopupContents
+{
     display: flex;
-    flex-flow: row-reverse wrap;
+    flex-wrap: wrap;
     justify-content: left;
     width: 100%;
 }
 
-.wuxInspectionPopupContentData {
-    display: block;
+.wuxInspectionPopupContents
+{
+    flex-flow: row-reverse wrap;
+}
+
+.wuxInspectionPopupContentData,
+.wuxFilterPopupContentData 
+{
     flex: 1;
+}
+
+.wuxInspectionPopupContentData
+{
+    display: block;
     min-width: 220px;
     width: 45%;
 }
 
-.wuxInspectionPopupContentData .wuxHeader2 {
+.wuxFilterPopupContentRow
+{
+    flex: 0 0 100%;
+}
+
+.wuxInspectionPopupContentData .wuxHeader2,
+.wuxFilterPopupContentData .wuxHeader2
+{
     margin: 0 10px 10px 10px;
     width: 80%;
 
@@ -6986,14 +7008,17 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     border-image: linear-gradient(to right, #A0A0A0 0%, #A0A0A0 50%, #A0A0A0 100%) 1;
 }
 
-.wuxInspectionPopupContentData .wuxDescription {
+.wuxInspectionPopupContentData .wuxDescription,
+.wuxFilterPopupContentData .wuxDescription
+{
     margin: 0 20px 10px 20px;
     width: 80%;
     
     color: #3e3e3e;
 }
 
-.wuxInspectionPopupSelectContainer
+.wuxInspectionPopupSelectContainer,
+.wuxFilterPopupSelectContainer
 {
     position: relative;
     display: block;
@@ -7006,17 +7031,22 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     border: 1px solid black;
 }
 
-input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInspectionPopupSelectContainer {
+input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInspectionPopupSelectContainer,
+input[type=hidden].wuxFilterPopupSelectContainer-flag[value="on"] + .wuxFilterPopupSelectContainer
+{
 
     background: #9fa0a3;
     box-shadow: #1d1e1f 0 0 5px;
 }
 
-.wuxInspectionPopupSelectContainer:hover {
+.wuxInspectionPopupSelectContainer:hover,
+.wuxFilterPopupSelectContainer:hover
+{
     background: #9fa0a3;
 }
 
-.wuxInspectionPopupSelectContainer input[type=checkbox]
+.wuxInspectionPopupSelectContainer input[type=checkbox],
+.wuxFilterPopupSelectContainer input[type=checkbox]
 {
     position: absolute;
     display: block;
@@ -7028,7 +7058,8 @@ input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInsp
     z-index: 100;
 }
 
-.wuxInspectionPopupSelectContainer span
+.wuxInspectionPopupSelectContainer span,
+.wuxFilterPopupSelectContainer span
 {
     pointer-events: none;
     position: relative;

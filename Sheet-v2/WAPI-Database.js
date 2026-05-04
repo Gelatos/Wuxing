@@ -2622,20 +2622,6 @@ class BaseTechniqueEffectDisplayData {
     }
 
     formatEffect(effect, technique) {
-        // Combat
-        // Social
-        // Influence
-        // Request
-        // Favor
-        // Status (all of them?)
-        // Break Focus
-        // Terrain
-        // Structure
-        // Move
-        // Illusion
-        
-        // Affinites (all of them)
-        
         if (this.effectDescription != "" && !this.effectDescription.endsWith(".")) {
             if (this.effectType != "Damage") {
                 this.effectDescription += ". ";

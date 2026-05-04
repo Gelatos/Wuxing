@@ -1304,3 +1304,20 @@ class ItemDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addUpdate(this.getVariable("ItemCraft", WuxDef._info), 0);
 	}
 }
+
+class BasePopupAttributeHandler {
+	constructor(attrHandler) {
+		this.attrHandler = attrHandler;
+	}
+
+	show(popupTitleDefinitionName) {
+		let popupName = WuxDef.GetTitle(popupTitleDefinitionName);
+		this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_PopupActive"), "on");
+		this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_PopupName"), popupName);
+	}
+	
+	hide() {
+		this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_PopupActive"), "0");
+		this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_PopupName"), "0");
+	}
+}

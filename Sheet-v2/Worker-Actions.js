@@ -464,7 +464,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         }
         return repeaterSlotIds;
     }
-
     const getStyleSlotRepeaterIDs = function (repeaterSlotData, index, finishCallback) {
         if (index >= repeaterSlotData.length) {
             finishCallback(repeaterSlotData);
@@ -743,36 +742,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             let loader = new LoadingScreenHandler(attributeHandler);
             loader.run();
         },
-        refreshBasicActions = function () {
-            let attributeHandler = new WorkerAttributeHandler();
-            populateBasicActions(attributeHandler, "RepeatingBasicActions", "Basic Action");
-            let loader = new LoadingScreenHandler(attributeHandler);
-            loader.run();
-        },
-        refreshBasicRecovery = function () {
-            let attributeHandler = new WorkerAttributeHandler();
-            populateBasicActions(attributeHandler, "RepeatingBasicRecovery", "Basic Recovery");
-            let loader = new LoadingScreenHandler(attributeHandler);
-            loader.run();
-        },
-        refreshBasicAttack = function () {
-            let attributeHandler = new WorkerAttributeHandler();
-            populateBasicActions(attributeHandler, "RepeatingBasicAttack", "Basic Attack");
-            let loader = new LoadingScreenHandler(attributeHandler);
-            loader.run();
-        },
-        refreshBasicSocial = function () {
-            let attributeHandler = new WorkerAttributeHandler();
-            populateBasicActions(attributeHandler, "RepeatingBasicSocial", "Basic Social");
-            let loader = new LoadingScreenHandler(attributeHandler);
-            loader.run();
-        },
-        refreshBasicSpirit = function () {
-            let attributeHandler = new WorkerAttributeHandler();
-            populateBasicActions(attributeHandler, "RepeatingBasicSpirit", "Basic Spirit");
-            let loader = new LoadingScreenHandler(attributeHandler);
-            loader.run();
-        },
+        
         populateGearActions = function () {
             let actionsRepeatingWorker = new WorkerRepeatingSectionHandler("RepeatingGearTech");
             actionsRepeatingWorker.getIds(function (actionsRepeater) {
@@ -854,11 +824,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         RefreshAdvancedStyleActions: refreshAdvancedStyleActions,
         RefreshStandardStyleActions: refreshStandardStyleActions,
         RemoveAllOldStyleData: removeAllOldStyleData,
-        RefreshBasicActions: refreshBasicActions,
-        RefreshBasicRecovery: refreshBasicRecovery,
-        RefreshBasicAttack: refreshBasicAttack,
-        RefreshBasicSocial: refreshBasicSocial,
-        RefreshBasicSpirit: refreshBasicSpirit,
         PopulateGearActions: populateGearActions,
         RemoveStyleActions: removeStyleActions,
         RemoveAllStyleBoosters: removeAllStyleBoosters,

@@ -779,7 +779,7 @@ input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeaderDisplayInfoActionTy
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Item
 {
     background: linear-gradient(to right,
-    #6f02a6 80%,
+    #c761ff 80%,
     #6f02a600);
 }
 
@@ -900,9 +900,11 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 .wuxFeatureHeaderDisplayInfoEnCost,
 .wuxFeatureHeaderDisplayInfoWillCost,
 .wuxFeatureHeaderDisplayInfoBulk,
+.wuxFeatureHeaderDisplayInfoCoin,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoEnCost,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoWillCost,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoBulk
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoBulk,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderDisplayInfoCoin
 {
     position: relative;
     display: block;
