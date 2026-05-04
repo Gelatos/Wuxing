@@ -893,7 +893,7 @@ class TechniqueRepeaterDisplayBuilderUsable extends TechniqueRepeaterDisplayBuil
         let rankDownButton = WuxSheetMain.HiddenSpanFieldToggle(this.getActionTypeAttribute("TechRankDown", WuxDef._info),
             WuxSheetMain.Button(rankDownField, "<span class='wuxFeatureButtonIcon'>&#8722;</span> Decrease Rank", "wuxFeatureButton"),
             WuxSheetMain.Button(rankDownField, "<span class='wuxFeatureButtonIcon'>&#8722;</span> Decrease Rank", "wuxFeatureButtonDisabled"));
-        let contents = `<div class="wuxFeatureHeaderInfoEffect-EnhanceButtons">${rankUpButton}${rankDownButton}</div>`;
+        let contents = `<div class="wuxFeatureHeaderInfoEffect-EnhanceButtons">${rankDownButton}${rankUpButton}</div>`;
         
         return WuxSheetMain.HiddenField(fieldName,
             `${this.printEnhancementEffectsField(this.printSpan(fieldName))}
@@ -1017,6 +1017,49 @@ class ItemRepeaterDisplayBuilder extends BaseItemDisplayBuilder {
                 this.printSpan(fieldName)
             )
         );
+    }
+}
+
+class BaseFilterDisplayBuilder {
+    constructor() {}
+
+    print () {
+        return `<div class="wuxFilterSection">
+            ${this.printContents()}
+        </div>
+        `;
+    }
+    
+    printContents() {}
+}
+
+class TechniqueFilterDisplayBuilder extends BaseFilterDisplayBuilder {
+    constructor() {
+        super();
+    }
+
+    printContents() {
+        return `${this.printTechniqueFunction()}
+        `;
+
+        // Combat
+        // Social
+        // Influence
+        // Request
+        // Favor
+        // Status (all of them?)
+        // Break Focus
+        // Terrain
+        // Structure
+        // Move
+        // Illusion
+
+        // Affinites (all of them)
+        
+    }
+    
+    printTechniqueFunction() {
+        
     }
 }
 
@@ -2561,26 +2604,42 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
             callback(values[keys[i]]);
         }
     };
+
     const filter = function (filterData) {
-        let filteredGroup;
-        if (Array.isArray(filterData)) {
-            filteredGroup = getSortedGroup(filterData[0].property, filterData[0].value);
-            let nextFilter = [];
-            for (let i = 1; i < filterData.length; i++) {
-                if (filteredGroup == undefined || filteredGroup.length == 0) {
-                    return [];
-                }
-                nextFilter = getSortedGroup(filterData[i].property, filterData[i].value);
+        if (!Array.isArray(filterData)) {
+            filterData = [filterData];
+        }
+
+        let filteredGroup = getSortedData(filterData[0]);
+        for (let i = 1; i < filterData.length; i++) {
+            if (filteredGroup == undefined || filteredGroup.length == 0) {
+                return [];
+            }
+            let nextFilter = getSortedData(filterData[i]);
+            if (nextFilter != undefined && nextFilter.length > 0) {
                 filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
             }
-        } else {
-            filteredGroup = getSortedGroup(filterData.property, filterData.value);
         }
+
         if (filteredGroup == undefined || filteredGroup.length == 0) {
             return [];
         }
         return getGroupData(filteredGroup);
-    };
+    }
+
+    const getSortedData = function (filterData) {
+        let filterOutput = getSortedGroup(filterData.property, filterData.value[0]);
+        for (let i = 1; i < filterData.length; i++) {
+            let nextFilter = getSortedGroup(filterData.property, filterData.value[i]);
+            nextFilter.forEach(item => {
+                if (!filterOutput.includes(item)) {
+                    filterOutput.push(item);
+                }
+            });
+        }
+        return filterOutput;
+    }
+    
     const getSortedGroup = function (property, propertyValue) {
         if (!sortingGroups.hasOwnProperty(property)) {
             let keys = "";
@@ -2616,6 +2675,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
         jsClassData.addFunction("has", has);
         jsClassData.addFunction("iterate", iterate);
         jsClassData.addFunction("filter", filter);
+        jsClassData.addFunction("getSortedData", getSortedData);
         jsClassData.addFunction("getSortedGroup", getSortedGroup);
         jsClassData.addFunction("getGroupData", getGroupData);
         jsClassData.addPublicData("get");
@@ -2737,7 +2797,7 @@ function AssessTechniquesFromPosition(sheet) {
     if (sheet.getSheetName() == "Techniques" || sheet.getSheetName() == "CustomTechniques") {
         const range = sheet.getActiveRange();
         let row = range.getRow();
-        row = AssessTechniqueAtRow(sheet, row);
+        AssessTechniqueAtRow(sheet, row);
         return true;
     }
     return false;
@@ -2760,14 +2820,14 @@ function AssessTechniqueAtRow(sheet, rowIndex) {
     }
     let versionColumn = getNamedColumn(sheet, "Version");
     let assessColumn = getNamedColumn(sheet, "Assessment");
-    let impactsColumn = getNamedColumn(sheet, "Gen Traits");
+    let groupsColumn = getNamedColumn(sheet, "Group");
 
     let assessingCell = sheet.getRange(rowIndex, assessColumn, 1, 1);
     assessingCell.setValue("Calculating...")
 
     let techniqueData = GetTechniqueForAssessment(sheet, rowIndex, assessColumn);
     if (techniqueData != undefined) {
-        let assessment = new TechniqueAssessment(techniqueData.tech, sheet, techniqueData.row, versionColumn, assessColumn, impactsColumn);
+        let assessment = new TechniqueAssessment(techniqueData.tech, sheet, techniqueData.row, versionColumn, assessColumn, groupsColumn);
         assessment.printCellValues();
         if (sheet.getSheetName() == "CustomTechniques") {
             assessment.printCellJson(true);
@@ -2788,7 +2848,7 @@ function AssessGearAtRow(sheet, rowIndex) {
     }
     let versionColumn = getNamedColumn(sheet, "Version");
     let assessColumn = getNamedColumn(sheet, "Assessment");
-    let impactsColumn = getNamedColumn(sheet, "Gen Traits");
+    let groupsColumn = getNamedColumn(sheet, "Group");
 
     let assessingCell = sheet.getRange(rowIndex, assessColumn, 1, 1);
     assessingCell.setValue("Calculating...")
@@ -2796,7 +2856,7 @@ function AssessGearAtRow(sheet, rowIndex) {
     let itemData = GetGearForAssessment(sheet, rowIndex, assessColumn);
     if (itemData != undefined) {
         if (itemData.item.hasTechnique) {
-            let techniqueAssessment = new TechniqueAssessment(itemData.item.technique, sheet, itemData.row, versionColumn, assessColumn, impactsColumn);
+            let techniqueAssessment = new TechniqueAssessment(itemData.item.technique, sheet, itemData.row, versionColumn, assessColumn, groupsColumn);
             techniqueAssessment.printCellValues();
         }
         if (rowIndex != itemData.row) {
@@ -2818,7 +2878,7 @@ function AssessAllTechniquesByStartRow(sheet, startRow) {
     const lastRow = sheet.getLastRow();
     let versionColumn = getNamedColumn(sheet, "Version");
     let assessColumn = getNamedColumn(sheet, "Assessment");
-    let impactsColumn = getNamedColumn(sheet, "Gen Traits");
+    let groupsColumn = getNamedColumn(sheet, "Group");
     let rowIndex = startRow;
     let techniqueData;
     while (rowIndex < lastRow) {
@@ -2829,7 +2889,7 @@ function AssessAllTechniquesByStartRow(sheet, startRow) {
         if (techniqueData != undefined) {
             rowIndex = techniqueData.finalRow;
             let assessment = new TechniqueAssessment(
-                techniqueData.tech, sheet, techniqueData.row, versionColumn, assessColumn, impactsColumn);
+                techniqueData.tech, sheet, techniqueData.row, versionColumn, assessColumn, groupsColumn);
             assessment.printCellValues();
         } else {
             assessingCell.setValue("");
@@ -2991,12 +3051,12 @@ function getNamedColumn(sheet, name) {
 }
 
 class TechniqueAssessment {
-    constructor(technique, sheet, row, versionColumn, assessColumn, impactsColumn) {
+    constructor(technique, sheet, row, versionColumn, assessColumn, groupsColumn) {
         this.sheet = sheet;
         this.row = row;
         this.versionColumn = versionColumn;
         this.assessColumn = assessColumn;
-        this.impactsColumn = impactsColumn;
+        this.groupsColumn = groupsColumn;
 
         this.technique = technique;
         this.assessment = "";
@@ -3047,6 +3107,10 @@ class TechniqueAssessment {
         this.lowRequest = 0;
         this.highRequest = 0;
         this.requestVariance = false;
+        
+        this.isCombat = false;
+        this.isSocial = false;
+        this.isMovement = false;
 
         this.assessTechnique();
     }
@@ -3137,8 +3201,9 @@ class TechniqueAssessment {
 
     printCellValues() {
         this.printAssessmentNote();
-        this.printVersionChange();
         this.printAssessmentPointValues();
+        this.printVersionChange();
+        this.printSortingValues();
     }
     printAssessmentNote() {
         let range = this.sheet.getRange(this.row, this.assessColumn, 1, 1);
@@ -3147,10 +3212,6 @@ class TechniqueAssessment {
             return;
         }
         range.setNote(this.getAssessmentNote());
-    }
-    printVersionChange() {
-        let range = this.sheet.getRange(this.row, this.versionColumn, 1, 1);
-        range.setValue("CHANGE");
     }
     printAssessmentPointValues() {
         let values = [];
@@ -3161,6 +3222,14 @@ class TechniqueAssessment {
 
         let range = this.sheet.getRange(this.row, this.assessColumn, this.pointBreakdown.length, 2);
         range.setValues(values);
+    }
+    printVersionChange() {
+        let range = this.sheet.getRange(this.row, this.versionColumn, 1, 1);
+        range.setValue("CHANGE");
+    }
+    printSortingValues() {
+        let range = this.sheet.getRange(this.row, this.groupsColumn, 1, 1);
+        range.setValue(this.printImpactTraits());
     }
 
     printCellJson(isCustom) {
@@ -3206,7 +3275,7 @@ class TechniqueAssessment {
         return output;
     }
     
-    getImpactTraits() {
+    printImpactTraits() {
         let output = "";
         for(let key in this.impactTraits) {
             if (output != "") {
@@ -3274,7 +3343,7 @@ class TechniqueAssessment {
             let effect = this.technique.enhancementEffects[key];
             assessor.pointBreakdown.push({points: 0, rubric: ""});
             assessor.assessEffect(effect, attributeHandler);
-        };
+        }
 
         this.getStructureAssessment();
         let customPoints = this.sheet.getRange(this.row, this.assessColumn + 2, 1, 1).getValues()[0];
@@ -3362,9 +3431,6 @@ class TechniqueAssessment {
         let restTypes = ["Brief", "Short", "Long"];
         if (restTypes.includes(this.technique.action)) {
             return 9;
-        }
-        if (this.technique.action == "Assist") {
-            return 0;
         }
         return this.technique.tier + 2;
     }
@@ -4243,7 +4309,6 @@ class TechniqueAssessment {
     }
 
     addImpactTrait(traitName) {
-        return;
         let traitParts = traitName.split("-");
         let traitBase = traitParts[0];
         let traitType = "";

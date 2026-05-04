@@ -111,7 +111,13 @@ class Dictionary {
 class DatabaseFilterData {
     constructor(property, value) {
         this.property = property;
-        this.value = value;
+        
+        if (Array.isArray(value)) {
+            this.value = value;
+        }
+        else {
+            this.value = [value];
+        }
     }
 }
 
@@ -156,27 +162,38 @@ class Database extends Dictionary {
     }
 
     filter(filterData) {
-
-        let filteredGroup;
-        if (Array.isArray(filterData)) {
-            filteredGroup = this.getSortedGroup(filterData[0].property, filterData[0].value);
-            let nextFilter = [];
-            for (let i = 1; i < filterData.length; i++) {
-                if (filteredGroup == undefined || filteredGroup.length == 0) {
-                    return [];
-                }
-                nextFilter = this.getSortedGroup(filterData[i].property, filterData[i].value);
-                if (nextFilter != undefined && nextFilter.length > 0) {
-                    filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
-                }
-            }
-        } else {
-            filteredGroup = this.getSortedGroup(filterData.property, filterData.value);
+        if (!Array.isArray(filterData)) {
+            filterData = [filterData];
         }
+        
+        let filteredGroup = this.getSortedData(filterData[0]);
+        for (let i = 1; i < filterData.length; i++) {
+            if (filteredGroup == undefined || filteredGroup.length == 0) {
+                return [];
+            }
+            let nextFilter = this.getSortedData(filterData[i]);
+            if (nextFilter != undefined && nextFilter.length > 0) {
+                filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
+            }
+        }
+        
         if (filteredGroup == undefined || filteredGroup.length == 0) {
             return [];
         }
         return this.getGroupData(filteredGroup);
+    }
+    
+    getSortedData(filterData) {
+        let filterOutput = this.getSortedGroup(filterData.property, filterData.value[0]);
+        for (let i = 1; i < filterData.length; i++) {
+            let nextFilter = this.getSortedGroup(filterData.property, filterData.value[i]);
+            nextFilter.forEach(item => {
+                if (!filterOutput.includes(item)) {
+                    filterOutput.push(item);
+                }
+            });
+        }
+        return filterOutput;
     }
 
     getSortedGroup(property, propertyValue) {
@@ -263,7 +280,7 @@ class WuxDataDatabase extends Database {
 class ExtendedTechniqueDatabase extends Database {
 
     constructor(data) {
-        let filters = ["style", "group", "affinity", "tier", "action", "skill", "keywords", "rangeType"];
+        let filters = ["style", "group", "affinity", "tier", "action", "skill", "keywords", "rangeType", "damageType"];
         let dataCreation = function (data) {
             return new TechniqueData(data);
         };
@@ -302,6 +319,9 @@ class ExtendedTechniqueDatabase extends Database {
         let forms = value.forms.split(";");
         for (let i = 0; i < forms.length; i++) {
             this.addSortingGroup("keywords", forms[i].trim(), value);
+        }
+        for (let i = 0; i < value.damageTypes.length; i++) {
+            this.addSortingGroup("damageType", value.damageTypes[i].trim(), value);
         }
     }
 }
@@ -623,6 +643,7 @@ class TechniqueData extends WuxDatabaseData {
 
         this.effects = new TechniqueEffectDatabase();
         this.enhancementEffects = {};
+        this.damageTypes = [];
         this.endEffectConditionName = "";
         this.endEffectConditionEffect = "";
         this.techniqueEffect = {};
@@ -662,6 +683,7 @@ class TechniqueData extends WuxDatabaseData {
         this.willBreakEffect = json.willBreakEffect == undefined ? undefined : new TechniqueEffect(json.willBreakEffect);
         this.effects = new TechniqueEffectDatabase(json.effects);
         this.enhancementEffects = json.enhancementEffects;
+        this.damageTypes = json.damageTypes;
         this.endEffectConditionName = json.endEffectConditionName;
         this.endEffectConditionEffect = json.endEffectConditionEffect;
         this.isCustom = json.isCustom != undefined ? json.isCustom : false;
@@ -783,20 +805,24 @@ class TechniqueData extends WuxDatabaseData {
         let shortRange = parseInt(rangeParts[0]);
         let longRange = rangeParts.length > 1 ? parseInt(rangeParts[1]) : 0;
 
-        if (longRange >= 8) {
-            this.rangeType = "Long Range";
+        let targetingStyle = this.getTargetingStyle();
+
+        if (longRange >= 7) {
+            if (this.target == "Target") {
+                this.rangeType = `Long Range${targetingStyle}`;
+            }
             return;
         }
         if (shortRange == 1) {
             if (longRange >= 2) {
-                this.rangeType = "Short Range";
+                this.rangeType = `Short Range${targetingStyle}`;
                 return;
             }
             this.rangeType = "Melee";
             return;
         }
         if (longRange > 2) {
-            this.rangeType = "Short Range";
+            this.rangeType = `Short Range${targetingStyle}`;
             return;
         }
         
@@ -805,6 +831,14 @@ class TechniqueData extends WuxDatabaseData {
         }
         
         this.rangeType = "Special";
+    }
+    getTargetingStyle() {
+        let singleTargetTypes = ["Targets", "Objects", "Targets/Self", "Target", "Object", "Space", "Self", "Target/Self"];
+        if (singleTargetTypes.includes(this.target)) {
+            return "";
+        }
+        
+        return " Area";
     }
 
     setRank(rank) {
@@ -895,8 +929,13 @@ class TechniqueData extends WuxDatabaseData {
                 if (effect.traits != "") {
                     this.addDefinition(`Trait_${effect.traits}`);
                 }
-                if (effect.type == "Damage" && effect.effect == "Dmg_Psyche") {
-                    this.willBreakEffect = this.effects.getDefaultWillbreak();
+                if (effect.type == "Damage") {
+                    if (!this.damageTypes.includes(effect.effect)) {
+                        this.damageTypes.push(effect.effect);
+                    }
+                    if (effect.effect == "Dmg_Psyche") {
+                        this.willBreakEffect = this.effects.getDefaultWillbreak();
+                    }
                 }
                 return;
         }

@@ -1379,13 +1379,14 @@ var DisplayPopups = DisplayPopups || (function () {
         },
 
         printFilterPopup = function () {
-            return buildBasePopup(WuxDef.GetAttribute("Popup_FilterPopupActive"), FilterPopup.Print());
+            return buildBasePopup(WuxDef.GetAttribute("Popup_FilterPopupActive"), FilterPopup.Print(), FilterPopup.PrintHeader());
         },
 
-        buildBasePopup = function (attribute, popupContents) {
+        buildBasePopup = function (attribute, popupContents, popupHeaderContents) {
             popupContents = `<div class="wuxPopup">
                 <div class="wuxPopupHeader">
                     <span class="wuxPopupInnerHeader" name="${WuxDef.GetAttribute("Popup_PopupName")}">Name</span>
+                    ${popupHeaderContents}
                     ${WuxSheetMain.Button(WuxDef.GetAttribute("Popup_PopupActive"), "Exit")}
                 </div>
                 ${popupContents}
@@ -1477,13 +1478,16 @@ var DisplayPopups = DisplayPopups || (function () {
                     let contents = buildTechniqueFilters();
                     return `<div class="wuxFilterPopupContents">${contents}</div>`;
                 },
+                printHeader = function () {
+                    return printApplyFilterButton();
+                },
                 
                 buildTechniqueFilters = function () {
                     return `${buildPopupContentRow(printApplyFilterButton())}
                     
                     ${buildPopupContentRow(printApplyFilterButton())}`;
                 },
-                
+
                 printApplyFilterButton = function () {
                     let applyFilterDef = WuxDef.Get("Popup_ApplyFilter");
                     return WuxSheetMain.Button(applyFilterDef.getAttribute(), `<span">${applyFilterDef.getTitle()}</span>`);
@@ -1497,7 +1501,8 @@ var DisplayPopups = DisplayPopups || (function () {
                 }
     
             return {
-                Print: print
+                Print: print,
+                PrintHeader: printHeader
             }
         }());
 

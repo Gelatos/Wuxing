@@ -413,7 +413,7 @@ div.wuxStyleHeaderButton:hover span {
 ========================================*/
 
 .wuxFeature,
-.sheet-rolltemplate-technique
+.sheet-rolltemplate-technique,
 .wuxFeatureTable
 {
     position: relative;
@@ -1599,6 +1599,15 @@ input.wuxFeatureTypeEquipSlot-flag[value="Legs Armor"] + .wuxFeatureTypeEquipSlo
 .wuxFeatureEditBlock
 {
     background-color: #1d1e1f;
+}
+
+/*========================================
+   Filters
+========================================*/
+
+.wuxFilterSection {
+    position: relative;
+    display: block;
 }
 
 /*========================================
