@@ -1386,7 +1386,7 @@ var DisplayPopups = DisplayPopups || (function () {
             popupContents = `<div class="wuxPopup">
                 <div class="wuxPopupHeader">
                     <span class="wuxPopupInnerHeader" name="${WuxDef.GetAttribute("Popup_PopupName")}">Name</span>
-                    ${WuxSheetMain.Button(attribute, "Exit")}
+                    ${WuxSheetMain.Button(WuxDef.GetAttribute("Popup_PopupActive"), "Exit")}
                 </div>
                 ${popupContents}
             </div>`;

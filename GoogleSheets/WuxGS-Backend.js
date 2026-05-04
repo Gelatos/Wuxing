@@ -541,10 +541,7 @@ var ActionBuilder = ActionBuilder || (function () {
         listenerTechniquesFilterPopup = function () {
             return `${WuxSheetBackend.OnChange(
                 [WuxDef.GetVariable("Action_FormeTechniques", WuxDef._filter)],
-                `WuxWorkerFilterPopup.OpenFormeTechnique()`, true)}
-                ${WuxSheetBackend.OnChange(
-                [WuxDef.GetVariable("Popup_FilterPopupActive", WuxDef._filter)],
-                `WuxWorkerFilterPopup.Close()`, true)}`;
+                `WuxWorkerFilterPopup.OpenFormeTechnique()`, true)}`;
         }
     return {
         Print: print
@@ -560,7 +557,6 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerOpenSubMenu();
             output += listenerCloseSubMenu();
             output += listenerClosePopup();
-            output += listenerCloseInspectPopup();
             output += listenerUpdateRepeatingItemInspectPopupItems();
             output += listenerInspectPopupAddButton();
             return output;
@@ -630,13 +626,6 @@ var PopupBuilder = PopupBuilder || (function () {
             let output = `WuxWorkerGeneral.ClosePopup()`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
-        },
-        
-        listenerCloseInspectPopup = function () {
-            let groupVariableNames = [`${WuxDef.GetVariable("Popup_InspectPopupActive")}`];
-            let output = `WuxWorkerInspectPopup.ClosePopup(eventinfo)`;
-
-            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerInspectPopupAddButton = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Popup_InspectAddClick")}`];

@@ -49570,7 +49570,7 @@
 					<div class="wuxPopupHeader">
 						<span class="wuxPopupInnerHeader" name="attr_popup-popupname">Name</span>
 						<div class="wuxButton">
-							<input type="checkbox" name="attr_popup-inspectpopupactive">
+							<input type="checkbox" name="attr_popup-popupactive">
 							<span>Exit</span>
 						</div>
 					</div>
@@ -49905,7 +49905,7 @@
 					<div class="wuxPopupHeader">
 						<span class="wuxPopupInnerHeader" name="attr_popup-popupname">Name</span>
 						<div class="wuxButton">
-							<input type="checkbox" name="attr_popup-filterpopupactive">
+							<input type="checkbox" name="attr_popup-popupactive">
 							<span>Exit</span>
 						</div>
 					</div>
@@ -50295,10 +50295,6 @@ WuxWorkerActions.RemoveAllOldStyleData()
 on("change:act-formetechniques_filter", function (eventinfo) {
 WuxWorkerFilterPopup.OpenFormeTechnique()
 });
-
-on("change:popup-filterpopupactive_filter", function (eventinfo) {
-WuxWorkerFilterPopup.Close()
-});
 on("change:note-opennotebookactions change:note-notebookactions0 change:note-notebookactions1 change:note-notebookactions2 change:note-notebookactions3 change:repeating_jobstyles:forme-actions change::forme-actions change:repeating_styles:forme-actions change:forme-jobslot1_submenu change:forme-advancedslot1_submenu change:forme-styleslot1_submenu change:forme-jobslot2_submenu change:forme-advancedslot2_submenu change:forme-styleslot2_submenu change:forme-jobslot3_submenu change:forme-advancedslot3_submenu change:forme-styleslot3_submenu change:forme-styleslot4_submenu change:forme-styleslot5_submenu change:forme-styleslot6_submenu change:repeating_equipment:gear-itemaction change:repeating_consumables:gear-itemaction change:repeating_goods:gear-itemaction change:repeating_jobtech1:act-actions change:repeating_jobtech2:act-actions change:repeating_jobtech3:act-actions change:repeating_advtech1:act-actions change:repeating_advtech2:act-actions change:repeating_advtech3:act-actions change:repeating_advtech4:act-actions change:repeating_advtech5:act-actions change:repeating_advtech6:act-actions change:repeating_advtech7:act-actions change:repeating_advtech8:act-actions change:repeating_advtech9:act-actions change:repeating_geartech:act-actions change:repeating_consumables:act-actions change:repeating_basicaction:act-actions change:repeating_basicrecovery:act-actions change:repeating_basicattack:act-actions change:repeating_basicsocial:act-actions change:repeating_customtech:act-actions change:job-fighter_expand change:job-brawler_expand change:job-labourer_expand change:job-sentinel_expand change:job-warden_expand change:job-bulwark_expand change:job-exemplar_expand change:job-kineticist_expand change:job-rogue_expand change:job-hunter_expand change:job-sniper_expand change:job-warmage_expand change:job-trooper_expand change:job-geomancer_expand change:job-magus_expand change:job-spellwright_expand change:job-tactician_expand change:job-bard_expand change:job-scholar_expand change:job-medic_expand change:job-alchemist_expand change:job-culinarian_expand change:job-merchant_expand change:job-courtier_expand change:job-diplomat_expand change:job-detective_expand change:job-inquisitor_expand change:job-preacher_expand change:job-etherealist_expand change:job-phantasm_expand change:job-shade_expand change:job-yaksa_expand", function (eventinfo) {
 WuxWorkerGeneral.OpenSubMenu(eventinfo)
 });
@@ -50307,9 +50303,6 @@ WuxWorkerGeneral.CloseSubMenu()
 });
 on("change:popup-popupactive", function (eventinfo) {
 WuxWorkerGeneral.ClosePopup()
-});
-on("change:popup-inspectpopupactive", function (eventinfo) {
-WuxWorkerInspectPopup.ClosePopup(eventinfo)
 });
 on("change:repeating_itempopupvalues:popup-itemselectison", function (eventinfo) {
 WuxWorkerInspectPopup.SelectInspectionItemFromActiveGroup(eventinfo)
