@@ -440,629 +440,6 @@ class SheetDatabaseObject {
     }
 }
 
-class BaseFeatureDisplayBuilder {
-    constructor() {}
-    
-    print () {
-        return `<div class="wuxFeature">
-            ${this.printHeaderBlock()}
-            ${this.printInfoBlock()}
-        </div>
-        `;
-    }
-
-    printTooltip (name, tooltipName, descriptions) {
-        if (descriptions.length > 0) {
-            let descriptionData = `<span class="wuxDescription">${descriptions.join(`</span><br /><span class="wuxDescription">`)}</span>`;
-            return this.printTooltipField(name, tooltipName, descriptionData);
-        }
-        else {
-            return this.printSpan(name);
-        }
-    }
-    printTooltipField (name, tooltipName, descriptionData) {
-        return `<span class="wuxTooltip">
-            <span class="wuxTooltipText"><strong>${name}</strong></span>
-            <div class="wuxTooltipContent">
-                <div class="wuxHeader2">${tooltipName}</div>
-                ${descriptionData}
-            </div>
-        </span>`;
-    }
-    
-    printHeaderBlock() {}
-    printHeaderBlockField(contents) {
-        return `<div class="wuxFeatureHeader">
-            <div class="wuxFeatureHeaderDisplayBlock">
-                <div class="wuxFeatureHeaderDisplayTitleBlock">
-                    ${this.printName()}
-                    ${this.printActionType()}
-                </div>
-                ${contents}
-            </div>
-        </div>`;
-        
-    }
-
-    printName() {}
-    printNameField (contents) {
-        return `<div class="wuxFeatureHeaderName">${contents}</div>`;
-    }
-
-    printActionType() {}
-    printActionTypeField (input, contents) {
-        return `${input}
-        <div class="wuxFeatureHeaderDisplayInfoActionType">${contents}</div>`;
-    }
-
-    printInfoBlock() {
-        return `<div class="wuxFeatureInfoDisplayBlock">
-            ${this.printTrigger()}
-            ${this.printTraits()}
-            ${this.printFlavorText()}
-            ${this.printCoreEffects()}
-            ${this.printOnEnter()}
-            ${this.printCheckEffects()}
-            ${this.printEndEffects()}
-            ${this.printWillBreakEffects()}
-        </div>`;
-    }
-    printInfoBlockField(contents) {
-        return `<div class="wuxFeatureInfoDisplayBlock">
-            ${contents}
-        </div>`;
-    }
-
-}
-
-class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
-    constructor() {
-        super();
-    }
-
-    printHeaderBlock() {
-        return this.printHeaderBlockField(
-        `<div class="wuxFeatureHeaderDisplayInfoBlock">
-            ${this.printRange()}
-            ${this.printTargetType()}
-        </div>
-        <div class="wuxFeatureHeaderDisplayCostBlock">
-            ${this.printEnCost()}
-            ${this.printWillCost()}
-        </div>`);
-    }
-
-    printInfoBlock() {
-        return this.printInfoBlockField(
-            `${this.printTrigger()}
-            ${this.printTraits()}
-            ${this.printFlavorText()}
-            ${this.printCoreEffects()}
-            ${this.printOnEnter()}
-            ${this.printCheckEffects()}
-            ${this.printEndEffects()}
-            ${this.printWillBreakEffects()}
-            ${this.printEnhancementEffects()}`);
-    }
-    
-    printRange() {}
-    printRangeField (contents) {
-        return `<div class="wuxFeatureHeaderDisplayInfoRange">${contents}</div>`
-    }
-
-    printTargetType() {}
-    printTargetTypeField (contents) {
-        return `<div class="wuxFeatureHeaderDisplayInfoTargetType">${contents}</div>`;
-    }
-    
-    printEnCost() {}
-    printEnCostField (contents) {
-        return `<div class="wuxFeatureHeaderDisplayInfoEnCost">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> EN</span></div>`;
-    }
-    printWillCost() {}
-    printWillCostField (contents) {
-        return `<div class="wuxFeatureHeaderDisplayInfoWillCost">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>`;
-    }
-
-    printTrigger() {}
-    printTriggerField (contents) {
-        return `<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> ${contents}</div>`;
-    }
-    
-    printTraits() {}
-    printTraitsField (title, contents) {
-        return `<div class="wuxFeatureHeaderInfoTraits"><strong>${title}.</strong> ${contents}</div>`;
-    }
-
-    printFlavorText() {}
-    printFlavorTextField (contents) {
-        return `<div class="wuxFeatureHeaderInfoFlavor">${contents}</div>`;
-    }
-
-    printCoreEffects() {}
-    printCoreEffectsField (title, contents) {
-        return `<div class="wuxFeatureHeaderInfoEffect-Core">
-            <input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-            <div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${title}</span></div>
-            <div class="wuxFeatureHeaderInfoContents">${contents}</div>
-        </div>`;
-    }
-
-    printOnEnter() {}
-    printOnEnterField(contents) {
-        return `<div class="wuxFeatureHeaderInfoEffectOnEnter"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${contents}</span></div>`;
-    }
-
-    printCheckEffects() {}
-    printCheckEffectsField (input, title, contents) {
-        return `<div class="wuxFeatureHeaderInfoEffect-Check">
-            ${input}
-            <div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${title}</span></div>
-            <div class="wuxFeatureHeaderInfoContents">${contents}</div>
-        </div>`;
-    }
-
-    printEndEffects() {}
-    printEndEffectsField(contents) {
-        return `<div class="wuxFeatureHeaderInfoEffect"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${contents}</span></div>`;
-    }
-    
-    printWillBreakEffects() {}
-    printWillBreakEffectsField (title, contents) {
-        return `<div class="wuxFeatureHeaderInfoEffect-WillBreak">
-            <input type="hidden" class="wuxFeatureHeader-flag" value="WillBreak">
-            <div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${title}</span></div>
-            <div class="wuxFeatureHeaderInfoContents">${contents}</div>
-        </div>`;
-    }
-
-    printEnhancementEffects() {}
-    printEnhancementEffectsField(contents) {
-        let enhancementDef = WuxDef.Get("Title_TechEnhancement");
-        let title = this.printTooltip(enhancementDef.getTitle(), enhancementDef.getTitle(), enhancementDef.descriptions);
-        return `<div class="wuxFeatureHeaderInfoEffect-Enhance">
-            <input type="hidden" class="wuxFeatureHeader-flag" value="Enhance">
-            <div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${title}</span></div>
-            <div class="wuxFeatureHeaderInfoContents">${contents}</div>
-        </div>`;
-    }
-}
-
-class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
-    constructor(displayData) {
-        super();
-        this.displayData = displayData;
-    }
-    printSpan (contents) {
-        return `<span>${contents}</span>`;
-    }
-    
-    printName() {
-        return this.printNameField(this.printSpan(this.displayData.name));
-    }
-    printActionType () {
-        return this.printActionTypeField(
-            `<input type="hidden" class="wuxFeatureHeader-flag" value="${this.displayData.actionType}">`,
-            this.printSpan(this.displayData.actionName));
-    }
-    printRange() {
-        return this.printRangeField(
-            this.printTooltip(this.displayData.range, "Range", this.displayData.targetDesc));
-    }
-    printTargetType() {
-        if (this.displayData.targetType == "") {
-            return "";
-        }
-        return this.printTargetTypeField(this.printSpan(this.displayData.targetType));
-    }
-    printEnCost() {
-        if (this.displayData.enCost == "") {
-            return "";
-        }
-        return this.printEnCostField(this.printSpan(this.displayData.enCost));
-    }
-    printWillCost() {
-        if (this.displayData.willCost == "") {
-            return "";
-        }
-        return this.printWillCostField(this.printSpan(this.displayData.willCost));
-    }
-    printTrigger() {
-        if (this.displayData.trigger == "") {
-            return "";
-        }
-        return this.printTriggerField(this.printSpan(this.displayData.trigger));
-    }
-    printTraits() {
-        if (this.displayData.traits == "") {
-            return "";
-        }
-        return this.printTraitsField(
-            this.printTooltip("Traits", "Traits", this.displayData.traitsDesc), 
-            this.printSpan(this.displayData.traits));
-    }
-    printFlavorText() {
-        if (this.displayData.flavorText == "") {
-            return "";
-        }
-        return this.printFlavorTextField(this.printSpan(this.displayData.flavorText));
-    }
-    printCoreEffects() {
-        if (this.displayData.coreEffect == "") {
-            return "";
-        }
-        return this.printCoreEffectsField(
-            this.printTooltip("Effects", "Core Effects", this.displayData.coreEffect.effectTypeDesc),
-            this.printSpan(this.displayData.getCoreEffects("\n"))
-        );
-    }
-    printOnEnter() {
-        if (!this.displayData.isOnEnter) {
-            return "";
-        }
-        let onEnterDef = WuxDef.Get("Trait_OnEnter");
-        return this.printOnEnterField(this.printTooltip("On Enter Effects", "On Enter Effects", onEnterDef.descriptions));
-    }
-
-    printCheckEffects() {
-        if (this.displayData.checkEffect == "") {
-            return "";
-        }
-        return this.printCheckEffectsField(
-            `<input type="hidden" class="wuxFeatureHeader-flag" value="${this.displayData.coreDefense}">`,
-            this.printTooltip(this.displayData.checkType, "Skill Check Effects", this.displayData.checkEffect.effectTypeDesc),
-            this.printSpan(this.displayData.getCheckEffects("\n"))
-        );
-    }
-    printEndEffects() {
-        if (!this.displayData.endEffectDesc) {
-            return "";
-        }
-        return this.printEndEffectsField(this.printSpan(this.displayData.endEffectDesc));
-    }
-    printWillBreakEffects() {
-        if (this.displayData.willBreakEffect == "") {
-            return "";
-        }
-        return this.printWillBreakEffectsField(
-            this.printTooltip("Will Break Effects", "Will Break Effects", this.displayData.willBreakEffect.effectTypeDesc),
-            this.printSpan(this.displayData.getWillBreakEffects("\n"))
-        );
-    }
-    printEnhancementEffects() {
-        if (this.displayData.enhanceEffect == "") {
-            return "";
-        }
-        return this.printEnhancementEffectsField(
-            this.printSpan(this.displayData.getEnhanceEffects("\n"))
-        );
-    }
-}
-
-class TechniqueDisplayBuilderUsable extends TechniqueDisplayBuilder {
-    printName() {
-        let contents = `<button class="wuxFeatureHeaderNameButton" type="roll" value="${this.displayData.getSheetRollTemplate(true)}">
-            ${this.printSpan(this.displayData.name)}
-        </button>`
-        return this.printNameField(contents);
-    }
-}
-
-class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
-    constructor(baseDefinition, rootSuffix) {
-        super();
-        this.baseDefinition = baseDefinition;
-        this.rootSuffix = rootSuffix;
-    }
-
-    getActionTypeAttribute (attribute, suffix) {
-        if (this.rootSuffix != undefined) {
-            suffix = `${suffix != undefined ? suffix : ""}${this.rootSuffix}`;
-        }
-        return this.baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
-    }
-    printSpan (fieldName) {
-        return `<span name="${fieldName}"></span>`;
-    }
-    printSpanActionTypeAttribute (attribute, suffix) {
-        return `<span name="${this.getActionTypeAttribute(attribute, suffix)}"></span>`;
-    }
-    printAttributeTooltip (name, tooltipName, fieldName) {
-        let descriptionData = `<span class="wuxDescription" name="${fieldName}"></span>`;
-        return WuxSheetMain.HiddenSpanFieldToggle(fieldName,
-            this.printTooltipField(name, tooltipName, descriptionData),
-            `${name}`);
-    }
-    
-    printName() {
-        let contents = this.printSpanActionTypeAttribute("TechName");
-        return `<input type="hidden" name="${this.getActionTypeAttribute("TechTrueName")}">
-        ${this.printNameField(contents)}`;
-    }
-    printActionType () {
-        return this.printActionTypeField(
-            `<input type="hidden" class="wuxFeatureHeader-flag" name="${this.getActionTypeAttribute("TechActionType")}">`,
-            this.printAttributeTooltip(`<span name="${this.getActionTypeAttribute("TechActionName")}"></span>`, 
-                "Action", this.getActionTypeAttribute("TechActionTooltip"))
-        )
-    }
-    printRange() {
-        let fieldName = this.getActionTypeAttribute("TechRange");
-        return WuxSheetMain.HiddenField(fieldName, 
-            this.printRangeField(
-                this.printAttributeTooltip(`<span name="${fieldName}"></span>`, "Range", this.getActionTypeAttribute("TechTargetDesc"))
-            )
-        );
-    }
-    printTargetType() {
-        let fieldName = this.getActionTypeAttribute("TechTargetType");
-        return WuxSheetMain.HiddenField(fieldName, this.printTargetTypeField(this.printSpan(fieldName)));
-    }
-    printEnCost() {
-        let fieldName = this.getActionTypeAttribute("TechEnCost");
-        return WuxSheetMain.HiddenField(fieldName, this.printEnCostField(this.printSpan(fieldName)));
-    }
-    printWillCost() {
-        let fieldName = this.getActionTypeAttribute("TechWillCost");
-        return WuxSheetMain.HiddenField(fieldName, this.printWillCostField(this.printSpan(fieldName)));
-    }
-    printTrigger() {
-        let fieldName = this.getActionTypeAttribute("TechTrigger");
-        return WuxSheetMain.HiddenField(fieldName, this.printTriggerField(this.printSpan(fieldName)));
-    }
-    printTraits() {
-        let fieldName = this.getActionTypeAttribute("TechTraits");
-        return WuxSheetMain.HiddenField(fieldName,
-            this.printTraitsField(
-                this.printAttributeTooltip("Traits", "Traits", this.getActionTypeAttribute("TechTraitsDesc")),
-                this.printSpan(fieldName)
-            )
-        );
-    }
-    printFlavorText() {
-        let fieldName = this.getActionTypeAttribute("TechFlavorText");
-        return WuxSheetMain.HiddenField(fieldName, this.printFlavorTextField(this.printSpan(fieldName)));
-    }
-    printCoreEffects() {
-        let fieldName = this.getActionTypeAttribute("TechCoreEffect");
-        return WuxSheetMain.HiddenField(fieldName,
-            this.printCoreEffectsField(
-                this.printAttributeTooltip("Effects", "Core Effects", 
-                    this.getActionTypeAttribute("TechCoreEffect", WuxDef._info)),
-                this.printSpan(fieldName)
-            )
-        );
-    }
-    printOnEnter() {
-        let fieldName = this.getActionTypeAttribute("TechOnEnter");
-        let onEnterDef = WuxDef.Get("Trait_OnEnter");
-        return WuxSheetMain.HiddenField(fieldName,
-            this.printOnEnterField(this.printTooltip("On Enter Effects", "On Enter Effects", onEnterDef.descriptions)));
-    }
-
-    printCheckEffects() {
-        let fieldName = this.getActionTypeAttribute("TechCheckEffect");
-        return WuxSheetMain.HiddenField(fieldName,
-            this.printCheckEffectsField(
-                `<input type="hidden" class="wuxFeatureHeader-flag" name="${this.getActionTypeAttribute("TechCoreDefense")}">`,
-                this.printAttributeTooltip(this.printSpanActionTypeAttribute("TechCheckTitle"), "Skill Check Effects",
-                    this.getActionTypeAttribute("TechCheckEffect", WuxDef._info)),
-                this.printSpan(fieldName)
-            )
-        );
-    }
-    printEndEffects() {
-        let fieldName = this.getActionTypeAttribute("TechEndEffect");
-        return WuxSheetMain.HiddenField(fieldName, this.printEndEffectsField(this.printSpan(fieldName)));
-    }
-    printWillBreakEffects() {
-        let fieldName = this.getActionTypeAttribute("TechWillBreakEffect");
-        return WuxSheetMain.HiddenField(fieldName,
-            this.printWillBreakEffectsField(
-                this.printAttributeTooltip("Will Break Effects", "Will Break Effects",
-                    this.getActionTypeAttribute("TechWillBreakEffect", WuxDef._info)),
-                this.printSpan(fieldName)
-            )
-        );
-    }
-    printEnhancementEffects() {
-        let fieldName = this.getActionTypeAttribute("TechEnhanceEffect");
-        return WuxSheetMain.HiddenField(fieldName,
-            this.printEnhancementEffectsField(
-                this.printSpan(fieldName)
-            )
-        );
-    }
-}
-
-class TechniqueRepeaterDisplayBuilderUsable extends TechniqueRepeaterDisplayBuilder {
-    printName() {
-        let contents = `<button class="wuxFeatureHeaderNameButton" type="roll" value="@{${WuxDef.GetVariable("Action_Use")}}">
-            ${this.printSpanActionTypeAttribute("TechName")}
-        </button>`
-        return this.printNameField(contents);
-    }
-    printEnhancementEffects() {
-        let fieldName = this.getActionTypeAttribute("TechEnhanceEffect");
-
-        let rankUpField = this.getActionTypeAttribute("TechRankUp");
-        let rankUpButton = WuxSheetMain.HiddenSpanFieldToggle(this.getActionTypeAttribute("TechRankUp", WuxDef._info),
-            WuxSheetMain.Button(rankUpField, "<span class='wuxFeatureButtonIcon'>&#43;</span> Increase Rank", "wuxFeatureButton"),
-            WuxSheetMain.Button(rankUpField, "<span class='wuxFeatureButtonIcon'>&#43;</span> Increase Rank", "wuxFeatureButtonDisabled"));
-        let rankDownField = this.getActionTypeAttribute("TechRankDown");
-        let rankDownButton = WuxSheetMain.HiddenSpanFieldToggle(this.getActionTypeAttribute("TechRankDown", WuxDef._info),
-            WuxSheetMain.Button(rankDownField, "<span class='wuxFeatureButtonIcon'>&#8722;</span> Decrease Rank", "wuxFeatureButton"),
-            WuxSheetMain.Button(rankDownField, "<span class='wuxFeatureButtonIcon'>&#8722;</span> Decrease Rank", "wuxFeatureButtonDisabled"));
-        let contents = `<div class="wuxFeatureHeaderInfoEffect-EnhanceButtons">${rankDownButton}${rankUpButton}</div>`;
-        
-        return WuxSheetMain.HiddenField(fieldName,
-            `${this.printEnhancementEffectsField(this.printSpan(fieldName))}
-            ${contents}`
-        );
-    }
-}
-
-class BaseItemDisplayBuilder extends BaseFeatureDisplayBuilder {
-    constructor() {
-        super();
-    }
-
-    printHeaderBlock() {
-        return this.printHeaderBlockField(
-            `<div class="wuxFeatureHeaderDisplayInfoBlock">
-            ${this.printBulk()}
-            ${this.printBaseValue()}
-        </div>`);
-    }
-
-    printInfoBlock() {
-        return this.printInfoBlockField(
-            `${this.printFlavorText()}
-            ${this.printTraits()}
-            ${this.printCrafting()}`);
-    }
-
-    printBulk() {}
-    printBulkField (contents) {
-        return `<div class="wuxFeatureHeaderDisplayInfoBulk">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> Bulk</span></div>`;
-    }
-    printBaseValue() {}
-    printBaseValueField (contents) {
-        return `<div class="wuxFeatureHeaderDisplayInfoCoin">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> J</span></div>`;
-    }
-
-    printFlavorText() {}
-    printFlavorTextField (contents) {
-        return `<div class="wuxFeatureHeaderInfoFlavor">${contents}</div>`;
-    }
-
-    printTraits() {}
-    printTraitsField (title, contents) {
-        return `<div class="wuxFeatureHeaderInfoTraits"><strong>${title}.</strong> ${contents}</div>`;
-    }
-
-    printCrafting() {}
-    printCraftingField (title, contents) {
-        return `<div class="wuxFeatureHeaderInfoEffect-Core">
-            <input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-            <div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${title}</span></div>
-            <div class="wuxFeatureHeaderInfoContents">${contents}</div>
-        </div>`;
-    }
-}
-
-class ItemRepeaterDisplayBuilder extends BaseItemDisplayBuilder {
-    constructor(baseDefinition, rootSuffix) {
-        super();
-        this.baseDefinition = baseDefinition;
-        this.rootSuffix = rootSuffix;
-    }
-
-    getActionTypeAttribute (attribute, suffix) {
-        if (this.rootSuffix != undefined) {
-            suffix = `${suffix != undefined ? suffix : ""}${this.rootSuffix}`;
-        }
-        return this.baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
-    }
-    printSpan (fieldName) {
-        return `<span name="${fieldName}"></span>`;
-    }
-    printSpanActionTypeAttribute (attribute, suffix) {
-        return `<span name="${this.getActionTypeAttribute(attribute, suffix)}"></span>`;
-    }
-    printAttributeTooltip (name, tooltipName, fieldName) {
-        let descriptionData = `<span class="wuxDescription" name="${fieldName}"></span>`;
-        return WuxSheetMain.HiddenSpanFieldToggle(fieldName,
-            this.printTooltipField(name, tooltipName, descriptionData),
-            `${name}`);
-    }
-
-    printName() {
-        let contents = this.printSpanActionTypeAttribute("ItemName");
-        return this.printNameField(contents);
-    }
-    printActionType () {
-        let fieldName = this.getActionTypeAttribute("ItemGroup");
-        return this.printActionTypeField(
-            `<input type="hidden" class="wuxFeatureHeader-flag" value="Item">`,
-            this.printSpan(fieldName));
-    }
-    printBulk() {
-        let fieldName = this.getActionTypeAttribute("ItemBulk");
-        return WuxSheetMain.HiddenField(fieldName, this.printBulkField(this.printSpan(fieldName)));
-    }
-    printBaseValue() {
-        let fieldName = this.getActionTypeAttribute("ItemBaseValue");
-        return WuxSheetMain.HiddenField(fieldName, this.printBaseValueField(this.printSpan(fieldName)));
-    }
-    printFlavorText() {
-        let fieldName = this.getActionTypeAttribute("ItemDescription");
-        return WuxSheetMain.HiddenField(fieldName, this.printFlavorTextField(this.printSpan(fieldName)));
-    }
-    printTraits() {
-        let fieldName = this.getActionTypeAttribute("ItemTrait");
-        return WuxSheetMain.HiddenField(fieldName,
-            this.printTraitsField(
-                this.printAttributeTooltip("Traits", "Traits", this.getActionTypeAttribute("ItemTrait", WuxDef._info)),
-                this.printSpan(fieldName)
-            )
-        );
-    }
-    printCrafting() {
-        let fieldName = this.getActionTypeAttribute("ItemCraft");
-        return WuxSheetMain.HiddenField(fieldName,
-            this.printCraftingField(
-                this.printAttributeTooltip("Crafting", "Crafting",
-                    this.getActionTypeAttribute("ItemCraft", WuxDef._info)),
-                this.printSpan(fieldName)
-            )
-        );
-    }
-}
-
-class BaseFilterDisplayBuilder {
-    constructor() {}
-
-    print () {
-        return `<div class="wuxFilterSection">
-            ${this.printContents()}
-        </div>
-        `;
-    }
-    
-    printContents() {}
-}
-
-class TechniqueFilterDisplayBuilder extends BaseFilterDisplayBuilder {
-    constructor() {
-        super();
-    }
-
-    printContents() {
-        return `${this.printTechniqueFunction()}
-        `;
-
-        // Combat
-        // Social
-        // Influence
-        // Request
-        // Favor
-        // Status (all of them?)
-        // Break Focus
-        // Terrain
-        // Structure
-        // Move
-        // Illusion
-
-        // Affinites (all of them)
-        
-    }
-    
-    printTechniqueFunction() {
-        
-    }
-}
-
 var WuxDefinition = WuxDefinition || (function () {
     const definitionContents = function (definitionData) {
         let expandContents = "";
@@ -3066,6 +2443,8 @@ class TechniqueAssessment {
         this.invalidReason = "";
         
         this.impactTraits = {};
+        this.categoryTraits = ["TechFilterType_Combat", "TechFilterType_Social", "TechFilterType_Utility", "TechFilterType_Support"];
+        this.utilitySet = false;
 
         this.target = technique.target;
         this.size = technique.size;
@@ -3540,9 +2919,6 @@ class TechniqueAssessment {
             case "BreakFocus":
                 this.getBreakFocusAssessment(effect, attributeHandler);
                 break;
-            case "Resistance":
-                this.getResistanceAssessment(effect, attributeHandler);
-                break;
             case "Terrain":
                 this.getTerrainAssessment(effect, attributeHandler);
                 break;
@@ -3558,6 +2934,10 @@ class TechniqueAssessment {
             case "FreeFocus":
                 this.getFreeFocusAssessment(effect, attributeHandler);
                 break;
+            default:
+                if (effect.subType != "") {
+                    this.addImpactTrait(`TechFilterType_${effect.subType}`);
+                }
         }
     }
 
@@ -3614,7 +2994,8 @@ class TechniqueAssessment {
                 this.addPointsRubric(output.value, message);
             }
             this.addTargetedPointsRubric(effect, output.value);
-            this.addImpactTrait("Trait_Atk");
+            this.addImpactTrait("TechFilterType_Combat");
+            this.addImpactTrait(effect.effect);
         }
         else if (subType == "Status") {
             output.value = Math.max(Math.floor(output.value * 0.7), 1);
@@ -3624,10 +3005,12 @@ class TechniqueAssessment {
                 this.addPointsRubric(output.value, message);
             }
             this.addTargetedPointsRubric(effect, output.value);
-            this.addImpactTrait("Trait_Atk");
+            this.addImpactTrait("TechFilterType_Combat");
+            this.addImpactTrait(effect.effect);
         }
         else if (subType == "Special") {
-            this.addImpactTrait("Trait_Atk");
+            this.addImpactTrait("TechFilterType_Combat");
+            this.addImpactTrait(effect.effect);
         }
         else if (effect.effect == "Dmg_Psyche") {
             if (effect.target == "Self") {
@@ -3652,6 +3035,8 @@ class TechniqueAssessment {
                 this.addPointsRubric(output.value, message);
                 this.addDefensePointsRubric(effect, output.value, message);
                 this.addTargetedPointsRubric(effect, output.value);
+                this.addImpactTrait("TechFilterType_Social");
+                this.addImpactTrait(effect.effect);
             }
         } 
         else if (this.technique.forms.includes("Break")) {
@@ -3677,26 +3062,24 @@ class TechniqueAssessment {
                 return;
             }
             else if (effect.defense == "WillBreak") {
-                this.addImpactTrait(`Trait_Will:Trait_Atk`);
             }
             else {
                 this.addPointsRubric(output.value, message);
-                this.addImpactTrait("Trait_Atk");
+                this.addImpactTrait("TechFilterType_Combat");
+                this.addImpactTrait(effect.effect);
             }
             this.addDefensePointsRubric(effect, output.value, message);
             this.addTargetedPointsRubric(effect, output.value);
         }
 
-        if (effect.traits != "") {
-            let effectPts;
-            if (effect.traits.includes("Brutal")) {
-                effectPts = Math.floor(output.value * 0.33);
-                this.addPointsRubric(effectPts, `(Brutal)`);
-            }
-            if (effect.traits.includes("AP")) {
-                effectPts = Math.floor(output.value * 0.33);
-                this.addPointsRubric(effectPts, `(AP)`);
-            }
+        let effectPts;
+        if (this.technique.impacts.indexOf("Brutal") >= 0) {
+            effectPts = Math.floor(output.value * 0.33);
+            this.addPointsRubric(effectPts, `(Brutal)`);
+        }
+        if (this.technique.impacts.indexOf("AP") >= 0) {
+            effectPts = Math.floor(output.value * 0.33);
+            this.addPointsRubric(effectPts, `(AP)`);
         }
     }
 
@@ -3715,7 +3098,7 @@ class TechniqueAssessment {
                     this.addPointsRubric(output.value, message);
                 }
                 this.addTargetedPointsRubric(effect, output.value);
-                this.addImpactTrait("Trait_Heal");
+                this.addImpactTrait("TechFilterType_Support");
                 break;
             case "Surge":
                 message = `(Surge HP)`;
@@ -3724,30 +3107,10 @@ class TechniqueAssessment {
                     this.addPointsRubric(output.value, message);
                 }
                 this.addTargetedPointsRubric(effect, output.value);
-                this.addImpactTrait("Trait_Heal-Surge");
-                break;
-            case "Burst Damage":
-                output.value = Math.max(Math.floor(output.value * 0.25), 1);
-                message = `(Burst)`;
-
-                if (effect.defense != "WillBreak") {
-                    this.addPointsRubric(output.value, message);
-                }
-                this.addTargetedPointsRubric(effect, output.value);
-                this.addImpactTrait("Trait_Atk");
-                break;
-            case "Status":
-                output.value = Math.max(Math.floor(output.value * 0.25), 1);
-                message = `(Status)`;
-
-                if (effect.defense != "WillBreak") {
-                    this.addPointsRubric(output.value, message);
-                }
-                this.addTargetedPointsRubric(effect, output.value);
-                this.addImpactTrait("Trait_Atk");
+                this.addImpactTrait("TechFilterType_Support");
                 break;
             case "Special":
-                this.addImpactTrait("Trait_Atk");
+                this.addImpactTrait("TechFilterType_Combat");
                 break;
             default:
                 if (effect.target == "Self") {
@@ -3760,27 +3123,24 @@ class TechniqueAssessment {
                 message = `(HP)`;
 
                 if (effect.defense == "WillBreak") {
-                    this.addImpactTrait(`Trait_Will:Trait_Atk`);
                 }
                 else {
                     this.addPointsRubric(output.value, message);
-                    this.addImpactTrait("Trait_Atk");
+                    this.addImpactTrait("TechFilterType_Combat");
                 }
                 this.addDefensePointsRubric(effect, output.value, message);
                 this.addTargetedPointsRubric(effect, output.value);
                 break;
         }
 
-        if (effect.traits != "") {
-            let effectPts;
-            if (effect.traits.includes("Brutal")) {
-                effectPts = Math.floor(output.value * 0.33);
-                this.addPointsRubric(effectPts, `(Brutal)`);
-            }
-            if (effect.traits.includes("AP")) {
-                effectPts = Math.floor(output.value * 0.33);
-                this.addPointsRubric(effectPts, `(AP)`);
-            }
+        let effectPts;
+        if (this.technique.impacts.indexOf("Brutal") >= 0) {
+            effectPts = Math.floor(output.value * 0.33);
+            this.addPointsRubric(effectPts, `(Brutal)`);
+        }
+        if (this.technique.impacts.indexOf("AP") >= 0) {
+            effectPts = Math.floor(output.value * 0.33);
+            this.addPointsRubric(effectPts, `(AP)`);
         }
     }
 
@@ -3792,7 +3152,6 @@ class TechniqueAssessment {
             case "Heal":
                 output.value = Math.floor(output.value * 1.5);
                 message = `(Heal Will)`;
-                this.addImpactTrait("Trait_Heal-Will");
                 break;
             default:
                 if (effect.target == "Self") {
@@ -3817,10 +3176,12 @@ class TechniqueAssessment {
     getVitalityAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
         output.value *= 21;
-        let impactTrait = "";
         if (effect.subType != "Heal") {
             output.value = Math.floor(output.value * 1.5);
-            this.addImpactTrait("Trait_Heal-Vitality");
+            this.addImpactTrait("TechFilterType_Combat");
+        }
+        else {
+            this.addImpactTrait("TechFilterType_Support");
         }
         let message = `(${effect.subType != "" ? `${effect.subType} ` : ""}Vit)`;
 
@@ -3840,19 +3201,17 @@ class TechniqueAssessment {
                 if (effect.defense == "WillBreak") {
                     output.value *= 5;
                     this.addPointsRubric(0, `${output.value} (Heal Impatience)`);
-                    this.addImpactTrait("Trait_Heal-Impatience");
                 }
                 else {
                     output.value *= 10;
                     this.addPointsRubric(output.value, `(Heal Impatience)`);
-                    this.addImpactTrait("Trait_Heal-Impatience");
                 }
                 break;
             default:
                 this.patience += output.value;
-                this.addImpactTrait(`Trait_Impatience-${this.patience}`);
                 break;
         }
+        this.addImpactTrait("TechFilterType_Social");
     }
 
     getFavorAssessment(effect, attributeHandler) {
@@ -3864,7 +3223,6 @@ class TechniqueAssessment {
                     output.value *= 6;
                 }
                 message = `(Heal Favor)`;
-                this.addImpactTrait("Trait_Heal-Favor");
                 break;
             default:
                 this.favor += output.value;
@@ -3880,12 +3238,12 @@ class TechniqueAssessment {
         if (effect.defense == "WillBreak") {
             message = `${output.value} (Favor)`;
             this.addPointsRubric(0, message);
-            this.addImpactTrait(`Trait_Will:Trait_Favor`);
         }
         else {
             this.addPointsRubric(output.value, message);
-            this.addImpactTrait("Trait_Favor");
         }
+        this.addImpactTrait("TechFilterType_Social");
+        this.addImpactTrait("Trait_Favor");
         this.addDefensePointsRubric(effect, output.value, message);
         this.addTargetedPointsRubric(effect, output.value);
     }
@@ -3894,7 +3252,6 @@ class TechniqueAssessment {
         let subTypes = effect.subType.split(":");
         let points = 0;
         let message = "";
-        let impactTrait = "";
         switch (subTypes[0]) {
             case "Raise":
             case "Lower":
@@ -3902,29 +3259,12 @@ class TechniqueAssessment {
                     points = 14;
                 }
                 message = `(${subTypes[0]} Influence)`;
-                impactTrait = "Trait_Influence";
                 break;
             case "Adjust":
                 if (effect.defense != "WillBreak") {
                     points = 16;
                 }
                 message = `(${subTypes[0]} Influence)`;
-                impactTrait = "Trait_Influence";
-                break;
-            case "Reveal":
-                if (effect.defense != "WillBreak") {
-                    points = 10;
-                }
-                message = `(${subTypes[0]} Reveal)`;
-                impactTrait = "Trait_Assess";
-                break;
-            case "RevealNeg":
-            case "RevealPos":
-                if (effect.defense != "WillBreak") {
-                    points = 8;
-                }
-                message = `(${subTypes[0]} Reveal)`;
-                impactTrait = "Trait_Assess";
                 break;
             case "Add":
                 if (subTypes.length > 1) {
@@ -3935,18 +3275,17 @@ class TechniqueAssessment {
                     }
                 }
                 message = `(${subTypes[0]} Influence)`;
-                impactTrait = "Trait_AddInfluence";
                 break;
         }
 
+        this.addImpactTrait("TechFilterType_Social");
+        this.addImpactTrait("Trait_Influence");
         if (effect.defense == "WillBreak") {
             message = `${points} ${message}`;
             this.addPointsRubric(0, message);
-            this.addImpactTrait(`Trait_Will:${impactTrait}`);
         }
         else {
             this.addPointsRubric(points, message);
-            this.addImpactTrait(impactTrait);
         }
     }
 
@@ -3963,6 +3302,7 @@ class TechniqueAssessment {
         let message = `(Request)`;
         this.addPointsRubric(output.value, message);
         this.addDefensePointsRubric(effect, output.value);
+        this.addImpactTrait("TechFilterType_Social");
         this.addImpactTrait("Trait_Request");
     }
 
@@ -3982,7 +3322,8 @@ class TechniqueAssessment {
 
         this.addPointsRubric(value, message);
         this.addTargetedPointsRubric(effect, value);
-        this.addImpactTrait(`Trait_Terrain:${effect.effect}`);
+        this.addImpactTrait("TechFilterType_Utility");
+        this.addImpactTrait("Trait_Terrain");
     }
 
     getStructureAssessmentData(effect, attributeHandler) {
@@ -4009,6 +3350,8 @@ class TechniqueAssessment {
             let value = this.structureCount * pointMod;
             let message = `(Structure)`;
             this.addPointsRubric(value, message);
+            this.addImpactTrait("TechFilterType_Utility");
+            this.addImpactTrait("Trait_Structure");
         }
     }
 
@@ -4053,6 +3396,7 @@ class TechniqueAssessment {
         else {
             this.addPointsRubric(output.value, message);
             if (impactTrait != "") {
+                this.addImpactTrait("TechFilterType_Utility");
                 this.addImpactTrait(impactTrait);
             }
             if (effect.target != "Self") {
@@ -4067,10 +3411,12 @@ class TechniqueAssessment {
         output.value *= 2;
         let message = `(EN)`;
         this.addPointsRubric(output.value, message);
+        this.addImpactTrait("TechFilterType_Utility");
         this.addImpactTrait(`Trait_EN`);
     }
 
     getFreeFocusAssessment() {
+        this.addImpactTrait("TechFilterType_Utility");
         this.addPointsRubric(10, "(Free Focus)");
     }
 
@@ -4105,7 +3451,6 @@ class TechniqueAssessment {
                 if (effect.defense == "WillBreak") {
                     message = `${value} (Add ${state.getTitle()})`;
                     this.addPointsRubric(0, message);
-                    this.addImpactTrait(`Trait_Will-Apply:${state.name}`);
                 }
                 else {
                     let onlySingleTargetWillbreak = ["Jolted", "Blinded"];
@@ -4120,7 +3465,6 @@ class TechniqueAssessment {
                         this.addDefensePointsRubric(effect, value, message);
                     }
                     this.addTargetedPointsRubric(effect, value);
-                    this.addImpactTrait(`Trait_Apply:${state.name}`);
 
                     if (effect.effect != "Stat_Engaged") {
                         this.statusCount++;
@@ -4129,6 +3473,15 @@ class TechniqueAssessment {
                             this.addPointsRubric(value, `(MultiStat)`);
                         }
                     }
+                }
+                if (state.canBeFiltered) {
+                    if (state.isBeneficial) {
+                        this.addImpactTrait("TechFilterType_Support");
+                    }
+                    else if (!this.isCombat) {
+                        this.addImpactTrait("TechFilterType_Utility");
+                    }
+                    this.addImpactTrait(`Trait_Apply:${state.name}`);
                 }
                 break;
             case "Trigger":
@@ -4144,14 +3497,13 @@ class TechniqueAssessment {
                 value = Math.floor(parseInt(state.points) * 0.75);
                 message = `(Remove ${state.getTitle()})`;
 
-                if (effect.defense == "WillBreak") {
-                    this.addImpactTrait(`Trait_Will-Cleanse:${state.name}`);
-                }
-                else {
+                if (effect.defense != "WillBreak") {
                     this.addPointsRubric(value, message);
                     this.addImpactTrait(`Trait_Cleanse:${state.name}`);
                 }
                 this.addTargetedPointsRubric(effect, value);
+                this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("Trait_Cleanse");
 
                 if (effect.effect != "Stat_Engaged") {
                     this.statusCount++;
@@ -4165,12 +3517,9 @@ class TechniqueAssessment {
                 value = parseInt(state.points) + 2;
                 message = `(Choose ${state.getTitle()})`;
 
-                if (effect.defense == "WillBreak") {
-                    this.addImpactTrait(`Trait_Will-Apply:${state.name}`);
-                }
-                else {
+                if (effect.defense != "WillBreak") {
                     this.addPointsRubric(value, message);
-                    this.addImpactTrait(`Trait_Apply:${state.name}`);
+                    this.addImpactTrait("TechFilterType_Support");
                 }
                 this.addTargetedPointsRubric(effect, value);
                 break;
@@ -4180,7 +3529,8 @@ class TechniqueAssessment {
 
                 this.addPointsRubric(value, message);
                 this.addTargetedPointsRubric(effect, value);
-                this.addImpactTrait(`Trait_Cleanse-Any`);
+                this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("Trait_Cleanse");
                 break;
             case "Remove All":
                 value = 20;
@@ -4188,7 +3538,8 @@ class TechniqueAssessment {
 
                 this.addPointsRubric(value, message);
                 this.addTargetedPointsRubric(effect, value);
-                this.addImpactTrait(`Trait_Cleanse-All`);
+                this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("Trait_Cleanse");
                 break;
             case "Remove Will":
                 value = 14;
@@ -4196,7 +3547,8 @@ class TechniqueAssessment {
 
                 this.addPointsRubric(value, message);
                 this.addTargetedPointsRubric(effect, value);
-                this.addImpactTrait(`Trait_Cleanse-Will`);
+                this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("Trait_Cleanse");
                 break;
         }
     }
@@ -4204,13 +3556,7 @@ class TechniqueAssessment {
     getBreakFocusAssessment() {
         let message = `(Break Focus)`;
         this.addPointsRubric(28, message);
-        this.addImpactTrait(`Trait_BreakFocus`);
-    }
-
-    getResistanceAssessment(effect, attributeHandler) {
-        let output = this.getDiceFormula(effect, attributeHandler);
-        let message = `(Resist ${effect.effect})`;
-        this.addPointsRubric(output.value, message);
+        this.addImpactTrait("TechFilterType_Utility");
     }
 
     addDefensePointsRubric(effect, points) {
@@ -4309,6 +3655,12 @@ class TechniqueAssessment {
     }
 
     addImpactTrait(traitName) {
+        if (this.categoryTraits.includes(traitName)) {
+            if (this.utilitySet) {
+                return;
+            }
+            this.utilitySet = true;
+        }
         let traitParts = traitName.split("-");
         let traitBase = traitParts[0];
         let traitType = "";

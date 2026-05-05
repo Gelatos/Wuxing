@@ -45574,22 +45574,22 @@
 				<div class="wuxPopup">
 					<div class="wuxPopupHeader">
 						<span class="wuxPopupInnerHeader" name="attr_popup-popupname">Name</span>
-						undefined
-						<div class="wuxButton">
+						<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-inspectshowadd" value="0">
+						<div class="wuxHiddenField">
+							<div class="wuxButton">
+								<input type="checkbox" name="attr_popup-inspectaddclick">
+								<span><span name="attr_popup-inspectaddtype">Add</span></span>
+							</div>
+						</div>
+
+						<div class="wuxButton wuxPopupClose">
 							<input type="checkbox" name="attr_popup-popupactive">
 							<span>Exit</span>
 						</div>
 					</div>
 					<div class="wuxInspectionPopupContents"><input type="hidden" class="wuxInput" name="attr_popup-inspectselecttype" value="" />
 						<input type="hidden" class="wuxInput" name="attr_popup-inspectselectid" value="" />
-						<div class="wuxInspectionPopupContentData"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-inspectshowadd" value="0">
-							<div class="wuxHiddenField">
-								<div class="wuxButton">
-									<input type="checkbox" name="attr_popup-inspectaddclick">
-									<span><span name="attr_popup-inspectaddtype">Add</span></span>
-								</div>
-							</div>
-							<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-itemname" value="0">
+						<div class="wuxInspectionPopupContentData"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-itemname" value="0">
 							<div class="wuxHiddenField">
 								<div class="wuxHeader">Item Data</div>
 								<div class="wuxFeature">
@@ -45916,28 +45916,801 @@
 								<span">Apply Filter
 							</span></span>
 						</div>
-						<div class="wuxButton">
+						<div class="wuxButton wuxPopupClose">
 							<input type="checkbox" name="attr_popup-popupactive">
 							<span>Exit</span>
 						</div>
 					</div>
 					<div class="wuxFilterPopupContents">
-						<div class="wuxFilterPopupContentRow">
-							<div class="wuxButton">
-								<input type="checkbox" name="attr_popup-applyfilter">
-								<span>
-									<span">Apply Filter
-								</span></span>
+						<div class="wuxFilterSection">
+							<div class="wuxFilterPopupContentRow">
+								<div class="wuxHeader"><span>Category</span></div>
 							</div>
+
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-combat" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-combat" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-combat" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-combat" />
+											Combat
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-social" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-social" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-social" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-social" />
+											Social
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-utility" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-utility" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-utility" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-utility" />
+											Utility
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-support" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-support" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-support" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-support" />
+											Support
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="wuxFilterPopupContentRow">
+								<div class="wuxHeader"><span>Action Type</span></div>
+							</div>
+
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-quickaction" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-quickaction" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-quickaction" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-quickaction" />
+											Quick Action
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-assistaction" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-assistaction" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-assistaction" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-assistaction" />
+											Assist Action
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-fullaction" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-fullaction" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-fullaction" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-fullaction" />
+											Full Action
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-swiftaction" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-swiftaction" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-swiftaction" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-swiftaction" />
+											Swift Action
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-reactionaction" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-reactionaction" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-reactionaction" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-reactionaction" />
+											Reaction
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-briefaction" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-briefaction" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-briefaction" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-briefaction" />
+											Brief Action
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-longaction" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-longaction" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-longaction" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-longaction" />
+											Long Action
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-passiveaction" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-passiveaction" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-passiveaction" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-passiveaction" />
+											Passive
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="wuxFilterPopupContentRow">
+								<div class="wuxHeader"><span>Targeting</span></div>
+							</div>
+
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-rangeself" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangeself" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangeself" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangeself" />
+											Self
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-rangemelee" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangemelee" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangemelee" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangemelee" />
+											Melee
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-rangeclose" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangeclose" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangeclose" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangeclose" />
+											Close Range
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-rangeshort" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangeshort" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangeshort" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangeshort" />
+											Short Range
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-rangeshortarea" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangeshortarea" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangeshortarea" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangeshortarea" />
+											Short Range Area
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-rangelong" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangelong" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangelong" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangelong" />
+											Long Range
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-rangelongarea" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangelongarea" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangelongarea" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangelongarea" />
+											Long Range Area
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-rangespecial" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangespecial" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangespecial" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangespecial" />
+											Special Range
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="wuxFilterPopupContentRow">
+								<div class="wuxHeader"><span>Damage Types</span></div>
+							</div>
+
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-dmg-burn" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-burn" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-burn" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-burn" />
+											Burn
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-dmg-cold" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-cold" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-cold" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-cold" />
+											Cold
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-dmg-energy" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-energy" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-energy" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-energy" />
+											Energy
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-dmg-force" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-force" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-force" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-force" />
+											Force
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-dmg-piercing" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-piercing" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-piercing" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-piercing" />
+											Piercing
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-dmg-psyche" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-psyche" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-psyche" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-psyche" />
+											Will
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-dmg-tension" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-tension" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-tension" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-tension" />
+											Tension
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-dmg-weapon" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-weapon" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-weapon" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-dmg-weapon" />
+											Weapon
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="wuxFilterPopupContentRow">
+								<div class="wuxHeader"><span>Status (Beneficial)</span></div>
+							</div>
+
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-invisible" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-invisible" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-invisible" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-invisible" />
+											Invisible
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-burn_aegis" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-burn_aegis" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-burn_aegis" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-burn_aegis" />
+											Burn Aegis
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-cold_aegis" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-cold_aegis" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-cold_aegis" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-cold_aegis" />
+											Cold Aegis
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-dodge" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-dodge" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-dodge" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-dodge" />
+											Dodge
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-empowered" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-empowered" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-empowered" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-empowered" />
+											Empowered
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-iron_plates" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-iron_plates" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-iron_plates" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-iron_plates" />
+											Iron Plates
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-quickened" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-quickened" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-quickened" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-quickened" />
+											Quickened
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-sand_aegis" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-sand_aegis" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-sand_aegis" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-sand_aegis" />
+											Sand Aegis
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-shielded" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-shielded" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-shielded" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-shielded" />
+											Shielded
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-shock_aegis" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-shock_aegis" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-shock_aegis" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-shock_aegis" />
+											Shock Aegis
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="wuxFilterPopupContentRow">
+								<div class="wuxHeader"><span>Status (Harmful)</span></div>
+							</div>
+
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-grappled" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-grappled" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-grappled" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-grappled" />
+											Grappled
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-aflame" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-aflame" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-aflame" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-aflame" />
+											Aflame
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-chilled" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-chilled" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-chilled" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-chilled" />
+											Chilled
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-earthblight" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-earthblight" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-earthblight" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-earthblight" />
+											Earthblight
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-hindered" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-hindered" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-hindered" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-hindered" />
+											Hindered
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-immobilized" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-immobilized" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-immobilized" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-immobilized" />
+											Immobilized
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-jolted" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-jolted" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-jolted" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-jolted" />
+											Jolted
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-prone" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-prone" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-prone" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-prone" />
+											Prone
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-sickened" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-sickened" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-sickened" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-sickened" />
+											Sickened
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-soaked" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-soaked" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-soaked" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-soaked" />
+											Soaked
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-stunned" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-stunned" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-stunned" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-stunned" />
+											Stunned
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxFilterPopupContentData">
+								<div class="wuxInteractiveBlock">
+									<div class="wuxInteractiveInnerBlock">
+										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-sts-vined" />
+										<div class="wuxInteractiveContent">
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-vined" />
+											<span class="wuxInteractiveIcon">&#9635;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-vined" />
+											<span class="wuxInteractiveAuxIcon">&#9634;</span>
+											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-sts-vined" />
+											Vined
+										</div>
+									</div>
+								</div>
+							</div>
+
+
 						</div>
 
-						<div class="wuxFilterPopupContentRow">
-							<div class="wuxButton">
-								<input type="checkbox" name="attr_popup-applyfilter">
-								<span>
-									<span">Apply Filter
-								</span></span>
-							</div>
+						<div class="wuxButton">
+							<input type="checkbox" name="attr_popup-applyfilter">
+							<span>
+								<span">Apply Filter
+							</span></span>
 						</div>
 					</div>
 				</div>

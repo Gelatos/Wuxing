@@ -5669,7 +5669,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Energy","traits":""},
                 "isCustom":false,"rank":0},
             "Piercing Fleuret":{"name":"Piercing Fleuret","fieldName":"piercing_fleuret","group":"","descriptions":[],
-                "variable":"","techSet":"Piercing Fleuret","version":"3.0","affinity":"","tier":2,"action":"Quick","forms":"","impacts":"","en":2,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Skirmish","hasAdv":"","range":"1","rangeType":"Melee","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":["Trait_AP"],
+                "variable":"","techSet":"Piercing Fleuret","version":"3.0","affinity":"","tier":2,"action":"Quick","forms":"","impacts":"AP","en":2,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Skirmish","hasAdv":"","range":"1","rangeType":"Melee","target":"Target","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":["Trait_AP"],
                 "effects":{"keys":["T0"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","duration":"","dVal":"4","dType":"3","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],

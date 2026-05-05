@@ -1392,7 +1392,13 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
             }
             let damageType = this.getDamageType(attrGetters, techniqueEffect);
             roll.setDamageType(damageType);
-            roll.setTraits(techniqueEffect.traits);
+
+            if (this.technique.traits.includes("AP")) {
+                roll.setTraits("AP");
+            }
+            else if (this.technique.traits.includes("Brutal")) {
+                roll.setTraits("Brutal");
+            }
         }
         tokenEffect.addDamageRoll(roll);
     }

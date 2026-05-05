@@ -809,28 +809,28 @@ class TechniqueData extends WuxDatabaseData {
 
         if (longRange >= 7) {
             if (this.target == "Target") {
-                this.rangeType = `Long Range${targetingStyle}`;
+                this.rangeType = `FilterType_RangeLong${targetingStyle}`;
             }
             return;
         }
         if (shortRange == 1) {
             if (longRange >= 2) {
-                this.rangeType = `Short Range${targetingStyle}`;
+                this.rangeType = `FilterType_RangeClose${targetingStyle}`;
                 return;
             }
-            this.rangeType = "Melee";
+            this.rangeType = "FilterType_RangeMelee";
             return;
         }
         if (longRange > 2) {
-            this.rangeType = `Short Range${targetingStyle}`;
+            this.rangeType = `FilterType_RangeShort${targetingStyle}`;
             return;
         }
         
         if (rangeParts[0] == "" || rangeParts[0] == "Self" || this.target == "Self") {
-            this.rangeType = "Self";
+            this.rangeType = "FilterType_RangeSelf";
         }
         
-        this.rangeType = "Special";
+        this.rangeType = "FilterType_RangeSpecial";
     }
     getTargetingStyle() {
         let singleTargetTypes = ["Targets", "Objects", "Targets/Self", "Target", "Object", "Space", "Self", "Target/Self"];
@@ -838,7 +838,7 @@ class TechniqueData extends WuxDatabaseData {
             return "";
         }
         
-        return " Area";
+        return "Area";
     }
 
     setRank(rank) {
@@ -1544,13 +1544,14 @@ class StatusData extends WuxDatabaseData {
         this.name = json.name;
         this.fieldName = json.fieldName;
         this.group = json.group;
-        this.description = json.description;
+        this.descriptions = json.descriptions;
         this.shortDescription = json.shortDescription;
         this.points = json.points;
         this.endsOnRoundStart = json.endsOnRoundStart;
         this.endsOnTrigger = json.endsOnTrigger;
         this.hasRanks = json.hasRanks;
         this.isBeneficial = json.isBeneficial;
+        this.canBeFiltered = json.canBeFiltered;
     }
 
     importSheets(dataArray) {
@@ -1561,7 +1562,7 @@ class StatusData extends WuxDatabaseData {
         this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i];
         i++;
-        this.description = "" + dataArray[i];
+        this.descriptions = ["" + dataArray[i]];
         i++;
         this.shortDescription = "" + dataArray[i];
         i++;
@@ -1575,6 +1576,8 @@ class StatusData extends WuxDatabaseData {
         i++;
         this.isBeneficial = ("" + dataArray[i]) != "";
         i++;
+        this.canBeFiltered = ("" + dataArray[i]) != "";
+        i++;
     }
 
     createEmpty() {
@@ -1582,13 +1585,13 @@ class StatusData extends WuxDatabaseData {
         this.name = "";
         this.fieldName = "";
         this.group = "";
-        this.description = "";
         this.shortDescription = "";
         this.points = 0;
         this.endsOnRoundStart = false;
         this.endsOnTrigger = false;
         this.hasRanks = false;
         this.isBeneficial = false;
+        this.canBeFiltered = false;
     }
 
     createDefinition(baseDefinition) {
@@ -1601,11 +1604,12 @@ class StatusData extends WuxDatabaseData {
         definition.endsOnTrigger = this.endsOnTrigger;
         definition.hasRanks = this.hasRanks;
         definition.isBeneficial = this.isBeneficial;
+        definition.canBeFiltered = this.canBeFiltered;
         return definition;
     }
     
     getDescriptions() {
-        let output = [this.description];
+        let output = this.descriptions;
         if (this.endsOnRoundStart && this.endsOnTrigger) {
             output.push(`This ${this.group} ends when it is triggered or at the start of the next round.`);
         }
@@ -2012,7 +2016,7 @@ class DefinitionData extends WuxDatabaseData {
     
     addSubDefinition(subDefinition) {
         this.title = `${this.title} [${subDefinition.getTitle()}]`;
-        this.descriptions = this.descriptions.concat(["", subDefinition.getTitle()]);
+        this.descriptions = this.descriptions.concat(["", `[${subDefinition.getTitle()}]`]);
         this.descriptions = this.descriptions.concat(subDefinition.descriptions);
     }
 }
@@ -2134,6 +2138,7 @@ class StatusDefinitionData extends DefinitionData {
         this.endsOnTrigger = json.endsOnTrigger;
         this.hasRanks = json.hasRanks;
         this.isBeneficial = json.isBeneficial;
+        this.canBeFiltered = json.canBeFiltered;
     }
 
     setImportSheetExtraData(property, value) {
@@ -2153,6 +2158,9 @@ class StatusDefinitionData extends DefinitionData {
             case "isBeneficial":
                 this.isBeneficial = value.toLowerCase() == "true";
                 break;
+            case "canBeFiltered":
+                this.canBeFiltered = value.toLowerCase() == "true";
+                break;
         }
     }
 
@@ -2164,6 +2172,7 @@ class StatusDefinitionData extends DefinitionData {
         this.endsOnTrigger = false;
         this.hasRanks = false;
         this.isBeneficial = false;
+        this.canBeFiltered = false;
     }
 }
 
@@ -2261,7 +2270,7 @@ class TechniqueDisplayData {
         this.actionsDesc = [];
         this.actionType = technique.action;
         
-        let actionTypeDef = WuxDef.Get(`Title_${technique.action}Action`);
+        let actionTypeDef = WuxDef.Get(`FilterType_${technique.action}Action`);
         this.actionsDesc.push(`[${actionTypeDef.getTitle()}]`);
         this.actionsDesc = this.actionsDesc.concat(actionTypeDef.descriptions);
         
@@ -2290,27 +2299,7 @@ class TechniqueDisplayData {
 
     setTechTargetData(technique) {
 
-        if (technique.target == "Self") {
-            this.range = "Self";
-            this.targetType = 0;
-            this.targetDesc = WuxDef.Get("Title_RangeSelf").descriptions;
-            return;
-        }
-        
-        let rangeDesc = WuxDef.Get("Title_Range");
-        
-        if (technique.range != "") {
-            this.range = technique.range;
-            if (!this.range.startsWith("1")) {
-                rangeDesc = WuxDef.Get("Title_RangeDistance");
-            }
-        }
-        else if (technique.target != "") {
-            this.range = 1;
-        }
-        else {
-            this.range = "";
-        }
+        let rangeDesc = WuxDef.Get(technique.rangeType);
         
         if (technique.target != "") {
             let singleTargetTypes = ["Target", "Object", "Space"];
@@ -2672,7 +2661,7 @@ class BaseTechniqueEffectDisplayData {
                     this.effectType = effect.type;
                     this.addDefintionToEffectDescription(WuxDef.Get(`Trait_Damage${this.evasionDefense}`));
                 }
-                this.formatDamageEffect(effect);
+                this.formatDamageEffect(effect, technique);
                 break;
             case "HP":
                 this.effectType = effect.type;
@@ -2815,14 +2804,14 @@ class BaseTechniqueEffectDisplayData {
         let subType = subTypeParts[0];
         
         let traits = "";
-        if (effect.traits.includes("AP")) {
+        if (technique.impacts.indexOf("AP") >= 0) {
             traits += "[AP] ";
             if (!this.includedAp) {
                 this.includedAp = true;
                 this.addDefintionToEffectDescription(WuxDef.Get("Trait_AP"));
             }
         }
-        if (effect.traits.includes("Brutal")) {
+        if (technique.impacts.indexOf("Brutal") >= 0) {
             traits += "[Brutal] ";
             if (!this.includedBrutal) {
                 this.includedBrutal = true;

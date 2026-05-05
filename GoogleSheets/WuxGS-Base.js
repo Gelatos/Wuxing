@@ -1375,7 +1375,7 @@ var DisplayPopups = DisplayPopups || (function () {
         },
 
         printInspectionPopup = function () {
-            return buildBasePopup(WuxDef.GetAttribute("Popup_InspectPopupActive"), InspectionPopup.Print());
+            return buildBasePopup(WuxDef.GetAttribute("Popup_InspectPopupActive"), InspectionPopup.Print(), InspectionPopup.PrintHeader());
         },
 
         printFilterPopup = function () {
@@ -1387,7 +1387,7 @@ var DisplayPopups = DisplayPopups || (function () {
                 <div class="wuxPopupHeader">
                     <span class="wuxPopupInnerHeader" name="${WuxDef.GetAttribute("Popup_PopupName")}">Name</span>
                     ${popupHeaderContents}
-                    ${WuxSheetMain.Button(WuxDef.GetAttribute("Popup_PopupActive"), "Exit")}
+                    ${WuxSheetMain.Button(WuxDef.GetAttribute("Popup_PopupActive"), "Exit", "wuxPopupClose")}
                 </div>
                 ${popupContents}
             </div>`;
@@ -1402,9 +1402,12 @@ var DisplayPopups = DisplayPopups || (function () {
                     let contents = "";
                     contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Popup_InspectSelectType"), "") + "\n";
                     contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Popup_InspectSelectId"), "") + "\n";
-                    contents += buildInspectionPopupContentData(printAddButton() + buildItemTemplate() + buildTechniqueTemplate());
+                    contents += buildInspectionPopupContentData(buildItemTemplate() + buildTechniqueTemplate());
                     contents += buildInspectionPopupContentData(buildItemRepeater());
                     return `<div class="wuxInspectionPopupContents">${contents}</div>`;
+                },
+                printHeader = function () {
+                    return printAddButton();
                 },
 
                 buildInspectionPopupContentData = function (contents) {
@@ -1466,7 +1469,8 @@ var DisplayPopups = DisplayPopups || (function () {
                 }
 
             return {
-                Print: print
+                Print: print,
+                PrintHeader: printHeader
             }
         }()),
 
@@ -1475,7 +1479,8 @@ var DisplayPopups = DisplayPopups || (function () {
     
             var
                 print = function () {
-                    let contents = buildTechniqueFilters();
+                    let contents = `${buildTechniqueFilters()}
+                    ${printApplyFilterButton()}`;
                     return `<div class="wuxFilterPopupContents">${contents}</div>`;
                 },
                 printHeader = function () {
@@ -1483,21 +1488,14 @@ var DisplayPopups = DisplayPopups || (function () {
                 },
                 
                 buildTechniqueFilters = function () {
-                    return `${buildPopupContentRow(printApplyFilterButton())}
-                    
-                    ${buildPopupContentRow(printApplyFilterButton())}`;
+                    let filterDefinitions = new TechniqueFilterDefinitions("TechFilterPopup");
+                    let filterDisplay = new FilterDisplayBuilder(filterDefinitions);
+                    return `${filterDisplay.print()}`;
                 },
 
                 printApplyFilterButton = function () {
                     let applyFilterDef = WuxDef.Get("Popup_ApplyFilter");
                     return WuxSheetMain.Button(applyFilterDef.getAttribute(), `<span">${applyFilterDef.getTitle()}</span>`);
-                },
-
-                buildPopupContentRow = function (contents) {
-                    return `<div class="wuxFilterPopupContentRow">${contents}</div>`;
-                },
-                buildPopupContentData = function (contents) {
-                    return `<div class="wuxFilterPopupContentData">${contents}</div>`;
                 }
     
             return {

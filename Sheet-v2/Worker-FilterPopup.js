@@ -3,6 +3,8 @@
 class FilterPopupAttributeHandler extends BasePopupAttributeHandler {
     constructor(attrHandler) {
         super(attrHandler);
+        this.baseDefinition = WuxDef.Get("TechFilterPopup");
+        this.filterDefinitions = new TechniqueFilterDefinitions("TechFilterPopup");
     }
 
     show(popupTitleDefinitionName) {
@@ -18,6 +20,10 @@ class FilterPopupAttributeHandler extends BasePopupAttributeHandler {
     }
     resetFilterVariables() {
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_FilterPopupType"), "");
+        let variables = this.filterDefinitions.getVariables();
+        variables.forEach((variable) => {
+            this.attrHandler.addUpdate(variable, "");
+        });
     };
 }
 
