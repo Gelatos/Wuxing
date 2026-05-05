@@ -861,6 +861,9 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             let contents = "";
             let refreshTechDef = WuxDef.Get("RefreshTech");
             contents += WuxSheetMain.Button(refreshTechDef.getAttribute(), refreshTechDef.getTitle(), "wuxSizePercent");
+            let sectionDefinition = WuxDef.Get("Action_FormeTechniques");
+            let refreshField = sectionDefinition.getAttribute(WuxDef._refresh);
+            contents += WuxSheetMain.Button(refreshField, "Update Techniques", "wuxSizePercent");
 
             let titleDefinition = WuxDef.Get("Action_Techniques");
             return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), contents, true);
@@ -2006,7 +2009,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
 
     const getSortedData = function (filterData) {
         let filterOutput = getSortedGroup(filterData.property, filterData.value[0]);
-        for (let i = 1; i < filterData.length; i++) {
+        for (let i = 1; i < filterData.value.length; i++) {
             let nextFilter = getSortedGroup(filterData.property, filterData.value[i]);
             nextFilter.forEach(item => {
                 if (!filterOutput.includes(item)) {
@@ -3481,7 +3484,7 @@ class TechniqueAssessment {
                     else if (!this.isCombat) {
                         this.addImpactTrait("TechFilterType_Utility");
                     }
-                    this.addImpactTrait(`Trait_Apply:${state.name}`);
+                    this.addImpactTrait(state.name);
                 }
                 break;
             case "Trigger":
@@ -3491,7 +3494,6 @@ class TechniqueAssessment {
                 this.addPointsRubric(value, message);
                 this.addDefensePointsRubric(effect, value, message);
                 this.addTargetedPointsRubric(effect, value);
-                this.addImpactTrait(`Trait_Trigger:${state.name}`);
                 break;
             case "Remove":
                 value = Math.floor(parseInt(state.points) * 0.75);

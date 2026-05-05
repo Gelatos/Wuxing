@@ -499,13 +499,11 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     text-transform: capitalize;
 }
 
-.wuxPopupHeader .wuxButton
+.wuxPopup .wuxButton
 {
-    flex: 1;
     min-width: 20px;
     width: auto;
     padding: 0;
-    margin-right: 20px;
 
     background: #aae1ff;
     text-decoration: none;
@@ -513,17 +511,23 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     cursor: pointer;
 }
 
-.wuxPopupHeader .wuxButton.wuxPopupClose
+.wuxPopupHeader .wuxButton
+{
+    flex: 1;
+    margin-right: 20px;
+}
+
+.wuxPopup .wuxButton.wuxPopupClose
 {
     background: #ffaaaa;
 }
 
-.wuxPopupHeader .wuxButton span
+.wuxPopup .wuxButton span
 {
     font-weight: bold;
 }
 
-.wuxPopupHeader .wuxButton:hover {
+.wuxPopup .wuxButton:hover {
     background: #0056b3;
 }
 

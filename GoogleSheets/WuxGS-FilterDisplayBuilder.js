@@ -30,7 +30,8 @@ class FilterDisplayBuilder {
         }
 
         return `${this.printFilterRow(WuxSheetMain.Header(`<span>${baseDefinition.getTitle()}</span>`))}
-        ${optionsOutput}`;
+        ${optionsOutput}
+        ${WuxSheetMain.Row("&nbsp;")}`;
     }
     printFilterOption(optionDefinition) {
         return this.printFilterData(WuxSheetMain.InteractionElement.BuildCheckboxInput(

@@ -185,7 +185,7 @@ class Database extends Dictionary {
     
     getSortedData(filterData) {
         let filterOutput = this.getSortedGroup(filterData.property, filterData.value[0]);
-        for (let i = 1; i < filterData.length; i++) {
+        for (let i = 1; i < filterData.value.length; i++) {
             let nextFilter = this.getSortedGroup(filterData.property, filterData.value[i]);
             nextFilter.forEach(item => {
                 if (!filterOutput.includes(item)) {
@@ -312,6 +312,12 @@ class ExtendedTechniqueDatabase extends Database {
     add(key, value) {
         super.add(key, value);
 
+        if (value.group.indexOf(";") >= 0) {
+            let groups = value.group.split(";");
+            for (let i = 0; i < groups.length; i++) {
+                this.addSortingGroup("group", groups[i].trim(), value);
+            }
+        }
         let styles = value.techSet.split(";");
         for (let i = 0; i < styles.length; i++) {
             this.addSortingGroup("style", styles[i].trim(), value);
@@ -2300,6 +2306,22 @@ class TechniqueDisplayData {
     setTechTargetData(technique) {
 
         let rangeDesc = WuxDef.Get(technique.rangeType);
+        if (technique.target == "Self") {
+            this.range = "Self";
+            this.targetType = 0;
+            this.targetDesc = rangeDesc.descriptions;
+            return;
+        }
+
+        if (technique.range != "") {
+            this.range = technique.range;
+        }
+        else if (technique.target != "") {
+            this.range = 1;
+        }
+        else {
+            this.range = 0;
+        }
         
         if (technique.target != "") {
             let singleTargetTypes = ["Target", "Object", "Space"];

@@ -540,8 +540,11 @@ var ActionBuilder = ActionBuilder || (function () {
         },
         listenerTechniquesFilterPopup = function () {
             return `${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Action_FormeTechniques", WuxDef._learn)],
+                `WuxWorkerFilterPopup.OpenFormeTechnique()`, true)}
+                ${WuxSheetBackend.OnChange(
                 [WuxDef.GetVariable("Action_FormeTechniques", WuxDef._filter)],
-                `WuxWorkerFilterPopup.OpenFormeTechnique()`, true)}`;
+                `WuxWorkerFilterPopup.RemoveFilter()`, true)}`;
         }
     return {
         Print: print
@@ -558,7 +561,8 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerCloseSubMenu();
             output += listenerClosePopup();
             output += listenerUpdateRepeatingItemInspectPopupItems();
-            output += listenerInspectPopupAddButton();
+            output += listenerInspectPopupButtons();
+            output += listenerFilterPopupButtons();
             return output;
         },
         listenerOpenSubMenu = function () {
@@ -627,7 +631,7 @@ var PopupBuilder = PopupBuilder || (function () {
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
-        listenerInspectPopupAddButton = function () {
+        listenerInspectPopupButtons = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Popup_InspectAddClick")}`];
             let output = `WuxWorkerInspectPopup.AddSelectedInspectElement()`;
 
@@ -639,6 +643,12 @@ var PopupBuilder = PopupBuilder || (function () {
             let output = `WuxWorkerInspectPopup.SelectInspectionItemFromActiveGroup(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerFilterPopupButtons = function () {
+            return `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Popup_ApplyFilter")}`],
+                `WuxWorkerFilterPopup.ApplyFilter()`, false)}
+                ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Popup_ClearFilter")}`],
+                `WuxWorkerFilterPopup.ClearFilter()`, false)}`;
         }
     return {
         Print: print

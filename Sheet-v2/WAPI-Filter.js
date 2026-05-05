@@ -11,16 +11,17 @@ class BaseFilteredDefinitions {
         return Object.keys(this.definitionDatabase);
     }
     getDefinitions(key) {
-        let definitions = [];
-        if (key == undefined) {
-            let keys = this.getKeys();
-            for (let i = 0; i < keys.length; i++) {
-                let key = keys[i];
-                definitions = definitions.concat(this.definitionDatabase[key]);
-            }
+        if (this.definitionDatabase[key] == undefined) {
+            return [];
         }
-        else {
-            definitions = this.definitionDatabase[key];
+        return this.definitionDatabase[key];
+    }
+    getAllDefinitions() {
+        let definitions = [];
+        let keys = this.getKeys();
+        for (let i = 0; i < keys.length; i++) {
+            let key = keys[i];
+            definitions = definitions.concat(this.definitionDatabase[key]);
         }
         return definitions;
     }
@@ -41,6 +42,13 @@ class BaseFilteredDefinitions {
     getVariables(key, suffix) {
         let output = [];
         this.getDefinitions(key).forEach(definition => {
+            output.push(this.getCompoundVariable(definition, suffix));
+        });
+        return output;
+    }
+    getAllVariables(suffix) {
+        let output = [];
+        this.getAllDefinitions().forEach(definition => {
             output.push(this.getCompoundVariable(definition, suffix));
         });
         return output;

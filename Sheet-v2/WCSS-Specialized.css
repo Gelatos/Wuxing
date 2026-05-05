@@ -398,6 +398,11 @@ div.wuxStyleHeaderButton .wuxStyleHeaderButtonIcon {
     font-size: 24px;
 }
 
+div.wuxStyleHeaderButton .wuxStyleHeaderButtonIconClear {
+    font-size: 18px;
+    color: red;
+}
+
 div.wuxStyleHeaderButton:hover {
     background: none;
     box-shadow: none;

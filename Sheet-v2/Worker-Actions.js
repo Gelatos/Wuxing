@@ -480,8 +480,8 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
     'use strict';
 
     const
-        updateAllFormeActions = function (attributeHandler) {
-            let formeTech = new FormeTechniqueDatabase(attributeHandler);
+        updateAllFormeActions = function (attributeHandler, filters) {
+            let formeTech = new FormeTechniqueDatabase(attributeHandler, filters);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 formeTech.setupPostGetAttr(attrHandler);
                 formeTech.registerTechDictionary(attrHandler);
@@ -892,16 +892,22 @@ class FormeTechniqueSort {
     }
 }
 class FormeTechniqueDatabase {
-    constructor(attributeHandler) {
+    constructor(attributeHandler, filters) {
         this.techDictionary = new Dictionary();
         this.techSorter = new FormeTechniqueSort();
         this.sortList = [];
         this.endSortList = [];
         this.userAffinities = "";
         this.userCr = 0;
-        
-        if (attributeHandler == undefined) {
-            attributeHandler = new WorkerAttributeHandler();
+
+        this.filters = 0;
+        if (Array.isArray(filters)) {
+            Debug.Log(`Working with: ${JSON.stringify(filters)}`);
+            let filteredTechs = WuxTechs.Filter(filters);
+            this.filters = [];
+            filteredTechs.forEach((technique) => {
+                this.filters.push(technique.name);
+            })
         }
 
         this.boosterFieldName = WuxDef.GetVariable("BoostStyleTech");
@@ -1042,12 +1048,13 @@ class FormeTechniqueDatabase {
         return undefined;
     }
     createTechDictionaryTechnique(technique, techniqueRank, isActive) {
+        let isVisible = isActive && this.checkTechniqueIsVisibleInFilter(technique);
         return {
             technique: technique,
             techniqueRank: techniqueRank,
             isSet: false,
             isActive: isActive,
-            isVisible: isActive && this.checkTechniqueIsVisibleInFilter(technique),
+            isVisible: isVisible,
             sortOrder: -1
         };
         
@@ -1088,7 +1095,10 @@ class FormeTechniqueDatabase {
         return true;
     }
     checkTechniqueIsVisibleInFilter(technique) {
-        return true;
+        if (this.filters == 0) {
+            return true;
+        }
+        return this.filters.includes(technique.name);
     }
     
     setSortOrder() {

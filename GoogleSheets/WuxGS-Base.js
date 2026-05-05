@@ -1248,11 +1248,11 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let repeaterDefinition = WuxDef.Get("RepeatingFormeTech");
                     let repeatingVariable = repeaterDefinition.getVariable();
                     let sectionDefinition = WuxDef.Get("Action_FormeTechniques");
-                    let refreshField = sectionDefinition.getAttribute(WuxDef._refresh);
-                    let filterField = sectionDefinition.getAttribute(WuxDef._filter);
+                    let filterField = sectionDefinition.getAttribute(WuxDef._learn);
+                    let removeFilterField = sectionDefinition.getAttribute(WuxDef._filter);
 
                     let header = getFormeSectionHeader(
-                        `<span>${sectionDefinition.getTitle()}</span>`, refreshField, filterField);
+                        `<span>${sectionDefinition.getTitle()}</span>`, filterField, removeFilterField);
                     
                     let actionDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible"), 
                         printFormTechniqueFullActionDisplay());
@@ -1297,17 +1297,17 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     ${WuxSheetMain.Row("&nbsp;")}`;
                 },
 
-                getFormeSectionHeader = function (headerName, refreshField, filterField) {
+                getFormeSectionHeader = function (headerName, filterField, removeFilterField) {
                     let headerButtons = "";
                     let loadFormeField = WuxDef.GetAttribute("Action_FormeLoadCount");
                     let loadFormeDef = WuxDef.Get("Action_FormeLoad");
                     headerButtons += WuxSheetMain.HiddenField(loadFormeField, WuxSheetMain.Button(loadFormeDef.getAttribute(),
                         `<span class='wuxStyleHeaderButtonIcon'>&#10227;</span>${loadFormeDef.getTitle(`<span name="${loadFormeField}"></span>`)}`, 
                         "wuxStyleHeaderButton"));
-                    headerButtons += WuxSheetMain.Button(refreshField,
-                        "<span class='wuxStyleHeaderButtonIcon'>&#10227;</span> Update", "wuxStyleHeaderButton");
                     headerButtons += WuxSheetMain.Button(filterField,
                         "<span class='wuxStyleHeaderButtonIcon'>&#9776;</span> Filter", "wuxStyleHeaderButton");
+                    headerButtons += WuxSheetMain.HiddenSpanField(removeFilterField, WuxSheetMain.Button(removeFilterField,
+                        "<span class='wuxStyleHeaderButtonIconClear'>&#10008;</span> Remove Filter", "wuxStyleHeaderButton", "0"));
 
                     headerButtons = `<span class="wuxStyleHeaderButtonContainer">${headerButtons}</span>`;
                     return headerButtons + headerName;
@@ -1479,7 +1479,8 @@ var DisplayPopups = DisplayPopups || (function () {
     
             var
                 print = function () {
-                    let contents = `${buildTechniqueFilters()}
+                    let contents = `${printClearFilterButton()}
+                    ${buildTechniqueFilters()}
                     ${printApplyFilterButton()}`;
                     return `<div class="wuxFilterPopupContents">${contents}</div>`;
                 },
@@ -1496,6 +1497,11 @@ var DisplayPopups = DisplayPopups || (function () {
                 printApplyFilterButton = function () {
                     let applyFilterDef = WuxDef.Get("Popup_ApplyFilter");
                     return WuxSheetMain.Button(applyFilterDef.getAttribute(), `<span">${applyFilterDef.getTitle()}</span>`);
+                },
+
+                printClearFilterButton = function () {
+                    let clearFilterDef = WuxDef.Get("Popup_ClearFilter");
+                    return WuxSheetMain.Button(clearFilterDef.getAttribute(), `<span">${clearFilterDef.getTitle()}</span>`);
                 }
     
             return {
