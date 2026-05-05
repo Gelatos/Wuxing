@@ -453,9 +453,8 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
 
     min-width: 200px;
     width: 80%;
-    max-width: 600px;
+    max-width:720px;
     height: 80%;
-    padding: 20px;
     overflow: auto;
     
     background: white;
@@ -463,17 +462,26 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.wuxPopup .wuxInteractiveContent-flag:hover + .wuxInteractiveContent
+{
+    background: #eae7e7;
+    border-radius: 3px;
+}
+
 .wuxPopupHeader
 {
-    position: relative;
+    position: sticky;
+    left: 0;
+    top: 0;
     display: flex;
     align-content: flex-start;
     margin-bottom: 15px;
-    width: calc(100% - 15px);
+    width: calc(100% - 30px);
     height: 22px;
-    padding: 3px 3px 3px 6px;
+    padding: 13px 23px 23px 16px;
     z-index: 1;
 
+    background: white;
     border-bottom: 3px solid;
     border-color: transparent transparent #71B9DE transparent;
     border-radius: 10px 10px 0 0;
@@ -482,7 +490,7 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
 .wuxPopupHeader .wuxPopupInnerHeader
 {
     flex: 5;
-
+    
     color: #1d1e1f;
     font-family: "Candal", serif;
     font-size: 16px;
@@ -497,12 +505,22 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     min-width: 20px;
     width: auto;
     padding: 0;
+    margin-right: 20px;
 
-    background: #71B9DE;
-    color: white;
+    background: #aae1ff;
     text-decoration: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.wuxPopupHeader .wuxButton.wuxPopupClose
+{
+    background: #ffaaaa;
+}
+
+.wuxPopupHeader .wuxButton span
+{
+    font-weight: bold;
 }
 
 .wuxPopupHeader .wuxButton:hover {
@@ -515,7 +533,8 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     display: flex;
     flex-wrap: wrap;
     justify-content: left;
-    width: 100%;
+    width: calc(100% - 50px);
+    margin: 20px;
 }
 
 .wuxInspectionPopupContents
@@ -526,6 +545,7 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
 .wuxInspectionPopupContentData,
 .wuxFilterPopupContentData 
 {
+    display: inline-block;
     flex: 1;
 }
 
@@ -545,7 +565,7 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
 .wuxFilterPopupContentData .wuxHeader2
 {
     margin: 0 10px 10px 10px;
-    width: 80%;
+    width: calc(80% - 20px);
 
     color: #3e3e3e;
     
@@ -557,7 +577,7 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
 .wuxFilterPopupContentData .wuxDescription
 {
     margin: 0 20px 10px 20px;
-    width: 80%;
+    width: calc(80% - 20px);
     
     color: #3e3e3e;
 }

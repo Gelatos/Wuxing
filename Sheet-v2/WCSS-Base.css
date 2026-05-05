@@ -246,7 +246,7 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment
 .wuxFloatSidebar
 {
     position: sticky;
-    left: 0px;
+    left: 0;
     padding-bottom: 5px;
 
     background: linear-gradient(to bottom, #3A3D3EFF 85%, #3A3D3E00 100%);
@@ -256,7 +256,7 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment
 {
     width: 100%;
     flex-basis: 100%;
-    top: 0px;
+    top: 0;
     z-index: 9999;
 }
 
@@ -958,7 +958,9 @@ textarea.wuxInput
 .wuxPostButton
 {
 
-    background: linear-gradient(to bottom, #f4f6f8 0%, #939393 80%);
+    background: linear-gradient(to bottom, 
+    #f4f6f8 0%,
+    #e1e2e4 80%);
     text-shadow: none;
     box-shadow: none;
     border: 1px solid black;
@@ -989,7 +991,10 @@ div.wuxPostButton
 button[type=roll].wuxButton:hover,
 button[type=roll].wuxSmallButton:hover
 {
-    background: linear-gradient(to bottom, #f4f6f8 0%, #cacbcf 70%, #535353 100%);
+    background: linear-gradient(to bottom, 
+    #f4f6f8 0%,
+    #cacbcf 70%,
+    #a8aaac 100%);
     box-shadow: #1d1e1f 0 0 5px;
 }
 
