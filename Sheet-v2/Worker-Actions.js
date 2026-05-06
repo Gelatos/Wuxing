@@ -365,25 +365,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
 
         return selectedElement;
     };
-
-    const inspectTechnique = function (repeatingSectionName, inspectionField, suffix, inspectionTitle) {
-        let styleRepeater = new WorkerRepeatingSectionHandler(repeatingSectionName);
-        let selectedId = styleRepeater.getIdFromFieldName(inspectionField);
-
-        styleRepeater.getIds(function (techRepeater) {
-            let fieldName = WuxDef.GetUntypedVariable("Action", "TechTrueName", suffix);
-            WuxWorkerInspectPopup.OpenTechniqueInspection(function (attrHandler) {
-                    Debug.Log(`Adding ${fieldName} to getters`);
-                    attrHandler.addMod(techRepeater.getFieldName(selectedId, fieldName));
-                },
-                function (attrHandler, itemPopupRepeater) {
-                    attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
-                    attrHandler.addUpdate(techRepeater.getFieldName(selectedId, WuxDef.GetVariable("Action_Actions")), "0");
-                    return populateInspectionElements(attrHandler, itemPopupRepeater, techRepeater, inspectionTitle, selectedId, fieldName);
-                }
-            );
-        });
-    };
     const rankTechnique = function (attributeHandler, repeatingSectionName, sourceFieldName, rankChange) {
         let styleWorker = new WuxStyleWorkerBuild();
         attributeHandler.addMod([styleWorker.attrBuildDraft, styleWorker.attrMax]);
@@ -659,10 +640,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         rankDownTechnique = function (eventinfo, repeatingSection) {
             let attributeHandler = new WorkerAttributeHandler();
             rankTechnique(attributeHandler, repeatingSection, eventinfo.sourceAttribute, -1);
-        },
-        inspectFormeTechnique = function (eventinfo, suffix) {
-            Debug.Log(`Opening Forme Technique Popup with id ${eventinfo.sourceAttribute}`);
-            inspectTechnique("RepeatingFormeTech", eventinfo.sourceAttribute, suffix, "All Forme Techniques");
         },
 
         populateStyleActions = function (repeatingSectionName, repeatingSectionIndex, styleName, tier) {
@@ -1060,19 +1037,13 @@ class FormeTechniqueDatabase {
         
     }
     checkTechniqueIsEquipped(technique, styleName) {
-        if (technique.forms.includes("Permanent")) {
-            return true;
-        }
-
         if (styleName.includes(";")) {
             let styleParts = styleName.split(";").map(s => s.trim());
             if (!styleParts.some(part => this.equippedSlots.includes(part))) {
-                Debug.Log(`${technique.name} is not equipped`);
                 return false;
             }
         }
         else if (styleName != "" && !this.equippedSlots.includes(styleName)) {
-            Debug.Log(`${technique.name} is not equipped`);
             return false;
         }
         return true;
@@ -1098,7 +1069,11 @@ class FormeTechniqueDatabase {
         if (this.filters == 0) {
             return true;
         }
-        return this.filters.includes(technique.name);
+        let value = this.filters.includes(technique.name);
+        if (!value) {
+            Debug.Log(`${technique.name} is not visible due to filters.`);
+        }
+        return value;
     }
     
     setSortOrder() {

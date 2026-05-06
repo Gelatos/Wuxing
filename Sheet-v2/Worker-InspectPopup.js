@@ -23,26 +23,17 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
 }
 
 var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
-    const showPopup = function (popupTitleDefinitionName, updateCallback, getAttrCallback) {
-        let attributeHandler = new WorkerAttributeHandler();
+    const showPopup = function (attributeHandler, popupTitleDefinitionName) {
 
         getInspectionVariables(attributeHandler);
-        updateCallback(attributeHandler);
         attributeHandler.addGetAttrCallback(function (attrHandler) {
             let inspectPopup = new InspectPopupAttributeHandler(attrHandler);
             inspectPopup.show(popupTitleDefinitionName);
         });
-        attributeHandler.addGetAttrCallback(getAttrCallback);
-        attributeHandler.run();
     };
-    const closePopup = function () {
-        let attributeHandler = new WorkerAttributeHandler();
-
-        attributeHandler.addGetAttrCallback(function (attrHandler) {
-            let inspectPopup = new InspectPopupAttributeHandler(attrHandler);
-            inspectPopup.hide();
-        });
-        attributeHandler.run();
+    const closePopup = function (attrHandler) {
+        let inspectPopup = new InspectPopupAttributeHandler(attrHandler);
+        inspectPopup.hide();
     };
     const getInspectionVariables = function (attrHandler) {
         attrHandler.addMod([WuxDef.GetVariable("Popup_InspectSelectType"), WuxDef.GetVariable("Popup_InspectSelectId")]);
@@ -146,56 +137,71 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
 
         return WuxDef.GetTitle("Gear_Equip");
     };
+    
+    const populateInspectionPopupWithItems = function (attributeHandler, itemPopupRepeater, setSelectedItemCallback) {
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
+    
+            let selectedItem = setSelectedItemCallback(attrHandler, itemPopupRepeater);
+            if (selectedItem == null) {
+                Debug.LogError(`No items found`);
+                closePopup(attrHandler);
+            } else {
+                setInspectionSelection(attrHandler, itemPopupRepeater.definitionId, selectedItem.id);
+                let itemAttributeHandler = new ItemDataAttributeHandler(attrHandler, "Popup");
+                itemAttributeHandler.setItemInfo(selectedItem.item);
+            }
+            itemPopupRepeater.removeAllIdsAfterIteratorIndex();
+        })
+    };
+    const populateInspectionPopupWithTechniques = function (attributeHandler, techniquePopupRepeater, setSelectedItemCallback) {
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
+    
+            let selectedItem = setSelectedItemCallback(attrHandler, techniquePopupRepeater);
+            if (selectedItem == null) {
+                Debug.LogError(`No items found`);
+                closePopup(attrHandler);
+            } else {
+                setInspectionSelection(attrHandler, techniquePopupRepeater.definitionId, selectedItem.id);
+                let itemAttributeHandler = new ItemDataAttributeHandler(attrHandler, "Popup");
+                itemAttributeHandler.clearItemInfo(attrHandler);
+                let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Popup");
+                techniqueAttributeHandler.setTechniqueInfo(selectedItem.item);
+                techniqueAttributeHandler.setVisibilityAttribute(true);
+            }
+    
+            techniquePopupRepeater.removeAllIdsAfterIteratorIndex();
+        })
+    };
     'use strict';
 
-    const openItemInspection = function (updateCallback, setSelectedItemCallback) {
+    const openItemInspection = function (attributeHandler, setSelectedItemCallback) {
             Debug.Log("Open Item Popup");
-            let repeaterName = "ItemPopupValues";
-
-            let itemPopupValuesRepeatingSection = new WorkerRepeatingSectionHandler(repeaterName);
+            let itemPopupValuesRepeatingSection = new WorkerRepeatingSectionHandler("ItemPopupValues");
             itemPopupValuesRepeatingSection.getIds(function (itemPopupRepeater) {
-                showPopup("Popup_ItemInspectionName", updateCallback, function (attrHandler) {
-                    attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
-
-                    let selectedItem = setSelectedItemCallback(attrHandler, itemPopupRepeater);
-                    if (selectedItem == null) {
-                        Debug.LogError(`No items found`);
-                        closePopup();
-                    } else {
-                        setInspectionSelection(attrHandler, repeaterName, selectedItem.id);
-                        let itemAttributeHandler = new ItemDataAttributeHandler(attrHandler, "Popup");
-                        itemAttributeHandler.setItemInfo(selectedItem.item);
-                    }
-                    itemPopupRepeater.removeAllIdsAfterIteratorIndex();
-                });
+                showPopup(attributeHandler, "Popup_ItemInspectionName");
+                populateInspectionPopupWithItems(attributeHandler, itemPopupRepeater, setSelectedItemCallback);
             });
         },
 
-        openTechniqueInspection = function (updateCallback, setSelectedItemCallback) {
+        openTechniqueInspection = function (attributeHandler, setSelectedItemCallback) {
             Debug.Log("Open Technique Popup");
             let repeaterName = "ItemPopupValues";
 
             let techniquePopupValuesRepeatingSection = new WorkerRepeatingSectionHandler(repeaterName);
             techniquePopupValuesRepeatingSection.getIds(function (techniquePopupRepeater) {
-                showPopup("Popup_TechniqueInspectionName", updateCallback, function (attrHandler) {
-                    attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
-
-                    let selectedItem = setSelectedItemCallback(attrHandler, techniquePopupRepeater);
-                    if (selectedItem == null) {
-                        Debug.LogError(`No items found`);
-                        closePopup();
-                    } else {
-                        setInspectionSelection(attrHandler, repeaterName, selectedItem.id);
-                        let itemAttributeHandler = new ItemDataAttributeHandler(attrHandler, "Popup");
-                        itemAttributeHandler.clearItemInfo(attrHandler);
-                        let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Popup");
-                        techniqueAttributeHandler.setTechniqueInfo(selectedItem.item);
-                        techniqueAttributeHandler.setVisibilityAttribute(true);
-                    }
-
-                    techniquePopupRepeater.removeAllIdsAfterIteratorIndex();
-                });
+                showPopup(attributeHandler, "Popup_TechniqueInspectionName");
+                populateInspectionPopupWithTechniques(attributeHandler, techniquePopupRepeater, setSelectedItemCallback);
             });
+        },
+        close = function () {
+            let attributeHandler = new WorkerAttributeHandler();
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                closePopup(attrHandler);
+            });
+            attributeHandler.run();
         },
 
         selectInspectionItemFromActiveGroup = function (eventinfo) {
@@ -275,7 +281,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         OpenItemInspection: openItemInspection,
         OpenTechniqueInspection: openTechniqueInspection,
         SelectInspectionItemFromActiveGroup: selectInspectionItemFromActiveGroup,
-        ClosePopup: closePopup,
+        Close: close,
         AddSelectedInspectElement: addSelectedInspectElement
     };
 }());

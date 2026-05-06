@@ -131,17 +131,15 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
         seeTechniques = function (eventinfo) {
             let jobName = eventinfo.newValue;
             Debug.Log(`See Techniques for ${jobName}`);
-            WuxWorkerInspectPopup.OpenTechniqueInspection(function () {
-                },
-                function (attrHandler, itemPopupRepeater) {
-                    
-                    attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
-                    attrHandler.addUpdate(eventinfo.sourceAttribute, "0");
-                    attrHandler.addUpdate(WuxDef.GetVariable(WuxDef.GetName(jobName, WuxDef.Get("Job")), WuxDef._expand), "0");
+            let attributeHandler = new WorkerAttributeHandler();
+            WuxWorkerInspectPopup.OpenTechniqueInspection(attributeHandler, function (attrHandler, itemPopupRepeater) {
+                attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
+                attrHandler.addUpdate(eventinfo.sourceAttribute, "0");
+                attrHandler.addUpdate(WuxDef.GetVariable(WuxDef.GetName(jobName, WuxDef.Get("Job")), WuxDef._expand), "0");
 
-                    return populateJobInspectionTechniques(attrHandler, itemPopupRepeater, jobName);
-                }
-            );
+                return populateJobInspectionTechniques(attrHandler, itemPopupRepeater, jobName);
+            });
+            attributeHandler.run();
         };
 
     return {

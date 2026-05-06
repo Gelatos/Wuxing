@@ -232,22 +232,35 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
 
         let weaponSlotDef = WuxDef.Get("Gear_WeaponSlot");
         let equipSlotDef = WuxDef.Get("Gear_EquipmentSlot");
+        let attributeHandler = new WorkerAttributeHandler();
+        attributeHandler.addMod(weaponSlotDef.getVariable(1));
+        for (let i = 1; i <= 9; i++) {
+            attributeHandler.addMod(equipSlotDef.getVariable(i));
+        }
         
-        WuxWorkerInspectPopup.OpenItemInspection(function (attrHandler) {
-                attrHandler.addMod(weaponSlotDef.getVariable(1));
-                for (let i = 1; i <= 9; i++) {
-                    attrHandler.addMod(equipSlotDef.getVariable(i));
-                }
-            },
-            function (attrHandler, popupRepeater) {
-                let styleName = attrHandler.parseString(styleFieldName);
-                attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
-                attrHandler.addUpdate(styleFieldName + WuxDef._expand, "0");
-                let selectedElement = null;
+        WuxWorkerInspectPopup.OpenItemInspection(attributeHandler, function (attrHandler, popupRepeater) {
+            let styleName = attrHandler.parseString(styleFieldName);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
+            attrHandler.addUpdate(styleFieldName + WuxDef._expand, "0");
+            let selectedElement = null;
 
-                let fieldName = weaponSlotDef.getVariable(1);
-                let itemName = attrHandler.parseString(fieldName);
-                let item = WuxItems.Get(itemName);
+            let fieldName = weaponSlotDef.getVariable(1);
+            let itemName = attrHandler.parseString(fieldName);
+            let item = WuxItems.Get(itemName);
+            if (item.group != "") {
+                let isOn = styleName == itemName;
+                let newRowId = createItemInspectionEquipmentListing(attrHandler, popupRepeater, item, itemType, isOn);
+                if (isOn) {
+                    selectedElement = {
+                        item: item,
+                        id: newRowId
+                    }
+                }
+            }
+            for (let i = 1; i <= 9; i++) {
+                fieldName = equipSlotDef.getVariable(i);
+                itemName = attrHandler.parseString(fieldName);
+                item = WuxItems.Get(itemName);
                 if (item.group != "") {
                     let isOn = styleName == itemName;
                     let newRowId = createItemInspectionEquipmentListing(attrHandler, popupRepeater, item, itemType, isOn);
@@ -258,24 +271,10 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                         }
                     }
                 }
-                for (let i = 1; i <= 9; i++) {
-                    fieldName = equipSlotDef.getVariable(i);
-                    itemName = attrHandler.parseString(fieldName);
-                    item = WuxItems.Get(itemName);
-                    if (item.group != "") {
-                        let isOn = styleName == itemName;
-                        let newRowId = createItemInspectionEquipmentListing(attrHandler, popupRepeater, item, itemType, isOn);
-                        if (isOn) {
-                            selectedElement = {
-                                item: item,
-                                id: newRowId
-                            }
-                        }
-                    }
-                }
-                return selectedElement;
             }
-        );
+            return selectedElement;
+        });
+        attributeHandler.run();
         
     };
     const populateInspectionElements = function (attrHandler, popupRepeater, sectionRepeater, selectedId, itemType) {
@@ -584,6 +583,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         inspectGear = function (eventinfo, repeatingSectionName) {
             let EquipmentRepeater = new WorkerRepeatingSectionHandler(repeatingSectionName);
             let selectedId = EquipmentRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let attributeHandler = new WorkerAttributeHandler();
             
             let itemType = "";
             switch (repeatingSectionName) {
@@ -597,31 +597,31 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                     itemType = "Goods";
                     break;
             }
+            
 
             EquipmentRepeater.getIds(function (equipRepeater) {
-                WuxWorkerInspectPopup.OpenItemInspection(function (attrHandler) {
-                        equipRepeater.iterate(function (id) {
-                            attrHandler.addMod(equipRepeater.getFieldName(id, getGearVariable("ItemName")));
-                        });
-                    },
-                    function (attrHandler, itemPopupRepeater) {
+                equipRepeater.iterate(function (id) {
+                    attributeHandler.addMod(equipRepeater.getFieldName(id, getGearVariable("ItemName")));
+                });
+                WuxWorkerInspectPopup.OpenItemInspection(attributeHandler, function (attrHandler, itemPopupRepeater) {
                         attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
                         attrHandler.addUpdate(equipRepeater.getFieldName(selectedId, getGearVariable("ItemAction")), "0");
                         return populateInspectionElements(attrHandler, itemPopupRepeater, equipRepeater, selectedId, itemType);
                     }
                 );
             });
+            attributeHandler.run();
         },
 
         openEquipmentAdditionItemInspection = function (eventinfo, addType) {
-            WuxWorkerInspectPopup.OpenItemInspection(function () {
-                },
-                function (attrHandler, itemPopupRepeater) {
-                    attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "on");
-                    attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), addType);
+            let attributeHandler = new WorkerAttributeHandler();
+            WuxWorkerInspectPopup.OpenItemInspection(attributeHandler, function (attrHandler, itemPopupRepeater) {
+                attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "on");
+                attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), addType);
 
-                    return populateItemInspectionEquipment(attrHandler, itemPopupRepeater, eventinfo);
-                });
+                return populateItemInspectionEquipment(attrHandler, itemPopupRepeater, eventinfo);
+            });
+            attributeHandler.run();
         },
 
         unequipSetGear = function (eventinfo, slotIndex, equipSlotFieldName) {

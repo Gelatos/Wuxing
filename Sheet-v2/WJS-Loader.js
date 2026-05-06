@@ -2,7 +2,6 @@ var wuxCurrentVersion = "1.0.8";
 
 var upgrade_to_1_0_8 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.8");
-	WuxWorkerActions.UpdateAllFormeActions(attributeHandler);
 	attributeHandler.run();
 }
 
@@ -92,6 +91,8 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 			attrHandler.addUpdate(statBonusFilter[i].getVariable(), statBonusFilter[i].formula.getValue(attrHandler));
 		}
 	});
+
+	WuxWorkerActions.UpdateAllFormeActions(attributeHandler, [new DatabaseFilterData("group", "Style")]);
 	
 	attributeHandler.run();
 };

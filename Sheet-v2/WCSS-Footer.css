@@ -600,6 +600,19 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     border: 1px solid black;
 }
 
+.wuxInspectionPopupContentData .wuxButton
+{
+    margin: 0 20px;
+    min-width: 20px;
+    width: auto;
+    padding: 0;
+
+    background: #ebf7ff;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInspectionPopupSelectContainer,
 input[type=hidden].wuxFilterPopupSelectContainer-flag[value="on"] + .wuxFilterPopupSelectContainer
 {

@@ -405,26 +405,25 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         let tierFieldName = repeater.getFieldName(selectedId, WuxDef.GetVariable("Forme_Tier"));
         let crFieldName = WuxDef.GetVariable("CR");
 
-        WuxWorkerInspectPopup.OpenTechniqueInspection(
-            function (attrHandler) {
-                attrHandler.addMod([nameFieldName, tierFieldName, crFieldName]);
-                attrHandler.addMod([WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("Ancestry")]);
-            },
-            function (attrHandler, itemPopupRepeater) {
-                attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
-                attrHandler.addUpdate(seeTechniqueFieldName, "0");
-                attrHandler.addUpdate(actionFieldName, "0");
-                let maxTier = attrHandler.parseInt(tierFieldName);
-                let cr = attrHandler.parseInt(crFieldName);
-                let affinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
-                    attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
-                    attrHandler.parseString(WuxDef.GetVariable("Ancestry"))];
+        let attributeHandler = new WorkerAttributeHandler();
+        attributeHandler.addMod([nameFieldName, tierFieldName, crFieldName]);
+        attributeHandler.addMod([WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("Ancestry")]);
 
-                let style = WuxStyles.Get(attrHandler.parseString(nameFieldName));
-                return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater,
-                    style, "", Math.min(maxTier, cr), affinities, false, true);
-            }
-        );
+        WuxWorkerInspectPopup.OpenTechniqueInspection(attributeHandler, function (attrHandler, itemPopupRepeater) {
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
+            attrHandler.addUpdate(seeTechniqueFieldName, "0");
+            attrHandler.addUpdate(actionFieldName, "0");
+            let maxTier = attrHandler.parseInt(tierFieldName);
+            let cr = attrHandler.parseInt(crFieldName);
+            let affinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
+                attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
+                attrHandler.parseString(WuxDef.GetVariable("Ancestry"))];
+
+            let style = WuxStyles.Get(attrHandler.parseString(nameFieldName));
+            return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater,
+                style, "", Math.min(maxTier, cr), affinities, false, true);
+        });
+        attributeHandler.run();
     }
     const seeSetFormeTechniques = function (eventinfo, repeaterName, styleFieldName) {
         Debug.Log("See Forme Techniques");
@@ -639,22 +638,21 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             if (technique == undefined) {
                 return;
             }
-            
-            WuxWorkerInspectPopup.OpenTechniqueInspection(
-                function () {},
-                function (attrHandler, itemPopupRepeater) {
-                    let style = WuxStyles.Get(technique.techSet);
 
-                    attrHandler.addUpdate(eventinfo.sourceAttribute, "0");
-                    attrHandler.addUpdate(WuxDef.GetVariable(WuxDef.GetName(style, WuxDef.Get("Style")), WuxDef._expand), "0");
-                    let affinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
-                        attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
-                        attrHandler.parseString(WuxDef.GetVariable("Ancestry"))];
+            let attributeHandler = new WorkerAttributeHandler();
+            WuxWorkerInspectPopup.OpenTechniqueInspection(attributeHandler, function (attrHandler, itemPopupRepeater) {
+                let style = WuxStyles.Get(technique.techSet);
 
-                    return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater, 
-                        style, technique.name, 9, affinities, true, false);
-                }
-            );
+                attrHandler.addUpdate(eventinfo.sourceAttribute, "0");
+                attrHandler.addUpdate(WuxDef.GetVariable(WuxDef.GetName(style, WuxDef.Get("Style")), WuxDef._expand), "0");
+                let affinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
+                    attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
+                    attrHandler.parseString(WuxDef.GetVariable("Ancestry"))];
+
+                return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater, 
+                    style, technique.name, 9, affinities, true, false);
+            });
+            attributeHandler.run();
         },
 
         seeJobTechniques = function (eventinfo) {

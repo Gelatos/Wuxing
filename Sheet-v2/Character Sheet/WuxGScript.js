@@ -819,6 +819,10 @@ class TechniqueData extends WuxDatabaseData {
             }
             return;
         }
+        if (rangeParts[0] == "" || rangeParts[0] == "Self" || this.target == "Self") {
+            this.rangeType = "FilterType_RangeSelf";
+            return;
+        }
         if (shortRange == 1) {
             if (longRange >= 2) {
                 this.rangeType = `FilterType_RangeClose${targetingStyle}`;
@@ -830,10 +834,6 @@ class TechniqueData extends WuxDatabaseData {
         if (longRange > 2) {
             this.rangeType = `FilterType_RangeShort${targetingStyle}`;
             return;
-        }
-        
-        if (rangeParts[0] == "" || rangeParts[0] == "Self" || this.target == "Self") {
-            this.rangeType = "FilterType_RangeSelf";
         }
         
         this.rangeType = "FilterType_RangeSpecial";
@@ -1031,7 +1031,7 @@ class TechniqueEffect extends dbObj {
         if (formulaString == "0") {
             formulaString = "";
         }
-        else if (formulaString == "" && autoAddTypes.includes(this.type)) {
+        else if (formulaString == "" && this.defense != "Enhance" && autoAddTypes.includes(this.type)) {
             formulaString = `Potency`;
         }
         this.formula = new FormulaData(formulaString);
@@ -5208,10 +5208,10 @@ class SandboxAttributeHandler extends AttributeHandler {
 
 
 class RepeatingSectionHandler {
-    constructor(definitionId, variableId) {
+    constructor(definitionId, variableSuffix) {
         this.definitionId = definitionId;
         this.definition = WuxDef.Get(definitionId);
-        this.repeatingSection = this.definition.getVariable(variableId);
+        this.repeatingSection = this.definition.getVariable(variableSuffix);
         this.ids = [];
         this.fieldNames = [];
         this.iteratorIndex = 0;
@@ -9593,7 +9593,7 @@ class TechniqueAssessment {
                     else if (!this.isCombat) {
                         this.addImpactTrait("TechFilterType_Utility");
                     }
-                    this.addImpactTrait(`Trait_Apply:${state.name}`);
+                    this.addImpactTrait(state.name);
                 }
                 break;
             case "Trigger":
@@ -9603,7 +9603,6 @@ class TechniqueAssessment {
                 this.addPointsRubric(value, message);
                 this.addDefensePointsRubric(effect, value, message);
                 this.addTargetedPointsRubric(effect, value);
-                this.addImpactTrait(`Trait_Trigger:${state.name}`);
                 break;
             case "Remove":
                 value = Math.floor(parseInt(state.points) * 0.75);
