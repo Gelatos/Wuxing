@@ -141,7 +141,7 @@ var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
         },
         clearFilter = function () {
             let attributeHandler = new WorkerAttributeHandler();
-            let filterPopup = new FilterPopup();
+            let filterPopup = new FilterPopup(attributeHandler);
             filterPopup.clearFilter();
             attributeHandler.run();
         };

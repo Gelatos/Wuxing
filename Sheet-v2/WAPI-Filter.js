@@ -77,12 +77,24 @@ class TechniqueFilterDefinitions extends BaseFilteredDefinitions{
                 new DatabaseFilterData("group", "TechFilterType"),
                 new DatabaseFilterData("subGroup", baseGroupFilters[i].getTitle())]);
         }
+        this.definitionDatabase["FilterType_CombatKeywords"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Trait"),
+            new DatabaseFilterData("subGroup", "Combat Keyword")
+        ]);
+        this.definitionDatabase["FilterType_SocialKeywords"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Trait"),
+            new DatabaseFilterData("subGroup", "Social Keyword")
+        ]);
+        this.definitionDatabase["FilterType_SupportKeywords"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Trait"),
+            new DatabaseFilterData("subGroup", "Support Keyword")
+        ]);
+        this.definitionDatabase["FilterType_UtilityKeywords"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Trait"),
+            new DatabaseFilterData("subGroup", "Utility Keyword")
+        ]);
         this.definitionDatabase["FilterType_Defense"] = WuxDef.Filter(
             new DatabaseFilterData("group", ["Defense", "Sense"]));
-        this.definitionDatabase["FilterType_Keywords"] = WuxDef.Filter([
-            new DatabaseFilterData("group", "Trait"),
-            new DatabaseFilterData("subGroup", "Keyword")
-        ]);
         this.definitionDatabase["FilterType_DamageType"] = WuxDef.Filter(
             new DatabaseFilterData("group", "DamageType"));
 

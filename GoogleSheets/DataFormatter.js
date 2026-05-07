@@ -2449,7 +2449,6 @@ class TechniqueAssessment {
         this.invalidReason = "";
         
         this.impactTraits = {};
-        this.categoryTraits = ["TechFilterType_Combat", "TechFilterType_Social", "TechFilterType_Utility", "TechFilterType_Support"];
         this.utilitySet = false;
 
         this.target = technique.target;
@@ -2495,7 +2494,6 @@ class TechniqueAssessment {
         
         this.isCombat = false;
         this.isSocial = false;
-        this.isMovement = false;
 
         this.assessTechnique();
     }
@@ -2662,6 +2660,12 @@ class TechniqueAssessment {
     
     printImpactTraits() {
         let output = "";
+        if (this.isCombat) {
+            this.addImpactTrait("TechFilterType_Combat");
+        }
+        else if (this.isSocial) {
+            this.addImpactTrait("TechFilterType_Social")
+        } 
         for(let key in this.impactTraits) {
             if (output != "") {
                 output += "; ";
@@ -3000,7 +3004,7 @@ class TechniqueAssessment {
                 this.addPointsRubric(output.value, message);
             }
             this.addTargetedPointsRubric(effect, output.value);
-            this.addImpactTrait("TechFilterType_Combat");
+            this.isCombat = true;
             this.addImpactTrait(effect.effect);
         }
         else if (subType == "Status") {
@@ -3011,11 +3015,11 @@ class TechniqueAssessment {
                 this.addPointsRubric(output.value, message);
             }
             this.addTargetedPointsRubric(effect, output.value);
-            this.addImpactTrait("TechFilterType_Combat");
+            this.isCombat = true;
             this.addImpactTrait(effect.effect);
         }
         else if (subType == "Special") {
-            this.addImpactTrait("TechFilterType_Combat");
+            this.isCombat = true;
             this.addImpactTrait(effect.effect);
         }
         else if (effect.effect == "Dmg_Psyche") {
@@ -3041,7 +3045,7 @@ class TechniqueAssessment {
                 this.addPointsRubric(output.value, message);
                 this.addDefensePointsRubric(effect, output.value, message);
                 this.addTargetedPointsRubric(effect, output.value);
-                this.addImpactTrait("TechFilterType_Social");
+                this.isSocial = true;
                 this.addImpactTrait(effect.effect);
             }
         } 
@@ -3071,7 +3075,7 @@ class TechniqueAssessment {
             }
             else {
                 this.addPointsRubric(output.value, message);
-                this.addImpactTrait("TechFilterType_Combat");
+                this.isCombat = true;
                 this.addImpactTrait(effect.effect);
             }
             this.addDefensePointsRubric(effect, output.value, message);
@@ -3105,6 +3109,7 @@ class TechniqueAssessment {
                 }
                 this.addTargetedPointsRubric(effect, output.value);
                 this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("Trait_Heal");
                 break;
             case "Surge":
                 message = `(Surge HP)`;
@@ -3114,9 +3119,10 @@ class TechniqueAssessment {
                 }
                 this.addTargetedPointsRubric(effect, output.value);
                 this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("Trait_Heal");
                 break;
             case "Special":
-                this.addImpactTrait("TechFilterType_Combat");
+                this.isCombat = true;
                 break;
             default:
                 if (effect.target == "Self") {
@@ -3132,7 +3138,7 @@ class TechniqueAssessment {
                 }
                 else {
                     this.addPointsRubric(output.value, message);
-                    this.addImpactTrait("TechFilterType_Combat");
+                    this.isCombat = true;
                 }
                 this.addDefensePointsRubric(effect, output.value, message);
                 this.addTargetedPointsRubric(effect, output.value);
@@ -3182,12 +3188,13 @@ class TechniqueAssessment {
     getVitalityAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
         output.value *= 21;
-        if (effect.subType != "Heal") {
-            output.value = Math.floor(output.value * 1.5);
-            this.addImpactTrait("TechFilterType_Combat");
+        if (effect.subType == "Heal") {
+            this.addImpactTrait("TechFilterType_Support");
+            this.addImpactTrait("Trait_Heal");
         }
         else {
-            this.addImpactTrait("TechFilterType_Support");
+            output.value = Math.floor(output.value * 1.5);
+            this.isCombat = true;
         }
         let message = `(${effect.subType != "" ? `${effect.subType} ` : ""}Vit)`;
 
@@ -3217,7 +3224,7 @@ class TechniqueAssessment {
                 this.patience += output.value;
                 break;
         }
-        this.addImpactTrait("TechFilterType_Social");
+        this.isSocial = true;
     }
 
     getFavorAssessment(effect, attributeHandler) {
@@ -3248,7 +3255,7 @@ class TechniqueAssessment {
         else {
             this.addPointsRubric(output.value, message);
         }
-        this.addImpactTrait("TechFilterType_Social");
+        this.isSocial = true;
         this.addImpactTrait("Trait_Favor");
         this.addDefensePointsRubric(effect, output.value, message);
         this.addTargetedPointsRubric(effect, output.value);
@@ -3284,7 +3291,7 @@ class TechniqueAssessment {
                 break;
         }
 
-        this.addImpactTrait("TechFilterType_Social");
+        this.isSocial = true;
         this.addImpactTrait("Trait_Influence");
         if (effect.defense == "WillBreak") {
             message = `${points} ${message}`;
@@ -3308,7 +3315,7 @@ class TechniqueAssessment {
         let message = `(Request)`;
         this.addPointsRubric(output.value, message);
         this.addDefensePointsRubric(effect, output.value);
-        this.addImpactTrait("TechFilterType_Social");
+        this.isSocial = true;
         this.addImpactTrait("Trait_Request");
     }
 
@@ -3363,31 +3370,31 @@ class TechniqueAssessment {
 
     getMoveAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
-        let impactTrait = "";
+        let impactTrait = `Trait_Move`;
         switch (effect.subType) {
             case "Teleport":
                 output.value = Math.floor(output.value * 2);
-                impactTrait = `Trait_Move-${effect.subType}`;
+                impactTrait = `Trait_Move-Special`;
                 break;
             case "Fly":
             case "FreeMove":
                 output.value = Math.floor(output.value * 1.5);
-                impactTrait = `Trait_Move-${effect.subType}`;
+                impactTrait = `Trait_Move-Special`;
                 break;
             case "Invis":
             case "Sneak":
                 output.value = Math.floor(output.value * 2);
-                impactTrait = `Trait_Move-${effect.subType}`;
+                impactTrait = `Trait_Move-Sneak`;
                 break;
             case "ForceMove":
             case "Pushed":
             case "Pulled":
                 output.value = Math.floor(output.value * (1 + (output.value * 0.5)));
-                impactTrait = `Trait_ForceMove-${effect.subType}`;
+                impactTrait = `Trait_ForceMove`;
                 break;
             case "Fall":
                 output.value = 2;
-                impactTrait = `Trait_ForceMove-${effect.subType}`;
+                impactTrait = `Trait_ForceMove`;
                 break;
             case "Jump":
                 let height = parseInt(effect.effect);
@@ -3660,12 +3667,6 @@ class TechniqueAssessment {
     }
 
     addImpactTrait(traitName) {
-        if (this.categoryTraits.includes(traitName)) {
-            if (this.utilitySet) {
-                return;
-            }
-            this.utilitySet = true;
-        }
         let traitParts = traitName.split("-");
         let traitBase = traitParts[0];
         let traitType = "";
