@@ -1,7 +1,11 @@
-var wuxCurrentVersion = "1.0.8";
+var wuxCurrentVersion = "1.0.9";
 
-var upgrade_to_1_0_8 = function (currentVersion) {
-	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.8");
+var upgrade_to_1_0_9 = function (currentVersion) {
+	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.9");
+	let inspectPopupOldItemsRepeater = new WorkerRepeatingSectionHandler("ItemPopupValues");
+	inspectPopupOldItemsRepeater.getIds(function (itemPopupRepeater) {
+		itemPopupRepeater.removeAllIds();
+	});
 	attributeHandler.run();
 }
 
@@ -92,7 +96,7 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 		}
 	});
 
-	WuxWorkerActions.UpdateAllFormeActions(attributeHandler, [new DatabaseFilterData("group", "Style")]);
+	WuxWorkerActions.UpdateAllActionsInAdvancement(attributeHandler);
 	
 	attributeHandler.run();
 };
@@ -115,8 +119,9 @@ var versioning = function () {
 			case wuxCurrentVersion:
 				console.log(`Wuxing Sheet modified from 5th Edition OGL by Roll20 v${wuxCurrentVersion}`);
 				break;
+			case "1.0.8":
 			case "1.0.7":
-				upgrade_to_1_0_8(v["version"]);
+				upgrade_to_1_0_9(v["version"]);
 				break;
 			case "1.0.6":
 			case "1.0.5":

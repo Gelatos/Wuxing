@@ -57,68 +57,80 @@ class FilterPopupAttributeHandler extends BasePopupAttributeHandler {
     }
 }
 
+class FilterPopup {
+    constructor(attributeHandler) {
+        this.attributeHandler = attributeHandler;
+        this.filterDefinitions = new TechniqueFilterDefinitions("TechFilterPopup");
+    }
+    open() {
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            let filterPopupAttrHandler = new FilterPopupAttributeHandler(attrHandler, this.filterDefinitions);
+            filterPopupAttrHandler.show("Popup_FilterTechniquePopupName");
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_FilterPopupType"), "Forme");
+        });
+    }
+    close() {
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            let filterPopupAttrHandler = new FilterPopupAttributeHandler(attrHandler, this.filterDefinitions);
+            filterPopupAttrHandler.hide();
+        });
+    }
+    
+    applyFilter() {
+        let loader = new LoadingScreenHandler();
+        loader.showLoadingScreen(() => {
+            let filterPopup = this;
+            this.attributeHandler.addMod(this.filterDefinitions.getAllVariables());
+
+            this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let filterPopupAttrHandler = new FilterPopupAttributeHandler(attrHandler, filterPopup.filterDefinitions);
+                filterPopupAttrHandler.setFilterActive();
+                filterPopupAttrHandler.hide();
+            });
+            this.attributeHandler.addFinishCallback(function (attrHandler) {
+                let filterPopupAttrHandler = new FilterPopupAttributeHandler(attrHandler, filterPopup.filterDefinitions);
+                let attributeHandler2 = new WorkerAttributeHandler();
+                let filters = attrHandler.parseJSON(filterPopupAttrHandler.getFilterVariable());
+                WuxWorkerActions.UpdateAllFormeActions(attributeHandler2, filters);
+                attributeHandler2.addFinishCallback(() => {
+                    loader.hideLoadingScreen();
+                });
+                attributeHandler2.run();
+            })
+            attributeHandler.run();
+        });
+    }
+    
+    clearFilter() {
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            let filterPopupAttrHandler = new FilterPopupAttributeHandler(attrHandler, this.filterDefinitions);
+            filterPopupAttrHandler.resetFilterVariables();
+        });
+    }
+}
+
 var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
-    const setInspectionSelection = function (attrHandler, repeaterName, id) {
-        let currentType = attrHandler.parseString(WuxDef.GetVariable("Popup_InspectSelectType"));
-        let currentId = attrHandler.parseString(WuxDef.GetVariable("Popup_InspectSelectId"));
-        if (currentType != "" && currentId != "") {
-            let oldRepeater = new WorkerRepeatingSectionHandler(currentType);
-            attrHandler.addUpdate(oldRepeater.getFieldName(currentId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "0");
-        }
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), repeaterName);
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectId"), id);
-    };
     'use strict';
 
     const openFormeTechnique = function () {
             Debug.Log("Open Technique Filter Popup");
             let attributeHandler = new WorkerAttributeHandler();
-            
-            let filterDefinitions = new TechniqueFilterDefinitions("TechFilterPopup");
-            
-            attributeHandler.addGetAttrCallback(function (attrHandler) {
-                let filterPopup = new FilterPopupAttributeHandler(attrHandler, filterDefinitions);
-                filterPopup.show("Popup_FilterTechniquePopupName");
-                attrHandler.addUpdate(WuxDef.GetVariable("Popup_FilterPopupType"), "Forme");
-            });
+            let filterPopup = new FilterPopup(attributeHandler);
+            filterPopup.open();
             attributeHandler.run();
         },
         close = function () {
             let attributeHandler = new WorkerAttributeHandler();
-            let filterDefinitions = new TechniqueFilterDefinitions("TechFilterPopup");
-            
-            attributeHandler.addGetAttrCallback(function (attrHandler) {
-                let filterPopup = new FilterPopupAttributeHandler(attrHandler, filterDefinitions);
-                filterPopup.hide();
-            });
+            let filterPopup = new FilterPopup();
+            filterPopup.close();
             attributeHandler.run();
         },
         applyFilter = function () {
             Debug.Log("Applying Technique Filters");
-            let loader = new LoadingScreenHandler();
-            loader.showLoadingScreen(() => {
-                let attributeHandler = new WorkerAttributeHandler();
-
-                let filterDefinitions = new TechniqueFilterDefinitions("TechFilterPopup");
-                attributeHandler.addMod(filterDefinitions.getAllVariables());
-
-                attributeHandler.addGetAttrCallback(function (attrHandler) {
-                    let filterPopup = new FilterPopupAttributeHandler(attrHandler, filterDefinitions);
-                    filterPopup.setFilterActive();
-                    filterPopup.hide();
-                });
-                attributeHandler.addFinishCallback(function (attrHandler) {
-                    let filterPopup = new FilterPopupAttributeHandler(attrHandler, filterDefinitions);
-                    let attributeHandler2 = new WorkerAttributeHandler();
-                    let filters = attrHandler.parseJSON(filterPopup.getFilterVariable());
-                    WuxWorkerActions.UpdateAllFormeActions(attributeHandler2, filters);
-                    attributeHandler2.addFinishCallback(() => {
-                        loader.hideLoadingScreen();
-                    });
-                    attributeHandler2.run();
-                })
-                attributeHandler.run();
-            });
+            let attributeHandler = new WorkerAttributeHandler();
+            let filterPopup = new FilterPopup(attributeHandler);
+            filterPopup.applyFilter();
+            attributeHandler.run();
         
         }, 
         removeFilter = function () {
@@ -126,12 +138,8 @@ var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
         },
         clearFilter = function () {
             let attributeHandler = new WorkerAttributeHandler();
-            let filterDefinitions = new TechniqueFilterDefinitions("TechFilterPopup");
-
-            attributeHandler.addGetAttrCallback(function (attrHandler) {
-                let filterPopup = new FilterPopupAttributeHandler(attrHandler, filterDefinitions);
-                filterPopup.resetFilterVariables();
-            });
+            let filterPopup = new FilterPopup();
+            filterPopup.clearFilter();
             attributeHandler.run();
         };
 

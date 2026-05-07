@@ -3,14 +3,25 @@
 class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
     constructor(attrHandler) {
         super(attrHandler);
+        this.repeater = attrHandler.getRepeatingSection("ItemPopupValues");
+        this.titleDefinitionName = "";
+        this.itemDataAttributeHandler = new ItemDataAttributeHandler(this.attrHandler, "Popup");
+        this.techniqueAttributeHandler = new TechniqueDataAttributeHandler(this.attrHandler, "Popup");
     }
 
-    show(popupTitleDefinitionName) {
-        super.show(popupTitleDefinitionName);
+    show(inventoryTitle, inventoryItems, addType) {
+        super.show(this.titleDefinitionName);
         this.resetInspectionVariables();
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupActive"), "on");
+        
+        this.setPopupType(this.titleDefinitionName);
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), inventoryTitle);
+        this.initializePopup();
+        this.iterateAndSetItems(inventoryItems);
+        if (addType != undefined) {
+            this.setAddType(addType);
+        }
     }
-
     hide() {
         super.hide();
         this.resetInspectionVariables();
@@ -19,35 +30,214 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
     resetInspectionVariables() {
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), "");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectId"), "");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), "");
     };
+    setPopupType(popupType) {
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), popupType);
+    }
+    setAddType(addType) {
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), addType);
+    }
+
+    initializePopup(attrHandler) {}
+
+    iterateAndSetItems(itemData) {
+        let setSelectedItem = false;
+        let iterator = 0;
+        while (iterator < this.repeater.ids.length) {
+            let id = this.repeater.ids[iterator];
+            if (iterator < itemData.length) {
+                let item = itemData[iterator];
+                this.setInventoryItemData(id, item);
+                if (!setSelectedItem && !item.isTitle) {
+                    this.setSelectedItem(id, item.name);
+                    setSelectedItem = true;
+                }
+            }
+            else {
+                this.setInventoryItemVisibility(id, false);
+            }
+            iterator++;
+        }
+        while (iterator < itemData.length) {
+            let id = this.repeater.generateRowId();
+            let item = itemData[iterator];
+            this.setInventoryItemData(id, item);
+            if (!setSelectedItem && !item.isTitle) {
+                this.setSelectedItem(id, item.name);
+                setSelectedItem = true;
+            }
+            iterator++;
+        }
+    }
+    setInventoryItemVisibility(id, isVisible) {
+        let itemSelectVisibleAttr = WuxDef.GetVariable("Popup_ItemSelectVisible");
+        this.attrHandler.addUpdate(this.repeater.getFieldName(id, itemSelectVisibleAttr), isVisible ? "on" : "0");
+
+    }
+    setInventoryItemData(id, itemData) {
+        let itemSelectTypeAttr = WuxDef.GetVariable("Popup_ItemSelectType");
+        let itemSelectDisplayAttr = WuxDef.GetVariable("Popup_ItemSelectDisplay");
+        let itemSelectNameAttr = WuxDef.GetVariable("Popup_ItemSelectName");
+
+        this.setInventoryItemVisibility(id, true);
+        this.attrHandler.addUpdate(this.repeater.getFieldName(id, itemSelectTypeAttr), itemData.isTitle ? "0" : "on");
+        this.attrHandler.addUpdate(this.repeater.getFieldName(id, itemSelectDisplayAttr), itemData.display);
+        this.attrHandler.addUpdate(this.repeater.getFieldName(id, itemSelectNameAttr), itemData.name);
+    }
+
+    setSelectedItem(selectedItemId, itemName) {
+        this.clearLastSelectedItem(selectedItemId);
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectId"), selectedItemId);
+        this.attrHandler.addUpdate(this.repeater.getFieldName(selectedItemId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "on");
+        this.setSelectedItemData(itemName);
+    }
+    clearLastSelectedItem() {
+        let currentId = this.attrHandler.parseString(WuxDef.GetVariable("Popup_InspectSelectId"));
+        if (currentId != "") {
+            this.attrHandler.addUpdate(this.repeater.getFieldName(currentId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "0");
+        }
+    }
+    setSelectedItemData(selectedItemName) {}
+}
+class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
+    constructor(attributeHandler) {
+        super(attributeHandler);
+        this.titleDefinitionName = "Popup_TechniqueInspectionName";
+    }
+
+    initializePopup() {
+        super.initializePopup();
+        this.itemDataAttributeHandler.clearItemInfo();
+    }
+    setSelectedItemData(selectedItemName) {
+        let technique = WuxTechs.Get(selectedItemName);
+        if (technique == undefined) {
+            this.techniqueAttributeHandler.setVisibilityAttribute(false);
+            return;
+        }
+        this.techniqueAttributeHandler.setTechniqueInfo(technique);
+        this.techniqueAttributeHandler.setVisibilityAttribute(true);
+    }
+}
+class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
+    constructor(attributeHandler) {
+        super(attributeHandler);
+        this.titleDefinitionName = "Popup_ItemInspectionName";
+    }
+
+    setSelectedItemData(selectedItemName) {
+        let item = WuxItems.Get(selectedItemName);
+        if (item == undefined) {
+            this.itemDataAttributeHandler.clearItemInfo(this.attrHandler);
+        }
+        this.itemDataAttributeHandler.setItemInfo(item);
+    }
+}
+
+class InspectionInventoryItem {
+    constructor(displayString, databaseName, isTitle) {
+        this.display = displayString;
+        this.name = databaseName;
+        this.isTitle = isTitle;
+    }
+}
+class InspectionInventoryItemHandler {
+    constructor() {
+        this.items = [];
+    }
+    addItem(inspectionInventoryItem) {
+        this.items.push(inspectionInventoryItem);
+    }
+}
+class FilteredTechniquesInventoryItemHandler extends InspectionInventoryItemHandler {
+    constructor(filters, titleCallback) {
+        super();
+
+        let filteredTechniques = WuxTechs.FilterAndSortTechniquesByRequirement(filters);
+        if (filteredTechniques.length() == 0) {
+            return;
+        }
+
+        let inventoryItemHandler = this;
+        let maxTier = 9;
+        for (let tier = 1; tier <= maxTier; tier++) {
+
+            let tierData = filteredTechniques.get(tier);
+            tierData.iterate(function (techsByAffinity, affinity) {
+                if (techsByAffinity.length == 0) {
+                    return;
+                }
+
+                // add the title
+                if (titleCallback != undefined) {
+                    let techHeader = titleCallback(tier, affinity);
+                    if (techHeader != undefined) {
+                        inventoryItemHandler.addItem(techHeader);
+                    }
+                }
+
+                // add the techniques
+                techsByAffinity.forEach(function (technique) {
+                    let inventoryItem = new InspectionInventoryItem(technique.name, technique.name, false);
+                    inventoryItemHandler.addItem(inventoryItem);
+                });
+            });
+        }
+    }
+}
+
+class InspectionPopup {
+    constructor(attributeHandler) {
+        this.attributeHandler = attributeHandler;
+        this.inspectPopupAttrHandler = undefined;
+        this.inspectPopupInventoryId = "ItemPopupValues";
+    }
+    open(inventoryTitle, inventoryItems, addType) {
+        let inspectPopup = this;
+        this.attributeHandler.addRepeatingSection(this.inspectPopupInventoryId);
+
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            inspectPopup.setup(attrHandler);
+            inspectPopup.inspectPopupAttrHandler.show(inventoryTitle, inventoryItems, addType);
+        });
+    }
+    close() {
+        let inspectPopup = this;
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            inspectPopup.setup(attrHandler);
+            inspectPopup.inspectPopupAttrHandler.hide();
+        });
+    }
+    selectItem(selectedId) {
+        let inspectPopup = this;
+        this.attributeHandler.addRepeatingSection(this.inspectPopupInventoryId);
+        let repeater = this.attributeHandler.getRepeatingSection(this.inspectPopupInventoryId);
+        let inventoryItemNameVar = repeater.getFieldName(selectedId, WuxDef.GetVariable("Popup_ItemSelectName"))
+        this.attributeHandler.addMod([WuxDef.GetVariable("Popup_InspectSelectId"), inventoryItemNameVar]);
+
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            inspectPopup.setup(attrHandler);
+            inspectPopup.inspectPopupAttrHandler.setSelectedItem(selectedId, attrHandler.parseString(inventoryItemNameVar));
+        });
+    }
+
+    setup(attrHandler) {
+        this.inspectPopupAttrHandler = new InspectPopupAttributeHandler(attrHandler);
+    }
+}
+class TechniqueInspectionPopup extends InspectionPopup {
+    setup(attrHandler) {
+        this.inspectPopupAttrHandler = new TechniqueInspectPopupAttributeHandler(attrHandler);
+    }
+}
+class ItemInspectionPopup extends InspectionPopup {
+    setup(attrHandler) {
+        this.inspectPopupAttrHandler = new ItemInspectPopupAttributeHandler(attrHandler);
+    }
 }
 
 var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
-    const showPopup = function (attributeHandler, popupTitleDefinitionName) {
-
-        getInspectionVariables(attributeHandler);
-        attributeHandler.addGetAttrCallback(function (attrHandler) {
-            let inspectPopup = new InspectPopupAttributeHandler(attrHandler);
-            inspectPopup.show(popupTitleDefinitionName);
-        });
-    };
-    const closePopup = function (attrHandler) {
-        let inspectPopup = new InspectPopupAttributeHandler(attrHandler);
-        inspectPopup.hide();
-    };
-    const getInspectionVariables = function (attrHandler) {
-        attrHandler.addMod([WuxDef.GetVariable("Popup_InspectSelectType"), WuxDef.GetVariable("Popup_InspectSelectId")]);
-    };
-    const setInspectionSelection = function (attrHandler, repeaterName, id) {
-        let currentType = attrHandler.parseString(WuxDef.GetVariable("Popup_InspectSelectType"));
-        let currentId = attrHandler.parseString(WuxDef.GetVariable("Popup_InspectSelectId"));
-        if (currentType != "" && currentId != "") {
-            let oldRepeater = new WorkerRepeatingSectionHandler(currentType);
-            attrHandler.addUpdate(oldRepeater.getFieldName(currentId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "0");
-        }
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), repeaterName);
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectId"), id);
-    };
     const performAddSelectedInspectElement = function (attrHandler) {
         Debug.Log(`Adding Inspect Element ${attrHandler.parseString(WuxDef.GetUntypedVariable("Popup", "ItemName"))}`);
         switch (attrHandler.parseString(WuxDef.GetVariable("Popup_InspectAddType"))) {
@@ -138,128 +328,52 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         return WuxDef.GetTitle("Gear_Equip");
     };
     
-    const populateInspectionPopupWithItems = function (attributeHandler, itemPopupRepeater, setSelectedItemCallback) {
-        attributeHandler.addGetAttrCallback(function (attrHandler) {
-            attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
-    
-            let selectedItem = setSelectedItemCallback(attrHandler, itemPopupRepeater);
-            if (selectedItem == null) {
-                Debug.LogError(`No items found`);
-                closePopup(attrHandler);
-            } else {
-                setInspectionSelection(attrHandler, itemPopupRepeater.definitionId, selectedItem.id);
-                let itemAttributeHandler = new ItemDataAttributeHandler(attrHandler, "Popup");
-                itemAttributeHandler.setItemInfo(selectedItem.item);
-            }
-            itemPopupRepeater.removeAllIdsAfterIteratorIndex();
-        })
-    };
-    const populateInspectionPopupWithTechniques = function (attributeHandler, techniquePopupRepeater, setSelectedItemCallback) {
-        attributeHandler.addGetAttrCallback(function (attrHandler) {
-            attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
-    
-            let selectedItem = setSelectedItemCallback(attrHandler, techniquePopupRepeater);
-            if (selectedItem == null) {
-                Debug.LogError(`No items found`);
-                closePopup(attrHandler);
-            } else {
-                setInspectionSelection(attrHandler, techniquePopupRepeater.definitionId, selectedItem.id);
-                let itemAttributeHandler = new ItemDataAttributeHandler(attrHandler, "Popup");
-                itemAttributeHandler.clearItemInfo(attrHandler);
-                let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Popup");
-                techniqueAttributeHandler.setTechniqueInfo(selectedItem.item);
-                techniqueAttributeHandler.setVisibilityAttribute(true);
-            }
-    
-            techniquePopupRepeater.removeAllIdsAfterIteratorIndex();
-        })
-    };
     'use strict';
 
-    const openItemInspection = function (attributeHandler, setSelectedItemCallback) {
+    const openItemInspection = function (attributeHandler, inventoryTitle, inventoryItems, addType) {
             Debug.Log("Open Item Popup");
-            let itemPopupValuesRepeatingSection = new WorkerRepeatingSectionHandler("ItemPopupValues");
-            itemPopupValuesRepeatingSection.getIds(function (itemPopupRepeater) {
-                showPopup(attributeHandler, "Popup_ItemInspectionName");
-                populateInspectionPopupWithItems(attributeHandler, itemPopupRepeater, setSelectedItemCallback);
-            });
+            let inspectPopup = new ItemInspectionPopup(attributeHandler);
+            inspectPopup.open(inventoryTitle, inventoryItems, addType);
         },
 
-        openTechniqueInspection = function (attributeHandler, setSelectedItemCallback) {
+        openTechniqueInspection = function (attributeHandler, inventoryTitle, inventoryItems) {
             Debug.Log("Open Technique Popup");
-            let repeaterName = "ItemPopupValues";
-
-            let techniquePopupValuesRepeatingSection = new WorkerRepeatingSectionHandler(repeaterName);
-            techniquePopupValuesRepeatingSection.getIds(function (techniquePopupRepeater) {
-                showPopup(attributeHandler, "Popup_TechniqueInspectionName");
-                populateInspectionPopupWithTechniques(attributeHandler, techniquePopupRepeater, setSelectedItemCallback);
-            });
+            let inspectPopup = new TechniqueInspectionPopup(attributeHandler);
+            inspectPopup.open(inventoryTitle, inventoryItems, addType);
         },
+        
         close = function () {
             let attributeHandler = new WorkerAttributeHandler();
-
-            attributeHandler.addGetAttrCallback(function (attrHandler) {
-                closePopup(attrHandler);
-            });
+            let inspectPopup = new InspectionPopup(attributeHandler);
+            inspectPopup.close();
             attributeHandler.run();
         },
 
         selectInspectionItemFromActiveGroup = function (eventinfo) {
-            Debug.Log("Selected Inspection Item");
-            let repeaterName = "ItemPopupValues";
-
             let attributeHandler = new WorkerAttributeHandler();
-            let itemPopupValuesRepeatingSection = new WorkerRepeatingSectionHandler(repeaterName);
-            let selectedId = itemPopupValuesRepeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
+            let selectTypeVariable = WuxDef.GetVariable("Popup_InspectSelectType");
+            attributeHandler.addMod(selectTypeVariable);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let attributeHandler2 = new WorkerAttributeHandler();
 
-            itemPopupValuesRepeatingSection.getIds(function (itemPopupRepeater) {
-
-                let selectedItemNameFieldName = "";
-                let selectedItemTypeFieldName = "";
-
-                itemPopupRepeater.iterate(function (id) {
-                    if (selectedId == id) {
-                        selectedItemNameFieldName = itemPopupRepeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectName"));
-                        selectedItemTypeFieldName = itemPopupRepeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectType"));
-                    }
-                });
-                if (selectedItemNameFieldName != "") {
-                    attributeHandler.addMod(selectedItemNameFieldName);
-                    attributeHandler.addMod(selectedItemTypeFieldName);
-
-                    getInspectionVariables(attributeHandler);
-                    attributeHandler.addGetAttrCallback(function (attrHandler) {
-                        let itemName = attrHandler.parseString(selectedItemNameFieldName);
-                        let itemType = attrHandler.parseString(selectedItemTypeFieldName);
-
-                        Debug.Log(`Got item ${itemName} with type ${itemType}`);
-                        if (itemType == "Equipment" || itemType == "Consumable") {
-                            let item = WuxItems.Get(itemName);
-                            let itemAttributeHandler = new ItemDataAttributeHandler(attrHandler, "Popup");
-                            itemAttributeHandler.setItemInfo(item);
-                        } else if (itemType == "Goods") {
-                            let goods = WuxGoods.Get(itemName);
-                            let itemAttributeHandler = new ItemDataAttributeHandler(attrHandler, "Popup");
-                            itemAttributeHandler.setGoodsInfo(goods);
-                        } else if (itemType == "Tech") {
-                            let technique = WuxTechs.Get(itemName);
-                            let itemAttributeHandler = new ItemDataAttributeHandler(attrHandler, "Popup");
-                            itemAttributeHandler.clearItemInfo();
-                            let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Popup");
-                            techniqueAttributeHandler.setTechniqueInfo(technique);
-                            techniqueAttributeHandler.setVisibilityAttribute(true);
-                        }
-                        setInspectionSelection(attrHandler, repeaterName, selectedId);
-                    });
-
-                } else {
-                    Debug.LogError(`No item found for ${eventinfo.sourceAttribute}`);
-                    attributeHandler.addGetAttrCallback(function (attrHandler) {
-                        attrHandler.addUpdate(itemPopupRepeater.getFieldName(selectedId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), 0);
-                    });
+                let repeater = new WorkerRepeatingSectionHandler("ItemPopupValues");
+                let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+                
+                let inspectPopup;
+                switch(attrHandler.parseString(selectTypeVariable)) {
+                    case "Popup_TechniqueInspectionName":
+                        inspectPopup = new TechniqueInspectionPopup(attributeHandler2);
+                        break;
+                    case "Popup_ItemInspectionName":
+                        inspectPopup = new ItemInspectionPopup(attributeHandler2);
+                        break;
                 }
-                attributeHandler.run();
+                if (inspectPopup != undefined) {
+                    inspectPopup.selectItem(selectedId);
+                }
+                attributeHandler2.run();
             });
+            attributeHandler.run();
         },
 
         addSelectedInspectElement = function () {

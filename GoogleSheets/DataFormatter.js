@@ -1156,7 +1156,10 @@ var WuxSheetMain = WuxSheetMain || (function () {
         button = function (fieldName, contents, className, value) {
             className = className == undefined ? "" : ` ${className}`;
             value = value == undefined ? "" : ` value="${value}"`;
-            return `<div class="wuxButton${className}">\n<input type="checkbox" name="${fieldName}"${value}>\n<span>${contents}</span>\n </div>`;
+            return `<div class="wuxButton${className}">
+            <input type="checkbox" name="${fieldName}"${value}>
+            <span>${contents}</span>
+            </div>`;
         },
 
         pictosButton = function (fieldName, contents, className) {

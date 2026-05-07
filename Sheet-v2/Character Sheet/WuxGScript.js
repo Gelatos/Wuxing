@@ -7265,7 +7265,10 @@ var WuxSheetMain = WuxSheetMain || (function () {
         button = function (fieldName, contents, className, value) {
             className = className == undefined ? "" : ` ${className}`;
             value = value == undefined ? "" : ` value="${value}"`;
-            return `<div class="wuxButton${className}">\n<input type="checkbox" name="${fieldName}"${value}>\n<span>${contents}</span>\n </div>`;
+            return `<div class="wuxButton${className}">
+            <input type="checkbox" name="${fieldName}"${value}>
+            <span>${contents}</span>
+            </div>`;
         },
 
         pictosButton = function (fieldName, contents, className) {
@@ -11866,17 +11869,17 @@ var DisplayPopups = DisplayPopups || (function () {
                 buildItemRepeater = function () {
                     let itemSelectNameAttr = WuxDef.GetAttribute("Popup_ItemSelectName");
                     let itemSelectTypeAttr = WuxDef.GetAttribute("Popup_ItemSelectType");
-                    let itemSelectDescAttr = WuxDef.GetAttribute("Popup_ItemSelectDesc");
+                    let itemSelectDisplayAttr = WuxDef.GetAttribute("Popup_ItemSelectDisplay");
                     let itemSelectIsOnAttr = WuxDef.GetAttribute("Popup_ItemSelectIsOn");
-                    let itemData = `${WuxSheetMain.HiddenField(itemSelectTypeAttr,
-                        `<input type="hidden" class="wuxInspectionPopupSelectContainer-flag" name="${itemSelectIsOnAttr}">
-                        <div class="wuxButton wuxInspectionPopupSelectContainer">
-                            <input type="checkbox" name="${itemSelectIsOnAttr}">
-                            <span name="${itemSelectNameAttr}"></span>
-                        </div>`)}
-                        ${WuxSheetMain.HiddenAuxField(itemSelectTypeAttr, `${WuxSheetMain.Header2(WuxSheetMain.Span(itemSelectNameAttr))}
-                        ${WuxSheetMain.HiddenField(itemSelectDescAttr, WuxSheetMain.Desc(WuxSheetMain.Span(itemSelectDescAttr)))}`)}
-                    `;
+                    let itemSelectVisibleAttr = WuxDef.GetAttribute("Popup_ItemSelectVisible");
+                    let itemData = WuxSheetMain.HiddenField(itemSelectVisibleAttr, 
+                        WuxSheetMain.HiddenFieldToggle(itemSelectTypeAttr,
+                        `${WuxSheetMain.Input("hidden", itemSelectNameAttr)}
+                        <input type="hidden" class="wuxInspectionPopupSelectContainer-flag" name="${itemSelectIsOnAttr}">
+                        ${WuxSheetMain.Button(itemSelectIsOnAttr, WuxSheetMain.Span(itemSelectDisplayAttr), "wuxInspectionPopupSelectContainer")}`,
+                        `${WuxSheetMain.Header2(WuxSheetMain.Span(itemSelectDisplayAttr))}
+                        ${WuxSheetMain.HiddenField(itemSelectNameAttr, WuxSheetMain.Desc(WuxSheetMain.Span(itemSelectNameAttr)))}`)
+                    );
 
                     let groupDef = WuxDef.Get("Popup_InspectSelectGroup")
                     return `${WuxSheetMain.Header(`<span name="${groupDef.getAttribute()}">${groupDef.getTitle()}</span>`)}

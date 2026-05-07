@@ -2,59 +2,6 @@
 
 var WuxWorkerJobs = WuxWorkerJobs || (function () {
     
-    const populateJobInspectionTechniques = function (attrHandler, itemPopupRepeater, job) {
-        Debug.Log(`Populate Job Inspection Techniques for ${job}`);
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), `${job} Techniques`);
-        let maxTier = 6;
-        
-        let selectedElement = null;
-        let jobTechniques = WuxTechs.FilterAndSortTechniquesByRequirement(new DatabaseFilterData("style", job));
-        
-        for (let tier = 1; tier <= maxTier; tier++) {
-
-            let tierData = jobTechniques.get(tier);
-            tierData.iterate(function (techsByAffinity, affinity) {
-                if (techsByAffinity.length == 0) {
-                    return;
-                }
-                let techHeader = "";
-                let techDesc = "";
-                if (tier > 1) {
-                    let level = Format.GetLevelPrerequisites(tier);
-                    techHeader += `Level ${level}`
-                    techDesc += `These techniques are gained upon reaching Level ${level}`;
-                }
-                if (affinity != "") {
-                    techHeader += (techHeader == "" ? "" : "; ") + `${affinity} Affinity`;
-                    techDesc +=  (techDesc == "" ? "" : " ") + `and require ${affinity} affinity`;
-                }
-
-                let newRowId = itemPopupRepeater.getNextId();
-                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), techHeader);
-                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectType")), "");
-                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectDesc")), techDesc);
-                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), 0);
-                
-                techsByAffinity.forEach(function (jobTechnique) {
-                    newRowId = itemPopupRepeater.getNextId();
-                    attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), jobTechnique.name);
-                    attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectType")), "Tech");
-
-                    if (selectedElement == null) {
-                        selectedElement = {
-                            item: jobTechnique,
-                            id: newRowId
-                        }
-                        attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "on");
-                    } else {
-                        attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), 0);
-                    }
-                });
-            });
-        }
-
-        return selectedElement;
-    };
     const addStyles = function (attrHandler, jobWorker, jobStylesRepeater) {
         Debug.Log("Add Job Styles from addStyles");
         let jobSlot = WuxDef.GetVariable("Forme_JobSlot");
@@ -76,16 +23,17 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
     'use strict';
 
     const updateBuildPoints = function (eventinfo) {
-            Debug.Log("Update Jobs");
             let attributeHandler = new WorkerAttributeHandler();
             let worker = new WuxJobWorkerBuild();
             worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
             WuxWorkerSkills.UpdateKeySkills(attributeHandler);
-            attributeHandler.run();
+            WuxWorkerActions.UpdateAllActionsInAdvancement(attributeHandler);
+
+            let loader = new LoadingScreenHandler(attributeHandler);
+            loader.run();
         },
 
         refreshStats = function (attributeHandler) {
-            Debug.Log("Refresh Job Stats");
             let jobWorker = new WuxBasicWorkerBuild("Job");
             attributeHandler.addMod([jobWorker.attrBuildDraft, jobWorker.attrMax]);
             attributeHandler.addFormulaMods(jobWorker.definition);
@@ -132,13 +80,22 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             let jobName = eventinfo.newValue;
             Debug.Log(`See Techniques for ${jobName}`);
             let attributeHandler = new WorkerAttributeHandler();
-            WuxWorkerInspectPopup.OpenTechniqueInspection(attributeHandler, function (attrHandler, itemPopupRepeater) {
-                attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
-                attrHandler.addUpdate(eventinfo.sourceAttribute, "0");
-                attrHandler.addUpdate(WuxDef.GetVariable(WuxDef.GetName(jobName, WuxDef.Get("Job")), WuxDef._expand), "0");
-
-                return populateJobInspectionTechniques(attrHandler, itemPopupRepeater, jobName);
-            });
+            attributeHandler.addUpdate(eventinfo.sourceAttribute, "0");
+            let inventoryTitle = `${jobName} Techniques`;
+            let inventoryItems = new FilteredTechniquesInventoryItemHandler(
+                new DatabaseFilterData("style", jobName),
+                (tier) => {
+                    if (tier > 1) {
+                        let level = Format.GetLevelPrerequisites(tier);
+                        return new InspectionInventoryItem(`Level ${level}`,
+                            `These techniques are gained upon reaching Level ${level}`, 
+                            true);
+                    }
+                });
+            if (inventoryItems.items.length == 0) {
+                return;
+            }
+            WuxWorkerInspectPopup.OpenTechniqueInspection(attributeHandler, inventoryTitle, inventoryItems.items);
             attributeHandler.run();
         };
 

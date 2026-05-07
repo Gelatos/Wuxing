@@ -458,21 +458,28 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         });
     }
     
+    const updateAllActions = function (attributeHandler, filters) {
+        let formeTech = new FormeTechniqueDatabase(attributeHandler, filters);
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            formeTech.setupPostGetAttr(attrHandler);
+            formeTech.registerTechDictionary(attrHandler);
+            formeTech.updateDataAndVisibilityOfRepeaterTechniques(attrHandler);
+            formeTech.addMissingTechniques(attrHandler);
+            formeTech.updateLoadTechniques(attrHandler);
+        });
+        attributeHandler.addFinishCallback(function () {
+            formeTech.setSortOrder();
+        });
+    }
+    
     'use strict';
 
     const
+        updateAllActionsInAdvancement = function (attributeHandler)  {
+            updateAllActions(attributeHandler, [new DatabaseFilterData("group", "Style")]);
+        },
         updateAllFormeActions = function (attributeHandler, filters) {
-            let formeTech = new FormeTechniqueDatabase(attributeHandler, filters);
-            attributeHandler.addGetAttrCallback(function (attrHandler) {
-                formeTech.setupPostGetAttr(attrHandler);
-                formeTech.registerTechDictionary(attrHandler);
-                formeTech.updateDataAndVisibilityOfRepeaterTechniques(attrHandler);
-                formeTech.addMissingTechniques(attrHandler);
-                formeTech.updateLoadTechniques(attrHandler);
-            });
-            attributeHandler.addFinishCallback(function () {
-                formeTech.setSortOrder();
-            });
+            updateAllActions(attributeHandler, filters);
         },
         
         refreshAllFormeActions = function () {
@@ -786,6 +793,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
     ;
 
     return {
+        UpdateAllActionsInAdvancement: updateAllActionsInAdvancement,
         UpdateAllFormeActions: updateAllFormeActions,
         RefreshAllFormeActions: refreshAllFormeActions,
         LoadFormeActions: loadFormeActions,
