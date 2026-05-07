@@ -13414,7 +13414,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
             let output = "";
             output += printAdvancement(sheetsDb);
             output += printJobs(sheetsDb);
-            output += printSkills(sheetsDb);
+            output += printSkills();
             output += printAttributes(sheetsDb);
             return output;
         },
@@ -13435,11 +13435,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
             return WuxSheet.PageDisplay("Jobs", output);
         },
 
-        printSkills = function (sheetsDb) {
+        printSkills = function () {
             let definition = WuxDef.Get("Page_Skills");
             let output = WuxSheetNavigation.BuildAdvancementPageNavigation(definition) +
                 SideBarData.PrintSkills() +
-                MainContentData.PrintSkills(sheetsDb.skills);
+                MainContentData.PrintSkills();
             return WuxSheet.PageDisplay("Skills", output);
         },
 
@@ -13729,25 +13729,25 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                     }
                 }()),
 
-                printSkills = function (skillDictionary) {
-                    return WuxSheetMain.Build(buildSkills.Build(skillDictionary));
+                printSkills = function () {
+                    return WuxSheetMain.Build(buildSkills.Build());
                 },
 
                 buildSkills = buildSkills || (function () {
                     'use strict';
 
                     var
-                        build = function (database) {
-                            let contents = buildSkillGroup(database, "ActiveSkills");
-                            contents += buildSkillGroup(database, "SocialSkills");
-                            contents += buildSkillGroup(database, "WorldSkills");
+                        build = function () {
+                            let contents = buildSkillGroup("ActiveSkills");
+                            contents += buildSkillGroup("SocialSkills");
+                            contents += buildSkillGroup("WorldSkills");
                             return contents;
                         },
 
-                        buildSkillGroup = function (database, group) {
+                        buildSkillGroup = function (group) {
                             let subGroups = WuxDef.Filter([new DatabaseFilterData("subGroup", group)]);
 
-                            let contents = WuxSheetMain.MultiRowGroup(buildSubGroups(database, subGroups), WuxSheetMain.Table.FlexTable, 2);
+                            let contents = WuxSheetMain.MultiRowGroup(buildSubGroups(subGroups), WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definitionName = Format.GetDefinitionName("Page", group);
@@ -13755,7 +13755,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                         },
 
-                        buildSubGroups = function (database, subGroups) {
+                        buildSubGroups = function (subGroups) {
                             let output = [];
                             let groupName = "";
                             let filterSettings = new DatabaseFilterData("subGroup", "");
@@ -13765,8 +13765,9 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                     continue;
                                 }
                                 groupName = subGroups[i].getTitle();
-                                filterSettings.value = groupName;
-                                output.push(buildGroup(groupName, database.filter(filterSettings)));
+                                filterSettings.value = [groupName];
+                                let filteredData = WuxDef.Filter([new DatabaseFilterData("group", "Skill"), filterSettings]);
+                                output.push(buildGroup(groupName, filteredData));
                             }
                             return output;
                         },

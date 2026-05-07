@@ -1,5 +1,57 @@
 // noinspection ES6ConvertVarToLetConst
 
+class InspectionInventoryItem {
+    constructor(displayString, databaseName, isTitle) {
+        this.display = displayString;
+        this.name = databaseName;
+        this.isTitle = isTitle;
+    }
+}
+class InspectionInventoryItemHandler {
+    constructor() {
+        this.items = [];
+    }
+    addItem(inspectionInventoryItem) {
+        this.items.push(inspectionInventoryItem);
+    }
+}
+class FilteredTechniquesInventoryItemHandler extends InspectionInventoryItemHandler {
+    constructor(filters, titleCallback) {
+        super();
+
+        let filteredTechniques = WuxTechs.FilterAndSortTechniquesByRequirement(filters);
+        if (filteredTechniques.length() == 0) {
+            return;
+        }
+
+        let inventoryItemHandler = this;
+        let maxTier = 9;
+        for (let tier = 1; tier <= maxTier; tier++) {
+
+            let tierData = filteredTechniques.get(tier);
+            tierData.iterate(function (techsByAffinity, affinity) {
+                if (techsByAffinity.length == 0) {
+                    return;
+                }
+
+                // add the title
+                if (titleCallback != undefined) {
+                    let techHeader = titleCallback(tier, affinity);
+                    if (techHeader != undefined) {
+                        inventoryItemHandler.addItem(techHeader);
+                    }
+                }
+
+                // add the techniques
+                techsByAffinity.forEach(function (technique) {
+                    let inventoryItem = new InspectionInventoryItem(technique.name, technique.name, false);
+                    inventoryItemHandler.addItem(inventoryItem);
+                });
+            });
+        }
+    }
+}
+
 class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
     constructor(attrHandler) {
         super(attrHandler);
@@ -135,58 +187,6 @@ class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
     }
 }
 
-class InspectionInventoryItem {
-    constructor(displayString, databaseName, isTitle) {
-        this.display = displayString;
-        this.name = databaseName;
-        this.isTitle = isTitle;
-    }
-}
-class InspectionInventoryItemHandler {
-    constructor() {
-        this.items = [];
-    }
-    addItem(inspectionInventoryItem) {
-        this.items.push(inspectionInventoryItem);
-    }
-}
-class FilteredTechniquesInventoryItemHandler extends InspectionInventoryItemHandler {
-    constructor(filters, titleCallback) {
-        super();
-
-        let filteredTechniques = WuxTechs.FilterAndSortTechniquesByRequirement(filters);
-        if (filteredTechniques.length() == 0) {
-            return;
-        }
-
-        let inventoryItemHandler = this;
-        let maxTier = 9;
-        for (let tier = 1; tier <= maxTier; tier++) {
-
-            let tierData = filteredTechniques.get(tier);
-            tierData.iterate(function (techsByAffinity, affinity) {
-                if (techsByAffinity.length == 0) {
-                    return;
-                }
-
-                // add the title
-                if (titleCallback != undefined) {
-                    let techHeader = titleCallback(tier, affinity);
-                    if (techHeader != undefined) {
-                        inventoryItemHandler.addItem(techHeader);
-                    }
-                }
-
-                // add the techniques
-                techsByAffinity.forEach(function (technique) {
-                    let inventoryItem = new InspectionInventoryItem(technique.name, technique.name, false);
-                    inventoryItemHandler.addItem(inventoryItem);
-                });
-            });
-        }
-    }
-}
-
 class InspectionPopup {
     constructor(attributeHandler) {
         this.attributeHandler = attributeHandler;
@@ -196,6 +196,7 @@ class InspectionPopup {
     open(inventoryTitle, inventoryItems, addType) {
         let inspectPopup = this;
         this.attributeHandler.addRepeatingSection(this.inspectPopupInventoryId);
+        this.attributeHandler.addMod([WuxDef.GetVariable("Popup_InspectSelectId")]);
 
         this.attributeHandler.addGetAttrCallback(function (attrHandler) {
             inspectPopup.setup(attrHandler);
