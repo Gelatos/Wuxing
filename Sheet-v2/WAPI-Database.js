@@ -280,7 +280,7 @@ class WuxDataDatabase extends Database {
 class ExtendedTechniqueDatabase extends Database {
 
     constructor(data) {
-        let filters = ["style", "group", "affinity", "tier", "action", "skill", "keywords", "rangeType", "damageType"];
+        let filters = ["style", "group", "affinity", "tier", "action", "skill", "keywords", "rangeType", "damageType", "coreDefense"];
         let dataCreation = function (data) {
             return new TechniqueData(data);
         };
@@ -325,6 +325,10 @@ class ExtendedTechniqueDatabase extends Database {
         let forms = value.forms.split(";");
         for (let i = 0; i < forms.length; i++) {
             this.addSortingGroup("keywords", forms[i].trim(), value);
+        }
+        let impacts = value.impacts.split(";");
+        for (let i = 0; i < impacts.length; i++) {
+            this.addSortingGroup("keywords", impacts[i].trim(), value);
         }
         for (let i = 0; i < value.damageTypes.length; i++) {
             this.addSortingGroup("damageType", value.damageTypes[i].trim(), value);

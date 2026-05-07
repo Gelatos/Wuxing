@@ -77,9 +77,17 @@ class TechniqueFilterDefinitions extends BaseFilteredDefinitions{
                 new DatabaseFilterData("group", "TechFilterType"),
                 new DatabaseFilterData("subGroup", baseGroupFilters[i].getTitle())]);
         }
-        this.definitionDatabase["FilterType_DamageType"] = WuxDef.Filter(new DatabaseFilterData("group", "DamageType"));
+        this.definitionDatabase["FilterType_Defense"] = WuxDef.Filter(
+            new DatabaseFilterData("group", ["Defense", "Sense"]));
+        this.definitionDatabase["FilterType_Keywords"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Trait"),
+            new DatabaseFilterData("subGroup", "Keyword")
+        ]);
+        this.definitionDatabase["FilterType_DamageType"] = WuxDef.Filter(
+            new DatabaseFilterData("group", "DamageType"));
 
-        let statusDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Status"));
+        let statusDefinitions = WuxDef.Filter(
+            new DatabaseFilterData("group", "Status"));
         statusDefinitions = statusDefinitions.filter(item => item.canBeFiltered);
         this.definitionDatabase["FilterType_StatusGood"] = statusDefinitions.filter(item => item.isBeneficial);
         this.definitionDatabase["FilterType_StatusBad"] = statusDefinitions.filter(item => !item.isBeneficial);
