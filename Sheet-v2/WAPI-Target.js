@@ -293,7 +293,7 @@ class TokenTargetData extends TargetData {
         this.setIcon("status_yellow", value);
     }
     setTurnIcon(value) {
-        this.setIcon("status_purple", value);
+        this.setIcon("status_pink", value);
     }
     setAdvantageIcon(value) {
         this.setIcon("status_purple", value);
@@ -577,33 +577,23 @@ class TokenTargetData extends TargetData {
         attributeHandler.addMod(startEnVar);
         resultsCallback = resultsCallback == undefined ? this.applyResultsToEnergy : resultsCallback;
 
-        if (this.isCharacter()) {
-            this.modifyResourceAttribute(attributeHandler, "EN", startEnVar,
-                this.setModifierToAttribute, resultsCallback);
-        } else {
-            this.modifyIconAttribute(attributeHandler, "status_yellow", startEnVar,
-                function (results, value, attributeHandler, tokenTargetData) {
-                    results.max = 9;
-                    return tokenTargetData.setModifierToAttribute(results, value, attributeHandler);
-                }, resultsCallback);
-        }
+        this.modifyIconAttribute(attributeHandler, "status_yellow", startEnVar,
+            function (results, value, attributeHandler, tokenTargetData) {
+                results.max = 9;
+                return tokenTargetData.setModifierToAttribute(results, value, attributeHandler);
+            }, resultsCallback);
     }
 
     addStartRoundEnergy(attributeHandler, resultsCallback) {
         let roundEnVar = WuxDef.GetVariable("RoundEN");
         attributeHandler.addMod(roundEnVar);
         resultsCallback = resultsCallback == undefined ? this.applyResultsToEnergy : resultsCallback;
-
-        if (this.isCharacter()) {
-            this.modifyResourceAttribute(attributeHandler, "EN", roundEnVar,
-                this.addModifierToAttribute, resultsCallback);
-        } else {
-            this.modifyIconAttribute(attributeHandler, "status_yellow", roundEnVar,
-                function (results, value, attributeHandler, tokenTargetData) {
-                    results.max = 9;
-                    return tokenTargetData.addModifierToAttribute(results, value, attributeHandler, tokenTargetData);
-                }, resultsCallback);
-        }
+        
+        this.modifyIconAttribute(attributeHandler, "status_yellow", roundEnVar,
+            function (results, value, attributeHandler, tokenTargetData) {
+                results.max = 9;
+                return tokenTargetData.addModifierToAttribute(results, value, attributeHandler, tokenTargetData);
+            }, resultsCallback);
     }
 
     applyResultsToEnergy(results, attrHandler, attributeVar, tokenTargetData) {
@@ -869,6 +859,7 @@ class TokenTargetData extends TargetData {
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
             results.current = parseInt(tokenTargetData.getIcon(iconName));
+            Debug.LogError(`${results.name} is set to ${results.current}`);
             if (isNaN(results.current)) {
                 results.current = 0;
             }
@@ -918,6 +909,11 @@ class TokenTargetData extends TargetData {
         if (value == "max") {
             results.newValue = results.max;
             return;
+        }
+        
+        if (isNaN(value)) {
+            // likely a variable. Look it up
+            value = attrHandler.parseInt(value, 0, false);
         }
         
         if (isNaN(value)) {
@@ -1850,10 +1846,10 @@ var TargetReference = TargetReference || (function () {
             output += tokenOptionButton("End", "endcombat");
 
             output += tokenOptionSpacer();
-            output += tokenOptionTitle("Combat Stat Options");
-            output += tokenOptionButton("Full Heal", "pfullheal ?{Team index|0}@@@");
-            output += tokenOptionButton("Add Surge", "phealsurge ?{Team index|0}@@@?{How much surge to add?|1}");
-            output += tokenOptionButton("Add Vitality", "phealvit ?{Team index|0}@@@?{How much vitality to add?|1}");
+            // output += tokenOptionTitle("Combat Stat Options");
+            // output += tokenOptionButton("Full Heal", "pfullheal ?{Team index|0}@@@");
+            // output += tokenOptionButton("Add Surge", "phealsurge ?{Team index|0}@@@?{How much surge to add?|1}");
+            // output += tokenOptionButton("Add Vitality", "phealvit ?{Team index|0}@@@?{How much vitality to add?|1}");
 
             let senderMessage = new SystemInfoMessage(output);
             senderMessage.setSender(sender);
@@ -2315,7 +2311,18 @@ var TargetReference = TargetReference || (function () {
                     let outfitEmoteSetData = new EmoteSetData(attrHandler.parseJSON(emotesVar));
                     let messageObject = new IntroEmoteMessage(sender, msg);
                     messageObject.setTitle(attrHandler.parseString(introNameVar));
-                    messageObject.message = `${attrHandler.parseString(titleVar)}\nAge ${attrHandler.parseString(ageVar)}; ${attrHandler.parseString(genderVar)}`;
+                    let message = [];
+                    let title = attrHandler.parseString(titleVar);
+                    if (title != "" && title != "0") {
+                        message.push(title);
+                    }
+                    let age = attrHandler.parseString(ageVar);
+                    let gender = attrHandler.parseString(genderVar);
+                    let secondLine = `${age == "0" ? "" : `Age ${age}`}${gender == "0" ? "" : `; ${gender}`}`;
+                    if (secondLine != "") {
+                        message.push(secondLine);
+                    }
+                    messageObject.message = message.join("\n");
                     messageObject.url = outfitEmoteSetData.defaultEmote;
                     messageObject.setSender(sender);
                     WuxMessage.Send(messageObject);

@@ -4432,7 +4432,7 @@ class CombatDetails {
     }
 
     printTooltip() {
-        let output = `${this.displayName} [CR${this.cr}] ${this.affinity} ${this.job}`;
+        let output = `${this.displayName} [CR${this.cr}] ${this.affinity == 0 ? "" : ` ${this.affinity}`}${this.job}`;
         output += ` =========================== `;
         output += `${this.defenses.printDefenses(this.cr)} - `;
         switch (this.displayStyle) {
