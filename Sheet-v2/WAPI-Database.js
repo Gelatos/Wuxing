@@ -4565,7 +4565,7 @@ class CombatDetails {
     }
 
     printTooltip() {
-        let output = `${this.displayName} [CR${this.cr}] ${this.affinity} ${this.job}`;
+        let output = `${this.displayName} [CR${this.cr}] ${this.affinity == 0 ? "" : ` ${this.affinity}`}${this.job}`;
         output += ` =========================== `;
         output += `${this.defenses.printDefenses(this.cr)} - `;
         switch (this.displayStyle) {
@@ -4874,6 +4874,16 @@ class CombatDetailsHandler {
     setData(attrHandler) {
         if (this.combatDetails.cr == 0 && attrHandler != undefined) {
             this.combatDetails.importJson(attrHandler.parseJSON(this.combatDetailsVar));
+        }
+    }
+    setDataFromTokenNote(tokenNote) {
+        if (tokenNote.surges != undefined) {
+            this.combatDetails.surges = tokenNote.surges.current;
+            this.combatDetails.maxsurges = tokenNote.surges.max;
+        }
+        if (tokenNote.vitality != undefined) {
+            this.combatDetails.vitality = tokenNote.vitality.current;
+            this.combatDetails.maxvitality = tokenNote.vitality.max;
         }
     }
 }
