@@ -395,13 +395,16 @@ class TokenTargetData extends TargetData {
         this.refreshCombatDetails(attributeHandler);
         return this.combatDetails;
     }
-    refreshCombatDetails(attributeHandler) {
+    refreshCombatDetails(attributeHandler, tokenNoteReference) {
         if (attributeHandler == undefined) {
             return;
         }
         this.combatDetails = new CombatDetailsHandler(attributeHandler);
         this.combatDetails.setData(attributeHandler);
-        
+        if (tokenNoteReference == undefined) {
+            tokenNoteReference = new TokenNoteReference(this.getTokenNote());
+        }
+        this.combatDetails.setDataFromTokenNote(tokenNoteReference);
     }
     setCombatDetails(attrHandler, tokenNoteReference, statusHandler) {
         if (this.combatDetails == undefined) {
@@ -415,6 +418,7 @@ class TokenTargetData extends TargetData {
             if (tokenNoteReference == undefined) {
                 tokenNoteReference = new TokenNoteReference(this.getTokenNote());
             }
+            this.combatDetails.setDataFromTokenNote(tokenNoteReference);
             let toolTip = this.combatDetails.printTooltip(attrHandler, this.displayName);
             if (statusHandler == undefined) {
                 statusHandler = tokenNoteReference.statusHandler;
@@ -457,7 +461,7 @@ class TokenTargetData extends TargetData {
         if (tokenNoteReference == undefined) {
             tokenNoteReference = new TokenNoteReference(this.getTokenNote());
         }
-        
+        Debug.LogError(`Setting team index to ${index}`);
         tokenNoteReference.teamIndex = index;
         this.setTokenNote(JSON.stringify(tokenNoteReference));
     }
@@ -715,17 +719,15 @@ class TokenTargetData extends TargetData {
         }
     }
     applyResultsSurge(results, attrHandler, attributeVar, tokenTargetData) {
-        if (tokenTargetData.isBarLinked(1)) {
+        if (tokenTargetData.isCharacter()) {
             attrHandler.addUpdate(attributeVar, results.newValue, false);
             tokenTargetData.combatDetails.onUpdateSurges(attrHandler, results.newValue);
             tokenTargetData.setCombatDetails(attrHandler);
-        } else {
-            Debug.Log(`Updating vitality in token note to ${results.newValue}`);
-            let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
-            tokenNoteReference.surges.current = results.newValue;
-            tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
-            tokenTargetData.setCombatDetails(attrHandler, tokenNoteReference);
         }
+        let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
+        tokenNoteReference.surges.current = results.newValue;
+        tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
+        tokenTargetData.setCombatDetails(attrHandler, tokenNoteReference);
     }
 
     // Vitality
@@ -744,16 +746,15 @@ class TokenTargetData extends TargetData {
         }
     }
     applyResultsVitality(results, attrHandler, attributeVar, tokenTargetData) {
-        if (tokenTargetData.isBarLinked(1)) {
+        if (tokenTargetData.isCharacter()) {
             attrHandler.addUpdate(attributeVar, results.newValue, false);
             tokenTargetData.combatDetails.onUpdateVitality(attrHandler, results.newValue);
             tokenTargetData.setCombatDetails(attrHandler);
-        } else {
-            let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
-            tokenNoteReference.vitality.current = results.newValue;
-            tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
-            tokenTargetData.setCombatDetails(attrHandler, tokenNoteReference);
         }
+        let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
+        tokenNoteReference.vitality.current = results.newValue;
+        tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
+        tokenTargetData.setCombatDetails(attrHandler, tokenNoteReference);
 
         return results;
     }
@@ -859,7 +860,6 @@ class TokenTargetData extends TargetData {
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
             results.current = parseInt(tokenTargetData.getIcon(iconName));
-            Debug.LogError(`${results.name} is set to ${results.current}`);
             if (isNaN(results.current)) {
                 results.current = 0;
             }
