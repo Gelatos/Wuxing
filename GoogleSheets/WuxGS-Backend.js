@@ -1,5 +1,29 @@
 // noinspection JSUnusedGlobalSymbols,HtmlUnknownAttribute,ES6ConvertVarToLetConst,JSUnresolvedReference,SpellCheckingInspection
 
+var WuxSheetBackend = WuxSheetBackend || (function () {
+    'use strict';
+
+    const onChange = function (variables, contents, hasEvents) {
+            let output = "";
+            for (let i = 0; i < variables.length; i++) {
+                if (output != "") {
+                    output += " ";
+                }
+                output += `change:${variables[i]}`;
+            }
+            return `on("${output}", function (${hasEvents != undefined ? "eventinfo" : ""}) {\n${contents}\n});\n`;
+
+            // return `on("${output}", function (eventinfo) {
+            // if(eventinfo.sourceType === "sheetworker") return;
+            // ${contents}
+            // });\n`;
+        }
+    ;
+    return {
+        OnChange: onChange
+    };
+}());
+
 var BuilderBackend = BuilderBackend || (function () {
     'use strict';
 
@@ -338,6 +362,7 @@ var FormeBuilder = FormeBuilder || (function () {
             output += listenerEquipRepeatingForme();
             output += listenerInspectRepeatingForme();
             output += listenerSetFormeOptions();
+            output += listenerJobSelect();
             return output;
         },
         listenerEquipRepeatingForme = function () {
@@ -380,6 +405,10 @@ var FormeBuilder = FormeBuilder || (function () {
             }
 
             return output;
+        },
+        listenerJobSelect = function () {
+            return `${WuxSheetBackend.OnChange([WuxDef.GetVariable("Forme_SelectJob")],
+                `WuxWorkerJobs.EquipJobFromEvent(eventinfo)`, true)}`;
         }
     return {
         Print: print

@@ -225,7 +225,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
             loader.run();
         });
-    };;
+    };
 
     const seeSetItemTechniques = function (eventinfo, styleFieldName, itemType) {
         Debug.Log("See Item Techniques");

@@ -1330,7 +1330,7 @@ class SkillData extends WuxDatabaseData {
         this.subGroup = json.subGroup;
         this.abilityScore = json.abilityScore;
         this.abilityScore2 = json.abilityScore2;
-        this.description = json.description;
+        this.descriptions = json.descriptions;
     }
 
     importSheets(dataArray) {
@@ -1347,7 +1347,7 @@ class SkillData extends WuxDatabaseData {
         i++;
         this.abilityScore2 = "" + dataArray[i];
         i++;
-        this.description = "" + dataArray[i];
+        this.descriptions = ["" + dataArray[i]];
         i++;
 
     }
@@ -1360,7 +1360,6 @@ class SkillData extends WuxDatabaseData {
         this.subGroup = "";
         this.abilityScore = "";
         this.abilityScore2 = "";
-        this.description = "";
     }
 
     createDefinition(baseDefinition) {
@@ -1379,7 +1378,7 @@ class LanguageData extends WuxDatabaseData {
         this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
         this.location = json.location;
-        this.description = json.description;
+        this.descriptions = json.descriptions;
     }
 
     importSheets(dataArray) {
@@ -1392,7 +1391,7 @@ class LanguageData extends WuxDatabaseData {
         i++;
         this.location = "" + dataArray[i];
         i++;
-        this.description = "" + dataArray[i];
+        this.descriptions = ["" + dataArray[i]];
         i++;
     }
 
@@ -1402,7 +1401,6 @@ class LanguageData extends WuxDatabaseData {
         this.fieldName = "";
         this.group = "";
         this.location = "";
-        this.description = "";
     }
 
     createDefinition(baseDefinition) {
@@ -1419,7 +1417,7 @@ class LoreData extends WuxDatabaseData {
         this.name = json.name;
         this.fieldName = json.fieldName;
         this.group = json.group;
-        this.description = json.description;
+        this.descriptions = json.descriptions;
     }
 
     importSheets(dataArray) {
@@ -1430,7 +1428,7 @@ class LoreData extends WuxDatabaseData {
         this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i];
         i++;
-        this.description = "" + dataArray[i];
+        this.descriptions = ["" + dataArray[i]];
         i++;
     }
 
@@ -1439,7 +1437,6 @@ class LoreData extends WuxDatabaseData {
         this.name = "";
         this.fieldName = "";
         this.group = "";
-        this.description = "";
     }
 
     createDefinition(baseDefinition) {
@@ -1460,7 +1457,6 @@ class JobData extends WuxDatabaseData {
         this.category = "";
         this.difficulty = 0;
         this.skills = "";
-        this.descriptions = [];
         this.defenses = "";
         this.techniques = [];
     }

@@ -622,9 +622,10 @@ class WuxJobWorkerBuild extends WuxWorkerBuild {
 		let styleData = [];
 		this.iterateBuildStats(function (jobVariableData) {
 			let style = WuxStyles.GetByVariableName(jobVariableData.name);
-			let rank = parseInt(jobVariableData.value);
-			if (!isNaN(rank) && rank > 0) {
-				styleData.push({style: style, rank: rank});
+			let rank = jobVariableData.value;
+			Debug.Log(`${jobVariableData} with ${style.name} at rank: ${rank}`);
+			if (rank == "on") {
+				styleData.push({style: style, rank: 1});
 			}
 		});
 		return styleData;

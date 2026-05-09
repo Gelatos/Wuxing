@@ -475,6 +475,22 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
     'use strict';
 
     const
+        updateAllActionsFromMenu = function (attributeHandler)  {
+            let pageSetVariable = WuxDef.GetVariable("PageSet");
+            let formeTechniqueFilterVariable = WuxDef.GetVariable("Action_FormeTechniques", WuxDef._filter);
+            attributeHandler.addMod(pageSetVariable, formeTechniqueFilterVariable);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let attributeHandler2 = new WorkerAttributeHandler();
+                if (attrHandler.parseString(pageSetVariable) == "Core") {
+                    let filter = attrHandler.parseJSON(formeTechniqueFilterVariable);
+                    updateAllActions(attributeHandler2, filter);
+                }
+                else {
+                    WuxWorkerActions.UpdateAllActionsInAdvancement(attributeHandler2);
+                }
+                attributeHandler2.run();
+            });
+        },
         updateAllActionsInAdvancement = function (attributeHandler)  {
             updateAllActions(attributeHandler, [new DatabaseFilterData("group", "Style")]);
         },
@@ -793,6 +809,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
     ;
 
     return {
+        UpdateAllActionsFromMenu: updateAllActionsFromMenu,
         UpdateAllActionsInAdvancement: updateAllActionsInAdvancement,
         UpdateAllFormeActions: updateAllFormeActions,
         RefreshAllFormeActions: refreshAllFormeActions,
@@ -910,6 +927,9 @@ class FormeTechniqueDatabase {
 
         this.setFormeSlotsDefinitionData();
         this.addFormeSlotVariables(attributeHandler);
+        this.jobSlotVariable = WuxDef.GetVariable("Forme_JobSlot");
+        attributeHandler.addMod(this.jobSlotVariable);
+        
         this.equippedSlots = [];
         WuxWorkerActionsService.AddBoosterVariables(attributeHandler);
         WuxWorkerActionsService.addAffinityVariables(attributeHandler);
@@ -926,11 +946,6 @@ class FormeTechniqueDatabase {
     }
     setFormeSlotsDefinitionData () {
         this.formeDefinitions = [
-            // {
-            //     mainDef: WuxDef.Get("Forme_AdvancedSlot"),
-            //     max: parseInt(WuxDef.Get("Forme_AdvancedSlotCount").formula.getValue()),
-            //     countDef: WuxDef.Get("AdvancedSlots")
-            // },
             {
                 mainDef: WuxDef.Get("Forme_StyleSlot"),
                 max: parseInt(WuxDef.Get("Forme_StyleSlotCount").formula.getValue()),
@@ -968,6 +983,9 @@ class FormeTechniqueDatabase {
         
         let formeTechniqueDatabase = this;
         formeTechniqueDatabase.equippedSlots = [];
+        let equippedJobName = attrHandler.parseString(this.jobSlotVariable);
+        Debug.Log(`Equipped ${equippedJobName}`);
+        formeTechniqueDatabase.equippedSlots.push(attrHandler.parseString(this.jobSlotVariable));
         this.formeDefinitions.forEach(function (slot) {
             let count = attrHandler.parseInt(slot.countDef.getVariable());
             for (let i = 1; i <= count; i++) {
@@ -1009,6 +1027,7 @@ class FormeTechniqueDatabase {
     iterateAllTechniquesFromLearnedStyles(callback) {
         let allJobsArray = this.jobWorker.getStyles();
         allJobsArray.forEach((styleData) => {
+            Debug.Log(`Setting tech for ${styleData.style.name}`);
             let filteredTechs = WuxTechs.Filter(new DatabaseFilterData("style", styleData.style.name));
             filteredTechs.forEach(tech => callback(tech, 1));
         });

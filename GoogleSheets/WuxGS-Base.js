@@ -1225,6 +1225,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 buildFormeActions = function () {
                     let contents = "";
 
+                    contents += buildJobSelection();
                     contents += repeatingFormeSection();
                     contents += repeatingCustomTechniquesSection();
                     
@@ -1243,7 +1244,11 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
                         `${sectionDef.getTitle()}`, contents);
                 },
-
+                
+                buildJobSelection = function () {
+                    let jobSelection = new JobSelectionBuilder();
+                    return jobSelection.print();
+                },
                 repeatingFormeSection = function () {
                     let repeaterDefinition = WuxDef.Get("RepeatingFormeTech");
                     let repeatingVariable = repeaterDefinition.getVariable();

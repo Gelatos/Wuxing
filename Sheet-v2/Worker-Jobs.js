@@ -1,25 +1,4 @@
-
-
 var WuxWorkerJobs = WuxWorkerJobs || (function () {
-    
-    const addStyles = function (attrHandler, jobWorker, jobStylesRepeater) {
-        Debug.Log("Add Job Styles from addStyles");
-        let jobSlot = WuxDef.GetVariable("Forme_JobSlot");
-
-        jobWorker.iterateBuildStats(function (jobStyleVariableData) {
-            let jobStyle = WuxStyles.GetByVariableName(jobStyleVariableData.name);
-            Debug.Log(`Adding Job Style ${jobStyleVariableData.name}`);
-
-            if (jobStyle.group != "") {
-                let newRowId = jobStylesRepeater.generateRowId();
-                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Name")), jobStyle.name);
-                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Tier")), jobStyleVariableData.value);
-                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_IsEquipped")), jobSlot == jobStyle.name ? "on" : 0);
-                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Actions")), 0);
-                attrHandler.addUpdate(jobStylesRepeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_SeeTechniques")), 0);
-            }
-        });
-    };
     'use strict';
 
     const updateBuildPoints = function (eventinfo) {
@@ -97,13 +76,43 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             }
             WuxWorkerInspectPopup.OpenTechniqueInspection(attributeHandler, inventoryTitle, inventoryItems.items);
             attributeHandler.run();
+        },
+
+        equipJob = function (attributeHandler, jobName) {
+            if (jobName == "0") {
+                return;
+            }
+            let jobSlotVariable = WuxDef.GetVariable("Forme_JobSlot");
+            attributeHandler.addMod(jobSlotVariable);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let jobDef = WuxDef.Get(Format.GetDefinitionName("Job", jobName));
+                let lastJobName = attrHandler.parseString(jobSlotVariable);
+                if (lastJobName != "") {
+                    let lastJobDef = WuxDef.Get(Format.GetDefinitionName("Job", lastJobName));
+                    attributeHandler.addUpdate(lastJobDef.getVariable(WuxDef._learn), "0");
+                }
+                attributeHandler.addUpdate(jobDef.getVariable(WuxDef._learn), "on");
+                attributeHandler.addUpdate(jobSlotVariable, jobName);
+            });
+        },
+    
+        equipJobFromEvent = function (eventinfo) {
+            let jobName = eventinfo.newValue;
+            Debug.Log(`Equipping ${jobName}`);
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
+            equipJob(attributeHandler, jobName);
+            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+            attributeHandler.run();
         };
 
     return {
         UpdateBuildPoints: updateBuildPoints,
         RefreshStats: refreshStats,
         UpdateStats: updateStats,
-        SeeTechniques: seeTechniques
+        SeeTechniques: seeTechniques,
+        EquipJob: equipJob,
+        EquipJobFromEvent: equipJobFromEvent
     };
 }());
 

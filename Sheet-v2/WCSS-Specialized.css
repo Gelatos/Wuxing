@@ -263,6 +263,27 @@ input[type=hidden].wuxPageDisplay-Flag[value="Chapter"] ~ .wuxPageDisplay-Chapte
 }
 
 /*========================================
+    Job Selection
+========================================*/
+
+.wuxJobSelection .wuxButton {
+    width: 150px;
+}
+input[type=hidden].wuxJobSelection-flag[value="on"] + .wuxButton
+{
+    background: #aae1ff;
+}
+
+/*========================================
+    Skills
+========================================*/
+
+.wuxSkillGroup {
+    min-width: 220px;
+    max-width: 220px;
+}
+
+/*========================================
     Influences
 ========================================*/
 
