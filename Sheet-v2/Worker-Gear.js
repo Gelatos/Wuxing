@@ -69,15 +69,11 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 styleName = attrHandler.parseString(this.styleFieldName);
                 attrHandler.addUpdate(emptySlotFieldName, styleName);
             }
-
-            WuxWorkerActions.PopulateGearActions();
         }
 
         unequipSlot(attrHandler, actionFieldName, slotIndex, emptySlotFieldName) {
             attrHandler.addUpdate(this.styleRepeater.getFieldName(this.selectedId, WuxDef.GetVariable("Gear_ItemIsEquipped")), "0");
             attrHandler.addUpdate(emptySlotFieldName, "0");
-
-            WuxWorkerActions.PopulateGearActions();
         }
 
         findMatchingEquippedSlot(attrHandler, repeater, slotContents) {
@@ -158,6 +154,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                     setWeaponDamageValues(attrHandler, attrHandler.parseString(emptyEquipSlot.slotFieldName));
                 }
             });
+            WuxWorkerActions.UpdateAllActionsFromMenu(equipItemWorker.attributeHandler);
             let loader = new LoadingScreenHandler(equipItemWorker.attributeHandler);
             loader.run();
         });
@@ -202,6 +199,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 }
             }
         });
+        WuxWorkerActions.UpdateAllActionsFromMenu(equipStyleWorker.attributeHandler);
         let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
         loader.run();
     };
@@ -222,6 +220,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 equipStyleWorker.closeMenu(attrHandler);
                 equipStyleWorker.unequipSlot(attrHandler, actionFieldName, slotIndex, equipSlotFieldName);
             });
+            WuxWorkerActions.UpdateAllActionsFromMenu(equipStyleWorker.attributeHandler);
             let loader = new LoadingScreenHandler(equipStyleWorker.attributeHandler);
             loader.run();
         });

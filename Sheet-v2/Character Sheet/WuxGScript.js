@@ -11654,7 +11654,6 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 print = function () {
                     let contents = "";
                     contents += buildFormeActions();
-                    contents += buildGearActions();
                     return WuxSheetMain.Build(contents);
                 },
 
@@ -11670,16 +11669,6 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
                         `${sectionDef.getTitle()}`, contents);
                 },
-                buildGearActions = function () {
-                    let contents = "";
-                    contents += repeatingBasicTechniquesSection("RepeatingGearTech", "GearTech");
-                    contents += repeatingBasicTechniquesSection("RepeatingConsumables", "");
-                    contents = WuxSheetMain.TabBlock(contents);
-
-                    let sectionDef = WuxDef.Get("StyleCategory_Gear");
-                    return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
-                        `${sectionDef.getTitle()}`, contents);
-                },
                 
                 buildJobSelection = function () {
                     let jobSelection = new JobSelectionBuilder();
@@ -11689,11 +11678,13 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let repeaterDefinition = WuxDef.Get("RepeatingFormeTech");
                     let repeatingVariable = repeaterDefinition.getVariable();
                     let sectionDefinition = WuxDef.Get("Action_FormeTechniques");
+                    let refreshField = sectionDefinition.getAttribute(WuxDef._refresh);
+                    let sortField = sectionDefinition.getAttribute(WuxDef._subfilter);
                     let filterField = sectionDefinition.getAttribute(WuxDef._learn);
                     let removeFilterField = sectionDefinition.getAttribute(WuxDef._filter);
 
                     let header = getFormeSectionHeader(
-                        `<span>${sectionDefinition.getTitle()}</span>`, filterField, removeFilterField);
+                        `<span>${sectionDefinition.getTitle()}</span>`, refreshField, filterField, removeFilterField);
                     
                     let actionDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible"), 
                         printFormTechniqueFullActionDisplay());
@@ -11726,19 +11717,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     
                     // return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
-                repeatingBasicTechniquesSection = function (repeaterName) {
-                    let repeatingDef = WuxDef.Get(repeaterName);
 
-                    let header = `<span>${repeatingDef.getTitle()}</span>`;
-                    let actionDisplay = printFormTechniqueFullActionDisplay();
-                    let displayTechniquesContents = buildRepeater(repeatingDef.getVariable(), actionDisplay);
-                    
-                    return `${WuxSheetMain.Header(header)}
-                    ${displayTechniquesContents}
-                    ${WuxSheetMain.Row("&nbsp;")}`;
-                },
-
-                getFormeSectionHeader = function (headerName, filterField, removeFilterField) {
+                getFormeSectionHeader = function (headerName, refreshField, filterField, removeFilterField) {
                     let headerButtons = "";
                     let loadFormeField = WuxDef.GetAttribute("Action_FormeLoadCount");
                     let loadFormeDef = WuxDef.Get("Action_FormeLoad");
@@ -14990,7 +14970,7 @@ class JobSelectionBuilder {
     }
     printJobSelectButton(jobDefinition) {
         let jobName = jobDefinition.getTitle();
-        return WuxSheetMain.HiddenField(jobDefinition.getAttribute(),
+        return WuxSheetMain.HiddenSpanField(jobDefinition.getAttribute(),
             `<input type="hidden" class="wuxJobSelection-flag" name="${jobDefinition.getAttribute(WuxDef._learn)}" />
             ${WuxSheetMain.Button(this.jobSelectDefinition.getAttribute(), jobName, "", jobName)}`
         );

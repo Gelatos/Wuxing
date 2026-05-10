@@ -99,7 +99,7 @@ class FilterPopup {
                 });
                 attributeHandler2.run();
             })
-            attributeHandler.run();
+            this.attributeHandler.run();
         });
     }
     

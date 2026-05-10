@@ -25,7 +25,7 @@ class JobSelectionBuilder {
     }
     printJobSelectButton(jobDefinition) {
         let jobName = jobDefinition.getTitle();
-        return WuxSheetMain.HiddenField(jobDefinition.getAttribute(),
+        return WuxSheetMain.HiddenSpanField(jobDefinition.getAttribute(),
             `<input type="hidden" class="wuxJobSelection-flag" name="${jobDefinition.getAttribute(WuxDef._learn)}" />
             ${WuxSheetMain.Button(this.jobSelectDefinition.getAttribute(), jobName, "", jobName)}`
         );

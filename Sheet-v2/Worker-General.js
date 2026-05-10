@@ -88,27 +88,9 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             attributeHandler.run();
         },
         updatePrimaryAffinity = function (eventinfo) {
-            let loader = new LoadingScreenHandler();
-            loader.showLoadingScreen(() => {
-                WuxWorkerActions.GetAllStyleSlotRepeaterIDs((repeaterSlotData) => {
-                    let attributeHandler = new WorkerAttributeHandler();
-
-                    let crVar = WuxDef.GetVariable("CR");
-                    attributeHandler.addMod(crVar);
-
-                    attributeHandler.addGetAttrCallback(function (attrHandler) {
-                        let newAttributeHandler = new WorkerAttributeHandler();
-                        WuxWorkerActions.UpdateAllActiveStyleActions(newAttributeHandler, repeaterSlotData, 
-                            attrHandler.parseInt(crVar));
-                        newAttributeHandler.addFinishCallback(() => {
-                            loader.hideLoadingScreen();
-                        });
-                        newAttributeHandler.run();
-                    });
-                    attributeHandler.run();
-                });
-            });
-        
+            let attributeHandler = new WorkerAttributeHandler();
+            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+            attributeHandler.run();
         },
         generateCharacter = function () {
             let attributeHandler = new WorkerAttributeHandler();

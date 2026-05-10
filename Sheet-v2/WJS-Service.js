@@ -623,7 +623,6 @@ class WuxJobWorkerBuild extends WuxWorkerBuild {
 		this.iterateBuildStats(function (jobVariableData) {
 			let style = WuxStyles.GetByVariableName(jobVariableData.name);
 			let rank = jobVariableData.value;
-			Debug.Log(`${jobVariableData} with ${style.name} at rank: ${rank}`);
 			if (rank == "on") {
 				styleData.push({style: style, rank: 1});
 			}
@@ -1121,7 +1120,6 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 				this.getVariable("TechEnhanceEffect"), displayData.getEnhanceEffects("\n"));
 			let cr = this.attrHandler.parseInt(WuxDef.GetVariable("CR"), 1);
-			Debug.Log(`${technique.name} is at rank ${technique.rank} with max ${technique.getMaxRank(cr)}`);
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 				this.getVariable("TechRankUp", WuxDef._info), (technique.rank < technique.getMaxRank(cr) ? "1" : "0"));
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
