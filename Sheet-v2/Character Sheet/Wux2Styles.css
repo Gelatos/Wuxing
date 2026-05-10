@@ -1904,6 +1904,10 @@ input[type=hidden].wuxJobSelection-flag[value="on"] + .wuxButton
 {
     background: #aae1ff;
 }
+input[type=hidden].wuxJobSelection-flag[value="on"] + .wuxButton span
+{
+    font-weight: bold;
+}
 
 /*========================================
     Skills
