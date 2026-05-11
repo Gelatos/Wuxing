@@ -187,11 +187,11 @@ class Database extends Dictionary {
         let filterOutput = this.getSortedGroup(filterData.property, filterData.value[0]);
         for (let i = 1; i < filterData.value.length; i++) {
             let nextFilter = this.getSortedGroup(filterData.property, filterData.value[i]);
-            nextFilter.forEach(item => {
+            for (let item of nextFilter) {
                 if (!filterOutput.includes(item)) {
                     filterOutput.push(item);
                 }
-            });
+            }
         }
         return filterOutput;
     }
@@ -599,7 +599,7 @@ class WuxDatabaseData extends dbObj {
         let definition = new DefinitionData();
         definition.name = baseDefinition.isResource ? `${this.name}` : `${baseDefinition.abbreviation}_${this.name}`;
         definition.fieldName = this.fieldName;
-        definition.variable = `${baseDefinition.getVariable(`-${this.variable == "" ? this.fieldName : this.variable}`)}{0}`;
+        definition.variable = `${baseDefinition.getVariable(`-${this.variable == "" ? this.fieldName : this.variable}`)}{0}{1}`;
         definition.title = this.name;
         definition.group = baseDefinition.name;
         definition.subGroup = "";
@@ -3871,49 +3871,48 @@ class FormulaData {
                         output += " + ";
                     }
                     if (definition.group == "StatBonus") {
-                        output += `${definition.formula.getString()}`;
-                    } else {
-                        if (worker.multiplier != 1) {
-                            if (isNaN(parseFloat(worker.multiplier))) {
-                                let text = "";
-                                if (worker.multiplier == "adv-cr") {
-                                    text = WuxDef.GetTitle("CR");
-                                }
-                                output += `[${definition.title} x ${text}]`;
-                            } else if (worker.multiplier > 1) {
-                                output += `[${definition.title} x ${worker.multiplier}]`;
-                            } else {
-                                switch (worker.multiplier) {
-                                    case 0.5:
-                                        output += `[½ ${definition.title}]`;
-                                        break;
-                                    case 0.33:
-                                        output += `[⅓ ${definition.title}]`;
-                                        break;
-                                    case 0.25:
-                                        output += `[¼ ${definition.title}]`;
-                                        break;
-                                    case 0.2:
-                                        output += `[⅕ ${definition.title}]`;
-                                        break;
-                                }
+                        output += `${definition.formula.getString()} `;
+                    } else if (worker.multiplier != 1) {
+                        if (isNaN(parseFloat(worker.multiplier))) {
+                            let text = "";
+                            if (worker.multiplier == "adv-cr") {
+                                text = WuxDef.GetTitle("CR");
                             }
+                            else {
+                                text = WuxDef.GetTitle(worker.multiplier);
+                            }
+                            output += `[${definition.title} x ${text}] `;
+                        } else if (worker.multiplier > 1) {
+                            output += `[${definition.title} x ${worker.multiplier}] `;
                         } else {
-                            output += `[${definition.title}]`;
+                            switch (worker.multiplier) {
+                                case 0.5:
+                                    output += `[½ ${definition.title}] `;
+                                    break;
+                                case 0.33:
+                                    output += `[⅓ ${definition.title}] `;
+                                    break;
+                                case 0.25:
+                                    output += `[¼ ${definition.title}] `;
+                                    break;
+                                case 0.2:
+                                    output += `[⅕ ${definition.title}] `;
+                                    break;
+                            }
                         }
+                    } else {
+                        output += `[${definition.title}] `;
                     }
 
                     if (worker.max > 0) {
-                        output += `(max:${worker.max})`;
+                        output += `(max:${worker.max}) `;
                     }
                 }
-            } else if (worker.value == 0) {
-                // do nothing
-            } else {
-                if (output != "") {
-                    output += " + ";
-                }
-                output += worker.value;
+            } else if (worker.value > 0) {
+                output += `${output != "" ? "+ " : ""} ${worker.value} `;
+            }
+            else if (worker.value < 0) {
+                output += `- ${Math.abs(worker.value)} `;
             }
 
         });
