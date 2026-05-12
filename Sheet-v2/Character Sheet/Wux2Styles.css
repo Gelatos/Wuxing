@@ -1919,6 +1919,20 @@ input[type=hidden].wuxJobSelection-flag[value="on"] + .wuxButton span
 }
 
 /*========================================
+    Background
+========================================*/
+
+.wuxAncestrySelection-Human
+{
+    display: none;
+}
+
+input[type=hidden].wuxAncestrySelection-flag[value="Human"] + .wuxAncestrySelection-Human
+{
+    display: block;
+}
+
+/*========================================
     Influences
 ========================================*/
 

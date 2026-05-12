@@ -101,6 +101,8 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             let contents = "";
                             contents += WuxDefinition.BuildText(WuxDef.Get("FullName"), 
                                 WuxSheetMain.Span(WuxDef.GetAttribute("FullName")));
+                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("DisplayName"), 
+                                WuxDef.GetAttribute("DisplayName"));
                             
                             let hiddenAttr = WuxDef.GetAttribute("AffinityAspect");
                             let affinityFilter = [WuxDef.Get("Unaspected")].concat(
@@ -242,121 +244,10 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
                     var
                         build = function () {
-                            let contents = "";
-                            contents += buildOrigin();
-                            contents += createStatGroup("Attribute");
-                            contents += createStatGroup("Defense");
-                            contents += createStatGroup("Sense");
-                            contents += createStatGroup("General");
-                            contents += createStatGroup("Combat");
-                            contents += createStatGroup("Skill");
-                            return contents;
-                        },
-
-                        buildOrigin = function () {
-                            let contents = "";
-                            contents += WuxSheetMain.Header("Basics");
-                            contents += `${WuxSheetMain.MultiRowGroup([backgroundBasics(), backgroundBackstory()], WuxSheetMain.Table.FlexTable, 2)}`;
-                            contents += WuxSheetMain.Header("Background Generator");
-                            contents += backgroundGenerator();
-
-                            let definition = WuxDef.Get("Page_Origin")
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, WuxSheetMain.TabBlock(contents));
-                        },
-
-                        backgroundBasics = function () {
-                            let contents = "";
-                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("SheetName"), WuxDef.GetAttribute("SheetName"));
-                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName"));
-                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("DisplayName"), WuxDef.GetAttribute("DisplayName"));
-                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("Title"), WuxDef.GetAttribute("Title"));
-                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("Age"), WuxDef.GetAttribute("Age"));
-                            contents += WuxDefinition.BuildSelect(WuxDef.Get("Gender"), WuxDef.GetAttribute("Gender"),
-                                WuxDef.Filter([new DatabaseFilterData("group", "GenderType")]), true);
-                            contents += WuxDefinition.BuildSelect(WuxDef.Get("Ancestry"), WuxDef.GetAttribute("Ancestry"),
-                                WuxDef.Filter([new DatabaseFilterData("group", "AncestryType")]));
-                            let affinityFilter = [WuxDef.Get("Unaspected")].concat(
-                                WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])
-                            );
-                            contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("AffinityAspect"),
-                                affinityFilter, false);
-                            contents += WuxDefinition.BuildSelect(WuxDef.Get("HomeRegion"), WuxDef.GetAttribute("HomeRegion"),
-                                WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]));
-                            contents += WuxDefinition.BuildSelect(WuxDef.Get("Ethnicity"), WuxDef.GetAttribute("Ethnicity"),
-                                WuxDef.Filter([new DatabaseFilterData("group", "RaceType")]), true);
-                            // contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("Affinity"),
-                            //         WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]));
-                            contents = WuxSheetMain.Table.FlexTableGroup(contents);
-                            return contents;
-                        },
-
-                        backgroundBackstory = function () {
-                            let contents = "";
-                            contents += WuxDefinition.BuildTextarea(WuxDef.Get("QuickDescription"), WuxDef.GetAttribute("QuickDescription"),
-                                "wuxInput wuxHeight30");
-                            contents += WuxDefinition.BuildTextarea(WuxDef.Get("Backstory"), WuxDef.GetAttribute("Backstory"),
-                                "wuxInput wuxHeight150");
-                            contents = WuxSheetMain.Table.FlexTableGroup(contents);
-                            return contents;
-                        },
-
-                        backgroundGenerator = function () {
-                            let leftColmun = "";
-                            leftColmun += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenName"), WuxDef.GetAttribute("Note_GenName"));
-                            leftColmun += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenFullName"), WuxDef.GetAttribute("Note_GenFullName"));
-                            leftColmun += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenGender"), WuxDef.GetAttribute("Note_GenGender"));
-                            leftColmun += WuxDefinition.BuildSelect(WuxDef.Get("Note_GenHomeRegion"), WuxDef.GetAttribute("Note_GenHomeRegion"),
-                                WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]));
-                            leftColmun += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenRace"), WuxDef.GetAttribute("Note_GenRace"));
-                            leftColmun = WuxSheetMain.Table.FlexTableGroup(leftColmun);
-
-                            let rightColumn = "";
-                            let generatorDefinition = WuxDef.Get("Note_GenerateCharacter");
-                            let useDefinition = WuxDef.Get("Note_UseGeneration");
-                            let clearDefinition = WuxDef.Get("Note_ClearBackground");
-                            rightColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenPersonality"), WuxDef.GetAttribute("Note_GenPersonality"));
-                            rightColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenMotivation"), WuxDef.GetAttribute("Note_GenMotivation"));
-                            rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(generatorDefinition.getAttribute(), generatorDefinition.getTitle()));
-                            rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(useDefinition.getAttribute(), useDefinition.getTitle()));
-                            rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(clearDefinition.getAttribute(), clearDefinition.getTitle()));
-                            rightColumn = WuxSheetMain.Table.FlexTableGroup(rightColumn);
-
-                            return `${WuxSheetMain.MultiRowGroup([leftColmun, rightColumn], WuxSheetMain.Table.FlexTable, 2)}`;
-                        },
-
-                        createStatGroup = function (groupName) {
-                            let definition = WuxDef.Get(groupName);
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, createStatTable(groupName));
-                        },
-
-                        createStatTable = function (groupName) {
-                            let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", groupName)]);
-                            let output = "";
-                            for (let i = 0; i < filteredStats.length; i++) {
-                                output += createStatBlock(filteredStats[i]);
-                            }
-                            return WuxSheetMain.TabBlock(WuxSheetMain.Table.FlexTable(output));
-                        },
-
-                        createStatBlock = function (statDefinition) {
-                            let header = `${statDefinition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(statDefinition))}`;
-                            let contents = "";
-                            if (statDefinition.isResource) {
-                                // contents += createStatBlockValueWithHeader("Current", statDefinition.getAttribute());
-                                // contents += createStatBlockValueWithHeader("Max", statDefinition.getAttribute(WuxDef._max));
-                                contents += createStatBlockValue(statDefinition.getAttribute(WuxDef._max));
-                            } else {
-                                contents += createStatBlockValue(statDefinition.getAttribute());
-                            }
-                            contents = WuxSheetMain.Table.FlexTable(contents);
-
-                            let output = WuxSheetMain.Table.FlexTableHeader(header);
-                            output += WuxSheetMain.Table.FlexTableData(contents);
-                            return WuxSheetMain.Table.FlexTableGroup(output, " wuxMinWidth150");
-                        },
-
-                        createStatBlockValue = function (fieldName) {
-                            return WuxSheetMain.Table.FlexTableGroup(`<span class="wuxFlexTableItemData wuxTextCenter" name="${fieldName}">0</span>`, " wuxMinWidth100");
+                            let backgroundBuilder = new CharacterBackgroundBuilder();
+                            let statsBuilder = new CharacterStatisticsBuilder();
+                            return `${backgroundBuilder.print()}
+                            ${statsBuilder.print()}`;
                         }
 
                     return {
