@@ -69,31 +69,17 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                         build = function () {
                             let contents = "";
                             contents += buildCharacterSection();
-                            contents += buildResourcesSection();
                             return contents;
                         },
 
                         buildCharacterSection = function () {
                             let contents = "";
                             contents += WuxSheetMain.MultiRowGroup([basics(), influences()], WuxSheetMain.Table.FlexTable, 2);
-                            contents += WuxSheetMain.MultiRowGroup([advancement(), training()], WuxSheetMain.Table.FlexTable, 2);
+                            contents += WuxSheetMain.MultiRowGroup([advancement(), resources()], WuxSheetMain.Table.FlexTable, 2);
 
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_OverviewCharacter");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
-                        },
-
-                        buildResourcesSection = function () {
-                            let contents = "";
-                            let contentData = [];
-                            contentData.push(boons());
-                            contentData = contentData.concat(resources());
-                            contents += WuxSheetMain.MultiRowGroup(contentData, WuxSheetMain.Table.FlexTable, 2);
-
-                            contents = WuxSheetMain.TabBlock(contents);
-
-                            let definition = WuxDef.Get("Page_OverviewResources");
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                         },
 
@@ -164,70 +150,38 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute()));
 
                             let xpDefinition = WuxDef.Get("XP");
-                            contents += WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `To Level: ${xpDefinition.formula.getValue()}`);
-
-                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
-                        },
-
-                        training = function () {
-                            let contents = "";
-                            let titleDefinition = WuxDef.Get("Title_Training");
-                            contents += WuxDefinition.InfoHeader(titleDefinition);
-
-                            contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Go to ${titleDefinition.title}`, "wuxWidth160"));
-
-                            let levelDefinition = WuxDef.Get("Training");
-                            contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute(WuxDef._max)));
-
                             let ppDefinition = WuxDef.Get("PP");
-                            contents += WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.formula.getValue()}`);
+                            contents += WuxSheetMain.MultiRowGroup([
+                                    WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `To Level: ${xpDefinition.formula.getValue()}`)),
+                                    WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.formula.getValue()}`))],
+                                WuxSheetMain.Table.FlexTable, 2);
 
-                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
-                        },
-
-                        boons = function () {
-                            let contents = "";
-                            let boonDef = WuxDef.Get("Title_Boon");
-                            let boonsDefs = WuxDef.Filter([new DatabaseFilterData("group", "Boon")]);
-
-                            let boonInfo = WuxDefinition.TooltipDescription(boonDef);
-                            boonInfo = WuxSheetMain.Info.Contents(boonDef.getAttribute(WuxDef._info), boonInfo);
-
-                            contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(boonDef.getAttribute(WuxDef._info))}${boonDef.title}`)}
-							${boonInfo}`;
-
-                            for (let i = 0; i < boonsDefs.length; i++) {
-                                contents += WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(boonsDefs[i].getAttribute(), boonsDefs[i].getAttribute(WuxDef._info),
-                                    WuxSheetMain.Header(boonsDefs[i].title), WuxDefinition.TooltipDescription(boonsDefs[i]));
-                            }
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         },
 
                         resources = function () {
-                            let output = [];
+                            let contents = "";
+                            let titleDefinition = WuxDef.Get("Page_OverviewResources");
+                            contents += WuxSheetMain.Header(`${titleDefinition.getTitle()}`);
 
-                            // add CR
                             let crDef = WuxDef.Get("CR");
-                            let contents = `${WuxSheetMain.Header(`${crDef.title}`)}`;
-                            contents += WuxDefinition.BuildNumberLabelInput(crDef, crDef.getAttribute(), 
-                                `Max: <span name="${crDef.getAttribute(WuxDef._max)}"></span>`);
-
                             let potencyDefinition = WuxDef.Get("SB_MAX");
-                            contents += WuxDefinition.BuildText(potencyDefinition, WuxSheetMain.Span(potencyDefinition.getAttribute()));
-                            output.push(WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150"));
+                            contents += WuxSheetMain.MultiRowGroup([
+                                    WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildNumberLabelInput(crDef, crDef.getAttribute(),
+                                        `Max: <span name="${crDef.getAttribute(WuxDef._max)}"></span>`)),
+                                    WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildText(potencyDefinition, WuxSheetMain.Span(potencyDefinition.getAttribute())))],
+                                WuxSheetMain.Table.FlexTable, 2);
 
-                            let groups = ["General", "Combat", "Social"];
-                            for (let i = 0; i < groups.length; i++) {
-                                let resourcesDef = WuxDef.Get(groups[i]);
-                                let resourceDefs = WuxDef.Filter([new DatabaseFilterData("group", groups[i]), new DatabaseFilterData("hasMax", "true")]);
+                            let vitalityDef = WuxDef.Get("Cmb_Vitality");
+                            let surgeDef = WuxDef.Get("Surge");
+                            contents += WuxSheetMain.MultiRowGroup([
+                                    WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildNumberLabelInput(vitalityDef, vitalityDef.getAttribute(),
+                                        `Max: <span name="${vitalityDef.getAttribute(WuxDef._max)}"></span>`)),
+                                    WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildNumberLabelInput(surgeDef, surgeDef.getAttribute(),
+                                        `Max: <span name="${surgeDef.getAttribute(WuxDef._max)}"></span>`))],
+                                WuxSheetMain.Table.FlexTable, 2);
 
-                                contents = `${WuxSheetMain.Header(`${resourcesDef.title}`)}`;
-                                for (let j = 0; j < resourceDefs.length; j++) {
-                                    contents += WuxDefinition.BuildNumberLabelInput(resourceDefs[j], resourceDefs[j].getAttribute(), `Max: <span name="${resourceDefs[j].getAttribute(WuxDef._max)}"></span>`);
-                                }
-                                output.push(WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150"));
-                            }
-                            return output;
+                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         }
 
                     return {
@@ -244,10 +198,16 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
                     var
                         build = function () {
+
+                            let originDefinition = WuxDef.Get("Page_Origin");
                             let backgroundBuilder = new CharacterBackgroundBuilder();
-                            let statsBuilder = new CharacterStatisticsBuilder();
-                            return `${backgroundBuilder.print()}
-                            ${statsBuilder.print()}`;
+                            let statSummaryDefinition = WuxDef.Get("Title_StatSummary");
+                            let statsBuilder = new ExtendedCharacterStatisticsBuilder();
+                            
+                            return `${WuxSheetMain.CollapsibleTab(statSummaryDefinition.getAttribute(WuxDef._tab, WuxDef._expand), statSummaryDefinition.title,
+                                WuxSheetMain.TabBlock(statsBuilder.print()))}
+                                ${WuxSheetMain.CollapsibleTab(originDefinition.getAttribute(WuxDef._tab, WuxDef._expand), originDefinition.title,
+                                WuxSheetMain.TabBlock(backgroundBuilder.print()))}`;
                         }
 
                     return {

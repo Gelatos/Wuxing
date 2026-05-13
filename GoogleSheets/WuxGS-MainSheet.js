@@ -23,10 +23,10 @@ var WuxSheetMain = WuxSheetMain || (function () {
             },
 
             buildTooltipCheckboxInput = function (fieldName, infoFieldName, contents, infoContents) {
-                return `<div class="wuxInteractiveBlock">
-                ${WuxSheetMain.Info.Button(infoFieldName)}
-                ${checkboxBlockIcon(fieldName, contents)}
-                ${WuxSheetMain.HiddenField(infoFieldName, `<div class="wuxInfoContent">\n${infoContents}\n</div>`)}
+
+                return `<div class="wuxInteractiveBlock wuxTooltip">
+                <span class="wuxTooltipText">${checkboxBlockIcon(fieldName, contents)}</span>
+                <div class="wuxTooltipContent">\n${infoContents}\n</div>
                 </div>`;
             },
 
@@ -697,21 +697,6 @@ var WuxDefinition = WuxDefinition || (function () {
             expandContents += WuxSheetMain.Desc(`<em>${definitionData.subGroup}</em>`);
         }
         expandContents += `\n${WuxSheetMain.Desc(definitionData.getDescription(`</span><span class="wuxDescription">`))}`;
-        if (definitionData.formula.hasFormula()) {
-            switch (definitionData.group) {
-                case "Skill":
-                    expandContents += "";
-                    break;
-                case "LoreCategory":
-                    expandContents += "\n" + WuxSheetMain.Desc(`If trained, ${definitionData.title} is calculated as:\n${definitionData.formula.getString()} + [${WuxDef.GetTitle("CR")}]`);
-                    break;
-                case "Lore":
-                    expandContents += "\n" + WuxSheetMain.Desc(`If trained, ${definitionData.title} is calculated as:\n${definitionData.formula.getString()} + this lore's [Tier] + [${WuxDef.GetTitle("CR")}]`);
-                    break;
-                default:
-                    expandContents += "\n" + WuxSheetMain.Desc(`${definitionData.title} is calculated as:\n${definitionData.formula.getString()}`);
-            }
-        }
         return expandContents;
     };
     const values = {};
@@ -902,7 +887,7 @@ var WuxDefinition = WuxDefinition || (function () {
         },
 
         buildHeader = function (definition) {
-            return WuxSheetMain.Header2(`${definition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(definition))}`);
+            return WuxSheetMain.Header2(`${WuxSheetMain.Tooltip.Text(definition.title, WuxDefinition.TooltipDescription(definition))}`);
         },
 
         buildText = function (definition, textContents) {

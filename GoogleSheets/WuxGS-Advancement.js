@@ -896,18 +896,30 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                     `<div class="wuxMarginLeft50">${expertiseHeader}</div>`);
                         },
                         printInteractiveSkillHeader = function (skill, skillDefinition) {
-                            let attributesLine = ` (${WuxDef.GetAbbreviation(skill.abilityScore)}`;
+                            let abilityScores = [WuxDef.GetAbbreviation(skill.abilityScore)];
                             if (skill.abilityScore2 != "") {
-                                attributesLine += `/${WuxDef.GetAbbreviation(skill.abilityScore2)}`;
+                                abilityScores.push(WuxDef.GetAbbreviation(skill.abilityScore2))
                             }
-                            attributesLine += ")";
+                            let attributesLine = `(${abilityScores.join("/")})`;
                             let interactHeader = `<span class="wuxHeader">${skill.name} ${attributesLine}</span>`;
-                            interactHeader += `<span class="wuxFloatRight" name="${skillDefinition.getAttribute()}">0</span>`;
 
-                            return WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                            return `<div class="wuxSkill">
+                            ${WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
                                 skillDefinition.getAttribute(WuxDef._rank),
                                 skillDefinition.getAttribute(WuxDef._info),
-                                interactHeader, WuxDefinition.TooltipDescription(skillDefinition));
+                                interactHeader, WuxDefinition.TooltipDescription(skillDefinition))}
+                            ${printSkillStat(skillDefinition, skillDefinition.getAttribute(), skillDefinition.getAttribute(WuxDef._info))}
+                            </div>`;
+                        },
+                        printSkillStat = function(definition, fieldAttr, statCalculationField) {
+                            return `<span class="wuxFloatRight">
+                                ${WuxSheetMain.Tooltip.Text(WuxSheetMain.Span(fieldAttr),
+                                    printStatCalculationTooltipContent(definition, statCalculationField))}
+                            </span>`;
+                        },
+                        printStatCalculationTooltipContent = function(definitionData, statCalculationField) {
+                            return `${WuxSheetMain.Header2(definitionData.title)}
+                                <span class="wuxDescription" name="${statCalculationField}"></span>`;
                         },
                         printInteractiveExpertiseHeader = function (skillDefinition) {
                             let expertiseDef = WuxDef.Get("SkillExpertise");
@@ -933,7 +945,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             return jobSelection.print();
                         },
                         buildStatSummary = function () {
-                            return "";
+                            let statsBuilder = new CharacterStatisticsBuilder();
+                            return statsBuilder.print();
                         }
                         
                     ;

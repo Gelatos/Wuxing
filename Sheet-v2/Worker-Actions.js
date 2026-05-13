@@ -299,14 +299,17 @@ var WuxWorkerActionsService = WuxWorkerActionsService || (function () {
                     case "Set":
                         let newValue = value - boostDef.formula.getValue(attrHandler);
                         attrHandler.addUpdate(boostDef.getVariable(WuxDef._techset), newValue);
-                        boostEffectDescriptors.push(`-{${technique.name} Override}-`);
+                        boostEffectDescriptors.push(`${technique.name} Override`);
                         boostEffectDescriptors.push(`${techEffect.formula.getString()} = ${newValue}`);
+                        boostEffectDescriptors.push("");
                         break;
                     default:
                         attrHandler.addUpdate(boostDef.getVariable(variableSuffix),
                             attrHandler.parseInt(boostDef.getVariable(variableSuffix)) + value);
-                        boostEffectDescriptors.push(`-{${technique.name}}-`);
-                        boostEffectDescriptors.push(`${techEffect.formula.getString()} = ${value >= 0 ? "+" : "-"}${value}`);
+                        boostEffectDescriptors.push(`${technique.name}`);
+                        let formula = techEffect.formula.getString();
+                        boostEffectDescriptors.push(formula == value ? formula : `${formula} = ${value}`);
+                        boostEffectDescriptors.push("");
                         break;
                 }
                 attrHandler.addUpdate(boostDef.getVariable(variableSuffix, WuxDef._info), JSON.stringify(boostEffectDescriptors));
@@ -346,7 +349,7 @@ var WuxWorkerActionsService = WuxWorkerActionsService || (function () {
             let evasionVar = WuxDef.GetVariable("Def_Evasion");
             let resolveVar = WuxDef.GetVariable("Def_Resolve");
             let insightVar = WuxDef.GetVariable("Def_Insight");
-            let egoVar = WuxDef.GetVariable("Def_Ego");
+            let logicVar = WuxDef.GetVariable("Def_Logic");
 
             let healValueVar = WuxDef.GetVariable("Cmb_HV");
             let armorDefVar = WuxDef.GetVariable("Cmb_Armor");
@@ -414,7 +417,9 @@ var WuxWorkerActionsService = WuxWorkerActionsService || (function () {
                 // set the breakdown
                 let attributeBreakdown = {};
                 for (let definition of allModifierDefs) {
-                    attributeBreakdown[definition.name] = ["-{Base Calculation}-", `${definition.formula.getString()} = ${definition.formula.getValue(attrHandler)}`];
+                    let formula = definition.formula.getString();
+                    let value = definition.formula.getValue(attrHandler);
+                    attributeBreakdown[definition.name] = ["-- Base Calculation --", formula == value ? formula : `${formula} = ${value}`, ""];
                 }
 
                 addBoostStyleTechModifiers(attrHandler, techBoosters);
@@ -435,10 +440,12 @@ var WuxWorkerActionsService = WuxWorkerActionsService || (function () {
                     }
                     variableInfo = attrHandler.parseJSON(definition.getVariable(WuxDef._tech, WuxDef._info));
                     if (Array.isArray(variableInfo) && variableInfo.length > 0) {
+                        attributeBreakdown[definition.name].push("-- Technique Bonuses --");
                         attributeBreakdown[definition.name] = attributeBreakdown[definition.name].concat(variableInfo);
                     }
                     variableInfo = attrHandler.parseJSON(definition.getVariable(WuxDef._gear, WuxDef._info));
                     if (Array.isArray(variableInfo) && variableInfo.length > 0) {
+                        attributeBreakdown[definition.name].push("-- Gear Bonuses --");
                         attributeBreakdown[definition.name] = attributeBreakdown[definition.name].concat(variableInfo);
                     }
                     attrHandler.addUpdate(definition.getVariable(WuxDef._info), attributeBreakdown[definition.name].join("\n"));
@@ -448,8 +455,8 @@ var WuxWorkerActionsService = WuxWorkerActionsService || (function () {
                 combatDetailsHandler.onUpdateDefenses(attrHandler,
                     attrHandler.parseInt(braceVar), attrHandler.parseInt(wardingVar),
                     attrHandler.parseInt(reflexVar), attrHandler.parseInt(evasionVar),
-                    attrHandler.parseInt(resolveVar), attrHandler.parseInt(insightVar),
-                    attrHandler.parseInt(egoVar)
+                    attrHandler.parseInt(resolveVar), attrHandler.parseInt(logicVar), 
+                    attrHandler.parseInt(insightVar)
                 );
                 combatDetailsHandler.onUpdateHealValue(attrHandler, attrHandler.parseInt(healValueVar));
                 combatDetailsHandler.onUpdateSurges(attrHandler, attrHandler.parseInt(surgeDef.getVariable()));
@@ -778,7 +785,6 @@ class FormeTechniqueDatabase {
     iterateRepeaterTechniques(attrHandler, callback) {
         let repeater = attrHandler.getRepeatingSection(this.formeActionsRepeaterId);
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", repeater);
-        Debug.Log(`repeater ids: ${JSON.stringify(repeater.ids)}`);
         repeater.iterate((id) => {
             techniqueAttributeHandler.setId(id);
             let techniqueName = techniqueAttributeHandler.getTechniqueName();

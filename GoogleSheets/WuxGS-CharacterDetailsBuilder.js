@@ -2,46 +2,45 @@ class CharacterBackgroundBuilder {
     constructor() {
     }
     print() {
-        let contents = "";
-        contents += this.buildOrigin();
-        return contents;
-    }
-
-    buildOrigin() {
-        let definition = WuxDef.Get("Page_Origin")
-        return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, 
-            WuxSheetMain.TabBlock(`${this.printBasics()}
-            ${this.printGenerator()}`));
+        return `${this.printBasics()}
+            ${this.printGenerator()}`;
     }
     
     printBasics() {
         let definition = WuxDef.Get("Title_Background");
         let hiddenField = definition.getAttribute(WuxDef._expand);
-        let contents = WuxSheetMain.MultiRowGroup([this.backgroundBasics(), this.backgroundBackstory()], WuxSheetMain.Table.FlexTable, 2);
-        let header = WuxSheetMain.CollapsibleHeaderInverse(definition.getTitle(), hiddenField);
+        let header = WuxSheetMain.CollapsibleHeader(definition.getTitle(), hiddenField);
+        let contents = WuxSheetMain.MultiRowGroup(
+            [this.backgroundBasics(), this.backgroundBackstory()], 
+            WuxSheetMain.Table.FlexTable, 2);
         return `${WuxSheetMain.Header(header)} 
-        ${WuxSheetMain.HiddenField(hiddenField, contents)}`;
+        ${WuxSheetMain.HiddenAuxField(hiddenField, contents)}`;
     }
 
     backgroundBasics() {
         let nameFields = WuxSheetMain.MultiRowGroup([
-            WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildTextInput(WuxDef.Get("SheetName"), WuxDef.GetAttribute("SheetName"))),
-            WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName")))], 
+                WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildTextInput(WuxDef.Get("SheetName"), WuxDef.GetAttribute("SheetName"))),
+                WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName")))],
             WuxSheetMain.Table.FlexTable, 2);
+        
         let ancestryField = WuxDefinition.BuildSelect(WuxDef.Get("Ancestry"), WuxDef.GetAttribute("Ancestry"),
             WuxDef.Filter([new DatabaseFilterData("group", "AncestryType")]));
         let ethnicityField = `<input type="hidden" class="wuxAncestrySelection-flag" name="${WuxDef.GetAttribute("Ancestry")}" value="0">
             <div class="wuxAncestrySelection-Human">\n${WuxDefinition.BuildSelect(WuxDef.Get("Ethnicity"), WuxDef.GetAttribute("Ethnicity"),
             WuxDef.Filter([new DatabaseFilterData("group", "RaceType")]), true)}\n</div>`;
+        let ancestryFields = WuxSheetMain.MultiRowGroup(
+            [WuxSheetMain.Table.FlexTableGroup(ancestryField), WuxSheetMain.Table.FlexTableGroup(ethnicityField)],
+            WuxSheetMain.Table.FlexTable, 2);
+        
         let affinityField = WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("AffinityAspect"),
             [WuxDef.Get("Unaspected")].concat(WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])), 
             false);
+        
         let quickDescriptionField = WuxDefinition.BuildTextarea(WuxDef.Get("QuickDescription"), WuxDef.GetAttribute("QuickDescription"),
             "wuxInput wuxHeight30");
         
         return WuxSheetMain.Table.FlexTableGroup(`${nameFields}
-        ${ancestryField}
-        ${ethnicityField}
+        ${ancestryFields}
         ${affinityField}
         ${quickDescriptionField}`);
     }
@@ -66,9 +65,9 @@ class CharacterBackgroundBuilder {
     printGenerator() {
         let definition = WuxDef.Get("Title_BackgroundGenerator");
         let hiddenField = definition.getAttribute(WuxDef._expand);
-        let header = WuxSheetMain.CollapsibleHeader(definition.getTitle(), hiddenField);
+        let header = WuxSheetMain.CollapsibleHeaderInverse(definition.getTitle(), hiddenField);
         return `${WuxSheetMain.Header(header)} 
-        ${WuxSheetMain.HiddenAuxField(hiddenField, this.backgroundGenerator())}`;
+        ${WuxSheetMain.HiddenField(hiddenField, this.backgroundGenerator())}`;
     }
 
     backgroundGenerator() {
@@ -100,49 +99,176 @@ class CharacterStatisticsBuilder {
     constructor() {
     }
     print() {
-        let contents = "";
-        contents += this.createStatGroup("Attribute");
-        contents += this.createStatGroup("Defense");
-        contents += this.createStatGroup("Sense");
-        contents += this.createStatGroup("General");
-        contents += this.createStatGroup("Combat");
-        contents += this.createStatGroup("Skill");
+        return `<div class="wuxCharacterStatistics">
+            ${this.printBasics()}
+            <span class="wuxRow">&nbsp;</span>
+            ${this.printDefenses()}
+            <span class="wuxRow">&nbsp;</span>
+            ${this.printExpandedStats()}
+        </div>`;
+    }
+    
+    printBasics() {
+        let fullNameDef = WuxDef.Get("FullName");
+        let levelDef = WuxDef.Get("Level");
+        let jobDef = WuxDef.Get("Forme_JobSlot");
+        let crDef = WuxDef.Get("CR");
+        let recallDef = WuxDef.Get("Recall");
+        let recallField = `<div class="wuxRow">${this.printStat(recallDef, recallDef.getTitle(), recallDef.getAttribute())}</div>`;
+
+        let filteredStats = WuxDef.Filter([new DatabaseFilterData("subGroup", "CoreResource")]);
+        let resourceContents = "";
+        for (let definition of filteredStats) {
+            resourceContents += `<div class="wuxRow">
+            ${this.printStat(definition, definition.abbreviation,
+                definition.getAttribute(WuxDef._max), definition.getAttribute(WuxDef._info))}
+            </div>`;
+        }
+        
+        return `${WuxSheetMain.Header(WuxSheetMain.Span(fullNameDef.getAttribute()))}
+            <div class="wuxRow">
+                <span>[</span><span>${crDef.getTitle()}</span><span> </span>${WuxSheetMain.Span(crDef.getAttribute())}<span>]</span>
+                <span> </span>
+                <span>${levelDef.abbreviation}</span>${WuxSheetMain.Span(levelDef.getAttribute())}
+                <span> </span>
+                ${WuxSheetMain.Span(jobDef.getAttribute())}
+            </div>
+            ${resourceContents}`;
+    }
+    printDefenses() {
+        let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", ["Defense", "Sense"])]);
+        let contents = this.printHeader(WuxDef.GetTitle("Defense"));
+        for (let definition of filteredStats) {
+            let abilityScores = [];
+            let defenseDefinitionNames = definition.formula.getDefinitions();
+            for (let defenseDefinitionName of defenseDefinitionNames) {
+                if (defenseDefinitionName == "CR") {
+                    continue;
+                }
+                let defenseDefinition = WuxDef.Get(defenseDefinitionName);
+                abilityScores.push(defenseDefinition.abbreviation);
+            }
+            let attributesLine = "";
+            if (abilityScores.length > 0) {
+                attributesLine = `(${abilityScores.join("/")})`;
+            }
+            
+            contents += this.printStat(definition, `${definition.getTitle()} ${attributesLine}`, 
+                definition.getAttribute(), definition.getAttribute(WuxDef._info));
+        }
         return contents;
     }
-
-    createStatGroup(groupName) {
-        let definition = WuxDef.Get(groupName);
-        return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, this.createStatTable(groupName));
+    
+    printExpandedStats() {
+        let contents = this.printHeader(WuxDef.GetTitle("Title_Conflict"));
+        contents += this.printFilteredSubGroupStats("EnStat");
+        contents += this.printFilteredSubGroupStats("MoveStat");
+        contents += this.printFilteredSubGroupStats("CombatStat");
+        return contents;
     }
-
-    createStatTable(groupName) {
-        let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", groupName)]);
-        let output = "";
-        for (let i = 0; i < filteredStats.length; i++) {
-            output += this.createStatBlock(filteredStats[i]);
-        }
-        return WuxSheetMain.TabBlock(WuxSheetMain.Table.FlexTable(output));
-    }
-
-    createStatBlock(statDefinition) {
-        let header = `${statDefinition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(statDefinition))}`;
+    printFilteredSubGroupStats(subGroupName) {
         let contents = "";
-        if (statDefinition.isResource) {
-            // contents += createStatBlockValueWithHeader("Current", statDefinition.getAttribute());
-            // contents += createStatBlockValueWithHeader("Max", statDefinition.getAttribute(WuxDef._max));
-            contents += this.createStatBlockValue(statDefinition.getAttribute(WuxDef._max));
-        } else {
-            contents += this.createStatBlockValue(statDefinition.getAttribute());
+        let filteredStats = WuxDef.Filter([new DatabaseFilterData("subGroup", subGroupName)]);
+        for (let definition of filteredStats) {
+            contents += this.printStat(definition, definition.getTitle(),
+                definition.getAttribute(), definition.getAttribute(WuxDef._info));
         }
-        contents = WuxSheetMain.Table.FlexTable(contents);
-
-        let output = WuxSheetMain.Table.FlexTableHeader(header);
-        output += WuxSheetMain.Table.FlexTableData(contents);
-        return WuxSheetMain.Table.FlexTableGroup(output, " wuxMinWidth150");
+        return `${contents}
+        `;
+    }
+    
+    printHeader(header) {
+        return WuxSheetMain.Header(header);
+    }
+    printSetValue(definition, fieldAttr) {
+        return `<div class="wuxFlexTableItemGroup">
+            <strong>${WuxSheetMain.Tooltip.Text(definition.title,
+            this.printDefinitionTooltipContents(definition))}</strong>
+            ${WuxSheetMain.Span(fieldAttr)}
+        </div>`;
     }
 
-    createStatBlockValue(fieldName) {
-        return WuxSheetMain.Table.FlexTableGroup(`<span class="wuxFlexTableItemData wuxTextCenter" name="${fieldName}">0</span>`, " wuxMinWidth100");
+    printSetStat(definition, title, fieldAttr) {
+        return `<div class="wuxFlexTableItemGroup">
+            <strong>${WuxSheetMain.Tooltip.Text(title,
+            this.printDefinitionTooltipContents(definition))}</strong>
+            <div class="wuxCharacterStatisticsStat">
+                ${WuxSheetMain.Span(fieldAttr)}
+            </div>
+        </div>`;
+    }
+    printDefinitionTooltipContents(definitionData) {
+        return `${WuxSheetMain.Header2(definitionData.title)}
+        <span class="wuxDescription">${definitionData.getDescription(`</span><span class="wuxDescription">`)}</span>`;
+    }
+    
+    printStat(definition, title, fieldAttr, statCalculationField) {
+        return `<div class="wuxFlexTableItemGroup">
+            ${WuxSheetMain.Tooltip.Text(title,
+            this.printDefinitionTooltipContents(definition))}
+            <div class="wuxCharacterStatisticsStat">
+                ${WuxSheetMain.Tooltip.Text(WuxSheetMain.Span(fieldAttr),
+            this.printStatCalculationTooltipContent(definition, statCalculationField))}
+            </div>
+        </div>`;
+    }
+    printStatCalculationTooltipContent(definitionData, statCalculationField) {
+        return `${WuxSheetMain.Header2(definitionData.title)}
+        <span class="wuxDescription" name="${statCalculationField}"></span>`;
     }
     
 }
+
+class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
+
+    print() {
+        let leftColumn = `<div class="wuxCharacterStatistics">
+            ${this.printBasics()}
+            <span class="wuxRow">&nbsp;</span>
+            ${this.printAttributes()}
+            <span class="wuxRow">&nbsp;</span>
+            ${this.printDefenses()}
+            <span class="wuxRow">&nbsp;</span>
+            ${this.printExpandedStats()}
+        </div>`;
+        let rightColumn = `<div class="wuxCharacterStatistics">
+            ${this.printSkills()}
+        </div>`;
+        
+        return WuxSheetMain.MultiRowGroup(
+            [WuxSheetMain.Table.FlexTableGroup(leftColumn), WuxSheetMain.Table.FlexTableGroup(rightColumn)],
+            WuxSheetMain.Table.FlexTable, 2);
+    }
+    
+    printAttributes() {
+        let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", "Attribute")]);
+        let contents = this.printHeader(WuxDef.GetTitle("Attribute"));
+        for (let definition of filteredStats) {
+            contents += this.printSetStat(definition, definition.getTitle(), definition.getAttribute());
+        }
+        return contents;
+    }
+
+    printSkills() {
+        let contents = "";
+        this.printHeader(WuxDef.GetTitle("Skill"));
+        
+        let skillGroups = ["ActiveSkills", "SocialSkills", "WorldSkills"];
+        for (let skillGroup of skillGroups) {
+            
+            let subSkillGroups = WuxDef.Filter([new DatabaseFilterData("subGroup", skillGroup)]);
+            for (let subSkillGroup of subSkillGroups) {
+                contents += this.printHeader(`${subSkillGroup.getTitle()} Skills`);
+                
+                let skillDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Skill"),
+                    new DatabaseFilterData("subGroup", subSkillGroup.getTitle())]);
+                for (let definition of skillDefinitions) {
+                    contents += this.printStat(definition, definition.getTitle(), definition.getAttribute(), definition.getAttribute(WuxDef._info));
+                }
+            }
+        }
+        return contents;
+    }
+    
+}
+

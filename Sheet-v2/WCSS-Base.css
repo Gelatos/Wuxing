@@ -714,6 +714,7 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 .wuxSectionBlock .wuxTabRow,
 .wuxSectionBlock .wuxFormRow,
 .wuxSectionBlock .wuxMultiRow,
+.wuxSectionBlock .wuxSpacerRow,
 .wuxSectionBlock .wuxActionRow,
 .wuxSectionBlock .wuxMultiActionRow
 {
@@ -736,6 +737,12 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 .wuxSectionBlock .wuxTabRow
 {
     height: 14px;
+}
+
+.wuxSectionBlock .wuxSpacerRow
+{
+    height: 0;
+    font-size: 0;
 }
 
 .wuxSectionBlock .wuxFormRow

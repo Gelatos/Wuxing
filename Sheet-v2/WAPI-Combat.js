@@ -943,8 +943,8 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
         if (this.technique.coreDefense == "Brace" || this.technique.coreDefense == "Warding") {
             return "Evasion";
         }
-        if (this.technique.coreDefense == "Insight" || this.technique.coreDefense == "Resolve") {
-            return "Ego";
+        if (this.technique.coreDefense == "Logic" || this.technique.coreDefense == "Resolve") {
+            return "Insight";
         }
         return undefined;
     }

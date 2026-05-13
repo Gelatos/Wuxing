@@ -1103,7 +1103,7 @@ class TechniqueAssessment {
             }
         }
         else {
-            let accurateDefenses = ["Evasion", "Ego"];
+            let accurateDefenses = ["Evasion", "Insight"];
             if (accurateDefenses.some(type => type == this.technique.coreDefense)) {
                 this.defenseModifier += 0.25;
                 modNames.push("Effective");
@@ -1387,8 +1387,6 @@ class TechniqueAssessment {
         attributeHandler.current[WuxDef.GetVariable("Soc_Favor")] = 15;
         attributeHandler.addMod(WuxDef.GetVariable("StrideRoll"));
         attributeHandler.current[WuxDef.GetVariable("StrideRoll")] = 5;
-        attributeHandler.addMod(WuxDef.GetVariable("MvCharge"));
-        attributeHandler.current[WuxDef.GetVariable("MvCharge")] = 5;
         attributeHandler.addMod(WuxDef.GetVariable("Cmb_Mv"));
         attributeHandler.current[WuxDef.GetVariable("Cmb_Mv")] = 5;
         attributeHandler.addMod(WuxDef.GetVariable("Cmb_MvDash"));
@@ -1553,13 +1551,13 @@ class TechniqueAssessment {
                 break;
             case "Def_Brace":
             case "Def_Warding":
-            case "Def_Insight":
+            case "Def_Logic":
             case "Def_Resolve":
                 // 2 = 2, 3 = 4, 4 = 6, 5 = 8
                 output.value = Math.ceil(output.value + Math.max(Math.ceil(output.value * 0.75 - 1.5), 0));
                 break;
             case "Def_Evasion":
-            case "Def_Ego":
+            case "Def_Insight":
                 output.value = 1 + Math.ceil(output.value + Math.max(Math.ceil(output.value * 0.75 - 1.5), 0));
                 break;
             case "StartEN":

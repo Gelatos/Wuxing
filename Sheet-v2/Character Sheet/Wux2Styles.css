@@ -714,6 +714,7 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 .wuxSectionBlock .wuxTabRow,
 .wuxSectionBlock .wuxFormRow,
 .wuxSectionBlock .wuxMultiRow,
+.wuxSectionBlock .wuxSpacerRow,
 .wuxSectionBlock .wuxActionRow,
 .wuxSectionBlock .wuxMultiActionRow
 {
@@ -736,6 +737,12 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 .wuxSectionBlock .wuxTabRow
 {
     height: 14px;
+}
+
+.wuxSectionBlock .wuxSpacerRow
+{
+    height: 0;
+    font-size: 0;
 }
 
 .wuxSectionBlock .wuxFormRow
@@ -1918,6 +1925,17 @@ input[type=hidden].wuxJobSelection-flag[value="on"] + .wuxButton span
     max-width: 220px;
 }
 
+.wuxSkill {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+.wuxSkill .wuxInteractiveBlock {
+    display: inline-block;
+    width: auto;
+}
+
 /*========================================
     Background
 ========================================*/
@@ -1930,6 +1948,55 @@ input[type=hidden].wuxJobSelection-flag[value="on"] + .wuxButton span
 input[type=hidden].wuxAncestrySelection-flag[value="Human"] + .wuxAncestrySelection-Human
 {
     display: block;
+}
+
+.wuxCharacterStatistics
+{
+    position: relative;
+    display: flex;
+    align-content: flex-start;
+    flex-flow: row wrap;
+
+    max-width: 360px;
+}
+
+.wuxCharacterStatistics span
+{
+    color: white;
+}
+
+.wuxCharacterStatistics .wuxTooltipContent .wuxDescription
+{
+    color: black;
+    font-size: 12px;
+    white-space: pre-line;
+    word-break: break-word;
+}
+
+.wuxCharacterStatistics .wuxRow,
+.wuxCharacterStatistics .wuxRow span
+{
+    height: 16px;
+    line-height: 14px;
+    font-size: 14px;
+    margin: 2px 0;
+ }
+
+.wuxCharacterStatistics .wuxFlexTableItemGroup
+{
+    display: inline-block;
+    min-width: 130px;
+    max-width: 130px;
+    margin-right: 25px;
+    height: 16px;
+    line-height: 14px;
+}
+
+.wuxCharacterStatistics .wuxCharacterStatisticsStat
+{
+    display: inline-block;
+    float: right;
+    margin-right: 2px;
 }
 
 /*========================================
@@ -2861,9 +2928,9 @@ input.wuxFeatureHeader-flag[value="Resolve"] + .wuxFeatureHeaderInfoEffectTitle,
             #faeaea 10%);
 }
 
-input.wuxFeatureHeader-flag[value="Ego"] + .wuxFeatureHeaderInfoEffectTitle,
-.wuxFeatureHeaderInfoEffectTitle-Ego,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Ego
+input.wuxFeatureHeader-flag[value="Insight"] + .wuxFeatureHeaderInfoEffectTitle,
+.wuxFeatureHeaderInfoEffectTitle-Insight,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Insight
 {
     background:
             url("https://i.imgur.com/xYt4rHC.png") left / contain no-repeat,
@@ -2872,9 +2939,9 @@ input.wuxFeatureHeader-flag[value="Ego"] + .wuxFeatureHeaderInfoEffectTitle,
             #faeaea 10%);
 }
 
-input.wuxFeatureHeader-flag[value="Insight"] + .wuxFeatureHeaderInfoEffectTitle,
-.wuxFeatureHeaderInfoEffectTitle-Insight,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Insight
+input.wuxFeatureHeader-flag[value="Logic"] + .wuxFeatureHeaderInfoEffectTitle,
+.wuxFeatureHeaderInfoEffectTitle-Logic,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Logic
 {
     background:
             url("https://i.imgur.com/ZlNU2WD.png") left / contain no-repeat,

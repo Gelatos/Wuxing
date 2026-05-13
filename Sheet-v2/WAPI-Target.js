@@ -2185,7 +2185,7 @@ var TargetReference = TargetReference || (function () {
                 let evasionVar = WuxDef.GetVariable("Def_Evasion");
                 let resolveVar = WuxDef.GetVariable("Def_Resolve");
                 let insightVar = WuxDef.GetVariable("Def_Insight");
-                let egoVar = WuxDef.GetVariable("Def_Ego");
+                let logicVar = WuxDef.GetVariable("Def_Logic");
                 
                 let surgeVar = WuxDef.GetVariable("Surge");
                 let vitalityVar = WuxDef.GetVariable("Cmb_Vitality");
@@ -2201,7 +2201,7 @@ var TargetReference = TargetReference || (function () {
                 let dashVar = WuxDef.GetVariable("Cmb_MvDash");
                 let weaponDamageVar = WuxDef.GetVariable("WeaponDamageVal");
                 attributeHandler.addAttribute([affinityVar, crVar, jobVar, 
-                    braceVar, wardingVar, reflexVar, evasionVar, resolveVar, insightVar, egoVar,
+                    braceVar, wardingVar, reflexVar, evasionVar, resolveVar, insightVar, logicVar,
                     surgeVar, vitalityVar, hvVar, armorVar, speedVar, dashVar, weaponDamageVar,
                     burnResVar, coldResVar, energyResVar, forceResVar, piercingResVar, psycheResVar]);
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -2214,8 +2214,8 @@ var TargetReference = TargetReference || (function () {
                         attrHandler.parseInt(reflexVar, 0, false),
                         attrHandler.parseInt(evasionVar, 0, false),
                         attrHandler.parseInt(resolveVar, 0, false),
-                        attrHandler.parseInt(insightVar, 0, false),
-                        attrHandler.parseInt(egoVar, 0, false)
+                        attrHandler.parseInt(logicVar, 0, false),
+                        attrHandler.parseInt(insightVar, 0, false)
                         );
                     tokenTargetData.combatDetails.onUpdateSurges(attrHandler, attrHandler.parseInt(surgeVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateMaxSurges(attrHandler, attrHandler.parseInt(surgeVar, 0, true));

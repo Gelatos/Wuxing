@@ -3213,11 +3213,11 @@ class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
             }
             return "Evasion";
         }
-        if (coreDefense == "Insight" || coreDefense == "Resolve") {
+        if (coreDefense == "Logic" || coreDefense == "Resolve") {
             if (technique.impacts.includes("Truehit")) {
                 return "True";
             }
-            return "Ego";
+            return "Insight";
         }
         return "";
     }
@@ -4629,7 +4629,7 @@ class CombatDetailsDefenses {
         this.evasion = 0;
         this.resolve = 0;
         this.insight = 0;
-        this.ego = 0;
+        this.logic = 0;
     }
 
     importJson(json) {
@@ -4639,7 +4639,7 @@ class CombatDetailsDefenses {
         this.evasion = json.evasion != undefined ? json.evasion : 0;
         this.resolve = json.resolve != undefined ? json.resolve : 0;
         this.insight = json.insight != undefined ? json.insight : 0;
-        this.ego = json.ego != undefined ? json.ego : 0;
+        this.logic = json.logic != undefined ? json.logic : 0;
     }
     
     calculateAverageDefense(cr) {
@@ -4660,7 +4660,7 @@ class CombatDetailsDefenses {
         output += " Sens:";
         output += `${WuxDef.GetAbbreviation("Def_Resolve")}${this.resolve};.`;
         output += `${WuxDef.GetAbbreviation("Def_Insight")}${this.insight};.`;
-        output += `${WuxDef.GetAbbreviation("Def_Ego")}${this.ego}`;
+        output += `${WuxDef.GetAbbreviation("Def_Logic")}${this.logic}`;
         
         return output;
     }
@@ -4724,12 +4724,12 @@ class CombatDetailsHandler {
                 return this.combatDetails.defenses.reflex;
             case "Warding":
                 return this.combatDetails.defenses.warding;
-            case "Ego":
-                return this.combatDetails.defenses.ego;
-            case "Resolve":
-                return this.combatDetails.defenses.resolve;
             case "Insight":
                 return this.combatDetails.defenses.insight;
+            case "Resolve":
+                return this.combatDetails.defenses.resolve;
+            case "Logic":
+                return this.combatDetails.defenses.logic;
             default:
                 return 0;
         }
@@ -4781,7 +4781,7 @@ class CombatDetailsHandler {
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
     
-    onUpdateDefenses(attrHandler, brace, warding, reflex, evasion, resolve, insight, ego) {
+    onUpdateDefenses(attrHandler, brace, warding, reflex, evasion, resolve, logic, insight) {
         this.setData(attrHandler);
         this.combatDetails.defenses.brace = brace;
         this.combatDetails.defenses.warding = warding;
@@ -4789,7 +4789,7 @@ class CombatDetailsHandler {
         this.combatDetails.defenses.evasion = evasion;
         this.combatDetails.defenses.resolve = resolve;
         this.combatDetails.defenses.insight = insight;
-        this.combatDetails.defenses.ego = ego;
+        this.combatDetails.defenses.logic = logic;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 

@@ -3213,11 +3213,11 @@ class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
             }
             return "Evasion";
         }
-        if (coreDefense == "Insight" || coreDefense == "Resolve") {
+        if (coreDefense == "Logic" || coreDefense == "Resolve") {
             if (technique.impacts.includes("Truehit")) {
                 return "True";
             }
-            return "Ego";
+            return "Insight";
         }
         return "";
     }
@@ -4629,7 +4629,7 @@ class CombatDetailsDefenses {
         this.evasion = 0;
         this.resolve = 0;
         this.insight = 0;
-        this.ego = 0;
+        this.logic = 0;
     }
 
     importJson(json) {
@@ -4639,7 +4639,7 @@ class CombatDetailsDefenses {
         this.evasion = json.evasion != undefined ? json.evasion : 0;
         this.resolve = json.resolve != undefined ? json.resolve : 0;
         this.insight = json.insight != undefined ? json.insight : 0;
-        this.ego = json.ego != undefined ? json.ego : 0;
+        this.logic = json.logic != undefined ? json.logic : 0;
     }
     
     calculateAverageDefense(cr) {
@@ -4660,7 +4660,7 @@ class CombatDetailsDefenses {
         output += " Sens:";
         output += `${WuxDef.GetAbbreviation("Def_Resolve")}${this.resolve};.`;
         output += `${WuxDef.GetAbbreviation("Def_Insight")}${this.insight};.`;
-        output += `${WuxDef.GetAbbreviation("Def_Ego")}${this.ego}`;
+        output += `${WuxDef.GetAbbreviation("Def_Logic")}${this.logic}`;
         
         return output;
     }
@@ -4724,12 +4724,12 @@ class CombatDetailsHandler {
                 return this.combatDetails.defenses.reflex;
             case "Warding":
                 return this.combatDetails.defenses.warding;
-            case "Ego":
-                return this.combatDetails.defenses.ego;
-            case "Resolve":
-                return this.combatDetails.defenses.resolve;
             case "Insight":
                 return this.combatDetails.defenses.insight;
+            case "Resolve":
+                return this.combatDetails.defenses.resolve;
+            case "Logic":
+                return this.combatDetails.defenses.logic;
             default:
                 return 0;
         }
@@ -4781,7 +4781,7 @@ class CombatDetailsHandler {
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
     
-    onUpdateDefenses(attrHandler, brace, warding, reflex, evasion, resolve, insight, ego) {
+    onUpdateDefenses(attrHandler, brace, warding, reflex, evasion, resolve, logic, insight) {
         this.setData(attrHandler);
         this.combatDetails.defenses.brace = brace;
         this.combatDetails.defenses.warding = warding;
@@ -4789,7 +4789,7 @@ class CombatDetailsHandler {
         this.combatDetails.defenses.evasion = evasion;
         this.combatDetails.defenses.resolve = resolve;
         this.combatDetails.defenses.insight = insight;
-        this.combatDetails.defenses.ego = ego;
+        this.combatDetails.defenses.logic = logic;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
 
@@ -7241,7 +7241,7 @@ class TechniqueAssessment {
             }
         }
         else {
-            let accurateDefenses = ["Evasion", "Ego"];
+            let accurateDefenses = ["Evasion", "Insight"];
             if (accurateDefenses.some(type => type == this.technique.coreDefense)) {
                 this.defenseModifier += 0.25;
                 modNames.push("Effective");
@@ -7525,8 +7525,6 @@ class TechniqueAssessment {
         attributeHandler.current[WuxDef.GetVariable("Soc_Favor")] = 15;
         attributeHandler.addMod(WuxDef.GetVariable("StrideRoll"));
         attributeHandler.current[WuxDef.GetVariable("StrideRoll")] = 5;
-        attributeHandler.addMod(WuxDef.GetVariable("MvCharge"));
-        attributeHandler.current[WuxDef.GetVariable("MvCharge")] = 5;
         attributeHandler.addMod(WuxDef.GetVariable("Cmb_Mv"));
         attributeHandler.current[WuxDef.GetVariable("Cmb_Mv")] = 5;
         attributeHandler.addMod(WuxDef.GetVariable("Cmb_MvDash"));
@@ -7691,13 +7689,13 @@ class TechniqueAssessment {
                 break;
             case "Def_Brace":
             case "Def_Warding":
-            case "Def_Insight":
+            case "Def_Logic":
             case "Def_Resolve":
                 // 2 = 2, 3 = 4, 4 = 6, 5 = 8
                 output.value = Math.ceil(output.value + Math.max(Math.ceil(output.value * 0.75 - 1.5), 0));
                 break;
             case "Def_Evasion":
-            case "Def_Ego":
+            case "Def_Insight":
                 output.value = 1 + Math.ceil(output.value + Math.max(Math.ceil(output.value * 0.75 - 1.5), 0));
                 break;
             case "StartEN":
@@ -9065,10 +9063,10 @@ var WuxSheetMain = WuxSheetMain || (function () {
             },
 
             buildTooltipCheckboxInput = function (fieldName, infoFieldName, contents, infoContents) {
-                return `<div class="wuxInteractiveBlock">
-                ${WuxSheetMain.Info.Button(infoFieldName)}
-                ${checkboxBlockIcon(fieldName, contents)}
-                ${WuxSheetMain.HiddenField(infoFieldName, `<div class="wuxInfoContent">\n${infoContents}\n</div>`)}
+
+                return `<div class="wuxInteractiveBlock wuxTooltip">
+                <span class="wuxTooltipText">${checkboxBlockIcon(fieldName, contents)}</span>
+                <div class="wuxTooltipContent">\n${infoContents}\n</div>
                 </div>`;
             },
 
@@ -9739,21 +9737,6 @@ var WuxDefinition = WuxDefinition || (function () {
             expandContents += WuxSheetMain.Desc(`<em>${definitionData.subGroup}</em>`);
         }
         expandContents += `\n${WuxSheetMain.Desc(definitionData.getDescription(`</span><span class="wuxDescription">`))}`;
-        if (definitionData.formula.hasFormula()) {
-            switch (definitionData.group) {
-                case "Skill":
-                    expandContents += "";
-                    break;
-                case "LoreCategory":
-                    expandContents += "\n" + WuxSheetMain.Desc(`If trained, ${definitionData.title} is calculated as:\n${definitionData.formula.getString()} + [${WuxDef.GetTitle("CR")}]`);
-                    break;
-                case "Lore":
-                    expandContents += "\n" + WuxSheetMain.Desc(`If trained, ${definitionData.title} is calculated as:\n${definitionData.formula.getString()} + this lore's [Tier] + [${WuxDef.GetTitle("CR")}]`);
-                    break;
-                default:
-                    expandContents += "\n" + WuxSheetMain.Desc(`${definitionData.title} is calculated as:\n${definitionData.formula.getString()}`);
-            }
-        }
         return expandContents;
     };
     const values = {};
@@ -9944,7 +9927,7 @@ var WuxDefinition = WuxDefinition || (function () {
         },
 
         buildHeader = function (definition) {
-            return WuxSheetMain.Header2(`${definition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(definition))}`);
+            return WuxSheetMain.Header2(`${WuxSheetMain.Tooltip.Text(definition.title, WuxDefinition.TooltipDescription(definition))}`);
         },
 
         buildText = function (definition, textContents) {
@@ -10504,31 +10487,17 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                         build = function () {
                             let contents = "";
                             contents += buildCharacterSection();
-                            contents += buildResourcesSection();
                             return contents;
                         },
 
                         buildCharacterSection = function () {
                             let contents = "";
                             contents += WuxSheetMain.MultiRowGroup([basics(), influences()], WuxSheetMain.Table.FlexTable, 2);
-                            contents += WuxSheetMain.MultiRowGroup([advancement(), training()], WuxSheetMain.Table.FlexTable, 2);
+                            contents += WuxSheetMain.MultiRowGroup([advancement(), resources()], WuxSheetMain.Table.FlexTable, 2);
 
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_OverviewCharacter");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
-                        },
-
-                        buildResourcesSection = function () {
-                            let contents = "";
-                            let contentData = [];
-                            contentData.push(boons());
-                            contentData = contentData.concat(resources());
-                            contents += WuxSheetMain.MultiRowGroup(contentData, WuxSheetMain.Table.FlexTable, 2);
-
-                            contents = WuxSheetMain.TabBlock(contents);
-
-                            let definition = WuxDef.Get("Page_OverviewResources");
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                         },
 
@@ -10599,70 +10568,38 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute()));
 
                             let xpDefinition = WuxDef.Get("XP");
-                            contents += WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `To Level: ${xpDefinition.formula.getValue()}`);
-
-                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
-                        },
-
-                        training = function () {
-                            let contents = "";
-                            let titleDefinition = WuxDef.Get("Title_Training");
-                            contents += WuxDefinition.InfoHeader(titleDefinition);
-
-                            contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Go to ${titleDefinition.title}`, "wuxWidth160"));
-
-                            let levelDefinition = WuxDef.Get("Training");
-                            contents += WuxDefinition.BuildText(levelDefinition, WuxSheetMain.Span(levelDefinition.getAttribute(WuxDef._max)));
-
                             let ppDefinition = WuxDef.Get("PP");
-                            contents += WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.formula.getValue()}`);
+                            contents += WuxSheetMain.MultiRowGroup([
+                                    WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `To Level: ${xpDefinition.formula.getValue()}`)),
+                                    WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(), `To Training Point: ${ppDefinition.formula.getValue()}`))],
+                                WuxSheetMain.Table.FlexTable, 2);
 
-                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
-                        },
-
-                        boons = function () {
-                            let contents = "";
-                            let boonDef = WuxDef.Get("Title_Boon");
-                            let boonsDefs = WuxDef.Filter([new DatabaseFilterData("group", "Boon")]);
-
-                            let boonInfo = WuxDefinition.TooltipDescription(boonDef);
-                            boonInfo = WuxSheetMain.Info.Contents(boonDef.getAttribute(WuxDef._info), boonInfo);
-
-                            contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(boonDef.getAttribute(WuxDef._info))}${boonDef.title}`)}
-							${boonInfo}`;
-
-                            for (let i = 0; i < boonsDefs.length; i++) {
-                                contents += WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(boonsDefs[i].getAttribute(), boonsDefs[i].getAttribute(WuxDef._info),
-                                    WuxSheetMain.Header(boonsDefs[i].title), WuxDefinition.TooltipDescription(boonsDefs[i]));
-                            }
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         },
 
                         resources = function () {
-                            let output = [];
+                            let contents = "";
+                            let titleDefinition = WuxDef.Get("Page_OverviewResources");
+                            contents += WuxSheetMain.Header(`${titleDefinition.getTitle()}`);
 
-                            // add CR
                             let crDef = WuxDef.Get("CR");
-                            let contents = `${WuxSheetMain.Header(`${crDef.title}`)}`;
-                            contents += WuxDefinition.BuildNumberLabelInput(crDef, crDef.getAttribute(), 
-                                `Max: <span name="${crDef.getAttribute(WuxDef._max)}"></span>`);
-
                             let potencyDefinition = WuxDef.Get("SB_MAX");
-                            contents += WuxDefinition.BuildText(potencyDefinition, WuxSheetMain.Span(potencyDefinition.getAttribute()));
-                            output.push(WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150"));
+                            contents += WuxSheetMain.MultiRowGroup([
+                                    WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildNumberLabelInput(crDef, crDef.getAttribute(),
+                                        `Max: <span name="${crDef.getAttribute(WuxDef._max)}"></span>`)),
+                                    WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildText(potencyDefinition, WuxSheetMain.Span(potencyDefinition.getAttribute())))],
+                                WuxSheetMain.Table.FlexTable, 2);
 
-                            let groups = ["General", "Combat", "Social"];
-                            for (let i = 0; i < groups.length; i++) {
-                                let resourcesDef = WuxDef.Get(groups[i]);
-                                let resourceDefs = WuxDef.Filter([new DatabaseFilterData("group", groups[i]), new DatabaseFilterData("hasMax", "true")]);
+                            let vitalityDef = WuxDef.Get("Cmb_Vitality");
+                            let surgeDef = WuxDef.Get("Surge");
+                            contents += WuxSheetMain.MultiRowGroup([
+                                    WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildNumberLabelInput(vitalityDef, vitalityDef.getAttribute(),
+                                        `Max: <span name="${vitalityDef.getAttribute(WuxDef._max)}"></span>`)),
+                                    WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildNumberLabelInput(surgeDef, surgeDef.getAttribute(),
+                                        `Max: <span name="${surgeDef.getAttribute(WuxDef._max)}"></span>`))],
+                                WuxSheetMain.Table.FlexTable, 2);
 
-                                contents = `${WuxSheetMain.Header(`${resourcesDef.title}`)}`;
-                                for (let j = 0; j < resourceDefs.length; j++) {
-                                    contents += WuxDefinition.BuildNumberLabelInput(resourceDefs[j], resourceDefs[j].getAttribute(), `Max: <span name="${resourceDefs[j].getAttribute(WuxDef._max)}"></span>`);
-                                }
-                                output.push(WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150"));
-                            }
-                            return output;
+                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         }
 
                     return {
@@ -10679,10 +10616,16 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
                     var
                         build = function () {
+
+                            let originDefinition = WuxDef.Get("Page_Origin");
                             let backgroundBuilder = new CharacterBackgroundBuilder();
-                            let statsBuilder = new CharacterStatisticsBuilder();
-                            return `${backgroundBuilder.print()}
-                            ${statsBuilder.print()}`;
+                            let statSummaryDefinition = WuxDef.Get("Title_StatSummary");
+                            let statsBuilder = new ExtendedCharacterStatisticsBuilder();
+                            
+                            return `${WuxSheetMain.CollapsibleTab(statSummaryDefinition.getAttribute(WuxDef._tab, WuxDef._expand), statSummaryDefinition.title,
+                                WuxSheetMain.TabBlock(statsBuilder.print()))}
+                                ${WuxSheetMain.CollapsibleTab(originDefinition.getAttribute(WuxDef._tab, WuxDef._expand), originDefinition.title,
+                                WuxSheetMain.TabBlock(backgroundBuilder.print()))}`;
                         }
 
                     return {
@@ -13603,18 +13546,30 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                     `<div class="wuxMarginLeft50">${expertiseHeader}</div>`);
                         },
                         printInteractiveSkillHeader = function (skill, skillDefinition) {
-                            let attributesLine = ` (${WuxDef.GetAbbreviation(skill.abilityScore)}`;
+                            let abilityScores = [WuxDef.GetAbbreviation(skill.abilityScore)];
                             if (skill.abilityScore2 != "") {
-                                attributesLine += `/${WuxDef.GetAbbreviation(skill.abilityScore2)}`;
+                                abilityScores.push(WuxDef.GetAbbreviation(skill.abilityScore2))
                             }
-                            attributesLine += ")";
+                            let attributesLine = `(${abilityScores.join("/")})`;
                             let interactHeader = `<span class="wuxHeader">${skill.name} ${attributesLine}</span>`;
-                            interactHeader += `<span class="wuxFloatRight" name="${skillDefinition.getAttribute()}">0</span>`;
 
-                            return WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                            return `<div class="wuxSkill">
+                            ${WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
                                 skillDefinition.getAttribute(WuxDef._rank),
                                 skillDefinition.getAttribute(WuxDef._info),
-                                interactHeader, WuxDefinition.TooltipDescription(skillDefinition));
+                                interactHeader, WuxDefinition.TooltipDescription(skillDefinition))}
+                            ${printSkillStat(skillDefinition, skillDefinition.getAttribute(), skillDefinition.getAttribute(WuxDef._info))}
+                            </div>`;
+                        },
+                        printSkillStat = function(definition, fieldAttr, statCalculationField) {
+                            return `<span class="wuxFloatRight">
+                                ${WuxSheetMain.Tooltip.Text(WuxSheetMain.Span(fieldAttr),
+                                    printStatCalculationTooltipContent(definition, statCalculationField))}
+                            </span>`;
+                        },
+                        printStatCalculationTooltipContent = function(definitionData, statCalculationField) {
+                            return `${WuxSheetMain.Header2(definitionData.title)}
+                                <span class="wuxDescription" name="${statCalculationField}"></span>`;
                         },
                         printInteractiveExpertiseHeader = function (skillDefinition) {
                             let expertiseDef = WuxDef.Get("SkillExpertise");
@@ -13640,7 +13595,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             return jobSelection.print();
                         },
                         buildStatSummary = function () {
-                            return "";
+                            let statsBuilder = new CharacterStatisticsBuilder();
+                            return statsBuilder.print();
                         }
                         
                     ;
@@ -14787,46 +14743,45 @@ class CharacterBackgroundBuilder {
     constructor() {
     }
     print() {
-        let contents = "";
-        contents += this.buildOrigin();
-        return contents;
-    }
-
-    buildOrigin() {
-        let definition = WuxDef.Get("Page_Origin")
-        return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, 
-            WuxSheetMain.TabBlock(`${this.printBasics()}
-            ${this.printGenerator()}`));
+        return `${this.printBasics()}
+            ${this.printGenerator()}`;
     }
     
     printBasics() {
         let definition = WuxDef.Get("Title_Background");
         let hiddenField = definition.getAttribute(WuxDef._expand);
-        let contents = WuxSheetMain.MultiRowGroup([this.backgroundBasics(), this.backgroundBackstory()], WuxSheetMain.Table.FlexTable, 2);
-        let header = WuxSheetMain.CollapsibleHeaderInverse(definition.getTitle(), hiddenField);
+        let header = WuxSheetMain.CollapsibleHeader(definition.getTitle(), hiddenField);
+        let contents = WuxSheetMain.MultiRowGroup(
+            [this.backgroundBasics(), this.backgroundBackstory()], 
+            WuxSheetMain.Table.FlexTable, 2);
         return `${WuxSheetMain.Header(header)} 
-        ${WuxSheetMain.HiddenField(hiddenField, contents)}`;
+        ${WuxSheetMain.HiddenAuxField(hiddenField, contents)}`;
     }
 
     backgroundBasics() {
         let nameFields = WuxSheetMain.MultiRowGroup([
-            WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildTextInput(WuxDef.Get("SheetName"), WuxDef.GetAttribute("SheetName"))),
-            WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName")))], 
+                WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildTextInput(WuxDef.Get("SheetName"), WuxDef.GetAttribute("SheetName"))),
+                WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName")))],
             WuxSheetMain.Table.FlexTable, 2);
+        
         let ancestryField = WuxDefinition.BuildSelect(WuxDef.Get("Ancestry"), WuxDef.GetAttribute("Ancestry"),
             WuxDef.Filter([new DatabaseFilterData("group", "AncestryType")]));
         let ethnicityField = `<input type="hidden" class="wuxAncestrySelection-flag" name="${WuxDef.GetAttribute("Ancestry")}" value="0">
             <div class="wuxAncestrySelection-Human">\n${WuxDefinition.BuildSelect(WuxDef.Get("Ethnicity"), WuxDef.GetAttribute("Ethnicity"),
             WuxDef.Filter([new DatabaseFilterData("group", "RaceType")]), true)}\n</div>`;
+        let ancestryFields = WuxSheetMain.MultiRowGroup(
+            [WuxSheetMain.Table.FlexTableGroup(ancestryField), WuxSheetMain.Table.FlexTableGroup(ethnicityField)],
+            WuxSheetMain.Table.FlexTable, 2);
+        
         let affinityField = WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("AffinityAspect"),
             [WuxDef.Get("Unaspected")].concat(WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])), 
             false);
+        
         let quickDescriptionField = WuxDefinition.BuildTextarea(WuxDef.Get("QuickDescription"), WuxDef.GetAttribute("QuickDescription"),
             "wuxInput wuxHeight30");
         
         return WuxSheetMain.Table.FlexTableGroup(`${nameFields}
-        ${ancestryField}
-        ${ethnicityField}
+        ${ancestryFields}
         ${affinityField}
         ${quickDescriptionField}`);
     }
@@ -14851,9 +14806,9 @@ class CharacterBackgroundBuilder {
     printGenerator() {
         let definition = WuxDef.Get("Title_BackgroundGenerator");
         let hiddenField = definition.getAttribute(WuxDef._expand);
-        let header = WuxSheetMain.CollapsibleHeader(definition.getTitle(), hiddenField);
+        let header = WuxSheetMain.CollapsibleHeaderInverse(definition.getTitle(), hiddenField);
         return `${WuxSheetMain.Header(header)} 
-        ${WuxSheetMain.HiddenAuxField(hiddenField, this.backgroundGenerator())}`;
+        ${WuxSheetMain.HiddenField(hiddenField, this.backgroundGenerator())}`;
     }
 
     backgroundGenerator() {
@@ -14885,52 +14840,180 @@ class CharacterStatisticsBuilder {
     constructor() {
     }
     print() {
+        return `<div class="wuxCharacterStatistics">
+            ${this.printBasics()}
+            <span class="wuxRow">&nbsp;</span>
+            ${this.printDefenses()}
+            <span class="wuxRow">&nbsp;</span>
+            ${this.printExpandedStats()}
+        </div>`;
+    }
+    
+    printBasics() {
+        let fullNameDef = WuxDef.Get("FullName");
+        let levelDef = WuxDef.Get("Level");
+        let jobDef = WuxDef.Get("Forme_JobSlot");
+        let crDef = WuxDef.Get("CR");
+        let recallDef = WuxDef.Get("Recall");
+        let recallField = `<div class="wuxRow">${this.printStat(recallDef, recallDef.getTitle(), recallDef.getAttribute())}</div>`;
+
+        let filteredStats = WuxDef.Filter([new DatabaseFilterData("subGroup", "CoreResource")]);
+        let resourceContents = "";
+        for (let definition of filteredStats) {
+            resourceContents += `<div class="wuxRow">
+            ${this.printStat(definition, definition.abbreviation,
+                definition.getAttribute(WuxDef._max), definition.getAttribute(WuxDef._info))}
+            </div>`;
+        }
+        
+        return `${WuxSheetMain.Header(WuxSheetMain.Span(fullNameDef.getAttribute()))}
+            <div class="wuxRow">
+                <span>[</span><span>${crDef.getTitle()}</span><span> </span>${WuxSheetMain.Span(crDef.getAttribute())}<span>]</span>
+                <span> </span>
+                <span>${levelDef.abbreviation}</span>${WuxSheetMain.Span(levelDef.getAttribute())}
+                <span> </span>
+                ${WuxSheetMain.Span(jobDef.getAttribute())}
+            </div>
+            ${resourceContents}`;
+    }
+    printDefenses() {
+        let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", ["Defense", "Sense"])]);
+        let contents = this.printHeader(WuxDef.GetTitle("Defense"));
+        for (let definition of filteredStats) {
+            let abilityScores = [];
+            let defenseDefinitionNames = definition.formula.getDefinitions();
+            for (let defenseDefinitionName of defenseDefinitionNames) {
+                if (defenseDefinitionName == "CR") {
+                    continue;
+                }
+                let defenseDefinition = WuxDef.Get(defenseDefinitionName);
+                abilityScores.push(defenseDefinition.abbreviation);
+            }
+            let attributesLine = "";
+            if (abilityScores.length > 0) {
+                attributesLine = `(${abilityScores.join("/")})`;
+            }
+            
+            contents += this.printStat(definition, `${definition.getTitle()} ${attributesLine}`, 
+                definition.getAttribute(), definition.getAttribute(WuxDef._info));
+        }
+        return contents;
+    }
+    
+    printExpandedStats() {
+        let contents = this.printHeader(WuxDef.GetTitle("Title_Conflict"));
+        contents += this.printFilteredSubGroupStats("EnStat");
+        contents += this.printFilteredSubGroupStats("MoveStat");
+        contents += this.printFilteredSubGroupStats("CombatStat");
+        return contents;
+    }
+    printFilteredSubGroupStats(subGroupName) {
         let contents = "";
-        contents += this.createStatGroup("Attribute");
-        contents += this.createStatGroup("Defense");
-        contents += this.createStatGroup("Sense");
-        contents += this.createStatGroup("General");
-        contents += this.createStatGroup("Combat");
-        contents += this.createStatGroup("Skill");
+        let filteredStats = WuxDef.Filter([new DatabaseFilterData("subGroup", subGroupName)]);
+        for (let definition of filteredStats) {
+            contents += this.printStat(definition, definition.getTitle(),
+                definition.getAttribute(), definition.getAttribute(WuxDef._info));
+        }
+        return `${contents}
+        `;
+    }
+    
+    printHeader(header) {
+        return WuxSheetMain.Header(header);
+    }
+    printSetValue(definition, fieldAttr) {
+        return `<div class="wuxFlexTableItemGroup">
+            <strong>${WuxSheetMain.Tooltip.Text(definition.title,
+            this.printDefinitionTooltipContents(definition))}</strong>
+            ${WuxSheetMain.Span(fieldAttr)}
+        </div>`;
+    }
+
+    printSetStat(definition, title, fieldAttr) {
+        return `<div class="wuxFlexTableItemGroup">
+            <strong>${WuxSheetMain.Tooltip.Text(title,
+            this.printDefinitionTooltipContents(definition))}</strong>
+            <div class="wuxCharacterStatisticsStat">
+                ${WuxSheetMain.Span(fieldAttr)}
+            </div>
+        </div>`;
+    }
+    printDefinitionTooltipContents(definitionData) {
+        return `${WuxSheetMain.Header2(definitionData.title)}
+        <span class="wuxDescription">${definitionData.getDescription(`</span><span class="wuxDescription">`)}</span>`;
+    }
+    
+    printStat(definition, title, fieldAttr, statCalculationField) {
+        return `<div class="wuxFlexTableItemGroup">
+            ${WuxSheetMain.Tooltip.Text(title,
+            this.printDefinitionTooltipContents(definition))}
+            <div class="wuxCharacterStatisticsStat">
+                ${WuxSheetMain.Tooltip.Text(WuxSheetMain.Span(fieldAttr),
+            this.printStatCalculationTooltipContent(definition, statCalculationField))}
+            </div>
+        </div>`;
+    }
+    printStatCalculationTooltipContent(definitionData, statCalculationField) {
+        return `${WuxSheetMain.Header2(definitionData.title)}
+        <span class="wuxDescription" name="${statCalculationField}"></span>`;
+    }
+    
+}
+
+class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
+
+    print() {
+        let leftColumn = `<div class="wuxCharacterStatistics">
+            ${this.printBasics()}
+            <span class="wuxRow">&nbsp;</span>
+            ${this.printAttributes()}
+            <span class="wuxRow">&nbsp;</span>
+            ${this.printDefenses()}
+            <span class="wuxRow">&nbsp;</span>
+            ${this.printExpandedStats()}
+        </div>`;
+        let rightColumn = `<div class="wuxCharacterStatistics">
+            ${this.printSkills()}
+        </div>`;
+        
+        return WuxSheetMain.MultiRowGroup(
+            [WuxSheetMain.Table.FlexTableGroup(leftColumn), WuxSheetMain.Table.FlexTableGroup(rightColumn)],
+            WuxSheetMain.Table.FlexTable, 2);
+    }
+    
+    printAttributes() {
+        let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", "Attribute")]);
+        let contents = this.printHeader(WuxDef.GetTitle("Attribute"));
+        for (let definition of filteredStats) {
+            contents += this.printSetStat(definition, definition.getTitle(), definition.getAttribute());
+        }
         return contents;
     }
 
-    createStatGroup(groupName) {
-        let definition = WuxDef.Get(groupName);
-        return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, this.createStatTable(groupName));
-    }
-
-    createStatTable(groupName) {
-        let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", groupName)]);
-        let output = "";
-        for (let i = 0; i < filteredStats.length; i++) {
-            output += this.createStatBlock(filteredStats[i]);
-        }
-        return WuxSheetMain.TabBlock(WuxSheetMain.Table.FlexTable(output));
-    }
-
-    createStatBlock(statDefinition) {
-        let header = `${statDefinition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(statDefinition))}`;
+    printSkills() {
         let contents = "";
-        if (statDefinition.isResource) {
-            // contents += createStatBlockValueWithHeader("Current", statDefinition.getAttribute());
-            // contents += createStatBlockValueWithHeader("Max", statDefinition.getAttribute(WuxDef._max));
-            contents += this.createStatBlockValue(statDefinition.getAttribute(WuxDef._max));
-        } else {
-            contents += this.createStatBlockValue(statDefinition.getAttribute());
+        this.printHeader(WuxDef.GetTitle("Skill"));
+        
+        let skillGroups = ["ActiveSkills", "SocialSkills", "WorldSkills"];
+        for (let skillGroup of skillGroups) {
+            
+            let subSkillGroups = WuxDef.Filter([new DatabaseFilterData("subGroup", skillGroup)]);
+            for (let subSkillGroup of subSkillGroups) {
+                contents += this.printHeader(`${subSkillGroup.getTitle()} Skills`);
+                
+                let skillDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Skill"),
+                    new DatabaseFilterData("subGroup", subSkillGroup.getTitle())]);
+                for (let definition of skillDefinitions) {
+                    contents += this.printStat(definition, definition.getTitle(), definition.getAttribute(), definition.getAttribute(WuxDef._info));
+                }
+            }
         }
-        contents = WuxSheetMain.Table.FlexTable(contents);
-
-        let output = WuxSheetMain.Table.FlexTableHeader(header);
-        output += WuxSheetMain.Table.FlexTableData(contents);
-        return WuxSheetMain.Table.FlexTableGroup(output, " wuxMinWidth150");
-    }
-
-    createStatBlockValue(fieldName) {
-        return WuxSheetMain.Table.FlexTableGroup(`<span class="wuxFlexTableItemData wuxTextCenter" name="${fieldName}">0</span>`, " wuxMinWidth100");
+        return contents;
     }
     
-}class FilterDisplayBuilder {
+}
+
+class FilterDisplayBuilder {
     constructor(filterDefinitions) {
         this.filterDefinitions = filterDefinitions;
     }

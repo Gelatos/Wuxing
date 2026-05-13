@@ -37,24 +37,31 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
             }
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
-                let skillPointValue = 0;
-                let skillPointValueNoCr = 0;
-                let skillRank = 0;
-                let skillExpertise = 0;
-                for (let i = 0; i < skillDefinitions.length; i++) {
-                    skillPointValueNoCr = skillDefinitions[i].formula.getValue(attrHandler);
-                    skillPointValue = skillPointValueNoCr;
-                    skillRank = attrHandler.parseString(skillDefinitions[i].getVariable(WuxDef._rank));
-                    skillExpertise = attrHandler.parseString(skillDefinitions[i].getVariable(WuxDef._expertise));
+                let skillExpertiseDef = WuxDef.Get("SkillExpertise");
+                let trainingBonus = 2 + attrHandler.parseInt(WuxDef.GetVariable("CR"));
+                
+                skillDefinitions.forEach(skillDefinition => {
+                    let skillInfo = [];
+                    let skillPointValueNoCr = skillDefinition.formula.getValue(attrHandler);
+                    skillInfo = skillInfo.concat(["-- Base Calculation --", 
+                        `${skillDefinition.formula.getString()} = ${skillPointValueNoCr}`, ""]);
+                    
+                    let skillPointValue = skillPointValueNoCr;
+                    let skillRank = attrHandler.parseString(skillDefinition.getVariable(WuxDef._rank));
+                    let skillExpertise = attrHandler.parseString(skillDefinition.getVariable(WuxDef._expertise));
                     if (skillRank == "on") {
                         if (skillExpertise == "on") {
-                            skillPointValue = WuxDef.Get("SkillExpertise").formula.getValue();
+                            skillExpertise = skillExpertiseDef.formula.getValue();
+                            skillPointValue = skillExpertise;
+                            skillInfo = [`-- ${skillExpertiseDef.getTitle()} --`, skillExpertise, ""];
                         }
-                        skillPointValue += 2 + attrHandler.parseInt(WuxDef.GetVariable("CR"));
+                        skillPointValue += trainingBonus;
+                        skillInfo = skillInfo.concat(["-- Training Bonus --", `2 + [CR] = ${trainingBonus}`, ""]);
                     }
-                    attrHandler.addUpdate(skillDefinitions[i].getVariable(WuxDef._max), skillPointValueNoCr);
-                    attrHandler.addUpdate(skillDefinitions[i].getVariable(), skillPointValue);
-                }
+                    attrHandler.addUpdate(skillDefinition.getVariable(WuxDef._max), skillPointValueNoCr);
+                    attrHandler.addUpdate(skillDefinition.getVariable(), skillPointValue);
+                    attrHandler.addUpdate(skillDefinition.getVariable(WuxDef._info), skillInfo.join(`\n`));
+                });
             });
         },
         
