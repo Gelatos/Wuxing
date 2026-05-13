@@ -13179,8 +13179,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                 },
 
                 printAttributes = function () {
-                    let contents = `${buildTechPointsSection(WuxDef.GetAttribute("Attribute"))}
-                    ${buildTechPointsSection(WuxDef.GetAttribute("Skill"))}`;
+                    let contents = `${buildTechPointsSection(WuxDef.GetAttribute("Attribute"), "Attr. Pts")}
+                    ${buildTechPointsSection(WuxDef.GetAttribute("Skill"), "Skill Pts")}`;
                     return WuxSheetSidebar.Build("", contents);
                 },
                 
@@ -13225,31 +13225,41 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         buildAdvancementTab = function () {
-                            let contents = WuxSheetMain.MultiRowGroup([buildConversionStats(), buildAdvancementStats()], WuxSheetMain.Table.FlexTable, 2);
+                            let leftColumn = WuxSheetMain.Table.FlexTableGroup(buildLevelStats());
+                            let rightColumn = WuxSheetMain.Table.FlexTableGroup(buildAdvancementStats());
+                            let contents = WuxSheetMain.MultiRowGroup([leftColumn, rightColumn], WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Advancement");
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                         },
 
-                        buildConversionStats = function () {
+                        buildLevelStats = function () {
                             let contents = "";
-                            let titleDefinition = WuxDef.Get("Title_AdvancementConversion");
-                            contents += WuxDefinition.InfoHeader(titleDefinition);
+                            let titleDefinition = WuxDef.Get("Level");
+                            contents += WuxSheetMain.Header(titleDefinition.getTitle());
 
                             let xpDefinition = WuxDef.Get("XP");
-                            contents += WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(), `To Level: ${xpDefinition.formula.getValue()}`);
-                            contents += WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(), `Convert To Levels`));
+                            contents += WuxSheetMain.MultiRowGroup([
+                                    WuxSheetMain.Table.FlexTableGroup(
+                                        `${WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(),
+                                            `To Level: ${xpDefinition.formula.getValue()}`)}
+                                        ${WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(),
+                                            `Convert To Levels`))}`),
+                                    WuxSheetMain.Table.FlexTableGroup(
+                                        WuxDefinition.BuildTextInput(WuxDef.Get("Level"), WuxDef.GetAttribute("Level")))
+                                ],
+                                WuxSheetMain.Table.FlexTable, 2);
+                            contents += WuxDefinition.BuildText(WuxDef.Get("MaxCR"), WuxSheetMain.Span(WuxDef.GetAttribute("CR", WuxDef._max)));
 
-                            return WuxSheetMain.Table.FlexTableGroup(contents);
+                            return contents;
                         },
 
                         buildAdvancementStats = function () {
                             let contents = "";
                             let titleDefinition = WuxDef.Get("Title_Advancement");
-                            contents += WuxDefinition.InfoHeader(titleDefinition);
-                            contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Level"), WuxDef.GetAttribute("Level"));
-                            contents += WuxDefinition.BuildText(WuxDef.Get("MaxCR"), WuxSheetMain.Span(WuxDef.GetAttribute("CR", WuxDef._max)));
+                            contents += WuxSheetMain.Header(titleDefinition.getTitle());
+                            
                             contents += WuxDefinition.BuildText(WuxDef.Get("Advancement"),
                                 `${WuxSheetMain.Span(WuxDef.GetAttribute("Advancement"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("Advancement", WuxDef._max))}`);
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementJob"), WuxDef.GetAttribute("AdvancementJob"), `cost: 2 advancement points`);
@@ -13655,12 +13665,18 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                         buildLanguage = function (knowledge) {
                             let knowledgeDefinition = knowledge.createDefinition(WuxDef.Get("Language"));
-                            return WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(knowledgeDefinition.getAttribute(WuxDef._rank), knowledgeDefinition.getAttribute(WuxDef._info),
-                                buildInteractionMainBlock(knowledge, knowledgeDefinition), WuxDefinition.TooltipDescription(knowledgeDefinition));
+                            return `<div class="wuxSkill">
+                                ${WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                    knowledgeDefinition.getAttribute(WuxDef._rank), 
+                                    knowledgeDefinition.getAttribute(WuxDef._info),
+                                buildInteractionMainBlock(knowledge, knowledgeDefinition), 
+                                WuxDefinition.TooltipDescription(knowledgeDefinition))}
+                                <span class="wuxSubheader"> - ${knowledge.location}</span>
+                            </div>`;
                         },
 
                         buildInteractionMainBlock = function (knowledge, knowledgeDefinition) {
-                            return `<span class="wuxHeader">${knowledgeDefinition.title}</span><span class="wuxSubheader"> - ${knowledge.location}</span>`;
+                            return `<span class="wuxHeader">${knowledgeDefinition.title}</span>`;
                         }
 
                     return {
@@ -13717,9 +13733,12 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         buildLore = function (knowledgeDefinition, groupName, interactHeader) {
-                            return WuxSheetMain.InteractionElement.BuildTooltipSelectInput(knowledgeDefinition.getAttribute(WuxDef._rank), knowledgeDefinition.getAttribute(WuxDef._info),
-                                WuxDef.Filter([new DatabaseFilterData("group", groupName)]), false, "wuxWidth70 wuxMarginRight10",
-                                interactHeader, WuxDefinition.TooltipDescription(knowledgeDefinition));
+                            return `${WuxSheetMain.InteractionElement.BuildTooltipSelectInput(
+                                    knowledgeDefinition.getAttribute(WuxDef._rank), 
+                                    knowledgeDefinition.getAttribute(WuxDef._info),
+                                WuxDef.Filter([new DatabaseFilterData("group", groupName)]), 
+                                false, "wuxWidth70 wuxMarginRight10",
+                                interactHeader, WuxDefinition.TooltipDescription(knowledgeDefinition))}`;
                         },
 
                         buildMainLore = function (knowledge) {

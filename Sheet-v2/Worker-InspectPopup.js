@@ -70,9 +70,7 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), inventoryTitle);
         this.initializePopup();
         this.iterateAndSetItems(inventoryItems);
-        if (addType != undefined) {
-            this.setAddType(addType);
-        }
+        this.setAddType(addType);
     }
     hide() {
         super.hide();
@@ -88,6 +86,10 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), popupType);
     }
     setAddType(addType) {
+        if (addType == undefined) {
+            this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), "");
+            return;
+        }
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), addType);
     }
 
@@ -337,7 +339,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             inspectPopup.open(inventoryTitle, inventoryItems, addType);
         },
 
-        openTechniqueInspection = function (attributeHandler, inventoryTitle, inventoryItems) {
+        openTechniqueInspection = function (attributeHandler, inventoryTitle, inventoryItems, addType) {
             Debug.Log("Open Technique Popup");
             let inspectPopup = new TechniqueInspectionPopup(attributeHandler);
             inspectPopup.open(inventoryTitle, inventoryItems, addType);

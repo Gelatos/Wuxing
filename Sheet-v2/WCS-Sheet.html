@@ -1052,60 +1052,43 @@
 						<div class="wuxTabContent">
 							<div class="wuxFlexTable">
 								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader">
-										<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-advancementconversion_info" undefined><span>?</span></div>Conversion
-									</div>
-									<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-advancementconversion_info" value="0">
-									<div class="wuxHiddenField">
-										<div class="wuxInfoContent">
-											<div class="wuxHeader2">Conversion</div>
+									<div class="wuxHeader">Character Level</div>
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup">
+											<div class="wuxHeader2"><span class="wuxTooltip">
+													<span class="wuxTooltipText">
+														Experience
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Experience</div>
 
-											<span class="wuxDescription">Experience Points are used to grant levels to your character. You can convert experience points (XP) into levels by using the convert to levels button below.</span>
-										</div>
-									</div>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Experience
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Experience</div>
-
-												<span class="wuxDescription">Experience is a resource that is gained after completing challenges in a plot. When you gain enough experience you level up.</span>
+														<span class="wuxDescription">Experience is a resource that is gained after completing challenges in a plot. When you gain enough experience you level up.</span>
+													</div>
+												</span></div>
+											<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-xp" value="" placeholder="0" />
+												<div class="wuxInputLabel">To Level: 60</div>
 											</div>
-										</span></div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-xp" value="" placeholder="0" />
-										<div class="wuxInputLabel">To Level: 60</div>
-									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxButton">
-											<input type="checkbox" name="attr_ttl-advancementconversion">
-											<span>Convert To Levels</span>
-										</div>
-									</div>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader">
-										<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-advancement_info" undefined><span>?</span></div>Advancement
-									</div>
-									<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-advancement_info" value="0">
-									<div class="wuxHiddenField">
-										<div class="wuxInfoContent">
-											<div class="wuxHeader2">Advancement</div>
-
-											<span class="wuxDescription">As a character adventures, learns, and grows, they become more experienced in the world. Advancement tracks this progress through the character's level and experience. </span><span class="wuxDescription">In this section you can see your current level and track their experience. When you are ready, you may also access the advancement menu which will allow you to spend gained build points from leveling up.</span>
-										</div>
-									</div>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Character Level
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Character Level</div>
-
-												<span class="wuxDescription">A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP).</span>
+											<div class="wuxMultiRow">
+												<div class="wuxButton">
+													<input type="checkbox" name="attr_adv-level">
+													<span>Convert To Levels</span>
+												</div>
 											</div>
-										</span></div>
-									<input type="number" class="wuxInput" name="attr_adv-level" />
+										</div>
+										<div class="wuxFlexTableItemGroup">
+											<div class="wuxHeader2"><span class="wuxTooltip">
+													<span class="wuxTooltipText">
+														Character Level
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Character Level</div>
+
+														<span class="wuxDescription">A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP).</span>
+													</div>
+												</span></div>
+											<input type="text" class="wuxInput" name="attr_adv-level" />
+										</div>
+									</div>
 									<div class="wuxHeader2"><span class="wuxTooltip">
 											<span class="wuxTooltipText">
 												Max CR
@@ -1126,55 +1109,60 @@
 											</div>
 										</span></div>
 									<span class="wuxDescription"><span name="attr_adv-cr_max"></span></span>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Advancement Points
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Advancement Points</div>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader">Advancement</div>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Advancement Points
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Advancement Points</div>
 
-												<span class="wuxDescription">Advancement Points are gained whenever you level. </span><span class="wuxDescription">Every level you gain grants you one advancement point.</span>
-											</div>
-										</span></div>
-									<span class="wuxDescription"><span name="attr_adv"></span> / <span name="attr_adv_max"></span></span>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Job Points
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Job Points</div>
+													<span class="wuxDescription">Advancement Points are gained whenever you level. </span><span class="wuxDescription">Every level you gain grants you one advancement point.</span>
+												</div>
+											</span></div>
+										<span class="wuxDescription"><span name="attr_adv"></span> / <span name="attr_adv_max"></span></span>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Job Points
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Job Points</div>
 
-												<span class="wuxDescription">You can spend advancement points to gain Job Points. These job points can be used to increase tier in a job. You must spend 2 advancement points to gain 1 job point.</span>
-											</div>
-										</span></div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_job" value="" placeholder="0" />
-										<div class="wuxInputLabel">cost: 2 advancement points</div>
-									</div>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Skill Points
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Skill Points</div>
+													<span class="wuxDescription">You can spend advancement points to gain Job Points. These job points can be used to increase tier in a job. You must spend 2 advancement points to gain 1 job point.</span>
+												</div>
+											</span></div>
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_job" value="" placeholder="0" />
+											<div class="wuxInputLabel">cost: 2 advancement points</div>
+										</div>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Skill Points
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Skill Points</div>
 
-												<span class="wuxDescription">You can spend advancement points to gain Skill Points. These skill points can be used to learn a new skill. You must spend 2 advancement points to gain 1 skill point.</span>
-											</div>
-										</span></div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_skill" value="" placeholder="0" />
-										<div class="wuxInputLabel">cost: 1 advancement point</div>
-									</div>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Style Points
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Style Points</div>
+													<span class="wuxDescription">You can spend advancement points to gain Skill Points. These skill points can be used to learn a new skill. You must spend 2 advancement points to gain 1 skill point.</span>
+												</div>
+											</span></div>
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_skill" value="" placeholder="0" />
+											<div class="wuxInputLabel">cost: 1 advancement point</div>
+										</div>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Style Points
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Style Points</div>
 
-												<span class="wuxDescription">You can spend advancement points to gain Style Points. These style points can be used to learn a new style. You must spend 1 advancement points to gain 1 technique point.</span>
-											</div>
-										</span></div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_technique" value="" placeholder="0" />
-										<div class="wuxInputLabel">cost: 1 advancement point</div>
+													<span class="wuxDescription">You can spend advancement points to gain Style Points. These style points can be used to learn a new style. You must spend 1 advancement points to gain 1 technique point.</span>
+												</div>
+											</span></div>
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_technique" value="" placeholder="0" />
+											<div class="wuxInputLabel">cost: 1 advancement point</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -2703,7 +2691,7 @@
 				</div>
 				<div class="wuxTab">
 					<div class="wuxFloatSidebarContents">
-						<div class="wuxHeader">&nbsp;Build</div>
+						<div class="wuxHeader">&nbsp;Attr. Pts</div>
 						<div class="wuxDistinctSection wuxSizeInverse">
 							<div class="wuxDistinctField">
 								<span class="wuxDistinctSubtitle">Pts</span>
@@ -2715,7 +2703,7 @@
 								</span>
 							</div>
 						</div>
-						<div class="wuxHeader">&nbsp;Build</div>
+						<div class="wuxHeader">&nbsp;Skill Pts</div>
 						<div class="wuxDistinctSection wuxSizeInverse">
 							<div class="wuxDistinctField">
 								<span class="wuxDistinctSubtitle">Pts</span>
@@ -6224,210 +6212,171 @@
 								<div class="wuxFlexTableItemGroup wuxMinWidth150">
 									<div class="wuxFlexTableItemHeader wuxTextLeft">Walthair Languages</div>
 									<div class="wuxFlexTableItemData wuxTextLeft">
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-minere_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-minere_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-minere_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-minere_rank" />
-														<span class="wuxHeader">Minere</span><span class="wuxSubheader"> - Common</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-minere_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-minere_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-minere_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-minere_rank" />
+															<span class="wuxHeader">Minere</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Minere</div>
+													<span class="wuxDescription"><em>Walthair</em></span>
+													<span class="wuxDescription">The common language used in Minerva and the lands surrounding it. Minere is made up of three root languages that were once spoken commonly amongst the coastal civilizations of the area.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Minere</div>
-												<span class="wuxDescription"><em>Walthair</em></span>
-												<span class="wuxDescription">The common language used in Minerva and the lands surrounding it. Minere is made up of three root languages that were once spoken commonly amongst the coastal civilizations of the area.</span>
 											</div>
+											<span class="wuxSubheader"> - Common</span>
 										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-palmic_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-palmic_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-palmic_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-palmic_rank" />
-														<span class="wuxHeader">Palmic</span><span class="wuxSubheader"> - Tropical Seas</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-shorespeak_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-shorespeak_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-shorespeak_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-shorespeak_rank" />
+															<span class="wuxHeader">Shorespeak</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Shorespeak</div>
+													<span class="wuxDescription"><em>Walthair</em></span>
+													<span class="wuxDescription">A spoken language used by those living along the east coast and in island nations across the sea. While it has no written language, its similarities to both Minere and ancient Vulca make it easy to communicate across cultures regardless.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Palmic</div>
-												<span class="wuxDescription"><em>Walthair</em></span>
-												<span class="wuxDescription">This spoken language is used exclusively in tropical island nations. In modern times it only sees common use by tribes in the region, however its language is often used in the tourism industry to imbue a sense of exoticism.</span>
 											</div>
+											<span class="wuxSubheader"> - East Sea</span>
 										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-shorespeak_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-shorespeak_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-shorespeak_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-shorespeak_rank" />
-														<span class="wuxHeader">Shorespeak</span><span class="wuxSubheader"> - East Sea</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-verdeni_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-verdeni_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-verdeni_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-verdeni_rank" />
+															<span class="wuxHeader">Verdeni</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Verdeni</div>
+													<span class="wuxDescription"><em>Walthair</em></span>
+													<span class="wuxDescription">The spoken language of the island of Verdant Key. Its peoples' isolation from most of modern society has kept this language in tact to ancient times.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Shorespeak</div>
-												<span class="wuxDescription"><em>Walthair</em></span>
-												<span class="wuxDescription">A spoken language used by those living along the east coast and in island nations across the sea. While it has no written language, its similarities to both Minere and ancient Vulca make it easy to communicate across cultures regardless.</span>
 											</div>
-										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-verdeni_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-verdeni_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-verdeni_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-verdeni_rank" />
-														<span class="wuxHeader">Verdeni</span><span class="wuxSubheader"> - Verdant Key</span>
-													</div>
-												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Verdeni</div>
-												<span class="wuxDescription"><em>Walthair</em></span>
-												<span class="wuxDescription">The spoken language of the island of Verdant Key. Its peoples' isolation from most of modern society has kept this language in tact to ancient times.</span>
-											</div>
-										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-vulca_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-vulca_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-vulca_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-vulca_rank" />
-														<span class="wuxHeader">Vulca</span><span class="wuxSubheader"> - Ancient</span>
-													</div>
-												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Vulca</div>
-												<span class="wuxDescription"><em>Walthair</em></span>
-												<span class="wuxDescription">The ancient language of the civilization of Vulcan. It shares a lot of common traits of Shorespeak and may be its root language. The language has fallen out of favor for both Minere and Shorespeak but can still be found on ancient, Ocean Court relics and Vulcan texts.</span>
-											</div>
+											<span class="wuxSubheader"> - Verdant Key</span>
 										</div>
 									</div>
 								</div>
 								<div class="wuxFlexTableItemGroup wuxMinWidth150">
 									<div class="wuxFlexTableItemHeader wuxTextLeft">Aridsha Languages</div>
 									<div class="wuxFlexTableItemData wuxTextLeft">
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-junal_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-junal_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-junal_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-junal_rank" />
-														<span class="wuxHeader">Junal</span><span class="wuxSubheader"> - Common</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-junal_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-junal_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-junal_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-junal_rank" />
+															<span class="wuxHeader">Junal</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Junal</div>
+													<span class="wuxDescription"><em>Aridsha</em></span>
+													<span class="wuxDescription">Juno's major language and the official language of the Guidance. Those who live within or below the city of Juno are expected to learn and speak this language to fully integrate into society.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Junal</div>
-												<span class="wuxDescription"><em>Aridsha</em></span>
-												<span class="wuxDescription">Juno's major language and the official language of the Guidance. Those who live within or below the city of Juno are expected to learn and speak this language to fully integrate into society.</span>
 											</div>
+											<span class="wuxSubheader"> - Common</span>
 										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-byric_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-byric_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-byric_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-byric_rank" />
-														<span class="wuxHeader">Byric</span><span class="wuxSubheader"> - Baryan Ascent</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-dustell_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-dustell_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-dustell_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-dustell_rank" />
+															<span class="wuxHeader">Dustell</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Dustell</div>
+													<span class="wuxDescription"><em>Aridsha</em></span>
+													<span class="wuxDescription">This language has many derrivatives across the tribes of the desert. However each version, while distinct in its pronunciations, share a common written form derrived from the Shira language. Due to its use throughout the desert, it is Juno's second most common language.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Byric</div>
-												<span class="wuxDescription"><em>Aridsha</em></span>
-												<span class="wuxDescription">The dialect of the tribes of people that live in the Baryan Ascent, north of the Aridsha Desert. It has many common traits with the neighboring dialect of Dustell.</span>
 											</div>
+											<span class="wuxSubheader"> - Aridsha</span>
 										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-dustell_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-dustell_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-dustell_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-dustell_rank" />
-														<span class="wuxHeader">Dustell</span><span class="wuxSubheader"> - Aridsha</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-muralic_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-muralic_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-muralic_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-muralic_rank" />
+															<span class="wuxHeader">Muralic</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Muralic</div>
+													<span class="wuxDescription"><em>Aridsha</em></span>
+													<span class="wuxDescription">The language of the Murali people in the deserts of Aridsha. Its roots in Shira are clear and may be even closer to the ancient language than Junal.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Dustell</div>
-												<span class="wuxDescription"><em>Aridsha</em></span>
-												<span class="wuxDescription">This language has many derrivatives across the tribes of the desert. However each version, while distinct in its pronunciations, share a common written form derrived from the Shira language. Due to its use throughout the desert, it is Juno's second most common language.</span>
 											</div>
+											<span class="wuxSubheader"> - Aridsha</span>
 										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-muralic_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-muralic_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-muralic_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-muralic_rank" />
-														<span class="wuxHeader">Muralic</span><span class="wuxSubheader"> - Aridsha</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-shira_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-shira_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-shira_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-shira_rank" />
+															<span class="wuxHeader">Shira</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Shira</div>
+													<span class="wuxDescription"><em>Aridsha</em></span>
+													<span class="wuxDescription">An old language that evolved into both the Junal and Muralic languages. Usage can still be found in ancient Guidance relics.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Muralic</div>
-												<span class="wuxDescription"><em>Aridsha</em></span>
-												<span class="wuxDescription">The language of the Murali people in the deserts of Aridsha. Its roots in Shira are clear and may be even closer to the ancient language than Junal.</span>
 											</div>
-										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-shira_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-shira_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-shira_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-shira_rank" />
-														<span class="wuxHeader">Shira</span><span class="wuxSubheader"> - Ancient</span>
-													</div>
-												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Shira</div>
-												<span class="wuxDescription"><em>Aridsha</em></span>
-												<span class="wuxDescription">An old language that evolved into both the Junal and Muralic languages. Usage can still be found in ancient Guidance relics.</span>
-											</div>
+											<span class="wuxSubheader"> - Ancient</span>
 										</div>
 									</div>
 								</div>
@@ -6436,70 +6385,79 @@
 								<div class="wuxFlexTableItemGroup wuxMinWidth150">
 									<div class="wuxFlexTableItemHeader wuxTextLeft">Khem Languages</div>
 									<div class="wuxFlexTableItemData wuxTextLeft">
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-apollen_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-apollen_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-apollen_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-apollen_rank" />
-														<span class="wuxHeader">Apollen</span><span class="wuxSubheader"> - Common</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-apollen_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-apollen_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-apollen_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-apollen_rank" />
+															<span class="wuxHeader">Apollen</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Apollen</div>
+													<span class="wuxDescription"><em>Khem</em></span>
+													<span class="wuxDescription">The common tongue of Apollo, this language uses a variety of symbols in written works. It is one of the oldest languages still in use in modern times. In the Blessed lands it is known as Mons, the language of the mountainous people, the Monsen.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Apollen</div>
-												<span class="wuxDescription"><em>Khem</em></span>
-												<span class="wuxDescription">The common tongue of Apollo, this language uses a variety of symbols in written works. It is one of the oldest languages still in use in modern times. In the Blessed lands it is known as Mons, the language of the mountainous people, the Monsen.</span>
 											</div>
+											<span class="wuxSubheader"> - Common</span>
 										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-kleikan_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-kleikan_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-kleikan_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-kleikan_rank" />
-														<span class="wuxHeader">Kleikan</span><span class="wuxSubheader"> - Klef</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-kleikan_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-kleikan_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-kleikan_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-kleikan_rank" />
+															<span class="wuxHeader">Kleikan</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Kleikan</div>
+													<span class="wuxDescription"><em>Khem</em></span>
+													<span class="wuxDescription">This spoken language was once the language of the Suntouched people that lived west of the Khembalung Mountain range. It's largely fallen out of favor but pockets of people still try to keep the language alive.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Kleikan</div>
-												<span class="wuxDescription"><em>Khem</em></span>
-												<span class="wuxDescription">This spoken language was once the language of the Suntouched people that lived west of the Khembalung Mountain range. It's largely fallen out of favor but pockets of people still try to keep the language alive.</span>
 											</div>
+											<span class="wuxSubheader"> - Klef</span>
 										</div>
 									</div>
 								</div>
 								<div class="wuxFlexTableItemGroup wuxMinWidth150">
 									<div class="wuxFlexTableItemHeader wuxTextLeft">Colswei Languages</div>
 									<div class="wuxFlexTableItemData wuxTextLeft">
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-lib_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-lib_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-lib_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-lib_rank" />
-														<span class="wuxHeader">Lib</span><span class="wuxSubheader"> - Common</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-lib_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-lib_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-lib_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-lib_rank" />
+															<span class="wuxHeader">Lib</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Lib</div>
+													<span class="wuxDescription"><em>Colswei</em></span>
+													<span class="wuxDescription">This language is commonly used in Liber. Its roots seem entirely locked to the region, however the age of the language itself are unclear due to it not being used in written form until much later than its equivalents.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Lib</div>
-												<span class="wuxDescription"><em>Colswei</em></span>
-												<span class="wuxDescription">This language is commonly used in Liber. Its roots seem entirely locked to the region, however the age of the language itself are unclear due to it not being used in written form until much later than its equivalents.</span>
 											</div>
+											<span class="wuxSubheader"> - Common</span>
 										</div>
 									</div>
 								</div>
@@ -6508,250 +6466,286 @@
 								<div class="wuxFlexTableItemGroup wuxMinWidth150">
 									<div class="wuxFlexTableItemHeader wuxTextLeft">Ceres Languages</div>
 									<div class="wuxFlexTableItemData wuxTextLeft">
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-cert_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-cert_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-cert_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-cert_rank" />
-														<span class="wuxHeader">Cert</span><span class="wuxSubheader"> - Common</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-cert_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-cert_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-cert_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-cert_rank" />
+															<span class="wuxHeader">Cert</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Cert</div>
+													<span class="wuxDescription"><em>Ceres</em></span>
+													<span class="wuxDescription">The most commonly spoken language in all of Ceres, this language is the original tongue used by the Choi clan. To most in modern times, this connection to the Choi clan is lost but it can often be made clear in the company of those of the clan.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Cert</div>
-												<span class="wuxDescription"><em>Ceres</em></span>
-												<span class="wuxDescription">The most commonly spoken language in all of Ceres, this language is the original tongue used by the Choi clan. To most in modern times, this connection to the Choi clan is lost but it can often be made clear in the company of those of the clan.</span>
 											</div>
+											<span class="wuxSubheader"> - Common</span>
 										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-ciel_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-ciel_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-ciel_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-ciel_rank" />
-														<span class="wuxHeader">Ciel</span><span class="wuxSubheader"> - Capitol</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-ciel_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-ciel_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-ciel_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-ciel_rank" />
+															<span class="wuxHeader">Ciel</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Ciel</div>
+													<span class="wuxDescription"><em>Ceres</em></span>
+													<span class="wuxDescription">This language is used almost exclusively by Clan Par, the historians of Ceres. Those who learn the language often do so to share in the clan's protection and love of the stories and values of Ceres.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Ciel</div>
-												<span class="wuxDescription"><em>Ceres</em></span>
-												<span class="wuxDescription">This language is used almost exclusively by Clan Par, the historians of Ceres. Those who learn the language often do so to share in the clan's protection and love of the stories and values of Ceres.</span>
 											</div>
+											<span class="wuxSubheader"> - Capitol</span>
 										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-citeq_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-citeq_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-citeq_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-citeq_rank" />
-														<span class="wuxHeader">Citeq</span><span class="wuxSubheader"> - South West Ceres</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-citeq_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-citeq_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-citeq_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-citeq_rank" />
+															<span class="wuxHeader">Citeq</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Citeq</div>
+													<span class="wuxDescription"><em>Ceres</em></span>
+													<span class="wuxDescription">A spoken language used mostly by the Ceresian tribes that roam the south western plains of Ceres. </span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Citeq</div>
-												<span class="wuxDescription"><em>Ceres</em></span>
-												<span class="wuxDescription">A spoken language used mostly by the Ceresian tribes that roam the south western plains of Ceres. </span>
 											</div>
+											<span class="wuxSubheader"> - South West Ceres</span>
 										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-manstan_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-manstan_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-manstan_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-manstan_rank" />
-														<span class="wuxHeader">Manstan</span><span class="wuxSubheader"> - Southern Ceres</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-manstan_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-manstan_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-manstan_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-manstan_rank" />
+															<span class="wuxHeader">Manstan</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Manstan</div>
+													<span class="wuxDescription"><em>Ceres</em></span>
+													<span class="wuxDescription">The spoken language used in Southern Ceresian tribes. It has mostly fallen out of favor due to many of the tribes in this location having settled into Sanctum life, however many who wish to remember older times still speak this language.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Manstan</div>
-												<span class="wuxDescription"><em>Ceres</em></span>
-												<span class="wuxDescription">The spoken language used in Southern Ceresian tribes. It has mostly fallen out of favor due to many of the tribes in this location having settled into Sanctum life, however many who wish to remember older times still speak this language.</span>
 											</div>
+											<span class="wuxSubheader"> - Southern Ceres</span>
 										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-salkan_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-salkan_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-salkan_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-salkan_rank" />
-														<span class="wuxHeader">Salkan</span><span class="wuxSubheader"> - North West Ceres</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-salkan_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-salkan_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-salkan_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-salkan_rank" />
+															<span class="wuxHeader">Salkan</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Salkan</div>
+													<span class="wuxDescription"><em>Ceres</em></span>
+													<span class="wuxDescription">An entirely spoken language used by the Ceresian tribes located in the North west Salkandu region. It is most commonly known as the language of Clan Han.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Salkan</div>
-												<span class="wuxDescription"><em>Ceres</em></span>
-												<span class="wuxDescription">An entirely spoken language used by the Ceresian tribes located in the North west Salkandu region. It is most commonly known as the language of Clan Han.</span>
 											</div>
+											<span class="wuxSubheader"> - North West Ceres</span>
 										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-sansic_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-sansic_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-sansic_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-sansic_rank" />
-														<span class="wuxHeader">Sansic</span><span class="wuxSubheader"> - Eastern Ceres</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-sansic_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-sansic_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-sansic_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-sansic_rank" />
+															<span class="wuxHeader">Sansic</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Sansic</div>
+													<span class="wuxDescription"><em>Ceres</em></span>
+													<span class="wuxDescription">The spoken language used in Eastern Ceresian tribes. It has mostly fallen out of favor due to many of the tribes in this location having settled into Sanctum life, however many who wish to remember older times still speak this language.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Sansic</div>
-												<span class="wuxDescription"><em>Ceres</em></span>
-												<span class="wuxDescription">The spoken language used in Eastern Ceresian tribes. It has mostly fallen out of favor due to many of the tribes in this location having settled into Sanctum life, however many who wish to remember older times still speak this language.</span>
 											</div>
+											<span class="wuxSubheader"> - Eastern Ceres</span>
 										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-silq_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-silq_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-silq_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-silq_rank" />
-														<span class="wuxHeader">Silq</span><span class="wuxSubheader"> - Western Ceres</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-silq_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-silq_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-silq_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-silq_rank" />
+															<span class="wuxHeader">Silq</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Silq</div>
+													<span class="wuxDescription"><em>Ceres</em></span>
+													<span class="wuxDescription">The spoken language used in Western Ceresian forest tribes. This language is not often heard due to the forest peoples' exclusion from most of Ceres society in modern times.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Silq</div>
-												<span class="wuxDescription"><em>Ceres</em></span>
-												<span class="wuxDescription">The spoken language used in Western Ceresian forest tribes. This language is not often heard due to the forest peoples' exclusion from most of Ceres society in modern times.</span>
 											</div>
+											<span class="wuxSubheader"> - Western Ceres</span>
 										</div>
 									</div>
 								</div>
 								<div class="wuxFlexTableItemGroup wuxMinWidth150">
 									<div class="wuxFlexTableItemHeader wuxTextLeft">Special Languages</div>
 									<div class="wuxFlexTableItemData wuxTextLeft">
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-emotion_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-emotion_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-emotion_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-emotion_rank" />
-														<span class="wuxHeader">Emotion</span><span class="wuxSubheader"> - Animal/Spirit</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-emotion_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-emotion_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-emotion_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-emotion_rank" />
+															<span class="wuxHeader">Emotion</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Emotion</div>
+													<span class="wuxDescription"><em>Special</em></span>
+													<span class="wuxDescription">The language of animals and spirits. This language is incredibly simplistic as it is communicated entirely through emotions.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Emotion</div>
-												<span class="wuxDescription"><em>Special</em></span>
-												<span class="wuxDescription">The language of animals and spirits. This language is incredibly simplistic as it is communicated entirely through emotions.</span>
 											</div>
+											<span class="wuxSubheader"> - Animal/Spirit</span>
 										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-empathy_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-empathy_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-empathy_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-empathy_rank" />
-														<span class="wuxHeader">Empathy</span><span class="wuxSubheader"> - Ancient Spirit</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-empathy_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-empathy_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-empathy_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-empathy_rank" />
+															<span class="wuxHeader">Empathy</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Empathy</div>
+													<span class="wuxDescription"><em>Special</em></span>
+													<span class="wuxDescription">A language of the spirits. This language is communicated through thought and ether, allowing creatures of any type to understand.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Empathy</div>
-												<span class="wuxDescription"><em>Special</em></span>
-												<span class="wuxDescription">A language of the spirits. This language is communicated through thought and ether, allowing creatures of any type to understand.</span>
 											</div>
+											<span class="wuxSubheader"> - Ancient Spirit</span>
 										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-wolfwarg_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-wolfwarg_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-wolfwarg_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-wolfwarg_rank" />
-														<span class="wuxHeader">Wolfwarg</span><span class="wuxSubheader"> - Cesplangrah</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-wolfwarg_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-wolfwarg_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-wolfwarg_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-wolfwarg_rank" />
+															<span class="wuxHeader">Wolfwarg</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Wolfwarg</div>
+													<span class="wuxDescription"><em>Special</em></span>
+													<span class="wuxDescription">The spoken language of the bestial people, the Cesplangrah. Much of the language is spoken through grunts and growls.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Wolfwarg</div>
-												<span class="wuxDescription"><em>Special</em></span>
-												<span class="wuxDescription">The spoken language of the bestial people, the Cesplangrah. Much of the language is spoken through grunts and growls.</span>
 											</div>
+											<span class="wuxSubheader"> - Cesplangrah</span>
 										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-jovean_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-jovean_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-jovean_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-jovean_rank" />
-														<span class="wuxHeader">Jovean</span><span class="wuxSubheader"> - Ancient</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-jovean_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-jovean_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-jovean_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-jovean_rank" />
+															<span class="wuxHeader">Jovean</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Jovean</div>
+													<span class="wuxDescription"><em>Special</em></span>
+													<span class="wuxDescription">The common language of Novus, this language has been used across the blessed lands for as long as its people were aware. In the mainland, it is known as the language of the civilization of Jove and has largely fallen out of use.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Jovean</div>
-												<span class="wuxDescription"><em>Special</em></span>
-												<span class="wuxDescription">The common language of Novus, this language has been used across the blessed lands for as long as its people were aware. In the mainland, it is known as the language of the civilization of Jove and has largely fallen out of use.</span>
 											</div>
+											<span class="wuxSubheader"> - Ancient</span>
 										</div>
-										<div class="wuxInteractiveBlock wuxTooltip">
-											<span class="wuxTooltipText">
-												<div class="wuxInteractiveInnerBlock">
-													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-mytikan_rank" />
-													<div class="wuxInteractiveContent">
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-mytikan_rank" />
-														<span class="wuxInteractiveIcon">&#9635;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-mytikan_rank" />
-														<span class="wuxInteractiveAuxIcon">&#9634;</span>
-														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-mytikan_rank" />
-														<span class="wuxHeader">Mytikan</span><span class="wuxSubheader"> - Ancient</span>
+										<div class="wuxSkill">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_lng-mytikan_rank" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-mytikan_rank" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-mytikan_rank" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_lng-mytikan_rank" />
+															<span class="wuxHeader">Mytikan</span>
+														</div>
 													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Mytikan</div>
+													<span class="wuxDescription"><em>Special</em></span>
+													<span class="wuxDescription">The root language of both Novan and Apollen, Mytikan is a language lost to time in the mainland. Ancient relics still use the language in the Blessed Lands and as such isn't surprising to find it still learned by scholars in Novus society.</span>
 												</div>
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Mytikan</div>
-												<span class="wuxDescription"><em>Special</em></span>
-												<span class="wuxDescription">The root language of both Novan and Apollen, Mytikan is a language lost to time in the mainland. Ancient relics still use the language in the Blessed Lands and as such isn't surprising to find it still learned by scholars in Novus society.</span>
 											</div>
+											<span class="wuxSubheader"> - Ancient</span>
 										</div>
 									</div>
 								</div>
