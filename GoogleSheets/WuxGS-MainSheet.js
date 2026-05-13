@@ -1149,7 +1149,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
     };
     const advancementPageNavigation = function (definition, subheader) {
         let fieldName = WuxDef.GetAttribute("PageSet_Advancement");
-        let mainContents = buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Knowledge", "Styles", "Attributes", "Jobs", "Advancement"]);
+        let mainContents = buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Knowledge", "Techniques", "Attributes", "Jobs", "Advancement"]);
         mainContents += buildExitStickyButtons(fieldName, true);
         mainContents += buildHeader("Advancement", subheader, definition.getAttribute(WuxDef._info));
         return mainContents;
@@ -1185,7 +1185,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
     };
     const buildCharacterCreationTabs = function (sheetName) {
         let output = "";
-        let tabNames = ["Gear", "Knowledge", "Styles", "Attributes", "Jobs", "Origin"];
+        let tabNames = ["Gear", "Knowledge", "Techniques", "Attributes", "Jobs", "Origin"];
 
         for (let i = 0; i < tabNames.length; i++) {
             output += buildTabButton("radio", WuxDef.GetAttribute("Page"), tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
@@ -1222,7 +1222,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildCharacterCreationSplit = function (fieldName, mainContents, characterCreationContents) {
-            return `${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("PageSet"), "Builder")}
+            return `${WuxSheet.PageSetPageDisplayInput()}
             ${WuxSheet.PageDisplay(fieldName, mainContents)}
             ${WuxSheet.PageDisplay("Builder", characterCreationContents)}`;
         },
@@ -1283,8 +1283,16 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         },
 
         buildActionsPageNavigation = function () {
-            let definition = WuxDef.Get("Page_Actions");
-            return buildSection(mainPageNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), ""), WuxSheetMain.Info.DefaultContents(definition));
+            let actionsDefinition = WuxDef.Get("Page_Actions");
+            let techniquesDefinition = WuxDef.Get("Page_Techniques");
+            let output = `${WuxSheet.PageSetPageDisplayInput()}
+            ${WuxSheet.PageDisplay("Core", 
+                mainPageNavigation(actionsDefinition.title, actionsDefinition.title, actionsDefinition.getAttribute(WuxDef._info), ""))}
+            ${WuxSheet.PageDisplay("Builder",
+                characterCreationNavigation(techniquesDefinition, techniquesDefinition.title))}
+            ${WuxSheet.PageDisplay("Advancement",
+                advancementPageNavigation(techniquesDefinition, techniquesDefinition.title))}`;
+            return buildSection(output, WuxSheetMain.Info.DefaultContents(actionsDefinition));
         },
 
         buildNpcPageNavigation = function () {
@@ -1358,20 +1366,32 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
 var WuxSheet = WuxSheet || (function () {
     'use strict';
 
-    const pageDispayInput = function (fieldName, value) {
-            if (value == undefined) {
-                value = "";
-            } else {
-                value = ` value="${value}"`;
-            }
-            return `<input type="hidden" class="wuxPageDisplay-Flag" name="${fieldName}"${value} />`
+    const pageDisplayInput = function (fieldName, value) {
+        if (value == undefined) {
+            value = "";
+        } else {
+            value = ` value="${value}"`;
+        }
+        return `<input type="hidden" class="wuxPageDisplay-Flag" name="${fieldName}"${value} />`
+    },
+        mainPageDisplayInput = function () {
+            return pageDisplayInput(WuxDef.GetAttribute("Page"), "Origin");
+        },
+        pageSetPageDisplayInput = function () {
+            return pageDisplayInput(WuxDef.GetAttribute("PageSet"), "Builder");
+        },
+        notePageDisplayInput = function () {
+            return pageDisplayInput(WuxDef.GetAttribute("Note_PageDisplay"), "0");
         },
         pageDisplay = function (fieldName, contents) {
             return `<div class="wuxPageDisplay-${fieldName.replace(/[ .]/g, '')}">\n${contents}\n</div>`;
         }
     ;
     return {
-        PageDisplayInput: pageDispayInput,
+        PageDisplayInput: pageDisplayInput,
+        MainPageDisplayInput: mainPageDisplayInput,
+        PageSetPageDisplayInput: pageSetPageDisplayInput,
+        NotePageDisplayInput: notePageDisplayInput,
         PageDisplay: pageDisplay
     };
 }());

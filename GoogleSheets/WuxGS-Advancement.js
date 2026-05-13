@@ -21,7 +21,7 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
         buildCharacterSheetTechHtml = function (sheetsDb) {
             let output = "";
             // output += DisplayTechniquesSheet.Print(sheetsDb);
-            return `<div class="wuxCharacterSheet">\n${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page"), "Origin")}\n${output}\n`;
+            return `<div class="wuxCharacterSheet">\n${WuxSheet.MainPageDisplayInput()}\n${output}\n`;
         },
 
         buildCharacterSheetBaseHtml = function (sheetsDb) {
@@ -36,7 +36,10 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += DisplayActionSheet.Print(sheetsDb);
             output += DisplayPopups.Print();
             output += DisplayLoadingScreen.Print();
-            return `<div class="wuxCharacterSheet">\n${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("Page"), "Origin")}\n${output}\n</div>`;
+            return `<div class="wuxCharacterSheet">
+                ${WuxSheet.MainPageDisplayInput()}
+                ${output}
+            </div>`;
         },
 
         buildHiddenFields = function () {

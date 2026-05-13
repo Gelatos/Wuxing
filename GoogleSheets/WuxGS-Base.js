@@ -420,9 +420,8 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
                         addNotebookPageContents = function () {
                             let contents = "";
-                            let displayDef = WuxDef.Get("Note_PageDisplay");
 
-                            contents += WuxSheet.PageDisplayInput(displayDef.getAttribute(), "0");
+                            contents += WuxSheet.NotePageDisplayInput();
                             contents += WuxSheet.PageDisplay("0", addNotebookPageBasic());
                             contents += WuxSheet.PageDisplay("Character", addNotebookPageCharacter());
                             contents += WuxSheet.PageDisplay("Location", addNotebookPageLocation());
@@ -1080,14 +1079,15 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     contents += repeatingCustomTechniquesSection();
                     
                     contents = WuxSheetMain.TabBlock(contents);
-                    let sectionDef = WuxDef.Get("StyleCategory_Forme");
+                    let sectionDef = WuxDef.Get("Title_Techniques");
                     return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
                         `${sectionDef.getTitle()}`, contents);
                 },
                 
                 buildJobSelection = function () {
                     let jobSelection = new JobSelectionBuilder();
-                    return jobSelection.print();
+                    return `${WuxSheet.MainPageDisplayInput()}
+                    ${WuxSheet.PageDisplay("ActionsData", jobSelection.print())}`;
                 },
                 repeatingFormeSection = function () {
                     let repeaterDefinition = WuxDef.Get("RepeatingFormeTech");

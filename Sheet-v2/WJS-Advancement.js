@@ -348,6 +348,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			WuxWorkerSkills.RefreshStats(attributeHandler);
 			WuxWorkerJobs.RefreshStats(attributeHandler);
 			WuxWorkerStyles.RefreshStats(attributeHandler);
+			WuxWorkerActions.UpdateVisibilityOfAllActionsInAdvancement(attributeHandler);
 
 			attributeHandler.run();
 		},
