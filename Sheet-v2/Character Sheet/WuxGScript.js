@@ -3862,10 +3862,9 @@ class FormulaData {
 
     getString() {
         let output = "";
-        let definition = {};
         this.workers.forEach((worker) => {
             if (worker.definitionName.length > 0) {
-                definition = WuxDef.Get(worker.definitionName[0]);
+                let definition = WuxDef.Get(worker.definitionName[0]);
                 if (definition != undefined) {
                     if (output != "") {
                         output += " + ";
@@ -3901,7 +3900,16 @@ class FormulaData {
                             }
                         }
                     } else {
-                        output += `[${definition.title}] `;
+                        let secondDefinition = {};
+                        if (worker.definitionName.length > 1) {
+                            secondDefinition = WuxDef.Get(worker.definitionName[1]);
+                        }
+                        if (secondDefinition != undefined && secondDefinition != "" && secondDefinition.getTitle() != "") {
+                            output += `[Highest of ${definition.getTitle()} or ${secondDefinition.getTitle()}] `;
+                        }
+                        else {
+                            output += `[${definition.title}] `;
+                        }
                     }
 
                     if (worker.max > 0) {
@@ -11484,13 +11492,19 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
             var
                 print = function () {
-                    let contents = "";
-                    contents += WuxSheetSidebar.BuildChatSection();
-                    contents += WuxSheetSidebar.BuildChecksSection();
-                    contents += WuxSheetSidebar.BuildBoonSection();
-                    contents += WuxSheetSidebar.BuildTechSection();
                     // contents += WuxSheetSidebar.BuildLanguageSection();
-                    return WuxSheetSidebar.Build("", contents);
+                    return `${WuxSheet.MainPageDisplayInput()}
+                    ${WuxSheet.PageDisplay("ActionsData", 
+                        WuxSheetSidebar.Build("", `${WuxSheetSidebar.BuildChatSection()}
+                        ${WuxSheetSidebar.BuildChecksSection()}
+                        ${WuxSheetSidebar.BuildBoonSection()}
+                        ${WuxSheetSidebar.BuildTechSection()}`))}
+                    ${WuxSheet.PageDisplay("TechniquesData", 
+                        WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Technique"))))}`;
+                },
+
+                buildTechPointsSection = function (fieldName, header) {
+                    return WuxSheetSidebar.BuildPointsSection(fieldName, header);
                 }
 
             return {

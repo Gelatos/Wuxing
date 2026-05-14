@@ -108,7 +108,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             });
         },
         updateAllActionsInAdvancement = function (attributeHandler)  {
-            updateAllActions(attributeHandler, [new DatabaseFilterData("group", "Style")]);
+            updateAllActions(attributeHandler, [new DatabaseFilterData("style", "Style")]);
         },
         updateAllFormeActions = function (attributeHandler, filters) {
             updateAllActions(attributeHandler, filters);
@@ -121,7 +121,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         },
         
         updateVisibilityOfAllActionsInAdvancement = function (attributeHandler)  {
-            updateVisibilityAllActions(attributeHandler, [new DatabaseFilterData("group", "Style")]);
+            updateVisibilityAllActions(attributeHandler, [new DatabaseFilterData("style", "Style")]);
         },
         updateVisibilityOfFormeActions = function (attributeHandler) {
             Debug.Log(`Update Visibility of Forme Actions`);
@@ -552,12 +552,13 @@ class FormeTechniqueDatabase {
 
         this.filters = 0;
         if (Array.isArray(filters)) {
-            Debug.Log(`Working with: ${JSON.stringify(filters)}`);
             let filteredTechs = WuxTechs.Filter(filters);
             this.filters = [];
             filteredTechs.forEach((technique) => {
                 this.filters.push(technique.name);
             })
+            Debug.Log(`Filtering with: ${JSON.stringify(filters)}
+            Filtered Techniques: ${JSON.stringify(this.filters)}`);
         }
 
         this.boosterFieldName = WuxDef.GetVariable("BoostStyleTech");

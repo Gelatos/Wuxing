@@ -887,6 +887,7 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
     font-size: 12px;
     line-height: 13px;
     word-break: break-word;
+    margin-bottom: 3px;
 }
 
 span.wuxDescription,
@@ -1654,7 +1655,7 @@ input[type=hidden].wuxInteractiveExpandingContent-flag[value="on"] + .wuxInterac
 .wuxPageDisplay-Technique,
 .wuxPageDisplay-Techniques,
 .wuxPageDisplay-Styles,
-.wuxPageDisplay-AdvStyles,
+.wuxPageDisplay-TechniquesData,
 .wuxPageDisplay-Forme,
 .wuxPageDisplay-Actions,
 .wuxPageDisplay-ActionsData,
@@ -1684,8 +1685,9 @@ input[type=hidden].wuxPageDisplay-Flag[value="Jobs"] ~ .wuxPageDisplay-Jobs,
 input[type=hidden].wuxPageDisplay-Flag[value="Attributes"] ~ .wuxPageDisplay-Attributes,
 input[type=hidden].wuxPageDisplay-Flag[value="LevelUp"] ~ .wuxPageDisplay-LevelUp,
 input[type=hidden].wuxPageDisplay-Flag[value="Techniques"] ~ .wuxPageDisplay-Actions,
+input[type=hidden].wuxPageDisplay-Flag[value="Techniques"] ~ .wuxPageDisplay-TechniquesData,
 input[type=hidden].wuxPageDisplay-Flag[value="Styles"] ~ .wuxPageDisplay-Actions,
-input[type=hidden].wuxPageDisplay-Flag[value="Adv. Styles"] ~ .wuxPageDisplay-AdvStyles,
+input[type=hidden].wuxPageDisplay-Flag[value="Styles"] ~ .wuxPageDisplay-StylesData,
 input[type=hidden].wuxPageDisplay-Flag[value="Forme"] ~ .wuxPageDisplay-Forme,
 input[type=hidden].wuxPageDisplay-Flag[value="Actions"] ~ .wuxPageDisplay-Technique,
 input[type=hidden].wuxPageDisplay-Flag[value="Actions"] ~ .wuxPageDisplay-Actions,

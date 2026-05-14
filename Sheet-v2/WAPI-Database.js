@@ -3862,10 +3862,9 @@ class FormulaData {
 
     getString() {
         let output = "";
-        let definition = {};
         this.workers.forEach((worker) => {
             if (worker.definitionName.length > 0) {
-                definition = WuxDef.Get(worker.definitionName[0]);
+                let definition = WuxDef.Get(worker.definitionName[0]);
                 if (definition != undefined) {
                     if (output != "") {
                         output += " + ";
@@ -3901,7 +3900,16 @@ class FormulaData {
                             }
                         }
                     } else {
-                        output += `[${definition.title}] `;
+                        let secondDefinition = {};
+                        if (worker.definitionName.length > 1) {
+                            secondDefinition = WuxDef.Get(worker.definitionName[1]);
+                        }
+                        if (secondDefinition != undefined && secondDefinition != "" && secondDefinition.getTitle() != "") {
+                            output += `[Highest of ${definition.getTitle()} or ${secondDefinition.getTitle()}] `;
+                        }
+                        else {
+                            output += `[${definition.title}] `;
+                        }
                     }
 
                     if (worker.max > 0) {

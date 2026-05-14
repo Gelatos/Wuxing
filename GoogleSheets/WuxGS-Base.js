@@ -1046,13 +1046,19 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
             var
                 print = function () {
-                    let contents = "";
-                    contents += WuxSheetSidebar.BuildChatSection();
-                    contents += WuxSheetSidebar.BuildChecksSection();
-                    contents += WuxSheetSidebar.BuildBoonSection();
-                    contents += WuxSheetSidebar.BuildTechSection();
                     // contents += WuxSheetSidebar.BuildLanguageSection();
-                    return WuxSheetSidebar.Build("", contents);
+                    return `${WuxSheet.MainPageDisplayInput()}
+                    ${WuxSheet.PageDisplay("ActionsData", 
+                        WuxSheetSidebar.Build("", `${WuxSheetSidebar.BuildChatSection()}
+                        ${WuxSheetSidebar.BuildChecksSection()}
+                        ${WuxSheetSidebar.BuildBoonSection()}
+                        ${WuxSheetSidebar.BuildTechSection()}`))}
+                    ${WuxSheet.PageDisplay("TechniquesData", 
+                        WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Technique"))))}`;
+                },
+
+                buildTechPointsSection = function (fieldName, header) {
+                    return WuxSheetSidebar.BuildPointsSection(fieldName, header);
                 }
 
             return {
