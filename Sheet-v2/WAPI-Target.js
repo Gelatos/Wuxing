@@ -1093,6 +1093,10 @@ class TokenTargetEffectsData {
                 }
                 break;
             case "Dmg_Energy":
+                let staticked = this.tokenTargetData.getStatusRank(attrSetter, "Stat_Static");
+                if (staticked > 0) {
+                    damageReductionTotal -= staticked * 2;
+                }
                 let shockAegis = this.tokenTargetData.getStatusRank(attrSetter, "Stat_Shock Aegis");
                 if (shockAegis > 0) {
                     damageReductionTotal += shockAegis * this.tokenTargetData.combatDetails.getCr();
@@ -1153,13 +1157,14 @@ class TokenTargetEffectsData {
     tryAddStatusResult(statusDefinitionName, type, rank, attrHandler) {
         if (type == "add" || type == "set") {
             let aflame;
+            let vined;
             switch (statusDefinitionName) {
                 case "Stat_Aflame":
                     if (this.tokenTargetData.hasStatus(attrHandler, "Stat_Chilled")) {
                         this.effectMessages.push("Aflame removes Chilled from target");
                         rank *= 2;
                     }
-                    let vined = this.tokenTargetData.getStatusRank(attrHandler, "Stat_Vined");
+                    vined = this.tokenTargetData.getStatusRank(attrHandler, "Stat_Vined");
                     if (vined > 0) {
                         this.effectMessages.push("Target is Vined. Adding Vine ranks to Aflame and taking damage.");
                         rank += vined;
@@ -1170,6 +1175,7 @@ class TokenTargetEffectsData {
                 case "Stat_Vined":
                     if (this.tokenTargetData.hasStatus(attrHandler, "Stat_Soaked")) {
                         this.effectMessages.push("Target is Soaked. Doubling Vined ranks.");
+                        this.addStatusResult("Stat_Soaked", "remove", 1);
                         rank *= 2;
                     }
                     aflame = this.tokenTargetData.getStatusRank(attrHandler, "Stat_Soaked");
@@ -1187,12 +1193,25 @@ class TokenTargetEffectsData {
                     }
                     if (this.tokenTargetData.hasStatus(attrHandler, "Stat_Soaked")) {
                         this.effectMessages.push("Target is Soaked. Doubling Chilled ranks.");
+                        this.addStatusResult("Stat_Soaked", "remove", 1);
+                        rank *= 2;
+                    }
+                    if (this.tokenTargetData.hasStatus(attrHandler, "Stat_Magnetized")) {
+                        this.effectMessages.push("Target is Magnetized. Doubling Chilled ranks.");
+                        this.addStatusResult("Stat_Magnetized", "remove", 1);
                         rank *= 2;
                     }
                     break;
                 case "Stat_Cold Aegis":
                     if (this.tokenTargetData.hasStatus(attrHandler, "Stat_Iron Plates")) {
                         this.effectMessages.push("Target has Iron Plates. Doubling Cold Aegis ranks.");
+                        rank *= 2;
+                    }
+                    break;
+                case "Stat_Static":
+                    if (this.tokenTargetData.hasStatus(attrHandler, "Stat_Magnetized")) {
+                        this.effectMessages.push("Target is Magnetized. Doubling Static ranks.");
+                        this.addStatusResult("Stat_Magnetized", "remove", 1);
                         rank *= 2;
                     }
                     break;

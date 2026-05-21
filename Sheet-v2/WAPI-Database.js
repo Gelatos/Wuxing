@@ -715,7 +715,10 @@ class TechniqueData extends WuxDatabaseData {
         this.tier = parseInt(dataArray[i]);
         this.tier = isNaN(this.tier) ? 0 : this.tier;
         i++;
-        this.action = "" + dataArray[i];
+        this.action = "" + dataArray[i]
+        i++;
+        // Generated Groups
+        this.group = `${this.group != "" ? "; " : ""}${dataArray[i]}`;
         i++;
         this.forms = "" + dataArray[i];
         i++;
@@ -855,7 +858,8 @@ class TechniqueData extends WuxDatabaseData {
         this.rank = rank;
     }
     getMaxRank(cr) {
-        return 3 + cr - this.en;
+        let cap = 1 + cr - this.en;
+        return Math.min(cap, 9);
     }
     getRankEnhanceValue() {
         return this.rank - 1;
@@ -1007,7 +1011,7 @@ class TechniqueEffect extends dbObj {
         i++;
         this.dType = "" + dataArray[i];
         if (this.dType == "" && this.dVal != "") {
-            this.dType = "3";
+            this.dType = "6";
         }
         i++;
         this.formula = new FormulaData("" + dataArray[i]);
@@ -1035,8 +1039,13 @@ class TechniqueEffect extends dbObj {
         if (formulaString == "0") {
             formulaString = "";
         }
-        else if (formulaString == "" && this.defense != "Enhance" && autoAddTypes.includes(this.type)) {
-            formulaString = `Potency`;
+        else if (formulaString == "" && autoAddTypes.includes(this.type)) {
+            if (this.type == "Damage" && this.defense != "Enhance") {
+                formulaString = `Potency`;
+            }
+            else if (this.type == "Favor") {
+                formulaString = `CR`;
+            }
         }
         this.formula = new FormulaData(formulaString);
     }
@@ -3808,7 +3817,8 @@ class FormulaData {
                     Debug.LogError(`[Formula.GetValue] No AttributeHandler defined.`);
                     return;
                 }
-                multiplier = attributeHandler.parseInt(worker.multiplier);
+                
+                multiplier = attributeHandler.parseInt(Math.round(worker.multiplier));
             }
             if (worker.variableName.length == 1) {
                 if (attributeHandler == undefined) {

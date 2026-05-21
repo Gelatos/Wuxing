@@ -1035,6 +1035,10 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             advantage += 1;
             this.addMessage(`${this.targetTokenEffect.tokenTargetData.displayName} is Restrained: +1 Advantage`);
         }
+        if (this.targetTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Magnetized")) {
+            advantage += 1;
+            this.addMessage(`${this.targetTokenEffect.tokenTargetData.displayName} is Magnetized: +1 Advantage`);
+        }
         if (this.targetTokenEffect.tokenTargetData.hasStatus(targetAttributeHandler, "Stat_Frozen")) {
             advantage += 2;
             this.addMessage(`${this.targetTokenEffect.tokenTargetData.displayName} is Frozen: +2 Advantage`);
