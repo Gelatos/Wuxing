@@ -330,6 +330,10 @@ class ExtendedTechniqueDatabase extends Database {
         for (let i = 0; i < impacts.length; i++) {
             this.addSortingGroup("keywords", impacts[i].trim(), value);
         }
+        let itemTraits = value.itemTraits.split(";");
+        for (let i = 0; i < itemTraits.length; i++) {
+            this.addSortingGroup("keywords", itemTraits[i].trim(), value);
+        }
         for (let i = 0; i < value.damageTypes.length; i++) {
             this.addSortingGroup("damageType", value.damageTypes[i].trim(), value);
         }
@@ -764,7 +768,7 @@ class TechniqueData extends WuxDatabaseData {
     
     updateVersion(newVersion) {
         let version = this.getVersionParts(newVersion);
-        let baseVersionValue = 3;
+        let baseVersionValue = 1;
         
         if (parseInt(version[0]) != baseVersionValue) {
             version[0] = baseVersionValue;

@@ -330,6 +330,10 @@ class ExtendedTechniqueDatabase extends Database {
         for (let i = 0; i < impacts.length; i++) {
             this.addSortingGroup("keywords", impacts[i].trim(), value);
         }
+        let itemTraits = value.itemTraits.split(";");
+        for (let i = 0; i < itemTraits.length; i++) {
+            this.addSortingGroup("keywords", itemTraits[i].trim(), value);
+        }
         for (let i = 0; i < value.damageTypes.length; i++) {
             this.addSortingGroup("damageType", value.damageTypes[i].trim(), value);
         }
@@ -764,7 +768,7 @@ class TechniqueData extends WuxDatabaseData {
     
     updateVersion(newVersion) {
         let version = this.getVersionParts(newVersion);
-        let baseVersionValue = 3;
+        let baseVersionValue = 1;
         
         if (parseInt(version[0]) != baseVersionValue) {
             version[0] = baseVersionValue;
@@ -11736,12 +11740,17 @@ var DisplayPopups = DisplayPopups || (function () {
 
                 buildTechniqueTemplate = function () {
                     let popupDef = WuxDef.Get("Popup");
-                    let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilder(popupDef);
+                    let output = "";
+                    for (let i = 0; i < 4; i++) {
+                        let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechIsVisible")}${i}`);
+                        let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilder(popupDef, i);
+                        output += WuxSheetMain.HiddenField(fieldName, techniqueDisplayBuilder.print());
+                    }
 
-                    let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechTrueName")}`);
+                    let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechIsVisible")}0`);
                     return WuxSheetMain.HiddenField(fieldName,
                         `${WuxSheetMain.Header("Technique")}
-                        ${techniqueDisplayBuilder.print()}`);
+                        ${output}`);
                 },
 
                 printAddButton = function () {

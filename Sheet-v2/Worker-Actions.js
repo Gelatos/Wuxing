@@ -42,7 +42,8 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             styleWorker.updateBuildStats(attrHandler, updatingAttr, {value: newRank, group: technique.techSet});
             styleWorker.updatePoints(attrHandler);
 
-            let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", techniquesRepeater);
+            let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");
+            techniqueAttributeHandler.setRepeaterData(techniquesRepeater);
             techniqueAttributeHandler.setId(selectedId);
             technique.setRank(newRank);
             techniqueAttributeHandler.setTechniqueInfo(technique, true);
@@ -200,7 +201,8 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             let actionRepeater = new WorkerRepeatingSectionHandler("RepeatingCustomTech");
             
             let techniqueAttributeHandler = 
-                new TechniqueDataAttributeHandler(attributeHandler, "Action", actionRepeater);
+                new TechniqueDataAttributeHandler(attributeHandler, "Action");
+            techniqueAttributeHandler.setRepeaterData(actionRepeater);
 
             let selectedId = actionRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
             let technique = new TechniqueData(eventinfo.newValue);
@@ -785,7 +787,8 @@ class FormeTechniqueDatabase {
 
     iterateRepeaterTechniques(attrHandler, callback) {
         let repeater = attrHandler.getRepeatingSection(this.formeActionsRepeaterId);
-        let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", repeater);
+        let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");
+        techniqueAttributeHandler.setRepeaterData(repeater);
         repeater.iterate((id) => {
             techniqueAttributeHandler.setId(id);
             let techniqueName = techniqueAttributeHandler.getTechniqueName();
@@ -842,7 +845,8 @@ class FormeTechniqueDatabase {
     addMissingTechniques(attrHandler) {
         let unsetBaseTechniqueData = this.getUnsetTechniqueData();
         let repeater = attrHandler.getRepeatingSection(this.formeActionsRepeaterId);
-        let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", repeater);
+        let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");
+        techniqueAttributeHandler.setRepeaterData(repeater);
         let maxLoadCount = unsetBaseTechniqueData.length;
         
         let i = 0;

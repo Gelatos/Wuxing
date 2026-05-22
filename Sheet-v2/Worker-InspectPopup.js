@@ -167,11 +167,30 @@ class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler
     setSelectedItemData(selectedItemName) {
         let technique = WuxTechs.Get(selectedItemName);
         if (technique == undefined) {
-            this.techniqueAttributeHandler.setVisibilityAttribute(false);
+            this.hideTechnique(0);
             return;
         }
+        this.techniqueAttributeHandler.setBaseSuffix(0);
         this.techniqueAttributeHandler.setTechniqueInfo(technique);
         this.techniqueAttributeHandler.setVisibilityAttribute(true);
+        
+        // get the variants
+        let techniqueVariants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
+        for (let i = 1; i <= 3; i++) {
+            if (techniqueVariants.length >= i) {
+                this.techniqueAttributeHandler.setBaseSuffix(i);
+                this.techniqueAttributeHandler.setTechniqueInfo(techniqueVariants[i]);
+                this.techniqueAttributeHandler.setVisibilityAttribute(true);
+            }
+            else {
+                this.hideTechnique(i);
+            }
+        }
+    }
+    
+    hideTechnique(index) {
+        this.techniqueAttributeHandler.setBaseSuffix(index);
+        this.techniqueAttributeHandler.setVisibilityAttribute(false);
     }
 }
 class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
@@ -307,10 +326,11 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         }
     };
     const performAddSelectedInspectElementTechnique = function (attrHandler, repeater, newRowId, technique) {
-        let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action", repeater);
-        techniqueAttributeHandler.setId(newRowId);
-        techniqueAttributeHandler.setTechniqueInfo(technique, true);
-        techniqueAttributeHandler.setVisibilityAttribute(true);
+        let techniqueItemAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");
+        techniqueItemAttributeHandler.setRepeaterData(repeater);
+        techniqueItemAttributeHandler.setId(newRowId);
+        techniqueItemAttributeHandler.setTechniqueInfo(technique, true);
+        techniqueItemAttributeHandler.setVisibilityAttribute(true);
     };
     const getEquipMenuText = function (item) {
         switch (item.group) {

@@ -973,12 +973,22 @@ class WuxSkillWorkerBuild extends WuxWorkerBuild {
 }
 
 class DatabaseItemAttributeHandler {
-	constructor(attrHandler, baseDefinitionName, repeater, id) {
+	constructor(attrHandler, baseDefinitionName, baseSuffix) {
 		this.attrHandler = attrHandler;
 		this.baseDefinitionName = baseDefinitionName;
 		this.baseDefinition = baseDefinitionName != undefined ? WuxDef.Get(baseDefinitionName) : undefined;
-		this.repeater = repeater != undefined ? repeater : undefined;
+		this.baseSuffix = baseSuffix;
+		this.repeater = undefined;
+		this.id = "";
+	}
+	
+	setRepeaterData(repeater, id) {
+		this.repeater = repeater;
 		this.id = id != undefined ? id : "";
+	}
+	
+	setBaseSuffix(baseSuffix) {
+		this.baseSuffix = baseSuffix;
 	}
 	
 	setId (id) {
@@ -986,7 +996,7 @@ class DatabaseItemAttributeHandler {
 	}
 
 	getVariable (key, suffix) {
-		let output = WuxDef.GetVariable(key, suffix);
+		let output = WuxDef.GetVariable(key, suffix, this.baseSuffix);
 		if (this.baseDefinition != undefined) {
 			output = this.baseDefinition.getVariable(`-${output}`);
 		}
@@ -1047,13 +1057,13 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.setTechniqueUseRollTemplate(technique, displayData);
 		}
 	}
-	setTechniqueHeaderInfo(technique, displayData, suffix) {
+	setTechniqueHeaderInfo(technique, displayData) {
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechTrueName", suffix), technique.name);
+			this.getVariable("TechTrueName"), technique.name);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechName", suffix), displayData.name);
+			this.getVariable("TechName"), displayData.name);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechVersion", suffix), technique.version);
+			this.getVariable("TechVersion"), technique.version);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechActionType"), displayData.actionType);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
@@ -1061,15 +1071,15 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechActionTooltip"), displayData.getActionsDescriptions("\n"));
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechEnCost", suffix), displayData.enCost);
+			this.getVariable("TechEnCost"), displayData.enCost);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechWillCost", suffix), displayData.willCost);
+			this.getVariable("TechWillCost"), displayData.willCost);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechTargetType", suffix), displayData.targetType);
+			this.getVariable("TechTargetType"), displayData.targetType);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechTargetDesc"), displayData.getTargetDescriptions("\n"));
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechRange", suffix), displayData.range);
+			this.getVariable("TechRange"), displayData.range);
 		if (displayData.trigger != "") {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
 			this.getVariable("TechTrigger"), displayData.trigger);
@@ -1126,7 +1136,7 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 				this.getVariable("TechRankDown", WuxDef._info), (technique.rank > 1 ? "1" : "0"));
 		}
 	}
-	setTechniqueUseRollTemplate(technique, displayData, suffix) {
+	setTechniqueUseRollTemplate(technique, displayData) {
 		displayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
 		displayData.technique.displayname = displayData.displayname;
 
@@ -1139,7 +1149,7 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		}
 
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariableWithoutBase("Action_Use", suffix), displayData.getRollTemplate(true));
+			this.getVariableWithoutBase("Action_Use"), displayData.getRollTemplate(true));
 	}
 	clearTechniqueInfo () {
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
@@ -1229,8 +1239,8 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.setVisibilityAttribute(true);
 		return true;
 	}
-	setVisibilityAttribute (isVisible, suffix) {
-		let fieldName = this.getVariable("TechIsVisible", suffix);
+	setVisibilityAttribute (isVisible) {
+		let fieldName = this.getVariable("TechIsVisible");
 		let visibilityValue = isVisible ? "1" : "0";
 		if (this.attrHandler.parseString(fieldName) == isVisible) {
 			return;
@@ -1257,7 +1267,8 @@ class ItemDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.setSharedItemInfo(item);
 
 		// set the technique info
-		let techData = new TechniqueDataAttributeHandler(this.attrHandler, this.baseDefinitionName, this.repeater, this.id);
+		let techData = new TechniqueDataAttributeHandler(this.attrHandler, this.baseDefinitionName, this.baseSuffix);
+		techData.setRepeaterData(this.repeater, this.id);
 		if (item.itemType == "UsableItem" && item.hasTechnique) {
 			techData.setTechniqueInfo(item.technique);
 		} else {
