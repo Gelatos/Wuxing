@@ -1151,7 +1151,9 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     headerButtons += WuxSheetMain.HiddenSpanField(removeFilterField, WuxSheetMain.Button(removeFilterField,
                         "<span class='wuxStyleHeaderButtonIconClear'>&#10008;</span> Remove Filter", "wuxStyleHeaderButton", "0"));
 
-                    headerButtons = `<span class="wuxStyleHeaderButtonContainer">${headerButtons}</span>`;
+                    headerButtons = `${WuxSheet.MainPageDisplayInput()}
+                        ${WuxSheet.PageDisplay("Actions", 
+                        `<span class="wuxStyleHeaderButtonContainer">${headerButtons}</span>`)}`;
                     return headerButtons + headerName;
                 },
 

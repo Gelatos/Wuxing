@@ -292,6 +292,14 @@ var WuxConflictManager = WuxConflictManager || (function () {
                 tokenTargetData.removeStatus(attrHandler, "Stat_Hindered");
                 messages.push(`${tokenTargetData.displayName} is no longer Hindered`);
             }
+            if (tokenTargetData.hasStatus(attrHandler, "Stat_Magnetized")) {
+                tokenTargetData.removeStatus(attrHandler, "Stat_Magnetized");
+                messages.push(`${tokenTargetData.displayName} is no longer Magnetized`);
+            }
+            if (tokenTargetData.hasStatus(attrHandler, "Stat_Soaked")) {
+                tokenTargetData.removeStatus(attrHandler, "Stat_Soaked");
+                messages.push(`${tokenTargetData.displayName} is no longer Soaked`);
+            }
             if (tokenTargetData.hasStatus(attrHandler, "Stat_Rally")) {
                 tokenTargetData.removeStatus(attrHandler, "Stat_Rally");
                 messages.push(`${tokenTargetData.displayName} is no longer Rallied`);
@@ -307,22 +315,22 @@ var WuxConflictManager = WuxConflictManager || (function () {
             if (tokenTargetData.hasStatus(attrHandler, "Stat_Cold Aegis") && tokenTargetData.hasStatus(attrHandler, "Stat_Chilled")) {
                 tokenTargetData.removeStatus(attrHandler, "Stat_Cold Aegis");
                 tokenTargetData.removeStatus(attrHandler, "Stat_Chilled");
-                messages.push(`${tokenTargetData.displayName} is no Chilled and Cold Aegis ends`);
+                messages.push(`${tokenTargetData.displayName} is not Chilled and Cold Aegis ends`);
             }
             if (tokenTargetData.hasStatus(attrHandler, "Stat_Burn Aegis") && tokenTargetData.hasStatus(attrHandler, "Stat_Aflame")) {
                 tokenTargetData.removeStatus(attrHandler, "Stat_Burn Aegis");
                 tokenTargetData.removeStatus(attrHandler, "Stat_Aflame");
-                messages.push(`${tokenTargetData.displayName} is no Aflame and Burn Aegis ends`);
+                messages.push(`${tokenTargetData.displayName} is not Aflame and Burn Aegis ends`);
             }
             if (tokenTargetData.hasStatus(attrHandler, "Stat_Sand Aegis") && tokenTargetData.hasStatus(attrHandler, "Stat_Earthblight")) {
                 tokenTargetData.removeStatus(attrHandler, "Stat_Sand Aegis");
                 tokenTargetData.removeStatus(attrHandler, "Stat_Earthblight");
-                messages.push(`${tokenTargetData.displayName} is no Earthblighted and Sand Aegis ends`);
+                messages.push(`${tokenTargetData.displayName} is not Earthblighted and Sand Aegis ends`);
             }
-            if (tokenTargetData.hasStatus(attrHandler, "Stat_Shock Aegis") && tokenTargetData.hasStatus(attrHandler, "Stat_Jolted")) {
+            if (tokenTargetData.hasStatus(attrHandler, "Stat_Shock Aegis") && tokenTargetData.hasStatus(attrHandler, "Stat_Static")) {
                 tokenTargetData.removeStatus(attrHandler, "Stat_Shock Aegis");
-                tokenTargetData.removeStatus(attrHandler, "Stat_Jolted");
-                messages.push(`${tokenTargetData.displayName} is no Jolted and Shock Aegis ends`);
+                tokenTargetData.removeStatus(attrHandler, "Stat_Static");
+                messages.push(`${tokenTargetData.displayName} no longer has static and Shock Aegis ends`);
             }
         },
         sendStartRoundMessage = function (messages) {
