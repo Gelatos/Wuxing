@@ -97,19 +97,11 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             attributeHandler.addMod(pageSetVariable, formeTechniqueFilterVariable);
             attributeHandler.addFinishCallback(function (attrHandler) {
                 let attributeHandler2 = new WorkerAttributeHandler();
-                if (attrHandler.parseString(pageSetVariable) == "Core") {
-                    let filter = attrHandler.parseJSON(formeTechniqueFilterVariable);
-                    updateAllActions(attributeHandler2, filter);
-                }
-                else {
-                    WuxWorkerActions.UpdateAllActionsInAdvancement(attributeHandler2);
-                }
+                let filter = attrHandler.parseJSON(formeTechniqueFilterVariable);
+                updateAllActions(attributeHandler2, filter);
                 let loader = new LoadingScreenHandler(attributeHandler2);
                 loader.run();
             });
-        },
-        updateAllActionsInAdvancement = function (attributeHandler)  {
-            updateAllActions(attributeHandler, [new DatabaseFilterData("style", "Style")]);
         },
         updateAllFormeActions = function (attributeHandler, filters) {
             updateAllActions(attributeHandler, filters);
@@ -121,9 +113,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             attributeHandler.run();
         },
         
-        updateVisibilityOfAllActionsInAdvancement = function (attributeHandler)  {
-            updateVisibilityAllActions(attributeHandler, [new DatabaseFilterData("style", "Style")]);
-        },
         updateVisibilityOfFormeActions = function (attributeHandler) {
             Debug.Log(`Update Visibility of Forme Actions`);
             let pageSetVariable = WuxDef.GetVariable("PageSet");
@@ -131,13 +120,8 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             attributeHandler.addMod(pageSetVariable, formeTechniqueFilterVariable);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let attributeHandler2 = new WorkerAttributeHandler();
-                if (attrHandler.parseString(pageSetVariable) == "Core") {
-                    let filter = attrHandler.parseJSON(formeTechniqueFilterVariable);
-                    updateVisibilityAllActions(attributeHandler2, filter);
-                }
-                else {
-                    WuxWorkerActions.UpdateVisibilityOfAllActionsInAdvancement(attributeHandler2);
-                }
+                let filter = attrHandler.parseJSON(formeTechniqueFilterVariable);
+                updateVisibilityAllActions(attributeHandler2, filter);
                 attributeHandler2.run();
                 let loader = new LoadingScreenHandler(attributeHandler2);
                 loader.run();
@@ -215,11 +199,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
 
     return {
         UpdateAllActionsFromMenu: updateAllActionsFromMenu,
-        UpdateAllActionsInAdvancement: updateAllActionsInAdvancement,
         UpdateAllFormeActions: updateAllFormeActions,
         RefreshAllFormeActions: refreshAllFormeActions,
         LoadFormeActions: loadFormeActions,
-        UpdateVisibilityOfAllActionsInAdvancement: updateVisibilityOfAllActionsInAdvancement,
         UpdateVisibilityOfFormeActions: updateVisibilityOfFormeActions,
         RankUpTechnique: rankUpTechnique,
         RankDownTechnique: rankDownTechnique,
@@ -498,10 +480,10 @@ class FormeTechniqueSort {
     
     sortByActionType (techDictionary) {
         const actionPriority = {
-            Full: 0,
-            Quick: 1,
-            Assist: 2,
-            Swift: 3,
+            Swift: 0,
+            Assist: 1,
+            Quick: 2,
+            Full: 3,
             Reaction: 4,
             Brief:5,
             Short:6,
@@ -511,7 +493,7 @@ class FormeTechniqueSort {
 
         const entries = this.getEntries(techDictionary);
 
-        // 2️⃣ Sort them
+        // Sort them
         entries.sort(([, a], [, b]) => {
             const aAction = a.technique?.action || "";
             const bAction = b.technique?.action || "";

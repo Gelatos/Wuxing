@@ -3914,7 +3914,7 @@ class FormulaData {
                             }
                         }
                     } else {
-                        let secondDefinition = {};
+                        let secondDefinition;
                         if (worker.definitionName.length > 1) {
                             secondDefinition = WuxDef.Get(worker.definitionName[1]);
                         }

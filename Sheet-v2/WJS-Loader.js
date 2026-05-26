@@ -96,7 +96,7 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 		}
 	});
 
-	WuxWorkerActions.UpdateAllActionsInAdvancement(attributeHandler);
+	WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
 	
 	attributeHandler.run();
 };

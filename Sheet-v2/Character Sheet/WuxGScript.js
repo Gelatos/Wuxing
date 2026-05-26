@@ -3914,7 +3914,7 @@ class FormulaData {
                             }
                         }
                     } else {
-                        let secondDefinition = {};
+                        let secondDefinition;
                         if (worker.definitionName.length > 1) {
                             secondDefinition = WuxDef.Get(worker.definitionName[1]);
                         }
@@ -10221,7 +10221,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
     };
     const advancementPageNavigation = function (definition, subheader) {
         let fieldName = WuxDef.GetAttribute("PageSet_Advancement");
-        let mainContents = buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Knowledge", "Techniques", "Attributes", "Jobs", "Advancement"]);
+        let mainContents = buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Knowledge", "Styles", "Attributes", "Jobs", "Advancement"]);
         mainContents += buildExitStickyButtons(fieldName, true);
         mainContents += buildHeader("Advancement", subheader, definition.getAttribute(WuxDef._info));
         return mainContents;
@@ -10257,7 +10257,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
     };
     const buildCharacterCreationTabs = function (sheetName) {
         let output = "";
-        let tabNames = ["Gear", "Knowledge", "Techniques", "Attributes", "Jobs", "Origin"];
+        let tabNames = ["Gear", "Knowledge", "Styles", "Attributes", "Jobs", "Origin"];
 
         for (let i = 0; i < tabNames.length; i++) {
             output += buildTabButton("radio", WuxDef.GetAttribute("Page"), tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
@@ -10356,7 +10356,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
 
         buildActionsPageNavigation = function () {
             let actionsDefinition = WuxDef.Get("Page_Actions");
-            let techniquesDefinition = WuxDef.Get("Page_Techniques");
+            let techniquesDefinition = WuxDef.Get("Page_Styles");
             let output = `${WuxSheet.PageSetPageDisplayInput()}
             ${WuxSheet.PageDisplay("Core", 
                 mainPageNavigation(actionsDefinition.title, actionsDefinition.title, actionsDefinition.getAttribute(WuxDef._info), ""))}
@@ -11523,7 +11523,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         ${WuxSheetSidebar.BuildChecksSection()}
                         ${WuxSheetSidebar.BuildBoonSection()}
                         ${WuxSheetSidebar.BuildTechSection()}`))}
-                    ${WuxSheet.PageDisplay("TechniquesData", 
+                    ${WuxSheet.PageDisplay("StylesData", 
                         WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Technique"))))}`;
                 },
 
@@ -11543,6 +11543,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
             var
                 print = function () {
                     let contents = "";
+                    contents += buildStylesList();
                     contents += buildFormeActions();
                     return WuxSheetMain.Build(contents);
                 },
@@ -11638,6 +11639,54 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 getActionTypeAttribute = function (attribute, suffix) {
                     let baseDefinition = WuxDef.Get("Action");
                     return baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
+                },
+
+                buildStylesList = function () {
+                    let contents = "";
+                    contents += styleListSection("RepeatingStyles", false);
+                    contents = WuxSheetMain.TabBlock(contents);
+
+                    let sectionDef = WuxDef.Get("Page_Styles");
+                    return `${WuxSheet.MainPageDisplayInput()}
+                    ${WuxSheet.PageDisplay("StylesData",
+                        WuxSheetMain.CollapsibleTab(
+                            sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
+                            sectionDef.getTitle(), contents))}`;
+                },
+
+                styleListSection = function (repeatingSectionName, displayTierData) {
+                    let repeatingDef = WuxDef.Get(repeatingSectionName);
+                    let contents = `${WuxSheetMain.Header(repeatingDef.getTitle())}
+                        <div>
+                        ${buildRepeater(repeatingDef.getVariable(), addStyleListRepeaterContents(displayTierData))}
+                        ${WuxSheetMain.Row("&nbsp;")}
+                    </div>`;
+                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
+                },
+
+                addStyleListRepeaterContents = function (displayTierData) {
+                    let nameDef = WuxDef.Get("Forme_Name");
+                    let inspectDef = WuxDef.Get("Forme_Inspect");
+                    let deleteDef = WuxDef.Get("Forme_Delete");
+                    let tierOutput = "";
+
+                    if (displayTierData) {
+                        let tierDef = WuxDef.Get("Forme_Tier");
+                        let isAdvancedAttr = WuxDef.GetAttribute("Forme_IsAdvanced");
+                        let tierData = `<span>Tier </span><span name="${tierDef.getAttribute()}"></span>`;
+                        tierOutput = WuxSheetMain.HiddenSpanField(isAdvancedAttr, `${tierData}<span>A</span>`);
+                        tierOutput += WuxSheetMain.HiddenAuxSpanField(isAdvancedAttr, tierData);
+                        tierOutput = `<div class="wuxEquipableType wuxDescription">${tierOutput}</div>`;
+                    }
+
+                    return `<div class="wuxMultiRow" style="min-width: 300px;">
+                        ${tierOutput}
+                        <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>
+                        <div class="wuxFloatRight">
+                            ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxSmallButton")}
+                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `&#10008; ${deleteDef.getTitle()}`, "wuxSmallButton")}
+                        </div>
+                    </div>`;
                 },
 
                 buildRepeater = function (repeaterName, repeaterData) {
