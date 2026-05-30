@@ -526,6 +526,7 @@ var ActionBuilder = ActionBuilder || (function () {
             output += listenerFormeButtonActions();
             output += listenerRefreshBasicActions();
             output += listenerTechniquesFilterPopup();
+            output += listenerStyleAutoFilterButtons();
             return output;
         },
         listenerRankRepeatingStyles = function () {
@@ -574,6 +575,14 @@ var ActionBuilder = ActionBuilder || (function () {
                 ${WuxSheetBackend.OnChange(
                 [WuxDef.GetVariable("Action_FormeTechniques", WuxDef._filter)],
                 `WuxWorkerFilterPopup.RemoveFilter()`, true)}`;
+        },
+        listenerStyleAutoFilterButtons = function () {
+            let autoFilters = WuxDef.Filter([new DatabaseFilterData("group", "TechAutoFilter")]);
+            let groupVariableNames = [];
+            for (let i = 0; i < autoFilters.length; i++) {
+                groupVariableNames.push(autoFilters[i].getVariable());
+            }
+            return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerInspectPopup.OpenStyleFilterTechniqueInspection(eventinfo)`, true);
         }
     return {
         Print: print
