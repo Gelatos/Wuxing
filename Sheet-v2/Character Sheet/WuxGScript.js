@@ -8878,13 +8878,13 @@ class TechniqueAssessment {
                         }
                     }
                 }
+                if (state.isBeneficial) {
+                    this.addImpactTrait("TechFilterType_Support");
+                }
+                else if (!this.isCombat) {
+                    this.addImpactTrait("TechFilterType_Utility");
+                }
                 if (state.canBeFiltered) {
-                    if (state.isBeneficial) {
-                        this.addImpactTrait("TechFilterType_Support");
-                    }
-                    else if (!this.isCombat) {
-                        this.addImpactTrait("TechFilterType_Utility");
-                    }
                     this.addImpactTrait(state.name);
                 }
                 break;
