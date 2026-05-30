@@ -1173,7 +1173,9 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 buildStylesList = function () {
                     let contents = "";
-                    contents += styleListSection("RepeatingStyles", false);
+                    contents += WuxSheetMain.MultiRowGroup([
+                        buildStyleFilter(),  styleListSection("RepeatingStyles", false)], 
+                        WuxSheetMain.Table.FlexTable, 2);
                     contents = WuxSheetMain.TabBlock(contents);
 
                     let sectionDef = WuxDef.Get("Page_Styles");
@@ -1191,7 +1193,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         ${buildRepeater(repeatingDef.getVariable(), addStyleListRepeaterContents(displayTierData))}
                         ${WuxSheetMain.Row("&nbsp;")}
                     </div>`;
-                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
+                    return WuxSheetMain.Table.FlexTableGroup(contents);
                 },
 
                 addStyleListRepeaterContents = function (displayTierData) {
@@ -1225,6 +1227,84 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                             ${repeaterData}
                         </fieldset>
                     </div>`;
+                },
+
+                buildStyleFilter = function () {
+                    let titleDef = WuxDef.Get("Title_LearnNewStyles");
+                    let contents = WuxSheetMain.Header(titleDef.getTitle());
+                    contents += buildStyleFilterCheckboxes();
+                    contents += WuxSheetMain.Header2(WuxDef.GetTitle("Title_QuickStyleFilter"));
+                    contents += buildRecommendedStyleFilterButton();
+                    contents += buildStyleAutoFilterButtons();
+                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
+                },
+
+                buildStyleFilterCheckboxes = function () {
+                    let nonElementDef = WuxDef.Get("Forme_ShowFromNonElement");
+                    let levelRestrictedDef = WuxDef.Get("Forme_ShowLevelRestricted");
+                    let items = [
+                        WuxSheetMain.Table.FlexTableGroup(
+                            WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                nonElementDef.getAttribute(),
+                                nonElementDef.getAttribute(WuxDef._info),
+                                WuxSheetMain.Header(nonElementDef.getTitle()), 
+                                WuxDefinition.TooltipDescription(nonElementDef))),
+                        WuxSheetMain.Table.FlexTableGroup(
+                            WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                levelRestrictedDef.getAttribute(),
+                                levelRestrictedDef.getAttribute(WuxDef._info),
+                                WuxSheetMain.Header(levelRestrictedDef.getTitle()), 
+                                WuxDefinition.TooltipDescription(levelRestrictedDef)))
+                    ];
+                    return `${WuxSheetMain.Header2(WuxDef.GetTitle("Title_StyleFilterOption"))}
+                    ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 1)}`;
+                },
+
+                buildRecommendedStyleFilterButton = function () {
+                    let recommendedFilterDef = WuxDef.Get("Forme_RecommendedStyles");
+                    let customFilterDef = WuxDef.Get("Forme_CustomStyleFilter");
+                    let items = [];
+                    items.push(WuxSheetMain.Table.FlexTableGroup(
+                        WuxSheetMain.Button(recommendedFilterDef.getAttribute(), recommendedFilterDef.getTitle(), "wuxWidth160")
+                    ));
+                    items.push(WuxSheetMain.Table.FlexTableGroup(
+                        WuxSheetMain.Button(customFilterDef.getAttribute(), customFilterDef.getTitle(), "wuxWidth160")
+                    ));
+                    return WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 1);
+                },
+
+                buildStyleAutoFilterButtons = function () {
+                    let baseGroups = WuxDef.Filter([
+                        new DatabaseFilterData("group", "TechAutoFilter"),
+                        new DatabaseFilterData("subGroup", "BaseGroup")
+                    ]);
+
+                    let filterOptions = [];
+                    for (let i = 0; i < baseGroups.length; i++) {
+                        let groupDef = baseGroups[i];
+                        let groupButtons = WuxDef.Filter([
+                            new DatabaseFilterData("group", "TechAutoFilter"),
+                            new DatabaseFilterData("subGroup", groupDef.getTitle())
+                        ]);
+
+                        let items = [];
+                        for (let j = 0; j < groupButtons.length; j++) {
+                            items.push(WuxSheetMain.Table.FlexTableGroup(
+                                WuxSheetMain.Button(groupButtons[j].getAttribute(), groupButtons[j].getTitle(), "wuxWidth160")
+                            ));
+                        }
+
+                        filterOptions.push(WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Header2(groupDef.getTitle()) +
+                            WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 1)));
+                    }
+                    let output = WuxSheetMain.MultiRowGroup(filterOptions, WuxSheetMain.Table.FlexTable, 2);
+
+                    let expandedStylesDef = WuxDef.Get("Title_ExpandedStyleFilters");
+                    let hiddenField = expandedStylesDef.getAttribute(WuxDef._expand);
+                    let header = WuxSheetMain.Header(
+                        WuxSheetMain.CollapsibleHeader(
+                            `<span>${(expandedStylesDef.getTitle())}</span>`, hiddenField));
+                    return header + WuxSheetMain.HiddenAuxField(hiddenField, output);
                 }
 
             return {
