@@ -196,6 +196,21 @@ class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler
         this.itemDataAttributeHandler.clearItemInfo();
     }
     setSelectedItemData(selectedItemName) {
+        const getTechHeader = function (affinity) {
+            if (affinity === "") return "0";
+            let parts = affinity.split(";").map(s => s.trim()).filter(s => s !== "");
+            if (parts.length === 0) return "0";
+            let list;
+            if (parts.length === 1) {
+                list = parts[0];
+            } else if (parts.length === 2) {
+                list = `${parts[0]} or ${parts[1]}`;
+            } else {
+                list = `${parts.slice(0, -1).join(", ")}, or ${parts[parts.length - 1]}`;
+            }
+            return `Requires ${list} affinity`;
+        };
+
         let technique = WuxTechs.Get(selectedItemName);
         if (technique == undefined) {
             this.hideTechnique(0);
@@ -204,7 +219,12 @@ class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler
         this.techniqueAttributeHandler.setBaseSuffix(0);
         this.techniqueAttributeHandler.setTechniqueInfo(technique);
         this.techniqueAttributeHandler.setVisibilityAttribute(true);
-        
+        this.attrHandler.addRepeatingSectionRowUpdate(
+            this.techniqueAttributeHandler.repeater?.definitionId,
+            this.techniqueAttributeHandler.getVariable("TechHeader"),
+            getTechHeader(technique.affinity)
+        );
+
         // get the variants
         let techniqueVariants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
         for (let i = 0; i < 3; i++) {
@@ -213,16 +233,26 @@ class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler
                 this.techniqueAttributeHandler.setBaseSuffix(index);
                 this.techniqueAttributeHandler.setTechniqueInfo(techniqueVariants[i]);
                 this.techniqueAttributeHandler.setVisibilityAttribute(true);
+                this.attrHandler.addRepeatingSectionRowUpdate(
+                    this.techniqueAttributeHandler.repeater?.definitionId,
+                    this.techniqueAttributeHandler.getVariable("TechHeader"),
+                    getTechHeader(techniqueVariants[i].affinity)
+                );
             }
             else {
                 this.hideTechnique(index);
             }
         }
     }
-    
+
     hideTechnique(index) {
         this.techniqueAttributeHandler.setBaseSuffix(index);
         this.techniqueAttributeHandler.setVisibilityAttribute(false);
+        this.attrHandler.addRepeatingSectionRowUpdate(
+            this.techniqueAttributeHandler.repeater?.definitionId,
+            this.techniqueAttributeHandler.getVariable("TechHeader"),
+            "0"
+        );
     }
 }
 class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
@@ -446,23 +476,6 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             attributeHandler.run();
         };
 
-    const getAffinityImageHtml = function (affinity) {
-        const affinityImages = {
-            "Wood":    "https://i.imgur.com/pjMuXYy.png",
-            "Fire":    "https://i.imgur.com/aD41Ap4.png",
-            "Earth":   "https://i.imgur.com/1efdxRx.png",
-            "Metal":   "https://i.imgur.com/CFQ9LJx.png",
-            "Water":   "https://i.imgur.com/KAcJG5h.png",
-            "Neutral": "https://i.imgur.com/5hQ5Bun.png"
-        };
-        if (!affinity || affinity === "") return "";
-        let parts = affinity.includes(";") ? affinity.split(";").map(s => s.trim()) : [affinity];
-        return parts
-            .filter(a => affinityImages[a] !== undefined)
-            .map(a => `<img src="${affinityImages[a]}" class="wuxAffinityIcon wuxAffinityIcon${a}" alt="${a}">`)
-            .join("");
-    };
-
     const openStyleFilterTechniqueInspection = function (eventinfo) {
         Debug.Log("Open Style Filter Technique Inspection");
 
@@ -512,13 +525,14 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 return new InspectionInventoryItem(title, "", true, affinity, tier);
             },
             function (technique) {
-                let baseAffinity = technique.affinity !== "" ? technique.affinity : "Neutral";
-                let iconAffinities = [baseAffinity];
+                let iconAffinities = technique.getAffinityParts();
                 let variants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
                 for (let i = 0; i < variants.length; i++) {
-                    let variantAffinity = variants[i].affinity !== "" ? variants[i].affinity : "Neutral";
-                    if (!iconAffinities.includes(variantAffinity)) {
-                        iconAffinities.push(variantAffinity);
+                    let variantParts = variants[i].getAffinityParts();
+                    for (let j = 0; j < variantParts.length; j++) {
+                        if (!iconAffinities.includes(variantParts[j])) {
+                            iconAffinities.push(variantParts[j]);
+                        }
                     }
                 }
                 return { display: technique.name, iconAffinities: iconAffinities };

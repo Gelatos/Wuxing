@@ -1402,8 +1402,11 @@ var DisplayPopups = DisplayPopups || (function () {
                     let output = "";
                     for (let i = 0; i < 4; i++) {
                         let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechIsVisible")}${i}`);
+                        let techHeaderAttr = popupDef.getAttribute(`-${WuxDef.GetVariable("TechHeader")}${i}`);
                         let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilder(popupDef, i);
-                        output += `<div>${WuxSheetMain.HiddenField(fieldName, techniqueDisplayBuilder.print())}</div>`;
+                        output += `<div>${WuxSheetMain.HiddenField(fieldName,
+                            WuxSheetMain.HiddenField(techHeaderAttr, WuxSheetMain.Header2(WuxSheetMain.Span(techHeaderAttr))) +
+                            techniqueDisplayBuilder.print())}</div>`;
                     }
 
                     let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechIsVisible")}0`);

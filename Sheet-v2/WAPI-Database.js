@@ -976,6 +976,12 @@ class TechniqueData extends WuxDatabaseData {
         return output;
     }
 
+    getAffinityParts() {
+        if (this.affinity === "") return ["Neutral"];
+        let parts = this.affinity.split(";").map(s => s.trim()).filter(s => s !== "");
+        return parts.length > 0 ? parts : ["Neutral"];
+    }
+
     addDefinition(definition) {
         if (!this.definitions.includes(definition)) {
             this.definitions.push(definition);
