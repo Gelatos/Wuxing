@@ -138,6 +138,9 @@ class Database extends Dictionary {
 
     add(key, value) {
         super.add(key, value);
+        this.performAddSortingGroups(value);
+    }
+    performAddSortingGroups(value) {
         for (let property in this.sortingGroups) {
             if (value != undefined && value.hasOwnProperty(property)) {
                 this.addSortingGroup(property, value[property], value);
@@ -213,7 +216,11 @@ class Database extends Dictionary {
             // Debug.Log (`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
             return [];
         }
-        return this.sortingGroups[property][propertyValue];
+        let output = this.sortingGroups[property][propertyValue];
+        if (output == undefined) {
+            return [];
+        }
+        return output;
     }
 
     getGroupData(group) {
@@ -265,13 +272,20 @@ class WuxDataDatabase extends Database {
         }
     }
 
-    add(key, value) {
-        super.add(key, value);
-
-        if (value.group.indexOf(";") >= 0) {
-            let groups = value.group.split(";");
-            for (let i = 0; i < groups.length; i++) {
-                this.addSortingGroup("group", groups[i].trim(), value);
+    performAddSortingGroups(value) {
+        for (let property in this.sortingGroups) {
+            if (property == "group") {
+                if (value.group.indexOf(";") >= 0) {
+                    let groups = value.group.split(";");
+                    for (let i = 0; i < groups.length; i++) {
+                        if (groups[i].trim() != "") {
+                            this.addSortingGroup("group", groups[i].trim(), value);
+                        }
+                    }
+                }
+            }
+            else if (value != undefined && value.hasOwnProperty(property)) {
+                this.addSortingGroup(property, value[property], value);
             }
         }
     }
@@ -308,14 +322,21 @@ class ExtendedTechniqueDatabase extends Database {
             }
         }
     }
-
-    add(key, value) {
-        super.add(key, value);
-
-        if (value.group.indexOf(";") >= 0) {
-            let groups = value.group.split(";");
-            for (let i = 0; i < groups.length; i++) {
-                this.addSortingGroup("group", groups[i].trim(), value);
+    
+    performAddSortingGroups(value) {
+        for (let property in this.sortingGroups) {
+            if (property == "group") {
+                if (value.group.indexOf(";") >= 0) {
+                    let groups = value.group.split(";");
+                    for (let i = 0; i < groups.length; i++) {
+                        if (groups[i].trim() != "") {
+                            this.addSortingGroup("group", groups[i].trim(), value);
+                        }
+                    }
+                }
+            }
+            else if (value != undefined && value.hasOwnProperty(property)) {
+                this.addSortingGroup(property, value[property], value);
             }
         }
         let styles = value.techSet.split(";");
@@ -722,7 +743,7 @@ class TechniqueData extends WuxDatabaseData {
         this.action = "" + dataArray[i]
         i++;
         // Generated Groups
-        this.group = `${this.group != "" ? "; " : ""}${dataArray[i]}`;
+        this.group += `${this.group != "" ? "; " : ""}${dataArray[i]}`;
         i++;
         this.forms = "" + dataArray[i];
         i++;
@@ -768,7 +789,7 @@ class TechniqueData extends WuxDatabaseData {
     
     updateVersion(newVersion) {
         let version = this.getVersionParts(newVersion);
-        let baseVersionValue = 1;
+        let baseVersionValue = 3;
         
         if (parseInt(version[0]) != baseVersionValue) {
             version[0] = baseVersionValue;

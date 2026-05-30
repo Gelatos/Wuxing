@@ -610,6 +610,9 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
     }
     
     const getSortedGroup = function (property, propertyValue) {
+        if (sortingGroups == undefined) {
+            return [];
+        }
         if (!sortingGroups.hasOwnProperty(property)) {
             let keys = "";
             for (let key in sortingGroups) {
@@ -623,7 +626,11 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
             }
             // Debug.Log(`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
         }
-        return sortingGroups[property][propertyValue];
+        let output = sortingGroups[property][propertyValue];
+        if (output == undefined) {
+            return [];
+        }
+        return output;
     };
     const getGroupData = function (group) {
         let output = [];
