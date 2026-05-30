@@ -172,7 +172,7 @@ class Database extends Dictionary {
                 return [];
             }
             let nextFilter = this.getSortedData(filterData[i]);
-            if (nextFilter != undefined && nextFilter.length > 0) {
+            if (nextFilter != undefined) {
                 filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
             }
         }
@@ -6745,7 +6745,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
                 return [];
             }
             let nextFilter = getSortedData(filterData[i]);
-            if (nextFilter != undefined && nextFilter.length > 0) {
+            if (nextFilter != undefined) {
                 filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
             }
         }
@@ -11876,7 +11876,7 @@ var DisplayPopups = DisplayPopups || (function () {
                     for (let i = 0; i < 4; i++) {
                         let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechIsVisible")}${i}`);
                         let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilder(popupDef, i);
-                        output += WuxSheetMain.HiddenField(fieldName, techniqueDisplayBuilder.print());
+                        output += `<div>${WuxSheetMain.HiddenField(fieldName, techniqueDisplayBuilder.print())}</div>`;
                     }
 
                     let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechIsVisible")}0`);
@@ -11897,11 +11897,18 @@ var DisplayPopups = DisplayPopups || (function () {
                     let itemSelectDisplayAttr = WuxDef.GetAttribute("Popup_ItemSelectDisplay");
                     let itemSelectIsOnAttr = WuxDef.GetAttribute("Popup_ItemSelectIsOn");
                     let itemSelectVisibleAttr = WuxDef.GetAttribute("Popup_ItemSelectVisible");
-                    let itemData = WuxSheetMain.HiddenField(itemSelectVisibleAttr, 
+                    let affinityIcons =
+                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayNeutral"), `<img class="wuxAffinityIcon wuxAffinityIconNeutral" src="https://i.imgur.com/5hQ5Bun.png">`) +
+                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayWood"),    `<img class="wuxAffinityIcon wuxAffinityIconWood"    src="https://i.imgur.com/pjMuXYy.png">`) +
+                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayFire"),    `<img class="wuxAffinityIcon wuxAffinityIconFire"    src="https://i.imgur.com/aD41Ap4.png">`) +
+                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayEarth"),   `<img class="wuxAffinityIcon wuxAffinityIconEarth"   src="https://i.imgur.com/1efdxRx.png">`) +
+                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayMetal"),   `<img class="wuxAffinityIcon wuxAffinityIconMetal"   src="https://i.imgur.com/CFQ9LJx.png">`) +
+                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayWater"),   `<img class="wuxAffinityIcon wuxAffinityIconWater"   src="https://i.imgur.com/KAcJG5h.png">`);
+                    let itemData = WuxSheetMain.HiddenField(itemSelectVisibleAttr,
                         WuxSheetMain.HiddenFieldToggle(itemSelectTypeAttr,
                         `${WuxSheetMain.Input("hidden", itemSelectNameAttr)}
                         <input type="hidden" class="wuxInspectionPopupSelectContainer-flag" name="${itemSelectIsOnAttr}">
-                        ${WuxSheetMain.Button(itemSelectIsOnAttr, WuxSheetMain.Span(itemSelectDisplayAttr), "wuxInspectionPopupSelectContainer")}`,
+                        ${WuxSheetMain.Button(itemSelectIsOnAttr, WuxSheetMain.Span(itemSelectDisplayAttr) + affinityIcons, "wuxInspectionPopupSelectContainer")}`,
                         `${WuxSheetMain.Header2(WuxSheetMain.Span(itemSelectDisplayAttr))}
                         ${WuxSheetMain.HiddenField(itemSelectNameAttr, WuxSheetMain.Desc(WuxSheetMain.Span(itemSelectNameAttr)))}`)
                     );

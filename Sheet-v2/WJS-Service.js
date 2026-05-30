@@ -1242,17 +1242,19 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 	setVisibilityAttribute (isVisible) {
 		let fieldName = this.getVariable("TechIsVisible");
 		let visibilityValue = isVisible ? "1" : "0";
-		if (this.attrHandler.parseString(fieldName) == isVisible) {
-			return;
+		if (this.repeater == undefined) {
+			this.attrHandler.addUpdate(fieldName, visibilityValue);
 		}
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			fieldName, visibilityValue);
+		else {
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				fieldName, visibilityValue);
+		}
 	}
-	getTechniqueName(techIndex) {
-		return this.attrHandler.parseString(this.getVariable("TechTrueName", techIndex));
+	getTechniqueName() {
+		return this.attrHandler.parseString(this.getVariable("TechTrueName"));
 	}
-	getTechniqueVersion(techIndex) {
-		let version = this.attrHandler.parseString(this.getVariable("TechVersion", techIndex), "undefined");
+	getTechniqueVersion() {
+		let version = this.attrHandler.parseString(this.getVariable("TechVersion"), "undefined");
 		if (version == "undefined") {
 			return undefined;
 		}

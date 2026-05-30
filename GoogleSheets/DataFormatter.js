@@ -585,7 +585,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
                 return [];
             }
             let nextFilter = getSortedData(filterData[i]);
-            if (nextFilter != undefined && nextFilter.length > 0) {
+            if (nextFilter != undefined) {
                 filteredGroup = filteredGroup.filter(item => nextFilter.includes(item))
             }
         }

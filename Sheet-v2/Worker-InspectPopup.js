@@ -1,12 +1,13 @@
 // noinspection ES6ConvertVarToLetConst
 
 class InspectionInventoryItem {
-    constructor(displayString, databaseName, isTitle, affinity, tier) {
+    constructor(displayString, databaseName, isTitle, affinity, tier, iconAffinities) {
         this.display = displayString;
         this.name = databaseName;
         this.isTitle = isTitle;
         this.affinity = affinity || "";
         this.tier = tier || 0;
+        this.iconAffinities = iconAffinities || [];
     }
 }
 class InspectionInventoryItemHandler {
@@ -18,7 +19,7 @@ class InspectionInventoryItemHandler {
     }
 }
 class FilteredTechniquesInventoryItemHandler extends InspectionInventoryItemHandler {
-    constructor(filters, titleCallback) {
+    constructor(filters, titleCallback, displayCallback) {
         super();
 
         let filteredTechniques = WuxTechs.FilterAndSortTechniquesByRequirement(filters);
@@ -46,7 +47,18 @@ class FilteredTechniquesInventoryItemHandler extends InspectionInventoryItemHand
 
                 // add the techniques
                 techsByAffinity.forEach(function (technique) {
-                    let inventoryItem = new InspectionInventoryItem(technique.name, technique.name, false);
+                    let display = technique.name;
+                    let iconAffinities = [];
+                    if (displayCallback != undefined) {
+                        let result = displayCallback(technique);
+                        if (result !== null && typeof result === "object") {
+                            display = result.display;
+                            iconAffinities = result.iconAffinities || [];
+                        } else {
+                            display = result;
+                        }
+                    }
+                    let inventoryItem = new InspectionInventoryItem(display, technique.name, false, undefined, undefined, iconAffinities);
                     inventoryItemHandler.addItem(inventoryItem);
                 });
             });
@@ -140,6 +152,23 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
         this.attrHandler.addUpdate(this.repeater.getFieldName(id, itemSelectTypeAttr), itemData.isTitle ? "0" : "on");
         this.attrHandler.addUpdate(this.repeater.getFieldName(id, itemSelectDisplayAttr), itemData.display);
         this.attrHandler.addUpdate(this.repeater.getFieldName(id, itemSelectNameAttr), itemData.name);
+        if (!itemData.isTitle) {
+            this.setInventoryItemAffinityIcons(id, itemData.iconAffinities);
+        }
+    }
+    setInventoryItemAffinityIcons(id, iconAffinities) {
+        const affinityFields = {
+            "Neutral": WuxDef.GetVariable("Popup_ItemSelectDisplayNeutral"),
+            "Wood":    WuxDef.GetVariable("Popup_ItemSelectDisplayWood"),
+            "Fire":    WuxDef.GetVariable("Popup_ItemSelectDisplayFire"),
+            "Earth":   WuxDef.GetVariable("Popup_ItemSelectDisplayEarth"),
+            "Metal":   WuxDef.GetVariable("Popup_ItemSelectDisplayMetal"),
+            "Water":   WuxDef.GetVariable("Popup_ItemSelectDisplayWater")
+        };
+        for (let affinity in affinityFields) {
+            let value = iconAffinities.includes(affinity) ? "0" : "on";
+            this.attrHandler.addUpdate(this.repeater.getFieldName(id, affinityFields[affinity]), value);
+        }
     }
 
     setSelectedItem(selectedItemId, itemName) {
@@ -179,13 +208,14 @@ class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler
         // get the variants
         let techniqueVariants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
         for (let i = 0; i < 3; i++) {
+            let index = parseInt(i) + 1;
             if (techniqueVariants.length > i) {
-                this.techniqueAttributeHandler.setBaseSuffix(i+1);
+                this.techniqueAttributeHandler.setBaseSuffix(index);
                 this.techniqueAttributeHandler.setTechniqueInfo(techniqueVariants[i]);
                 this.techniqueAttributeHandler.setVisibilityAttribute(true);
             }
             else {
-                this.hideTechnique(i+1);
+                this.hideTechnique(index);
             }
         }
     }
@@ -416,6 +446,23 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             attributeHandler.run();
         };
 
+    const getAffinityImageHtml = function (affinity) {
+        const affinityImages = {
+            "Wood":    "https://i.imgur.com/pjMuXYy.png",
+            "Fire":    "https://i.imgur.com/aD41Ap4.png",
+            "Earth":   "https://i.imgur.com/1efdxRx.png",
+            "Metal":   "https://i.imgur.com/CFQ9LJx.png",
+            "Water":   "https://i.imgur.com/KAcJG5h.png",
+            "Neutral": "https://i.imgur.com/5hQ5Bun.png"
+        };
+        if (!affinity || affinity === "") return "";
+        let parts = affinity.includes(";") ? affinity.split(";").map(s => s.trim()) : [affinity];
+        return parts
+            .filter(a => affinityImages[a] !== undefined)
+            .map(a => `<img src="${affinityImages[a]}" class="wuxAffinityIcon wuxAffinityIcon${a}" alt="${a}">`)
+            .join("");
+    };
+
     const openStyleFilterTechniqueInspection = function (eventinfo) {
         Debug.Log("Open Style Filter Technique Inspection");
 
@@ -452,17 +499,31 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         Debug.Log(`Filters: ${JSON.stringify(filters)}`);
 
         // Build the full inventory item list from the filtered and sorted techniques
-        let inventoryItems = new FilteredTechniquesInventoryItemHandler(filters, function (tier, affinity) {
-            let level = Format.GetLevelPrerequisites(tier);
-            let title = level > 0 ? `Level ${level}` : "";
-            if (affinity !== "") {
-                title = title !== "" ? `${affinity} - ${title}` : affinity;
+        let inventoryItems = new FilteredTechniquesInventoryItemHandler(filters,
+            function (tier, affinity) {
+                let level = Format.GetLevelPrerequisites(tier);
+                let title = level > 0 ? `Level ${level}` : "";
+                if (affinity !== "") {
+                    title = title !== "" ? `${affinity} - ${title}` : affinity;
+                }
+                if (title === "") {
+                    title = "Level 0";
+                }
+                return new InspectionInventoryItem(title, "", true, affinity, tier);
+            },
+            function (technique) {
+                let baseAffinity = technique.affinity !== "" ? technique.affinity : "Neutral";
+                let iconAffinities = [baseAffinity];
+                let variants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
+                for (let i = 0; i < variants.length; i++) {
+                    let variantAffinity = variants[i].affinity !== "" ? variants[i].affinity : "Neutral";
+                    if (!iconAffinities.includes(variantAffinity)) {
+                        iconAffinities.push(variantAffinity);
+                    }
+                }
+                return { display: technique.name, iconAffinities: iconAffinities };
             }
-            if (title === "") {
-                title = "Level 0";
-            }
-            return new InspectionInventoryItem(title, "", true, affinity, tier);
-        });
+        );
 
         // Read checkbox state and user attributes to apply optional post-filters
         let attributeHandler = new WorkerAttributeHandler();
