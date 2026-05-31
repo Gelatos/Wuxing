@@ -732,13 +732,7 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 	}
 
 	getBuildVariables() {
-		let allStyles = WuxDef.Filter([new DatabaseFilterData("group", "Style")]);
-		let groupVariableNames = [];
-		for(let i = 0; i < allStyles.length; i++) {
-			groupVariableNames = groupVariableNames.concat(
-				WuxTechs.GetGroupVariables(new DatabaseFilterData("style", allStyles[i].getTitle())));
-		}
-		return groupVariableNames;
+		return WuxTechs.keys;
 	}
 	
 	getTechniques() {

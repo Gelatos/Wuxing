@@ -684,11 +684,49 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         inspectSetJobStyle = function (eventinfo, slotIndex, equipSlotFieldName) {
             seeSetFormeTechniques(eventinfo, "RepeatingJobStyles", equipSlotFieldName);
         },
-        
+
         inspectSetStyle = function (eventinfo, slotIndex, equipSlotFieldName) {
             seeSetFormeTechniques(eventinfo, "RepeatingStyles", equipSlotFieldName);
+        },
+
+        inspectListStyle = function (eventinfo) {
+        
+        },
+
+        deleteListStyle = function (eventinfo) {
+            let repeater = new WorkerRepeatingSectionHandler("RepeatingStyles");
+            let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let nameFieldName = repeater.getFieldName(selectedId, WuxDef.GetVariable("Forme_Name"));
+
+            let worker = new WuxStyleWorkerBuild();
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod(nameFieldName);
+            attributeHandler.addMod(worker.attrMax);
+            attributeHandler.addMod(worker.attrBuildDraft);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let styleName = attrHandler.parseString(nameFieldName);
+                Debug.Log(`Deleting Style ${styleName}`);
+                worker.setBuildStatsDraft(attrHandler);
+                worker.iterateBuildStats(function (buildStat) {
+                    if (buildStat.group.split(";").map(s => s.trim()).includes(styleName)) {
+                        worker.updateBuildStats(attrHandler, buildStat.name, {value: 0, group: buildStat.group});
+                        attrHandler.addUpdate(buildStat.name, 0);
+                    }
+                });
+                // worker.updatePoints(attrHandler);
+                // WuxWorkerSkills.UpdateKeySkills(attrHandler);
+                repeater.removeId(selectedId);
+            });
+
+            // attributeHandler.addFinishCallback(function () {
+            //     let attributeHandler2 = new WorkerAttributeHandler();
+            //     WuxWorkerStyles.UpdateStats(attributeHandler2);
+            //     attributeHandler2.run();
+            // });
+            attributeHandler.run();
         }
-    
+
     ;
 
     return {
@@ -704,7 +742,9 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         SeeJobTechniques: seeJobTechniques,
         SeeStyleTechniques: seeStyleTechniques,
         InspectSetJobStyle: inspectSetJobStyle,
-        InspectSetStyle: inspectSetStyle
+        InspectSetStyle: inspectSetStyle,
+        InspectListStyle: inspectListStyle,
+        DeleteListStyle: deleteListStyle
     };
 }());
 

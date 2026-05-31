@@ -363,6 +363,8 @@ var FormeBuilder = FormeBuilder || (function () {
             output += listenerInspectRepeatingForme();
             output += listenerSetFormeOptions();
             output += listenerJobSelect();
+            output += listenerInspectListStyle();
+            output += listenerDeleteListStyle();
             return output;
         },
         listenerEquipRepeatingForme = function () {
@@ -409,6 +411,16 @@ var FormeBuilder = FormeBuilder || (function () {
         listenerJobSelect = function () {
             return `${WuxSheetBackend.OnChange([WuxDef.GetVariable("Forme_SelectJob")],
                 `WuxWorkerJobs.EquipJobFromEvent(eventinfo)`, true)}`;
+        },
+        listenerInspectListStyle = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingStyles")}:${WuxDef.GetVariable("Forme_Inspect")}`],
+                `WuxWorkerStyles.InspectListStyle(eventinfo)`, true);
+        },
+        listenerDeleteListStyle = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingStyles")}:${WuxDef.GetVariable("Forme_Delete")}`],
+                `WuxWorkerStyles.DeleteListStyle(eventinfo)`, true);
         }
     return {
         Print: print

@@ -1497,7 +1497,7 @@ class JobData extends WuxDatabaseData {
         this.category = "";
         this.difficulty = 0;
         this.skills = "";
-        this.defenses = "";
+        this.recommendedStyles = "";
         this.techniques = [];
     }
 
@@ -1510,7 +1510,7 @@ class JobData extends WuxDatabaseData {
         this.difficulty = json.difficulty;
         this.skills = json.skills;
         this.descriptions = json.descriptions;
-        this.defenses = json.defenses;
+        this.recommendedStyles = json.recommendedStyles;
         this.techniques = json.techniques;
     }
 
@@ -1531,7 +1531,7 @@ class JobData extends WuxDatabaseData {
         i++;
         this.descriptions = [("" + dataArray[i])];
         i++;
-        this.defenses = "" + dataArray[i];
+        this.recommendedStyles = "" + dataArray[i];
         i++;
         this.techniques = this.createJobTechnique(dataArray.slice(i));
         i++;
@@ -1542,7 +1542,6 @@ class JobData extends WuxDatabaseData {
         definition.subGroup = this.group;
         definition.skills = this.skills;
         definition.requirements = this.getRequirements();
-        definition.defenses = this.defenses;
         definition.formula = new FormulaData();
         return definition;
     }
@@ -2153,7 +2152,7 @@ class JobDefinitionData extends DefinitionData {
         super.importJson(json);
         this.skills = json.skills;
         this.requirements = json.requirements;
-        this.defenses = json.defenses;
+        this.recommendedStyles = json.recommendedStyles;
     }
 
     setImportSheetExtraData(property, value) {
@@ -2161,8 +2160,8 @@ class JobDefinitionData extends DefinitionData {
             case "requirements":
                 this.requirements = value;
                 break;
-            case "defenses":
-                this.defenses = value;
+            case "recommendedStyles":
+                this.recommendedStyles = value;
                 break;
         }
     }
@@ -2171,7 +2170,7 @@ class JobDefinitionData extends DefinitionData {
         super.createEmpty();
         this.skills = "";
         this.requirements = "";
-        this.defenses = "";
+        this.recommendedStyles = "";
     }
 }
 
@@ -12397,6 +12396,8 @@ var FormeBuilder = FormeBuilder || (function () {
             output += listenerInspectRepeatingForme();
             output += listenerSetFormeOptions();
             output += listenerJobSelect();
+            output += listenerInspectListStyle();
+            output += listenerDeleteListStyle();
             return output;
         },
         listenerEquipRepeatingForme = function () {
@@ -12443,6 +12444,16 @@ var FormeBuilder = FormeBuilder || (function () {
         listenerJobSelect = function () {
             return `${WuxSheetBackend.OnChange([WuxDef.GetVariable("Forme_SelectJob")],
                 `WuxWorkerJobs.EquipJobFromEvent(eventinfo)`, true)}`;
+        },
+        listenerInspectListStyle = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingStyles")}:${WuxDef.GetVariable("Forme_Inspect")}`],
+                `WuxWorkerStyles.InspectListStyle(eventinfo)`, true);
+        },
+        listenerDeleteListStyle = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingStyles")}:${WuxDef.GetVariable("Forme_Delete")}`],
+                `WuxWorkerStyles.DeleteListStyle(eventinfo)`, true);
         }
     return {
         Print: print
