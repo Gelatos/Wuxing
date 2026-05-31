@@ -87,7 +87,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             });
             attributeHandler.run();
         },
-        updatePrimaryAffinity = function (eventinfo) {
+        updatePrimaryAffinity = function () {
             let attributeHandler = new WorkerAttributeHandler();
             WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
             attributeHandler.run();
@@ -213,6 +213,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                         WuxWorkerInspectPopup.Close();
                         break;
                     case WuxDef.GetTitle("Popup_FilterTechniquePopupName"):
+                    case WuxDef.GetTitle("Popup_CustomStylesFilterName"):
                         WuxWorkerFilterPopup.Close();
                         break;
                 }

@@ -3,7 +3,7 @@ class FilterDisplayBuilder {
         this.filterDefinitions = filterDefinitions;
     }
 
-    print () {
+    print() {
         return `<div class="wuxFilterSection">
             ${this.printContents()}
         </div>

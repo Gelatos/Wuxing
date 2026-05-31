@@ -122,6 +122,17 @@ var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
             filterPopup.open();
             attributeHandler.run();
         },
+        openCustomStyleFilter = function () {
+            Debug.Log("Open Custom Style Filter Popup");
+            let attributeHandler = new WorkerAttributeHandler();
+            let filterDefinitions = new TechniqueFilterDefinitions("TechFilterPopup");
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let filterPopupAttrHandler = new FilterPopupAttributeHandler(attrHandler, filterDefinitions);
+                filterPopupAttrHandler.show("Popup_CustomStylesFilterName");
+                attrHandler.addUpdate(WuxDef.GetVariable("Popup_FilterPopupType"), "CustomStyle");
+            });
+            attributeHandler.run();
+        },
         close = function () {
             let attributeHandler = new WorkerAttributeHandler();
             let filterPopup = new FilterPopup(attributeHandler);
@@ -148,6 +159,7 @@ var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
 
     return {
         OpenFormeTechnique : openFormeTechnique,
+        OpenCustomStyleFilter: openCustomStyleFilter,
         Close: close,
         ApplyFilter: applyFilter,
         RemoveFilter: removeFilter,

@@ -93,6 +93,10 @@ class TechniqueFilterDefinitions extends BaseFilteredDefinitions{
             new DatabaseFilterData("group", "Trait"),
             new DatabaseFilterData("subGroup", "Utility Keyword")
         ]);
+        this.definitionDatabase["FilterType_WeaponKeywords"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Trait"),
+            new DatabaseFilterData("subGroup", ["Martial Trait", "Aim Trait"])
+        ]);
         this.definitionDatabase["FilterType_Defense"] = WuxDef.Filter(
             new DatabaseFilterData("group", ["Defense", "Sense"]));
         this.definitionDatabase["FilterType_DamageType"] = WuxDef.Filter(

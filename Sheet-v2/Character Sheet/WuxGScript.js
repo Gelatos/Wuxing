@@ -6171,6 +6171,10 @@ class TechniqueFilterDefinitions extends BaseFilteredDefinitions{
             new DatabaseFilterData("group", "Trait"),
             new DatabaseFilterData("subGroup", "Utility Keyword")
         ]);
+        this.definitionDatabase["FilterType_WeaponKeywords"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Trait"),
+            new DatabaseFilterData("subGroup", ["Martial Trait", "Aim Trait"])
+        ]);
         this.definitionDatabase["FilterType_Defense"] = WuxDef.Filter(
             new DatabaseFilterData("group", ["Defense", "Sense"]));
         this.definitionDatabase["FilterType_DamageType"] = WuxDef.Filter(
@@ -12619,7 +12623,10 @@ var ActionBuilder = ActionBuilder || (function () {
                 `WuxWorkerFilterPopup.OpenFormeTechnique()`, true)}
                 ${WuxSheetBackend.OnChange(
                 [WuxDef.GetVariable("Action_FormeTechniques", WuxDef._filter)],
-                `WuxWorkerFilterPopup.RemoveFilter()`, true)}`;
+                `WuxWorkerFilterPopup.RemoveFilter()`, true)}
+                ${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Forme_CustomStyleFilter")],
+                `WuxWorkerFilterPopup.OpenCustomStyleFilter()`, true)}`;
         },
         listenerStyleAutoFilterButtons = function () {
             let autoFilters = WuxDef.Filter([new DatabaseFilterData("group", "TechAutoFilter")]);
@@ -15301,7 +15308,7 @@ class FilterDisplayBuilder {
         this.filterDefinitions = filterDefinitions;
     }
 
-    print () {
+    print() {
         return `<div class="wuxFilterSection">
             ${this.printContents()}
         </div>
