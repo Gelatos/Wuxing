@@ -1,4 +1,24 @@
-var wuxCurrentVersion = "1.0.9";
+var wuxCurrentVersion = "1.0.10";
+
+var upgrade_to_1_0_10 = function (currentVersion) {
+	let worker = new WuxStyleWorkerBuild();
+	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.10");
+	attributeHandler.addRepeatingSection("RepeatingStyles");
+	attributeHandler.addMod(worker.attrBuildDraft);
+	attributeHandler.addMod(worker.attrMax);
+
+	attributeHandler.addGetAttrCallback(function (attrHandler) {
+		attributeHandler.getRepeatingSection("RepeatingStyles").removeAllIds();
+		worker.setBuildStatsDraft(attrHandler);
+		worker.iterateBuildStats(function (buildStat) {
+			worker.updateBuildStats(attrHandler, buildStat.name, {value: 0, group: buildStat.group});
+			attrHandler.addUpdate(buildStat.name, 0);
+		});
+		worker.updatePoints(attrHandler);
+	});
+
+	attributeHandler.run();
+};
 
 var upgrade_to_1_0_9 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.9");
@@ -118,6 +138,9 @@ var versioning = function () {
 		switch(v["version"]) {
 			case wuxCurrentVersion:
 				console.log(`Wuxing Sheet modified from 5th Edition OGL by Roll20 v${wuxCurrentVersion}`);
+				break;
+			case "1.0.9":
+				upgrade_to_1_0_10(v["version"]);
 				break;
 			case "1.0.8":
 			case "1.0.7":
