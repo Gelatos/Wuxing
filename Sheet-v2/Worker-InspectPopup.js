@@ -187,11 +187,13 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
         let itemSelectTypeAttr = WuxDef.GetVariable("Popup_ItemSelectType");
         let itemSelectDisplayAttr = WuxDef.GetVariable("Popup_ItemSelectDisplay");
         let itemSelectNameAttr = WuxDef.GetVariable("Popup_ItemSelectName");
+        let itemSelectOnAttr = WuxDef.GetVariable("Popup_ItemSelectIsOn");
 
         this.setInventoryItemVisibility(id, true);
         this.attrHandler.addUpdate(this.repeater.getFieldName(id, itemSelectTypeAttr), itemData.isTitle ? "0" : "on");
         this.attrHandler.addUpdate(this.repeater.getFieldName(id, itemSelectDisplayAttr), itemData.display);
         this.attrHandler.addUpdate(this.repeater.getFieldName(id, itemSelectNameAttr), itemData.name);
+        this.attrHandler.addUpdate(this.repeater.getFieldName(id, itemSelectOnAttr), "0");
         if (!itemData.isTitle) {
             this.setInventoryItemAffinityIcons(id, itemData.iconAffinities);
         }
