@@ -1174,7 +1174,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 buildStylesList = function () {
                     let contents = "";
                     contents += WuxSheetMain.MultiRowGroup([
-                        buildStyleFilter(),  styleListSection("RepeatingStyles", false)], 
+                        buildStyleFilter(),  styleListSection("RepeatingStyles")], 
                         WuxSheetMain.Table.FlexTable, 2);
                     contents = WuxSheetMain.TabBlock(contents);
 
@@ -1186,30 +1186,21 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                             sectionDef.getTitle(), contents))}`;
                 },
 
-                styleListSection = function (repeatingSectionName, displayTierData) {
+                styleListSection = function (repeatingSectionName) {
                     let repeatingDef = WuxDef.Get(repeatingSectionName);
                     let contents = `${WuxSheetMain.Header(repeatingDef.getTitle())}
                         <div>
-                        ${buildRepeater(repeatingDef.getVariable(), addStyleListRepeaterContents(displayTierData))}
+                        ${buildRepeater(repeatingDef.getVariable(), addStyleListRepeaterContents())}
                         ${WuxSheetMain.Row("&nbsp;")}
                     </div>`;
                     return WuxSheetMain.Table.FlexTableGroup(contents);
                 },
 
-                addStyleListRepeaterContents = function (displayTierData) {
+                addStyleListRepeaterContents = function () {
                     let nameDef = WuxDef.Get("Forme_Name");
                     let inspectDef = WuxDef.Get("Forme_Inspect");
                     let deleteDef = WuxDef.Get("Forme_Delete");
                     let tierOutput = "";
-
-                    if (displayTierData) {
-                        let tierDef = WuxDef.Get("Forme_Tier");
-                        let isAdvancedAttr = WuxDef.GetAttribute("Forme_IsAdvanced");
-                        let tierData = `<span>Tier </span><span name="${tierDef.getAttribute()}"></span>`;
-                        tierOutput = WuxSheetMain.HiddenSpanField(isAdvancedAttr, `${tierData}<span>A</span>`);
-                        tierOutput += WuxSheetMain.HiddenAuxSpanField(isAdvancedAttr, tierData);
-                        tierOutput = `<div class="wuxEquipableType wuxDescription">${tierOutput}</div>`;
-                    }
 
                     return `<div class="wuxMultiRow" style="min-width: 300px;">
                         ${tierOutput}

@@ -269,6 +269,14 @@ class WuxWorkerBuild {
 		this.buildStats.clean(this.getBuildVariables());
 		this.buildStats.cleanValues();
 	}
+	
+	clearBuildStats() {
+		this.buildStats.clear();
+	}
+	
+	removeBuildStat(key) {
+		this.buildStats.remove(key);
+	}
 
 	setVariablesToBuildStats(attributeHandler) {
 		this.iterateBuildStats(function (buildStat) {
@@ -665,7 +673,7 @@ class StyleWorkerBuildStats extends WorkerBuildStats {
 		let points = 0;
 		for (let i = 0; i < this.keys.length; i++) {
 			let val = this.values[this.keys[i]];
-			if (val.group == "Basic") {
+			if (val.group != "Style") {
 				continue;
 			}
 			if (val.value == "on") {
@@ -698,7 +706,7 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 	initializeData() {
 		let worker = this;
 		this.iterateBuildStats(function (techniqueVariableData) {
-			let technique = WuxTechs.GetByVariableName(techniqueVariableData.name);
+			let technique = WuxTechs.Get(techniqueVariableData.name);
 			if (technique == undefined) {
 				return;
 			}
@@ -763,46 +771,14 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 	}
 
 	getStyles() {
-		let styleNames = [];
-		let permanentNames = [];
-		let recheckedNames = [];
-		let styleData = [];
-		let techniques = this.getTechniques();
-		for (let i = 0; i < techniques.length; i++) {
-			let technique = techniques[i];
-			let styles = technique.techSet.split(";");
-			for (let j = 0; j < styles.length; j++) {
-				let styleName = styles[j];
-				if (technique.forms.includes("Permanent")) {
-					if (!permanentNames.includes(styleName)) {
-						permanentNames.push(styleName);
-					}
-					// Permanent techniques do not add their style to any style lists
-					continue;
-				}
-				if (!styleNames.includes(styleName)) {
-					let style = WuxStyles.Get(styleName);
-					if (style.baseStyle != "" && !styleNames.includes(style.baseStyle) && !permanentNames.includes(style.baseStyle)) {
-						recheckedNames.push(styleName);
-						continue;
-					}
-					styleNames.push(styleName);
-					styleData.push({style: style, rank: 10});
-				}
+		let techniques = {};
+		for (let key in this.styledTechniqueData) {
+			let technique = this.styledTechniqueData[key].technique;
+			if (technique.techSet == "Style") {
+				techniques.push(this.styledTechniqueData[key].technique);
 			}
 		}
-		for (let i = 0; i < recheckedNames.length; i++) {
-			if (!styleNames.includes(recheckedNames[i]) && !permanentNames.includes(recheckedNames[i])) {
-				let styleName = recheckedNames[i];
-				let style = WuxStyles.Get(styleName);
-				if (!styleNames.includes(style.baseStyle) && !permanentNames.includes(style.baseStyle)) {
-					continue;
-				}
-				styleNames.push(styleName);
-				styleData.push({style: style, rank: 10});
-			}
-		}
-		return styleData;
+		return techniques;
 	}
 }
 

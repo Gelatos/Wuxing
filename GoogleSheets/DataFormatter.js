@@ -633,7 +633,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
             }
             return [];
         }
-        return sortingGroups[property][propertyValue];
+        return sortingGroups[property][propertyValue].slice();
     };
     const getGroupData = function (group) {
         let output = [];

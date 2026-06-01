@@ -93,10 +93,6 @@ class TechniqueFilterDefinitions extends BaseFilteredDefinitions{
             new DatabaseFilterData("group", "Trait"),
             new DatabaseFilterData("subGroup", "Utility Keyword")
         ]);
-        this.definitionDatabase["FilterType_WeaponKeywords"] = WuxDef.Filter([
-            new DatabaseFilterData("group", "Trait"),
-            new DatabaseFilterData("subGroup", ["Martial Trait", "Aim Trait"])
-        ]);
         this.definitionDatabase["FilterType_Defense"] = WuxDef.Filter(
             new DatabaseFilterData("group", ["Defense", "Sense"]));
         this.definitionDatabase["FilterType_DamageType"] = WuxDef.Filter(
@@ -107,6 +103,28 @@ class TechniqueFilterDefinitions extends BaseFilteredDefinitions{
         statusDefinitions = statusDefinitions.filter(item => item.canBeFiltered);
         this.definitionDatabase["FilterType_StatusGood"] = statusDefinitions.filter(item => item.isBeneficial);
         this.definitionDatabase["FilterType_StatusBad"] = statusDefinitions.filter(item => !item.isBeneficial);
+        
+        this.definitionDatabase["FilterType_WeaponKeywords"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Trait"),
+            new DatabaseFilterData("subGroup", ["Martial Trait", "Aim Trait"])
+        ]);
+        this.definitionDatabase["FilterType_AthleticSkills"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Skill"),
+            new DatabaseFilterData("subGroup", ["Athletics"])
+        ]);
+        this.definitionDatabase["FilterType_MagicSkills"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Skill"),
+            new DatabaseFilterData("subGroup", ["Magic"])
+        ]);
+        this.definitionDatabase["FilterType_SocialSkills"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Skill"),
+            new DatabaseFilterData("subGroup", ["Persuade", "Cunning"])
+        ]);
+        this.definitionDatabase["FilterType_WorldSkills"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Skill"),
+            new DatabaseFilterData("subGroup", ["Perception", "Device", "Craft"])
+        ]);
+        
     }
 }
 

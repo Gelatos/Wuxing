@@ -66,6 +66,14 @@ class Dictionary {
         }
         this.values[key] = value;
     }
+    
+    remove(key) {
+        if (!this.keys.includes(key)) {
+            return;
+        }
+        this.keys = this.keys.filter(k => k !== key);
+        delete this.values[key];
+    }
 
     get(key) {
         return this.values[key];
@@ -101,6 +109,11 @@ class Dictionary {
         }
         this.keys = keys;
         this.values = values;
+    }
+    
+    clear() {
+        this.keys = [];
+        this.values = {};
     }
     
     length() {
@@ -789,7 +802,7 @@ class TechniqueData extends WuxDatabaseData {
     
     updateVersion(newVersion) {
         let version = this.getVersionParts(newVersion);
-        let baseVersionValue = 3;
+        let baseVersionValue = 1;
         
         if (parseInt(version[0]) != baseVersionValue) {
             version[0] = baseVersionValue;

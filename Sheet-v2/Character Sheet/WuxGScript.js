@@ -66,6 +66,14 @@ class Dictionary {
         }
         this.values[key] = value;
     }
+    
+    remove(key) {
+        if (!this.keys.includes(key)) {
+            return;
+        }
+        this.keys = this.keys.filter(k => k !== key);
+        delete this.values[key];
+    }
 
     get(key) {
         return this.values[key];
@@ -101,6 +109,11 @@ class Dictionary {
         }
         this.keys = keys;
         this.values = values;
+    }
+    
+    clear() {
+        this.keys = [];
+        this.values = {};
     }
     
     length() {
@@ -789,7 +802,7 @@ class TechniqueData extends WuxDatabaseData {
     
     updateVersion(newVersion) {
         let version = this.getVersionParts(newVersion);
-        let baseVersionValue = 3;
+        let baseVersionValue = 1;
         
         if (parseInt(version[0]) != baseVersionValue) {
             version[0] = baseVersionValue;
@@ -6171,10 +6184,6 @@ class TechniqueFilterDefinitions extends BaseFilteredDefinitions{
             new DatabaseFilterData("group", "Trait"),
             new DatabaseFilterData("subGroup", "Utility Keyword")
         ]);
-        this.definitionDatabase["FilterType_WeaponKeywords"] = WuxDef.Filter([
-            new DatabaseFilterData("group", "Trait"),
-            new DatabaseFilterData("subGroup", ["Martial Trait", "Aim Trait"])
-        ]);
         this.definitionDatabase["FilterType_Defense"] = WuxDef.Filter(
             new DatabaseFilterData("group", ["Defense", "Sense"]));
         this.definitionDatabase["FilterType_DamageType"] = WuxDef.Filter(
@@ -6185,6 +6194,28 @@ class TechniqueFilterDefinitions extends BaseFilteredDefinitions{
         statusDefinitions = statusDefinitions.filter(item => item.canBeFiltered);
         this.definitionDatabase["FilterType_StatusGood"] = statusDefinitions.filter(item => item.isBeneficial);
         this.definitionDatabase["FilterType_StatusBad"] = statusDefinitions.filter(item => !item.isBeneficial);
+        
+        this.definitionDatabase["FilterType_WeaponKeywords"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Trait"),
+            new DatabaseFilterData("subGroup", ["Martial Trait", "Aim Trait"])
+        ]);
+        this.definitionDatabase["FilterType_AthleticSkills"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Skill"),
+            new DatabaseFilterData("subGroup", ["Athletics"])
+        ]);
+        this.definitionDatabase["FilterType_MagicSkills"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Skill"),
+            new DatabaseFilterData("subGroup", ["Magic"])
+        ]);
+        this.definitionDatabase["FilterType_SocialSkills"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Skill"),
+            new DatabaseFilterData("subGroup", ["Persuade", "Cunning"])
+        ]);
+        this.definitionDatabase["FilterType_WorldSkills"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Skill"),
+            new DatabaseFilterData("subGroup", ["Perception", "Device", "Craft"])
+        ]);
+        
     }
 }
 
@@ -6823,7 +6854,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
             }
             return [];
         }
-        return sortingGroups[property][propertyValue];
+        return sortingGroups[property][propertyValue].slice();
     };
     const getGroupData = function (group) {
         let output = [];
@@ -11685,7 +11716,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 buildStylesList = function () {
                     let contents = "";
                     contents += WuxSheetMain.MultiRowGroup([
-                        buildStyleFilter(),  styleListSection("RepeatingStyles", false)], 
+                        buildStyleFilter(),  styleListSection("RepeatingStyles")], 
                         WuxSheetMain.Table.FlexTable, 2);
                     contents = WuxSheetMain.TabBlock(contents);
 
@@ -11697,30 +11728,21 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                             sectionDef.getTitle(), contents))}`;
                 },
 
-                styleListSection = function (repeatingSectionName, displayTierData) {
+                styleListSection = function (repeatingSectionName) {
                     let repeatingDef = WuxDef.Get(repeatingSectionName);
                     let contents = `${WuxSheetMain.Header(repeatingDef.getTitle())}
                         <div>
-                        ${buildRepeater(repeatingDef.getVariable(), addStyleListRepeaterContents(displayTierData))}
+                        ${buildRepeater(repeatingDef.getVariable(), addStyleListRepeaterContents())}
                         ${WuxSheetMain.Row("&nbsp;")}
                     </div>`;
                     return WuxSheetMain.Table.FlexTableGroup(contents);
                 },
 
-                addStyleListRepeaterContents = function (displayTierData) {
+                addStyleListRepeaterContents = function () {
                     let nameDef = WuxDef.Get("Forme_Name");
                     let inspectDef = WuxDef.Get("Forme_Inspect");
                     let deleteDef = WuxDef.Get("Forme_Delete");
                     let tierOutput = "";
-
-                    if (displayTierData) {
-                        let tierDef = WuxDef.Get("Forme_Tier");
-                        let isAdvancedAttr = WuxDef.GetAttribute("Forme_IsAdvanced");
-                        let tierData = `<span>Tier </span><span name="${tierDef.getAttribute()}"></span>`;
-                        tierOutput = WuxSheetMain.HiddenSpanField(isAdvancedAttr, `${tierData}<span>A</span>`);
-                        tierOutput += WuxSheetMain.HiddenAuxSpanField(isAdvancedAttr, tierData);
-                        tierOutput = `<div class="wuxEquipableType wuxDescription">${tierOutput}</div>`;
-                    }
 
                     return `<div class="wuxMultiRow" style="min-width: 300px;">
                         ${tierOutput}

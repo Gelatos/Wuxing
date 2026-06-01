@@ -73,10 +73,8 @@ class FilteredTechniquesInventoryItemHandler extends InspectionInventoryItemHand
 
 class FilteredStylesInventoryItemHandler extends FilteredTechniquesInventoryItemHandler {
     getFilteredTechniques(filters) {
-        let allStyleNames = WuxTechs.GetSortedGroup("style", "Style");
-        allStyleNames.push("Style");
-        filters.push(new DatabaseFilterData("style", allStyleNames));
-        let filteredTechniques = WuxTechs.Filter(filters);
+        let allStyleNames = [...WuxTechs.GetSortedGroup("style", "Style"), "Style"];
+        let filteredTechniques = WuxTechs.Filter([...filters, new DatabaseFilterData("style", allStyleNames)]);
         let newFilteredTechniquesList = [];
         let addedFilteredTechniqueNames = [];
         
@@ -366,92 +364,147 @@ class InspectionPopup {
     setup(attrHandler) {
         this.inspectPopupAttrHandler = new InspectPopupAttributeHandler(attrHandler);
     }
+    
+    addItem() {
+        let inspectPopup = this;
+        this.attributeHandler.addRepeatingSection(this.inspectPopupInventoryId);
+        
+        let itemNameVar = WuxDef.GetVariable("Popup_ItemSelectName");
+        let selectedIdVar = WuxDef.GetVariable("Popup_InspectSelectId");
+        this.attributeHandler.getRepeatingSection(this.inspectPopupInventoryId).addFieldNames([itemNameVar]);
+        this.attributeHandler.addMod(selectedIdVar);
+
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            inspectPopup.setup(attrHandler);
+            
+            let repeater = inspectPopup.attributeHandler.getRepeatingSection(inspectPopup.inspectPopupInventoryId);
+            let selectedItemId = attrHandler.parseString(selectedIdVar);
+            let itemName = attrHandler.parseString(repeater.getFieldName(selectedItemId, itemNameVar));
+            inspectPopup.performAddItem(attrHandler, itemName);
+        });
+    }
+    
+    performAddItem(attrHandler, itemName) {}
 }
 class TechniqueInspectionPopup extends InspectionPopup {
     setup(attrHandler) {
         this.inspectPopupAttrHandler = new TechniqueInspectPopupAttributeHandler(attrHandler);
+    }
+
+    addItem() {
+        let worker = new WuxStyleWorkerBuild();
+        let styleRepeaterId = "RepeatingStyles";
+        this.attributeHandler.addMod([worker.attrMax, worker.attrBuildDraft]);
+        this.attributeHandler.addRepeatingSection(styleRepeaterId);
+        super.addItem();
+        WuxWorkerSkills.UpdateKeySkills(this.attributeHandler);
+    }
+
+    performAddItem(attrHandler, itemName) {
+        Debug.Log(`Adding Style ${itemName}`);
+
+        let baseTechnique = WuxTechs.Get(itemName);
+        if (baseTechnique == undefined) {
+            return;
+        }
+        
+        let worker = new WuxStyleWorkerBuild();
+        let styleRepeaterId = "RepeatingStyles";
+        
+        // only the base technique gets add to the styles list
+        let repeater = attrHandler.getRepeatingSection(styleRepeaterId);
+        attrHandler.addUpdate(
+            repeater.getFieldName(repeater.generateRowId(), WuxDef.GetVariable("Forme_Name")), 
+            baseTechnique.name);
+        
+        // add all the techniques to the style worker as this is how we track styles tracked and their level
+        worker.setBuildStatsDraft(attrHandler);
+        worker.updateBuildStats(attrHandler, baseTechnique.name, {value: 1, group: "Style"});
+        
+        let variantTechniques = WuxTechs.Filter(new DatabaseFilterData("style", itemName));
+        variantTechniques.forEach(function (technique) {
+            worker.updateBuildStats(attrHandler, technique.name, {value: 1, group: technique.techSet});
+        });
+        worker.updatePoints(attrHandler);
     }
 }
 class ItemInspectionPopup extends InspectionPopup {
     setup(attrHandler) {
         this.inspectPopupAttrHandler = new ItemInspectPopupAttributeHandler(attrHandler);
     }
-}
 
-var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
-    const performAddSelectedInspectElement = function (attrHandler) {
+    addItem (attrHandler) {
         Debug.Log(`Adding Inspect Element ${attrHandler.parseString(WuxDef.GetUntypedVariable("Popup", "ItemName"))}`);
         switch (attrHandler.parseString(WuxDef.GetVariable("Popup_InspectAddType"))) {
             case "Add Equipment":
-                performAddSelectedInspectElementEquipment(attrHandler,
+                this.performAddSelectedInspectElementEquipment(attrHandler,
                     WuxItems.Get(attrHandler.parseString(WuxDef.GetUntypedVariable("Popup", "ItemName")))
                 );
                 break;
             case "Add Consumable":
-                performAddSelectedInspectElementConsumable(attrHandler,
+                this.performAddSelectedInspectElementConsumable(attrHandler,
                     WuxItems.Get(attrHandler.parseString(WuxDef.GetUntypedVariable("Popup", "ItemName")))
                 );
                 break;
             case "Add Good":
-                performAddSelectedInspectElementGoods(attrHandler,
+                this.performAddSelectedInspectElementGoods(attrHandler,
                     WuxGoods.Get(attrHandler.parseString(WuxDef.GetUntypedVariable("Popup", "ItemName")))
                 );
                 break;
         }
     };
 
-    const getGearVariable = function (variable, suffix) {
-        let baseDefinition = WuxDef.Get("Gear");
-        return baseDefinition.getVariable(`-${WuxDef.GetVariable(variable, suffix)}`);
-    };
-
-    const performAddSelectedInspectElementEquipment = function (attrHandler, item) {
+    performAddSelectedInspectElementEquipment(attrHandler, item) {
         Debug.Log(`Adding Equipment ${item.name}`);
         let repeater = new WorkerRepeatingSectionHandler("RepeatingEquipment");
         let newRowId = repeater.generateRowId();
-        performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
+        this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
     };
-    const performAddSelectedInspectElementConsumable = function (attrHandler, item) {
+    performAddSelectedInspectElementConsumable(attrHandler, item) {
         Debug.Log(`Adding Consumable ${item.name}`);
         let repeater = new WorkerRepeatingSectionHandler("RepeatingConsumables");
         let newRowId = repeater.generateRowId();
-        performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
-        performAddSelectedInspectElementTechnique(attrHandler, repeater, newRowId, item.technique);
-        
+        this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
+        this.performAddSelectedInspectElementTechnique(attrHandler, repeater, newRowId, item.technique);
+
     };
-    const performAddSelectedInspectElementGoods = function (attrHandler, item) {
+    performAddSelectedInspectElementGoods(attrHandler, item) {
         Debug.Log(`Adding Goods ${item.name}`);
         let repeater = new WorkerRepeatingSectionHandler("RepeatingGoods");
         let newRowId = repeater.generateRowId();
-        performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
+        this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
     };
-    const performAddSelectedInspectElementItem = function (attrHandler, repeater, newRowId, item) {
+    getGearVariable(variable, suffix) {
+        let baseDefinition = WuxDef.Get("Gear");
+        return baseDefinition.getVariable(`-${WuxDef.GetVariable(variable, suffix)}`);
+    };
+    performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item) {
         let displayData = new ItemDisplayData(item);
 
-        let equipMenuText = getEquipMenuText(item);
+        let equipMenuText = this.getEquipMenuText(item);
         attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_ItemEquipMenu")), equipMenuText);
         let purchaseMenuText = `${WuxDef.GetTitle("Gear_Purchase")} (${item.value})`;
         attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_Purchase", WuxDef._tab)), purchaseMenuText);
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, getGearVariable("ItemName")), displayData.name);
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, getGearVariable("ItemGroup")), displayData.group);
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, getGearVariable("ItemStats")), displayData.stats);
+        attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemName")), displayData.name);
+        attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemGroup")), displayData.group);
+        attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemStats")), displayData.stats);
 
         if (displayData.traits.length > 0) {
             let databaseAttributeHandler = new DatabaseItemAttributeHandler(attrHandler);
             databaseAttributeHandler.addDefinitions(displayData.traits, repeater.getFieldName(newRowId, getGearVariable("ItemTrait")), 3);
         }
         if (displayData.description != "") {
-            attrHandler.addUpdate(repeater.getFieldName(newRowId, getGearVariable("ItemDescription")), displayData.description);
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemDescription")), displayData.description);
         }
     };
-    const performAddSelectedInspectElementTechnique = function (attrHandler, repeater, newRowId, technique) {
+    performAddSelectedInspectElementTechnique(attrHandler, repeater, newRowId, technique) {
         let techniqueItemAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");
         techniqueItemAttributeHandler.setRepeaterData(repeater);
         techniqueItemAttributeHandler.setId(newRowId);
         techniqueItemAttributeHandler.setTechniqueInfo(technique, true);
         techniqueItemAttributeHandler.setVisibilityAttribute(true);
     };
-    const getEquipMenuText = function (item) {
+    getEquipMenuText(item) {
         switch (item.group) {
             case "Head Gear":
                 return WuxDef.GetTitle("Gear_EquipHead");
@@ -469,7 +522,31 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
 
         return WuxDef.GetTitle("Gear_Equip");
     };
-    
+}
+
+var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
+    const getOpenInspectionPopup = function (callback) {
+        let attributeHandler = new WorkerAttributeHandler();
+        let selectTypeVariable = WuxDef.GetVariable("Popup_InspectSelectType");
+        attributeHandler.addMod(selectTypeVariable);
+
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            let attributeHandler2 = new WorkerAttributeHandler();
+            let inspectPopup;
+            switch(attrHandler.parseString(selectTypeVariable)) {
+                case "Popup_TechniqueInspectionName":
+                    inspectPopup = new TechniqueInspectionPopup(attributeHandler2);
+                    break;
+                case "Popup_ItemInspectionName":
+                    inspectPopup = new ItemInspectionPopup(attributeHandler2);
+                    break;
+            }
+            if (inspectPopup != undefined) {
+                callback(inspectPopup);
+            }
+        });
+        attributeHandler.run();
+    }
     'use strict';
 
     const openItemInspection = function (attributeHandler, inventoryTitle, inventoryItems, addType) {
@@ -519,18 +596,11 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         },
 
         addSelectedInspectElement = function () {
-            let attributeHandler = new WorkerAttributeHandler();
-
-            attributeHandler.addMod([WuxDef.GetVariable("Popup_InspectAddType"),
-                WuxDef.GetUntypedVariable("Popup", "ItemName"),
-                WuxDef.GetVariable("FullName")]);
-
-            attributeHandler.addGetAttrCallback(function (attrHandler) {
-                let inspectPopup = new InspectPopupAttributeHandler(attrHandler);
-                inspectPopup.hide();
-                performAddSelectedInspectElement(attrHandler);
+            getOpenInspectionPopup((inspectPopup) => {
+                inspectPopup.addItem();
+                inspectPopup.close();
+                inspectPopup.attributeHandler.run();
             });
-            attributeHandler.run();
         };
 
     const performStyleFilterInspection = function (filters, title) {
@@ -548,11 +618,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             },
             function (technique) {
                 let iconAffinities = technique.getAffinityParts();
-                Debug.Log(`${technique.name} has the variants ${JSON.stringify(WuxTechs.GetSortedGroup("style", technique.name))}`);
                 let variants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
-                if (variants.length > 5) {
-                    variants = [];
-                }
                 
                 for (let i = 0; i < variants.length; i++) {
                     let variantTechnique = variants[i];

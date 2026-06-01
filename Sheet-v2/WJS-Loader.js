@@ -10,11 +10,9 @@ var upgrade_to_1_0_10 = function (currentVersion) {
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
 		attributeHandler.getRepeatingSection("RepeatingStyles").removeAllIds();
 		worker.setBuildStatsDraft(attrHandler);
-		worker.iterateBuildStats(function (buildStat) {
-			worker.updateBuildStats(attrHandler, buildStat.name, {value: 0, group: buildStat.group});
-			attrHandler.addUpdate(buildStat.name, 0);
-		});
+		worker.clearBuildStats();
 		worker.updatePoints(attrHandler);
+		worker.revertBuildStatsDraft(attrHandler);
 	});
 
 	attributeHandler.run();
