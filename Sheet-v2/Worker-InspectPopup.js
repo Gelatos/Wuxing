@@ -133,15 +133,18 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), "");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectId"), "");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), "");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
     };
     setPopupType(popupType) {
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), popupType);
     }
     setAddType(addType) {
         if (addType == undefined) {
+            this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
             this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), "");
             return;
         }
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "on");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), addType);
     }
 
@@ -695,7 +698,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             });
 
             let attributeHandler2 = new WorkerAttributeHandler();
-            openTechniqueInspection(attributeHandler2, title, filteredItems);
+            openTechniqueInspection(attributeHandler2, title, filteredItems, "Add Style");
             attributeHandler2.run();
         });
 
