@@ -150,6 +150,11 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
     initializePopup(attrHandler) {}
 
     iterateAndSetItems(itemData) {
+        if (itemData.length === 0) {
+            this.repeater.ids.forEach(id => this.setInventoryItemVisibility(id, false));
+            this.onNoItems();
+            return;
+        }
         let setSelectedItem = false;
         let iterator = 0;
         while (iterator < this.repeater.ids.length) {
@@ -177,6 +182,10 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
             }
             iterator++;
         }
+    }
+    onNoItems() {
+        let id = this.repeater.ids.length > 0 ? this.repeater.ids[0] : this.repeater.generateRowId();
+        this.setInventoryItemData(id, new InspectionInventoryItem("No items available", "", true));
     }
     setInventoryItemVisibility(id, isVisible) {
         let itemSelectVisibleAttr = WuxDef.GetVariable("Popup_ItemSelectVisible");
@@ -295,6 +304,12 @@ class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler
             this.techniqueAttributeHandler.getVariable("TechHeader"),
             "0"
         );
+    }
+    onNoItems() {
+        super.onNoItems();
+        for (let i = 0; i <= 3; i++) {
+            this.hideTechnique(i);
+        }
     }
 }
 class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
