@@ -602,11 +602,59 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         },
 
         inspectListStyle = function (eventinfo) {
-        
+            let worker = new WuxStyleWorkerBuild();
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("RepeatingStyles");
+            let repeater = attributeHandler.getRepeatingSection("RepeatingStyles");
+            let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let nameFieldName = repeater.getFieldName(selectedId, WuxDef.GetVariable("Forme_Name"));
+            attributeHandler.addMod([nameFieldName, worker.attrMax, worker.attrBuildDraft]);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let selectedStyleName = attrHandler.parseString(nameFieldName);
+
+                worker.setBuildStatsDraft(attrHandler);
+
+                let inventoryItems = [];
+                let selectedItem = undefined;
+
+                worker.iterateBuildStats(function (buildStat) {
+                    if (buildStat.group !== "Style") return;
+
+                    let technique = WuxTechs.Get(buildStat.name);
+                    if (technique == undefined) return;
+
+                    let iconAffinities = technique.getAffinityParts();
+                    let variants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
+                    for (let variant of variants) {
+                        let variantParts = variant.getAffinityParts();
+                        for (let part of variantParts) {
+                            if (!iconAffinities.includes(part)) iconAffinities.push(part);
+                        }
+                    }
+
+                    let item = new InspectionInventoryItem(buildStat.name, buildStat.name, false, undefined, undefined, iconAffinities);
+
+                    if (buildStat.name === selectedStyleName) {
+                        selectedItem = item;
+                    } else {
+                        inventoryItems.push(item);
+                    }
+                });
+
+                if (selectedItem !== undefined) {
+                    inventoryItems.unshift(selectedItem);
+                }
+
+                let attributeHandler2 = new WorkerAttributeHandler();
+                WuxWorkerInspectPopup.OpenTechniqueInspection(attributeHandler2, "Styles", inventoryItems);
+                attributeHandler2.run();
+            });
+
+            attributeHandler.run();
         },
 
         deleteListStyle = function (eventinfo) {
-
             let worker = new WuxStyleWorkerBuild();
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addRepeatingSection("RepeatingStyles");
