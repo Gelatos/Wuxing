@@ -22,7 +22,7 @@ class FilteredTechniquesInventoryItemHandler extends InspectionInventoryItemHand
     constructor(filters, titleCallback, displayCallback) {
         super();
 
-        let filteredTechniques = WuxTechs.FilterAndSortTechniquesByRequirement(filters);
+        let filteredTechniques = this.getFilteredTechniques(filters);
         if (filteredTechniques.length() == 0) {
             return;
         }
@@ -63,6 +63,46 @@ class FilteredTechniquesInventoryItemHandler extends InspectionInventoryItemHand
                 });
             });
         }
+    }
+    
+    getFilteredTechniques(filters) {
+        let filteredTechniques = WuxTechs.Filter(filters);
+        return WuxTechs.SortFilteredTechniquesByRequirement(filteredTechniques);
+    }
+}
+
+class FilteredStylesInventoryItemHandler extends FilteredTechniquesInventoryItemHandler {
+    getFilteredTechniques(filters) {
+        let allStyleNames = WuxTechs.GetSortedGroup("style", "Style");
+        allStyleNames.push("Style");
+        filters.push(new DatabaseFilterData("style", allStyleNames));
+        let filteredTechniques = WuxTechs.Filter(filters);
+        let newFilteredTechniquesList = [];
+        let addedFilteredTechniqueNames = [];
+        
+        for (let technique of filteredTechniques) {
+            if (technique == undefined || addedFilteredTechniqueNames.includes(technique.name)) {
+                continue;
+            }
+            
+            if (technique.techSet == "Style") {
+                addedFilteredTechniqueNames.push(technique.name);
+                newFilteredTechniquesList.push(technique);
+                continue;
+            }
+            
+            if (addedFilteredTechniqueNames.includes(technique.techSet)) {
+                continue;
+            }
+
+            let baseTechnique = WuxTechs.Get(technique.techSet);
+            if (baseTechnique != undefined && baseTechnique.techSet == "Style") {
+                addedFilteredTechniqueNames.push(baseTechnique.name);
+                newFilteredTechniquesList.push(baseTechnique);
+            }
+        }
+
+        return WuxTechs.SortFilteredTechniquesByRequirement(newFilteredTechniquesList);
     }
 }
 
@@ -476,59 +516,30 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             attributeHandler.run();
         };
 
-    const openStyleFilterTechniqueInspection = function (eventinfo) {
-        Debug.Log("Open Style Filter Technique Inspection");
-
-        // Find the TechAutoFilter definition that matches the button that was pressed
-        let allAutoFilters = WuxDef.Filter([new DatabaseFilterData("group", "TechAutoFilter")]);
-        let pressedDef = null;
-        for (let i = 0; i < allAutoFilters.length; i++) {
-            if (allAutoFilters[i].getVariable() === eventinfo.sourceAttribute) {
-                pressedDef = allAutoFilters[i];
-                break;
-            }
-        }
-        if (pressedDef == null) {
-            Debug.Log(`No TechAutoFilter definition found for attribute: ${eventinfo.sourceAttribute}`);
-            return;
-        }
-
-        // Parse the JSON filter rules from the definition's description
-        let filterRules;
-        try {
-            filterRules = JSON.parse(pressedDef.getDescription());
-        } catch (e) {
-            Debug.Log(`Failed to parse filter rules for "${pressedDef.getTitle()}": ${e}`);
-            return;
-        }
-
-        // Build the filter list: start with group = "Style", then append the JSON rules
-        let filters = [new DatabaseFilterData("style", "Style")];
-        filterRules.forEach(function (rule) {
-            Object.keys(rule).forEach(function (key) {
-                filters.push(new DatabaseFilterData(key, rule[key]));
-            });
-        });
-        Debug.Log(`Filters: ${JSON.stringify(filters)}`);
-
-        // Build the full inventory item list from the filtered and sorted techniques
-        let inventoryItems = new FilteredTechniquesInventoryItemHandler(filters,
+    const performStyleFilterInspection = function (filters, title) {
+        let inventoryItems = new FilteredStylesInventoryItemHandler(filters,
             function (tier, affinity) {
                 let level = Format.GetLevelPrerequisites(tier);
-                let title = level > 0 ? `Level ${level}` : "";
+                let itemTitle = level > 0 ? `Level ${level}` : "";
                 if (affinity !== "") {
-                    title = title !== "" ? `${affinity} - ${title}` : affinity;
+                    itemTitle = itemTitle !== "" ? `${affinity} - ${itemTitle}` : affinity;
                 }
-                if (title === "") {
-                    title = "Level 0";
+                if (itemTitle === "") {
+                    itemTitle = "Level 1";
                 }
-                return new InspectionInventoryItem(title, "", true, affinity, tier);
+                return new InspectionInventoryItem(itemTitle, "", true, affinity, tier);
             },
             function (technique) {
                 let iconAffinities = technique.getAffinityParts();
+                Debug.Log(`${technique.name} has the variants ${JSON.stringify(WuxTechs.GetSortedGroup("style", technique.name))}`);
                 let variants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
+                if (variants.length > 5) {
+                    variants = [];
+                }
+                
                 for (let i = 0; i < variants.length; i++) {
-                    let variantParts = variants[i].getAffinityParts();
+                    let variantTechnique = variants[i];
+                    let variantParts = variantTechnique.getAffinityParts();
                     for (let j = 0; j < variantParts.length; j++) {
                         if (!iconAffinities.includes(variantParts[j])) {
                             iconAffinities.push(variantParts[j]);
@@ -539,7 +550,6 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             }
         );
 
-        // Read checkbox state and user attributes to apply optional post-filters
         let attributeHandler = new WorkerAttributeHandler();
         attributeHandler.addMod([
             WuxDef.GetVariable("Forme_ShowFromNonElement"),
@@ -602,17 +612,61 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             });
 
             let attributeHandler2 = new WorkerAttributeHandler();
-            openTechniqueInspection(attributeHandler2, pressedDef.getTitle(), filteredItems);
+            openTechniqueInspection(attributeHandler2, title, filteredItems);
             attributeHandler2.run();
         });
 
         attributeHandler.run();
     };
 
+    const openCustomStyleFilterInspection = function (filters, title) {
+        Debug.Log("Open Custom Style Filter Inspection");
+        performStyleFilterInspection(filters, title);
+    };
+
+    const openStyleFilterTechniqueInspection = function (eventinfo) {
+        Debug.Log("Open Style Filter Technique Inspection");
+
+        // Find the TechAutoFilter definition that matches the button that was pressed
+        let allAutoFilters = WuxDef.Filter([new DatabaseFilterData("group", "TechAutoFilter")]);
+        let pressedDef = null;
+        for (let i = 0; i < allAutoFilters.length; i++) {
+            if (allAutoFilters[i].getVariable() === eventinfo.sourceAttribute) {
+                pressedDef = allAutoFilters[i];
+                break;
+            }
+        }
+        if (pressedDef == null) {
+            Debug.Log(`No TechAutoFilter definition found for attribute: ${eventinfo.sourceAttribute}`);
+            return;
+        }
+
+        // Parse the JSON filter rules from the definition's description
+        let filterRules;
+        try {
+            filterRules = JSON.parse(pressedDef.getDescription());
+        } catch (e) {
+            Debug.Log(`Failed to parse filter rules for "${pressedDef.getTitle()}": ${e}`);
+            return;
+        }
+
+        // Build the filter list: start with style = "Style", then append the JSON rules
+        let filters = [];
+        filterRules.forEach(function (rule) {
+            Object.keys(rule).forEach(function (key) {
+                filters.push(new DatabaseFilterData(key, rule[key]));
+            });
+        });
+        Debug.Log(`Filters: ${JSON.stringify(filters)}`);
+
+        performStyleFilterInspection(filters, pressedDef.getTitle());
+    };
+
     return {
         OpenItemInspection: openItemInspection,
         OpenTechniqueInspection: openTechniqueInspection,
         OpenStyleFilterTechniqueInspection: openStyleFilterTechniqueInspection,
+        OpenCustomStyleFilterInspection: openCustomStyleFilterInspection,
         SelectInspectionItemFromActiveGroup: selectInspectionItemFromActiveGroup,
         Close: close,
         AddSelectedInspectElement: addSelectedInspectElement

@@ -609,28 +609,31 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
         return filterOutput;
     }
     
-    const getSortedGroup = function (property, propertyValue) {
+    const getSortedGroup = function (property, propertyValue, debug) {
         if (sortingGroups == undefined) {
             return [];
         }
         if (!sortingGroups.hasOwnProperty(property)) {
-            let keys = "";
-            for (let key in sortingGroups) {
-                keys += `${key}, `;
+            if (debug != undefined) {
+                let keys = "";
+                for (let key in sortingGroups) {
+                    keys += `${key}, `;
+                }
+                Debug.Log(`[${debug}] Tried to find property ${property} but it does not exist in the database. Valid keys: ${keys}`);
             }
-        }
-        if (!sortingGroups[property].hasOwnProperty(propertyValue)) {
-            let keys = "";
-            for (let key in sortingGroups[property]) {
-                keys += `${key}, `;
-            }
-            // Debug.Log(`Tried to find sub property ${propertyValue} but it does not exist in the database. Valid properties are ${keys}`);
-        }
-        let output = sortingGroups[property][propertyValue];
-        if (output == undefined) {
             return [];
         }
-        return output;
+        if (!sortingGroups[property].hasOwnProperty(propertyValue)) {
+            if (debug != undefined) {
+                let keys = "";
+                for (let key in sortingGroups[property]) {
+                    keys += `${key}, `;
+                }
+                Debug.Log(`[${debug}] Tried to find sub property ${propertyValue} but it does not exist in the database. Valid keys: ${keys}`);
+            }
+            return [];
+        }
+        return sortingGroups[property][propertyValue];
     };
     const getGroupData = function (group) {
         let output = [];
@@ -1585,7 +1588,7 @@ class DatabaseAssessment {
             let key = variableNameKeys[variableName];
             return get(key);
         });
-        techniqueClassData.addPublicFunction("filterAndSortTechniquesByRequirement", WuxDefinition.FilterAndSortTechniquesByRequirement);
+        techniqueClassData.addPublicFunction("sortFilteredTechniquesByRequirement", WuxDefinition.SortFilteredTechniquesByRequirement);
         techniqueClassData.addPublicFunction("getGroupVariables", WuxDefinition.GetGroupVariablesTechnique);
         output += techniqueClassData.print("WuxTechs") + "\n";
 

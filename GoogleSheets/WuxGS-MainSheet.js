@@ -827,10 +827,8 @@ var WuxDefinition = WuxDefinition || (function () {
         getName = function (name, baseDefinition) {
             return baseDefinition.isResource ? `${name}` : `${baseDefinition.abbreviation}_${name}`;
         },
-
-
-        filterAndSortTechniquesByRequirement = function (techniquesFilterData) {
-            let techniquesFilter = filter(techniquesFilterData);
+        
+        sortFilteredTechniquesByRequirement = function (techniquesFilter) {
             let technique = {};
 
             let techniquesByRequirements = new Dictionary();
@@ -938,7 +936,7 @@ var WuxDefinition = WuxDefinition || (function () {
         GetTitle: getTitle,
         GetDescription: getDescription,
         GetName: getName,
-        FilterAndSortTechniquesByRequirement: filterAndSortTechniquesByRequirement,
+        SortFilteredTechniquesByRequirement: sortFilteredTechniquesByRequirement,
         DisplayEntry: displayEntry,
         TooltipDescription: tooltipDescription,
         DefinitionContents: definitionContents,

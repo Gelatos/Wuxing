@@ -141,7 +141,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), `${style.name} Techniques`);
 
         let selectedElement = null;
-        let styleTechniques = WuxTechs.FilterAndSortTechniquesByRequirement(new DatabaseFilterData("style", style.name));
+        let styleTechniques = WuxTechs.Filter(new DatabaseFilterData("style", style.name));
+        styleTechniques = WuxTechs.SortFilteredTechniquesByRequirement(styleTechniques);
 
         for (let tier = 1; tier <= maxTier; tier++) {
 

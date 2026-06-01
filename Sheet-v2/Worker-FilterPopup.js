@@ -62,14 +62,16 @@ class FilterPopup {
         this.attributeHandler = attributeHandler;
         this.filterDefinitions = new TechniqueFilterDefinitions("TechFilterPopup");
     }
-    open() {
+
+    open(popupTitleDefinitionName, popupType) {
         let filterPopup = this;
         this.attributeHandler.addGetAttrCallback(function (attrHandler) {
             let filterPopupAttrHandler = new FilterPopupAttributeHandler(attrHandler, filterPopup.filterDefinitions);
-            filterPopupAttrHandler.show("Popup_FilterTechniquePopupName");
-            attrHandler.addUpdate(WuxDef.GetVariable("Popup_FilterPopupType"), "Forme");
+            filterPopupAttrHandler.show(popupTitleDefinitionName);
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_FilterPopupType"), popupType);
         });
     }
+
     close() {
         let filterPopup = this;
         this.attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -77,7 +79,21 @@ class FilterPopup {
             filterPopupAttrHandler.hide();
         });
     }
-    
+
+    clearFilter() {
+        let filterPopup = this;
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            let filterPopupAttrHandler = new FilterPopupAttributeHandler(attrHandler, filterPopup.filterDefinitions);
+            filterPopupAttrHandler.resetFilterVariables();
+        });
+    }
+}
+
+class TechniqueFilterPopup extends FilterPopup {
+    open() {
+        super.open("Popup_FilterTechniquePopupName", "Forme");
+    }
+
     applyFilter() {
         let loader = new LoadingScreenHandler();
         loader.showLoadingScreen(() => {
@@ -98,17 +114,35 @@ class FilterPopup {
                     loader.hideLoadingScreen();
                 });
                 attributeHandler2.run();
-            })
+            });
             this.attributeHandler.run();
         });
     }
-    
-    clearFilter() {
+}
+
+class StyleFilterPopup extends FilterPopup {
+    open() {
+        super.open("Popup_CustomStylesFilterName", "CustomStyle");
+    }
+
+    applyFilter() {
         let filterPopup = this;
+        this.attributeHandler.addMod(this.filterDefinitions.getAllVariables());
+
+        let capturedFilters = [];
+
         this.attributeHandler.addGetAttrCallback(function (attrHandler) {
             let filterPopupAttrHandler = new FilterPopupAttributeHandler(attrHandler, filterPopup.filterDefinitions);
-            filterPopupAttrHandler.resetFilterVariables();
+            let techniqueFilters = filterPopupAttrHandler.getTechniqueFilters();
+            capturedFilters = Array.isArray(techniqueFilters) ? techniqueFilters : [];
+            filterPopupAttrHandler.hide();
         });
+
+        this.attributeHandler.addFinishCallback(function () {
+            WuxWorkerInspectPopup.OpenCustomStyleFilterInspection(capturedFilters, WuxDef.GetTitle("Popup_CustomStylesFilterName"));
+        });
+
+        this.attributeHandler.run();
     }
 }
 
@@ -118,42 +152,44 @@ var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
     const openFormeTechnique = function () {
             Debug.Log("Open Technique Filter Popup");
             let attributeHandler = new WorkerAttributeHandler();
-            let filterPopup = new FilterPopup(attributeHandler);
-            filterPopup.open();
+            new TechniqueFilterPopup(attributeHandler).open();
             attributeHandler.run();
         },
         openCustomStyleFilter = function () {
             Debug.Log("Open Custom Style Filter Popup");
             let attributeHandler = new WorkerAttributeHandler();
-            let filterDefinitions = new TechniqueFilterDefinitions("TechFilterPopup");
-            attributeHandler.addGetAttrCallback(function (attrHandler) {
-                let filterPopupAttrHandler = new FilterPopupAttributeHandler(attrHandler, filterDefinitions);
-                filterPopupAttrHandler.show("Popup_CustomStylesFilterName");
-                attrHandler.addUpdate(WuxDef.GetVariable("Popup_FilterPopupType"), "CustomStyle");
-            });
+            new StyleFilterPopup(attributeHandler).open();
             attributeHandler.run();
         },
         close = function () {
             let attributeHandler = new WorkerAttributeHandler();
-            let filterPopup = new FilterPopup(attributeHandler);
-            filterPopup.close();
+            new FilterPopup(attributeHandler).close();
             attributeHandler.run();
         },
         applyFilter = function () {
-            Debug.Log("Applying Technique Filters");
+            Debug.Log("Applying Filters");
+            let popupTypeVar = WuxDef.GetVariable("Popup_FilterPopupType");
             let attributeHandler = new WorkerAttributeHandler();
-            let filterPopup = new FilterPopup(attributeHandler);
-            filterPopup.applyFilter();
+            attributeHandler.addMod(popupTypeVar);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let popupType = attrHandler.parseString(popupTypeVar);
+                let attributeHandler2 = new WorkerAttributeHandler();
+                if (popupType === "Forme") {
+                    new TechniqueFilterPopup(attributeHandler2).applyFilter();
+                } else if (popupType === "CustomStyle") {
+                    new StyleFilterPopup(attributeHandler2).applyFilter();
+                }
+            });
+
             attributeHandler.run();
-        
-        }, 
+        },
         removeFilter = function () {
             WuxWorkerActions.RefreshAllFormeActions();
         },
         clearFilter = function () {
             let attributeHandler = new WorkerAttributeHandler();
-            let filterPopup = new FilterPopup(attributeHandler);
-            filterPopup.clearFilter();
+            new FilterPopup(attributeHandler).clearFilter();
             attributeHandler.run();
         };
 
