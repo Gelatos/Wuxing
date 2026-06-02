@@ -672,8 +672,7 @@ class FormeTechniqueDatabase {
     }
     tryAddTechniqueToTechDictionary(technique, techniqueRank) {
         if (!this.techDictionary.has(technique.name)) {
-            let isActive = this.checkTechniqueIsEquipped(technique, technique.techSet)
-                && this.checkTechniqueIsActive(technique);
+            let isActive = this.checkTechniqueIsActive(technique);
             let newEntry = this.createTechDictionaryTechnique(technique, techniqueRank, isActive);
             this.techDictionary.add(technique.name, newEntry);
             return newEntry;

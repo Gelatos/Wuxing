@@ -679,6 +679,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 repeater.removeId(selectedId);
             });
             WuxWorkerSkills.UpdateKeySkills(attributeHandler);
+            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
             attributeHandler.run();
         }
 

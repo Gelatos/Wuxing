@@ -401,6 +401,7 @@ class TechniqueInspectionPopup extends InspectionPopup {
         this.attributeHandler.addRepeatingSection(styleRepeaterId);
         super.addItem();
         WuxWorkerSkills.UpdateKeySkills(this.attributeHandler);
+        WuxWorkerActions.UpdateAllActionsFromMenu(this.attributeHandler);
     }
 
     performAddItem(attrHandler, itemName) {
@@ -494,7 +495,7 @@ class ItemInspectionPopup extends InspectionPopup {
 
         if (displayData.traits.length > 0) {
             let databaseAttributeHandler = new DatabaseItemAttributeHandler(attrHandler);
-            databaseAttributeHandler.addDefinitions(displayData.traits, repeater.getFieldName(newRowId, getGearVariable("ItemTrait")), 3);
+            databaseAttributeHandler.addDefinitions(displayData.traits, repeater.getFieldName(newRowId, this.getGearVariable("ItemTrait")), 3);
         }
         if (displayData.description != "") {
             attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemDescription")), displayData.description);

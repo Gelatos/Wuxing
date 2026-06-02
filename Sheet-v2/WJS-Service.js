@@ -714,7 +714,7 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 			if (isNaN(rank)) {
 				rank = 1;
 			}
-			if (technique.style == "Basic") {
+			if (technique.techSet == "Basic") {
 				worker.basicTechniqueData[technique.name] = {technique: technique, rank: rank};
 				return;
 			}
@@ -771,7 +771,7 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 	}
 
 	getStyles() {
-		let techniques = {};
+		let techniques = [];
 		for (let key in this.styledTechniqueData) {
 			let technique = this.styledTechniqueData[key].technique;
 			if (technique.techSet == "Style") {
