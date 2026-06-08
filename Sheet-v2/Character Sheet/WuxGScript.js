@@ -8838,6 +8838,10 @@ class TechniqueAssessment {
 
     getStructureAssessmentData(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
+        if (effect.defense == "Enhance") {
+            this.addPointsRubric(0, `${output.value} (max ${this.getEnhancementPoints()})`);
+            return;
+        }
         switch (effect.subType) {
             case "Count":
                 this.structureCount += output.value;

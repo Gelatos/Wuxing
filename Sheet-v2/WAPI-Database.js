@@ -3376,6 +3376,10 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
         this.effectDescription += `Increase ${WuxDef.GetTitle(effect.effect)} ranks by ${this.formatCalcBonus(effect)}`;
     }
 
+    formatStructureEffect(effect, technique) {
+        this.effectDescription += `Increase structure count by ${this.formatCalcBonus(effect)}`;
+    }
+
     formatCalcBonus(effect) {
         let output = this.formatEffectDice(effect);
         if (effect.formula.workers.length == 0) {
