@@ -468,8 +468,10 @@ class TechniqueAssessment {
                 this.getBoostAssessment(effect, attributeHandler);
                 break;
             case "Damage":
-            case "Break":
                 this.getDamageAssessment(effect, attributeHandler);
+                break;
+            case "Break":
+                this.getBreakAssessment(effect, attributeHandler);
                 break;
             case "HP":
                 this.getHPAssessment(effect, attributeHandler);
@@ -561,7 +563,6 @@ class TechniqueAssessment {
 
     getDamageAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
-        Debug.Log(`For Damage, got ${output.value}`);
         let subTypeParts = effect.subType.split(":");
         let subType = subTypeParts[0];
 
@@ -618,13 +619,6 @@ class TechniqueAssessment {
                 this.addImpactTrait(effect.effect);
             }
         }
-        else if (this.technique.forms.includes("Break")) {
-            output.value = Math.floor(output.value * 0.5);
-            message = `(Break)`;
-            this.addPointsRubric(output.value, message);
-            this.addDefensePointsRubric(effect, output.value, message);
-            this.addTargetedPointsRubric(effect, output.value);
-        }
         else {
             let points = output.value;
             message = `(HP)`;
@@ -668,6 +662,20 @@ class TechniqueAssessment {
             effectPts = Math.floor(output.value * 0.33);
             this.addPointsRubric(effectPts, `(AP)`);
         }
+    }
+
+    getBreakAssessment(effect, attributeHandler) {
+        let output = this.getDiceFormula(effect, attributeHandler);
+        let message;
+
+        output.value = Math.floor(output.value * 0.5);
+        message = `(Break)`;
+        this.addPointsRubric(output.value, message);
+        this.addDefensePointsRubric(effect, output.value, message);
+        this.addTargetedPointsRubric(effect, output.value);
+
+        this.isCombat = true;
+        this.addImpactTrait("Trait_Break");
     }
 
     getHPAssessment(effect, attributeHandler) {

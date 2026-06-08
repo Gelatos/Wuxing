@@ -2737,6 +2737,13 @@ class BaseTechniqueEffectDisplayData {
                 }
                 this.formatDamageEffect(effect, technique);
                 break;
+            case "Break":
+                if (this.effectType != "Damage") {
+                    this.effectType = effect.type;
+                    this.addDefintionToEffectDescription(WuxDef.Get(`Trait_Damage${this.evasionDefense}`));
+                }
+                this.formatBreakEffect(effect, technique);
+                break;
             case "HP":
                 this.effectType = effect.type;
                 this.formatHpEffect(effect);
@@ -2916,6 +2923,22 @@ class BaseTechniqueEffectDisplayData {
                 this.effectDescription += (this.effectDescription == "" ? `${this.formatTargetTake(effect)}` : " and");
                 this.effectDescription += ` ${this.formatCalcBonus(effect)} ${traits}${WuxDef.GetTitle(effect.effect)} damage`;
         }
+    }
+
+    formatBreakEffect(effect, technique) {
+
+        let traits = "";
+        this.addDefintionToEffectDescription(WuxDef.Get("Trait_Break"));
+        if (technique.impacts.indexOf("AP") >= 0) {
+            traits += "[AP] ";
+            if (!this.includedAp) {
+                this.includedAp = true;
+                this.addDefintionToEffectDescription(WuxDef.Get("Trait_AP"));
+            }
+        }
+        this.effectDescription += (this.effectDescription == "" ? `(Objects only) ${this.formatTargetTake(effect)}` : " and");
+        this.effectDescription += ` ${this.formatCalcBonus(effect)} ${traits} damage`;
+        
     }
 
     formatHpEffect(effect) {
