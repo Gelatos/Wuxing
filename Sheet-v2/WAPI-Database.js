@@ -913,7 +913,7 @@ class TechniqueData extends WuxDatabaseData {
             let tech = this;
             let output = new TechniqueEffectDatabase();
             this.effects.iterate(function (effect) {
-                if (effect.subType == "Enhancing" || effect.type == "Heal" || (effect.type == "Structure" && effect.subType == "Count")) {
+                if (effect.subType == "Enhancing" || (effect.type == "HP" && effect.subType == "Heal") || (effect.type == "Structure" && effect.subType == "Count")) {
                     let enhancement = tech.enhancementEffects[effect.type];
                     if (enhancement != undefined) {
                         let enhanceDVal = isNaN(parseInt(enhancement.dVal)) ? 0 : parseInt(enhancement.dVal);
@@ -1815,6 +1815,16 @@ class UsableItemData extends ItemData {
         let definition = new ItemDefinitionData(super.createDefinition(baseDefinition));
         definition.techInfo = this.technique;
         return definition;
+    }
+
+    getCommonTechniques() {
+        if (!this.commonTechniques) return [];
+        return this.commonTechniques
+            .split(";")
+            .map(name => name.trim())
+            .filter(name => name !== "")
+            .map(name => WuxTechs.Get(name))
+            .filter(technique => technique != undefined);
     }
 }
 

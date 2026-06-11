@@ -913,7 +913,7 @@ class TechniqueData extends WuxDatabaseData {
             let tech = this;
             let output = new TechniqueEffectDatabase();
             this.effects.iterate(function (effect) {
-                if (effect.subType == "Enhancing") {
+                if (effect.subType == "Enhancing" || effect.type == "Heal" || (effect.type == "Structure" && effect.subType == "Count")) {
                     let enhancement = tech.enhancementEffects[effect.type];
                     if (enhancement != undefined) {
                         let enhanceDVal = isNaN(parseInt(enhancement.dVal)) ? 0 : parseInt(enhancement.dVal);
@@ -3382,6 +3382,9 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
     formatHpEffect(effect, technique) {
         if (effect.subType == "Heal") {
             this.effectDescription += `Increase HP healing by ${this.formatCalcBonus(effect)}`;
+        }
+        if (effect.subType == "Surge") {
+            this.effectDescription += `Increase HP healing on Surge by ${this.formatCalcBonus(effect)}`;
         }
     }
     
@@ -8631,6 +8634,11 @@ class TechniqueAssessment {
                 break;
             case "Surge":
                 message = `(Surge HP)`;
+
+                if (effect.defense == "Enhance") {
+                    this.addPointsRubric(0, `${output.value} (max ${this.getEnhancementPoints()})`);
+                    return;
+                }
 
                 if (effect.defense != "WillBreak") {
                     this.addPointsRubric(output.value, message);
