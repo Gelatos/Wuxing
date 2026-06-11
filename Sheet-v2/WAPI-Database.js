@@ -913,7 +913,7 @@ class TechniqueData extends WuxDatabaseData {
             let tech = this;
             let output = new TechniqueEffectDatabase();
             this.effects.iterate(function (effect) {
-                if (effect.subType == "Enhancing") {
+                if (effect.subType == "Enhancing" || effect.type == "Heal" || (effect.type == "Structure" && effect.subType == "Count")) {
                     let enhancement = tech.enhancementEffects[effect.type];
                     if (enhancement != undefined) {
                         let enhanceDVal = isNaN(parseInt(enhancement.dVal)) ? 0 : parseInt(enhancement.dVal);
@@ -3128,15 +3128,22 @@ class BaseTechniqueEffectDisplayData {
     }
 
     formatStructureEffect(effect) {
+        let count = this.formatCalcBonus(effect);
         switch (effect.subType) {
             case "Count":
-                this.effectDescription += `You create ${this.formatCalcBonus(effect)} ${effect.effect} at the targeted spaces and must remain within range`;
+                this.effectDescription += `You create ${count} ${effect.effect} at the targeted spaces.`;
+                if (count > 1) {
+                    this.effectDescription += ` Each object must be within range of this technique.`;
+                }
                 return;
-            case "Height":
-                this.effectDescription += `Each ${effect.effect} is ${this.formatCalcBonus(effect)} spaces high`;
+            case "Dimensions":
+                this.effectDescription += `Each ${effect.effect} is ${count} spaces high`;
                 return;
             case "HP":
-                this.effectDescription += `Each ${effect.effect} has ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle("HP")}`;
+                this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("HP")}`;
+                return;
+            case "Armor":
+                this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("Cmb_Armor")}`;
                 return;
             default:
                 this.effectDescription += effect.effect;
@@ -3370,6 +3377,15 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
 
     formatDamageEffect(effect, technique) {
         this.effectDescription += `Increase ${WuxDef.GetTitle(effect.effect)} damage by ${this.formatCalcBonus(effect)}`;
+    }
+
+    formatHpEffect(effect, technique) {
+        if (effect.subType == "Heal") {
+            this.effectDescription += `Increase HP healing by ${this.formatCalcBonus(effect)}`;
+        }
+        if (effect.subType == "Surge") {
+            this.effectDescription += `Increase HP healing on Surge by ${this.formatCalcBonus(effect)}`;
+        }
     }
     
     formatStatusEffect(effect, state) {

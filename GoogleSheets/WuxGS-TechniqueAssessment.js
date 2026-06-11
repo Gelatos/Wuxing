@@ -45,7 +45,7 @@ class TechniqueAssessment {
 
         this.structureCount = 0;
         this.structureHP = 0;
-        this.structureHeight = 0;
+        this.structureArmor = 0;
 
         this.favor = 0;
         this.lowFavor = 0;
@@ -689,6 +689,10 @@ class TechniqueAssessment {
                 output.value = Math.floor(output.value * 2.5);
                 message = `(Heal HP)`;
 
+                if (effect.defense == "Enhance") {
+                    this.addPointsRubric(0, `${output.value} (max ${this.getEnhancementPoints()})`);
+                    return;
+                }
                 if (effect.defense != "WillBreak") {
                     this.addPointsRubric(output.value, message);
                 }
@@ -698,6 +702,11 @@ class TechniqueAssessment {
                 break;
             case "Surge":
                 message = `(Surge HP)`;
+
+                if (effect.defense == "Enhance") {
+                    this.addPointsRubric(0, `${output.value} (max ${this.getEnhancementPoints()})`);
+                    return;
+                }
 
                 if (effect.defense != "WillBreak") {
                     this.addPointsRubric(output.value, message);
@@ -925,11 +934,12 @@ class TechniqueAssessment {
     }
 
     getStructureAssessmentData(effect, attributeHandler) {
-        let output = this.getDiceFormula(effect, attributeHandler);
         if (effect.defense == "Enhance") {
-            this.addPointsRubric(0, `${output.value} (max ${this.getEnhancementPoints()})`);
+            let pointMod = this.getDiceFormula(effect, attributeHandler).value * this.getStructureValueMod();
+            this.addPointsRubric(0, `${pointMod} (max ${this.getEnhancementPoints()})`);
             return;
         }
+        let output = this.getDiceFormula(effect, attributeHandler);
         switch (effect.subType) {
             case "Count":
                 this.structureCount += output.value;
@@ -937,24 +947,26 @@ class TechniqueAssessment {
             case "HP":
                 this.structureHP += output.value;
                 break;
-            case "Height":
-                this.structureHeight += output.value;
+            case "Armor":
+                this.structureArmor += output.value;
+                break;
+            case "Dimensions":
                 break;
         }
     }
 
     getStructureAssessment() {
         if (this.structureCount > 0) {
-            let pointMod = Math.ceil(this.structureHP / 4);
-            if (this.structureHeight > 0) {
-                pointMod += Math.ceil(pointMod * (this.structureHeight - 1) * 0.6);
-            }
-            let value = this.structureCount * pointMod;
+            let value = this.structureCount * this.getStructureValueMod();
             let message = `(Structure)`;
             this.addPointsRubric(value, message);
             this.addImpactTrait("TechFilterType_Utility");
             this.addImpactTrait("Trait_Structure");
         }
+    }
+    
+    getStructureValueMod() {
+        return Math.ceil(this.structureHP / 2) + Math.ceil(this.structureArmor);
     }
 
     getMoveAssessment(effect, attributeHandler) {

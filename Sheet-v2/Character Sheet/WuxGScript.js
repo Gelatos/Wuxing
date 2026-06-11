@@ -3128,15 +3128,22 @@ class BaseTechniqueEffectDisplayData {
     }
 
     formatStructureEffect(effect) {
+        let count = this.formatCalcBonus(effect);
         switch (effect.subType) {
             case "Count":
-                this.effectDescription += `You create ${this.formatCalcBonus(effect)} ${effect.effect} at the targeted spaces and must remain within range`;
+                this.effectDescription += `You create ${count} ${effect.effect} at the targeted spaces.`;
+                if (count > 1) {
+                    this.effectDescription += ` Each object must be within range of this technique.`;
+                }
                 return;
-            case "Height":
-                this.effectDescription += `Each ${effect.effect} is ${this.formatCalcBonus(effect)} spaces high`;
+            case "Dimensions":
+                this.effectDescription += `Each ${effect.effect} is ${count} spaces high`;
                 return;
             case "HP":
-                this.effectDescription += `Each ${effect.effect} has ${this.formatCalcBonus(effect)} ${WuxDef.GetTitle("HP")}`;
+                this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("HP")}`;
+                return;
+            case "Armor":
+                this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("Cmb_Armor")}`;
                 return;
             default:
                 this.effectDescription += effect.effect;
@@ -3371,9 +3378,19 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
     formatDamageEffect(effect, technique) {
         this.effectDescription += `Increase ${WuxDef.GetTitle(effect.effect)} damage by ${this.formatCalcBonus(effect)}`;
     }
+
+    formatHpEffect(effect, technique) {
+        if (effect.subType == "Heal") {
+            this.effectDescription += `Increase HP healing by ${this.formatCalcBonus(effect)}`;
+        }
+    }
     
     formatStatusEffect(effect, state) {
         this.effectDescription += `Increase ${WuxDef.GetTitle(effect.effect)} ranks by ${this.formatCalcBonus(effect)}`;
+    }
+
+    formatStructureEffect(effect, technique) {
+        this.effectDescription += `Increase structure count by ${this.formatCalcBonus(effect)}`;
     }
 
     formatCalcBonus(effect) {
@@ -7957,7 +7974,7 @@ class TechniqueAssessment {
 
         this.structureCount = 0;
         this.structureHP = 0;
-        this.structureHeight = 0;
+        this.structureArmor = 0;
 
         this.favor = 0;
         this.lowFavor = 0;
@@ -8601,6 +8618,10 @@ class TechniqueAssessment {
                 output.value = Math.floor(output.value * 2.5);
                 message = `(Heal HP)`;
 
+                if (effect.defense == "Enhance") {
+                    this.addPointsRubric(0, `${output.value} (max ${this.getEnhancementPoints()})`);
+                    return;
+                }
                 if (effect.defense != "WillBreak") {
                     this.addPointsRubric(output.value, message);
                 }
@@ -8837,11 +8858,12 @@ class TechniqueAssessment {
     }
 
     getStructureAssessmentData(effect, attributeHandler) {
-        let output = this.getDiceFormula(effect, attributeHandler);
         if (effect.defense == "Enhance") {
-            this.addPointsRubric(0, `${output.value} (max ${this.getEnhancementPoints()})`);
+            let pointMod = this.getDiceFormula(effect, attributeHandler).value * this.getStructureValueMod();
+            this.addPointsRubric(0, `${pointMod} (max ${this.getEnhancementPoints()})`);
             return;
         }
+        let output = this.getDiceFormula(effect, attributeHandler);
         switch (effect.subType) {
             case "Count":
                 this.structureCount += output.value;
@@ -8849,24 +8871,26 @@ class TechniqueAssessment {
             case "HP":
                 this.structureHP += output.value;
                 break;
-            case "Height":
-                this.structureHeight += output.value;
+            case "Armor":
+                this.structureArmor += output.value;
+                break;
+            case "Dimensions":
                 break;
         }
     }
 
     getStructureAssessment() {
         if (this.structureCount > 0) {
-            let pointMod = Math.ceil(this.structureHP / 4);
-            if (this.structureHeight > 0) {
-                pointMod += Math.ceil(pointMod * (this.structureHeight - 1) * 0.6);
-            }
-            let value = this.structureCount * pointMod;
+            let value = this.structureCount * this.getStructureValueMod();
             let message = `(Structure)`;
             this.addPointsRubric(value, message);
             this.addImpactTrait("TechFilterType_Utility");
             this.addImpactTrait("Trait_Structure");
         }
+    }
+    
+    getStructureValueMod() {
+        return Math.ceil(this.structureHP / 2) + Math.ceil(this.structureArmor);
     }
 
     getMoveAssessment(effect, attributeHandler) {
