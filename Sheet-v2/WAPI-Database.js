@@ -913,7 +913,7 @@ class TechniqueData extends WuxDatabaseData {
             let tech = this;
             let output = new TechniqueEffectDatabase();
             this.effects.iterate(function (effect) {
-                if (effect.subType == "Enhancing" || (effect.type == "HP" && effect.subType == "Heal") || (effect.type == "Structure" && effect.subType == "Count")) {
+                if (effect.enhancing == "1") {
                     let enhancement = tech.enhancementEffects[effect.type];
                     if (enhancement != undefined) {
                         let enhanceDVal = isNaN(parseInt(enhancement.dVal)) ? 0 : parseInt(enhancement.dVal);
@@ -1030,7 +1030,7 @@ class TechniqueEffect extends dbObj {
         this.target = json.target;
         this.type = json.type;
         this.subType = json.subType;
-        this.duration = json.duration;
+        this.enhancing = json.enhancing;
         this.dVal = json.dVal;
         this.dType = json.dType;
         this.formula = new FormulaData(json.formula);
@@ -1049,7 +1049,7 @@ class TechniqueEffect extends dbObj {
         i++;
         this.subType = "" + dataArray[i];
         i++;
-        this.duration = "" + dataArray[i];
+        this.enhancing = "" + dataArray[i];
         i++;
         this.dVal = "" + dataArray[i];
         i++;
@@ -1101,7 +1101,7 @@ class TechniqueEffect extends dbObj {
         this.target = "";
         this.type = "";
         this.subType = "";
-        this.duration = "";
+        this.enhancing = "";
         this.dVal = "";
         this.dType = "";
         this.formula = new FormulaData();
@@ -2472,7 +2472,7 @@ class TechniqueDisplayData {
                     checkedEffects.push(effect);
                     break;
             }
-            if (effect.subType == "Enhancing") {
+            if (effect.enhancing == "1") {
                 enhancingEffects.push(effect);
             }
         });
@@ -2872,23 +2872,7 @@ class BaseTechniqueEffectDisplayData {
         return this.effectDescription;
     }
 
-    formatTemporaryEffect(effect) {
-        switch (effect.duration) {
-            case "Trigger":
-                return "Against the triggering effect, ";
-            case "Turn":
-                return "Until the end of the turn, ";
-            case "Round":
-                return "Until the end of the round, ";
-            case "Focus":
-                return "Until you lose focus, ";
-            case "Conflict":
-                return "Until the end of the conflict, ";
-            case "Long Rest":
-                return "Until the end of the next Long Rest, ";
-        }
-        return "";
-    }
+
 
     formatDamageEffect(effect, technique) {
         let subTypeParts = effect.subType.split(":");
@@ -3404,6 +3388,38 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
 
     formatStructureEffect(effect, technique) {
         this.effectDescription += `Increase structure count by ${this.formatCalcBonus(effect)}`;
+    }
+
+    formatMoveEffect(effect) {
+        let bonus = this.formatCalcBonus(effect);
+        switch (effect.subType) {
+            case "FreeMove":
+                this.effectDescription += `Increase Free Move distance by ${bonus} spaces`;
+                return;
+            case "Pushed":
+                this.effectDescription += `Increase Pushed distance by ${bonus} spaces`;
+                return;
+            case "Pulled":
+                this.effectDescription += `Increase Pulled distance by ${bonus} spaces`;
+                return;
+            case "ForceMove":
+                this.effectDescription += `Increase Force Move distance by ${bonus} spaces`;
+                return;
+            case "Sneak":
+                this.effectDescription += `Increase Sneak movement by ${bonus} spaces`;
+                return;
+            case "Teleport":
+                this.effectDescription += `Increase teleport distance by ${bonus} spaces`;
+                return;
+            case "Jump":
+                this.effectDescription += `Increase jump distance by ${bonus} spaces`;
+                return;
+            case "Charge":
+                this.effectDescription += `Increase Move Charge by ${bonus}`;
+                return;
+            default:
+                this.effectDescription += `Increase movement by ${bonus} spaces`;
+        }
     }
 
     formatCalcBonus(effect) {
