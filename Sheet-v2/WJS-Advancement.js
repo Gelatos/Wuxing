@@ -37,9 +37,10 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 		},
 		setAffinityValue = function (eventinfo) {
 			Debug.Log(`Setting ${eventinfo.sourceAttribute}`);
-			
+
 			let primaryAffinityVariable = WuxDef.GetVariable("Affinity");
 			let affinityAspectVariable = WuxDef.GetVariable("AffinityAspect");
+			let advancedAffinityVariable = WuxDef.GetVariable("AdvancedAffinity");
 			let isPrimary = (eventinfo.sourceAttribute == primaryAffinityVariable || eventinfo.sourceAttribute == affinityAspectVariable);
 			let attributeHandler = new WorkerAttributeHandler();
 			let affinityVariable = eventinfo.sourceAttribute;
@@ -53,9 +54,20 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 				if (isPrimary) {
 					attrHandler.addUpdate(primaryAffinityVariable, eventinfo.newValue);
 					combatDetailsHandler.onUpdateAffinity(attrHandler, eventinfo.newValue);
+				} else {
+					// AdvancedAffinity stores a semicolon-delimited array. When Secondary
+					// Affinity writes a new single value, preserve any non-AffinityType
+					// entries (e.g. advanced branch names) from the previous array and
+					// replace only the AffinityType slot.
+					let allAffinityTitles = WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]).map(d => d.getTitle());
+					let previousEntries = (eventinfo.previousValue || "").split(";").map(s => s.trim()).filter(s => s !== "" && !allAffinityTitles.includes(s));
+					if (eventinfo.newValue && eventinfo.newValue !== "") {
+						previousEntries.push(eventinfo.newValue);
+					}
+					attrHandler.addUpdate(advancedAffinityVariable, previousEntries.join(";"));
 				}
 				attrHandler.addUpdate(variable, desc);
-				
+
 			});
 			if (eventinfo.sourceAttribute == primaryAffinityVariable) {
 				WuxWorkerActions.UpdateVisibilityOfFormeActions(attributeHandler);

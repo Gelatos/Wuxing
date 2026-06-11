@@ -416,9 +416,13 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             attrHandler.addUpdate(actionFieldName, "0");
             let maxTier = attrHandler.parseInt(tierFieldName);
             let cr = attrHandler.parseInt(crFieldName);
-            let affinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
-                attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
-                attrHandler.parseString(WuxDef.GetVariable("Ancestry"))];
+            let advancedAffinityRaw = attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity"));
+            let advancedAffinities = advancedAffinityRaw.split(";").map(s => s.trim()).filter(s => s !== "");
+            let affinities = [
+                attrHandler.parseString(WuxDef.GetVariable("Affinity")),
+                ...advancedAffinities,
+                attrHandler.parseString(WuxDef.GetVariable("Ancestry"))
+            ];
 
             let style = WuxStyles.Get(attrHandler.parseString(nameFieldName));
             return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater,
@@ -557,11 +561,15 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
 
                 attrHandler.addUpdate(eventinfo.sourceAttribute, "0");
                 attrHandler.addUpdate(WuxDef.GetVariable(WuxDef.GetName(style, WuxDef.Get("Style")), WuxDef._expand), "0");
-                let affinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
-                    attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
-                    attrHandler.parseString(WuxDef.GetVariable("Ancestry"))];
+                let advancedAffinityRaw = attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity"));
+                let advancedAffinities = advancedAffinityRaw.split(";").map(s => s.trim()).filter(s => s !== "");
+                let affinities = [
+                    attrHandler.parseString(WuxDef.GetVariable("Affinity")),
+                    ...advancedAffinities,
+                    attrHandler.parseString(WuxDef.GetVariable("Ancestry"))
+                ];
 
-                return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater, 
+                return populateStyleInspectionTechniques(attrHandler, itemPopupRepeater,
                     style, technique.name, 9, affinities, true, false);
             });
             attributeHandler.run();

@@ -971,6 +971,35 @@ class TechniqueAssessment {
 
     getMoveAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
+
+        if (effect.defense == "Enhance") {
+            switch (effect.subType) {
+                case "Teleport":
+                    output.value = Math.floor(output.value * 2);
+                    break;
+                case "Fly":
+                case "FreeMove":
+                    output.value = Math.floor(output.value * 1.5);
+                    break;
+                case "Invis":
+                case "Sneak":
+                    output.value = Math.floor(output.value * 2);
+                    break;
+                case "ForceMove":
+                case "Pushed":
+                case "Pulled":
+                    output.value = Math.floor(output.value * (1 + (output.value * 0.5)));
+                    break;
+                case "Jump": {
+                    let jumpHeight = parseInt(effect.effect);
+                    output.value += (isNaN(jumpHeight) ? 0 : jumpHeight) * 2;
+                    break;
+                }
+            }
+            this.addPointsRubric(0, `${output.value} (max ${this.getEnhancementPoints()})`);
+            return;
+        }
+
         let impactTrait = `Trait_Move`;
         switch (effect.subType) {
             case "Teleport":
@@ -997,10 +1026,11 @@ class TechniqueAssessment {
                 output.value = 2;
                 impactTrait = `Trait_ForceMove`;
                 break;
-            case "Jump":
+            case "Jump": {
                 let height = parseInt(effect.effect);
                 output.value += (isNaN(height) ? 0 : height) * 2;
                 break;
+            }
         }
         let message = `(${effect.subType == "" ? "Move" : effect.subType})`;
 

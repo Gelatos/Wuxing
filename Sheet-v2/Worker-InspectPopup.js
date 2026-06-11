@@ -725,9 +725,11 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         attributeHandler.addGetAttrCallback(function (attrHandler) {
             let showFromNonElement = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement"));
             let showLevelRestricted = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowLevelRestricted"));
+            let advancedAffinityRaw = attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity"));
+            let advancedAffinities = advancedAffinityRaw.split(";").map(s => s.trim()).filter(s => s !== "");
             let userAffinities = [
                 attrHandler.parseString(WuxDef.GetVariable("Affinity")),
-                attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
+                ...advancedAffinities,
                 attrHandler.parseString(WuxDef.GetVariable("Ancestry"))
             ];
             let userCr = attrHandler.parseInt(WuxDef.GetVariable("CR", WuxDef._max));

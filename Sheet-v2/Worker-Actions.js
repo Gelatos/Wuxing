@@ -610,9 +610,13 @@ class FormeTechniqueDatabase {
             this.userCr = cr;
         }
         
-        this.userAffinities = [attrHandler.parseString(WuxDef.GetVariable("Affinity")),
-            attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")),
-            attrHandler.parseString(WuxDef.GetVariable("Ancestry"))];
+        let advancedAffinityRaw = attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity"));
+        let advancedAffinities = advancedAffinityRaw.split(";").map(s => s.trim()).filter(s => s !== "");
+        this.userAffinities = [
+            attrHandler.parseString(WuxDef.GetVariable("Affinity")),
+            ...advancedAffinities,
+            attrHandler.parseString(WuxDef.GetVariable("Ancestry"))
+        ];
         
         this.equippedSlots = [];
         this.equippedSlots.push(attrHandler.parseString(this.jobSlotVariable));

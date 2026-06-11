@@ -913,7 +913,7 @@ class TechniqueData extends WuxDatabaseData {
             let tech = this;
             let output = new TechniqueEffectDatabase();
             this.effects.iterate(function (effect) {
-                if (effect.subType == "Enhancing" || effect.type == "Heal" || (effect.type == "Structure" && effect.subType == "Count")) {
+                if (effect.enhancing == "1") {
                     let enhancement = tech.enhancementEffects[effect.type];
                     if (enhancement != undefined) {
                         let enhanceDVal = isNaN(parseInt(enhancement.dVal)) ? 0 : parseInt(enhancement.dVal);
@@ -1030,7 +1030,7 @@ class TechniqueEffect extends dbObj {
         this.target = json.target;
         this.type = json.type;
         this.subType = json.subType;
-        this.duration = json.duration;
+        this.enhancing = json.enhancing;
         this.dVal = json.dVal;
         this.dType = json.dType;
         this.formula = new FormulaData(json.formula);
@@ -1049,7 +1049,7 @@ class TechniqueEffect extends dbObj {
         i++;
         this.subType = "" + dataArray[i];
         i++;
-        this.duration = "" + dataArray[i];
+        this.enhancing = "" + dataArray[i];
         i++;
         this.dVal = "" + dataArray[i];
         i++;
@@ -1101,7 +1101,7 @@ class TechniqueEffect extends dbObj {
         this.target = "";
         this.type = "";
         this.subType = "";
-        this.duration = "";
+        this.enhancing = "";
         this.dVal = "";
         this.dType = "";
         this.formula = new FormulaData();
@@ -1816,6 +1816,16 @@ class UsableItemData extends ItemData {
         definition.techInfo = this.technique;
         return definition;
     }
+
+    getCommonTechniques() {
+        if (!this.commonTechniques) return [];
+        return this.commonTechniques
+            .split(";")
+            .map(name => name.trim())
+            .filter(name => name !== "")
+            .map(name => WuxTechs.Get(name))
+            .filter(technique => technique != undefined);
+    }
 }
 
 class AttributeGroupData extends dbObj {
@@ -2462,7 +2472,7 @@ class TechniqueDisplayData {
                     checkedEffects.push(effect);
                     break;
             }
-            if (effect.subType == "Enhancing") {
+            if (effect.enhancing == "1") {
                 enhancingEffects.push(effect);
             }
         });
@@ -2862,23 +2872,7 @@ class BaseTechniqueEffectDisplayData {
         return this.effectDescription;
     }
 
-    formatTemporaryEffect(effect) {
-        switch (effect.duration) {
-            case "Trigger":
-                return "Against the triggering effect, ";
-            case "Turn":
-                return "Until the end of the turn, ";
-            case "Round":
-                return "Until the end of the round, ";
-            case "Focus":
-                return "Until you lose focus, ";
-            case "Conflict":
-                return "Until the end of the conflict, ";
-            case "Long Rest":
-                return "Until the end of the next Long Rest, ";
-        }
-        return "";
-    }
+
 
     formatDamageEffect(effect, technique) {
         let subTypeParts = effect.subType.split(":");
@@ -3394,6 +3388,38 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
 
     formatStructureEffect(effect, technique) {
         this.effectDescription += `Increase structure count by ${this.formatCalcBonus(effect)}`;
+    }
+
+    formatMoveEffect(effect) {
+        let bonus = this.formatCalcBonus(effect);
+        switch (effect.subType) {
+            case "FreeMove":
+                this.effectDescription += `Increase Free Move distance by ${bonus} spaces`;
+                return;
+            case "Pushed":
+                this.effectDescription += `Increase Pushed distance by ${bonus} spaces`;
+                return;
+            case "Pulled":
+                this.effectDescription += `Increase Pulled distance by ${bonus} spaces`;
+                return;
+            case "ForceMove":
+                this.effectDescription += `Increase Force Move distance by ${bonus} spaces`;
+                return;
+            case "Sneak":
+                this.effectDescription += `Increase Sneak movement by ${bonus} spaces`;
+                return;
+            case "Teleport":
+                this.effectDescription += `Increase teleport distance by ${bonus} spaces`;
+                return;
+            case "Jump":
+                this.effectDescription += `Increase jump distance by ${bonus} spaces`;
+                return;
+            case "Charge":
+                this.effectDescription += `Increase Move Charge by ${bonus}`;
+                return;
+            default:
+                this.effectDescription += `Increase movement by ${bonus} spaces`;
+        }
     }
 
     formatCalcBonus(effect) {
@@ -8903,6 +8929,35 @@ class TechniqueAssessment {
 
     getMoveAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
+
+        if (effect.defense == "Enhance") {
+            switch (effect.subType) {
+                case "Teleport":
+                    output.value = Math.floor(output.value * 2);
+                    break;
+                case "Fly":
+                case "FreeMove":
+                    output.value = Math.floor(output.value * 1.5);
+                    break;
+                case "Invis":
+                case "Sneak":
+                    output.value = Math.floor(output.value * 2);
+                    break;
+                case "ForceMove":
+                case "Pushed":
+                case "Pulled":
+                    output.value = Math.floor(output.value * (1 + (output.value * 0.5)));
+                    break;
+                case "Jump": {
+                    let jumpHeight = parseInt(effect.effect);
+                    output.value += (isNaN(jumpHeight) ? 0 : jumpHeight) * 2;
+                    break;
+                }
+            }
+            this.addPointsRubric(0, `${output.value} (max ${this.getEnhancementPoints()})`);
+            return;
+        }
+
         let impactTrait = `Trait_Move`;
         switch (effect.subType) {
             case "Teleport":
@@ -8929,10 +8984,11 @@ class TechniqueAssessment {
                 output.value = 2;
                 impactTrait = `Trait_ForceMove`;
                 break;
-            case "Jump":
+            case "Jump": {
                 let height = parseInt(effect.effect);
                 output.value += (isNaN(height) ? 0 : height) * 2;
                 break;
+            }
         }
         let message = `(${effect.subType == "" ? "Move" : effect.subType})`;
 
