@@ -296,6 +296,9 @@ class WuxDataDatabase extends Database {
                         }
                     }
                 }
+                else {
+                    this.addSortingGroup("group", value.group, value);
+                }
             }
             else if (value != undefined && value.hasOwnProperty(property)) {
                 this.addSortingGroup(property, value[property], value);
@@ -346,6 +349,22 @@ class ExtendedTechniqueDatabase extends Database {
                             this.addSortingGroup("group", groups[i].trim(), value);
                         }
                     }
+                }
+                else {
+                    this.addSortingGroup("group", value.group, value);
+                }
+            }
+            else if (property == "affinity") {
+                if (value.affinity.indexOf(";") >= 0) {
+                    let groups = value.affinity.split(";");
+                    for (let i = 0; i < groups.length; i++) {
+                        if (groups[i].trim() != "") {
+                            this.addSortingGroup("affinity", groups[i].trim(), value);
+                        }
+                    }
+                }
+                else {
+                    this.addSortingGroup("affinity", value.affinity, value);
                 }
             }
             else if (value != undefined && value.hasOwnProperty(property)) {
@@ -802,7 +821,7 @@ class TechniqueData extends WuxDatabaseData {
     
     updateVersion(newVersion) {
         let version = this.getVersionParts(newVersion);
-        let baseVersionValue = 1;
+        let baseVersionValue = 2;
         
         if (parseInt(version[0]) != baseVersionValue) {
             version[0] = baseVersionValue;
@@ -3391,6 +3410,10 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
 
     formatStructureEffect(effect, technique) {
         this.effectDescription += `Increase structure count by ${this.formatCalcBonus(effect)}`;
+    }
+
+    formatRequestEffect(effect) {
+        this.effectDescription += `Increase request check bonus by ${this.formatCalcBonus(effect)}`;
     }
 
     formatMoveEffect(effect) {
@@ -8862,11 +8885,17 @@ class TechniqueAssessment {
 
     getRequestAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
-        output.value = Math.ceil(output.value * (1.5 - (this.patience * (this.technique.action != "Full" ? 0.5 : 0.25))));
+        output.value = Math.ceil(output.value * (2 - (this.patience * (this.technique.action != "Full" ? 0.5 : 0.25))));
 
         if (effect.subType == "Bargain") {
             output.value += 3;
         }
+
+        if (effect.defense == "Enhance") {
+            this.addPointsRubric(0, `${output.value} (max ${this.getEnhancementPoints()})`);
+            return;
+        }
+
         this.request += output.value;
         this.lowRequest += output.lowValue;
         this.highRequest += output.highValue;

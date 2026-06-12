@@ -805,22 +805,36 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             return;
         }
 
-        // Parse the JSON filter rules from the definition's description
-        let filterRules;
-        try {
-            filterRules = JSON.parse(pressedDef.getDescription());
-        } catch (e) {
-            Debug.Log(`Failed to parse filter rules for "${pressedDef.getTitle()}": ${e}`);
+        // Parse filter rules from the definition's description.
+        // Format: "key:value1, value2; key2:value3" where:
+        //   ","  separates multiple values for one rule (OR'd together)
+        //   ";"  separates additional filter rules on the same line (AND'd together)
+        //   "\n" (multiple description entries) also separates rules (AND'd together)
+        // Keys map directly to ExtendedTechniqueDatabase sorting properties:
+        //   "group", "keywords", "affinity", "style", "tier", "action", etc.
+        let description = pressedDef.getDescription();
+        if (description === "") {
+            Debug.Log(`No filter rules defined for "${pressedDef.getTitle()}"`);
             return;
         }
 
-        // Build the filter list: start with style = "Style", then append the JSON rules
         let filters = [];
-        filterRules.forEach(function (rule) {
-            Object.keys(rule).forEach(function (key) {
-                filters.push(new DatabaseFilterData(key, rule[key]));
-            });
-        });
+        let rules = description.split("\n").flatMap(line => line.split(";"));
+        for (let rule of rules) {
+            rule = rule.trim();
+            if (rule === "") continue;
+            let colonIndex = rule.indexOf(":");
+            if (colonIndex === -1) continue;
+            let key = rule.substring(0, colonIndex).trim();
+            let values = rule.substring(colonIndex + 1).split(",").map(v => v.trim()).filter(v => v !== "");
+            if (values.length === 0) continue;
+            filters.push(new DatabaseFilterData(key, values.length === 1 ? values[0] : values));
+        }
+
+        if (filters.length === 0) {
+            Debug.Log(`No valid filter rules found for "${pressedDef.getTitle()}"`);
+            return;
+        }
         Debug.Log(`Filters: ${JSON.stringify(filters)}`);
 
         performStyleFilterInspection(filters, pressedDef.getTitle());
