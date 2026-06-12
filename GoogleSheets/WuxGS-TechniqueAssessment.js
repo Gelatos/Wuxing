@@ -898,11 +898,17 @@ class TechniqueAssessment {
 
     getRequestAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
-        output.value = Math.ceil(output.value * (1.5 - (this.patience * (this.technique.action != "Full" ? 0.5 : 0.25))));
+        output.value = Math.ceil(output.value * (2 - (this.patience * (this.technique.action != "Full" ? 0.5 : 0.25))));
 
         if (effect.subType == "Bargain") {
             output.value += 3;
         }
+
+        if (effect.defense == "Enhance") {
+            this.addPointsRubric(0, `${output.value} (max ${this.getEnhancementPoints()})`);
+            return;
+        }
+
         this.request += output.value;
         this.lowRequest += output.lowValue;
         this.highRequest += output.highValue;
