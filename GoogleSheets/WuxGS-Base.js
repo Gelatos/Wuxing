@@ -346,21 +346,12 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                         },
                         addStaticNotebooks = function (count) {
                             let nameDef = WuxDef.Get("Note_NotebookName");
-                            let actionDef = WuxDef.Get("Note_NotebookActions");
-
-                            return `
-                            <div class="wuxEquipableSubMenu">
-                                ${WuxSheetMain.SubMenuButton(actionDef.getAttribute(count), addSubmenuContentsStaticNotebooks(count))}
-                            </div>
-                            ${WuxSheetMain.CustomInput("text", nameDef.getAttribute(count), 
-                                "wuxInput wuxWidth160", ` placeholder="Notebook ${count + 1}"`)}`;
-                        },
-                        addSubmenuContentsStaticNotebooks = function (count) {
                             let openDef = WuxDef.Get("Note_NotebookOpen");
 
                             return `
-                                ${WuxSheetMain.SubMenuOptionButton(openDef.getAttribute(count), `<span>${openDef.getTitle()}</span>`)}
-                            `;
+                            ${WuxSheetMain.CustomInput("text", nameDef.getAttribute(count),
+                                "wuxInput wuxWidth160", ` placeholder="Notebook ${count + 1}"`)}
+                            ${WuxSheetMain.Button(openDef.getAttribute(count), openDef.getTitle(), "wuxSmallButton")}`;
                         },
 
                         notebookPages = function (notebookCount) {

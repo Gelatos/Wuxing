@@ -5574,7 +5574,7 @@ class Dictionary {
         }
     }
 
-    clean(validKeys) {
+    clean(validKeys) {B
         let keys = this.keys.filter(key => validKeys.includes(key));
         let values = {};
         for (let i = 0; i < keys.length; i++) {
