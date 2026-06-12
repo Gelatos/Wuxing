@@ -3191,6 +3191,9 @@ class BaseTechniqueEffectDisplayData {
             case "Teleport":
                 this.effectDescription += `${this.formatTarget(effect)} teleports up to ${this.formatCalcBonus(effect)} spaces${effect.effect != "" ? "" : " " + effect.effect}`;
                 return;
+            case "Temporal":
+                this.effectDescription += `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} Temporal Movement Actions`;
+                return;
             default:
                 this.effectDescription += `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces${effect.effect != "" ? "" : " " + effect.effect}`;
         }
@@ -3200,7 +3203,7 @@ class BaseTechniqueEffectDisplayData {
         let effectTotal = this.formatCalcBonus(effect);
         this.effectDescription += `${this.formatTargetGain(effect)} ${effectTotal} ${WuxDef.GetTitle("EN")}`;
     }
-    
+
     formatFreeFocusEffect() {
         this.effectDescription += `You may maintain focus on the triggering technique without expending EN and it does not count against your limit of focus techniques`;
     }
@@ -3416,6 +3419,9 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
                 return;
             case "Charge":
                 this.effectDescription += `Increase Move Charge by ${bonus}`;
+                return;
+            case "Temporal":
+                this.effectDescription += `Increase Temporal Movement Actions by ${bonus}`;
                 return;
             default:
                 this.effectDescription += `Increase movement by ${bonus} spaces`;
@@ -8794,7 +8800,7 @@ class TechniqueAssessment {
                 this.lowFavor += output.lowValue;
                 this.highFavor += output.highValue;
                 if (effect.defense != "WillBreak") {
-                    output.value *= (6 - (this.patience * (this.technique.action != "Full" ? 2 : 1)));
+                    output.value *= (10 - (this.patience * (this.technique.action != "Full" ? 4 : 2)));
                 }
                 message = `(Favor)`;
                 break;
@@ -8953,6 +8959,9 @@ class TechniqueAssessment {
                     output.value += (isNaN(jumpHeight) ? 0 : jumpHeight) * 2;
                     break;
                 }
+                case "Temporal":
+                    output.value *= 3;
+                    break;
             }
             this.addPointsRubric(0, `${output.value} (max ${this.getEnhancementPoints()})`);
             return;
@@ -8989,6 +8998,9 @@ class TechniqueAssessment {
                 output.value += (isNaN(height) ? 0 : height) * 2;
                 break;
             }
+            case "Temporal":
+                output.value *= 3;
+                break;
         }
         let message = `(${effect.subType == "" ? "Move" : effect.subType})`;
 

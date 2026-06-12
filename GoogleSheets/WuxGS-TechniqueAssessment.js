@@ -836,7 +836,7 @@ class TechniqueAssessment {
                 this.lowFavor += output.lowValue;
                 this.highFavor += output.highValue;
                 if (effect.defense != "WillBreak") {
-                    output.value *= (6 - (this.patience * (this.technique.action != "Full" ? 2 : 1)));
+                    output.value *= (10 - (this.patience * (this.technique.action != "Full" ? 4 : 2)));
                 }
                 message = `(Favor)`;
                 break;
@@ -995,6 +995,9 @@ class TechniqueAssessment {
                     output.value += (isNaN(jumpHeight) ? 0 : jumpHeight) * 2;
                     break;
                 }
+                case "Temporal":
+                    output.value *= 3;
+                    break;
             }
             this.addPointsRubric(0, `${output.value} (max ${this.getEnhancementPoints()})`);
             return;
@@ -1031,6 +1034,9 @@ class TechniqueAssessment {
                 output.value += (isNaN(height) ? 0 : height) * 2;
                 break;
             }
+            case "Temporal":
+                output.value *= 3;
+                break;
         }
         let message = `(${effect.subType == "" ? "Move" : effect.subType})`;
 

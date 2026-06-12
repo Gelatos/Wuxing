@@ -3191,6 +3191,9 @@ class BaseTechniqueEffectDisplayData {
             case "Teleport":
                 this.effectDescription += `${this.formatTarget(effect)} teleports up to ${this.formatCalcBonus(effect)} spaces${effect.effect != "" ? "" : " " + effect.effect}`;
                 return;
+            case "Temporal":
+                this.effectDescription += `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} Temporal Movement Actions`;
+                return;
             default:
                 this.effectDescription += `${this.formatTarget(effect)} may Move up to ${this.formatCalcBonus(effect)} spaces${effect.effect != "" ? "" : " " + effect.effect}`;
         }
@@ -3200,7 +3203,7 @@ class BaseTechniqueEffectDisplayData {
         let effectTotal = this.formatCalcBonus(effect);
         this.effectDescription += `${this.formatTargetGain(effect)} ${effectTotal} ${WuxDef.GetTitle("EN")}`;
     }
-    
+
     formatFreeFocusEffect() {
         this.effectDescription += `You may maintain focus on the triggering technique without expending EN and it does not count against your limit of focus techniques`;
     }
@@ -3416,6 +3419,9 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
                 return;
             case "Charge":
                 this.effectDescription += `Increase Move Charge by ${bonus}`;
+                return;
+            case "Temporal":
+                this.effectDescription += `Increase Temporal Movement Actions by ${bonus}`;
                 return;
             default:
                 this.effectDescription += `Increase movement by ${bonus} spaces`;

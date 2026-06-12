@@ -998,14 +998,6 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             }
             this.addMessage(`${this.senderTokenEffect.tokenTargetData.displayName} is Encouraged: +1 Advantage. Removed Encouraged status.`);
         }
-        let distracted = this.senderTokenEffect.tokenTargetData.getStatusRank(senderAttributeHandler, "Stat_Distracted");
-        if (distracted > 0) {
-            advantage -= distracted;
-            if (removeStatus) {
-                this.targetTokenEffect.tokenTargetData.removeStatus(targetAttributeHandler, "Stat_Distracted");
-            }
-            this.addMessage(`${this.senderTokenEffect.tokenTargetData.displayName} is Distracted: +${distracted} Disadvantage. Removed Distracted status.`);
-        }
         let rally = this.senderTokenEffect.tokenTargetData.getStatusRank(senderAttributeHandler, "Stat_Rally");
         if (rally > 0) {
             advantage += rally;
@@ -1058,6 +1050,14 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
         if (this.targetTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Blinded")) {
             advantage += 1;
             this.addMessage(`${this.senderTokenEffect.tokenTargetData.displayName} is Blinded: +1 Advantage`);
+        }
+        let distracted = this.targetTokenEffect.tokenTargetData.getStatusRank(senderAttributeHandler, "Stat_Distracted");
+        if (distracted > 0) {
+            advantage += distracted;
+            if (removeStatus) {
+                this.targetTokenEffect.tokenTargetData.removeStatus(targetAttributeHandler, "Stat_Distracted");
+            }
+            this.addMessage(`${this.targetTokenEffect.tokenTargetData.displayName} is Distracted: +${distracted} Disadvantage. Removed Distracted status.`);
         }
         
         return advantage;
