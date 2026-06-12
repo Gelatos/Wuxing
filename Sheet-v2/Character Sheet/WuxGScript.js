@@ -11784,6 +11784,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let contents = "";
 
                     contents += buildJobSelection();
+                    contents += buildBaseFilterButtons();
                     contents += repeatingFormeSection();
                     contents += repeatingCustomTechniquesSection();
                     
@@ -11793,6 +11794,16 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         `${sectionDef.getTitle()}`, contents);
                 },
                 
+                buildBaseFilterButtons = function () {
+                    let titleDef = WuxDef.Get("TechBaseFilter");
+                    let baseFilters = WuxDef.Filter([new DatabaseFilterData("group", "TechBaseFilter")]);
+                    let items = [];
+                    for (let i = 0; i < baseFilters.length; i++) {
+                        items.push(WuxSheetMain.Button(baseFilters[i].getAttribute(), baseFilters[i].getTitle(), "wuxWidth120"));
+                    }
+                    return WuxSheetMain.Header(titleDef.getTitle()) + WuxSheetMain.MultiRow(items.join(""));
+                },
+
                 buildJobSelection = function () {
                     let jobSelection = new JobSelectionBuilder();
                     return `${WuxSheet.MainPageDisplayInput()}
@@ -12759,6 +12770,7 @@ var ActionBuilder = ActionBuilder || (function () {
             output += listenerRefreshBasicActions();
             output += listenerTechniquesFilterPopup();
             output += listenerStyleAutoFilterButtons();
+            output += listenerBaseFilterButtons();
             return output;
         },
         listenerRankRepeatingStyles = function () {
@@ -12818,6 +12830,14 @@ var ActionBuilder = ActionBuilder || (function () {
                 groupVariableNames.push(autoFilters[i].getVariable());
             }
             return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerInspectPopup.OpenStyleFilterTechniqueInspection(eventinfo)`, true);
+        },
+        listenerBaseFilterButtons = function () {
+            let baseFilters = WuxDef.Filter([new DatabaseFilterData("group", "TechBaseFilter")]);
+            let groupVariableNames = [];
+            for (let i = 0; i < baseFilters.length; i++) {
+                groupVariableNames.push(baseFilters[i].getVariable());
+            }
+            return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerActions.QuickFilterFormeActions(eventinfo)`, true);
         }
     return {
         Print: print

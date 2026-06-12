@@ -183,8 +183,8 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         setCustomTechnique = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
             let actionRepeater = new WorkerRepeatingSectionHandler("RepeatingCustomTech");
-            
-            let techniqueAttributeHandler = 
+
+            let techniqueAttributeHandler =
                 new TechniqueDataAttributeHandler(attributeHandler, "Action");
             techniqueAttributeHandler.setRepeaterData(actionRepeater);
 
@@ -194,6 +194,60 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             techniqueAttributeHandler.setTechniqueInfo(technique, true);
             techniqueAttributeHandler.setVisibilityAttribute(true);
             attributeHandler.run();
+        },
+
+        quickFilterFormeActions = function (eventinfo) {
+            Debug.Log("Quick Filter Forme Actions");
+            let allBaseFilters = WuxDef.Filter([new DatabaseFilterData("group", "TechBaseFilter")]);
+            let pressedDef = null;
+            for (let i = 0; i < allBaseFilters.length; i++) {
+                if (allBaseFilters[i].getVariable() === eventinfo.sourceAttribute) {
+                    pressedDef = allBaseFilters[i];
+                    break;
+                }
+            }
+            if (pressedDef == null) {
+                Debug.Log(`No TechBaseFilter definition found for attribute: ${eventinfo.sourceAttribute}`);
+                return;
+            }
+
+            let description = pressedDef.getDescription();
+            if (description === "") {
+                Debug.Log(`No filter rules defined for "${pressedDef.getTitle()}"`);
+                return;
+            }
+
+            let filters = [];
+            let rules = description.split("\n").flatMap(line => line.split(";"));
+            for (let rule of rules) {
+                rule = rule.trim();
+                if (rule === "") continue;
+                let colonIndex = rule.indexOf(":");
+                if (colonIndex === -1) continue;
+                let key = rule.substring(0, colonIndex).trim();
+                let values = rule.substring(colonIndex + 1).split(",").map(v => v.trim()).filter(v => v !== "");
+                if (values.length === 0) continue;
+                filters.push(new DatabaseFilterData(key, values.length === 1 ? values[0] : values));
+            }
+
+            if (filters.length === 0) {
+                Debug.Log(`No valid filter rules found for "${pressedDef.getTitle()}"`);
+                return;
+            }
+
+            // Write the filter JSON to _filter so the "Remove Filter" button becomes visible,
+            // and apply the filter directly since setAttrs is always silent and won't trigger onChange.
+            let filterVariable = WuxDef.GetVariable("Action_FormeTechniques", WuxDef._filter);
+            let loader = new LoadingScreenHandler();
+            loader.showLoadingScreen(() => {
+                let attributeHandler = new WorkerAttributeHandler();
+                attributeHandler.addUpdate(filterVariable, JSON.stringify(filters));
+                updateAllFormeActions(attributeHandler, filters);
+                attributeHandler.addFinishCallback(() => {
+                    loader.hideLoadingScreen();
+                });
+                attributeHandler.run();
+            });
         }
     ;
 
@@ -207,6 +261,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         RankDownTechnique: rankDownTechnique,
         RemoveAllOldStyleData: removeAllOldStyleData,
         SetCustomTechnique: setCustomTechnique,
+        QuickFilterFormeActions: quickFilterFormeActions,
     };
 }());
 

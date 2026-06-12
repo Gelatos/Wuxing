@@ -539,6 +539,7 @@ var ActionBuilder = ActionBuilder || (function () {
             output += listenerRefreshBasicActions();
             output += listenerTechniquesFilterPopup();
             output += listenerStyleAutoFilterButtons();
+            output += listenerBaseFilterButtons();
             return output;
         },
         listenerRankRepeatingStyles = function () {
@@ -598,6 +599,14 @@ var ActionBuilder = ActionBuilder || (function () {
                 groupVariableNames.push(autoFilters[i].getVariable());
             }
             return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerInspectPopup.OpenStyleFilterTechniqueInspection(eventinfo)`, true);
+        },
+        listenerBaseFilterButtons = function () {
+            let baseFilters = WuxDef.Filter([new DatabaseFilterData("group", "TechBaseFilter")]);
+            let groupVariableNames = [];
+            for (let i = 0; i < baseFilters.length; i++) {
+                groupVariableNames.push(baseFilters[i].getVariable());
+            }
+            return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerActions.QuickFilterFormeActions(eventinfo)`, true);
         }
     return {
         Print: print
