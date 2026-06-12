@@ -522,8 +522,6 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 styleWorker.setBuildStatsDraft(attrHandler);
                 styleWorker.cleanBuildStats();
 
-                addStyles(attrHandler, styleWorker, attributeHandler.getRepeatingSection(styleRepeaterId));
-
                 styleWorker.setBuildStatVariables(attrHandler);
                 styleWorker.saveBuildStatsToFinal(attrHandler);
                 styleWorker.revertBuildStatsDraft(attrHandler);

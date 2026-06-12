@@ -740,7 +740,7 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 	}
 
 	getBuildVariables() {
-		return WuxTechs.keys;
+		return WuxTechs.GetKeys();
 	}
 	
 	getTechniques() {

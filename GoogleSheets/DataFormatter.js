@@ -531,6 +531,9 @@ class JavascriptDataClass {
 }
 
 var JavascriptDatabase = JavascriptDatabase || (function () {
+    const getKeys = function () {
+        return keys;
+    }
     const getValues = function (keyArray, delimiter, prefix) {
         if (keyArray == undefined || keyArray == "") {
             return [];
@@ -651,6 +654,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
         jsClassData.addVariable("sortingGroups", JSON.stringify(database.sortingGroups));
         jsClassData.addFunction("get", getFunction);
         jsClassData.addFunction("getValues", getValues);
+        jsClassData.addFunction("getKeys", getKeys);
         jsClassData.addFunction("has", has);
         jsClassData.addFunction("iterate", iterate);
         jsClassData.addFunction("filter", filter);
@@ -659,6 +663,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
         jsClassData.addFunction("getGroupData", getGroupData);
         jsClassData.addPublicData("get");
         jsClassData.addPublicData("getValues");
+        jsClassData.addPublicData("getKeys");
         jsClassData.addPublicData("has");
         jsClassData.addPublicData("iterate");
         jsClassData.addPublicData("filter");
