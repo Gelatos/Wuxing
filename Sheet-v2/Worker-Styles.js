@@ -514,11 +514,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 attributeHandler.addMod(normalStylesDef.getVariable(i));
             }
 
-            let styleRepeaterId = "RepeatingStyles";
-            attributeHandler.addRepeatingSection(styleRepeaterId);
-
             attributeHandler.addGetAttrCallback(function (attrHandler) {
-                attributeHandler.getRepeatingSection(styleRepeaterId).removeAllIds();
                 styleWorker.setBuildStatsDraft(attrHandler);
                 styleWorker.cleanBuildStats();
 
