@@ -594,28 +594,46 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 				let attributeHandler = new WorkerAttributeHandler();
 				let worker = new WuxPerkWorkerBuild();
 
-				if (perk.name == "Second Affinity") {
-					let isUsed = eventinfo.newValue !== "" && eventinfo.newValue !== "0";
-					let cost = isUsed ? perk.cost : 0;
+				if (perk.group === "Branch Perks") {
+					let isChecked = eventinfo.newValue !== "" && eventinfo.newValue !== "0";
+					let cost = isChecked ? perk.cost : 0;
 					let advancedAffinityVar = WuxDef.GetVariable("AdvancedAffinity");
+					let allAffinityTitles = WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]).map(d => d.getTitle());
 
 					attributeHandler.addMod(worker.attrMax);
 					attributeHandler.addMod(worker.attrBuildDraft);
 					attributeHandler.addMod(advancedAffinityVar);
-					attributeHandler.addGetAttrCallback(function (attrHandler) {
-						// Merge SecondaryAffinity into AdvancedAffinity, replacing any old AffinityType entry
-						let allAffinityTitles = WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]).map(d => d.getTitle());
-						let current = (attrHandler.parseString(advancedAffinityVar) || "").split(";").map(s => s.trim()).filter(s => s !== "" && !allAffinityTitles.includes(s));
-						if (isUsed) {
-							current.push(eventinfo.newValue);
-						}
-						attrHandler.addUpdate(advancedAffinityVar, current.join(";"));
 
-						// Track cost in build stats and update available perk points
-						worker.setBuildStatsDraft(attrHandler);
-						worker.updateBuildStats(attrHandler, eventinfo.sourceAttribute, cost);
-						worker.updatePoints(attrHandler);
-					});
+					if (perk.name === "Second Affinity") {
+						let perkDef = new PerkData(perk).createDefinition(WuxDef.Get("Perk"));
+						attributeHandler.addMod(perkDef.getVariable(WuxDef._affinity));
+						attributeHandler.addGetAttrCallback(function (attrHandler) {
+							let current = (attrHandler.parseString(advancedAffinityVar) || "").split(";").map(s => s.trim()).filter(s => s !== "" && !allAffinityTitles.includes(s));
+							if (isChecked) {
+								let selectedAffinity = attrHandler.parseString(perkDef.getVariable(WuxDef._affinity));
+								if (selectedAffinity && selectedAffinity !== "") {
+									current.push(selectedAffinity);
+								}
+							}
+							attrHandler.addUpdate(advancedAffinityVar, current.join(";"));
+							worker.setBuildStatsDraft(attrHandler);
+							worker.updateBuildStats(attrHandler, eventinfo.sourceAttribute, cost);
+							worker.updatePoints(attrHandler);
+						});
+					} else {
+						attributeHandler.addGetAttrCallback(function (attrHandler) {
+							if (perk.statVariable && perk.statVariable !== "") {
+								let current = (attrHandler.parseString(advancedAffinityVar) || "").split(";").map(s => s.trim()).filter(s => s !== "" && s !== perk.statVariable);
+								if (isChecked) {
+									current.push(perk.statVariable);
+								}
+								attrHandler.addUpdate(advancedAffinityVar, current.join(";"));
+							}
+							worker.setBuildStatsDraft(attrHandler);
+							worker.updateBuildStats(attrHandler, eventinfo.sourceAttribute, cost);
+							worker.updatePoints(attrHandler);
+						});
+					}
 				} else {
 					let rank = parseInt(eventinfo.newValue) || 0;
 					let max = perk.maxRank.getValue(crAttrHandler);
@@ -656,6 +674,29 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 		updateStats = function (attributeHandler) {
 			WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
 		},
+		updateSecondAffinityBranch = function (eventinfo) {
+			let secondAffinityPerk = WuxPerks.Get("Second Affinity");
+			if (secondAffinityPerk == undefined) return;
+			let perkDef = new PerkData(secondAffinityPerk).createDefinition(WuxDef.Get("Perk"));
+
+			let attributeHandler = new WorkerAttributeHandler();
+			let advancedAffinityVar = WuxDef.GetVariable("AdvancedAffinity");
+			let allAffinityTitles = WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]).map(d => d.getTitle());
+
+			attributeHandler.addMod(advancedAffinityVar);
+			attributeHandler.addMod(perkDef.getVariable());
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				let isChecked = attrHandler.parseString(perkDef.getVariable()) !== "";
+				let current = (attrHandler.parseString(advancedAffinityVar) || "").split(";").map(s => s.trim()).filter(s => s !== "" && !allAffinityTitles.includes(s));
+				if (isChecked && eventinfo.newValue && eventinfo.newValue !== "") {
+					current.push(eventinfo.newValue);
+				}
+				attrHandler.addUpdate(advancedAffinityVar, current.join(";"));
+			});
+
+			WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+			attributeHandler.run();
+		},
 		setJobSkillPerkPoints = function (eventinfo) {
 			let attributeHandler = new WorkerAttributeHandler();
 			let perkWorker = new WuxPerkWorkerBuild();
@@ -674,6 +715,7 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 
 	return {
 		UpdateBuildPoints: updateBuildPoints,
+		UpdateSecondAffinityBranch: updateSecondAffinityBranch,
 		SetJobSkillPerkPoints: setJobSkillPerkPoints,
 		RefreshStats: refreshStats,
 		UpdateStats: updateStats

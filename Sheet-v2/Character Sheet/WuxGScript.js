@@ -12556,6 +12556,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
             output += listenerSetAdvancementPerkTransferPoints();
             output += listenerSetAdvancementJobSkillPerkPoints();
             output += listenerUpdatePerkPoints();
+            output += listenerUpdateSecondAffinityBranch();
             output += listenerUpdateJobBuildPoints();
             output += listenerSeeJobTechniques();
             output += listenerUpdateSkillBuildPoints();
@@ -12619,6 +12620,14 @@ var AdvancementBackend = AdvancementBackend || (function () {
                 variables.push(new PerkData(perk).createDefinition(WuxDef.Get("Perk")).getVariable());
             });
             return WuxSheetBackend.OnChange(variables, `WuxWorkerPerks.UpdateBuildPoints(eventinfo)`, true);
+        },
+        listenerUpdateSecondAffinityBranch = function () {
+            let perkDef = new PerkData(WuxPerks.Get("Second Affinity")).createDefinition(WuxDef.Get("Perk"));
+            return WuxSheetBackend.OnChange(
+                [perkDef.getVariable(WuxDef._affinity)],
+                `WuxWorkerPerks.UpdateSecondAffinityBranch(eventinfo)`,
+                true
+            );
         },
         listenerUpdateJobBuildPoints = function () {
             let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"));
@@ -13784,14 +13793,22 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let perkInstance = new PerkData(perk);
                             let perkDef = perkInstance.createDefinition(WuxDef.Get("Perk"));
                             let inputRow = WuxSheetMain.Header2(perk.name);
-                            if (perk.name == "Second Affinity") {
-                                inputRow += WuxSheetMain.MultiRow(
-                                    WuxSheetMain.InputLabel(`Cost: ${perk.cost} perk point`)
-                                ) + WuxSheetMain.MultiRow(
-                                    WuxSheetMain.Select(perkDef.getAttribute(),
-                                        WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])) +
-                                    WuxSheetMain.DescField(perkDef.getAttribute(WuxDef._learn))
-                                );
+                            if (perk.group === "Branch Perks") {
+                                let label = WuxSheetMain.InputLabel(`Cost: ${perk.cost} perk point`);
+                                if (perk.name === "Second Affinity") {
+                                    let affinitySelect =
+                                        WuxSheetMain.Select(perkDef.getAttribute(WuxDef._affinity),
+                                            WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])) +
+                                        WuxSheetMain.DescField(perkDef.getAttribute(WuxDef._learn));
+                                    inputRow += `<div class="wuxInteractiveBlock">
+                                        ${WuxSheetMain.InteractionElement.CheckboxBlockIcon(perkDef.getAttribute(), label)}
+                                        ${WuxSheetMain.InteractionElement.ExpandableBlockContents(perkDef.getAttribute(), affinitySelect)}
+                                    </div>`;
+                                } else {
+                                    inputRow += WuxSheetMain.MultiRow(
+                                        WuxSheetMain.InteractionElement.BuildCheckboxInput(perkDef.getAttribute(), label)
+                                    );
+                                }
                             } else {
                                 let label = `Cost: ${perk.cost}${perkInstance.maxRank.hasFormula() ? ` perk point, Max: ${WuxSheetMain.Span(perkDef.getAttribute(WuxDef._max))}` : ""}`;
                                 inputRow += WuxSheetMain.MultiRow(

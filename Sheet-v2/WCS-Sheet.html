@@ -1141,24 +1141,18 @@
 							<div class="wuxMultiRow">
 								<div class="wuxDescription">Skill Points are used to gain new skills or skill augments.</div>
 							</div>
-							<div class="wuxHeader">Origin Perks</div>
+							<div class="wuxHeader">Character Perks</div>
 							<div class="wuxFlexTable">
 								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader2">Second Affinity</div>
-									<div class="wuxMultiRow">
-										<div class="wuxInputLabel">Cost: 1 perk point</div>
+									<div class="wuxHeader2">Bonus Vitality</div>
+									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-bonus_vitality" value="" placeholder="0" />
+										<div class="wuxInputLabel">Cost: 0 perk point, Max: <span name="attr_perk-bonus_vitality_max"></span></div>
 									</div>
-									<div class="wuxMultiRow"><select class="wuxInput" name="attr_perk-second_affinity" value="0">
-											<option value="0">-</option>
-											<option value="Wood">Wood Affinity</option>
-											<option value="Fire">Fire Affinity</option>
-											<option value="Earth">Earth Affinity</option>
-											<option value="Metal">Metal Affinity</option>
-											<option value="Water">Water Affinity</option>
-										</select><span class="wuxDescription" name="attr_perk-second_affinity_learn"></span></div>
 									<div class="wuxMultiRow">
-										<div class="wuxDescription">Human Only. Gain a second elemental affinity.</div>
+										<div class="wuxDescription">Gain +1 Vitality per rank. Player characters should start with at least 1 Vitality.</div>
 									</div>
+								</div>
+								<div class="wuxFlexTableItemGroup">
 									<div class="wuxHeader2">Bonus Potency</div>
 									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-bonus_potency" value="" placeholder="0" />
 										<div class="wuxInputLabel">Cost: 0 perk point, Max: <span name="attr_perk-bonus_potency_max"></span></div>
@@ -1167,13 +1161,153 @@
 										<div class="wuxDescription">Gain +1 Potency per rank.This perk is not intended for player characters.</div>
 									</div>
 								</div>
+							</div>
+							<div class="wuxHeader">Branch Perks</div>
+							<div class="wuxFlexTable">
 								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader2">Bonus Vitality</div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-bonus_vitality" value="" placeholder="0" />
-										<div class="wuxInputLabel">Cost: 0 perk point, Max: <span name="attr_perk-bonus_vitality_max"></span></div>
+									<div class="wuxHeader2">Second Affinity</div>
+									<div class="wuxInteractiveBlock">
+										<div class="wuxInteractiveInnerBlock">
+											<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-second_affinity" />
+											<div class="wuxInteractiveContent">
+												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-second_affinity" />
+												<span class="wuxInteractiveIcon">&#9635;</span>
+												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-second_affinity" />
+												<span class="wuxInteractiveAuxIcon">&#9634;</span>
+												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-second_affinity" />
+												<div class="wuxInputLabel">Cost: 1 perk point</div>
+											</div>
+										</div>
+										<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_perk-second_affinity">
+										<div class="wuxInteractiveExpandingContent">
+											<select class="wuxInput" name="attr_perk-second_affinity_affinity" value="0">
+												<option value="0">-</option>
+												<option value="Wood">Wood Affinity</option>
+												<option value="Fire">Fire Affinity</option>
+												<option value="Earth">Earth Affinity</option>
+												<option value="Metal">Metal Affinity</option>
+												<option value="Water">Water Affinity</option>
+											</select><span class="wuxDescription" name="attr_perk-second_affinity_learn"></span>
+										</div>
 									</div>
 									<div class="wuxMultiRow">
-										<div class="wuxDescription">Gain +1 Vitality per rank. Player characters should start with at least 1 Vitality.</div>
+										<div class="wuxDescription">Human Only. Gain a second elemental affinity.</div>
+									</div>
+									<div class="wuxHeader2">Light Magic</div>
+									<div class="wuxMultiRow">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-light_magic" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-light_magic" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-light_magic" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-light_magic" />
+													<div class="wuxInputLabel">Cost: 3 perk point</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxMultiRow">
+										<div class="wuxDescription">Fire Affinity Only. You can now learn Light affinty techniques that can blind and create illusions.</div>
+									</div>
+									<div class="wuxHeader2">Blood Magic</div>
+									<div class="wuxMultiRow">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-blood_magic" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-blood_magic" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-blood_magic" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-blood_magic" />
+													<div class="wuxInputLabel">Cost: 3 perk point</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxMultiRow">
+										<div class="wuxDescription">Metal Affinity Only. You can now learn Blood affinty techniques that both heal and paralyze targets.</div>
+									</div>
+									<div class="wuxHeader2">Spirit Conduit</div>
+									<div class="wuxMultiRow">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-spirit_conduit" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-spirit_conduit" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-spirit_conduit" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-spirit_conduit" />
+													<div class="wuxInputLabel">Cost: 2 perk point</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxMultiRow">
+										<div class="wuxDescription">Unaspected Human Only. You can hold multiple spirits inside of your body. You are able to swap your active spirit as a swift action for the cost of 2 EN.</div>
+									</div>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxHeader2">Corrosion Magic</div>
+									<div class="wuxMultiRow">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-corrosion_magic" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-corrosion_magic" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-corrosion_magic" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-corrosion_magic" />
+													<div class="wuxInputLabel">Cost: 3 perk point</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxMultiRow">
+										<div class="wuxDescription">Wood Affinity Only. You can now learn Corrosion affinity techniques granting access to acids and poisons.</div>
+									</div>
+									<div class="wuxHeader2">Shadow Magic</div>
+									<div class="wuxMultiRow">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-shadow_magic" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-shadow_magic" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-shadow_magic" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-shadow_magic" />
+													<div class="wuxInputLabel">Cost: 3 perk point</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxMultiRow">
+										<div class="wuxDescription">Earth Affinity Only. You can now learn Shadow affinity techniques that can blind and hide.</div>
+									</div>
+									<div class="wuxHeader2">Time Magic</div>
+									<div class="wuxMultiRow">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-time_magic" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-time_magic" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-time_magic" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-time_magic" />
+													<div class="wuxInputLabel">Cost: 3 perk point</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxMultiRow">
+										<div class="wuxDescription">Water Affinity Only. You can now learn Time affinity techniques that allow specialized movement actions.</div>
 									</div>
 								</div>
 							</div>
@@ -14138,14 +14272,6 @@
 													<div class="wuxFlexTable">
 														<div class="wuxFlexTableItemGroup">
 															<div class="wuxButton wuxWidth160">
-																<input type="checkbox" name="attr_autofilter-corrosion">
-																<span>Corrosion</span>
-															</div>
-														</div>
-													</div>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup">
-															<div class="wuxButton wuxWidth160">
 																<input type="checkbox" name="attr_autofilter-woodsound">
 																<span>Sound</span>
 															</div>
@@ -14191,14 +14317,6 @@
 															<div class="wuxButton wuxWidth160">
 																<input type="checkbox" name="attr_autofilter-glass">
 																<span>Glass Material</span>
-															</div>
-														</div>
-													</div>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup">
-															<div class="wuxButton wuxWidth160">
-																<input type="checkbox" name="attr_autofilter-light">
-																<span>Light Energy</span>
 															</div>
 														</div>
 													</div>
@@ -14266,14 +14384,6 @@
 													<div class="wuxFlexTable">
 														<div class="wuxFlexTableItemGroup">
 															<div class="wuxButton wuxWidth160">
-																<input type="checkbox" name="attr_autofilter-shadow">
-																<span>Shadow Energy</span>
-															</div>
-														</div>
-													</div>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup">
-															<div class="wuxButton wuxWidth160">
 																<input type="checkbox" name="attr_autofilter-earthempowering">
 																<span>Empowerment</span>
 															</div>
@@ -14325,22 +14435,6 @@
 													<div class="wuxFlexTable">
 														<div class="wuxFlexTableItemGroup">
 															<div class="wuxButton wuxWidth160">
-																<input type="checkbox" name="attr_autofilter-ether">
-																<span>Ether</span>
-															</div>
-														</div>
-													</div>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup">
-															<div class="wuxButton wuxWidth160">
-																<input type="checkbox" name="attr_autofilter-blood">
-																<span>Blood</span>
-															</div>
-														</div>
-													</div>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup">
-															<div class="wuxButton wuxWidth160">
 																<input type="checkbox" name="attr_autofilter-metalempowering">
 																<span>Empowerment</span>
 															</div>
@@ -14386,14 +14480,6 @@
 													<div class="wuxFlexTable">
 														<div class="wuxFlexTableItemGroup">
 															<div class="wuxButton wuxWidth160">
-																<input type="checkbox" name="attr_autofilter-time">
-																<span>Time</span>
-															</div>
-														</div>
-													</div>
-													<div class="wuxFlexTable">
-														<div class="wuxFlexTableItemGroup">
-															<div class="wuxButton wuxWidth160">
 																<input type="checkbox" name="attr_autofilter-waterhealing">
 																<span>Healing</span>
 															</div>
@@ -14412,6 +14498,57 @@
 															<div class="wuxButton wuxWidth160">
 																<input type="checkbox" name="attr_autofilter-waterempowering">
 																<span>Empowerment</span>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFlexTableItemGroup">
+													<div class="wuxHeader2">Special Magic</div>
+													<div class="wuxFlexTable">
+														<div class="wuxFlexTableItemGroup">
+															<div class="wuxButton wuxWidth160">
+																<input type="checkbox" name="attr_autofilter-ether">
+																<span>Ether</span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTable">
+														<div class="wuxFlexTableItemGroup">
+															<div class="wuxButton wuxWidth160">
+																<input type="checkbox" name="attr_autofilter-corrosion">
+																<span>Corrosion</span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTable">
+														<div class="wuxFlexTableItemGroup">
+															<div class="wuxButton wuxWidth160">
+																<input type="checkbox" name="attr_autofilter-light">
+																<span>Light</span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTable">
+														<div class="wuxFlexTableItemGroup">
+															<div class="wuxButton wuxWidth160">
+																<input type="checkbox" name="attr_autofilter-shadow">
+																<span>Shadow</span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTable">
+														<div class="wuxFlexTableItemGroup">
+															<div class="wuxButton wuxWidth160">
+																<input type="checkbox" name="attr_autofilter-blood">
+																<span>Blood</span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxFlexTable">
+														<div class="wuxFlexTableItemGroup">
+															<div class="wuxButton wuxWidth160">
+																<input type="checkbox" name="attr_autofilter-time">
+																<span>Time</span>
 															</div>
 														</div>
 													</div>
@@ -18212,8 +18349,11 @@ on("change:adv-ap_job change:adv-ap_skill", function (eventinfo) {
 WuxWorkerPerks.SetJobSkillPerkPoints(eventinfo);
 
 });
-on("change:perk-second_affinity change:perk-bonus_vitality change:perk-bonus_potency change:perk-increase_hp change:perk-increase_will change:perk-increase_base_speed change:perk-increase_dash_speed change:perk-increase_armor change:perk-increase_starting_en change:perk-bonus_equipment_slots", function (eventinfo) {
+on("change:perk-bonus_vitality change:perk-bonus_potency change:perk-second_affinity change:perk-corrosion_magic change:perk-light_magic change:perk-shadow_magic change:perk-blood_magic change:perk-time_magic change:perk-spirit_conduit change:perk-increase_hp change:perk-increase_will change:perk-increase_base_speed change:perk-increase_dash_speed change:perk-increase_armor change:perk-increase_starting_en change:perk-bonus_equipment_slots", function (eventinfo) {
 WuxWorkerPerks.UpdateBuildPoints(eventinfo)
+});
+on("change:perk-second_affinity_affinity", function (eventinfo) {
+WuxWorkerPerks.UpdateSecondAffinityBranch(eventinfo)
 });
 on("change:job-fighter change:job-brawler change:job-labourer change:job-sentinel change:job-warden change:job-bulwark change:job-exemplar change:job-kineticist change:job-rogue change:job-hunter change:job-sniper change:job-warmage change:job-trooper change:job-geomancer change:job-magus change:job-spellwright change:job-tactician change:job-bard change:job-scholar change:job-medic change:job-alchemist change:job-culinarian change:job-merchant change:job-courtier change:job-diplomat change:job-detective change:job-inquisitor change:job-preacher change:job-etherealist change:job-phantasm change:job-shade change:job-yaksa", function (eventinfo) {
 WuxWorkerJobs.UpdateBuildPoints(eventinfo)
@@ -18496,7 +18636,7 @@ WuxWorkerFilterPopup.RemoveFilter()
 on("change:forme-customstylefilter", function (eventinfo) {
 WuxWorkerFilterPopup.OpenCustomStyleFilter()
 });
-on("change:autofilter-meleeweapons change:autofilter-lightblade change:autofilter-heavyblade change:autofilter-hammer change:autofilter-polearm change:autofilter-whip change:autofilter-rangedweapons change:autofilter-bow change:autofilter-handgun change:autofilter-longshot change:autofilter-thrownblade change:autofilter-athletics change:autofilter-forcefulfist change:autofilter-grappler change:autofilter-swiftform change:autofilter-mobility change:autofilter-acrobatics change:autofilter-stealth change:autofilter-social change:autofilter-favorbuilding change:autofilter-request change:autofilter-influence change:autofilter-emotion change:autofilter-woodmagic change:autofilter-plantmartial change:autofilter-plants change:autofilter-wood change:autofilter-wind change:autofilter-mana change:autofilter-corrosion change:autofilter-woodsound change:autofilter-woodhealing change:autofilter-woodempowering change:autofilter-firemagic change:autofilter-flamemartial change:autofilter-flames change:autofilter-glass change:autofilter-light change:autofilter-smoke change:autofilter-firehealing change:autofilter-fireempowering change:autofilter-earthmagic change:autofilter-sandmartial change:autofilter-rock change:autofilter-terrain change:autofilter-gravity change:autofilter-shadow change:autofilter-earthempowering change:autofilter-metalmagic change:autofilter-lightningmartial change:autofilter-ironsand change:autofilter-metal change:autofilter-lightning change:autofilter-stasis change:autofilter-ether change:autofilter-blood change:autofilter-metalempowering change:autofilter-watermagic change:autofilter-icemartial change:autofilter-water change:autofilter-cold change:autofilter-ice change:autofilter-time change:autofilter-waterhealing change:autofilter-watersound change:autofilter-waterempowering", function (eventinfo) {
+on("change:autofilter-meleeweapons change:autofilter-lightblade change:autofilter-heavyblade change:autofilter-hammer change:autofilter-polearm change:autofilter-whip change:autofilter-rangedweapons change:autofilter-bow change:autofilter-handgun change:autofilter-longshot change:autofilter-thrownblade change:autofilter-athletics change:autofilter-forcefulfist change:autofilter-grappler change:autofilter-swiftform change:autofilter-mobility change:autofilter-acrobatics change:autofilter-stealth change:autofilter-social change:autofilter-favorbuilding change:autofilter-request change:autofilter-influence change:autofilter-emotion change:autofilter-woodmagic change:autofilter-plantmartial change:autofilter-plants change:autofilter-wood change:autofilter-wind change:autofilter-mana change:autofilter-woodsound change:autofilter-woodhealing change:autofilter-woodempowering change:autofilter-firemagic change:autofilter-flamemartial change:autofilter-flames change:autofilter-glass change:autofilter-smoke change:autofilter-firehealing change:autofilter-fireempowering change:autofilter-earthmagic change:autofilter-sandmartial change:autofilter-rock change:autofilter-terrain change:autofilter-gravity change:autofilter-earthempowering change:autofilter-metalmagic change:autofilter-lightningmartial change:autofilter-ironsand change:autofilter-metal change:autofilter-lightning change:autofilter-stasis change:autofilter-metalempowering change:autofilter-watermagic change:autofilter-icemartial change:autofilter-water change:autofilter-cold change:autofilter-ice change:autofilter-waterhealing change:autofilter-watersound change:autofilter-waterempowering change:autofilter-specialmagic change:autofilter-ether change:autofilter-corrosion change:autofilter-light change:autofilter-shadow change:autofilter-blood change:autofilter-time", function (eventinfo) {
 WuxWorkerInspectPopup.OpenStyleFilterTechniqueInspection(eventinfo)
 });
 on("change:techbasefilter-combat change:techbasefilter-social change:techbasefilter-support change:techbasefilter-utility", function (eventinfo) {
