@@ -10573,7 +10573,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
     };
     const buildCharacterCreationTabs = function (sheetName) {
         let output = "";
-        let tabNames = ["Gear", "Knowledge", "Styles", "Attributes", "Jobs", "Origin"];
+        let tabNames = ["Advancement", "Gear", "Knowledge", "Styles", "Attributes", "Jobs", "Origin"];
 
         for (let i = 0; i < tabNames.length; i++) {
             output += buildTabButton("radio", WuxDef.GetAttribute("Page"), tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
