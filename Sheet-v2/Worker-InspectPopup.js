@@ -245,6 +245,14 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
         }
     }
     setInventoryItemAffinityIcons(id, iconAffinities) {
+        const branchToElement = {
+            "Corrosion": "Wood",
+            "Light":     "Fire",
+            "Shadow":    "Earth",
+            "Blood":     "Metal",
+            "Time":      "Water"
+        };
+        const normalizedAffinities = iconAffinities.map(a => branchToElement[a] ?? a);
         const affinityFields = {
             "Neutral": WuxDef.GetVariable("Popup_ItemSelectDisplayNeutral"),
             "Wood":    WuxDef.GetVariable("Popup_ItemSelectDisplayWood"),
@@ -254,7 +262,7 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
             "Water":   WuxDef.GetVariable("Popup_ItemSelectDisplayWater")
         };
         for (let affinity in affinityFields) {
-            let value = iconAffinities.includes(affinity) ? "0" : "on";
+            let value = normalizedAffinities.includes(affinity) ? "0" : "on";
             this.attrHandler.addUpdate(this.repeater.getFieldName(id, affinityFields[affinity]), value);
         }
     }
@@ -452,6 +460,82 @@ class InspectionPopup {
     
     performAddItem(attrHandler, itemName) {}
 }
+class PerkTechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
+    constructor(attributeHandler) {
+        super(attributeHandler);
+        this.titleDefinitionName = "Popup_PerkInspectionName";
+    }
+
+    initializePopup() {
+        super.initializePopup();
+        this.itemDataAttributeHandler.clearItemInfo();
+        for (let i = 0; i <= 3; i++) {
+            this.hideTechnique(i);
+        }
+    }
+
+    setSelectedItemData(selectedItemName) {
+        let technique = WuxTechs.Get(selectedItemName);
+        if (technique == undefined) {
+            this.hideTechnique(0);
+            return;
+        }
+        this.techniqueAttributeHandler.setBaseSuffix(0);
+        this.techniqueAttributeHandler.setTechniqueInfo(technique);
+        this.techniqueAttributeHandler.setVisibilityAttribute(true);
+        this.attrHandler.addRepeatingSectionRowUpdate(
+            this.techniqueAttributeHandler.repeater?.definitionId,
+            this.techniqueAttributeHandler.getVariable("TechHeader"),
+            getTechHeader(technique.affinity)
+        );
+
+        let techniqueVariants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
+        for (let i = 0; i < 3; i++) {
+            let index = parseInt(i) + 1;
+            if (techniqueVariants.length > i) {
+                this.techniqueAttributeHandler.setBaseSuffix(index);
+                this.techniqueAttributeHandler.setTechniqueInfo(techniqueVariants[i]);
+                this.techniqueAttributeHandler.setVisibilityAttribute(true);
+                this.attrHandler.addRepeatingSectionRowUpdate(
+                    this.techniqueAttributeHandler.repeater?.definitionId,
+                    this.techniqueAttributeHandler.getVariable("TechHeader"),
+                    getTechHeader(techniqueVariants[i].affinity)
+                );
+            } else {
+                this.hideTechnique(index);
+            }
+        }
+    }
+
+    onNoItems() {
+        super.onNoItems();
+        for (let i = 0; i <= 3; i++) {
+            this.hideTechnique(i);
+        }
+    }
+}
+
+class PerkTechniqueInspectionPopup extends InspectionPopup {
+    setup(attrHandler) {
+        this.inspectPopupAttrHandler = new PerkTechniqueInspectPopupAttributeHandler(attrHandler);
+    }
+
+    addItem() {
+        this.attributeHandler.addRepeatingSection("RepeatingPerks");
+        super.addItem();
+    }
+
+    performAddItem(attrHandler, itemName) {
+        Debug.Log(`Adding Perk Technique ${itemName}`);
+        let technique = WuxTechs.Get(itemName);
+        if (technique == undefined) return;
+        let repeater = attrHandler.getRepeatingSection("RepeatingPerks");
+        attrHandler.addUpdate(
+            repeater.getFieldName(repeater.generateRowId(), WuxDef.GetVariable("Forme_Name")),
+            technique.name);
+    }
+}
+
 class TechniqueInspectionPopup extends InspectionPopup {
     setup(attrHandler) {
         this.inspectPopupAttrHandler = new TechniqueInspectPopupAttributeHandler(attrHandler);
@@ -604,6 +688,9 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 case "Popup_TechniqueInspectionName":
                     inspectPopup = new TechniqueInspectionPopup(attributeHandler2);
                     break;
+                case "Popup_PerkInspectionName":
+                    inspectPopup = new PerkTechniqueInspectionPopup(attributeHandler2);
+                    break;
                 case "Popup_ItemInspectionName":
                     inspectPopup = new ItemInspectionPopup(attributeHandler2);
                     break;
@@ -649,6 +736,9 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 switch(attrHandler.parseString(selectTypeVariable)) {
                     case "Popup_TechniqueInspectionName":
                         inspectPopup = new TechniqueInspectionPopup(attributeHandler2);
+                        break;
+                    case "Popup_PerkInspectionName":
+                        inspectPopup = new PerkTechniqueInspectionPopup(attributeHandler2);
                         break;
                     case "Popup_ItemInspectionName":
                         inspectPopup = new ItemInspectionPopup(attributeHandler2);
@@ -840,11 +930,143 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         performStyleFilterInspection(filters, pressedDef.getTitle());
     };
 
+    const performPerkFilterInspection = function (filters, title) {
+        let matchingPerks = WuxPerks.Filter(filters);
+        let techniques = [];
+        let techniqueIconAffinities = {};
+        for (let perk of matchingPerks) {
+            Debug.Log(`Found Perk ${perk.name}`);
+            let technique = WuxTechs.Get(perk.name);
+            if (technique == undefined) continue;
+            let iconAffinities = technique.getAffinityParts();
+            let variants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
+            for (let i = 0; i < variants.length; i++) {
+                let variantParts = variants[i].getAffinityParts();
+                for (let j = 0; j < variantParts.length; j++) {
+                    if (!iconAffinities.includes(variantParts[j])) {
+                        iconAffinities.push(variantParts[j]);
+                    }
+                }
+            }
+            techniqueIconAffinities[technique.name] = iconAffinities;
+            techniques.push(technique);
+        }
+
+        let attributeHandler = new WorkerAttributeHandler();
+        attributeHandler.addMod([
+            WuxDef.GetVariable("Forme_ShowFromNonElement"),
+            WuxDef.GetVariable("Forme_ShowLevelRestricted"),
+            WuxDef.GetVariable("Affinity"),
+            WuxDef.GetVariable("AdvancedAffinity"),
+            WuxDef.GetVariable("Ancestry"),
+            WuxDef.GetVariable("CR", WuxDef._max)
+        ]);
+
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            let showFromNonElement = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement"));
+            let showLevelRestricted = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowLevelRestricted"));
+            let advancedAffinityRaw = attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity"));
+            let advancedAffinities = advancedAffinityRaw.split(";").map(s => s.trim()).filter(s => s !== "");
+            let userAffinities = [
+                attrHandler.parseString(WuxDef.GetVariable("Affinity")),
+                ...advancedAffinities,
+                attrHandler.parseString(WuxDef.GetVariable("Ancestry"))
+            ];
+            let userCr = attrHandler.parseInt(WuxDef.GetVariable("CR", WuxDef._max));
+
+            let filteredTechniques = techniques.filter(function (technique) {
+                if (showFromNonElement === "0") {
+                    if (technique.affinity.includes(";")) {
+                        let affinityParts = technique.affinity.split(";").map(s => s.trim());
+                        if (!affinityParts.some(part => userAffinities.includes(part))) return false;
+                    } else if (technique.affinity !== "" && !userAffinities.includes(technique.affinity)) {
+                        return false;
+                    }
+                }
+                if (showLevelRestricted === "0") {
+                    if (technique.tier > userCr) return false;
+                }
+                return true;
+            });
+
+            let sortedTechniques = WuxTechs.SortFilteredTechniquesByRequirement(filteredTechniques);
+            let sortedItems = [];
+            for (let tier = 1; tier <= 9; tier++) {
+                let tierData = sortedTechniques.get(tier);
+                tierData.iterate(function (techsByAffinity, affinity) {
+                    if (techsByAffinity.length == 0) return;
+                    let level = Format.GetLevelPrerequisites(tier);
+                    let itemTitle = level > 0 ? `Level ${level}` : "";
+                    if (affinity !== "") {
+                        itemTitle = itemTitle !== "" ? `${affinity} - ${itemTitle}` : affinity;
+                    }
+                    if (itemTitle === "") itemTitle = "Level 1";
+                    sortedItems.push(new InspectionInventoryItem(itemTitle, "", true, affinity, tier));
+                    techsByAffinity.forEach(function (technique) {
+                        let iconAffinities = techniqueIconAffinities[technique.name] || [];
+                        sortedItems.push(new InspectionInventoryItem(technique.name, technique.name, false, technique.affinity, technique.tier, iconAffinities));
+                    });
+                });
+            }
+
+            let attributeHandler2 = new WorkerAttributeHandler();
+            let inspectPopup = new PerkTechniqueInspectionPopup(attributeHandler2);
+            inspectPopup.open(title, sortedItems, "Add Perk Technique");
+            attributeHandler2.run();
+        });
+
+        attributeHandler.run();
+    };
+
+    const openPerkFilterTechniqueInspection = function (eventinfo) {
+        Debug.Log("Open Perk Filter Technique Inspection");
+
+        let allPerkFilters = WuxDef.Filter([new DatabaseFilterData("group", "PerkAutoFilter")]);
+        let pressedDef = null;
+        for (let i = 0; i < allPerkFilters.length; i++) {
+            if (allPerkFilters[i].getVariable() === eventinfo.sourceAttribute) {
+                pressedDef = allPerkFilters[i];
+                break;
+            }
+        }
+        if (pressedDef == null) {
+            Debug.Log(`No PerkAutoFilter definition found for attribute: ${eventinfo.sourceAttribute}`);
+            return;
+        }
+
+        let description = pressedDef.getDescription();
+        if (description === "") {
+            Debug.Log(`No filter rules defined for "${pressedDef.getTitle()}"`);
+            return;
+        }
+
+        let filters = [];
+        let rules = description.split("\n").flatMap(line => line.split(";"));
+        for (let rule of rules) {
+            rule = rule.trim();
+            if (rule === "") continue;
+            let colonIndex = rule.indexOf(":");
+            if (colonIndex === -1) continue;
+            let key = rule.substring(0, colonIndex).trim();
+            let values = rule.substring(colonIndex + 1).split(",").map(v => v.trim()).filter(v => v !== "");
+            if (values.length === 0) continue;
+            filters.push(new DatabaseFilterData(key, values.length === 1 ? values[0] : values));
+        }
+
+        if (filters.length === 0) {
+            Debug.Log(`No valid filter rules found for "${pressedDef.getTitle()}"`);
+            return;
+        }
+
+        performPerkFilterInspection(filters, pressedDef.getTitle());
+    };
+
     return {
         OpenItemInspection: openItemInspection,
         OpenItemFilterInspection: openItemFilterInspection,
         OpenTechniqueInspection: openTechniqueInspection,
         OpenStyleFilterTechniqueInspection: openStyleFilterTechniqueInspection,
+        OpenPerkFilterTechniqueInspection: openPerkFilterTechniqueInspection,
         OpenCustomStyleFilterInspection: openCustomStyleFilterInspection,
         SelectInspectionItemFromActiveGroup: selectInspectionItemFromActiveGroup,
         Close: close,

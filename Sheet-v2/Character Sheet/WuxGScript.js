@@ -6636,7 +6636,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         return new ExtendedTechniqueStyleDatabase(arr);
     };
     const createBasicPerks = function (arr) {
-        return new WuxDataDatabase(arr, arr => { return new PerkData(arr); });
+        return new WuxDataDatabase(arr, arr => { return new PerkData(arr); }, ["group", "cost"]);
     };
     const createLanguages = function (arr) {
         return new WuxDataDatabase(arr, arr => {return new LanguageData(arr)});
@@ -12557,6 +12557,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
             output += listenerSetAdvancementJobSkillPerkPoints();
             output += listenerUpdatePerkPoints();
             output += listenerUpdateSecondAffinityBranch();
+            output += listenerPerkAutoFilterButtons();
             output += listenerUpdateJobBuildPoints();
             output += listenerSeeJobTechniques();
             output += listenerUpdateSkillBuildPoints();
@@ -12617,6 +12618,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
         listenerUpdatePerkPoints = function () {
             let variables = [];
             WuxPerks.Iterate(function (perk) {
+                if (perk.group === "Perk Technique") return;
                 variables.push(new PerkData(perk).createDefinition(WuxDef.Get("Perk")).getVariable());
             });
             return WuxSheetBackend.OnChange(variables, `WuxWorkerPerks.UpdateBuildPoints(eventinfo)`, true);
@@ -12628,6 +12630,11 @@ var AdvancementBackend = AdvancementBackend || (function () {
                 `WuxWorkerPerks.UpdateSecondAffinityBranch(eventinfo)`,
                 true
             );
+        },
+        listenerPerkAutoFilterButtons = function () {
+            let perkFilters = WuxDef.Filter([new DatabaseFilterData("group", "PerkAutoFilter")]);
+            let groupVariableNames = perkFilters.map(def => def.getVariable());
+            return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerInspectPopup.OpenPerkFilterTechniqueInspection(eventinfo)`, true);
         },
         listenerUpdateJobBuildPoints = function () {
             let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"));
@@ -13674,6 +13681,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let contents = "";
                             contents += buildAdvancementTab();
                             contents += buildPerks();
+                            contents += buildPerkTechniqueList();
                             return contents;
                         },
 
@@ -13765,6 +13773,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let contents = "";
                             let groups = {};
                             WuxPerks.Iterate(function (perk) {
+                                if (perk.group === "Perk Technique") return;
                                 if (!groups.hasOwnProperty(perk.group)) {
                                     groups[perk.group] = [];
                                 }
@@ -13817,6 +13826,67 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 );
                             }
                             return inputRow + (desc !== "" ? WuxSheetMain.MultiRow(`<div class="wuxDescription">${desc}</div>`) : "");
+                        },
+
+                        buildPerkTechniqueList = function () {
+                            let repeatingDef = WuxDef.Get("RepeatingPerks");
+
+                            let nonElementDef = WuxDef.Get("Forme_ShowFromNonElement");
+                            let levelRestrictedDef = WuxDef.Get("Forme_ShowLevelRestricted");
+                            let filterCheckboxItems = [
+                                WuxSheetMain.Table.FlexTableGroup(
+                                    WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                        nonElementDef.getAttribute(),
+                                        nonElementDef.getAttribute(WuxDef._info),
+                                        WuxSheetMain.Header(nonElementDef.getTitle()),
+                                        WuxDefinition.TooltipDescription(nonElementDef))),
+                                WuxSheetMain.Table.FlexTableGroup(
+                                    WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                        levelRestrictedDef.getAttribute(),
+                                        levelRestrictedDef.getAttribute(WuxDef._info),
+                                        WuxSheetMain.Header(levelRestrictedDef.getTitle()),
+                                        WuxDefinition.TooltipDescription(levelRestrictedDef)))
+                            ];
+                            let filterCheckboxes = `${WuxSheetMain.Header2(WuxDef.GetTitle("Title_StyleFilterOption"))}
+                                ${WuxSheetMain.MultiRowGroup(filterCheckboxItems, WuxSheetMain.Table.FlexTable, 1)}`;
+                            let perkFilterDefs = WuxDef.Filter([new DatabaseFilterData("group", "PerkAutoFilter")]);
+                            let perkFilterButtons = perkFilterDefs.map(def =>
+                                WuxSheetMain.Table.FlexTableGroup(
+                                    WuxSheetMain.Button(def.getAttribute(), def.getTitle(), "wuxWidth160")));
+                            let filterPanel = WuxSheetMain.Table.FlexTableGroup(
+                                filterCheckboxes + 
+                                WuxSheetMain.Header2(WuxDef.GetTitle("Title_PerkStyleFilter")) + 
+                                WuxSheetMain.MultiRowGroup(perkFilterButtons, WuxSheetMain.Table.FlexTable, 1),
+                                " wuxMinWidth350 wuxFlexTableItemGroup2");
+
+                            let nameDef = WuxDef.Get("Forme_Name");
+                            let inspectDef = WuxDef.Get("Forme_Inspect");
+                            let deleteDef = WuxDef.Get("Forme_Delete");
+                            let rowContents = `<div class="wuxMultiRow" style="min-width: 300px;">
+                                <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>
+                                <div class="wuxFloatRight">
+                                    ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`)}
+                                    ${WuxSheetMain.Button(deleteDef.getAttribute(), `&#10008; ${deleteDef.getTitle()}`)}
+                                </div>
+                            </div>`;
+                            let repeaterSection = WuxSheetMain.Table.FlexTableGroup(
+                                `${WuxSheetMain.Header(repeatingDef.getTitle())}
+                                <div>
+                                    <div class="wuxNoRepControl wuxRepeatingFlexSection">
+                                        <fieldset class="${repeatingDef.getVariable()}">
+                                            ${rowContents}
+                                        </fieldset>
+                                    </div>
+                                    ${WuxSheetMain.Row("&nbsp;")}
+                                </div>`);
+
+                            let sectionDef = WuxDef.Get("Title_PerkTechniques");
+                            let contents = WuxSheetMain.MultiRowGroup([filterPanel, repeaterSection], WuxSheetMain.Table.FlexTable, 2);
+                            contents = WuxSheetMain.TabBlock(contents);
+                            return WuxSheetMain.CollapsibleTab(
+                                sectionDef.getAttribute(WuxDef._expand),
+                                sectionDef.getTitle(),
+                                contents);
                         }
                     ;
                     return {

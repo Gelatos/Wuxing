@@ -276,7 +276,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         return new ExtendedTechniqueStyleDatabase(arr);
     };
     const createBasicPerks = function (arr) {
-        return new WuxDataDatabase(arr, arr => { return new PerkData(arr); });
+        return new WuxDataDatabase(arr, arr => { return new PerkData(arr); }, ["group", "cost"]);
     };
     const createLanguages = function (arr) {
         return new WuxDataDatabase(arr, arr => {return new LanguageData(arr)});

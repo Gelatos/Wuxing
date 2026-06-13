@@ -230,6 +230,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                 switch (attrHandler.parseString(nameFieldName)) {
                     case WuxDef.GetTitle("Popup_ItemInspectionName"):
                     case WuxDef.GetTitle("Popup_TechniqueInspectionName"):
+                    case WuxDef.GetTitle("Popup_PerkInspectionName"):
                         WuxWorkerInspectPopup.Close();
                         break;
                     case WuxDef.GetTitle("Popup_FilterTechniquePopupName"):

@@ -178,6 +178,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
             output += listenerSetAdvancementJobSkillPerkPoints();
             output += listenerUpdatePerkPoints();
             output += listenerUpdateSecondAffinityBranch();
+            output += listenerPerkAutoFilterButtons();
             output += listenerUpdateJobBuildPoints();
             output += listenerSeeJobTechniques();
             output += listenerUpdateSkillBuildPoints();
@@ -250,6 +251,11 @@ var AdvancementBackend = AdvancementBackend || (function () {
                 `WuxWorkerPerks.UpdateSecondAffinityBranch(eventinfo)`,
                 true
             );
+        },
+        listenerPerkAutoFilterButtons = function () {
+            let perkFilters = WuxDef.Filter([new DatabaseFilterData("group", "PerkAutoFilter")]);
+            let groupVariableNames = perkFilters.map(def => def.getVariable());
+            return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerInspectPopup.OpenPerkFilterTechniqueInspection(eventinfo)`, true);
         },
         listenerUpdateJobBuildPoints = function () {
             let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"));

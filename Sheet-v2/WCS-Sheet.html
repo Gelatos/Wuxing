@@ -1371,6 +1371,117 @@
 					</div>
 				</div>
 			</div>
+			<div class="wuxSegment">
+				<input type="checkbox" class="wuxTab-flag" name="attr_ttl-perktechniques_expand" checked="checked" />
+				<div class="wuxTabHeader">
+					<div class="wuxInteractiveInnerExpandBlock">
+						<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_ttl-perktechniques_expand" />
+						<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_ttl-perktechniques_expand" />
+						<span class="wuxInteractiveExpandIcon">&#9662;</span>
+						<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_ttl-perktechniques_expand" />
+						<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
+					</div><span>Perk Techniques</span>
+				</div>
+				<div class="wuxTab">
+					<div class="wuxSectionBlock wuxLayoutItem">
+						<div class="wuxTabContent">
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
+									<div class="wuxHeader2">Filter Options</div>
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_forme-showfromnonelement" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_forme-showfromnonelement" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_forme-showfromnonelement" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_forme-showfromnonelement" />
+															<div class="wuxHeader">Show Restricted Aspect Techniques</div>
+														</div>
+													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Show Restricted Aspect Techniques</div>
+
+													<span class="wuxDescription">Many techniques require the user to have a specific elemental aspect to use it. By default, the filter options below will not show any techniques you cannot use. Activating this option will not hide techniques you cannot learn because of your lack of the appropriate elemental aspect.</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup">
+											<div class="wuxInteractiveBlock wuxTooltip">
+												<span class="wuxTooltipText">
+													<div class="wuxInteractiveInnerBlock">
+														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_forme-showlevelrestricted" />
+														<div class="wuxInteractiveContent">
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_forme-showlevelrestricted" />
+															<span class="wuxInteractiveIcon">&#9635;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_forme-showlevelrestricted" />
+															<span class="wuxInteractiveAuxIcon">&#9634;</span>
+															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_forme-showlevelrestricted" />
+															<div class="wuxHeader">Show Techniques Above Your Level</div>
+														</div>
+													</div>
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Show Techniques Above Your Level</div>
+
+													<span class="wuxDescription">Many techniques require a minimum level to be learned. By default, the filter options below will not show any techniques you are too low level to learn. Activating this option will not hide techniques you are too low leveled to learn.</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxHeader2">Choose a Perk Technique Filter</div>
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup">
+											<div class="wuxButton wuxWidth160">
+												<input type="checkbox" name="attr_perkfilter-cost3perk">
+												<span>Cost 3 Perks</span>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup">
+											<div class="wuxButton wuxWidth160">
+												<input type="checkbox" name="attr_perkfilter-cost4perk">
+												<span>Cost 4 Perks</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxHeader">Learned Perks</div>
+									<div>
+										<div class="wuxNoRepControl wuxRepeatingFlexSection">
+											<fieldset class="repeating_perks">
+												<div class="wuxMultiRow" style="min-width: 300px;">
+													<div class="wuxEquipableName"><span class="wuxDescription" name="attr_forme-name"></span></div>
+													<div class="wuxFloatRight">
+														<div class="wuxButton">
+															<input type="checkbox" name="attr_forme-inspect">
+															<span>&#9673; Inspect</span>
+														</div>
+														<div class="wuxButton">
+															<input type="checkbox" name="attr_forme-delete">
+															<span>&#10008; Delete</span>
+														</div>
+													</div>
+												</div>
+											</fieldset>
+										</div>
+										<div class="wuxRow">&nbsp;</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="wuxPageDisplay-Jobs">
@@ -18354,6 +18465,9 @@ WuxWorkerPerks.UpdateBuildPoints(eventinfo)
 });
 on("change:perk-second_affinity_affinity", function (eventinfo) {
 WuxWorkerPerks.UpdateSecondAffinityBranch(eventinfo)
+});
+on("change:perkfilter-cost3perk change:perkfilter-cost4perk", function (eventinfo) {
+WuxWorkerInspectPopup.OpenPerkFilterTechniqueInspection(eventinfo)
 });
 on("change:job-fighter change:job-brawler change:job-labourer change:job-sentinel change:job-warden change:job-bulwark change:job-exemplar change:job-kineticist change:job-rogue change:job-hunter change:job-sniper change:job-warmage change:job-trooper change:job-geomancer change:job-magus change:job-spellwright change:job-tactician change:job-bard change:job-scholar change:job-medic change:job-alchemist change:job-culinarian change:job-merchant change:job-courtier change:job-diplomat change:job-detective change:job-inquisitor change:job-preacher change:job-etherealist change:job-phantasm change:job-shade change:job-yaksa", function (eventinfo) {
 WuxWorkerJobs.UpdateBuildPoints(eventinfo)
