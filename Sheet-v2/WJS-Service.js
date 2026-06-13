@@ -87,25 +87,29 @@ class WorkerAttributeHandler extends AttributeHandler {
 	}
 
 	async run() {
-		let attributeHandler = this;
-		for (const key in attributeHandler.repeatingSections) {
-			attributeHandler.repeatingSections[key].ids = await getSectionIDsAsync(attributeHandler.repeatingSections[key].repeatingSection);
-			attributeHandler.repeatingSections[key].addAttributeMods(attributeHandler);
+		try {
+			let attributeHandler = this;
+			for (const key in attributeHandler.repeatingSections) {
+				attributeHandler.repeatingSections[key].ids = await getSectionIDsAsync(attributeHandler.repeatingSections[key].repeatingSection);
+				attributeHandler.repeatingSections[key].addAttributeMods(attributeHandler);
+			}
+			attributeHandler.current = await getAttrsAsync(attributeHandler.mods);
+
+			attributeHandler.getCallbacks.forEach((callback) => {
+				callback(attributeHandler);
+			});
+			await setAttrsAsync(attributeHandler.update, {silent: true});
+			let repeatingUpdates = attributeHandler.getRepeaterUpdate();
+			for (let i = 0; i < repeatingUpdates.length; i++) {
+				await setAttrsAsync(repeatingUpdates[i], {silent: true});
+			}
+
+			attributeHandler.finishCallbacks.forEach((callback) => {
+				callback(attributeHandler);
+			});
+		} catch(e) {
+			// No active character in sandbox — skip silently
 		}
-		attributeHandler.current = await getAttrsAsync(attributeHandler.mods);
-		
-		attributeHandler.getCallbacks.forEach((callback) => {
-			callback(attributeHandler);
-		});
-		await setAttrsAsync(attributeHandler.update, {silent: true});
-		let repeatingUpdates = attributeHandler.getRepeaterUpdate();
-		for (let i = 0; i < repeatingUpdates.length; i++) {
-			await setAttrsAsync(repeatingUpdates[i], {silent: true});
-		}
-		
-		attributeHandler.finishCallbacks.forEach((callback) => {
-			callback(attributeHandler);
-		});
 	}
 	
 	getRepeaterUpdate() {
@@ -129,12 +133,16 @@ class WorkerRepeatingSectionHandler extends RepeatingSectionHandler {
 
 	getIds(callback) {
 		let repeater = this;
-		getSectionIDs(this.repeatingSection, function (ids) {
-			ids.forEach(function (id) {
-				repeater.ids.push(id);
+		try {
+			getSectionIDs(this.repeatingSection, function (ids) {
+				ids.forEach(function (id) {
+					repeater.ids.push(id);
+				});
+				callback(repeater);
 			});
-			callback(repeater);
-		});
+		} catch(e) {
+			// No active character in sandbox — skip silently
+		}
 	}
 
 	removeId(id) {

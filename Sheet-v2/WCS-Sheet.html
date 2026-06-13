@@ -168,35 +168,6 @@
 										<option value="Metal">Metal Affinity</option>
 										<option value="Water">Water Affinity</option>
 									</select><span class="wuxDescription" name="attr_affinity_learn"></span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader">
-										<div class="wuxInfoButton"><input type="checkbox" name="attr_soc-influence_info" undefined><span>?</span></div>Influences
-									</div>
-									<input type="hidden" class="wuxHiddenField-flag" name="attr_soc-influence_info" value="0">
-									<div class="wuxHiddenField">
-										<div class="wuxInfoContent">
-											<div class="wuxHeader2">Influences</div>
-
-											<span class="wuxDescription">An influence is a phrase or desription of something of some importance to the character. </span><span class="wuxDescription">An influence is written as a few words to describe a personality trait, bond, or ideal. Each Influence should be clearly defined and unique. Descriptors like “Skilled” or “Determined” are too general, since they could fit nearly any context. Instead, choose something more distinct, like “Street Duelist” or “Focused Studier.” These influences can then be further explained in a description for when it would be used if necessary.</span>
-											<div class="wuxHeader2">Using Influences</div>
-
-											<span class="wuxDescription">Influences can be used to better perform skill checks. Whenenver a character makes a skill check, if they feel like the skill check is related to an influence they may draw on the influence to gain advantage. The number of advantages gained are equal to the influence's severity. Using an influence in this way always closts a Boon.</span><span class="wuxDescription">Whenever you play your character and leverage an influence you may gain a Boon of Truth. Gaining this boon is usually reserved for particularly dramatic uses of your influence.</span><span class="wuxDescription">Influences are used to modify social checks. Whenenver making a check that modifies favor, if your statements reference your target's influences it may grant you advantage or disadvantage to your check.</span><span class="wuxDescription">Influences also modify persuade checks. Whenever performing a persuade check you will add or removed 1d6 to the check result. This value can increase by +5 on a moderate influence, or +10 on a severe.</span><span class="wuxDescription">Only the most supportive influence and most opposing influence may affect any one persuade or favor roll.</span>
-										</div>
-									</div>
-									<div>
-										<fieldset class="repeating_influences">
-											<div class="wuxMultiRow"><select class="wuxInput wuxInfluenceType" name="attr_soc-severity" value="0">
-													<option value="sev-low{0}{1}">+1 Low</option>
-													<option value="sev-moderate{0}{1}">+2 Moderate</option>
-													<option value="sev-high{0}{1}">+3 High</option>
-												</select><input type="text" class="wuxInput wuxInfluenceDescription" name="attr_soc-influence" placeholder="Influence" /></div><textarea class="wuxInput wuxHeight30" name="attr_soc-influencedesc" placeholder="Description"></textarea>
-										</fieldset>
-									</div>
-								</div>
-							</div>
-							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
 									<div class="wuxHeader">
 										<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-originadvancement_info" undefined><span>?</span></div>Advancement
 									</div>
@@ -230,103 +201,30 @@
 											</div>
 										</span></div>
 									<span class="wuxDescription"><span name="attr_adv-cr_max"></span></span>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Advancement Points
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Advancement Points</div>
-
-												<span class="wuxDescription">Advancement Points are gained whenever you level. </span><span class="wuxDescription">Every level you gain grants you one advancement point.</span>
-											</div>
-										</span></div>
-									<span class="wuxDescription"><span name="attr_adv"></span> / <span name="attr_adv_max"></span></span>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Job Points
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Job Points</div>
-
-												<span class="wuxDescription">Job Points lets you pick additional jobs. You can only ever have one job equipped. You can swap jobs as a swift action that costs 3 EN.</span>
-											</div>
-										</span></div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_job" value="" placeholder="0" />
-										<div class="wuxInputLabel">cost: 2 advancement points</div>
-									</div>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Skill Points
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Skill Points</div>
-
-												<span class="wuxDescription">Skill Points are used to gain new skills or skill augments.</span>
-											</div>
-										</span></div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_skill" value="" placeholder="0" />
-										<div class="wuxInputLabel">cost: 1 advancement point</div>
-									</div>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Style Points
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Style Points</div>
-
-												<span class="wuxDescription">You can spend advancement points to gain Style Points. These style points can be used to learn a new style. You must spend 1 advancement points to gain 1 technique point.</span>
-											</div>
-										</span></div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_technique" value="" placeholder="0" />
-										<div class="wuxInputLabel">cost: 2 advancement points</div>
-									</div>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<div class="wuxHeader">
-										<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-origintraining_info" undefined><span>?</span></div>Training
+										<div class="wuxInfoButton"><input type="checkbox" name="attr_soc-influence_info" undefined><span>?</span></div>Influences
 									</div>
-									<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-origintraining_info" value="0">
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_soc-influence_info" value="0">
 									<div class="wuxHiddenField">
 										<div class="wuxInfoContent">
-											<div class="wuxHeader2">Training</div>
+											<div class="wuxHeader2">Influences</div>
 
-											<span class="wuxDescription">The pursuit of skill and knowledge is an ever flowing river. Training is a system to track your progress in learning knowledge and new techniques apart from Advancement.</span><span class="wuxDescription">Here you can set any training points your character may have gained prior to character creation. You may also immediately spend these points on further build points.</span>
+											<span class="wuxDescription">An influence is a phrase or desription of something of some importance to the character. </span><span class="wuxDescription">An influence is written as a few words to describe a personality trait, bond, or ideal. Each Influence should be clearly defined and unique. Descriptors like “Skilled” or “Determined” are too general, since they could fit nearly any context. Instead, choose something more distinct, like “Street Duelist” or “Focused Studier.” These influences can then be further explained in a description for when it would be used if necessary.</span>
+											<div class="wuxHeader2">Using Influences</div>
+
+											<span class="wuxDescription">Influences can be used to better perform skill checks. Whenenver a character makes a skill check, if they feel like the skill check is related to an influence they may draw on the influence to gain advantage. The number of advantages gained are equal to the influence's severity. Using an influence in this way always closts a Boon.</span><span class="wuxDescription">Whenever you play your character and leverage an influence you may gain a Boon of Truth. Gaining this boon is usually reserved for particularly dramatic uses of your influence.</span><span class="wuxDescription">Influences are used to modify social checks. Whenenver making a check that modifies favor, if your statements reference your target's influences it may grant you advantage or disadvantage to your check.</span><span class="wuxDescription">Influences also modify persuade checks. Whenever performing a persuade check you will add or removed 1d6 to the check result. This value can increase by +5 on a moderate influence, or +10 on a severe.</span><span class="wuxDescription">Only the most supportive influence and most opposing influence may affect any one persuade or favor roll.</span>
 										</div>
 									</div>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Bonus Advancement Points
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Bonus Advancement Points</div>
-
-												<span class="wuxDescription">Bonus advancement points are gained by spending TP - experience gained when performing tasks.</span><span class="wuxDescription">Whenever you gain 60 TP, you gain one Advancement Point.</span>
-											</div>
-										</span></div>
-									<input type="number" class="wuxInput" name="attr_trn-bonustraining" />
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Training Points
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Training Points</div>
-
-												<span class="wuxDescription">Training points are gained through training and whenever you level. You can spend training points on bonus build points for both knowledge and techniques. </span><span class="wuxDescription">Whenever you gain 30 PP, you gain one Training Point.</span>
-											</div>
-										</span></div>
-									<span class="wuxDescription"><span name="attr_trn"></span> / <span name="attr_trn_max"></span></span>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Style Points
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Style Points</div>
-
-												<span class="wuxDescription">You can spend training points to gain Style Points. These style points can be used to learn a new style. You must spend 1 training points to gain 1 style point.</span>
-											</div>
-										</span></div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-tp_technique" value="" placeholder="0" />
-										<div class="wuxInputLabel">cost: 1 training point</div>
+									<div>
+										<fieldset class="repeating_influences">
+											<div class="wuxMultiRow"><select class="wuxInput wuxInfluenceType" name="attr_soc-severity" value="0">
+													<option value="sev-low{0}{1}">+1 Low</option>
+													<option value="sev-moderate{0}{1}">+2 Moderate</option>
+													<option value="sev-high{0}{1}">+3 High</option>
+												</select><input type="text" class="wuxInput wuxInfluenceDescription" name="attr_soc-influence" placeholder="Influence" /></div><textarea class="wuxInput wuxHeight30" name="attr_soc-influencedesc" placeholder="Description"></textarea>
+										</fieldset>
 									</div>
 								</div>
 							</div>
@@ -348,250 +246,348 @@
 				<div class="wuxTab">
 					<div class="wuxSectionBlock wuxLayoutItem">
 						<div class="wuxTabContent">
-							<div class="wuxHeader">Basics</div>
-							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Display Name
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Display Name</div>
+							<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
 
-												<span class="wuxDescription">This is the name that is displayed when your character speaks.</span>
-											</div>
-										</span></div>
-									<input type="text" class="wuxInput" name="attr_display_name" />
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Full Name
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Full Name</div>
-
-												<span class="wuxDescription">A character's full name. This is for self referential use and is not used anywhere except on this character sheet page.</span>
-											</div>
-										</span></div>
-									<input type="text" class="wuxInput" name="attr_full_name" />
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Title
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Title</div>
-
-												<span class="wuxDescription"></span><span class="wuxDescription">This is a title given to the character to briefly describe them. Shown when an introduction call is made.</span>
-											</div>
-										</span></div>
-									<input type="text" class="wuxInput" name="attr_ttl" />
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Age
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Age</div>
-
-												<span class="wuxDescription">This represents how old the character is in years.</span>
-											</div>
-										</span></div>
-									<input type="text" class="wuxInput" name="attr_age" />
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Gender
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Gender</div>
-
-												<span class="wuxDescription">The gender the character identifies as.</span>
-											</div>
-										</span></div>
-									<select class="wuxInput" name="attr_gender" value="0">
-										<option value="0">-</option>
-										<option value="Male">Male</option>
-										<option value="Female">Female</option>
-										<option value="Non Binary">Non Binary</option>
-									</select>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Home Region
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Home Region</div>
-
-												<span class="wuxDescription">The region of Wuxing where the character hails from.</span>
-											</div>
-										</span></div>
-									<select class="wuxInput" name="attr_homeregion" value="0">
-										<option value="0">-</option>
-										<option value="Walthair">Walthair</option>
-										<option value="EastSea">East Sea</option>
-										<option value="Khem">Khem</option>
-										<option value="Aridsha">Aridsha</option>
-										<option value="Ceres">Ceres</option>
-										<option value="Colswei">Colswei</option>
-										<option value="Dowfeng">Dowfeng</option>
-										<option value="Wayling">Wayling</option>
-										<option value="Novus">Novus</option>
-									</select>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Ethnicity
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Ethnicity</div>
-
-												<span class="wuxDescription">The ethnicity the character is a part of.</span>
-											</div>
-										</span></div>
-									<select class="wuxInput" name="attr_ethnicity" value="0">
-										<option value="0">-</option>
-										<option value="Coastborne">Coastborne</option>
-										<option value="Suntouched">Suntouched</option>
-										<option value="Sandfolk">Sandfolk</option>
-										<option value="Plains-kin">Plains-kin</option>
-										<option value="Frostcloaked">Frostcloaked</option>
-										<option value="Earthblood">Earthblood</option>
-										<option value="Other">Other</option>
-									</select>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Quick Description
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Quick Description</div>
-
-												<span class="wuxDescription">A short description of what this character is about</span>
-											</div>
-										</span></div>
-									<textarea class="wuxInput wuxHeight30" name="attr_quickdescription"></textarea>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Backstory
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Backstory</div>
-
-												<span class="wuxDescription">This is the background story of your character. Add any details on the character's past here.</span>
-											</div>
-										</span></div>
-									<textarea class="wuxInput wuxHeight150" name="attr_backstory"></textarea>
-								</div>
-							</div>
-							<div class="wuxHeader">Background Generator</div>
-							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Name
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Name</div>
-												<span class="wuxDescription"><em>Generator</em></span>
-												<span class="wuxDescription"></span>
-											</div>
-										</span></div>
-									<input type="text" class="wuxInput" name="attr_note-genname" />
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Full Name
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Full Name</div>
-												<span class="wuxDescription"><em>Generator</em></span>
-												<span class="wuxDescription"></span>
-											</div>
-										</span></div>
-									<input type="text" class="wuxInput" name="attr_note-genfullname" />
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Gender
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Gender</div>
-												<span class="wuxDescription"><em>Generator</em></span>
-												<span class="wuxDescription"></span>
-											</div>
-										</span></div>
-									<input type="text" class="wuxInput" name="attr_note-gengender" />
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Home Region
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Home Region</div>
-												<span class="wuxDescription"><em>Generator</em></span>
-												<span class="wuxDescription"></span>
-											</div>
-										</span></div>
-									<select class="wuxInput" name="attr_note-genhomeregion" value="0">
-										<option value="0">-</option>
-										<option value="Walthair">Walthair</option>
-										<option value="EastSea">East Sea</option>
-										<option value="Khem">Khem</option>
-										<option value="Aridsha">Aridsha</option>
-										<option value="Ceres">Ceres</option>
-										<option value="Colswei">Colswei</option>
-										<option value="Dowfeng">Dowfeng</option>
-										<option value="Wayling">Wayling</option>
-										<option value="Novus">Novus</option>
-									</select>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Race
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Race</div>
-												<span class="wuxDescription"><em>Generator</em></span>
-												<span class="wuxDescription"></span>
-											</div>
-										</span></div>
-									<input type="text" class="wuxInput" name="attr_note-genrace" />
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Personality
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Personality</div>
-												<span class="wuxDescription"><em>Generator</em></span>
-												<span class="wuxDescription"></span>
-											</div>
-										</span></div>
-									<input type="text" class="wuxInput" name="attr_note-genpersonality" />
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Motivation
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Motivation</div>
-												<span class="wuxDescription"><em>Generator</em></span>
-												<span class="wuxDescription"></span>
-											</div>
-										</span></div>
-									<input type="text" class="wuxInput" name="attr_note-genmotivation" />
-									<div class="wuxMultiRow">
-										<div class="wuxButton">
-											<input type="checkbox" name="attr_note-generatecharacter">
-											<span>Generate Character</span>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-background_expand" value="0">
+									<span class="wuxHiddenInlineField">
+										<div class="wuxButton wuxStyleHeaderButton">
+											<input type="checkbox" name="attr_ttl-background_expand">
+											<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
 										</div>
+									</span>
+
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-background_expand" value="0">
+									<span class="wuxHiddenInlineAuxField">
+										<div class="wuxButton wuxStyleHeaderButton">
+											<input type="checkbox" name="attr_ttl-background_expand">
+											<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
+										</div>
+									</span>
+
+								</span>Background</div>
+							<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-background_expand" value="0">
+							<div class="wuxHiddenAuxField">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Sheet Name
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Sheet Name</div>
+
+															<span class="wuxDescription">The name of the character sheet. This is the name of the character as written in the character's Journal entry.</span>
+														</div>
+													</span></div>
+												<input type="text" class="wuxInput" name="attr_sheetname" />
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Full Name
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Full Name</div>
+
+															<span class="wuxDescription">A character's full name. This is for self referential use and is not used anywhere except on this character sheet page.</span>
+														</div>
+													</span></div>
+												<input type="text" class="wuxInput" name="attr_full_name" />
+											</div>
+										</div>
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Ancestry
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Ancestry</div>
+
+															<span class="wuxDescription">Ancestry represents your characters species and background. This unlocks certain techniques and styles which are locked to specific ancestries. </span>
+														</div>
+													</span></div>
+												<select class="wuxInput" name="attr_ancestry" value="0">
+													<option value="0">-</option>
+													<option value="Human">Human</option>
+													<option value="Spirit">Spirit</option>
+												</select>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<input type="hidden" class="wuxAncestrySelection-flag" name="attr_ancestry" value="0">
+												<div class="wuxAncestrySelection-Human">
+													<div class="wuxHeader2"><span class="wuxTooltip">
+															<span class="wuxTooltipText">
+																Ethnicity
+															</span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Ethnicity</div>
+
+																<span class="wuxDescription">The ethnicity the character is a part of.</span>
+															</div>
+														</span></div>
+													<select class="wuxInput" name="attr_ethnicity" value="0">
+														<option value="0">-</option>
+														<option value="Coastborne">Coastborne</option>
+														<option value="Suntouched">Suntouched</option>
+														<option value="Sandfolk">Sandfolk</option>
+														<option value="Plains-kin">Plains-kin</option>
+														<option value="Frostcloaked">Frostcloaked</option>
+														<option value="Earthblood">Earthblood</option>
+														<option value="Other">Other</option>
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Elemental Affinity
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Elemental Affinity</div>
+
+													<span class="wuxDescription">Characters that are able to cast spells have an elemental affinity that ties them to one of the five primary elements. Some techniques require an elemental affinity before they may be taken.</span><span class="wuxDescription">Your chosen affinity grants weaknesses and resistances to certain elemental damage types.</span>
+												</div>
+											</span></div>
+										<select class="wuxInput" name="attr_affinityaspect" value="0">
+											<option value="0">Unaspected</option>
+											<option value="Wood">Wood Affinity</option>
+											<option value="Fire">Fire Affinity</option>
+											<option value="Earth">Earth Affinity</option>
+											<option value="Metal">Metal Affinity</option>
+											<option value="Water">Water Affinity</option>
+										</select>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Quick Description
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Quick Description</div>
+
+													<span class="wuxDescription">A short description of what this character is about</span>
+												</div>
+											</span></div>
+										<textarea class="wuxInput wuxHeight30" name="attr_quickdescription"></textarea>
 									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxButton">
-											<input type="checkbox" name="attr_note-usegeneration">
-											<span>Use This Character</span>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Title
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Title</div>
+
+													<span class="wuxDescription"></span><span class="wuxDescription">This is a title given to the character to briefly describe them. Shown when an introduction call is made.</span>
+												</div>
+											</span></div>
+										<input type="text" class="wuxInput" name="attr_ttl" />
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Age
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Age</div>
+
+															<span class="wuxDescription">This represents how old the character is in years.</span>
+														</div>
+													</span></div>
+												<input type="text" class="wuxInput" name="attr_age" />
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Gender
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Gender</div>
+
+															<span class="wuxDescription">The gender the character identifies as.</span>
+														</div>
+													</span></div>
+												<select class="wuxInput" name="attr_gender" value="0">
+													<option value="0">-</option>
+													<option value="Male">Male</option>
+													<option value="Female">Female</option>
+													<option value="Non Binary">Non Binary</option>
+												</select>
+											</div>
 										</div>
-									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxButton">
-											<input type="checkbox" name="attr_note-clearbackground">
-											<span>Clear Background</span>
-										</div>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Home Region
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Home Region</div>
+
+													<span class="wuxDescription">The region of Wuxing where the character hails from.</span>
+												</div>
+											</span></div>
+										<select class="wuxInput" name="attr_homeregion" value="0">
+											<option value="0">-</option>
+											<option value="Walthair">Walthair</option>
+											<option value="EastSea">East Sea</option>
+											<option value="Khem">Khem</option>
+											<option value="Aridsha">Aridsha</option>
+											<option value="Ceres">Ceres</option>
+											<option value="Colswei">Colswei</option>
+											<option value="Dowfeng">Dowfeng</option>
+											<option value="Wayling">Wayling</option>
+											<option value="Novus">Novus</option>
+										</select>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Backstory
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Backstory</div>
+
+													<span class="wuxDescription">This is the background story of your character. Add any details on the character's past here.</span>
+												</div>
+											</span></div>
+										<textarea class="wuxInput wuxHeight150" name="attr_backstory"></textarea>
 									</div>
 								</div>
 							</div>
+
+							<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
+
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-backgroundgenerator_expand" value="0">
+									<span class="wuxHiddenInlineField">
+										<div class="wuxButton wuxStyleHeaderButton">
+											<input type="checkbox" name="attr_ttl-backgroundgenerator_expand">
+											<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
+										</div>
+									</span>
+
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-backgroundgenerator_expand" value="0">
+									<span class="wuxHiddenInlineAuxField">
+										<div class="wuxButton wuxStyleHeaderButton">
+											<input type="checkbox" name="attr_ttl-backgroundgenerator_expand">
+											<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
+										</div>
+									</span>
+
+								</span>Background Generator</div>
+							<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-backgroundgenerator_expand" value="0">
+							<div class="wuxHiddenField">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Name
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Name</div>
+													<span class="wuxDescription"><em>Generator</em></span>
+													<span class="wuxDescription"></span>
+												</div>
+											</span></div>
+										<input type="text" class="wuxInput" name="attr_note-genname" />
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Full Name
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Full Name</div>
+													<span class="wuxDescription"><em>Generator</em></span>
+													<span class="wuxDescription"></span>
+												</div>
+											</span></div>
+										<input type="text" class="wuxInput" name="attr_note-genfullname" />
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Gender
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Gender</div>
+													<span class="wuxDescription"><em>Generator</em></span>
+													<span class="wuxDescription"></span>
+												</div>
+											</span></div>
+										<input type="text" class="wuxInput" name="attr_note-gengender" />
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Home Region
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Home Region</div>
+													<span class="wuxDescription"><em>Generator</em></span>
+													<span class="wuxDescription"></span>
+												</div>
+											</span></div>
+										<select class="wuxInput" name="attr_note-genhomeregion" value="0">
+											<option value="0">-</option>
+											<option value="Walthair">Walthair</option>
+											<option value="EastSea">East Sea</option>
+											<option value="Khem">Khem</option>
+											<option value="Aridsha">Aridsha</option>
+											<option value="Ceres">Ceres</option>
+											<option value="Colswei">Colswei</option>
+											<option value="Dowfeng">Dowfeng</option>
+											<option value="Wayling">Wayling</option>
+											<option value="Novus">Novus</option>
+										</select>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Race
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Race</div>
+													<span class="wuxDescription"><em>Generator</em></span>
+													<span class="wuxDescription"></span>
+												</div>
+											</span></div>
+										<input type="text" class="wuxInput" name="attr_note-genrace" />
+									</div>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Personality
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Personality</div>
+													<span class="wuxDescription"><em>Generator</em></span>
+													<span class="wuxDescription"></span>
+												</div>
+											</span></div>
+										<input type="text" class="wuxInput" name="attr_note-genpersonality" />
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Motivation
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Motivation</div>
+													<span class="wuxDescription"><em>Generator</em></span>
+													<span class="wuxDescription"></span>
+												</div>
+											</span></div>
+										<input type="text" class="wuxInput" name="attr_note-genmotivation" />
+										<div class="wuxMultiRow">
+											<div class="wuxButton">
+												<input type="checkbox" name="attr_note-generatecharacter">
+												<span>Generate Character</span>
+											</div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxButton">
+												<input type="checkbox" name="attr_note-usegeneration">
+												<span>Use This Character</span>
+											</div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxButton">
+												<input type="checkbox" name="attr_note-clearbackground">
+												<span>Clear Background</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
 						</div>
 					</div>
 				</div>

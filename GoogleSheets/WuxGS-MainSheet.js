@@ -1401,3 +1401,111 @@ var WuxSheet = WuxSheet || (function () {
     };
 }());
 
+var WuxCharacterSheetBuilders = WuxCharacterSheetBuilders || (function () {
+    'use strict';
+
+    var
+        buildInfluences = function () {
+            let contents = "";
+            let influenceDef = WuxDef.Get("Soc_Influence");
+            let usingInfluences = WuxDef.Get("Title_UsingInfluences");
+
+            let influenceInfo = WuxDefinition.TooltipDescription(influenceDef);
+            influenceInfo += WuxDefinition.TooltipDescription(usingInfluences);
+            influenceInfo = WuxSheetMain.Info.Contents(influenceDef.getAttribute(WuxDef._info), influenceInfo);
+
+            contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(influenceDef.getAttribute(WuxDef._info))}${influenceDef.title}`)}
+                ${influenceInfo}`;
+
+            let influenceContents = WuxSheetMain.MultiRow(
+                WuxSheetMain.Select(
+                    WuxDef.GetAttribute("Soc_Severity"),
+                    WuxDef.Filter([new DatabaseFilterData("group", "SeverityRank")]),
+                    false,
+                    "wuxInfluenceType") +
+                WuxSheetMain.CustomInput(
+                    "text",
+                    influenceDef.getAttribute(),
+                    "wuxInput wuxInfluenceDescription",
+                    ` placeholder="Influence"`)
+            );
+            influenceContents += WuxSheetMain.Textarea(WuxDef.GetAttribute("Soc_InfluenceDesc"),
+                "wuxInput wuxHeight30", WuxDef.GetTitle("Soc_InfluenceDesc"));
+
+            contents += `<div>
+                <fieldset class="${WuxDef.GetVariable("RepeatingInfluences")}">
+                    ${influenceContents}
+                </fieldset>
+            </div>`;
+            return WuxSheetMain.Table.FlexTableGroup(contents);
+        },
+
+        buildBackgroundBasics = function () {
+            let contents = "";
+            contents += WuxDefinition.BuildTextInput(WuxDef.Get("DisplayName"), WuxDef.GetAttribute("DisplayName"));
+            contents += WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName"));
+            contents += WuxDefinition.BuildTextInput(WuxDef.Get("Title"), WuxDef.GetAttribute("Title"));
+            contents += WuxDefinition.BuildTextInput(WuxDef.Get("Age"), WuxDef.GetAttribute("Age"));
+            contents += WuxDefinition.BuildSelect(WuxDef.Get("Gender"), WuxDef.GetAttribute("Gender"),
+                WuxDef.Filter([new DatabaseFilterData("group", "GenderType")]), true);
+            contents += WuxDefinition.BuildSelect(WuxDef.Get("HomeRegion"), WuxDef.GetAttribute("HomeRegion"),
+                WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]));
+            contents += WuxDefinition.BuildSelect(WuxDef.Get("Ethnicity"), WuxDef.GetAttribute("Ethnicity"),
+                WuxDef.Filter([new DatabaseFilterData("group", "RaceType")]), true);
+            return WuxSheetMain.Table.FlexTableGroup(contents);
+        },
+
+        buildBackgroundBackstory = function () {
+            let contents = "";
+            contents += WuxDefinition.BuildTextarea(WuxDef.Get("QuickDescription"), WuxDef.GetAttribute("QuickDescription"),
+                "wuxInput wuxHeight30");
+            contents += WuxDefinition.BuildTextarea(WuxDef.Get("Backstory"), WuxDef.GetAttribute("Backstory"),
+                "wuxInput wuxHeight150");
+            return WuxSheetMain.Table.FlexTableGroup(contents);
+        },
+
+        buildBackgroundGenerator = function () {
+            let leftColumn = "";
+            leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenName"), WuxDef.GetAttribute("Note_GenName"));
+            leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenFullName"), WuxDef.GetAttribute("Note_GenFullName"));
+            leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenGender"), WuxDef.GetAttribute("Note_GenGender"));
+            leftColumn += WuxDefinition.BuildSelect(WuxDef.Get("Note_GenHomeRegion"), WuxDef.GetAttribute("Note_GenHomeRegion"),
+                WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]));
+            leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenRace"), WuxDef.GetAttribute("Note_GenRace"));
+            leftColumn = WuxSheetMain.Table.FlexTableGroup(leftColumn);
+
+            let rightColumn = "";
+            let generatorDefinition = WuxDef.Get("Note_GenerateCharacter");
+            let useDefinition = WuxDef.Get("Note_UseGeneration");
+            let clearDefinition = WuxDef.Get("Note_ClearBackground");
+            rightColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenPersonality"), WuxDef.GetAttribute("Note_GenPersonality"));
+            rightColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenMotivation"), WuxDef.GetAttribute("Note_GenMotivation"));
+            rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(generatorDefinition.getAttribute(), generatorDefinition.getTitle()));
+            rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(useDefinition.getAttribute(), useDefinition.getTitle()));
+            rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(clearDefinition.getAttribute(), clearDefinition.getTitle()));
+            rightColumn = WuxSheetMain.Table.FlexTableGroup(rightColumn);
+
+            return `${WuxSheetMain.MultiRowGroup([leftColumn, rightColumn], WuxSheetMain.Table.FlexTable, 2)}`;
+        },
+
+        buildBackground = function () {
+            let contents = "";
+            contents += WuxSheetMain.Header("Basics");
+            contents += `${WuxSheetMain.MultiRowGroup([buildBackgroundBasics(), buildBackgroundBackstory()], WuxSheetMain.Table.FlexTable, 2)}`;
+            contents += WuxSheetMain.Header("Background Generator");
+            contents += buildBackgroundGenerator();
+
+            let definition = WuxDef.Get("Title_Background");
+            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, WuxSheetMain.TabBlock(contents));
+        }
+
+    ;
+    return {
+        BuildInfluences: buildInfluences,
+        BuildBackgroundBasics: buildBackgroundBasics,
+        BuildBackgroundBackstory: buildBackgroundBackstory,
+        BuildBackgroundGenerator: buildBackgroundGenerator,
+        BuildBackground: buildBackground
+    };
+}());
+

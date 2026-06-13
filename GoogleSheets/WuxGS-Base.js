@@ -74,7 +74,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
                         buildCharacterSection = function () {
                             let contents = "";
-                            contents += WuxSheetMain.MultiRowGroup([basics(), influences()], WuxSheetMain.Table.FlexTable, 2);
+                            contents += WuxSheetMain.MultiRowGroup([basics(), WuxCharacterSheetBuilders.BuildInfluences()], WuxSheetMain.Table.FlexTable, 2);
                             contents += WuxSheetMain.MultiRowGroup([advancement(), resources()], WuxSheetMain.Table.FlexTable, 2);
 
                             contents = WuxSheetMain.TabBlock(contents);
@@ -101,41 +101,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                                     WuxDef.GetAttribute("Affinity"), affinityFilter, false)
                             );
                             
-                            return WuxSheetMain.Table.FlexTableGroup(contents);
-                        },
-
-                        influences = function () {
-                            let contents = "";
-                            let influenceDef = WuxDef.Get("Soc_Influence");
-                            let usingInfluences = WuxDef.Get("Title_UsingInfluences");
-
-                            let influenceInfo = WuxDefinition.TooltipDescription(influenceDef);
-                            influenceInfo += WuxDefinition.TooltipDescription(usingInfluences);
-                            influenceInfo = WuxSheetMain.Info.Contents(influenceDef.getAttribute(WuxDef._info), influenceInfo);
-
-                            contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(influenceDef.getAttribute(WuxDef._info))}${influenceDef.title}`)}
-							${influenceInfo}`;
-
-                            let influenceContents = WuxSheetMain.MultiRow(
-                                WuxSheetMain.Select(
-                                    WuxDef.GetAttribute("Soc_Severity"),
-                                    WuxDef.Filter([new DatabaseFilterData("group", "SeverityRank")]),
-                                    false,
-                                    "wuxInfluenceType") +
-                                WuxSheetMain.CustomInput(
-                                    "text",
-                                    influenceDef.getAttribute(),
-                                    "wuxInput wuxInfluenceDescription",
-                                    ` placeholder="Influence"`)
-                            );
-                            influenceContents += WuxSheetMain.Textarea(WuxDef.GetAttribute("Soc_InfluenceDesc"),
-                                "wuxInput wuxHeight30", WuxDef.GetTitle("Soc_InfluenceDesc"));
-
-                            contents += `<div>
-								<fieldset class="${WuxDef.GetVariable("RepeatingInfluences")}">
-									${influenceContents}
-								</fieldset>
-							</div>`;
                             return WuxSheetMain.Table.FlexTableGroup(contents);
                         },
 
