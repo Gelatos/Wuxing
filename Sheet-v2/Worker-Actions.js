@@ -729,7 +729,7 @@ class FormeTechniqueDatabase {
             let techniqueData = allStyleTechniques[key];
             callback(techniqueData.technique, techniqueData.rank);
         }
-        let allPerkTechniques = this.perkWorker.getPermanentTechniques();
+        let allPerkTechniques = this.perkWorker.getPerkTechniques();
         allPerkTechniques.forEach((technique) => {
             callback(technique, 1);
         });

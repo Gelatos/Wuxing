@@ -521,8 +521,11 @@ class PerkTechniqueInspectionPopup extends InspectionPopup {
     }
 
     addItem() {
+        let worker = new WuxPerkWorkerBuild();
+        this.attributeHandler.addMod([worker.attrMax, worker.attrBuildDraft]);
         this.attributeHandler.addRepeatingSection("RepeatingPerks");
         super.addItem();
+        WuxWorkerActions.UpdateAllActionsFromMenu(this.attributeHandler);
     }
 
     performAddItem(attrHandler, itemName) {
@@ -533,6 +536,14 @@ class PerkTechniqueInspectionPopup extends InspectionPopup {
         attrHandler.addUpdate(
             repeater.getFieldName(repeater.generateRowId(), WuxDef.GetVariable("Forme_Name")),
             technique.name);
+
+        let perk = WuxPerks.Get(itemName);
+        if (perk == undefined) return;
+        let perkAttr = perk.createDefinition(WuxDef.Get("Perk")).getVariable();
+        let worker = new WuxPerkWorkerBuild();
+        worker.setBuildStatsDraft(attrHandler);
+        worker.updateBuildStats(attrHandler, perkAttr, perk.cost);
+        worker.updatePoints(attrHandler);
     }
 }
 
@@ -713,6 +724,12 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             Debug.Log("Open Technique Popup");
             let inspectPopup = new TechniqueInspectionPopup(attributeHandler);
             inspectPopup.open(inventoryTitle, inventoryItems, addType);
+        },
+
+        openPerkTechniqueInspection = function (attributeHandler, inventoryTitle, inventoryItems) {
+            Debug.Log("Open Perk Technique Popup");
+            let inspectPopup = new PerkTechniqueInspectionPopup(attributeHandler);
+            inspectPopup.open(inventoryTitle, inventoryItems);
         },
         
         close = function () {
@@ -1065,6 +1082,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         OpenItemInspection: openItemInspection,
         OpenItemFilterInspection: openItemFilterInspection,
         OpenTechniqueInspection: openTechniqueInspection,
+        OpenPerkTechniqueInspection: openPerkTechniqueInspection,
         OpenStyleFilterTechniqueInspection: openStyleFilterTechniqueInspection,
         OpenPerkFilterTechniqueInspection: openPerkFilterTechniqueInspection,
         OpenCustomStyleFilterInspection: openCustomStyleFilterInspection,

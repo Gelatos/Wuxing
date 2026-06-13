@@ -12762,6 +12762,8 @@ var FormeBuilder = FormeBuilder || (function () {
             output += listenerJobSelect();
             output += listenerInspectListStyle();
             output += listenerDeleteListStyle();
+            output += listenerInspectListPerk();
+            output += listenerDeleteListPerk();
             return output;
         },
         listenerEquipRepeatingForme = function () {
@@ -12818,6 +12820,16 @@ var FormeBuilder = FormeBuilder || (function () {
             return WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingStyles")}:${WuxDef.GetVariable("Forme_Delete")}`],
                 `WuxWorkerStyles.DeleteListStyle(eventinfo)`, true);
+        },
+        listenerInspectListPerk = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingPerks")}:${WuxDef.GetVariable("Forme_Inspect")}`],
+                `WuxWorkerPerks.InspectListPerk(eventinfo)`, true);
+        },
+        listenerDeleteListPerk = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingPerks")}:${WuxDef.GetVariable("Forme_Delete")}`],
+                `WuxWorkerPerks.DeleteListPerk(eventinfo)`, true);
         }
     return {
         Print: print

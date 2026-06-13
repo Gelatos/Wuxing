@@ -901,6 +901,21 @@ class WuxPerkWorkerBuild extends WuxWorkerBuild {
 		});
 		return techniques;
 	}
+
+	getPerkTechniques() {
+		let techniques = [];
+		this.iterateBuildStats(function (perkVariableData) {
+			let perk = WuxPerks.GetByVariableName(perkVariableData.name);
+			if (perk == undefined) return;
+			if (perk.group !== "Perk Technique") return;
+			if (perkVariableData.value == "0" || perkVariableData.value == 0) return;
+			let technique = WuxTechs.Get(perk.name);
+			if (technique != undefined) {
+				techniques.push(technique);
+			}
+		});
+		return techniques;
+	}
 }
 
 class WuxSkillWorkerBuild extends WuxWorkerBuild {

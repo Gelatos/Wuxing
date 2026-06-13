@@ -1440,6 +1440,14 @@
 									<div class="wuxFlexTable">
 										<div class="wuxFlexTableItemGroup">
 											<div class="wuxButton wuxWidth160">
+												<input type="checkbox" name="attr_perkfilter-cost2perk">
+												<span>Cost 2 Perks</span>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup">
+											<div class="wuxButton wuxWidth160">
 												<input type="checkbox" name="attr_perkfilter-cost3perk">
 												<span>Cost 3 Perks</span>
 											</div>
@@ -18466,7 +18474,7 @@ WuxWorkerPerks.UpdateBuildPoints(eventinfo)
 on("change:perk-second_affinity_affinity", function (eventinfo) {
 WuxWorkerPerks.UpdateSecondAffinityBranch(eventinfo)
 });
-on("change:perkfilter-cost3perk change:perkfilter-cost4perk", function (eventinfo) {
+on("change:perkfilter-cost2perk change:perkfilter-cost3perk change:perkfilter-cost4perk", function (eventinfo) {
 WuxWorkerInspectPopup.OpenPerkFilterTechniqueInspection(eventinfo)
 });
 on("change:job-fighter change:job-brawler change:job-labourer change:job-sentinel change:job-warden change:job-bulwark change:job-exemplar change:job-kineticist change:job-rogue change:job-hunter change:job-sniper change:job-warmage change:job-trooper change:job-geomancer change:job-magus change:job-spellwright change:job-tactician change:job-bard change:job-scholar change:job-medic change:job-alchemist change:job-culinarian change:job-merchant change:job-courtier change:job-diplomat change:job-detective change:job-inquisitor change:job-preacher change:job-etherealist change:job-phantasm change:job-shade change:job-yaksa", function (eventinfo) {
@@ -18607,6 +18615,12 @@ WuxWorkerStyles.InspectListStyle(eventinfo)
 });
 on("change:repeating_styles:forme-delete", function (eventinfo) {
 WuxWorkerStyles.DeleteListStyle(eventinfo)
+});
+on("change:repeating_perks:forme-inspect", function (eventinfo) {
+WuxWorkerPerks.InspectListPerk(eventinfo)
+});
+on("change:repeating_perks:forme-delete", function (eventinfo) {
+WuxWorkerPerks.DeleteListPerk(eventinfo)
 });
 on("change:pag-addmeleeweapon change:pag-addrangedweapon change:pag-addtool change:pag-addcommstool change:pag-addlighttool change:pag-addbindingstool change:pag-addmisctool change:pag-addheadgear change:pag-addfacegear change:pag-addchestgear change:pag-addarmgear change:pag-addleggear change:pag-addfootgear change:pag-addmiscgear", function (eventinfo) {
 WuxWorkerGear.OpenEquipmentAdditionItemInspection(eventinfo, "Add Equipment")

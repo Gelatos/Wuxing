@@ -711,6 +711,88 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 			});
 
 			attributeHandler.run();
+		},
+
+		inspectListPerk = function (eventinfo) {
+			let worker = new WuxPerkWorkerBuild();
+			let attributeHandler = new WorkerAttributeHandler();
+			attributeHandler.addRepeatingSection("RepeatingPerks");
+			let repeater = attributeHandler.getRepeatingSection("RepeatingPerks");
+			let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+			let nameFieldName = repeater.getFieldName(selectedId, WuxDef.GetVariable("Forme_Name"));
+			attributeHandler.addMod([nameFieldName, worker.attrBuildDraft]);
+
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				let selectedPerkName = attrHandler.parseString(nameFieldName);
+
+				worker.setBuildStatsDraft(attrHandler);
+
+				let inventoryItems = [];
+				let selectedItem = undefined;
+
+				worker.iterateBuildStats(function (buildStat) {
+					let perk = WuxPerks.GetByVariableName(buildStat.name);
+					if (perk == undefined) return;
+					if (perk.group !== "Perk Technique") return;
+					if (buildStat.value == "0" || buildStat.value == 0) return;
+
+					let technique = WuxTechs.Get(perk.name);
+					if (technique == undefined) return;
+
+					let iconAffinities = technique.getAffinityParts();
+					let variants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
+					for (let variant of variants) {
+						let variantParts = variant.getAffinityParts();
+						for (let part of variantParts) {
+							if (!iconAffinities.includes(part)) iconAffinities.push(part);
+						}
+					}
+
+					let item = new InspectionInventoryItem(perk.name, perk.name, false, undefined, undefined, iconAffinities);
+					if (perk.name === selectedPerkName) {
+						selectedItem = item;
+					} else {
+						inventoryItems.push(item);
+					}
+				});
+
+				if (selectedItem !== undefined) {
+					inventoryItems.unshift(selectedItem);
+				}
+
+				let attributeHandler2 = new WorkerAttributeHandler();
+				WuxWorkerInspectPopup.OpenPerkTechniqueInspection(attributeHandler2, "Perk Techniques", inventoryItems);
+				attributeHandler2.run();
+			});
+
+			attributeHandler.run();
+		},
+
+		deleteListPerk = function (eventinfo) {
+			let worker = new WuxPerkWorkerBuild();
+			let attributeHandler = new WorkerAttributeHandler();
+			attributeHandler.addRepeatingSection("RepeatingPerks");
+			let repeater = attributeHandler.getRepeatingSection("RepeatingPerks");
+			let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+			let nameFieldName = repeater.getFieldName(selectedId, WuxDef.GetVariable("Forme_Name"));
+			attributeHandler.addMod([nameFieldName, worker.attrMax, worker.attrBuildDraft]);
+
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				let perkName = attrHandler.parseString(nameFieldName);
+				Debug.Log(`Deleting Perk Technique ${perkName}`);
+
+				let perk = WuxPerks.Get(perkName);
+				if (perk != undefined) {
+					let perkAttr = perk.createDefinition(WuxDef.Get("Perk")).getVariable();
+					worker.setBuildStatsDraft(attrHandler);
+					worker.removeBuildStat(perkAttr);
+					worker.updatePoints(attrHandler);
+					worker.revertBuildStatsDraft(attrHandler);
+				}
+				repeater.removeId(selectedId);
+			});
+			WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+			attributeHandler.run();
 		}
 
 	return {
@@ -718,7 +800,9 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 		UpdateSecondAffinityBranch: updateSecondAffinityBranch,
 		SetJobSkillPerkPoints: setJobSkillPerkPoints,
 		RefreshStats: refreshStats,
-		UpdateStats: updateStats
+		UpdateStats: updateStats,
+		InspectListPerk: inspectListPerk,
+		DeleteListPerk: deleteListPerk
 	};
 }());
 
