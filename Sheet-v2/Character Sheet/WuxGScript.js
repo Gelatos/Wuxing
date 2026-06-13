@@ -1393,7 +1393,7 @@ class TechniqueStyle extends WuxDatabaseData {
     }
 }
 
-class BasicPerk extends WuxDatabaseData {
+class PerkData extends WuxDatabaseData {
     importJson(json) {
         this.createEmpty();
         this.name = json.name;
@@ -1402,7 +1402,7 @@ class BasicPerk extends WuxDatabaseData {
         this.cost = json.cost;
         this.increase = json.increase;
         this.max = json.max;
-        this.variable = json.variable;
+        this.statVariable = json.statVariable;
         this.descriptions = [json.description];
     }
 
@@ -1420,7 +1420,7 @@ class BasicPerk extends WuxDatabaseData {
         i++;
         this.max = parseInt(dataArray[i]);
         i++;
-        this.variable = "" + dataArray[i];
+        this.statVariable = "" + dataArray[i];
         i++;
         this.descriptions = ["" + dataArray[i]];
         i++;
@@ -6636,7 +6636,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         return new ExtendedTechniqueStyleDatabase(arr);
     };
     const createBasicPerks = function (arr) {
-        return new WuxDataDatabase(arr, arr => { return new BasicPerk(arr); });
+        return new WuxDataDatabase(arr, arr => { return new PerkData(arr); });
     };
     const createLanguages = function (arr) {
         return new WuxDataDatabase(arr, arr => {return new LanguageData(arr)});
@@ -7997,6 +7997,7 @@ class DatabaseAssessment {
             variableNameKeys[definition.getVariable()] = key;
         });
         let basicPerksClassData = JavascriptDatabase.Create(perkDb, WuxDefinition.GetBasicPerk);
+        basicPerksClassData.addVariable("variableNameKeys", JSON.stringify(variableNameKeys));
         basicPerksClassData.addPublicFunction("getByVariableName", function (variableName) {
             let key = variableNameKeys[variableName];
             return get(key);
@@ -10144,7 +10145,7 @@ var WuxDefinition = WuxDefinition || (function () {
             if (values[key] == undefined) {
                 return undefined;
             }
-            return new BasicPerk(values[key]);
+            return new PerkData(values[key]);
         },
         getAttribute = function (key, mod, mod1) {
             let data = get(key);
@@ -12529,11 +12530,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
         listenerUpdatePerkPoints = function () {
             let variables = [];
             WuxPerks.Iterate(function (perk) {
-                if (perk.name == "Second Affinity") {
-                    variables.push(WuxDef.GetVariable("SecondaryAffinity"));
-                } else {
-                    variables.push(Object.assign(new BasicPerk(), perk).createDefinition(WuxDef.Get("Perk")).getVariable());
-                }
+                variables.push(Object.assign(new PerkData(), perk).createDefinition(WuxDef.Get("Perk")).getVariable());
             });
             return WuxSheetBackend.OnChange(variables, `WuxWorkerPerks.UpdateBuildPoints(eventinfo)`, true);
         },
@@ -13468,19 +13465,20 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
                         printBasicPerk = function (perk) {
                             let desc = (perk.descriptions || []).join("\n");
+                            let perkDef = Object.assign(new PerkData(), perk).createDefinition(WuxDef.Get("Perk"));
                             let inputRow;
                             if (perk.name == "Second Affinity") {
                                 inputRow = WuxSheetMain.MultiRow(
                                     WuxSheetMain.InputLabel(`${perk.name} [Cost: ${perk.cost}]`)
                                 ) + WuxSheetMain.MultiRow(
-                                    WuxSheetMain.Select(WuxDef.GetAttribute("SecondaryAffinity"),
+                                    WuxSheetMain.Select(perkDef.getAttribute(),
                                         WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])) +
-                                    WuxSheetMain.DescField(WuxDef.GetAttribute("SecondaryAffinity", WuxDef._learn))
+                                    WuxSheetMain.DescField(perkDef.getAttribute(WuxDef._learn))
                                 );
                             } else {
                                 let label = `${perk.name} [Cost: ${perk.cost}${perk.max ? `, Max: ${perk.max}` : ""}]`;
                                 inputRow = WuxSheetMain.MultiRow(
-                                    WuxSheetMain.Input("number", Object.assign(new BasicPerk(), perk).createDefinition(WuxDef.Get("Perk")).getAttribute(), "", "0") +
+                                    WuxSheetMain.Input("number", perkDef.getAttribute(), "", "0") +
                                     WuxSheetMain.InputLabel(label)
                                 );
                             }
@@ -13848,19 +13846,20 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                         printBasicPerk = function (perk) {
                             let desc = (perk.descriptions || []).join("\n");
+                            let perkDef = Object.assign(new PerkData(), perk).createDefinition(WuxDef.Get("Perk"));
                             let inputRow;
                             if (perk.name == "Second Affinity") {
                                 inputRow = WuxSheetMain.MultiRow(
                                     WuxSheetMain.InputLabel(`${perk.name} [Cost: ${perk.cost}]`)
                                 ) + WuxSheetMain.MultiRow(
-                                    WuxSheetMain.Select(WuxDef.GetAttribute("SecondaryAffinity"),
+                                    WuxSheetMain.Select(perkDef.getAttribute(),
                                         WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])) +
-                                    WuxSheetMain.DescField(WuxDef.GetAttribute("SecondaryAffinity", WuxDef._learn))
+                                    WuxSheetMain.DescField(perkDef.getAttribute(WuxDef._learn))
                                 );
                             } else {
                                 let label = `${perk.name} [Cost: ${perk.cost}${perk.max ? `, Max: ${perk.max}` : ""}]`;
                                 inputRow = WuxSheetMain.MultiRow(
-                                    WuxSheetMain.Input("number", Object.assign(new BasicPerk(), perk).createDefinition(WuxDef.Get("Perk")).getAttribute(), "", "0") +
+                                    WuxSheetMain.Input("number", perkDef.getAttribute(), "", "0") +
                                     WuxSheetMain.InputLabel(label)
                                 );
                             }

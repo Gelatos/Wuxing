@@ -762,7 +762,7 @@ var WuxDefinition = WuxDefinition || (function () {
             if (values[key] == undefined) {
                 return undefined;
             }
-            return new BasicPerk(values[key]);
+            return new PerkData(values[key]);
         },
         getAttribute = function (key, mod, mod1) {
             let data = get(key);

@@ -564,15 +564,12 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 
 	var
 		updateBuildPoints = function (eventinfo) {
-			Debug.Log("Update Perks");
-			let perk = null;
-			WuxPerks.Iterate(function (p) {
-				let perkVar = p.name == "Second Affinity"
-					? WuxDef.GetVariable("SecondaryAffinity")
-					: Object.assign(new BasicPerk(), p).createDefinition(WuxDef.Get("Perk")).getVariable();
-				if (perkVar === eventinfo.sourceAttribute) { perk = p; }
-			});
-			if (perk == null) { return; }
+			Debug.Log(`Update Perks ${eventinfo.sourceAttribute}`);
+			let perk = WuxPerks.GetByVariableName(eventinfo.sourceAttribute);
+			if (perk == undefined) { 
+				Debug.LogError("No Perk Found");
+				return; 
+			}
 
 			let attributeHandler = new WorkerAttributeHandler();
 			let worker = new WuxPerkWorkerBuild();
@@ -597,14 +594,23 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 					worker.updateBuildStats(attrHandler, eventinfo.sourceAttribute, cost);
 					worker.updatePoints(attrHandler);
 				});
-			} else {
+			} 
+			else {
 				let rank = parseInt(eventinfo.newValue) || 0;
-				if (rank > perk.max) { rank = perk.max; }
-				worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, rank, perk.cost, perk.increase);
+				if (rank > perk.max) {
+					rank = perk.max;
+					attributeHandler.addUpdate(eventinfo.sourceAttribute, perk.max);
+				}
+				worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, rank, perk.cost);
+				
+				if (perk.statVariable && perk.statVariable !== "") {
+					let increaseValue = rank * perk.increase;
+					let statDef = WuxDef.Get(perk.statVariable);
+					attributeHandler.addUpdate(statDef.getVariable(WuxDef._perk), increaseValue);
+				}
 			}
-
+			WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
 			refreshStats(attributeHandler);
-			WuxWorkerStyles.UpdateStats(attributeHandler);
 			attributeHandler.run();
 		},
 

@@ -280,19 +280,20 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
                         printBasicPerk = function (perk) {
                             let desc = (perk.descriptions || []).join("\n");
+                            let perkDef = Object.assign(new PerkData(), perk).createDefinition(WuxDef.Get("Perk"));
                             let inputRow;
                             if (perk.name == "Second Affinity") {
                                 inputRow = WuxSheetMain.MultiRow(
                                     WuxSheetMain.InputLabel(`${perk.name} [Cost: ${perk.cost}]`)
                                 ) + WuxSheetMain.MultiRow(
-                                    WuxSheetMain.Select(WuxDef.GetAttribute("SecondaryAffinity"),
+                                    WuxSheetMain.Select(perkDef.getAttribute(),
                                         WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])) +
-                                    WuxSheetMain.DescField(WuxDef.GetAttribute("SecondaryAffinity", WuxDef._learn))
+                                    WuxSheetMain.DescField(perkDef.getAttribute(WuxDef._learn))
                                 );
                             } else {
                                 let label = `${perk.name} [Cost: ${perk.cost}${perk.max ? `, Max: ${perk.max}` : ""}]`;
                                 inputRow = WuxSheetMain.MultiRow(
-                                    WuxSheetMain.Input("number", Object.assign(new BasicPerk(), perk).createDefinition(WuxDef.Get("Perk")).getAttribute(), "", "0") +
+                                    WuxSheetMain.Input("number", perkDef.getAttribute(), "", "0") +
                                     WuxSheetMain.InputLabel(label)
                                 );
                             }
@@ -660,19 +661,20 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                         printBasicPerk = function (perk) {
                             let desc = (perk.descriptions || []).join("\n");
+                            let perkDef = Object.assign(new PerkData(), perk).createDefinition(WuxDef.Get("Perk"));
                             let inputRow;
                             if (perk.name == "Second Affinity") {
                                 inputRow = WuxSheetMain.MultiRow(
                                     WuxSheetMain.InputLabel(`${perk.name} [Cost: ${perk.cost}]`)
                                 ) + WuxSheetMain.MultiRow(
-                                    WuxSheetMain.Select(WuxDef.GetAttribute("SecondaryAffinity"),
+                                    WuxSheetMain.Select(perkDef.getAttribute(),
                                         WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])) +
-                                    WuxSheetMain.DescField(WuxDef.GetAttribute("SecondaryAffinity", WuxDef._learn))
+                                    WuxSheetMain.DescField(perkDef.getAttribute(WuxDef._learn))
                                 );
                             } else {
                                 let label = `${perk.name} [Cost: ${perk.cost}${perk.max ? `, Max: ${perk.max}` : ""}]`;
                                 inputRow = WuxSheetMain.MultiRow(
-                                    WuxSheetMain.Input("number", Object.assign(new BasicPerk(), perk).createDefinition(WuxDef.Get("Perk")).getAttribute(), "", "0") +
+                                    WuxSheetMain.Input("number", perkDef.getAttribute(), "", "0") +
                                     WuxSheetMain.InputLabel(label)
                                 );
                             }

@@ -224,11 +224,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
         listenerUpdatePerkPoints = function () {
             let variables = [];
             WuxPerks.Iterate(function (perk) {
-                if (perk.name == "Second Affinity") {
-                    variables.push(WuxDef.GetVariable("SecondaryAffinity"));
-                } else {
-                    variables.push(Object.assign(new BasicPerk(), perk).createDefinition(WuxDef.Get("Perk")).getVariable());
-                }
+                variables.push(Object.assign(new PerkData(), perk).createDefinition(WuxDef.Get("Perk")).getVariable());
             });
             return WuxSheetBackend.OnChange(variables, `WuxWorkerPerks.UpdateBuildPoints(eventinfo)`, true);
         },

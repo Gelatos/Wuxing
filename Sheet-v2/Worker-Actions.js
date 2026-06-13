@@ -477,6 +477,11 @@ var WuxWorkerActionsService = WuxWorkerActionsService || (function () {
                     if (Array.isArray(variableInfo) && variableInfo.length > 0) {
                         attributeBreakdown[definition.name] = attributeBreakdown[definition.name].concat(variableInfo);
                     }
+                    variableInfo = attrHandler.parseJSON(definition.getVariable(WuxDef._perk));
+                    if (variableInfo != 0) {
+                        attributeBreakdown[definition.name].push("-- Perk Bonuses --");
+                        attributeBreakdown[definition.name] = attributeBreakdown[definition.name].concat([`${variableInfo}`, ""]);
+                    }
                     variableInfo = attrHandler.parseJSON(definition.getVariable(WuxDef._tech, WuxDef._info));
                     if (Array.isArray(variableInfo) && variableInfo.length > 0) {
                         attributeBreakdown[definition.name].push("-- Technique Bonuses --");

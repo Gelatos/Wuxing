@@ -826,9 +826,9 @@ class WuxPerkWorkerBuild extends WuxWorkerBuild {
 		super("Perk");
 	}
 
-	changeWorkerAttribute(attributeHandler, updatingAttr, rank, perkCost, perkIncrease) {
+	changeWorkerAttribute(attributeHandler, updatingAttr, rank, perkCost) {
 		// Write the computed stat value (rank × increase) to the perk's variable
-		attributeHandler.addUpdate(updatingAttr, rank * perkIncrease);
+		attributeHandler.addUpdate(updatingAttr, rank);
 		// Track rank × cost in build stats so perk point totals stay accurate
 		super.changeWorkerAttribute(attributeHandler, updatingAttr, rank * perkCost);
 	}
@@ -856,11 +856,7 @@ class WuxPerkWorkerBuild extends WuxWorkerBuild {
 	getBuildVariables() {
 		let variables = [];
 		WuxPerks.Iterate(function (perk) {
-			if (perk.name == "Second Affinity") {
-				variables.push(WuxDef.GetVariable("SecondaryAffinity"));
-			} else {
-				variables.push(Object.assign(new BasicPerk(), perk).createDefinition(WuxDef.Get("Perk")).getVariable());
-			}
+			variables.push(Object.assign(new PerkData(), perk).createDefinition(WuxDef.Get("Perk")).getVariable());
 		});
 		return variables;
 	}

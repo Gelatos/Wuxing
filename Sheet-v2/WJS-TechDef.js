@@ -17227,34 +17227,35 @@ var WuxPerks = WuxPerks || (function() {
     'use strict';
 
     var
-        keys = ["Second Affinity","Bonus Vitality","Bonus Potency","HP","WILL","Base Speed","Dash Speed","Armor","Starting EN","Bonus Equipment Slot"],
+        keys = ["Second Affinity","Bonus Vitality","Bonus Potency","Increase HP","Increase WILL","Inc. Base Speed","Inc. Dash Speed","Increase Armor","Inc. Starting EN","Bonus Equipment Slots"],
         values = {"Second Affinity":{"name":"Second Affinity","fieldName":"second_affinity","group":"Origin Perks","descriptions":["Human Only. Gain a second elemental affinity."],
-                "variable":"","cost":1,"increase":null,"max":null},
+                "variable":"","cost":1,"increase":null,"max":null,"statVariable":""},
             "Bonus Vitality":{"name":"Bonus Vitality","fieldName":"bonus_vitality","group":"Origin Perks","descriptions":["Gain +1 Vitality per rank. Player characters should start with at least 1 Vitality."],
-                "variable":"Cmb_Vitality","cost":0,"increase":1,"max":4},
+                "variable":"","cost":0,"increase":1,"max":4,"statVariable":"Cmb_Vitality"},
             "Bonus Potency":{"name":"Bonus Potency","fieldName":"bonus_potency","group":"Origin Perks","descriptions":["Gain +1 Potency per rank.This perk is not intended for player characters."],
-                "variable":"Potency","cost":0,"increase":1,"max":12},
-            "HP":{"name":"HP","fieldName":"hp","group":"Stat Boost Perks","descriptions":["Gain 10 HP"],
-                "variable":"HP","cost":1,"increase":10,"max":3},
-            "WILL":{"name":"WILL","fieldName":"will","group":"Stat Boost Perks","descriptions":["Gain 10 WILL"],
-                "variable":"WILL","cost":1,"increase":10,"max":3},
-            "Base Speed":{"name":"Base Speed","fieldName":"base_speed","group":"Stat Boost Perks","descriptions":["Gain +1 Base Speed"],
-                "variable":"Cmb_Mv","cost":2,"increase":1,"max":2},
-            "Dash Speed":{"name":"Dash Speed","fieldName":"dash_speed","group":"Stat Boost Perks","descriptions":["Gain +1 Dash Speed"],
-                "variable":"Cmb_MvDash","cost":2,"increase":1,"max":2},
-            "Armor":{"name":"Armor","fieldName":"armor","group":"Stat Boost Perks","descriptions":["Gain +1 Armor"],
-                "variable":"Cmb_Armor","cost":2,"increase":1,"max":6},
-            "Starting EN":{"name":"Starting EN","fieldName":"starting_en","group":"Stat Boost Perks","descriptions":["Gain +1 Starting EN"],
-                "variable":"StartEN","cost":2,"increase":1,"max":2},
-            "Bonus Equipment Slot":{"name":"Bonus Equipment Slot","fieldName":"bonus_equipment_slot","group":"Stat Boost Perks","descriptions":["Gain +1 Equipment Slot"],
-                "variable":"EquipmentSlots","cost":1,"increase":1,"max":4}},
-        sortingGroups = {"group":{"Origin Perks":["Second Affinity","Bonus Vitality","Bonus Potency"],"Stat Boost Perks":["HP","WILL","Base Speed","Dash Speed","Armor","Starting EN","Bonus Equipment Slot"]}},
+                "variable":"","cost":0,"increase":1,"max":12,"statVariable":"Potency"},
+            "Increase HP":{"name":"Increase HP","fieldName":"increase_hp","group":"Stat Boost Perks","descriptions":["Gain 10 HP"],
+                "variable":"","cost":1,"increase":10,"max":3,"statVariable":"HP"},
+            "Increase WILL":{"name":"Increase WILL","fieldName":"increase_will","group":"Stat Boost Perks","descriptions":["Gain 10 WILL"],
+                "variable":"","cost":1,"increase":10,"max":3,"statVariable":"WILL"},
+            "Inc. Base Speed":{"name":"Inc. Base Speed","fieldName":"inc._base_speed","group":"Stat Boost Perks","descriptions":["Gain +1 Base Speed"],
+                "variable":"","cost":2,"increase":1,"max":2,"statVariable":"Cmb_Mv"},
+            "Inc. Dash Speed":{"name":"Inc. Dash Speed","fieldName":"inc._dash_speed","group":"Stat Boost Perks","descriptions":["Gain +1 Dash Speed"],
+                "variable":"","cost":2,"increase":1,"max":2,"statVariable":"Cmb_MvDash"},
+            "Increase Armor":{"name":"Increase Armor","fieldName":"increase_armor","group":"Stat Boost Perks","descriptions":["Gain +1 Armor"],
+                "variable":"","cost":2,"increase":1,"max":6,"statVariable":"Cmb_Armor"},
+            "Inc. Starting EN":{"name":"Inc. Starting EN","fieldName":"inc._starting_en","group":"Stat Boost Perks","descriptions":["Gain +1 Starting EN"],
+                "variable":"","cost":2,"increase":1,"max":2,"statVariable":"StartEN"},
+            "Bonus Equipment Slots":{"name":"Bonus Equipment Slots","fieldName":"bonus_equipment_slots","group":"Stat Boost Perks","descriptions":["Gain +1 Equipment Slot"],
+                "variable":"","cost":1,"increase":1,"max":4,"statVariable":"EquipmentSlots"}},
+        sortingGroups = {"group":{"Origin Perks":["Second Affinity","Bonus Vitality","Bonus Potency"],"Stat Boost Perks":["Increase HP","Increase WILL","Inc. Base Speed","Inc. Dash Speed","Increase Armor","Inc. Starting EN","Bonus Equipment Slots"]}},
+        variableNameKeys = {"perk-second_affinity":"Second Affinity","perk-bonus_vitality":"Bonus Vitality","perk-bonus_potency":"Bonus Potency","perk-increase_hp":"Increase HP","perk-increase_will":"Increase WILL","perk-inc._base_speed":"Inc. Base Speed","perk-inc._dash_speed":"Inc. Dash Speed","perk-increase_armor":"Increase Armor","perk-inc._starting_en":"Inc. Starting EN","perk-bonus_equipment_slots":"Bonus Equipment Slots"},
 
         get = function (key) {
             if (values[key] == undefined) {
                 return undefined;
             }
-            return new BasicPerk(values[key]);
+            return new PerkData(values[key]);
         },
         getValues = function (keyArray, delimiter, prefix) {
             if (keyArray == undefined || keyArray == "") {
@@ -17612,12 +17613,12 @@ var WuxGoods = WuxGoods || (function() {
             "Bleached Pear":{"name":"Bleached Pear","fieldName":"","group":"Fruit","descriptions":[],
                 "variable":"","category":"Pear","itemType":"Goods","bulk":1,"value":3,"traits":"Edible","description":"A white pear common to desert regions.","affinity":"Wood","location":"Desert","rarity":1},
             "Scorcher Pepper":{"name":"Scorcher Pepper","fieldName":"","group":"Supplement","descriptions":[],
-                "variable":"","category":"Pepper","itemType":"Goods","bulk":1,"value":3,"traits":"Edible","description":"A spicy red and black pepper known for its sting.","affinity":"Wood","location":"Desert","rarity":1},
+                "variable":"","category":"Pepper","itemType":"Goods","bulk":1,"value":3,"traits":"Edible","description":"A spicy red and black pepper known for its sting.","affinity":"Wood","location":"Desert","rarity":1}
+            ,
             "Rhynoseed":{"name":"Rhynoseed","fieldName":"","group":"Supplement","descriptions":[],
                 "variable":"","category":"","itemType":"Goods","bulk":1,"value":40,"traits":"","description":"A seed whose extracts can cause psychoactive effects to induce erratic movement.","affinity":"Wood","location":"Desert","rarity":2},
             "Flaked Salt":{"name":"Flaked Salt","fieldName":"","group":"Supplement","descriptions":[],
-                "variable":"","category":"Salt","itemType":"Goods","bulk":1,"value":3,"traits":"Edible","description":"Flakey salt produced gathered from crystallized salt in the desert.","affinity":"Wood","location":"Desert","rarity":1}
-            ,
+                "variable":"","category":"Salt","itemType":"Goods","bulk":1,"value":3,"traits":"Edible","description":"Flakey salt produced gathered from crystallized salt in the desert.","affinity":"Wood","location":"Desert","rarity":1},
             "Crystal Sugarcane":{"name":"Crystal Sugarcane","fieldName":"","group":"Supplement","descriptions":[],
                 "variable":"","category":"Sugar","itemType":"Goods","bulk":1,"value":3,"traits":"Edible","description":"A fragrant grass found in desert regions that is often used to sweeten beverages and meals.","affinity":"Wood","location":"Desert","rarity":1},
             "Turmeric":{"name":"Turmeric","fieldName":"","group":"Supplement","descriptions":[],
@@ -18099,7 +18100,8 @@ var WuxItems = WuxItems || (function() {
                     "endEffectConditionName":"","endEffectConditionEffect":"","techniqueEffect":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                         "effect":"","traits":""},
                     "isCustom":false,"rank":0},
-                "hasTechnique":false},
+                "hasTechnique":false}
+            ,
             "Great Sword":{"name":"Great Sword","fieldName":"","group":"Weapon","descriptions":[],
                 "variable":"","category":"Melee","itemType":"UsableItem","bulk":15,"value":460,"traits":"Sword; Sharp","description":"","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","commonTechniques":"","technique":{"name":"Great Sword","fieldName":"great_sword","group":"","descriptions":[],
                     "variable":"","techSet":"Item","version":"2.0","affinity":"","tier":2,"action":"","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"FilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],
@@ -18108,8 +18110,7 @@ var WuxItems = WuxItems || (function() {
                                 "effect":"","traits":""}},
                         "sortingGroups":{"type":{"":["T0"]}},
                         "useDefaultWillBreak":false},
-                    "enhancementEffects":{}
-                    ,
+                    "enhancementEffects":{},
                     "damageTypes":[],
                     "endEffectConditionName":"","endEffectConditionEffect":"","techniqueEffect":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                         "effect":"","traits":""},
@@ -18587,7 +18588,8 @@ var WuxItems = WuxItems || (function() {
                         "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"15","workers":[{"variableName":[],
                                         "definitionName":[],
                                         "value":15,"multiplier":1,"max":0}]},
-                                "effect":"HP","traits":""},
+                                "effect":"HP","traits":""}
+                            ,
                             "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"2","workers":[{"variableName":[],
                                         "definitionName":[],
                                         "value":2,"multiplier":1,"max":0}]},
@@ -18602,8 +18604,7 @@ var WuxItems = WuxItems || (function() {
                                 "effect":"Def_Reflex","traits":""}},
                         "sortingGroups":{"type":{"Boost":["T0","T1","T2","T3"]}},
                         "useDefaultWillBreak":false},
-                    "enhancementEffects":{}
-                    ,
+                    "enhancementEffects":{},
                     "damageTypes":[],
                     "endEffectConditionName":"","endEffectConditionEffect":"","techniqueEffect":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"15","workers":[{"variableName":[],
                                 "definitionName":[],
@@ -19110,13 +19111,13 @@ var WuxItems = WuxItems || (function() {
                                 "effect":"","traits":""}},
                         "sortingGroups":{"type":{"":["T0"]}},
                         "useDefaultWillBreak":false},
-                    "enhancementEffects":{},
+                    "enhancementEffects":{}
+                    ,
                     "damageTypes":[],
                     "endEffectConditionName":"","endEffectConditionEffect":"","techniqueEffect":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                         "effect":"","traits":""},
                     "isCustom":false,"rank":0},
-                "hasTechnique":false}
-            ,
+                "hasTechnique":false},
             "Box, scroll":{"name":"Box, scroll","fieldName":"","group":"Gear","descriptions":[],
                 "variable":"","category":"Container","itemType":"UsableItem","bulk":1,"value":30,"traits":"","description":"This wooden box easily holds 10 scrolls and has small clips or bookmarks for easier indexing. Retrieving a scroll from a held scroll box is a move action.","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","commonTechniques":"","technique":{"name":"Box, scroll","fieldName":"box,_scroll","group":"","descriptions":[],
                     "variable":"","techSet":"Item","version":"2.0","affinity":"","tier":2,"action":"","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"FilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],

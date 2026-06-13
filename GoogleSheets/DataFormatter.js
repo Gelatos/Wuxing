@@ -276,7 +276,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         return new ExtendedTechniqueStyleDatabase(arr);
     };
     const createBasicPerks = function (arr) {
-        return new WuxDataDatabase(arr, arr => { return new BasicPerk(arr); });
+        return new WuxDataDatabase(arr, arr => { return new PerkData(arr); });
     };
     const createLanguages = function (arr) {
         return new WuxDataDatabase(arr, arr => {return new LanguageData(arr)});
@@ -1637,6 +1637,7 @@ class DatabaseAssessment {
             variableNameKeys[definition.getVariable()] = key;
         });
         let basicPerksClassData = JavascriptDatabase.Create(perkDb, WuxDefinition.GetBasicPerk);
+        basicPerksClassData.addVariable("variableNameKeys", JSON.stringify(variableNameKeys));
         basicPerksClassData.addPublicFunction("getByVariableName", function (variableName) {
             let key = variableNameKeys[variableName];
             return get(key);

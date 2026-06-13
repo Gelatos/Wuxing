@@ -1393,7 +1393,7 @@ class TechniqueStyle extends WuxDatabaseData {
     }
 }
 
-class BasicPerk extends WuxDatabaseData {
+class PerkData extends WuxDatabaseData {
     importJson(json) {
         this.createEmpty();
         this.name = json.name;
@@ -1402,7 +1402,7 @@ class BasicPerk extends WuxDatabaseData {
         this.cost = json.cost;
         this.increase = json.increase;
         this.max = json.max;
-        this.variable = json.variable;
+        this.statVariable = json.statVariable;
         this.descriptions = [json.description];
     }
 
@@ -1420,7 +1420,7 @@ class BasicPerk extends WuxDatabaseData {
         i++;
         this.max = parseInt(dataArray[i]);
         i++;
-        this.variable = "" + dataArray[i];
+        this.statVariable = "" + dataArray[i];
         i++;
         this.descriptions = ["" + dataArray[i]];
         i++;
