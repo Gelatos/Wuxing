@@ -1393,6 +1393,47 @@ class TechniqueStyle extends WuxDatabaseData {
     }
 }
 
+class BasicPerk extends WuxDatabaseData {
+    importJson(json) {
+        this.createEmpty();
+        this.name = json.name;
+        this.fieldName = Format.ToFieldName(this.name);
+        this.group = json.group;
+        this.cost = json.cost;
+        this.increase = json.increase;
+        this.max = json.max;
+        this.variable = json.variable;
+        this.descriptions = [json.description];
+    }
+
+    importSheets(dataArray) {
+        this.createEmpty();
+        let i = 0;
+        this.name = "" + dataArray[i];
+        i++;
+        this.fieldName = Format.ToFieldName(this.name);
+        this.group = "" + dataArray[i];
+        i++;
+        this.cost = parseInt(dataArray[i]);
+        i++;
+        this.increase = parseInt(dataArray[i]);
+        i++;
+        this.max = parseInt(dataArray[i]);
+        i++;
+        this.variable = "" + dataArray[i];
+        i++;
+        this.descriptions = ["" + dataArray[i]];
+        i++;
+    }
+
+    createEmpty() {
+        super.createEmpty();
+        this.cost = 0;
+        this.increase = 0;
+        this.max = 0;
+    }
+}
+
 class SkillData extends WuxDatabaseData {
     importJson(json) {
         this.createEmpty();

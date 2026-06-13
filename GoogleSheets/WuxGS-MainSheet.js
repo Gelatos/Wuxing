@@ -758,6 +758,12 @@ var WuxDefinition = WuxDefinition || (function () {
             }
             return new GoodsData(values[key]);
         },
+        getBasicPerk = function (key) {
+            if (values[key] == undefined) {
+                return undefined;
+            }
+            return new BasicPerk(values[key]);
+        },
         getAttribute = function (key, mod, mod1) {
             let data = get(key);
             return data.getAttribute(mod, mod1);
@@ -924,6 +930,7 @@ var WuxDefinition = WuxDefinition || (function () {
         GetTechnique: getTechnique,
         GetItem: getItem,
         GetGoods: getGoods,
+        GetBasicPerk: getBasicPerk,
         GetAttribute: getAttribute,
         GetVariable: getVariable,
         GetUntypedAttribute: getUntypedAttribute,

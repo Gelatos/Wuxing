@@ -275,6 +275,9 @@ var SheetsDatabase = SheetsDatabase || (function () {
     const createStyles = function (arr) {
         return new ExtendedTechniqueStyleDatabase(arr);
     };
+    const createBasicPerks = function (arr) {
+        return new WuxDataDatabase(arr, arr => { return new BasicPerk(arr); });
+    };
     const createLanguages = function (arr) {
         return new WuxDataDatabase(arr, arr => {return new LanguageData(arr)});
     };
@@ -346,7 +349,8 @@ var SheetsDatabase = SheetsDatabase || (function () {
         CreateGoods: createGoods,
         CreateGear: createGear,
         CreateConsumables: createConsumables,
-        CreateDefinitionTypes: createDefinitionTypes
+        CreateDefinitionTypes: createDefinitionTypes,
+        CreateBasicPerks: createBasicPerks
     }
 }());
 
@@ -365,6 +369,7 @@ class SheetDatabaseObject {
         this.gear;
         this.consumables;
         this.status;
+        this.basicPerks;
     }
 
     readDatabase(sheetName, startRow) {
@@ -409,7 +414,7 @@ class SheetDatabaseObject {
         this.styles = this.getStyles();
     }
     getStyles() {
-        return SheetsDatabase.CreateStyles(this.readDatabase("Styles", 2));
+        return SheetsDatabase.CreateStyles([]);
     }
     setSkills() {
         this.skills = SheetsDatabase.CreateSkills(this.readDatabase("Skills", 2));
@@ -437,6 +442,9 @@ class SheetDatabaseObject {
     }
     setStatus() {
         this.status = SheetsDatabase.CreateStatus(this.readDatabase("Status", 2));
+    }
+    setBasicPerks() {
+        this.basicPerks = SheetsDatabase.CreateBasicPerks(this.readDatabase("Perks", 2));
     }
 }
 
@@ -1460,6 +1468,9 @@ class DatabaseAssessment {
         if (setDefinitions || setCharacterSheet) {
             this.sheetsDb.setStyles();
         }
+        if (setDefinitions || setTech || setCharacterSheet) {
+            this.sheetsDb.setBasicPerks();
+        }
         if (setDefinitions || setCharacterSheet) {
             this.sheetsDb.setSkills();
         }
@@ -1617,6 +1628,9 @@ class DatabaseAssessment {
         });
         styleClassData.addPublicFunction("getGroupVariables", WuxDefinition.GetGroupVariablesStyle);
         output += styleClassData.print("WuxStyles") + "\n";
+
+        let basicPerksClassData = JavascriptDatabase.Create(this.sheetsDb.basicPerks, WuxDefinition.GetBasicPerk);
+        output += basicPerksClassData.print("WuxBasicPerks") + "\n";
 
         let goodsClassData = JavascriptDatabase.Create(this.sheetsDb.goods, WuxDefinition.GetGoods);
         output += goodsClassData.print("WuxGoods") + "\n";
