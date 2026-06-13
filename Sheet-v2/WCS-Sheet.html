@@ -278,7 +278,7 @@
 											</div>
 										</span></div>
 									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_technique" value="" placeholder="0" />
-										<div class="wuxInputLabel">cost: 1 advancement point</div>
+										<div class="wuxInputLabel">cost: 2 advancement points</div>
 									</div>
 								</div>
 								<div class="wuxFlexTableItemGroup">
@@ -315,19 +315,6 @@
 											</div>
 										</span></div>
 									<span class="wuxDescription"><span name="attr_trn"></span> / <span name="attr_trn_max"></span></span>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Knowledge Points
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Knowledge Points</div>
-
-												<span class="wuxDescription">You can spend training points to gain Knowledge Points. These knowledge points can be used to increase tier in a job. You must spend 1 training points to gain 1 knowledge point.</span>
-											</div>
-										</span></div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-tp_knowledge" value="" placeholder="0" />
-										<div class="wuxInputLabel">cost: 1 training point</div>
-									</div>
 									<div class="wuxHeader2"><span class="wuxTooltip">
 											<span class="wuxTooltipText">
 												Style Points
@@ -795,19 +782,6 @@
 									<input type="number" class="wuxInput" name="attr_trn-bonustraining" />
 									<div class="wuxHeader2"><span class="wuxTooltip">
 											<span class="wuxTooltipText">
-												Knowledge Points
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Knowledge Points</div>
-
-												<span class="wuxDescription">You can spend training points to gain Knowledge Points. These knowledge points can be used to increase tier in a job. You must spend 1 training points to gain 1 knowledge point.</span>
-											</div>
-										</span></div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-tp_knowledge" value="" placeholder="0" />
-										<div class="wuxInputLabel">cost: 1 training point</div>
-									</div>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
 												Style Points
 											</span>
 											<div class="wuxTooltipContent">
@@ -1082,6 +1056,19 @@
 												</div>
 											</span></div>
 										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_technique" value="" placeholder="0" />
+											<div class="wuxInputLabel">cost: 2 advancement points</div>
+										</div>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Knowledge Points
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Knowledge Points</div>
+
+													<span class="wuxDescription">You can spend training points to gain Knowledge Points. These knowledge points can be used to increase tier in a job. You must spend 1 training points to gain 1 knowledge point.</span>
+												</div>
+											</span></div>
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-tp_knowledge" value="" placeholder="0" />
 											<div class="wuxInputLabel">cost: 1 advancement point</div>
 										</div>
 									</div>
@@ -18159,8 +18146,12 @@ on("change:trn-bonustraining", function (eventinfo) {
 WuxWorkerAdvancement.SetBonusTrainingAdvancementPoints();
 
 });
-on("change:trn-tp_knowledge change:trn-tp_technique", function (eventinfo) {
+on("change:trn-tp_technique", function (eventinfo) {
 WuxWorkerTraining.SetTrainingPointsUpdate(eventinfo);
+
+});
+on("change:trn-tp_knowledge", function (eventinfo) {
+WuxWorkerAdvancement.SetAdvancementPointsUpdate(eventinfo);
 
 });
 on("change:lng-minere_rank change:lng-junal_rank change:lng-apollen_rank change:lng-lib_rank change:lng-cert_rank change:lng-dustell_rank change:lng-muralic_rank change:lng-shira_rank change:lng-ciel_rank change:lng-citeq_rank change:lng-manstan_rank change:lng-salkan_rank change:lng-sansic_rank change:lng-silq_rank change:lng-kleikan_rank change:lng-shorespeak_rank change:lng-verdeni_rank change:lng-emotion_rank change:lng-empathy_rank change:lng-wolfwarg_rank change:lng-jovean_rank change:lng-mytikan_rank change:lrc-academics_rank change:lrc-profession_rank change:lrc-craftmanship_rank change:lrc-geography_rank change:lrc-history_rank change:lrc-culture_rank change:lrc-religion_rank change:lrc-academics_rank change:lrc-profession_rank change:lrc-craftmanship_rank change:lrc-geography_rank change:lrc-history_rank change:lrc-culture_rank change:lrc-religion_rank change:lor-health_rank change:lor-mana_rank change:lor-mathematics_rank change:lor-nature_rank change:lor-school_rank change:lor-spirit_rank change:lor-warfare_rank change:lor-zoology_rank change:lor-arboriculture_rank change:lor-farming_rank change:lor-fishing_rank change:lor-hunting_rank change:lor-legal_rank change:lor-mercantile_rank change:lor-mining_rank change:lor-alchemy_rank change:lor-architecture_rank change:lor-brewing_rank change:lor-cooking_rank change:lor-engineering_rank change:lor-glassblowing_rank change:lor-leatherworking_rank change:lor-sculpting_rank change:lor-smithing_rank change:lor-weaving_rank change:lor-aridsha_rank change:lor-ceres_rank change:lor-colswei_rank change:lor-khem_rank change:lor-novus_rank change:lor-walthair_rank change:lor-wayling_rank change:lor-ethereal_plane_rank change:lor-aridsha_history_rank change:lor-ceres_history_rank change:lor-colswei_history_rank change:lor-khem_history_rank change:lor-novus_history_rank change:lor-walthair_history_rank change:lor-wayling_history_rank change:lor-art_rank change:lor-etiquette_rank change:lor-fashion_rank change:lor-games_rank change:lor-music_rank change:lor-scribing_rank change:lor-theater_rank change:lor-church_of_kongkwei_rank change:lor-guidance_rank change:lor-life's_circle_rank change:lor-ocean_court_rank change:lor-sylvan_rank change:lor-zushaon_rank", function (eventinfo) {

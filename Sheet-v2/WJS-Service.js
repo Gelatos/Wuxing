@@ -350,12 +350,16 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 		let buildPoints = 0;
 		let advTechs = WuxDef.GetVariable("AdvancementTechnique");
 		let perkConversion = WuxDef.GetVariable("AdvancementPerkTransfer");
+		let trainingKnowledge = WuxDef.GetVariable("TrainingKnowledge");
 
 		if (this.buildStats.has(advTechs)) {
-			buildPoints += this.buildStats.getIntValue(advTechs);
+			buildPoints += this.buildStats.getIntValue(advTechs) * 2;
 		}
 		if (this.buildStats.has(perkConversion)) {
 			buildPoints -= this.buildStats.getIntValue(perkConversion);
+		}
+		if (this.buildStats.has(trainingKnowledge)) {
+			buildPoints += this.buildStats.getIntValue(trainingKnowledge);
 		}
 		let buildPointsMax = attributeHandler.parseInt(this.attrMax);
 
@@ -365,7 +369,8 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 
 	getBuildVariables() {
 		return [WuxDef.GetVariable("Level"), WuxDef.GetVariable("XP"),
-			WuxDef.GetVariable("AdvancementTechnique"), WuxDef.GetVariable("AdvancementPerkTransfer")];
+			WuxDef.GetVariable("AdvancementTechnique"), WuxDef.GetVariable("AdvancementPerkTransfer"),
+			WuxDef.GetVariable("TrainingKnowledge")];
 	}
 
 	updateLevel(attributeHandler, fieldName, level) {
@@ -407,7 +412,7 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 		attributeHandler.addMod(WuxDef.GetVariable("Level"));
 		attributeHandler.addMod(WuxDef.GetVariable("BonusTraining"));
 
-		let manager = new WuxWorkerBuildManager(["Skill", "Job", "Technique", "Attribute", "Perk"]);
+		let manager = new WuxWorkerBuildManager(["Skill", "Job", "Technique", "Attribute", "Perk", "Knowledge"]);
 		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -490,13 +495,8 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 
 	updatePoints(attributeHandler) {
 		let buildPoints = 0;
-		let advKnowledge = WuxDef.GetVariable("TrainingKnowledge");
 		let advTechs = WuxDef.GetVariable("TrainingTechniques");
 
-		if (this.buildStats.has(advKnowledge)) {
-			Debug.Log(`adding ${this.buildStats.getIntValue(advKnowledge)} to buildPoints`);
-			buildPoints += this.buildStats.getIntValue(advKnowledge);
-		}
 		if (this.buildStats.has(advTechs)) {
 			Debug.Log(`adding ${this.buildStats.getIntValue(advTechs)} to buildPoints`);
 			buildPoints += this.buildStats.getIntValue(advTechs);
@@ -510,7 +510,7 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 
 	getBuildVariables() {
 		return [WuxDef.GetVariable("Training", WuxDef._max), WuxDef.GetVariable("PP"),
-			WuxDef.GetVariable("TrainingKnowledge"), WuxDef.GetVariable("TrainingTechniques")];
+			WuxDef.GetVariable("TrainingTechniques")];
 	}
 
 	updateLevel(attributeHandler) {
@@ -534,7 +534,7 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 		attributeHandler.addMod(worker.attrBuildFinal);
 		attributeHandler.addMod(bonusTrainingVariable);
 
-		let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+		let manager = new WuxWorkerBuildManager(["Technique"]);
 		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -568,7 +568,7 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 		attributeHandler.addMod(WuxDef.GetVariable("BonusTraining"));
 		attributeHandler.addMod(WuxDef.GetVariable("Level"));
 
-		let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+		let manager = new WuxWorkerBuildManager(["Technique"]);
 		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -588,7 +588,7 @@ class WuxTrainingWorkerBuild extends WuxWorkerBuild {
 		attributeHandler.addMod(worker.attrMax);
 		attributeHandler.addMod(worker.attrBuildDraft);
 
-		let manager = new WuxWorkerBuildManager(["Knowledge", "Technique"]);
+		let manager = new WuxWorkerBuildManager(["Technique"]);
 		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 		attributeHandler.addGetAttrCallback(function (attrHandler) {

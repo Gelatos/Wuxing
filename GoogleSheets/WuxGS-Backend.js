@@ -102,6 +102,7 @@ var TrainingBackend = TrainingBackend || (function () {
             output += listenerConvertPp();
             output += listenerSetTrainingPoints();
             output += listenerSetTrainingPointsUpdate();
+            output += listenerSetAdvancementKnowledgePoints();
             output += listenerUpdateKnowledgeBuildPoints();
             return output;
 
@@ -137,8 +138,14 @@ var TrainingBackend = TrainingBackend || (function () {
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerSetTrainingPointsUpdate = function () {
-            let groupVariableNames = [WuxDef.GetVariable("TrainingKnowledge"), WuxDef.GetVariable("TrainingTechniques")];
+            let groupVariableNames = [WuxDef.GetVariable("TrainingTechniques")];
             let output = `WuxWorkerTraining.SetTrainingPointsUpdate(eventinfo);\n`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerSetAdvancementKnowledgePoints = function () {
+            let groupVariableNames = [WuxDef.GetVariable("TrainingKnowledge")];
+            let output = `WuxWorkerAdvancement.SetAdvancementPointsUpdate(eventinfo);\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
