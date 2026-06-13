@@ -306,6 +306,8 @@ var WuxWorkerTraining = WuxWorkerTraining || (function () {
 			let attributeHandler = new WorkerAttributeHandler();
 			let worker = new WuxTrainingWorkerBuild();
 			worker.convertPp(attributeHandler);
+			let advWorker = new WuxAdvancementWorkerBuild();
+			advWorker.updateAdvancementPoints(attributeHandler);
 			attributeHandler.run();
 		},
 		setTrainingPoints = function () {
@@ -441,6 +443,13 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			trnWorker.updateLevel(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
 			attributeHandler.run();
 		},
+		setBonusTrainingAdvancementPoints = function () {
+			Debug.Log("Setting Bonus Training Advancement Points");
+			let attributeHandler = new WorkerAttributeHandler();
+			let advWorker = new WuxAdvancementWorkerBuild();
+			advWorker.updateAdvancementPoints(attributeHandler);
+			attributeHandler.run();
+		},
 		setAdvancementPointsUpdate = function (eventinfo) {
 			let attributeHandler = new WorkerAttributeHandler();
 			let worker = new WuxAdvancementWorkerBuild();
@@ -450,11 +459,17 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 		},
 		setAdvancementPerkTransferPointsUpdate = function (eventinfo) {
 			let attributeHandler = new WorkerAttributeHandler();
-			let worker = new WuxAdvancementWorkerBuild();
-			worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
-			worker.updateAdvancementPoints(attributeHandler);
+			let rank = parseInt(eventinfo.newValue) || 0;
+			let ppCost = WuxDef.Get("PP").formula.getValue();
+
+			let perkWorker = new WuxPerkWorkerBuild();
+			perkWorker.changeCostOnly(attributeHandler, eventinfo.sourceAttribute, rank * ppCost);
+
+			let advWorker = new WuxAdvancementWorkerBuild();
+			advWorker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			advWorker.updateAdvancementPoints(attributeHandler);
+
 			attributeHandler.run();
-			WuxWorkerPerks.UpdateBuildPoints(eventinfo, eventinfo.newValue);
 		},
 		setAffinityStats = function (attributeHandler) {
 			let affinityVariable = WuxDef.GetVariable("Affinity");
@@ -552,6 +567,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 		ExitBuild: exitBuild,
 		ConvertXp: convertXp,
 		SetLevel: setLevel,
+		SetBonusTrainingAdvancementPoints: setBonusTrainingAdvancementPoints,
 		SetAdvancementPointsUpdate: setAdvancementPointsUpdate,
 		SetAdvancementPerkTransferPointsUpdate: setAdvancementPerkTransferPointsUpdate,
 		SetAffinityStats: setAffinityStats,
@@ -639,10 +655,26 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 		},
 		updateStats = function (attributeHandler) {
 			WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+		},
+		setJobSkillPerkPoints = function (eventinfo) {
+			let attributeHandler = new WorkerAttributeHandler();
+			let perkWorker = new WuxPerkWorkerBuild();
+			let rank = parseInt(eventinfo.newValue) || 0;
+			let cost = eventinfo.sourceAttribute === WuxDef.GetVariable("AdvancementJob") ? 2 : 1;
+			perkWorker.changeCostOnly(attributeHandler, eventinfo.sourceAttribute, rank * cost);
+
+			let manager = new WuxWorkerBuildManager(["Skill", "Job"]);
+			manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				manager.setAttributeHandlerPoints(attrHandler);
+			});
+
+			attributeHandler.run();
 		}
 
 	return {
 		UpdateBuildPoints: updateBuildPoints,
+		SetJobSkillPerkPoints: setJobSkillPerkPoints,
 		RefreshStats: refreshStats,
 		UpdateStats: updateStats
 	};

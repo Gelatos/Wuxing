@@ -513,7 +513,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         buildAdvancementTab = function () {
-                            let leftColumn = WuxSheetMain.Table.FlexTableGroup(buildLevelStats());
+                            let leftColumn = WuxSheetMain.Table.FlexTableGroup(buildLevelStats() + buildTrainingConversion());
                             let rightColumn = WuxSheetMain.Table.FlexTableGroup(buildAdvancementStats());
                             let contents = WuxSheetMain.MultiRowGroup([leftColumn, rightColumn], WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);
@@ -543,16 +543,36 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             return contents;
                         },
 
+                        buildTrainingConversion = function () {
+                            let contents = "";
+                            let titleDefinition = WuxDef.Get("Title_TrainingConversion");
+                            contents += WuxSheetMain.Header(titleDefinition.getTitle());
+
+                            let conversionTitleDef = WuxDef.Get("Title_TrainingConversion");
+                            let ppDefinition = WuxDef.Get("PP");
+                            contents += WuxSheetMain.MultiRowGroup([
+                                    WuxSheetMain.Table.FlexTableGroup(
+                                        `${WuxDefinition.BuildNumberLabelInput(ppDefinition, ppDefinition.getAttribute(),
+                                            `To Adv. Point: ${ppDefinition.formula.getValue()}`)}
+                                        ${WuxSheetMain.MultiRow(WuxSheetMain.Button(conversionTitleDef.getAttribute(),
+                                            `Convert To AP`))}`),
+                                    WuxSheetMain.Table.FlexTableGroup(
+                                        WuxDefinition.BuildTextInput(WuxDef.Get("BonusTraining"), WuxDef.GetAttribute("BonusTraining")))
+                                ],
+                                WuxSheetMain.Table.FlexTable, 2);
+
+                            return contents;
+                        },
+
                         buildAdvancementStats = function () {
                             let contents = "";
                             let titleDefinition = WuxDef.Get("Title_Advancement");
                             contents += WuxSheetMain.Header(titleDefinition.getTitle());
-                            
+
                             contents += WuxDefinition.BuildText(WuxDef.Get("Advancement"),
                                 `${WuxSheetMain.Span(WuxDef.GetAttribute("Advancement"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("Advancement", WuxDef._max))}`);
-                            contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementJob"), WuxDef.GetAttribute("AdvancementJob"), `cost: 2 advancement points`);
-                            contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementSkill"), WuxDef.GetAttribute("AdvancementSkill"), `cost: 1 advancement point`);
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementTechnique"), WuxDef.GetAttribute("AdvancementTechnique"), `cost: 1 advancement point`);
+
                             return WuxSheetMain.Table.FlexTableGroup(contents);
                         },
                         
@@ -563,6 +583,12 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             contents += WuxSheetMain.Header(`${perkPageDef.getTitle()}`);
                             contents += WuxDefinition.BuildText(perkDef,
                                 `${WuxSheetMain.Span(perkDef.getAttribute())} / ${WuxSheetMain.Span(perkDef.getAttribute(WuxDef._max))}`);
+                            let advJobDef = WuxDef.Get("AdvancementJob");
+                            contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementJob"), advJobDef.getAttribute(), `cost: 2 perk points`);
+                            contents += WuxSheetMain.MultiRow(`<div class="wuxDescription">${advJobDef.getDescription()}</div>`);
+                            let advSkillDef = WuxDef.Get("AdvancementSkill");
+                            contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementSkill"), advSkillDef.getAttribute(), `cost: 1 perk point`);
+                            contents += WuxSheetMain.MultiRow(`<div class="wuxDescription">${advSkillDef.getDescription()}</div>`);
 
                             contents += buildBasicPerkList();
                             contents = WuxSheetMain.TabBlock(contents);

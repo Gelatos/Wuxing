@@ -348,17 +348,9 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 
 	updatePoints(attributeHandler) {
 		let buildPoints = 0;
-		let advJobs = WuxDef.GetVariable("AdvancementJob");
-		let advSkills = WuxDef.GetVariable("AdvancementSkill");
 		let advTechs = WuxDef.GetVariable("AdvancementTechnique");
 		let perkConversion = WuxDef.GetVariable("AdvancementPerkTransfer");
 
-		if (this.buildStats.has(advJobs)) {
-			buildPoints += this.buildStats.getIntValue(advJobs) * 2;
-		}
-		if (this.buildStats.has(advSkills)) {
-			buildPoints += this.buildStats.getIntValue(advSkills);
-		}
 		if (this.buildStats.has(advTechs)) {
 			buildPoints += this.buildStats.getIntValue(advTechs);
 		}
@@ -373,7 +365,6 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 
 	getBuildVariables() {
 		return [WuxDef.GetVariable("Level"), WuxDef.GetVariable("XP"),
-			WuxDef.GetVariable("AdvancementJob"), WuxDef.GetVariable("AdvancementSkill"), 
 			WuxDef.GetVariable("AdvancementTechnique"), WuxDef.GetVariable("AdvancementPerkTransfer")];
 	}
 
@@ -414,6 +405,7 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 		attributeHandler.addMod(worker.attrMax);
 		attributeHandler.addMod(worker.attrBuildDraft);
 		attributeHandler.addMod(WuxDef.GetVariable("Level"));
+		attributeHandler.addMod(WuxDef.GetVariable("BonusTraining"));
 
 		let manager = new WuxWorkerBuildManager(["Skill", "Job", "Technique", "Attribute", "Perk"]);
 		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
@@ -832,6 +824,10 @@ class WuxPerkWorkerBuild extends WuxWorkerBuild {
 		attributeHandler.addUpdate(updatingAttr, rank);
 		// Track rank × cost in build stats so perk point totals stay accurate
 		super.changeWorkerAttribute(attributeHandler, updatingAttr, rank * perkCost);
+	}
+
+	changeCostOnly(attributeHandler, updatingAttr, cost) {
+		super.changeWorkerAttribute(attributeHandler, updatingAttr, cost);
 	}
 
 	updatePoints(attributeHandler) {

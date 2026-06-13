@@ -248,7 +248,7 @@
 											<div class="wuxTooltipContent">
 												<div class="wuxHeader2">Job Points</div>
 
-												<span class="wuxDescription">You can spend advancement points to gain Job Points. These job points can be used to increase tier in a job. You must spend 2 advancement points to gain 1 job point.</span>
+												<span class="wuxDescription">Job Points lets you pick additional jobs. You can only ever have one job equipped. You can swap jobs as a swift action that costs 3 EN.</span>
 											</div>
 										</span></div>
 									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_job" value="" placeholder="0" />
@@ -261,7 +261,7 @@
 											<div class="wuxTooltipContent">
 												<div class="wuxHeader2">Skill Points</div>
 
-												<span class="wuxDescription">You can spend advancement points to gain Skill Points. These skill points can be used to learn a new skill. You must spend 2 advancement points to gain 1 skill point.</span>
+												<span class="wuxDescription">Skill Points are used to gain new skills or skill augments.</span>
 											</div>
 										</span></div>
 									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_skill" value="" placeholder="0" />
@@ -295,12 +295,12 @@
 									</div>
 									<div class="wuxHeader2"><span class="wuxTooltip">
 											<span class="wuxTooltipText">
-												Bonus Training Points
+												Bonus Advancement Points
 											</span>
 											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Bonus Training Points</div>
+												<div class="wuxHeader2">Bonus Advancement Points</div>
 
-												<span class="wuxDescription">Bonus training points are gained by spending PP - experience gained when performing tasks.</span><span class="wuxDescription">Whenever you gain 30 PP, you gain one Training Point.</span>
+												<span class="wuxDescription">Bonus advancement points are gained by spending TP - experience gained when performing tasks.</span><span class="wuxDescription">Whenever you gain 60 TP, you gain one Advancement Point.</span>
 											</div>
 										</span></div>
 									<input type="number" class="wuxInput" name="attr_trn-bonustraining" />
@@ -729,24 +729,24 @@
 							<div class="wuxFlexTable">
 								<div class="wuxFlexTableItemGroup">
 									<div class="wuxHeader">
-										<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-trainingconversion_info" undefined><span>?</span></div>Conversion
+										<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-trainingconversion_info" undefined><span>?</span></div>Training Points
 									</div>
 									<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-trainingconversion_info" value="0">
 									<div class="wuxHiddenField">
 										<div class="wuxInfoContent">
-											<div class="wuxHeader2">Conversion</div>
+											<div class="wuxHeader2">Training Points</div>
 
 											<span class="wuxDescription">PP is used to gain Training Points for your character. You can convert PP into Training Points by using the convert to TP button below.</span>
 										</div>
 									</div>
 									<div class="wuxHeader2"><span class="wuxTooltip">
 											<span class="wuxTooltipText">
-												Progression
+												Training Points
 											</span>
 											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Progression</div>
+												<div class="wuxHeader2">Training Points</div>
 
-												<span class="wuxDescription">PP is gained when a character spends time learning new knowledge, styles, or techniques. This is usually gained by practicing a task during freetime at a rate of 1 per day. You may gain an additional PP if a character devotes an entire day to training. </span><span class="wuxDescription">Once a character reaches 60 PP, they may spend their PP to gain a new knowledge or technique.</span>
+												<span class="wuxDescription">TP is gained when a character spends time learning new knowledge, styles, or techniques. This is usually gained by practicing a task during freetime at a rate of 1 per day. You may gain an additional TP if a character devotes an entire day to training. </span><span class="wuxDescription">Once a character reaches 60 TP, they may spend their TP to gain an advancement point.</span>
 											</div>
 										</span></div>
 									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-pp" value="" placeholder="0" />
@@ -784,12 +784,12 @@
 									<span class="wuxDescription"><span name="attr_trn"></span> / <span name="attr_trn_max"></span></span>
 									<div class="wuxHeader2"><span class="wuxTooltip">
 											<span class="wuxTooltipText">
-												Bonus Training Points
+												Bonus Advancement Points
 											</span>
 											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Bonus Training Points</div>
+												<div class="wuxHeader2">Bonus Advancement Points</div>
 
-												<span class="wuxDescription">Bonus training points are gained by spending PP - experience gained when performing tasks.</span><span class="wuxDescription">Whenever you gain 30 PP, you gain one Training Point.</span>
+												<span class="wuxDescription">Bonus advancement points are gained by spending TP - experience gained when performing tasks.</span><span class="wuxDescription">Whenever you gain 60 TP, you gain one Advancement Point.</span>
 											</div>
 										</span></div>
 									<input type="number" class="wuxInput" name="attr_trn-bonustraining" />
@@ -1019,6 +1019,43 @@
 											</div>
 										</span></div>
 									<span class="wuxDescription"><span name="attr_adv-cr_max"></span></span>
+									<div class="wuxHeader">Training Points</div>
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup">
+											<div class="wuxHeader2"><span class="wuxTooltip">
+													<span class="wuxTooltipText">
+														Training Points
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Training Points</div>
+
+														<span class="wuxDescription">TP is gained when a character spends time learning new knowledge, styles, or techniques. This is usually gained by practicing a task during freetime at a rate of 1 per day. You may gain an additional TP if a character devotes an entire day to training. </span><span class="wuxDescription">Once a character reaches 60 TP, they may spend their TP to gain an advancement point.</span>
+													</div>
+												</span></div>
+											<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-pp" value="" placeholder="0" />
+												<div class="wuxInputLabel">To Adv. Point: 60</div>
+											</div>
+											<div class="wuxMultiRow">
+												<div class="wuxButton">
+													<input type="checkbox" name="attr_ttl-trainingconversion">
+													<span>Convert To AP</span>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTableItemGroup">
+											<div class="wuxHeader2"><span class="wuxTooltip">
+													<span class="wuxTooltipText">
+														Bonus Advancement Points
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Bonus Advancement Points</div>
+
+														<span class="wuxDescription">Bonus advancement points are gained by spending TP - experience gained when performing tasks.</span><span class="wuxDescription">Whenever you gain 60 TP, you gain one Advancement Point.</span>
+													</div>
+												</span></div>
+											<input type="text" class="wuxInput" name="attr_trn-bonustraining" />
+										</div>
+									</div>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<div class="wuxFlexTableItemGroup">
@@ -1034,32 +1071,6 @@
 												</div>
 											</span></div>
 										<span class="wuxDescription"><span name="attr_adv"></span> / <span name="attr_adv_max"></span></span>
-										<div class="wuxHeader2"><span class="wuxTooltip">
-												<span class="wuxTooltipText">
-													Job Points
-												</span>
-												<div class="wuxTooltipContent">
-													<div class="wuxHeader2">Job Points</div>
-
-													<span class="wuxDescription">You can spend advancement points to gain Job Points. These job points can be used to increase tier in a job. You must spend 2 advancement points to gain 1 job point.</span>
-												</div>
-											</span></div>
-										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_job" value="" placeholder="0" />
-											<div class="wuxInputLabel">cost: 2 advancement points</div>
-										</div>
-										<div class="wuxHeader2"><span class="wuxTooltip">
-												<span class="wuxTooltipText">
-													Skill Points
-												</span>
-												<div class="wuxTooltipContent">
-													<div class="wuxHeader2">Skill Points</div>
-
-													<span class="wuxDescription">You can spend advancement points to gain Skill Points. These skill points can be used to learn a new skill. You must spend 2 advancement points to gain 1 skill point.</span>
-												</div>
-											</span></div>
-										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_skill" value="" placeholder="0" />
-											<div class="wuxInputLabel">cost: 1 advancement point</div>
-										</div>
 										<div class="wuxHeader2"><span class="wuxTooltip">
 												<span class="wuxTooltipText">
 													Style Points
@@ -1106,6 +1117,38 @@
 									</div>
 								</span></div>
 							<span class="wuxDescription"><span name="attr_perk"></span> / <span name="attr_perk_max"></span></span>
+							<div class="wuxHeader2"><span class="wuxTooltip">
+									<span class="wuxTooltipText">
+										Job Points
+									</span>
+									<div class="wuxTooltipContent">
+										<div class="wuxHeader2">Job Points</div>
+
+										<span class="wuxDescription">Job Points lets you pick additional jobs. You can only ever have one job equipped. You can swap jobs as a swift action that costs 3 EN.</span>
+									</div>
+								</span></div>
+							<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_job" value="" placeholder="0" />
+								<div class="wuxInputLabel">cost: 2 perk points</div>
+							</div>
+							<div class="wuxMultiRow">
+								<div class="wuxDescription">Job Points lets you pick additional jobs. You can only ever have one job equipped. You can swap jobs as a swift action that costs 3 EN.</div>
+							</div>
+							<div class="wuxHeader2"><span class="wuxTooltip">
+									<span class="wuxTooltipText">
+										Skill Points
+									</span>
+									<div class="wuxTooltipContent">
+										<div class="wuxHeader2">Skill Points</div>
+
+										<span class="wuxDescription">Skill Points are used to gain new skills or skill augments.</span>
+									</div>
+								</span></div>
+							<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_skill" value="" placeholder="0" />
+								<div class="wuxInputLabel">cost: 1 perk point</div>
+							</div>
+							<div class="wuxMultiRow">
+								<div class="wuxDescription">Skill Points are used to gain new skills or skill augments.</div>
+							</div>
 							<div class="wuxHeader">Origin Perks</div>
 							<div class="wuxFlexTable">
 								<div class="wuxFlexTableItemGroup">
@@ -1152,9 +1195,9 @@
 									<div class="wuxMultiRow">
 										<div class="wuxDescription">Gain 10 HP</div>
 									</div>
-									<div class="wuxHeader2">Inc. Base Speed</div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-inc._base_speed" value="" placeholder="0" />
-										<div class="wuxInputLabel">Cost: 2 perk point, Max: <span name="attr_perk-inc._base_speed_max"></span></div>
+									<div class="wuxHeader2">Increase Base Speed</div>
+									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-increase_base_speed" value="" placeholder="0" />
+										<div class="wuxInputLabel">Cost: 2 perk point, Max: <span name="attr_perk-increase_base_speed_max"></span></div>
 									</div>
 									<div class="wuxMultiRow">
 										<div class="wuxDescription">Gain +1 Base Speed</div>
@@ -1182,16 +1225,16 @@
 									<div class="wuxMultiRow">
 										<div class="wuxDescription">Gain 10 WILL</div>
 									</div>
-									<div class="wuxHeader2">Inc. Dash Speed</div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-inc._dash_speed" value="" placeholder="0" />
-										<div class="wuxInputLabel">Cost: 2 perk point, Max: <span name="attr_perk-inc._dash_speed_max"></span></div>
+									<div class="wuxHeader2">Increase Dash Speed</div>
+									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-increase_dash_speed" value="" placeholder="0" />
+										<div class="wuxInputLabel">Cost: 2 perk point, Max: <span name="attr_perk-increase_dash_speed_max"></span></div>
 									</div>
 									<div class="wuxMultiRow">
 										<div class="wuxDescription">Gain +1 Dash Speed</div>
 									</div>
-									<div class="wuxHeader2">Inc. Starting EN</div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-inc._starting_en" value="" placeholder="0" />
-										<div class="wuxInputLabel">Cost: 2 perk point, Max: <span name="attr_perk-inc._starting_en_max"></span></div>
+									<div class="wuxHeader2">Increase Starting EN</div>
+									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-increase_starting_en" value="" placeholder="0" />
+										<div class="wuxInputLabel">Cost: 2 perk point, Max: <span name="attr_perk-increase_starting_en_max"></span></div>
 									</div>
 									<div class="wuxMultiRow">
 										<div class="wuxDescription">Gain +1 Starting EN</div>
@@ -8504,12 +8547,12 @@
 											<div class="wuxFlexTableItemGroup">
 												<div class="wuxHeader2"><span class="wuxTooltip">
 														<span class="wuxTooltipText">
-															Progression
+															Training Points
 														</span>
 														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Progression</div>
+															<div class="wuxHeader2">Training Points</div>
 
-															<span class="wuxDescription">PP is gained when a character spends time learning new knowledge, styles, or techniques. This is usually gained by practicing a task during freetime at a rate of 1 per day. You may gain an additional PP if a character devotes an entire day to training. </span><span class="wuxDescription">Once a character reaches 60 PP, they may spend their PP to gain a new knowledge or technique.</span>
+															<span class="wuxDescription">TP is gained when a character spends time learning new knowledge, styles, or techniques. This is usually gained by practicing a task during freetime at a rate of 1 per day. You may gain an additional TP if a character devotes an entire day to training. </span><span class="wuxDescription">Once a character reaches 60 TP, they may spend their TP to gain an advancement point.</span>
 														</div>
 													</span></div>
 												<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-pp" value="" placeholder="0" />
@@ -18113,7 +18156,7 @@ WuxWorkerTraining.ConvertPp();
 
 });
 on("change:trn-bonustraining", function (eventinfo) {
-WuxWorkerTraining.SetTrainingPoints(eventinfo);
+WuxWorkerAdvancement.SetBonusTrainingAdvancementPoints();
 
 });
 on("change:trn-tp_knowledge change:trn-tp_technique", function (eventinfo) {
@@ -18143,7 +18186,7 @@ on("change:adv-level", function (eventinfo) {
 WuxWorkerAdvancement.SetLevel(eventinfo);
 
 });
-on("change:adv-ap_job change:adv-ap_skill change:adv-ap_technique", function (eventinfo) {
+on("change:adv-ap_technique", function (eventinfo) {
 WuxWorkerAdvancement.SetAdvancementPointsUpdate(eventinfo);
 
 });
@@ -18151,7 +18194,11 @@ on("change:adv-ap_perktransfer", function (eventinfo) {
 WuxWorkerAdvancement.SetAdvancementPerkTransferPointsUpdate(eventinfo);
 
 });
-on("change:perk-second_affinity change:perk-bonus_vitality change:perk-bonus_potency change:perk-increase_hp change:perk-increase_will change:perk-inc._base_speed change:perk-inc._dash_speed change:perk-increase_armor change:perk-inc._starting_en change:perk-bonus_equipment_slots", function (eventinfo) {
+on("change:adv-ap_job change:adv-ap_skill", function (eventinfo) {
+WuxWorkerPerks.SetJobSkillPerkPoints(eventinfo);
+
+});
+on("change:perk-second_affinity change:perk-bonus_vitality change:perk-bonus_potency change:perk-increase_hp change:perk-increase_will change:perk-increase_base_speed change:perk-increase_dash_speed change:perk-increase_armor change:perk-increase_starting_en change:perk-bonus_equipment_slots", function (eventinfo) {
 WuxWorkerPerks.UpdateBuildPoints(eventinfo)
 });
 on("change:job-fighter change:job-brawler change:job-labourer change:job-sentinel change:job-warden change:job-bulwark change:job-exemplar change:job-kineticist change:job-rogue change:job-hunter change:job-sniper change:job-warmage change:job-trooper change:job-geomancer change:job-magus change:job-spellwright change:job-tactician change:job-bard change:job-scholar change:job-medic change:job-alchemist change:job-culinarian change:job-merchant change:job-courtier change:job-diplomat change:job-detective change:job-inquisitor change:job-preacher change:job-etherealist change:job-phantasm change:job-shade change:job-yaksa", function (eventinfo) {

@@ -132,7 +132,7 @@ var TrainingBackend = TrainingBackend || (function () {
         },
         listenerSetTrainingPoints = function () {
             let groupVariableNames = [WuxDef.GetVariable("BonusTraining")];
-            let output = `WuxWorkerTraining.SetTrainingPoints(eventinfo);\n`;
+            let output = `WuxWorkerAdvancement.SetBonusTrainingAdvancementPoints();\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
@@ -168,6 +168,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
             output += listenerSetLevel();
             output += listenerSetAdvancementPoints();
             output += listenerSetAdvancementPerkTransferPoints();
+            output += listenerSetAdvancementJobSkillPerkPoints();
             output += listenerUpdatePerkPoints();
             output += listenerUpdateJobBuildPoints();
             output += listenerSeeJobTechniques();
@@ -207,10 +208,15 @@ var AdvancementBackend = AdvancementBackend || (function () {
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerSetAdvancementPoints = function () {
-            let groupVariableNames = [WuxDef.GetVariable("AdvancementJob"),
-                WuxDef.GetVariable("AdvancementSkill"),
-                WuxDef.GetVariable("AdvancementTechnique")];
+            let groupVariableNames = [WuxDef.GetVariable("AdvancementTechnique")];
             let output = `WuxWorkerAdvancement.SetAdvancementPointsUpdate(eventinfo);\n`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerSetAdvancementJobSkillPerkPoints = function () {
+            let groupVariableNames = [WuxDef.GetVariable("AdvancementJob"),
+                WuxDef.GetVariable("AdvancementSkill")];
+            let output = `WuxWorkerPerks.SetJobSkillPerkPoints(eventinfo);\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
