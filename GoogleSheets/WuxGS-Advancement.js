@@ -485,6 +485,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let contents = "";
                             let groups = {};
                             WuxPerks.Iterate(function (perk) {
+                                if (perk.group === "Perk Technique") return;
                                 if (!groups.hasOwnProperty(perk.group)) {
                                     groups[perk.group] = [];
                                 }
