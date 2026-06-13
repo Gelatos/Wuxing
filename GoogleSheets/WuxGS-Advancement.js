@@ -254,7 +254,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                         buildBasicPerkList = function () {
                             let contents = "";
                             let groups = {};
-                            WuxBasicPerks.Iterate(function (perk) {
+                            WuxPerks.Iterate(function (perk) {
                                 if (!groups.hasOwnProperty(perk.group)) {
                                     groups[perk.group] = [];
                                 }
@@ -265,6 +265,9 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                                 contents += WuxSheetMain.Header(groupName);
                                 let columns = ["", ""];
                                 for (let i = 0; i < perks.length; i++) {
+                                    if (perks[i] == undefined) {
+                                        continue;
+                                    }
                                     columns[i % 2] += printBasicPerk(perks[i]);
                                 }
                                 contents += WuxSheetMain.MultiRowGroup(
@@ -282,14 +285,15 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                                 inputRow = WuxSheetMain.MultiRow(
                                     WuxSheetMain.InputLabel(`${perk.name} [Cost: ${perk.cost}]`)
                                 ) + WuxSheetMain.MultiRow(
-                                    WuxSheetMain.Select(WuxDef.GetAttribute("AdvancedAffinity"),
+                                    WuxSheetMain.Select(WuxDef.GetAttribute("SecondaryAffinity"),
                                         WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])) +
-                                    WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedAffinity", WuxDef._learn))
+                                    WuxSheetMain.DescField(WuxDef.GetAttribute("SecondaryAffinity", WuxDef._learn))
                                 );
                             } else {
+                                let label = `${perk.name} [Cost: ${perk.cost}${perk.max ? `, Max: ${perk.max}` : ""}]`;
                                 inputRow = WuxSheetMain.MultiRow(
-                                    WuxSheetMain.Input("number", perk.variable, "", "0") +
-                                    WuxSheetMain.InputLabel(`${perk.name} [Cost: ${perk.cost}]`)
+                                    WuxSheetMain.Input("number", Object.assign(new BasicPerk(), perk).createDefinition(WuxDef.Get("Perk")).getAttribute(), "", "0") +
+                                    WuxSheetMain.InputLabel(label)
                                 );
                             }
                             return inputRow + (desc !== "" ? WuxSheetMain.MultiRow(`<div class="wuxDescription">${desc}</div>`) : "");
@@ -630,7 +634,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         buildBasicPerkList = function () {
                             let contents = "";
                             let groups = {};
-                            WuxBasicPerks.Iterate(function (perk) {
+                            WuxPerks.Iterate(function (perk) {
                                 if (!groups.hasOwnProperty(perk.group)) {
                                     groups[perk.group] = [];
                                 }
@@ -641,6 +645,9 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 contents += WuxSheetMain.Header(groupName);
                                 let columns = ["", ""];
                                 for (let i = 0; i < perks.length; i++) {
+                                    if (perks[i] == undefined) {
+                                        continue;
+                                    }
                                     columns[i % 2] += printBasicPerk(perks[i]);
                                 }
                                 contents += WuxSheetMain.MultiRowGroup(
@@ -658,14 +665,15 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 inputRow = WuxSheetMain.MultiRow(
                                     WuxSheetMain.InputLabel(`${perk.name} [Cost: ${perk.cost}]`)
                                 ) + WuxSheetMain.MultiRow(
-                                    WuxSheetMain.Select(WuxDef.GetAttribute("AdvancedAffinity"),
+                                    WuxSheetMain.Select(WuxDef.GetAttribute("SecondaryAffinity"),
                                         WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])) +
-                                    WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedAffinity", WuxDef._learn))
+                                    WuxSheetMain.DescField(WuxDef.GetAttribute("SecondaryAffinity", WuxDef._learn))
                                 );
                             } else {
+                                let label = `${perk.name} [Cost: ${perk.cost}${perk.max ? `, Max: ${perk.max}` : ""}]`;
                                 inputRow = WuxSheetMain.MultiRow(
-                                    WuxSheetMain.Input("number", perk.variable, "", "0") +
-                                    WuxSheetMain.InputLabel(`${perk.name} [Cost: ${perk.cost}]`)
+                                    WuxSheetMain.Input("number", Object.assign(new BasicPerk(), perk).createDefinition(WuxDef.Get("Perk")).getAttribute(), "", "0") +
+                                    WuxSheetMain.InputLabel(label)
                                 );
                             }
                             return inputRow + (desc !== "" ? WuxSheetMain.MultiRow(`<div class="wuxDescription">${desc}</div>`) : "");

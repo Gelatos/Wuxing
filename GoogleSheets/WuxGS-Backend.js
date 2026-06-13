@@ -222,22 +222,15 @@ var AdvancementBackend = AdvancementBackend || (function () {
         },
 
         listenerUpdatePerkPoints = function () {
-            let output = "";
-            let techniqueDefinition = WuxDef.Get("Technique");
-            let styleGroups = WuxDef.Filter([new DatabaseFilterData("group", "PerkGroup")]);
-            for (let index = 0; index < styleGroups.length; index++) {
-                let perkTechniques = WuxTechs.Filter(new DatabaseFilterData("style", styleGroups[index].getTitle()));
-
-                for (let i = 0; i < perkTechniques.length; i++) {
-                    let perkTech = perkTechniques[i];
-                    let perkDef = perkTech.createDefinition(techniqueDefinition);
-                    let perkStyle = WuxStyles.Get(perkTech.name);
-                    output += WuxSheetBackend.OnChange([perkDef.getVariable()],
-                        `WuxWorkerPerks.UpdateBuildPoints(eventinfo, ${perkStyle.effects})`, true);
+            let variables = [];
+            WuxPerks.Iterate(function (perk) {
+                if (perk.name == "Second Affinity") {
+                    variables.push(WuxDef.GetVariable("SecondaryAffinity"));
+                } else {
+                    variables.push(Object.assign(new BasicPerk(), perk).createDefinition(WuxDef.Get("Perk")).getVariable());
                 }
-            }
-
-            return output;
+            });
+            return WuxSheetBackend.OnChange(variables, `WuxWorkerPerks.UpdateBuildPoints(eventinfo)`, true);
         },
         listenerUpdateJobBuildPoints = function () {
             let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"));

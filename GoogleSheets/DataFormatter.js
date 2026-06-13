@@ -1546,6 +1546,7 @@ class DatabaseAssessment {
         this.importBasicDefinitions(definitionDatabase, "Definitions");
         this.importBasicDefinitions(definitionDatabase, "SystemDefinitions");
         this.importDatabaseDefinitions(definitionDatabase, this.sheetsDb.styles, WuxDef.Get("Style"));
+        this.importDatabaseDefinitions(definitionDatabase, this.sheetsDb.basicPerks, WuxDef.Get("Perk"));
         this.importDatabaseDefinitionsWithGroupCheck(definitionDatabase, this.sheetsDb.skills, WuxDef.Get("Skill"));
         this.importDatabaseDefinitions(definitionDatabase, this.sheetsDb.language, WuxDef.Get("Language"));
         let loreCategoryDef = WuxDef.Get("LoreCategory");
@@ -1629,8 +1630,19 @@ class DatabaseAssessment {
         styleClassData.addPublicFunction("getGroupVariables", WuxDefinition.GetGroupVariablesStyle);
         output += styleClassData.print("WuxStyles") + "\n";
 
-        let basicPerksClassData = JavascriptDatabase.Create(this.sheetsDb.basicPerks, WuxDefinition.GetBasicPerk);
-        output += basicPerksClassData.print("WuxBasicPerks") + "\n";
+        let perkDb = this.sheetsDb.basicPerks;
+        variableNameKeys = {};
+        perkDb.iterate(function (value, key) {
+            let definition = value.createDefinition(WuxDef.Get("Perk"));
+            variableNameKeys[definition.getVariable()] = key;
+        });
+        let basicPerksClassData = JavascriptDatabase.Create(perkDb, WuxDefinition.GetBasicPerk);
+        basicPerksClassData.addPublicFunction("getByVariableName", function (variableName) {
+            let key = variableNameKeys[variableName];
+            return get(key);
+        });
+        basicPerksClassData.addPublicFunction("getGroupVariables", WuxDefinition.GetGroupVariablesStyle);
+        output += basicPerksClassData.print("WuxPerks") + "\n";
 
         let goodsClassData = JavascriptDatabase.Create(this.sheetsDb.goods, WuxDefinition.GetGoods);
         output += goodsClassData.print("WuxGoods") + "\n";

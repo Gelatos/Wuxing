@@ -826,11 +826,11 @@ class WuxPerkWorkerBuild extends WuxWorkerBuild {
 		super("Perk");
 	}
 
-	changeWorkerAttribute(attributeHandler, updatingAttr, newValue, perkCost) {
-		if (newValue == "on" && perkCost > 0) {
-			newValue = perkCost;
-		}
-		super.changeWorkerAttribute(attributeHandler, updatingAttr, newValue);
+	changeWorkerAttribute(attributeHandler, updatingAttr, rank, perkCost, perkIncrease) {
+		// Write the computed stat value (rank × increase) to the perk's variable
+		attributeHandler.addUpdate(updatingAttr, rank * perkIncrease);
+		// Track rank × cost in build stats so perk point totals stay accurate
+		super.changeWorkerAttribute(attributeHandler, updatingAttr, rank * perkCost);
 	}
 
 	updatePoints(attributeHandler) {
@@ -847,22 +847,22 @@ class WuxPerkWorkerBuild extends WuxWorkerBuild {
 			return points;
 		}
 		for (let i = 0; i < this.buildStats.keys.length; i++) {
-			if (this.buildStats.values[this.buildStats.keys[i]].value != "on") {
-				// "on" is effectively 0 points 
-				points += isNaN(parseInt(this.buildStats.values[this.buildStats.keys[i]].value)) ? 0 : parseInt(this.buildStats.values[this.buildStats.keys[i]].value);
-			}
+			let val = this.buildStats.values[this.buildStats.keys[i]].value;
+			points += isNaN(parseInt(val)) ? 0 : parseInt(val);
 		}
 		return points;
 	}
 
 	getBuildVariables() {
-		let allStyles = WuxDef.Filter([new DatabaseFilterData("group", "PerkGroup")]);
-		let groupVariableNames = [];
-		for(let i = 0; i < allStyles.length; i++) {
-			groupVariableNames = groupVariableNames.concat(
-				WuxTechs.GetGroupVariables(new DatabaseFilterData("style", allStyles[i].getTitle())));
-		}
-		return groupVariableNames;
+		let variables = [];
+		WuxPerks.Iterate(function (perk) {
+			if (perk.name == "Second Affinity") {
+				variables.push(WuxDef.GetVariable("SecondaryAffinity"));
+			} else {
+				variables.push(Object.assign(new BasicPerk(), perk).createDefinition(WuxDef.Get("Perk")).getVariable());
+			}
+		});
+		return variables;
 	}
 
 	getBoostTechniques() {

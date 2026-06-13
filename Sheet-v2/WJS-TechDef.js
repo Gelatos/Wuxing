@@ -414,7 +414,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Stat_Ethereal","traits":""},
                 "isCustom":false,"rank":0},
             "Fast Climb":{"name":"Fast Climb","fieldName":"fast_climb","group":"","descriptions":[],
-                "variable":"","techSet":"Perk","version":"2.0","affinity":"","tier":2,"action":"Passive","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"FilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"You scale surfaces with practiced ease, moving at full speed while climbing.","coreDefense":"","definitions":[],
+                "variable":"","techSet":"Perk","version":"2.1","affinity":"","tier":2,"action":"Passive","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"FilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"You scale surfaces with practiced ease, moving at full speed while climbing.","coreDefense":"","definitions":[],
                 "effects":{"keys":["T0"],
                     "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                             "effect":"When you climb you no longer consume 1 additional space of movement.","traits":""}},
@@ -426,7 +426,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"When you climb you no longer consume 1 additional space of movement.","traits":""},
                 "isCustom":false,"rank":0},
             "Fast Swim":{"name":"Fast Swim","fieldName":"fast_swim","group":"","descriptions":[],
-                "variable":"","techSet":"Perk","version":"2.0","affinity":"","tier":2,"action":"Passive","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"FilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"You cut through water with efficient strokes, moving at full speed while swimming.","coreDefense":"","definitions":[],
+                "variable":"","techSet":"Perk","version":"2.1","affinity":"","tier":2,"action":"Passive","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"FilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"You cut through water with efficient strokes, moving at full speed while swimming.","coreDefense":"","definitions":[],
                 "effects":{"keys":["T0"],
                     "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                             "effect":"When you swim you no longer consume 1 additional space of movement.","traits":""}},
@@ -462,7 +462,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Ignore the effects of Slippery terrain. When entering Slippery terrain you move at double speed.","traits":""},
                 "isCustom":false,"rank":0},
             "Loosen Vines":{"name":"Loosen Vines","fieldName":"loosen_vines","group":"Trait_Cleanse:Stat_Vined; TechFilterType_Support; Trait_Cleanse","descriptions":[],
-                "variable":"","techSet":"Perk","version":"2.0","affinity":"Wood","tier":3,"action":"Swift","forms":"","impacts":"","en":0,"willPower":15,"boon":0,"resourceCost":"","limits":"1/Round","skill":"","hasAdv":"","range":"1","rangeType":"FilterType_RangeMelee","target":"Target/Self","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"You quickly free yourself or an ally from ensnaring growth, clearing the Vined condition.","coreDefense":"","definitions":[],
+                "variable":"","techSet":"Perk","version":"2.1","affinity":"Wood","tier":3,"action":"Swift","forms":"","impacts":"","en":0,"willPower":15,"boon":0,"resourceCost":"","limits":"1/Round","skill":"","hasAdv":"","range":"1","rangeType":"FilterType_RangeMelee","target":"Target/Self","size":1,"requirement":"","itemTraits":"","trigger":"","flavorText":"You quickly free yourself or an ally from ensnaring growth, clearing the Vined condition.","coreDefense":"","definitions":[],
                 "effects":{"keys":["T0"],
                     "values":{"T0":{"name":"T0","defense":"","target":"","type":"Status","subType":"Remove","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                             "effect":"Stat_Vined","traits":""}},
@@ -17223,7 +17223,7 @@ var WuxStyles = WuxStyles || (function() {
     };
 }());
 
-var WuxBasicPerks = WuxBasicPerks || (function() {
+var WuxPerks = WuxPerks || (function() {
     'use strict';
 
     var
@@ -17366,6 +17366,19 @@ var WuxBasicPerks = WuxBasicPerks || (function() {
                 output.push(get(group[i]));
             }
             return output;
+        },
+        getByVariableName = function (variableName) {
+            let key = variableNameKeys[variableName];
+            return get(key);
+        },
+        getGroupVariables = function (filterData, mod1, mod2) {
+            let data = filter(filterData);
+            let output = [];
+            for (let i = 0; i < data.length; i++) {
+                let definition = data[i].createDefinition(WuxDef.Get("Style"));
+                output.push(definition.getVariable(mod1, mod2));
+            }
+            return output;
         }
     ;
     return {
@@ -17375,7 +17388,9 @@ var WuxBasicPerks = WuxBasicPerks || (function() {
         Has: has,
         Iterate: iterate,
         Filter: filter,
-        GetSortedGroup: getSortedGroup
+        GetSortedGroup: getSortedGroup,
+        GetByVariableName: getByVariableName,
+        GetGroupVariables: getGroupVariables
     };
 }());
 
@@ -17601,14 +17616,14 @@ var WuxGoods = WuxGoods || (function() {
             "Rhynoseed":{"name":"Rhynoseed","fieldName":"","group":"Supplement","descriptions":[],
                 "variable":"","category":"","itemType":"Goods","bulk":1,"value":40,"traits":"","description":"A seed whose extracts can cause psychoactive effects to induce erratic movement.","affinity":"Wood","location":"Desert","rarity":2},
             "Flaked Salt":{"name":"Flaked Salt","fieldName":"","group":"Supplement","descriptions":[],
-                "variable":"","category":"Salt","itemType":"Goods","bulk":1,"value":3,"traits":"Edible","description":"Flakey salt produced gathered from crystallized salt in the desert.","affinity":"Wood","location":"Desert","rarity":1},
+                "variable":"","category":"Salt","itemType":"Goods","bulk":1,"value":3,"traits":"Edible","description":"Flakey salt produced gathered from crystallized salt in the desert.","affinity":"Wood","location":"Desert","rarity":1}
+            ,
             "Crystal Sugarcane":{"name":"Crystal Sugarcane","fieldName":"","group":"Supplement","descriptions":[],
                 "variable":"","category":"Sugar","itemType":"Goods","bulk":1,"value":3,"traits":"Edible","description":"A fragrant grass found in desert regions that is often used to sweeten beverages and meals.","affinity":"Wood","location":"Desert","rarity":1},
             "Turmeric":{"name":"Turmeric","fieldName":"","group":"Supplement","descriptions":[],
                 "variable":"","category":"","itemType":"Goods","bulk":1,"value":3,"traits":"Edible","description":"A yellow spice with a bitter flavor.","affinity":"Wood","location":"Desert","rarity":1},
             "Sunset Wheat":{"name":"Sunset Wheat","fieldName":"","group":"Starch","descriptions":[],
-                "variable":"","category":"Wheat","itemType":"Goods","bulk":1,"value":3,"traits":"Edible","description":"A low-water grain common around the world.","affinity":"Wood","location":"Desert","rarity":1}
-            ,
+                "variable":"","category":"Wheat","itemType":"Goods","bulk":1,"value":3,"traits":"Edible","description":"A low-water grain common around the world.","affinity":"Wood","location":"Desert","rarity":1},
             "Yidash":{"name":"Yidash","fieldName":"","group":"Supplement","descriptions":[],
                 "variable":"","category":"","itemType":"Goods","bulk":1,"value":25,"traits":"","description":"A plant that is known to incite sudden, involuntary muscle spasms. The effect is neutralized when the plant is grown magically. This is priced as if the effect is not neutralized.","affinity":"Wood","location":"Desert","rarity":2},
             "Grassland":{"name":"Grassland","fieldName":"","group":"","descriptions":[],
@@ -18093,13 +18108,13 @@ var WuxItems = WuxItems || (function() {
                                 "effect":"","traits":""}},
                         "sortingGroups":{"type":{"":["T0"]}},
                         "useDefaultWillBreak":false},
-                    "enhancementEffects":{},
+                    "enhancementEffects":{}
+                    ,
                     "damageTypes":[],
                     "endEffectConditionName":"","endEffectConditionEffect":"","techniqueEffect":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                         "effect":"","traits":""},
                     "isCustom":false,"rank":0},
-                "hasTechnique":false}
-            ,
+                "hasTechnique":false},
             "Whip":{"name":"Whip","fieldName":"","group":"Weapon","descriptions":[],
                 "variable":"","category":"Melee","itemType":"UsableItem","bulk":3,"value":140,"traits":"Whip","description":"","valMod":3,"skill":"Build","dc":0,"time":1,"components":"","commonTechniques":"","technique":{"name":"Whip","fieldName":"whip","group":"","descriptions":[],
                     "variable":"","techSet":"Item","version":"2.0","affinity":"","tier":2,"action":"","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"FilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],
@@ -18587,15 +18602,15 @@ var WuxItems = WuxItems || (function() {
                                 "effect":"Def_Reflex","traits":""}},
                         "sortingGroups":{"type":{"Boost":["T0","T1","T2","T3"]}},
                         "useDefaultWillBreak":false},
-                    "enhancementEffects":{},
+                    "enhancementEffects":{}
+                    ,
                     "damageTypes":[],
                     "endEffectConditionName":"","endEffectConditionEffect":"","techniqueEffect":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"15","workers":[{"variableName":[],
                                 "definitionName":[],
                                 "value":15,"multiplier":1,"max":0}]},
                         "effect":"HP","traits":""},
                     "isCustom":false,"rank":0},
-                "hasTechnique":true}
-            ,
+                "hasTechnique":true},
             "Etherlink Headset":{"name":"Etherlink Headset","fieldName":"","group":"Head Gear","descriptions":[],
                 "variable":"","category":"","itemType":"UsableItem","bulk":2,"value":1600,"traits":"Magitech","description":"A head mounted version of an Etherlink. This is a magitech device that allows one to communicate at great distances with another Etherlink. All Etherlink are callibrated with an ID, a frequency created by the Ventu Stone, to ensure only one device receives messages.","valMod":30,"skill":"Build","dc":15,"time":12,"components":"2 Goods_Component; 1 Goods_Nickel; 1 Goods_Pnevmarite; 1 Goods_Morillite; 1 Goods_Ventu Stone","commonTechniques":"","technique":{"name":"Etherlink Headset","fieldName":"etherlink_headset","group":"","descriptions":[],
                     "variable":"","techSet":"Item","version":"2.0","affinity":"","tier":2,"action":"Swift","forms":"","impacts":"","en":0,"willPower":10,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"50 miles","rangeType":"FilterType_RangeSpecial","target":"Target","size":1,"requirement":"The target must be another Etherlink which you know the frequency ID.","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],
