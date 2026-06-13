@@ -564,54 +564,62 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 
 	var
 		updateBuildPoints = function (eventinfo) {
-			Debug.Log(`Update Perks ${eventinfo.sourceAttribute}`);
 			let perk = WuxPerks.GetByVariableName(eventinfo.sourceAttribute);
-			if (perk == undefined) { 
-				Debug.LogError("No Perk Found");
-				return; 
+			if (perk == undefined) {
+				Debug.LogError("Tried to update perk, but no perk was found");
+				return;
 			}
+			Debug.Log(`Update Perk ${perk.name}`);
+			let crAttributeHandler = new WorkerAttributeHandler();
+			crAttributeHandler.addMod(WuxDef.GetVariable("CR", WuxDef._max));
 
-			let attributeHandler = new WorkerAttributeHandler();
-			let worker = new WuxPerkWorkerBuild();
+			crAttributeHandler.addGetAttrCallback((crAttrHandler) => {
 
-			if (perk.name == "Second Affinity") {
-				let isUsed = eventinfo.newValue !== "" && eventinfo.newValue !== "0";
-				let cost = isUsed ? perk.cost : 0;
-				let advancedAffinityVar = WuxDef.GetVariable("AdvancedAffinity");
+				let attributeHandler = new WorkerAttributeHandler();
+				let worker = new WuxPerkWorkerBuild();
 
-				attributeHandler.addMod(worker.attrMax);
-				attributeHandler.addMod(worker.attrBuildDraft);
-				attributeHandler.addMod(advancedAffinityVar);
-				attributeHandler.addGetAttrCallback(function (attrHandler) {
-					// Merge SecondaryAffinity into AdvancedAffinity, replacing any old AffinityType entry
-					let allAffinityTitles = WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]).map(d => d.getTitle());
-					let current = (attrHandler.parseString(advancedAffinityVar) || "").split(";").map(s => s.trim()).filter(s => s !== "" && !allAffinityTitles.includes(s));
-					if (isUsed) { current.push(eventinfo.newValue); }
-					attrHandler.addUpdate(advancedAffinityVar, current.join(";"));
+				if (perk.name == "Second Affinity") {
+					let isUsed = eventinfo.newValue !== "" && eventinfo.newValue !== "0";
+					let cost = isUsed ? perk.cost : 0;
+					let advancedAffinityVar = WuxDef.GetVariable("AdvancedAffinity");
 
-					// Track cost in build stats and update available perk points
-					worker.setBuildStatsDraft(attrHandler);
-					worker.updateBuildStats(attrHandler, eventinfo.sourceAttribute, cost);
-					worker.updatePoints(attrHandler);
-				});
-			} 
-			else {
-				let rank = parseInt(eventinfo.newValue) || 0;
-				if (rank > perk.max) {
-					rank = perk.max;
-					attributeHandler.addUpdate(eventinfo.sourceAttribute, perk.max);
+					attributeHandler.addMod(worker.attrMax);
+					attributeHandler.addMod(worker.attrBuildDraft);
+					attributeHandler.addMod(advancedAffinityVar);
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						// Merge SecondaryAffinity into AdvancedAffinity, replacing any old AffinityType entry
+						let allAffinityTitles = WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]).map(d => d.getTitle());
+						let current = (attrHandler.parseString(advancedAffinityVar) || "").split(";").map(s => s.trim()).filter(s => s !== "" && !allAffinityTitles.includes(s));
+						if (isUsed) {
+							current.push(eventinfo.newValue);
+						}
+						attrHandler.addUpdate(advancedAffinityVar, current.join(";"));
+
+						// Track cost in build stats and update available perk points
+						worker.setBuildStatsDraft(attrHandler);
+						worker.updateBuildStats(attrHandler, eventinfo.sourceAttribute, cost);
+						worker.updatePoints(attrHandler);
+					});
+				} else {
+					let rank = parseInt(eventinfo.newValue) || 0;
+					let max = perk.maxRank.getValue(crAttrHandler);
+					if (rank > max) {
+						rank = max;
+						attributeHandler.addUpdate(eventinfo.sourceAttribute, max);
+					}
+					worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, rank, perk.cost);
+
+					if (perk.statVariable && perk.statVariable !== "") {
+						let increaseValue = rank * perk.increase;
+						let statDef = WuxDef.Get(perk.statVariable);
+						attributeHandler.addUpdate(statDef.getVariable(WuxDef._perk), increaseValue);
+					}
 				}
-				worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, rank, perk.cost);
-				
-				if (perk.statVariable && perk.statVariable !== "") {
-					let increaseValue = rank * perk.increase;
-					let statDef = WuxDef.Get(perk.statVariable);
-					attributeHandler.addUpdate(statDef.getVariable(WuxDef._perk), increaseValue);
-				}
-			}
-			WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
-			refreshStats(attributeHandler);
-			attributeHandler.run();
+				WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+				refreshStats(attributeHandler);
+				attributeHandler.run();
+			});
+			crAttributeHandler.run();
 		},
 
 		refreshStats = function (attributeHandler) {

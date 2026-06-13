@@ -150,7 +150,26 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             });
             attributeHandler.run();
         },
+        updatePerkMaxRanks = function (attributeHandler) {
+            Debug.Log(`Updating Perk Max Ranks`);
+            let perkEntries = [];
+            WuxPerks.Iterate(function (perk) {
+                let perkInstance = new PerkData(perk);
+                perkEntries.push({ instance: perkInstance, def: perkInstance.createDefinition(WuxDef.Get("Perk")) });
+            });
+            perkEntries.forEach(entry => attributeHandler.addMod(entry.instance.maxRank.getAttributes()));
+            attributeHandler.addMod(WuxDef.GetVariable("CR", WuxDef._max));
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                perkEntries.forEach(entry => {
+                    if (entry.instance.maxRank.hasFormula()) {
+                        Debug.Log(`Updating Perk ${entry.instance.name} Max Rank to ${entry.instance.maxRank.getValue(attrHandler)}`);
+                        attrHandler.addUpdate(entry.def.getVariable(WuxDef._max), entry.instance.maxRank.getValue(attrHandler));
+                    }
+                });
+            });
+        },
         updateCR = function (eventinfo) {
+            Debug.Log("Updating CR");
             let cr = parseInt(eventinfo.newValue);
             let loader = new LoadingScreenHandler();
             loader.showLoadingScreen(() => {
@@ -161,7 +180,8 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                 WuxWorkerKnowledges.UpdateStats(attributeHandler);
                 WuxWorkerActions.UpdateVisibilityOfFormeActions(attributeHandler);
                 updateStats(attributeHandler, combatDetailsHandler);
-                
+                updatePerkMaxRanks(attributeHandler);
+
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
                     combatDetailsHandler.onUpdateCR(attrHandler, cr);
                 });
@@ -222,6 +242,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
         }
         
     return {
+        UpdatePerkMaxRanks: updatePerkMaxRanks,
         UpdateStats: updateStats,
         UpdateDisplayName: updateDisplayName,
         UpdateCharacterSheetName: updateCharacterSheetName,

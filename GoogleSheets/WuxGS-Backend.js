@@ -224,7 +224,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
         listenerUpdatePerkPoints = function () {
             let variables = [];
             WuxPerks.Iterate(function (perk) {
-                variables.push(Object.assign(new PerkData(), perk).createDefinition(WuxDef.Get("Perk")).getVariable());
+                variables.push(new PerkData(perk).createDefinition(WuxDef.Get("Perk")).getVariable());
             });
             return WuxSheetBackend.OnChange(variables, `WuxWorkerPerks.UpdateBuildPoints(eventinfo)`, true);
         },

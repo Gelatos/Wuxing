@@ -6,6 +6,9 @@ var upgrade_to_1_0_10 = function (currentVersion) {
 	attributeHandler.addRepeatingSection("RepeatingStyles");
 	attributeHandler.addMod(worker.attrBuildDraft);
 	attributeHandler.addMod(worker.attrMax);
+	attributeHandler.addMod("CR");
+
+	WuxWorkerGeneral.UpdatePerkMaxRanks(attributeHandler);
 
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
 		attributeHandler.getRepeatingSection("RepeatingStyles").removeAllIds();

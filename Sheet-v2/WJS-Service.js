@@ -406,6 +406,7 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 			worker.updatePoints(attrHandler);
 			manager.setAttributeHandlerPoints(attrHandler);
 		});
+		WuxWorkerGeneral.UpdatePerkMaxRanks(attributeHandler);
 	}
 
 	updateAdvancementPoints(attributeHandler) {
@@ -856,7 +857,7 @@ class WuxPerkWorkerBuild extends WuxWorkerBuild {
 	getBuildVariables() {
 		let variables = [];
 		WuxPerks.Iterate(function (perk) {
-			variables.push(Object.assign(new PerkData(), perk).createDefinition(WuxDef.Get("Perk")).getVariable());
+			variables.push(new PerkData(perk).createDefinition(WuxDef.Get("Perk")).getVariable());
 		});
 		return variables;
 	}

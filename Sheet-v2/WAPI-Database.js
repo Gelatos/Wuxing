@@ -1401,7 +1401,7 @@ class PerkData extends WuxDatabaseData {
         this.group = json.group;
         this.cost = json.cost;
         this.increase = json.increase;
-        this.max = json.max;
+        this.maxRank = new FormulaData(json.maxRank);
         this.statVariable = json.statVariable;
         this.descriptions = [json.description];
     }
@@ -1418,7 +1418,7 @@ class PerkData extends WuxDatabaseData {
         i++;
         this.increase = parseInt(dataArray[i]);
         i++;
-        this.max = parseInt(dataArray[i]);
+        this.maxRank = new FormulaData("" + dataArray[i]);
         i++;
         this.statVariable = "" + dataArray[i];
         i++;
@@ -1430,7 +1430,7 @@ class PerkData extends WuxDatabaseData {
         super.createEmpty();
         this.cost = 0;
         this.increase = 0;
-        this.max = 0;
+        this.maxRank = new FormulaData();
     }
 }
 
