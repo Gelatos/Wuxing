@@ -13428,63 +13428,56 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             contents += WuxSheetMain.Header(`${perkPageDef.getTitle()}`);
                             contents += WuxDefinition.BuildText(perkDef,
                                 `${WuxSheetMain.Span(perkDef.getAttribute())} / ${WuxSheetMain.Span(perkDef.getAttribute(WuxDef._max))}`);
-                            
-                            let perkConversionDef = WuxDef.Get("AdvancementPerkTransfer");
-                            contents += WuxDefinition.BuildNumberLabelInput(perkConversionDef, perkConversionDef.getAttribute(), `cost: 1 perk point`);
 
-                            contents += addPerksByGroup();
-                            contents = WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350");
-                            
+                            contents += buildBasicPerkList();
                             contents = WuxSheetMain.TabBlock(contents);
                             return WuxSheetMain.CollapsibleTab(perkPageDef.getAttribute(WuxDef._tab, WuxDef._expand), perkPageDef.title, contents);
                         },
-                        
-                        addPerksByGroup = function () {
+
+                        buildBasicPerkList = function () {
                             let contents = "";
-                            let styleGroups = WuxDef.Filter([new DatabaseFilterData("group", "PerkGroup")]);
-                            for (let i = 0; i < styleGroups.length; i++) {
-                                let title = styleGroups[i].getTitle();
-                                contents += WuxSheetMain.Header(title);
-                                contents += WuxSheetMain.MultiRowGroup(addPerkData(title), WuxSheetMain.Table.FlexTable, 2);
+                            let groups = {};
+                            WuxBasicPerks.Iterate(function (perk) {
+                                if (!groups.hasOwnProperty(perk.group)) {
+                                    groups[perk.group] = [];
+                                }
+                                groups[perk.group].push(perk);
+                            });
+                            for (let groupName in groups) {
+                                let perks = groups[groupName];
+                                contents += WuxSheetMain.Header(groupName);
+                                let columns = ["", ""];
+                                for (let i = 0; i < perks.length; i++) {
+                                    columns[i % 2] += printBasicPerk(perks[i]);
+                                }
+                                contents += WuxSheetMain.MultiRowGroup(
+                                    [WuxSheetMain.Table.FlexTableGroup(columns[0]),
+                                     WuxSheetMain.Table.FlexTableGroup(columns[1])],
+                                    WuxSheetMain.Table.FlexTable, 2);
                             }
                             return contents;
                         },
 
-                        addPerkData = function (styleGroup) {
-                            let perkTechniques = WuxTechs.Filter(new DatabaseFilterData("style", styleGroup));
-                            
-                            let perkTables = ["", ""];
-                            for (let i = 0; i < perkTechniques.length; i++) {
-                                let perkTechnique = perkTechniques[i];
-                                let perkDef = perkTechnique.createDefinition(WuxDef.Get("Technique"));
-                                perkTables[i%2] += printPerkTechnique(perkDef, perkTechnique, WuxStyles.Get(perkTechnique.name));
+                        printBasicPerk = function (perk) {
+                            let desc = (perk.descriptions || []).join("\n");
+                            let inputRow;
+                            if (perk.name == "Second Affinity") {
+                                inputRow = WuxSheetMain.MultiRow(
+                                    WuxSheetMain.InputLabel(`${perk.name} [Cost: ${perk.cost}]`)
+                                ) + WuxSheetMain.MultiRow(
+                                    WuxSheetMain.Select(WuxDef.GetAttribute("AdvancedAffinity"),
+                                        WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])) +
+                                    WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedAffinity", WuxDef._learn))
+                                );
+                            } else {
+                                inputRow = WuxSheetMain.MultiRow(
+                                    WuxSheetMain.Input("number", perk.variable, "", "0") +
+                                    WuxSheetMain.InputLabel(`${perk.name} [Cost: ${perk.cost}]`)
+                                );
                             }
-                            return [WuxSheetMain.Table.FlexTableGroup(perkTables[0], " wuxMinWidth350"),
-                                WuxSheetMain.Table.FlexTableGroup(perkTables[1], " wuxMinWidth350")];
+                            return inputRow + (desc !== "" ? WuxSheetMain.MultiRow(`<div class="wuxDescription">${desc}</div>`) : "");
                         },
 
-                        printPerkTechnique = function (perkDef, technique, style) {
-                            let headerContents = `<div class="wuxInteractiveBlock">
-                                ${WuxSheetMain.InteractionElement.CheckboxBlockIcon(perkDef.getAttribute(),
-                                `<span class="wuxHeader">${technique.name}</span>
-                                    <span class="wuxSubheader">[Cost ${style.effects} Perk Point]</span>`
-                            )}
-                            </div>`;
-
-                            let descContents = `<div class="wuxDescription wuxMarginLeft50">${style.getDescription()}</div>`;
-
-                            if (technique.name == "Second Affinity") {
-                                descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(),
-                                    `<div class="wuxMarginLeft50">
-                                        ${WuxSheetMain.Select(WuxDef.GetAttribute("AdvancedAffinity"),
-                                        WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]))}
-                                        ${WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedAffinity", WuxDef._learn))}
-                                    </div>`);
-                            }
-
-                            return WuxSheetMain.MultiRow(headerContents) + WuxSheetMain.MultiRow(descContents);
-                        },
-                        
                         buildBackground = function () {
                             let contents = "";
                             contents += WuxSheetMain.Header("Basics");
@@ -13812,71 +13805,53 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             contents += WuxDefinition.BuildText(perkDef,
                                 `${WuxSheetMain.Span(perkDef.getAttribute())} / ${WuxSheetMain.Span(perkDef.getAttribute(WuxDef._max))}`);
 
-                            let perkConversionDef = WuxDef.Get("AdvancementPerkTransfer");
-                            contents += WuxDefinition.BuildNumberLabelInput(perkConversionDef, perkConversionDef.getAttribute(), `cost: 1 perk point`);
-
-                            contents += addPerksByGroup();
-                            contents = WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350");
-
+                            contents += buildBasicPerkList();
                             contents = WuxSheetMain.TabBlock(contents);
                             return WuxSheetMain.CollapsibleTab(perkPageDef.getAttribute(WuxDef._tab, WuxDef._expand), perkPageDef.title, contents);
                         },
 
-                        addPerksByGroup = function () {
+                        buildBasicPerkList = function () {
                             let contents = "";
-                            let styleGroups = WuxDef.Filter([new DatabaseFilterData("group", "PerkGroup")]);
-                            for (let i = 0; i < styleGroups.length; i++) {
-                                let title = styleGroups[i].getTitle();
-                                contents += WuxSheetMain.Header(title);
-                                contents += WuxSheetMain.MultiRowGroup(addPerkData(title), WuxSheetMain.Table.FlexTable, 2);
+                            let groups = {};
+                            WuxBasicPerks.Iterate(function (perk) {
+                                if (!groups.hasOwnProperty(perk.group)) {
+                                    groups[perk.group] = [];
+                                }
+                                groups[perk.group].push(perk);
+                            });
+                            for (let groupName in groups) {
+                                let perks = groups[groupName];
+                                contents += WuxSheetMain.Header(groupName);
+                                let columns = ["", ""];
+                                for (let i = 0; i < perks.length; i++) {
+                                    columns[i % 2] += printBasicPerk(perks[i]);
+                                }
+                                contents += WuxSheetMain.MultiRowGroup(
+                                    [WuxSheetMain.Table.FlexTableGroup(columns[0]),
+                                     WuxSheetMain.Table.FlexTableGroup(columns[1])],
+                                    WuxSheetMain.Table.FlexTable, 2);
                             }
                             return contents;
                         },
 
-                        addPerkData = function (styleGroup) {
-                            let perkTechniqueStyles = WuxStyles.Filter(new DatabaseFilterData("group", styleGroup));
-
-                            let perkTables = ["", ""];
-                            for (let i = 0; i < perkTechniqueStyles.length; i++) {
-                                let perkStyle = perkTechniqueStyles[i];
-                                let perkTechnique = WuxTechs.Get(perkStyle.name);
-                                if (perkTechnique == undefined) {
-                                    continue;
-                                }
-                                let perkDef = perkTechnique.createDefinition(WuxDef.Get("Technique"));
-                                perkTables[i%2] += printPerkTechnique(perkDef, perkTechnique, perkStyle);
+                        printBasicPerk = function (perk) {
+                            let desc = (perk.descriptions || []).join("\n");
+                            let inputRow;
+                            if (perk.name == "Second Affinity") {
+                                inputRow = WuxSheetMain.MultiRow(
+                                    WuxSheetMain.InputLabel(`${perk.name} [Cost: ${perk.cost}]`)
+                                ) + WuxSheetMain.MultiRow(
+                                    WuxSheetMain.Select(WuxDef.GetAttribute("AdvancedAffinity"),
+                                        WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])) +
+                                    WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedAffinity", WuxDef._learn))
+                                );
+                            } else {
+                                inputRow = WuxSheetMain.MultiRow(
+                                    WuxSheetMain.Input("number", perk.variable, "", "0") +
+                                    WuxSheetMain.InputLabel(`${perk.name} [Cost: ${perk.cost}]`)
+                                );
                             }
-                            return [WuxSheetMain.Table.FlexTableGroup(perkTables[0], " wuxMinWidth350"),
-                                WuxSheetMain.Table.FlexTableGroup(perkTables[1], " wuxMinWidth350")];
-                        },
-
-                        printPerkTechnique = function (perkDef, technique, style) {
-                            let headerContents = `<div class="wuxInteractiveBlock">
-                                ${WuxSheetMain.InteractionElement.CheckboxBlockIcon(perkDef.getAttribute(),
-                                `<span class="wuxHeader">${technique.name}</span>
-                                    <span class="wuxSubheader">[Cost ${style.effects} Perk Point]</span>`
-                                )}
-                            </div>`;
-                            let descContents = `<div class="wuxDescription wuxMarginLeft50">${style.getDescription()}</div>`;
-                            
-                            if (technique.name == "Affinity") {
-                                descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(),
-                                    `<div class="wuxMarginLeft50">
-                                        ${WuxSheetMain.Select(WuxDef.GetAttribute("Affinity"), 
-                                        WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]))}
-                                        ${WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn))}
-                                    </div>`);
-                            }
-                            if (technique.name == "Second Affinity") {
-                                descContents += WuxSheetMain.HiddenField(perkDef.getAttribute(),
-                                    `<div class="wuxMarginLeft50">
-                                        ${WuxSheetMain.Select(WuxDef.GetAttribute("AdvancedAffinity"), 
-                                        WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]))}
-                                        ${WuxSheetMain.DescField(WuxDef.GetAttribute("AdvancedAffinity", WuxDef._learn))}
-                                    </div>`);
-                            }
-                            
-                            return WuxSheetMain.MultiRow(headerContents) + WuxSheetMain.MultiRow(descContents);
+                            return inputRow + (desc !== "" ? WuxSheetMain.MultiRow(`<div class="wuxDescription">${desc}</div>`) : "");
                         }
                     ;
                     return {
