@@ -12067,8 +12067,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         ${tierOutput}
                         <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>
                         <div class="wuxFloatRight">
-                            ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`)}
-                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `&#10008; ${deleteDef.getTitle()}`)}
+                            ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `&#10008; ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
                         </div>
                     </div>`;
                 },
@@ -13877,8 +13877,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let rowContents = `<div class="wuxMultiRow" style="min-width: 300px;">
                                 <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>
                                 <div class="wuxFloatRight">
-                                    ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`)}
-                                    ${WuxSheetMain.Button(deleteDef.getAttribute(), `&#10008; ${deleteDef.getTitle()}`)}
+                                    ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                                    ${WuxSheetMain.Button(deleteDef.getAttribute(), `&#10008; ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
                                 </div>
                             </div>`;
                             let repeaterSection = WuxSheetMain.Table.FlexTableGroup(

@@ -2154,6 +2154,27 @@ div.wuxStyleHeaderButton:hover span {
     color: #f4f6f8;
 }
 
+div.wuxRepeatingTechActionButton {
+    background: none;
+    border: none;
+}
+
+div.wuxRepeatingTechActionButton span {
+    color: #979898;
+    margin: 0;
+    padding: 0;
+}
+
+div.wuxRepeatingTechActionButton:hover {
+    background: none;
+    box-shadow: none;
+    border: none;
+}
+
+div.wuxRepeatingTechActionButton:hover span {
+    color: #f4f6f8;
+}
+
 /*========================================
     Techniques
 ========================================*/
