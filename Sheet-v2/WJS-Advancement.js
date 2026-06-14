@@ -649,7 +649,9 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 						attributeHandler.addUpdate(statDef.getVariable(WuxDef._perk), increaseValue);
 					}
 				}
-				WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+				if (perk.group === "Perk Technique") {
+					WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+				}
 				refreshStats(attributeHandler);
 				attributeHandler.run();
 			});
