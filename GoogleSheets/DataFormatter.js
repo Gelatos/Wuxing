@@ -1594,6 +1594,18 @@ class DatabaseAssessment {
     printTechniqueDatabase() {
         let output = "";
 
+        this.sheetsDb.gear.iterate(function (item) {
+            if (item.hasTechnique) {
+                this.sheetsDb.techniques.add(item.technique.name, item.technique);
+            }
+        }.bind(this));
+
+        this.sheetsDb.consumables.iterate(function (item) {
+            if (item.hasTechnique) {
+                this.sheetsDb.techniques.add(item.technique.name, item.technique);
+            }
+        }.bind(this));
+
         let variableNameKeys = {};
         let techniqueClassData = JavascriptDatabase.Create(this.sheetsDb.techniques, WuxDefinition.GetTechnique);
         this.sheetsDb.techniques.iterate(function (value, key) {
