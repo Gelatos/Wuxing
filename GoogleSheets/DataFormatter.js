@@ -1486,7 +1486,7 @@ class DatabaseAssessment {
         if (setTech || setCharacterSheet) {
             this.sheetsDb.setGoods();
         }
-        if (setCharacterSheet) {
+        if (setTech || setCharacterSheet) {
             this.sheetsDb.setGear();
         }
         if (setTech || setCharacterSheet) {
@@ -1593,6 +1593,18 @@ class DatabaseAssessment {
 
     printTechniqueDatabase() {
         let output = "";
+
+        this.sheetsDb.gear.iterate(function (item) {
+            if (item.hasTechnique) {
+                this.sheetsDb.techniques.add(item.technique.name, item.technique);
+            }
+        }.bind(this));
+
+        this.sheetsDb.consumables.iterate(function (item) {
+            if (item.hasTechnique) {
+                this.sheetsDb.techniques.add(item.technique.name, item.technique);
+            }
+        }.bind(this));
 
         let variableNameKeys = {};
         let techniqueClassData = JavascriptDatabase.Create(this.sheetsDb.techniques, WuxDefinition.GetTechnique);

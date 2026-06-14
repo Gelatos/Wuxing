@@ -1849,7 +1849,7 @@ class UsableItemData extends ItemData {
         i++;
         this.commonTechniques = "" + dataArray[i];
         i++;
-        let techData = [this.name, "Item", "", ("" + dataArray[i]), "", 2];
+        let techData = [this.name, "Gear", "", ("" + dataArray[i]), "", 2];
         i++;
         techData = techData.concat(dataArray.slice(i));
         this.technique = new TechniqueData(techData);
