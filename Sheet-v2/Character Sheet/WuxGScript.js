@@ -7846,7 +7846,7 @@ class DatabaseAssessment {
         if (setTech || setCharacterSheet) {
             this.sheetsDb.setGoods();
         }
-        if (setCharacterSheet) {
+        if (setTech || setCharacterSheet) {
             this.sheetsDb.setGear();
         }
         if (setTech || setCharacterSheet) {

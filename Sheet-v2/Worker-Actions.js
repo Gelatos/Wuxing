@@ -690,8 +690,9 @@ class FormeTechniqueDatabase {
 
     registerTechDictionary(attrHandler) {
         let formeTechDatabase = this;
-        attrHandler.addUpdate(formeTechDatabase.boosterFieldName, []);
+        attrHandler.addUpdate(formeTechDatabase.boosterFieldName, "[]");
         formeTechDatabase.addAllBasicTechniques();
+        formeTechDatabase.learnedJobStyleNames = new Set(formeTechDatabase.jobWorker.getStyles().map(s => s.style.name));
         formeTechDatabase.iterateAllTechniquesFromLearnedStyles(function (technique, techniqueRank) {
             let newEntry = formeTechDatabase.tryAddTechniqueToTechDictionary(technique, techniqueRank);
             if (newEntry != undefined && newEntry.isActive) {
@@ -781,7 +782,15 @@ class FormeTechniqueDatabase {
         else if (technique.affinity != "" && !this.userAffinities.includes(technique.affinity)) {
             return false;
         }
-        
+
+        if (this.learnedJobStyleNames) {
+            let techSetParts = technique.techSet.split(";").map(s => s.trim());
+            let isJobTechnique = techSetParts.some(part => this.learnedJobStyleNames.has(part));
+            if (isJobTechnique && !this.checkTechniqueIsEquipped(technique, technique.techSet)) {
+                return false;
+            }
+        }
+
         return true;
     }
     checkTechniqueIsVisibleInFilter(technique) {
