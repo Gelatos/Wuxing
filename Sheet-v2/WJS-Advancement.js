@@ -888,7 +888,24 @@ var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
 var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 	'use strict';
 
+	const loreRepeaterIds = [
+		"RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
+		"RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+	];
+
+	const loreTierVar = WuxDef.GetVariable("Lore_Tier");
+	const loreSubTypeVar = WuxDef.GetVariable("Lore_SubType");
+	const loreNameVar = WuxDef.GetVariable("Lore_Name");
+
 	var
+		addLoreRepeaters = function (attributeHandler) {
+			for (let i = 0; i < loreRepeaterIds.length; i++) {
+				attributeHandler.addRepeatingSection(loreRepeaterIds[i]);
+				let repeater = attributeHandler.getRepeatingSection(loreRepeaterIds[i]);
+				repeater.addFieldNames([loreTierVar, loreSubTypeVar, loreNameVar]);
+			}
+		},
+
 		updateBuildPoints = function (eventinfo) {
 			Debug.Log("Update Knowledge");
 			let attributeHandler = new WorkerAttributeHandler();
@@ -905,49 +922,62 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				worker.setBuildStatsDraft(attrHandler);
-
-				worker.cleanBuildStats();
 				worker.setPointsMax(attrHandler);
 				worker.updatePoints(attrHandler);
-				worker.revertBuildStatsDraft(attrHandler);
 			});
 		},
+
 		updateStats = function (attributeHandler) {
 			let loreCategoryDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "LoreCategory"));
-			let loreDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Lore"));
 			let languageDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Language"));
 
 			for (let i = 0; i < loreCategoryDefinitions.length; i++) {
 				attributeHandler.addMod(loreCategoryDefinitions[i].getVariable(WuxDef._rank));
 			}
-			for (let i = 0; i < loreDefinitions.length; i++) {
-				attributeHandler.addMod(loreDefinitions[i].getVariable(WuxDef._rank));
-			}
 			for (let i = 0; i < languageDefinitions.length; i++) {
 				attributeHandler.addMod(languageDefinitions[i].getVariable(WuxDef._rank));
 			}
+
+			addLoreRepeaters(attributeHandler);
 
 			attributeHandler.addMod([WuxDef.GetVariable("CR"), WuxDef.GetVariable("Recall")]);
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				let skillPointValue = 0;
 				let skillRank = 0;
+				let crValue = attrHandler.parseInt(WuxDef.GetVariable("CR"));
+				let recallValue = attrHandler.parseInt(WuxDef.GetVariable("Recall"));
 				let loreCategories = {};
+
 				for (let i = 0; i < loreCategoryDefinitions.length; i++) {
 					loreCategories[loreCategoryDefinitions[i].title] = {};
-
 					skillRank = attrHandler.parseInt(loreCategoryDefinitions[i].getVariable(WuxDef._rank));
 					if (skillRank > 0) {
-						skillPointValue = skillRank + attrHandler.parseInt(WuxDef.GetVariable("CR")) + attrHandler.parseInt(WuxDef.GetVariable("Recall"));
+						skillPointValue = skillRank + crValue + recallValue;
 						loreCategories[loreCategoryDefinitions[i].title]["General"] = skillPointValue;
 					}
 				}
-				for (let i = 0; i < loreDefinitions.length; i++) {
-					skillRank = attrHandler.parseInt(loreDefinitions[i].getVariable(WuxDef._rank));
-					if (skillRank > 0) {
-						skillPointValue = skillRank + attrHandler.parseInt(WuxDef.GetVariable("CR")) + attrHandler.parseInt(WuxDef.GetVariable("Recall"));
-						loreCategories[loreDefinitions[i].subGroup][loreDefinitions[i].title] = skillPointValue;
+
+				for (let i = 0; i < loreRepeaterIds.length; i++) {
+					let repeater = attrHandler.getRepeatingSection(loreRepeaterIds[i]);
+					let categoryName = WuxDef.Get(loreRepeaterIds[i]).title.replace(" Knowledge", "");
+					if (loreCategories[categoryName] === undefined) {
+						loreCategories[categoryName] = {};
 					}
+					repeater.iterate(function (id) {
+						let tier = attrHandler.parseInt(repeater.getFieldName(id, loreTierVar));
+						if (tier > 0) {
+							let subType = attrHandler.parseString(repeater.getFieldName(id, loreSubTypeVar));
+							let loreName = subType === "1"
+								? attrHandler.parseString(repeater.getFieldName(id, loreNameVar))
+								: subType;
+							if (loreName !== "" && loreName !== "0") {
+								skillPointValue = tier + crValue + recallValue;
+								loreCategories[categoryName][loreName] = skillPointValue;
+							}
+						}
+					});
 				}
+
 				attrHandler.addUpdate(WuxDef.GetVariable("Lore", WuxDef._true), JSON.stringify(loreCategories));
 
 				let languages = [];

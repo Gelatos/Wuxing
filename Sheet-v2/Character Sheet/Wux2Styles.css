@@ -2025,6 +2025,23 @@ input[type=hidden].wuxAncestrySelection-flag[value="Human"] + .wuxAncestrySelect
 }
 
 /*========================================
+    Lore
+========================================*/
+
+.wuxLoreType
+{
+    display: inline-block;
+    width: 120px;
+}
+
+.wuxLoreDescription
+{
+    display: inline-block;
+    margin-left: 5px;
+    width: calc(95% - 121px);
+}
+
+/*========================================
     Emote Post
 ========================================*/
 

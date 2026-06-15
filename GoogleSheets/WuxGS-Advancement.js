@@ -1006,14 +1006,14 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         buildSubLoreRepeater = function (groupName, subLores) {
                             let tierOptions = WuxDef.Filter([new DatabaseFilterData("group", "LoreTier")]);
 
-                            let subTypeSelect = `<select class="wuxInput" name="${WuxDef.GetAttribute("Lore_SubType")}">
+                            let subTypeSelect = `<select class="wuxInput wuxLoreDescription" name="${WuxDef.GetAttribute("Lore_SubType")}">
                                 <option value="0">-</option>
                                 ${subLores.map(k => `<option value="${k.name}">${k.name}</option>`).join("\n                                ")}
                                 <option value="1">Custom</option>
                             </select>`;
 
                             let repeaterContents = WuxSheetMain.MultiRow(
-                                WuxSheetMain.Select(WuxDef.GetAttribute("Lore_Tier"), tierOptions, false, "wuxWidth70 wuxMarginRight10") +
+                                WuxSheetMain.Select(WuxDef.GetAttribute("Lore_Tier"), tierOptions, false, "wuxLoreType") +
                                 subTypeSelect
                             );
 
@@ -1025,11 +1025,13 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 WuxDef.GetAttribute("Lore_Description"), "wuxInput wuxHeight30", WuxDef.GetTitle("Lore_Description"));
 
                             let specializedLoreDef = WuxDef.Get("Title_SpecializedLore");
-                            return `${WuxSheetMain.Header2(specializedLoreDef.getTitle())}
-                            <div>
-                                <fieldset class="${WuxDef.GetVariable("Repeater" + groupName)}">
-                                    ${repeaterContents}
-                                </fieldset>
+                            return `<div class="wuxMarginLeft50">
+                                ${WuxSheetMain.Header2(specializedLoreDef.getTitle(groupName))}
+                                <div>
+                                    <fieldset class="${WuxDef.GetVariable("Repeater" + groupName)}">
+                                        ${repeaterContents}
+                                    </fieldset>
+                                </div>
                             </div>`;
                         },
 

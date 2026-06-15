@@ -150,9 +150,15 @@ var TrainingBackend = TrainingBackend || (function () {
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerUpdateKnowledgeBuildPoints = function () {
+            let loreRepeaterIds = [
+                "RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
+                "RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+            ];
             let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Language"), WuxDef._rank);
             groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "LoreCategory"), WuxDef._rank));
-            groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Lore"), WuxDef._rank));
+            for (let i = 0; i < loreRepeaterIds.length; i++) {
+                groupVariableNames.push(`${WuxDef.GetVariable(loreRepeaterIds[i])}:${WuxDef.GetVariable("Lore_Tier")}`);
+            }
             let output = `WuxWorkerKnowledges.UpdateBuildPoints(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);

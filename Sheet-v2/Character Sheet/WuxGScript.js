@@ -12491,9 +12491,15 @@ var TrainingBackend = TrainingBackend || (function () {
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerUpdateKnowledgeBuildPoints = function () {
+            let loreRepeaterIds = [
+                "RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
+                "RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+            ];
             let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Language"), WuxDef._rank);
             groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "LoreCategory"), WuxDef._rank));
-            groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Lore"), WuxDef._rank));
+            for (let i = 0; i < loreRepeaterIds.length; i++) {
+                groupVariableNames.push(`${WuxDef.GetVariable(loreRepeaterIds[i])}:${WuxDef.GetVariable("Lore_Tier")}`);
+            }
             let output = `WuxWorkerKnowledges.UpdateBuildPoints(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
@@ -14245,38 +14251,66 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             return `<div class="wuxFlexTableItemGroup wuxMinWidth150">
 								<div class="wuxFlexTableItemHeader wuxTextLeft">${groupName} Lore</div>
 								<div class="wuxFlexTableItemData wuxTextLeft">
-									${buildLoreGroupSkills(filteredData)}
+									${buildLoreGroupSkills(filteredData, groupName)}
 								</div>
 							</div>`;
                         },
 
-                        buildLoreGroupSkills = function (knowledgeDataArray) {
+                        buildLoreGroupSkills = function (knowledgeDataArray, groupName) {
                             let output = "";
+                            let subLores = [];
                             for (let i = 0; i < knowledgeDataArray.length; i++) {
                                 if (knowledgeDataArray[i].name == knowledgeDataArray[i].group) {
                                     output += buildMainLore(knowledgeDataArray[i]);
                                 } else {
-                                    output += buildSubLore(knowledgeDataArray[i]);
+                                    subLores.push(knowledgeDataArray[i]);
                                 }
                             }
+                            output += buildSubLoreRepeater(groupName, subLores);
                             return output;
                         },
 
-                        buildLore = function (knowledgeDefinition, groupName, interactHeader) {
-                            return `${WuxSheetMain.InteractionElement.BuildTooltipSelectInput(
-                                    knowledgeDefinition.getAttribute(WuxDef._rank), 
-                                    knowledgeDefinition.getAttribute(WuxDef._info),
-                                WuxDef.Filter([new DatabaseFilterData("group", groupName)]), 
-                                false, "wuxWidth70 wuxMarginRight10",
-                                interactHeader, WuxDefinition.TooltipDescription(knowledgeDefinition))}`;
+                        buildSubLoreRepeater = function (groupName, subLores) {
+                            let tierOptions = WuxDef.Filter([new DatabaseFilterData("group", "LoreTier")]);
+
+                            let subTypeSelect = `<select class="wuxInput wuxLoreDescription" name="${WuxDef.GetAttribute("Lore_SubType")}">
+                                <option value="0">-</option>
+                                ${subLores.map(k => `<option value="${k.name}">${k.name}</option>`).join("\n                                ")}
+                                <option value="1">Custom</option>
+                            </select>`;
+
+                            let repeaterContents = WuxSheetMain.MultiRow(
+                                WuxSheetMain.Select(WuxDef.GetAttribute("Lore_Tier"), tierOptions, false, "wuxLoreType") +
+                                subTypeSelect
+                            );
+
+                            repeaterContents += WuxSheetMain.HiddenIndexField(
+                                WuxDef.GetAttribute("Lore_SubType"), 1,
+                                WuxSheetMain.Input("text", WuxDef.GetAttribute("Lore_Name"), "", WuxDef.GetTitle("Lore_Name")));
+
+                            repeaterContents += WuxSheetMain.Textarea(
+                                WuxDef.GetAttribute("Lore_Description"), "wuxInput wuxHeight30", WuxDef.GetTitle("Lore_Description"));
+
+                            let specializedLoreDef = WuxDef.Get("Title_SpecializedLore");
+                            return `<div class="wuxMarginLeft50">
+                                ${WuxSheetMain.Header2(specializedLoreDef.getTitle(groupName))}
+                                <div>
+                                    <fieldset class="${WuxDef.GetVariable("Repeater" + groupName)}">
+                                        ${repeaterContents}
+                                    </fieldset>
+                                </div>
+                            </div>`;
                         },
 
                         buildMainLore = function (knowledge) {
-                            return buildLore(knowledge.createDefinition(WuxDef.Get("LoreCategory")), "GeneralLoreTier", `<span class="wuxHeader">General ${knowledge.name}</span>`);
-                        },
-
-                        buildSubLore = function (knowledge) {
-                            return buildLore(knowledge.createDefinition(WuxDef.Get("Lore")), "LoreTier", `<span class="wuxSubheader">${knowledge.name}</span>`);
+                            let knowledgeDefinition = knowledge.createDefinition(WuxDef.Get("LoreCategory"));
+                            return `<div class="wuxSkill">
+                                ${WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                    knowledgeDefinition.getAttribute(WuxDef._rank),
+                                    knowledgeDefinition.getAttribute(WuxDef._info),
+                                    `<span class="wuxHeader">General ${knowledge.name}</span>`,
+                                    WuxDefinition.TooltipDescription(knowledgeDefinition))}
+                            </div>`;
                         }
 
                     return {
