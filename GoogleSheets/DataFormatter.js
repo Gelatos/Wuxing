@@ -279,7 +279,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         return new WuxDataDatabase(arr, arr => { return new PerkData(arr); }, ["group", "cost"]);
     };
     const createLanguages = function (arr) {
-        return new WuxDataDatabase(arr, arr => {return new LanguageData(arr)});
+        return new WuxDataDatabase(arr, arr => {return new LanguageData(arr)}, ["group", "location"]);
     };
     const createLores = function (arr) {
         return new WuxDataDatabase(arr, arr => {return new LoreData(arr)});

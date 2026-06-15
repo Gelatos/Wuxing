@@ -854,35 +854,74 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                     var
                         build = function (database) {
-                            let contents = WuxSheetMain.MultiRowGroup(buildGroups(database), WuxSheetMain.Table.FlexTable, 2);
+                            let leftColumn = buildCommonSection(database);
+                            let rightColumn = buildGroupsColumn(database);
+                            let contents = WuxSheetMain.MultiRowGroup([leftColumn, rightColumn], WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Language");
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                         },
 
-                        buildGroups = function (database) {
-                            let output = [];
-                            let groupName = "";
-                            let filterSettings = [new DatabaseFilterData("group", "")];
-                            let filteredData = {};
-                            let languageGroups = database.getPropertyValues("group");
-                            for (let i = 0; i < languageGroups.length; i++) {
-                                groupName = languageGroups[i];
-                                filterSettings[0].value = [groupName];
-                                filteredData = database.filter(filterSettings);
-                                output.push(printGroup(groupName, filteredData));
+                        buildCommonSection = function (database) {
+                            let commonLanguages = database.filter([new DatabaseFilterData("location", "Common")]);
+                            if (commonLanguages.length === 0) { return ""; }
+
+                            let definition = WuxDef.Get("Title_LanguageCommon");
+                            let header = WuxSheetMain.Header(definition.getTitle());
+
+                            return `<div class="wuxFlexTableItemGroup wuxMinWidth150">
+                                ${header}
+                                <div class="wuxFlexTableItemData wuxTextLeft">
+                                    ${buildCommonLanguageSkills(commonLanguages)}
+                                </div>
+                            </div>`;
+                        },
+
+                        buildCommonLanguageSkills = function (filteredData) {
+                            let output = "";
+                            for (let i = 0; i < filteredData.length; i++) {
+                                output += buildCommonLanguage(filteredData[i]);
                             }
                             return output;
                         },
 
+                        buildCommonLanguage = function (knowledge) {
+                            let knowledgeDefinition = knowledge.createDefinition(WuxDef.Get("Language"));
+                            return `<div class="wuxSkill">
+                                ${WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                    knowledgeDefinition.getAttribute(WuxDef._rank),
+                                    knowledgeDefinition.getAttribute(WuxDef._info),
+                                    buildInteractionMainBlock(knowledge, knowledgeDefinition),
+                                    WuxDefinition.TooltipDescription(knowledgeDefinition))}
+                                <span class="wuxSubheader"> - ${knowledge.group}</span>
+                            </div>`;
+                        },
+
+                        buildGroupsColumn = function (database) {
+                            let output = "";
+                            let filterSettings = [new DatabaseFilterData("group", "")];
+                            let languageGroups = database.getPropertyValues("group");
+                            for (let i = 0; i < languageGroups.length; i++) {
+                                let groupName = languageGroups[i];
+                                filterSettings[0].value = [groupName];
+                                let filteredData = database.filter(filterSettings);
+                                let nonCommon = filteredData.filter(k => k.location !== "Common");
+                                if (nonCommon.length > 0) {
+                                    output += printGroup(groupName, nonCommon);
+                                }
+                            }
+                            return WuxSheetMain.Table.FlexTableGroup(output);
+                        },
+
                         printGroup = function (groupName, filteredData) {
+                            let hiddenField = `attr_Language_${groupName.replace(/\s+/g, "")}_expand`;
+                            let header = WuxSheetMain.Header(
+                                WuxSheetMain.CollapsibleHeaderInverse(`<span>${groupName} Languages</span>`, hiddenField));
+                            let body = WuxSheetMain.HiddenField(hiddenField, buildLanguageGroupSkills(filteredData));
                             return `<div class="wuxFlexTableItemGroup wuxMinWidth150">
-								<div class="wuxFlexTableItemHeader wuxTextLeft">${groupName} Languages</div>
-								<div class="wuxFlexTableItemData wuxTextLeft">
-									${buildLanguageGroupSkills(filteredData)}
-								</div>
-							</div>`;
+                                ${header}${body}
+                            </div>`;
                         },
 
                         buildLanguageGroupSkills = function (filteredData) {
@@ -897,10 +936,10 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let knowledgeDefinition = knowledge.createDefinition(WuxDef.Get("Language"));
                             return `<div class="wuxSkill">
                                 ${WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
-                                    knowledgeDefinition.getAttribute(WuxDef._rank), 
+                                    knowledgeDefinition.getAttribute(WuxDef._rank),
                                     knowledgeDefinition.getAttribute(WuxDef._info),
-                                buildInteractionMainBlock(knowledge, knowledgeDefinition), 
-                                WuxDefinition.TooltipDescription(knowledgeDefinition))}
+                                    buildInteractionMainBlock(knowledge, knowledgeDefinition),
+                                    WuxDefinition.TooltipDescription(knowledgeDefinition))}
                                 <span class="wuxSubheader"> - ${knowledge.location}</span>
                             </div>`;
                         },
