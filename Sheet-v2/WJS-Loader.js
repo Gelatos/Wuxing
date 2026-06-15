@@ -1,4 +1,58 @@
-var wuxCurrentVersion = "1.0.10";
+var wuxCurrentVersion = "1.0.11";
+
+var upgrade_to_1_0_11 = function (currentVersion) {
+	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.11");
+
+	let loreRepeaterIds = [
+		"RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
+		"RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+	];
+	let loreTierVar = WuxDef.GetVariable("Lore_Tier");
+	let loreSubTypeVar = WuxDef.GetVariable("Lore_SubType");
+	let loreNameVar = WuxDef.GetVariable("Lore_Name");
+	let loreCategoryDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "LoreCategory"));
+
+	for (let i = 0; i < loreCategoryDefinitions.length; i++) {
+		attributeHandler.addMod(loreCategoryDefinitions[i].getVariable(WuxDef._rank));
+	}
+	for (let i = 0; i < loreRepeaterIds.length; i++) {
+		attributeHandler.addRepeatingSection(loreRepeaterIds[i]);
+		let repeater = attributeHandler.getRepeatingSection(loreRepeaterIds[i]);
+		repeater.addFieldNames([loreTierVar, loreSubTypeVar, loreNameVar]);
+	}
+
+	attributeHandler.addGetAttrCallback(function (attrHandler) {
+		let loreWorker = new WuxLoreWorkerBuild();
+		loreWorker.buildStats = new WorkerBuildStats();
+
+		for (let i = 0; i < loreCategoryDefinitions.length; i++) {
+			let rawRank = attrHandler.parseString(loreCategoryDefinitions[i].getVariable(WuxDef._rank));
+			if (rawRank === "on" || parseInt(rawRank) > 0) {
+				let key = `General ${loreCategoryDefinitions[i].title}`;
+				loreWorker.buildStats.add(key, new WorkerBuildStat([key, "on"]));
+			}
+		}
+		for (let i = 0; i < loreRepeaterIds.length; i++) {
+			let repeater = attrHandler.getRepeatingSection(loreRepeaterIds[i]);
+			repeater.iterate(function (id) {
+				let tier = attrHandler.parseInt(repeater.getFieldName(id, loreTierVar));
+				if (tier > 0) {
+					let subType = attrHandler.parseString(repeater.getFieldName(id, loreSubTypeVar));
+					let loreName = subType === "1"
+						? attrHandler.parseString(repeater.getFieldName(id, loreNameVar))
+						: subType;
+					if (loreName !== "" && loreName !== "0") {
+						loreWorker.buildStats.add(loreName, new WorkerBuildStat([loreName, tier.toString()]));
+					}
+				}
+			});
+		}
+
+		attrHandler.addUpdate(loreWorker.attrBuildDraft, JSON.stringify(loreWorker.buildStats));
+	});
+
+	attributeHandler.run();
+};
 
 var upgrade_to_1_0_10 = function (currentVersion) {
 	let worker = new WuxStyleWorkerBuild();
@@ -139,6 +193,9 @@ var versioning = function () {
 		switch(v["version"]) {
 			case wuxCurrentVersion:
 				console.log(`Wuxing Sheet modified from 5th Edition OGL by Roll20 v${wuxCurrentVersion}`);
+				break;
+			case "1.0.10":
+				upgrade_to_1_0_11(v["version"]);
 				break;
 			case "1.0.9":
 				upgrade_to_1_0_10(v["version"]);

@@ -981,6 +981,32 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 
 				attrHandler.addUpdate(WuxDef.GetVariable("Lore", WuxDef._true), JSON.stringify(loreCategories));
 
+				let loreWorker = new WuxLoreWorkerBuild();
+				loreWorker.buildStats = new WorkerBuildStats();
+				for (let i = 0; i < loreCategoryDefinitions.length; i++) {
+					let rawRank = attrHandler.parseString(loreCategoryDefinitions[i].getVariable(WuxDef._rank));
+					if (rawRank === "on" || parseInt(rawRank) > 0) {
+						let key = `General ${loreCategoryDefinitions[i].title}`;
+						loreWorker.buildStats.add(key, new WorkerBuildStat([key, "on"]));
+					}
+				}
+				for (let i = 0; i < loreRepeaterIds.length; i++) {
+					let repeater = attrHandler.getRepeatingSection(loreRepeaterIds[i]);
+					repeater.iterate(function (id) {
+						let tier = attrHandler.parseInt(repeater.getFieldName(id, loreTierVar));
+						if (tier > 0) {
+							let subType = attrHandler.parseString(repeater.getFieldName(id, loreSubTypeVar));
+							let loreName = subType === "1"
+								? attrHandler.parseString(repeater.getFieldName(id, loreNameVar))
+								: subType;
+							if (loreName !== "" && loreName !== "0") {
+								loreWorker.buildStats.add(loreName, new WorkerBuildStat([loreName, tier.toString()]));
+							}
+						}
+					});
+				}
+				attrHandler.addUpdate(loreWorker.attrBuildDraft, JSON.stringify(loreWorker.buildStats));
+
 				let languages = [];
 				for (let i = 0; i < languageDefinitions.length; i++) {
 					skillRank = attrHandler.parseString(languageDefinitions[i].getVariable(WuxDef._rank));

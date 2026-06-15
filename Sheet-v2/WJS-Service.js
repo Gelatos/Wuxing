@@ -969,6 +969,12 @@ class WuxSkillWorkerBuild extends WuxWorkerBuild {
 	}
 }
 
+class WuxLoreWorkerBuild extends WuxWorkerBuild {
+	constructor() {
+		super("Lore");
+	}
+}
+
 class DatabaseItemAttributeHandler {
 	constructor(attrHandler, baseDefinitionName, baseSuffix) {
 		this.attrHandler = attrHandler;

@@ -2430,8 +2430,8 @@ var TargetReference = TargetReference || (function () {
             let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
 
             let recallVar = WuxDef.GetVariable("Recall");
-            let knowledgeBuildVar = WuxDef.GetVariable("Knowledge", WuxDef._build);
-            attributeHandler.addMod([recallVar, knowledgeBuildVar]);
+            let loreBuildVar = WuxDef.GetVariable("Lore", WuxDef._build);
+            attributeHandler.addMod([recallVar, loreBuildVar]);
 
             let dieRoll = new DieRoll();
             dieRoll.rollCheck(advantage);
@@ -2442,19 +2442,17 @@ var TargetReference = TargetReference || (function () {
                 recallResults.addModToRoll(recallValue);
                 tableData.addRow(["Recall", `${Format.ShowTooltip(`${recallResults.total}`, recallResults.message)}`]);
 
-                let knowledges = new WorkerBuildStats();
-                knowledges.import(attrHandler.parseJSON(knowledgeBuildVar));
+                let lores = new WorkerBuildStats();
+                lores.import(attrHandler.parseJSON(loreBuildVar));
 
-                knowledges.iterate(function (buildStat) {
-                    let parts = buildStat.name.split("-");
-                    let title = parts[1].split("_")[0];
-                    if (parts[0] == "lor") {
+                lores.iterate(function (buildStat) {
+                    if (buildStat.value === "on") {
+                        tableData.addRow([buildStat.name, `${Format.ShowTooltip(`${recallResults.total}`, recallResults.message)}`]);
+                    } else if (parseInt(buildStat.value) > 0) {
                         let results = new DieRoll(dieRoll);
                         let value = parseInt(buildStat.value) + recallValue;
                         results.addModToRoll(value);
-                        tableData.addRow([title, `${Format.ShowTooltip(`${results.total}`, results.message)}`]);
-                    } else if (parts[0] == "lrc") {
-                        tableData.addRow([title, `${Format.ShowTooltip(`${recallResults.total}`, recallResults.message)}`]);
+                        tableData.addRow([buildStat.name, `${Format.ShowTooltip(`${results.total}`, results.message)}`]);
                     }
                 });
             });
