@@ -14722,7 +14722,7 @@
 						<div class="wuxSectionBlock wuxLayoutItem">
 							<div class="wuxTabContent">
 								<div class="wuxFlexTable">
-									<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup">
+									<div class="wuxFlexTableItemGroup wuxFlexTableItemGroup">
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_adv-ap_job" value="0">
 										<div class="wuxHiddenField">
 											<div class="wuxHeader">Equip Job</div>
@@ -14986,246 +14986,53 @@
 
 											</div>
 											<div class="wuxRow">&nbsp;</div>
-											<div class="wuxRepeatingFlexSection"><input type="hidden" name="attr_act-use-jc" value="" />
-												<input type="hidden" name="attr_act-techversion-jc" value="" />
-												<div class="wuxFeature">
-													<div class="wuxFeatureHeader">
-														<div class="wuxFeatureHeaderDisplayBlock">
-															<div class="wuxFeatureHeaderDisplayTitleBlock">
-																<div class="wuxFeatureHeaderName"><button class="wuxFeatureHeaderNameButton" type="roll" value="@{act-use-jc}">
-																		<span name="attr_act-techname-jc"></span>
-																	</button></div>
-																<input type="hidden" class="wuxFeatureHeader-flag" name="attr_act-techactiontype-jc">
-																<div class="wuxFeatureHeaderDisplayInfoActionType"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techactiontooltip-jc" value="0">
-																	<span class="wuxHiddenInlineField">
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><strong><span name="attr_act-techactionname-jc"></span></strong></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2">Action</div>
-																				<span class="wuxDescription" name="attr_act-techactiontooltip-jc"></span>
-																			</div>
-																		</span>
-																	</span>
-
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techactiontooltip-jc" value="0">
-																	<span class="wuxHiddenInlineAuxField">
-																		<span name="attr_act-techactionname-jc"></span>
-																	</span>
-																</div>
-															</div>
-															<div class="wuxFeatureHeaderDisplayInfoBlock">
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techrange-jc" value="0">
-																<div class="wuxHiddenField">
-																	<div class="wuxFeatureHeaderDisplayInfoRange"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtargetdesc-jc" value="0">
-																		<span class="wuxHiddenInlineField">
-																			<span class="wuxTooltip">
-																				<span class="wuxTooltipText"><strong><span name="attr_act-techrange-jc"></span></strong></span>
-																				<div class="wuxTooltipContent">
-																					<div class="wuxHeader2">Range</div>
-																					<span class="wuxDescription" name="attr_act-techtargetdesc-jc"></span>
-																				</div>
-																			</span>
-																		</span>
-
-																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtargetdesc-jc" value="0">
-																		<span class="wuxHiddenInlineAuxField">
-																			<span name="attr_act-techrange-jc"></span>
-																		</span>
+											<div class="wuxFeature wuxWidth300">
+												<div class="wuxFeatureHeader">
+													<div class="wuxFeatureHeaderDisplayBlock">
+														<div class="wuxFeatureHeaderDisplayTitleBlock">
+															<div class="wuxFeatureHeaderName"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Job Change}}{{type-Swift=1}}{{action=Swift}}{{En=3}}{{Range=Self}}{{FlavorText=You swap mindset to something more appropriate for the situation.}}{{Core0Data=You may change your equipped Job. }}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Job Change&#37;&#37;,&#37;&#37;en&#37;&#37;&&&#37;&#37;3&#37;&#37;,&#37;&#37;will&#37;&#37;&&&#37;&#37;0&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Job Change-0$$&#64;{sheetname}}}{{targetData=!utech Job Change-0$$&#64;{sheetname}}}">
+																	<span>Job Change</span>
+																</button></div>
+															<input type="hidden" class="wuxFeatureHeader-flag" value="Swift">
+															<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Swift</span></div>
+														</div>
+														<div class="wuxFeatureHeaderDisplayInfoBlock">
+															<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
+																	<span class="wuxTooltipText"><strong>Self</strong></span>
+																	<div class="wuxTooltipContent">
+																		<div class="wuxHeader2">Range</div>
+																		<span class="wuxDescription">This value represents the range and targetting pattern for this technique. A range of Self means this technique can only target the user.</span>
 																	</div>
-																</div>
+																</span></div>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtargettype-jc" value="0">
-																<div class="wuxHiddenField">
-																	<div class="wuxFeatureHeaderDisplayInfoTargetType"><span name="attr_act-techtargettype-jc"></span></div>
-																</div>
-
-															</div>
-															<div class="wuxFeatureHeaderDisplayCostBlock">
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techencost-jc" value="0">
-																<div class="wuxHiddenField">
-																	<div class="wuxFeatureHeaderDisplayInfoEnCost"><span name="attr_act-techencost-jc"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> EN</span></div>
-																</div>
-
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillcost-jc" value="0">
-																<div class="wuxHiddenField">
-																	<div class="wuxFeatureHeaderDisplayInfoWillCost"><span name="attr_act-techwillcost-jc"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>
-																</div>
-
-															</div>
 														</div>
-													</div>
-													<div class="wuxFeatureInfoDisplayBlock">
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrigger-jc" value="0">
-														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> <span name="attr_act-techtrigger-jc"></span></div>
+														<div class="wuxFeatureHeaderDisplayCostBlock">
+															<div class="wuxFeatureHeaderDisplayInfoEnCost"><span>3</span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> EN</span></div>
+
 														</div>
-
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtraits-jc" value="0">
-														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderInfoTraits"><strong><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtraitsdesc-jc" value="0">
-																	<span class="wuxHiddenInlineField">
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><strong>Traits</strong></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2">Traits</div>
-																				<span class="wuxDescription" name="attr_act-techtraitsdesc-jc"></span>
-																			</div>
-																		</span>
-																	</span>
-
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtraitsdesc-jc" value="0">
-																	<span class="wuxHiddenInlineAuxField">
-																		Traits
-																	</span>
-																	.</strong> <span name="attr_act-techtraits-jc"></span></div>
-														</div>
-
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techflavortext-jc" value="0">
-														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderInfoFlavor"><span name="attr_act-techflavortext-jc"></span></div>
-														</div>
-
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcoreeffect-jc" value="0">
-														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderInfoEffect-Core">
-																<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-																<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcoreeffect_info-jc" value="0">
-																		<span class="wuxHiddenInlineField">
-																			<span class="wuxTooltip">
-																				<span class="wuxTooltipText"><strong>Effects</strong></span>
-																				<div class="wuxTooltipContent">
-																					<div class="wuxHeader2">Core Effects</div>
-																					<span class="wuxDescription" name="attr_act-techcoreeffect_info-jc"></span>
-																				</div>
-																			</span>
-																		</span>
-
-																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcoreeffect_info-jc" value="0">
-																		<span class="wuxHiddenInlineAuxField">
-																			Effects
-																		</span>
-																	</span></div>
-																<div class="wuxFeatureHeaderInfoContents"><span name="attr_act-techcoreeffect-jc"></span></div>
-															</div>
-														</div>
-
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techonenter-jc" value="0">
-														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderInfoEffectOnEnter"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
-																		<span class="wuxTooltipText"><strong>On Enter Effects</strong></span>
-																		<div class="wuxTooltipContent">
-																			<div class="wuxHeader2">On Enter Effects</div>
-																			<span class="wuxDescription">As long as this effect persists the effects below this entry all occur to any character in the area immediately on casting. These effects also occur to every character in the area at the start of every subsequent round - this happens after all sustained effects have been determined. These effects also occur for any character that enters the affected spaces. These effects can only trigger on a character once per round.</span>
-																		</div>
-																	</span></span></div>
-														</div>
-
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcheckeffect-jc" value="0">
-														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderInfoEffect-Check">
-																<input type="hidden" class="wuxFeatureHeader-flag" name="attr_act-techcoredef-jc">
-																<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcheckeffect_info-jc" value="0">
-																		<span class="wuxHiddenInlineField">
-																			<span class="wuxTooltip">
-																				<span class="wuxTooltipText"><strong><span name="attr_act-techchecktitle-jc"></span></strong></span>
-																				<div class="wuxTooltipContent">
-																					<div class="wuxHeader2">Skill Check Effects</div>
-																					<span class="wuxDescription" name="attr_act-techcheckeffect_info-jc"></span>
-																				</div>
-																			</span>
-																		</span>
-
-																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcheckeffect_info-jc" value="0">
-																		<span class="wuxHiddenInlineAuxField">
-																			<span name="attr_act-techchecktitle-jc"></span>
-																		</span>
-																	</span></div>
-																<div class="wuxFeatureHeaderInfoContents"><span name="attr_act-techcheckeffect-jc"></span></div>
-															</div>
-														</div>
-
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techendeffect-jc" value="0">
-														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderInfoEffect"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span name="attr_act-techendeffect-jc"></span></span></div>
-														</div>
-
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillbreakeffect-jc" value="0">
-														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderInfoEffect-WillBreak">
-																<input type="hidden" class="wuxFeatureHeader-flag" value="WillBreak">
-																<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillbreakeffect_info-jc" value="0">
-																		<span class="wuxHiddenInlineField">
-																			<span class="wuxTooltip">
-																				<span class="wuxTooltipText"><strong>Will Break Effects</strong></span>
-																				<div class="wuxTooltipContent">
-																					<div class="wuxHeader2">Will Break Effects</div>
-																					<span class="wuxDescription" name="attr_act-techwillbreakeffect_info-jc"></span>
-																				</div>
-																			</span>
-																		</span>
-
-																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillbreakeffect_info-jc" value="0">
-																		<span class="wuxHiddenInlineAuxField">
-																			Will Break Effects
-																		</span>
-																	</span></div>
-																<div class="wuxFeatureHeaderInfoContents"><span name="attr_act-techwillbreakeffect-jc"></span></div>
-															</div>
-														</div>
-
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techenhanceeffect-jc" value="0">
-														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderInfoEffect-Enhance">
-																<input type="hidden" class="wuxFeatureHeader-flag" value="Enhance">
-																<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
-																			<span class="wuxTooltipText"><strong>Increased Rank Effects</strong></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2">Increased Rank Effects</div>
-																				<span class="wuxDescription">You may increase the rank of this technique so that it becomes more powerful. Each time you increase the rank you spend 1 additional EN to gain the effects listed below.</span>
-																			</div>
-																		</span></span></div>
-																<div class="wuxFeatureHeaderInfoContents"><span name="attr_act-techenhanceeffect-jc"></span></div>
-															</div>
-															<div class="wuxFeatureHeaderInfoEffect-EnhanceButtons"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techrankdown" value="0">
-																<span class="wuxHiddenInlineField">
-																	<div class="wuxButton wuxFeatureButton">
-																		<input type="checkbox" name="attr_act-techrankdown">
-																		<span><span class='wuxFeatureButtonIcon'>&#8722;</span> Decrease Rank</span>
-																	</div>
-																</span>
-
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techrankdown" value="0">
-																<span class="wuxHiddenInlineAuxField">
-																	<div class="wuxButton wuxFeatureButtonDisabled">
-																		<input type="checkbox" name="attr_act-techrankdown">
-																		<span><span class='wuxFeatureButtonIcon'>&#8722;</span> Decrease Rank</span>
-																	</div>
-																</span>
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techrankup" value="0">
-																<span class="wuxHiddenInlineField">
-																	<div class="wuxButton wuxFeatureButton">
-																		<input type="checkbox" name="attr_act-techrankup">
-																		<span><span class='wuxFeatureButtonIcon'>&#43;</span> Increase Rank</span>
-																	</div>
-																</span>
-
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techrankup" value="0">
-																<span class="wuxHiddenInlineAuxField">
-																	<div class="wuxButton wuxFeatureButtonDisabled">
-																		<input type="checkbox" name="attr_act-techrankup">
-																		<span><span class='wuxFeatureButtonIcon'>&#43;</span> Increase Rank</span>
-																	</div>
-																</span>
-															</div>
-														</div>
-
 													</div>
 												</div>
+												<div class="wuxFeatureInfoDisplayBlock">
+
+
+													<div class="wuxFeatureHeaderInfoFlavor"><span>You swap mindset to something more appropriate for the situation.</span></div>
+													<div class="wuxFeatureHeaderInfoEffect-Core">
+														<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span>Effects</span></span></div>
+														<div class="wuxFeatureHeaderInfoContents"><span>You may change your equipped Job. </span></div>
+													</div>
+
+
+
+
+
+												</div>
 											</div>
+
 										</div>
 
 									</div>
-									<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup">
+									<div class="wuxFlexTableItemGroup wuxFlexTableItemGroup">
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_perk-spirit_conduit" value="0">
 										<div class="wuxHiddenField">
 											<div class="wuxHeader">Change Affinity</div>
@@ -15237,238 +15044,46 @@
 												<option value="Metal">Metal Affinity</option>
 												<option value="Water">Water Affinity</option>
 											</select>
-											<input type="hidden" name="attr_act-use-sc" value="" />
-											<input type="hidden" name="attr_act-techversion-sc" value="" />
-											<div class="wuxFeature">
+											<div class="wuxRow">&nbsp;</div>
+											<div class="wuxFeature wuxWidth300">
 												<div class="wuxFeatureHeader">
 													<div class="wuxFeatureHeaderDisplayBlock">
 														<div class="wuxFeatureHeaderDisplayTitleBlock">
-															<div class="wuxFeatureHeaderName"><button class="wuxFeatureHeaderNameButton" type="roll" value="@{act-use-sc}">
-																	<span name="attr_act-techname-sc"></span>
+															<div class="wuxFeatureHeaderName"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Spirit Change}}{{type-Swift=1}}{{action=Swift}}{{En=3}}{{Range=Self}}{{FlavorText=You swap mindset to something more appropriate for the situation.}}{{Core0Data=You may change your active spirit and active affinity. }}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Spirit Change&#37;&#37;,&#37;&#37;en&#37;&#37;&&&#37;&#37;3&#37;&#37;,&#37;&#37;will&#37;&#37;&&&#37;&#37;0&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Spirit Change-0$$&#64;{sheetname}}}{{targetData=!utech Spirit Change-0$$&#64;{sheetname}}}">
+																	<span>Spirit Change</span>
 																</button></div>
-															<input type="hidden" class="wuxFeatureHeader-flag" name="attr_act-techactiontype-sc">
-															<div class="wuxFeatureHeaderDisplayInfoActionType"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techactiontooltip-sc" value="0">
-																<span class="wuxHiddenInlineField">
-																	<span class="wuxTooltip">
-																		<span class="wuxTooltipText"><strong><span name="attr_act-techactionname-sc"></span></strong></span>
-																		<div class="wuxTooltipContent">
-																			<div class="wuxHeader2">Action</div>
-																			<span class="wuxDescription" name="attr_act-techactiontooltip-sc"></span>
-																		</div>
-																	</span>
-																</span>
-
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techactiontooltip-sc" value="0">
-																<span class="wuxHiddenInlineAuxField">
-																	<span name="attr_act-techactionname-sc"></span>
-																</span>
-															</div>
+															<input type="hidden" class="wuxFeatureHeader-flag" value="Swift">
+															<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Swift</span></div>
 														</div>
 														<div class="wuxFeatureHeaderDisplayInfoBlock">
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techrange-sc" value="0">
-															<div class="wuxHiddenField">
-																<div class="wuxFeatureHeaderDisplayInfoRange"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtargetdesc-sc" value="0">
-																	<span class="wuxHiddenInlineField">
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><strong><span name="attr_act-techrange-sc"></span></strong></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2">Range</div>
-																				<span class="wuxDescription" name="attr_act-techtargetdesc-sc"></span>
-																			</div>
-																		</span>
-																	</span>
-
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtargetdesc-sc" value="0">
-																	<span class="wuxHiddenInlineAuxField">
-																		<span name="attr_act-techrange-sc"></span>
-																	</span>
-																</div>
-															</div>
-
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtargettype-sc" value="0">
-															<div class="wuxHiddenField">
-																<div class="wuxFeatureHeaderDisplayInfoTargetType"><span name="attr_act-techtargettype-sc"></span></div>
-															</div>
+															<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
+																	<span class="wuxTooltipText"><strong>Self</strong></span>
+																	<div class="wuxTooltipContent">
+																		<div class="wuxHeader2">Range</div>
+																		<span class="wuxDescription">This value represents the range and targetting pattern for this technique. A range of Self means this technique can only target the user.</span>
+																	</div>
+																</span></div>
 
 														</div>
 														<div class="wuxFeatureHeaderDisplayCostBlock">
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techencost-sc" value="0">
-															<div class="wuxHiddenField">
-																<div class="wuxFeatureHeaderDisplayInfoEnCost"><span name="attr_act-techencost-sc"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> EN</span></div>
-															</div>
-
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillcost-sc" value="0">
-															<div class="wuxHiddenField">
-																<div class="wuxFeatureHeaderDisplayInfoWillCost"><span name="attr_act-techwillcost-sc"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>
-															</div>
+															<div class="wuxFeatureHeaderDisplayInfoEnCost"><span>3</span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> EN</span></div>
 
 														</div>
 													</div>
 												</div>
 												<div class="wuxFeatureInfoDisplayBlock">
-													<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrigger-sc" value="0">
-													<div class="wuxHiddenField">
-														<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> <span name="attr_act-techtrigger-sc"></span></div>
+
+
+													<div class="wuxFeatureHeaderInfoFlavor"><span>You swap mindset to something more appropriate for the situation.</span></div>
+													<div class="wuxFeatureHeaderInfoEffect-Core">
+														<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span>Effects</span></span></div>
+														<div class="wuxFeatureHeaderInfoContents"><span>You may change your active spirit and active affinity. </span></div>
 													</div>
 
-													<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtraits-sc" value="0">
-													<div class="wuxHiddenField">
-														<div class="wuxFeatureHeaderInfoTraits"><strong><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtraitsdesc-sc" value="0">
-																<span class="wuxHiddenInlineField">
-																	<span class="wuxTooltip">
-																		<span class="wuxTooltipText"><strong>Traits</strong></span>
-																		<div class="wuxTooltipContent">
-																			<div class="wuxHeader2">Traits</div>
-																			<span class="wuxDescription" name="attr_act-techtraitsdesc-sc"></span>
-																		</div>
-																	</span>
-																</span>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtraitsdesc-sc" value="0">
-																<span class="wuxHiddenInlineAuxField">
-																	Traits
-																</span>
-																.</strong> <span name="attr_act-techtraits-sc"></span></div>
-													</div>
 
-													<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techflavortext-sc" value="0">
-													<div class="wuxHiddenField">
-														<div class="wuxFeatureHeaderInfoFlavor"><span name="attr_act-techflavortext-sc"></span></div>
-													</div>
 
-													<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcoreeffect-sc" value="0">
-													<div class="wuxHiddenField">
-														<div class="wuxFeatureHeaderInfoEffect-Core">
-															<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-															<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcoreeffect_info-sc" value="0">
-																	<span class="wuxHiddenInlineField">
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><strong>Effects</strong></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2">Core Effects</div>
-																				<span class="wuxDescription" name="attr_act-techcoreeffect_info-sc"></span>
-																			</div>
-																		</span>
-																	</span>
-
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcoreeffect_info-sc" value="0">
-																	<span class="wuxHiddenInlineAuxField">
-																		Effects
-																	</span>
-																</span></div>
-															<div class="wuxFeatureHeaderInfoContents"><span name="attr_act-techcoreeffect-sc"></span></div>
-														</div>
-													</div>
-
-													<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techonenter-sc" value="0">
-													<div class="wuxHiddenField">
-														<div class="wuxFeatureHeaderInfoEffectOnEnter"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
-																	<span class="wuxTooltipText"><strong>On Enter Effects</strong></span>
-																	<div class="wuxTooltipContent">
-																		<div class="wuxHeader2">On Enter Effects</div>
-																		<span class="wuxDescription">As long as this effect persists the effects below this entry all occur to any character in the area immediately on casting. These effects also occur to every character in the area at the start of every subsequent round - this happens after all sustained effects have been determined. These effects also occur for any character that enters the affected spaces. These effects can only trigger on a character once per round.</span>
-																	</div>
-																</span></span></div>
-													</div>
-
-													<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcheckeffect-sc" value="0">
-													<div class="wuxHiddenField">
-														<div class="wuxFeatureHeaderInfoEffect-Check">
-															<input type="hidden" class="wuxFeatureHeader-flag" name="attr_act-techcoredef-sc">
-															<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcheckeffect_info-sc" value="0">
-																	<span class="wuxHiddenInlineField">
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><strong><span name="attr_act-techchecktitle-sc"></span></strong></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2">Skill Check Effects</div>
-																				<span class="wuxDescription" name="attr_act-techcheckeffect_info-sc"></span>
-																			</div>
-																		</span>
-																	</span>
-
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcheckeffect_info-sc" value="0">
-																	<span class="wuxHiddenInlineAuxField">
-																		<span name="attr_act-techchecktitle-sc"></span>
-																	</span>
-																</span></div>
-															<div class="wuxFeatureHeaderInfoContents"><span name="attr_act-techcheckeffect-sc"></span></div>
-														</div>
-													</div>
-
-													<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techendeffect-sc" value="0">
-													<div class="wuxHiddenField">
-														<div class="wuxFeatureHeaderInfoEffect"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span name="attr_act-techendeffect-sc"></span></span></div>
-													</div>
-
-													<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillbreakeffect-sc" value="0">
-													<div class="wuxHiddenField">
-														<div class="wuxFeatureHeaderInfoEffect-WillBreak">
-															<input type="hidden" class="wuxFeatureHeader-flag" value="WillBreak">
-															<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillbreakeffect_info-sc" value="0">
-																	<span class="wuxHiddenInlineField">
-																		<span class="wuxTooltip">
-																			<span class="wuxTooltipText"><strong>Will Break Effects</strong></span>
-																			<div class="wuxTooltipContent">
-																				<div class="wuxHeader2">Will Break Effects</div>
-																				<span class="wuxDescription" name="attr_act-techwillbreakeffect_info-sc"></span>
-																			</div>
-																		</span>
-																	</span>
-
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillbreakeffect_info-sc" value="0">
-																	<span class="wuxHiddenInlineAuxField">
-																		Will Break Effects
-																	</span>
-																</span></div>
-															<div class="wuxFeatureHeaderInfoContents"><span name="attr_act-techwillbreakeffect-sc"></span></div>
-														</div>
-													</div>
-
-													<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techenhanceeffect-sc" value="0">
-													<div class="wuxHiddenField">
-														<div class="wuxFeatureHeaderInfoEffect-Enhance">
-															<input type="hidden" class="wuxFeatureHeader-flag" value="Enhance">
-															<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
-																		<span class="wuxTooltipText"><strong>Increased Rank Effects</strong></span>
-																		<div class="wuxTooltipContent">
-																			<div class="wuxHeader2">Increased Rank Effects</div>
-																			<span class="wuxDescription">You may increase the rank of this technique so that it becomes more powerful. Each time you increase the rank you spend 1 additional EN to gain the effects listed below.</span>
-																		</div>
-																	</span></span></div>
-															<div class="wuxFeatureHeaderInfoContents"><span name="attr_act-techenhanceeffect-sc"></span></div>
-														</div>
-														<div class="wuxFeatureHeaderInfoEffect-EnhanceButtons"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techrankdown" value="0">
-															<span class="wuxHiddenInlineField">
-																<div class="wuxButton wuxFeatureButton">
-																	<input type="checkbox" name="attr_act-techrankdown">
-																	<span><span class='wuxFeatureButtonIcon'>&#8722;</span> Decrease Rank</span>
-																</div>
-															</span>
-
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techrankdown" value="0">
-															<span class="wuxHiddenInlineAuxField">
-																<div class="wuxButton wuxFeatureButtonDisabled">
-																	<input type="checkbox" name="attr_act-techrankdown">
-																	<span><span class='wuxFeatureButtonIcon'>&#8722;</span> Decrease Rank</span>
-																</div>
-															</span>
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techrankup" value="0">
-															<span class="wuxHiddenInlineField">
-																<div class="wuxButton wuxFeatureButton">
-																	<input type="checkbox" name="attr_act-techrankup">
-																	<span><span class='wuxFeatureButtonIcon'>&#43;</span> Increase Rank</span>
-																</div>
-															</span>
-
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techrankup" value="0">
-															<span class="wuxHiddenInlineAuxField">
-																<div class="wuxButton wuxFeatureButtonDisabled">
-																	<input type="checkbox" name="attr_act-techrankup">
-																	<span><span class='wuxFeatureButtonIcon'>&#43;</span> Increase Rank</span>
-																</div>
-															</span>
-														</div>
-													</div>
 
 												</div>
 											</div>

@@ -1,8 +1,14 @@
 class BaseFeatureDisplayBuilder {
-    constructor() {}
+    constructor() {
+        this.featureBonusClasses = "";
+    }
+    
+    setFeatureBonusClasses(featureBonusClasses) {
+        this.featureBonusClasses = featureBonusClasses;
+    }
 
     print () {
-        return `<div class="wuxFeature">
+        return `<div class="wuxFeature${this.featureBonusClasses != "" ? ` ${this.featureBonusClasses}` : ""}">
             ${this.printHeaderBlock()}
             ${this.printInfoBlock()}
         </div>

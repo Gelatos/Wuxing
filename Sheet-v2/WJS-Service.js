@@ -1259,16 +1259,6 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 	}
 }
 
-class StaticTechniqueDataAttributeHandler extends TechniqueDataAttributeHandler {
-	getVariableWithoutBase(key, suffix) {
-		let output = WuxDef.GetVariable(key, suffix, this.baseSuffix);
-		if (this.repeater != undefined) {
-			output = this.repeater.getFieldName(this.id, output);
-		}
-		return output;
-	}
-}
-
 class ItemDataAttributeHandler extends DatabaseItemAttributeHandler {
 
 	setItemInfo (item) {

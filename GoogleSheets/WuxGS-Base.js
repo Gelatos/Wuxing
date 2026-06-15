@@ -1074,37 +1074,33 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 buildJobSelection = function () {
                     let jobSelection = new JobSelectionBuilder();
-                    let specialTechs = buildJobChangeTechniques();
+                    let specialTechs = buildStaticTechniqueDisplay("Job Change");
                     let contents = WuxSheetMain.HiddenField(WuxDef.Get("AdvancementJob").getAttribute(),
                         jobSelection.print() + specialTechs);
-                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup");
+                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxFlexTableItemGroup");
                 },
                 buildSpiritChangeSection = function () {
                     let affinityFilter = [WuxDef.Get("Unaspected")].concat(
                         WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])
                     );
                     let affinitySelect = WuxSheetMain.Select(WuxDef.GetAttribute("Affinity"), affinityFilter, false);
-                    
-                    let builder = new StaticTechniqueDisplayBuilder(WuxDef.Get("Action"), "-sc");
-                    let useAttr = WuxDef.Get("Action_Use").getAttribute("-sc");
-                    let versionAttr = builder.getActionTypeAttribute("TechVersion");
-                    
                     let content = `${WuxSheetMain.Header(WuxDef.GetTitle("Title_ChangeAffinity"))}
                         ${affinitySelect}
-                        <input type="hidden" name="${useAttr}" value="" />
-                        <input type="hidden" name="${versionAttr}" value="" />
-                        ${builder.print()}`;
+                        <div class="wuxRow">&nbsp;</div>
+                        ${buildStaticTechniqueDisplay("Spirit Change")}`;
                     let contents = WuxSheetMain.HiddenField(WuxDef.Get("Perk_Spirit Conduit").getAttribute(), content);
-                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup");
+                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxFlexTableItemGroup");
                 },
-                buildJobChangeTechniques = function () {
-                    let builder = new StaticTechniqueDisplayBuilder(WuxDef.Get("Action"), "-jc");
-                    let useAttr = WuxDef.Get("Action_Use").getAttribute("-jc");
-                    let versionAttr = builder.getActionTypeAttribute("TechVersion");
-                    let content = `<input type="hidden" name="${useAttr}" value="" />
-                        <input type="hidden" name="${versionAttr}" value="" />
-                        ${builder.print()}`;
-                    return `<div class="wuxRepeatingFlexSection">${content}</div>`;
+                buildStaticTechniqueDisplay = function (techniqueName) {
+                    let technique = WuxTechs.Get(techniqueName);
+                    if (technique == undefined) { return ""; }
+                    let displayData = new TechniqueDisplayData(technique);
+                    displayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
+                    displayData.technique.displayname = displayData.displayname;
+                    displayData.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
+                    let techDisplayDataBuilder = new TechniqueDisplayBuilderUsable(displayData);
+                    techDisplayDataBuilder.setFeatureBonusClasses("wuxWidth300");
+                    return techDisplayDataBuilder.print();
                 },
                 repeatingFormeSection = function () {
                     let repeaterDefinition = WuxDef.Get("RepeatingFormeTech");

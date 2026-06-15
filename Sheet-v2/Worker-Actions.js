@@ -71,7 +71,6 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             formeTech.updateDataAndVisibilityOfRepeaterTechniques(attrHandler);
             formeTech.addMissingTechniques(attrHandler);
             formeTech.updateLoadTechniques(attrHandler);
-            formeTech.updateStaticJobChangeTechniques(attrHandler);
         });
         attributeHandler.addFinishCallback(function () {
             formeTech.setSortOrder();
@@ -918,18 +917,6 @@ class FormeTechniqueDatabase {
             i++;
         }
         attrHandler.addUpdate(WuxDef.GetVariable("Action_FormeLoadCount"), Math.max(unsetBaseTechniqueData.length, 0));
-    }
-    updateStaticJobChangeTechniques(attrHandler) {
-        const specials = [
-            { name: "Job Change", suffix: "-jc" },
-            { name: "Spirit Change", suffix: "-sc" }
-        ];
-        for (let { name, suffix } of specials) {
-            let technique = WuxTechs.Get(name);
-            if (technique == undefined) { continue; }
-            let handler = new StaticTechniqueDataAttributeHandler(attrHandler, "Action", suffix);
-            handler.setTechniqueInfo(technique, true);
-        }
     }
     getUnsetTechniqueData() {
         Debug.Log(this.techDictionary);

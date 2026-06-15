@@ -1,13 +1,3 @@
-class StaticTechniqueDisplayBuilder extends TechniqueRepeaterDisplayBuilderUsable {
-    printName() {
-        let useVariable = WuxDef.Get("Action_Use").getVariable(this.rootSuffix);
-        let contents = `<button class="wuxFeatureHeaderNameButton" type="roll" value="@{${useVariable}}">
-            ${this.printSpanActionTypeAttribute("TechName")}
-        </button>`;
-        return this.printNameField(contents);
-    }
-}
-
 class JobSelectionBuilder {
     constructor() {
         this.jobDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Job")]);
