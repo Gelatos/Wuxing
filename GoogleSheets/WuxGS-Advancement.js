@@ -151,6 +151,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             let backgroundBuilder = new CharacterBackgroundBuilder();
                             contents += `${WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title,
                                 WuxSheetMain.TabBlock(backgroundBuilder.print()))}`;
+                            contents += new ChatDisplayBuilder().print();
                             return contents;
                         }
 

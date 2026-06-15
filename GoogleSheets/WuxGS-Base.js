@@ -190,100 +190,11 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                     var
                         build = function () {
                             let contents = "";
-                            contents += createChatDisplay();
+                            contents += new ChatDisplayBuilder().print();
                             contents += createNotebookDisplay();
                             return contents;
                         },
 
-                        createChatDisplay = function () {
-                            let contents = WuxSheetMain.MultiRowGroup([outfitCollection(), languageSelect()], WuxSheetMain.Table.FlexTable, 2);
-                            contents = WuxSheetMain.TabBlock(contents);
-
-                            let definition = WuxDef.Get("Title_Emotes");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
-                        },
-                        languageSelect = function () {
-                            let contents = "";
-                            let titleDefinition = WuxDef.Get("Title_LanguageSelect");
-                            contents += WuxDefinition.InfoHeader(titleDefinition);
-                            contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_LanguageTag"), "wuxInput");
-
-                            let languageFilters = WuxDef.Filter([new DatabaseFilterData("group", "Language")]);
-                            for (let i = 0; i < languageFilters.length; i++) {
-                                contents += WuxSheetMain.HiddenField(languageFilters[i].getAttribute(WuxDef._filter),
-                                    WuxSheetMain.InteractionElement.BuildTooltipRadioInput(WuxDef.GetAttribute("Chat_Language"), WuxDef.GetAttribute("Chat_Language", WuxDef._info),
-                                        languageFilters[i].title,
-                                        languageTitle(languageFilters[i]), WuxDefinition.TooltipDescription(languageFilters[i]))
-                                );
-                            }
-
-                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
-                        },
-                        languageTitle = function (languageDef) {
-                            return `<span class="wuxHeader2">${languageDef.title}</span><span class="wuxSubheader"> - ${languageDef.location}</span>`;
-                        },
-                        outfitCollection = function () {
-                            let contents = "";
-                            let titleDefinition = WuxDef.Get("Title_Outfits");
-                            contents += WuxDefinition.InfoHeader(titleDefinition);
-                            contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_SetId"));
-                            contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_Emotes"));
-                            contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_PostName"));
-                            contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_PostURL"));
-
-                            let outfitNameDef = WuxDef.Get("Chat_OutfitName");
-                            let emoteContents = `${WuxSheetMain.InteractionElement.ExpandableBlockIcon(outfitNameDef.getAttribute(WuxDef._expand))}
-							${WuxSheetMain.InteractionElement.CheckboxBlockIcon(outfitNameDef.getAttribute(WuxDef._learn),
-                                WuxSheetMain.Header(WuxSheetMain.Span(outfitNameDef.getAttribute(), "New Outfit")))}
-							${WuxSheetMain.SectionBlockHeaderFooter()}
-							${WuxSheetMain.InteractionElement.ExpandableBlockContents(outfitNameDef.getAttribute(WuxDef._expand),
-                                WuxSheetMain.SectionBlockContents(buildOutfitContents()))}`;
-
-                            emoteContents = `<div class="wuxSectionBlock wuxMinWidth200 wuxMaxWidth220">
-                                ${WuxSheetMain.InteractionElement.Build(true, emoteContents)}
-                            </div>`;
-
-                            contents += `<div class="wuxRepeatingFlexSection">
-								<fieldset class="${WuxDef.GetVariable("RepeatingOutfits")}">
-									${emoteContents}
-								</fieldset>
-							</div>`;
-                            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150 wuxFlexTableItemGroup2");
-                        },
-                        buildOutfitContents = function () {
-                            let contents = "";
-                            contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_OutfitEmotes", WuxDef._true));
-
-                            let outfitNameDefinition = WuxDef.Get("Chat_OutfitName");
-                            contents += WuxSheetMain.Header2(outfitNameDefinition.title) + "\n" +
-                                WuxSheetMain.Input("text", outfitNameDefinition.getAttribute(), "New Outfit");
-
-                            let outfitEmotesDef = WuxDef.Get("Chat_OutfitEmotes");
-                            contents += WuxSheetMain.Header2(`${outfitEmotesDef.title}`) + "\n" +
-                                WuxSheetMain.Textarea(outfitEmotesDef.getAttribute(), "wuxInput wuxHeight60");
-
-                            contents += WuxSheetMain.Row("&nbsp;");
-
-                            let defaultNameDefinition = WuxDef.Get("Chat_OutfitDefault");
-                            let defaultURLDefinition = WuxDef.Get("Chat_OutfitDefaultURL");
-                            contents += WuxSheetMain.Header2(defaultNameDefinition.title) + "\n" +
-                                WuxSheetMain.Input("text", defaultNameDefinition.getAttribute());
-                            contents += WuxSheetMain.Header2(defaultURLDefinition.title) + "\n" +
-                                WuxSheetMain.Input("text", defaultURLDefinition.getAttribute(), "");
-                            contents += WuxSheetMain.Row("&nbsp;");
-
-                            let nameDefinition = WuxDef.Get("Chat_EmoteName");
-                            let urlDefinition = WuxDef.Get("Chat_EmoteURL");
-                            for (let i = 2; i <= 30; i++) {
-                                contents += WuxSheetMain.Header2(`${nameDefinition.title} ${i}`) + "\n" +
-                                    WuxSheetMain.Input("text", nameDefinition.getAttribute() + i);
-                                contents += WuxSheetMain.Header2(`${urlDefinition.title} ${i}`) + "\n" +
-                                    WuxSheetMain.Input("text", urlDefinition.getAttribute() + i);
-                            }
-
-                            return contents;
-                        },
-                        
 
                         createNotebookDisplay = function () {
                             let notebookCount = parseInt(WuxDef.Get("Note_NotebookCount").formula.getValue());
