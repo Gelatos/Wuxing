@@ -113,142 +113,6 @@
 				<div class="wuxTab">
 					<div class="wuxSectionBlock wuxLayoutItem">
 						<div class="wuxTabContent">
-							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader">Basics</div>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Character Sheet Name
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Character Sheet Name</div>
-
-												<span class="wuxDescription">The name of the character sheet. This is the name of the character as written in the character's Journal entry.</span>
-											</div>
-										</span></div>
-									<input type="text" class="wuxInput" name="attr_charsheetname" />
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Full Name
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Full Name</div>
-
-												<span class="wuxDescription">A character's full name. This is for self referential use and is not used anywhere except on this character sheet page.</span>
-											</div>
-										</span></div>
-									<input type="text" class="wuxInput" name="attr_full_name" />
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Ancestry
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Ancestry</div>
-
-												<span class="wuxDescription">Ancestry represents your characters species and background. This unlocks certain techniques and styles which are locked to specific ancestries. </span>
-											</div>
-										</span></div>
-									<select class="wuxInput" name="attr_ancestry" value="0">
-										<option value="0">-</option>
-										<option value="Human">Human</option>
-										<option value="Spirit">Spirit</option>
-									</select>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Elemental Affinity
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Elemental Affinity</div>
-
-												<span class="wuxDescription">Characters that are able to cast spells have an elemental affinity that ties them to one of the five primary elements. Some techniques require an elemental affinity before they may be taken.</span><span class="wuxDescription">Your chosen affinity grants weaknesses and resistances to certain elemental damage types.</span>
-											</div>
-										</span></div>
-									<select class="wuxInput" name="attr_affinityaspect" value="0">
-										<option value="0">Unaspected</option>
-										<option value="Wood">Wood Affinity</option>
-										<option value="Fire">Fire Affinity</option>
-										<option value="Earth">Earth Affinity</option>
-										<option value="Metal">Metal Affinity</option>
-										<option value="Water">Water Affinity</option>
-									</select><span class="wuxDescription" name="attr_affinity_learn"></span>
-									<div class="wuxHeader">
-										<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-originadvancement_info" undefined><span>?</span></div>Advancement
-									</div>
-									<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-originadvancement_info" value="0">
-									<div class="wuxHiddenField">
-										<div class="wuxInfoContent">
-											<div class="wuxHeader2">Advancement</div>
-
-											<span class="wuxDescription">As a character adventures, learns, and grows, they become more experienced in the world. Advancement tracks this progress through the character's level and experience. </span><span class="wuxDescription">Here you can set your character's level. You may also spend any advancement points gained from increasing your character level on additional build points for jobs, skills, or techniques.</span>
-										</div>
-									</div>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Character Level
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Character Level</div>
-
-												<span class="wuxDescription">A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP).</span>
-											</div>
-										</span></div>
-									<input type="number" class="wuxInput" name="attr_adv-level" />
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												CR
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">CR</div>
-
-												<span class="wuxDescription">Your character rank applies to many of the values you record on your character sheet. This value limits the maximum tier of techniques a style can grant and also increases many statistics.</span><span class="wuxDescription">Usually, this value is equal to its maximum value. It may be reduced in special situations where power is restricted. For example, a character may have the experience of a higher leveled character but lacks the power. Alternatively they may simply be holding back or are depowered for whatever reason.</span>
-											</div>
-										</span></div>
-									<span class="wuxDescription"><span name="attr_adv-cr_max"></span></span>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader">
-										<div class="wuxInfoButton"><input type="checkbox" name="attr_soc-influence_info" undefined><span>?</span></div>Influences
-									</div>
-									<input type="hidden" class="wuxHiddenField-flag" name="attr_soc-influence_info" value="0">
-									<div class="wuxHiddenField">
-										<div class="wuxInfoContent">
-											<div class="wuxHeader2">Influences</div>
-
-											<span class="wuxDescription">An influence is a phrase or desription of something of some importance to the character. </span><span class="wuxDescription">An influence is written as a few words to describe a personality trait, bond, or ideal. Each Influence should be clearly defined and unique. Descriptors like “Skilled” or “Determined” are too general, since they could fit nearly any context. Instead, choose something more distinct, like “Street Duelist” or “Focused Studier.” These influences can then be further explained in a description for when it would be used if necessary.</span>
-											<div class="wuxHeader2">Using Influences</div>
-
-											<span class="wuxDescription">Influences can be used to better perform skill checks. Whenenver a character makes a skill check, if they feel like the skill check is related to an influence they may draw on the influence to gain advantage. The number of advantages gained are equal to the influence's severity. Using an influence in this way always closts a Boon.</span><span class="wuxDescription">Whenever you play your character and leverage an influence you may gain a Boon of Truth. Gaining this boon is usually reserved for particularly dramatic uses of your influence.</span><span class="wuxDescription">Influences are used to modify social checks. Whenenver making a check that modifies favor, if your statements reference your target's influences it may grant you advantage or disadvantage to your check.</span><span class="wuxDescription">Influences also modify persuade checks. Whenever performing a persuade check you will add or removed 1d6 to the check result. This value can increase by +5 on a moderate influence, or +10 on a severe.</span><span class="wuxDescription">Only the most supportive influence and most opposing influence may affect any one persuade or favor roll.</span>
-										</div>
-									</div>
-									<div>
-										<fieldset class="repeating_influences">
-											<div class="wuxMultiRow"><select class="wuxInput wuxInfluenceType" name="attr_soc-severity" value="0">
-													<option value="sev-low{0}{1}">+1 Low</option>
-													<option value="sev-moderate{0}{1}">+2 Moderate</option>
-													<option value="sev-high{0}{1}">+3 High</option>
-												</select><input type="text" class="wuxInput wuxInfluenceDescription" name="attr_soc-influence" placeholder="Influence" /></div><textarea class="wuxInput wuxHeight30" name="attr_soc-influencedesc" placeholder="Description"></textarea>
-										</fieldset>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="wuxSegment">
-				<input type="checkbox" class="wuxTab-flag" name="attr_ttl-background_tab_expand" checked="checked" />
-				<div class="wuxTabHeader">
-					<div class="wuxInteractiveInnerExpandBlock">
-						<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_ttl-background_tab_expand" />
-						<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_ttl-background_tab_expand" />
-						<span class="wuxInteractiveExpandIcon">&#9662;</span>
-						<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_ttl-background_tab_expand" />
-						<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
-					</div><span>Background</span>
-				</div>
-				<div class="wuxTab">
-					<div class="wuxSectionBlock wuxLayoutItem">
-						<div class="wuxTabContent">
 							<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
 
 									<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-background_expand" value="0">
@@ -274,19 +138,35 @@
 									<div class="wuxFlexTableItemGroup">
 										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroup">
-												<div class="wuxHeader2"><span class="wuxTooltip">
-														<span class="wuxTooltipText">
-															Sheet Name
-														</span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Sheet Name</div>
+												<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
+												<div class="wuxPageDisplay-OriginData">
+													<div class="wuxHeader2"><span class="wuxTooltip">
+															<span class="wuxTooltipText">
+																Sheet Name
+															</span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Sheet Name</div>
 
-															<span class="wuxDescription">The name of the character sheet. This is the name of the character as written in the character's Journal entry.</span>
-														</div>
-													</span></div>
-												<input type="text" class="wuxInput" name="attr_sheetname" />
+																<span class="wuxDescription">The name of the character sheet. This is the name of the character as written in the character's Journal entry.</span>
+															</div>
+														</span></div>
+													<input type="text" class="wuxInput" name="attr_charsheetname" />
+												</div>
+												<div class="wuxPageDisplay-CoreData">
+													<div class="wuxHeader2"><span class="wuxTooltip">
+															<span class="wuxTooltipText">
+																Sheet Name
+															</span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Sheet Name</div>
+
+																<span class="wuxDescription">The name of the character sheet. This is the name of the character as written in the character's Journal entry.</span>
+															</div>
+														</span></div>
+													<input type="text" class="wuxInput" name="attr_sheetname" />
+												</div>
 											</div>
-											<div class="wuxFlexTableItemGroup">
+											<div class="wuxFlexTableItemGroup wuxFlexTableItemGroup2">
 												<div class="wuxHeader2"><span class="wuxTooltip">
 														<span class="wuxTooltipText">
 															Full Name
@@ -318,7 +198,7 @@
 													<option value="Spirit">Spirit</option>
 												</select>
 											</div>
-											<div class="wuxFlexTableItemGroup">
+											<div class="wuxFlexTableItemGroup wuxFlexTableItemGroup2">
 												<input type="hidden" class="wuxAncestrySelection-flag" name="attr_ancestry" value="0">
 												<div class="wuxAncestrySelection-Human">
 													<div class="wuxHeader2"><span class="wuxTooltip">
@@ -456,6 +336,82 @@
 								</div>
 							</div>
 
+							<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
+							<div class="wuxPageDisplay-OriginData">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader">
+											<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-originadvancement_info" undefined><span>?</span></div>Advancement
+										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-originadvancement_info" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxInfoContent">
+												<div class="wuxHeader2">Advancement</div>
+
+												<span class="wuxDescription">As a character adventures, learns, and grows, they become more experienced in the world. Advancement tracks this progress through the character's level and experience. </span><span class="wuxDescription">Here you can set your character's level. You may also spend any advancement points gained from increasing your character level on additional build points for jobs, skills, or techniques.</span>
+											</div>
+										</div>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Character Level
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Character Level</div>
+
+													<span class="wuxDescription">A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP).</span>
+												</div>
+											</span></div>
+										<input type="number" class="wuxInput" name="attr_adv-level" />
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													CR
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">CR</div>
+
+													<span class="wuxDescription">Your character rank applies to many of the values you record on your character sheet. This value limits the maximum tier of techniques a style can grant and also increases many statistics.</span><span class="wuxDescription">Usually, this value is equal to its maximum value. It may be reduced in special situations where power is restricted. For example, a character may have the experience of a higher leveled character but lacks the power. Alternatively they may simply be holding back or are depowered for whatever reason.</span>
+												</div>
+											</span></div>
+										<span class="wuxDescription"><span name="attr_adv-cr_max"></span></span>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Potency
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Potency</div>
+
+													<span class="wuxDescription">This value is used as a bonus to trained skills, as a bonus to most damage, and as a cap to the amount EN you are able to use on a technique.</span>
+												</div>
+											</span></div>
+										<span class="wuxDescription"><span name="attr_potency"></span></span>
+									</div>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader">
+											<div class="wuxInfoButton"><input type="checkbox" name="attr_soc-influence_info" undefined><span>?</span></div>Influences
+										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_soc-influence_info" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxInfoContent">
+												<div class="wuxHeader2">Influences</div>
+
+												<span class="wuxDescription">An influence is a phrase or desription of something of some importance to the character. </span><span class="wuxDescription">An influence is written as a few words to describe a personality trait, bond, or ideal. Each Influence should be clearly defined and unique. Descriptors like “Skilled” or “Determined” are too general, since they could fit nearly any context. Instead, choose something more distinct, like “Street Duelist” or “Focused Studier.” These influences can then be further explained in a description for when it would be used if necessary.</span>
+												<div class="wuxHeader2">Using Influences</div>
+
+												<span class="wuxDescription">Influences can be used to better perform skill checks. Whenenver a character makes a skill check, if they feel like the skill check is related to an influence they may draw on the influence to gain advantage. The number of advantages gained are equal to the influence's severity. Using an influence in this way always closts a Boon.</span><span class="wuxDescription">Whenever you play your character and leverage an influence you may gain a Boon of Truth. Gaining this boon is usually reserved for particularly dramatic uses of your influence.</span><span class="wuxDescription">Influences are used to modify social checks. Whenenver making a check that modifies favor, if your statements reference your target's influences it may grant you advantage or disadvantage to your check.</span><span class="wuxDescription">Influences also modify persuade checks. Whenever performing a persuade check you will add or removed 1d6 to the check result. This value can increase by +5 on a moderate influence, or +10 on a severe.</span><span class="wuxDescription">Only the most supportive influence and most opposing influence may affect any one persuade or favor roll.</span>
+											</div>
+										</div>
+										<div>
+											<fieldset class="repeating_influences">
+												<div class="wuxMultiRow"><select class="wuxInput wuxInfluenceType" name="attr_soc-severity" value="0">
+														<option value="sev-low{0}{1}">+1 Low</option>
+														<option value="sev-moderate{0}{1}">+2 Moderate</option>
+														<option value="sev-high{0}{1}">+3 High</option>
+													</select><input type="text" class="wuxInput wuxInfluenceDescription" name="attr_soc-influence" placeholder="Influence" /></div><textarea class="wuxInput wuxHeight30" name="attr_soc-influencedesc" placeholder="Description"></textarea>
+											</fieldset>
+										</div>
+									</div>
+								</div>
+							</div>
 							<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
 
 									<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-backgroundgenerator_expand" value="0">
@@ -10202,19 +10158,35 @@
 										<div class="wuxFlexTableItemGroup">
 											<div class="wuxFlexTable">
 												<div class="wuxFlexTableItemGroup">
-													<div class="wuxHeader2"><span class="wuxTooltip">
-															<span class="wuxTooltipText">
-																Sheet Name
-															</span>
-															<div class="wuxTooltipContent">
-																<div class="wuxHeader2">Sheet Name</div>
+													<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
+													<div class="wuxPageDisplay-OriginData">
+														<div class="wuxHeader2"><span class="wuxTooltip">
+																<span class="wuxTooltipText">
+																	Sheet Name
+																</span>
+																<div class="wuxTooltipContent">
+																	<div class="wuxHeader2">Sheet Name</div>
 
-																<span class="wuxDescription">The name of the character sheet. This is the name of the character as written in the character's Journal entry.</span>
-															</div>
-														</span></div>
-													<input type="text" class="wuxInput" name="attr_sheetname" />
+																	<span class="wuxDescription">The name of the character sheet. This is the name of the character as written in the character's Journal entry.</span>
+																</div>
+															</span></div>
+														<input type="text" class="wuxInput" name="attr_charsheetname" />
+													</div>
+													<div class="wuxPageDisplay-CoreData">
+														<div class="wuxHeader2"><span class="wuxTooltip">
+																<span class="wuxTooltipText">
+																	Sheet Name
+																</span>
+																<div class="wuxTooltipContent">
+																	<div class="wuxHeader2">Sheet Name</div>
+
+																	<span class="wuxDescription">The name of the character sheet. This is the name of the character as written in the character's Journal entry.</span>
+																</div>
+															</span></div>
+														<input type="text" class="wuxInput" name="attr_sheetname" />
+													</div>
 												</div>
-												<div class="wuxFlexTableItemGroup">
+												<div class="wuxFlexTableItemGroup wuxFlexTableItemGroup2">
 													<div class="wuxHeader2"><span class="wuxTooltip">
 															<span class="wuxTooltipText">
 																Full Name
@@ -10246,7 +10218,7 @@
 														<option value="Spirit">Spirit</option>
 													</select>
 												</div>
-												<div class="wuxFlexTableItemGroup">
+												<div class="wuxFlexTableItemGroup wuxFlexTableItemGroup2">
 													<input type="hidden" class="wuxAncestrySelection-flag" name="attr_ancestry" value="0">
 													<div class="wuxAncestrySelection-Human">
 														<div class="wuxHeader2"><span class="wuxTooltip">
@@ -10384,6 +10356,82 @@
 									</div>
 								</div>
 
+								<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
+								<div class="wuxPageDisplay-OriginData">
+									<div class="wuxFlexTable">
+										<div class="wuxFlexTableItemGroup">
+											<div class="wuxHeader">
+												<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-originadvancement_info" undefined><span>?</span></div>Advancement
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-originadvancement_info" value="0">
+											<div class="wuxHiddenField">
+												<div class="wuxInfoContent">
+													<div class="wuxHeader2">Advancement</div>
+
+													<span class="wuxDescription">As a character adventures, learns, and grows, they become more experienced in the world. Advancement tracks this progress through the character's level and experience. </span><span class="wuxDescription">Here you can set your character's level. You may also spend any advancement points gained from increasing your character level on additional build points for jobs, skills, or techniques.</span>
+												</div>
+											</div>
+											<div class="wuxHeader2"><span class="wuxTooltip">
+													<span class="wuxTooltipText">
+														Character Level
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Character Level</div>
+
+														<span class="wuxDescription">A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP).</span>
+													</div>
+												</span></div>
+											<input type="number" class="wuxInput" name="attr_adv-level" />
+											<div class="wuxHeader2"><span class="wuxTooltip">
+													<span class="wuxTooltipText">
+														CR
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">CR</div>
+
+														<span class="wuxDescription">Your character rank applies to many of the values you record on your character sheet. This value limits the maximum tier of techniques a style can grant and also increases many statistics.</span><span class="wuxDescription">Usually, this value is equal to its maximum value. It may be reduced in special situations where power is restricted. For example, a character may have the experience of a higher leveled character but lacks the power. Alternatively they may simply be holding back or are depowered for whatever reason.</span>
+													</div>
+												</span></div>
+											<span class="wuxDescription"><span name="attr_adv-cr_max"></span></span>
+											<div class="wuxHeader2"><span class="wuxTooltip">
+													<span class="wuxTooltipText">
+														Potency
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Potency</div>
+
+														<span class="wuxDescription">This value is used as a bonus to trained skills, as a bonus to most damage, and as a cap to the amount EN you are able to use on a technique.</span>
+													</div>
+												</span></div>
+											<span class="wuxDescription"><span name="attr_potency"></span></span>
+										</div>
+										<div class="wuxFlexTableItemGroup">
+											<div class="wuxHeader">
+												<div class="wuxInfoButton"><input type="checkbox" name="attr_soc-influence_info" undefined><span>?</span></div>Influences
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_soc-influence_info" value="0">
+											<div class="wuxHiddenField">
+												<div class="wuxInfoContent">
+													<div class="wuxHeader2">Influences</div>
+
+													<span class="wuxDescription">An influence is a phrase or desription of something of some importance to the character. </span><span class="wuxDescription">An influence is written as a few words to describe a personality trait, bond, or ideal. Each Influence should be clearly defined and unique. Descriptors like “Skilled” or “Determined” are too general, since they could fit nearly any context. Instead, choose something more distinct, like “Street Duelist” or “Focused Studier.” These influences can then be further explained in a description for when it would be used if necessary.</span>
+													<div class="wuxHeader2">Using Influences</div>
+
+													<span class="wuxDescription">Influences can be used to better perform skill checks. Whenenver a character makes a skill check, if they feel like the skill check is related to an influence they may draw on the influence to gain advantage. The number of advantages gained are equal to the influence's severity. Using an influence in this way always closts a Boon.</span><span class="wuxDescription">Whenever you play your character and leverage an influence you may gain a Boon of Truth. Gaining this boon is usually reserved for particularly dramatic uses of your influence.</span><span class="wuxDescription">Influences are used to modify social checks. Whenenver making a check that modifies favor, if your statements reference your target's influences it may grant you advantage or disadvantage to your check.</span><span class="wuxDescription">Influences also modify persuade checks. Whenever performing a persuade check you will add or removed 1d6 to the check result. This value can increase by +5 on a moderate influence, or +10 on a severe.</span><span class="wuxDescription">Only the most supportive influence and most opposing influence may affect any one persuade or favor roll.</span>
+												</div>
+											</div>
+											<div>
+												<fieldset class="repeating_influences">
+													<div class="wuxMultiRow"><select class="wuxInput wuxInfluenceType" name="attr_soc-severity" value="0">
+															<option value="sev-low{0}{1}">+1 Low</option>
+															<option value="sev-moderate{0}{1}">+2 Moderate</option>
+															<option value="sev-high{0}{1}">+3 High</option>
+														</select><input type="text" class="wuxInput wuxInfluenceDescription" name="attr_soc-influence" placeholder="Influence" /></div><textarea class="wuxInput wuxHeight30" name="attr_soc-influencedesc" placeholder="Description"></textarea>
+												</fieldset>
+											</div>
+										</div>
+									</div>
+								</div>
 								<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
 
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-backgroundgenerator_expand" value="0">

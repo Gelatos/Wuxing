@@ -13918,7 +13918,7 @@ var WuxDef = WuxDef || (function() {
                 "linkedGroups":[],
                 "isResource":""},
             "CharSheetName":{"name":"CharSheetName","fieldName":"charsheetname","group":"Origin","descriptions":["The name of the character sheet. This is the name of the character as written in the character's Journal entry."],
-                "variable":"charsheetname","title":"Character Sheet Name","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
+                "variable":"charsheetname","title":"Sheet Name","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
             "SheetName":{"name":"SheetName","fieldName":"sheetname","group":"Origin","descriptions":["The name of the character sheet. This is the name of the character as written in the character's Journal entry."],

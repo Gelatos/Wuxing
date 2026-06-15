@@ -147,41 +147,11 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                     var
                         build = function () {
                             let contents = "";
-                            contents += buildOrigin();
-                            let definition = WuxDef.Get("Title_Background");
+                            let definition = WuxDef.Get("Page_Origin");
                             let backgroundBuilder = new CharacterBackgroundBuilder();
                             contents += `${WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title,
                                 WuxSheetMain.TabBlock(backgroundBuilder.print()))}`;
                             return contents;
-                        },
-
-                        buildOrigin = function () {
-                            let contents = WuxSheetMain.MultiRowGroup([buildBasics(), WuxCharacterSheetBuilders.BuildInfluences()], WuxSheetMain.Table.FlexTable, 2);
-                            contents = WuxSheetMain.TabBlock(contents);
-
-                            let definition = WuxDef.Get("Page_Origin");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
-                        },
-
-                        buildBasics = function () {
-                            let contents = "";
-                            contents += WuxSheetMain.Header("Basics");
-                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("CharSheetName"), WuxDef.GetAttribute("CharSheetName"));
-                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName"));
-                            contents += WuxDefinition.BuildSelect(WuxDef.Get("Ancestry"), WuxDef.GetAttribute("Ancestry"),
-                                WuxDef.Filter([new DatabaseFilterData("group", "AncestryType")]));
-                            let affinityFilter = [WuxDef.Get("Unaspected")].concat(
-                                WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])
-                            );
-                            contents += WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("AffinityAspect"), 
-                                affinityFilter, false);
-                            contents += WuxSheetMain.DescField(WuxDef.GetAttribute("Affinity", WuxDef._learn));
-
-                            contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginAdvancement"));
-                            contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Level"), WuxDef.GetAttribute("Level"));
-                            contents += WuxDefinition.BuildText(WuxDef.Get("CR"), WuxSheetMain.Span(WuxDef.GetAttribute("CR", WuxDef._max)));
-                            
-                            return WuxSheetMain.Table.FlexTableGroup(contents);
                         }
 
                     return {
