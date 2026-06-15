@@ -1849,7 +1849,7 @@ class UsableItemData extends ItemData {
         i++;
         this.commonTechniques = "" + dataArray[i];
         i++;
-        let techData = [this.name, "Item", "", ("" + dataArray[i]), "", 2];
+        let techData = [this.name, "Gear", "", ("" + dataArray[i]), "", 2];
         i++;
         techData = techData.concat(dataArray.slice(i));
         this.technique = new TechniqueData(techData);
@@ -7954,6 +7954,18 @@ class DatabaseAssessment {
     printTechniqueDatabase() {
         let output = "";
 
+        this.sheetsDb.gear.iterate(function (item) {
+            if (item.hasTechnique) {
+                this.sheetsDb.techniques.add(item.technique.name, item.technique);
+            }
+        }.bind(this));
+
+        this.sheetsDb.consumables.iterate(function (item) {
+            if (item.hasTechnique) {
+                this.sheetsDb.techniques.add(item.technique.name, item.technique);
+            }
+        }.bind(this));
+
         let variableNameKeys = {};
         let techniqueClassData = JavascriptDatabase.Create(this.sheetsDb.techniques, WuxDefinition.GetTechnique);
         this.sheetsDb.techniques.iterate(function (value, key) {
@@ -11924,18 +11936,32 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 print = function () {
                     let contents = "";
                     contents += buildStylesList();
+                    contents += buildEquipTech();
                     contents += buildFormeActions();
                     return WuxSheetMain.Build(contents);
+                },
+
+                buildEquipTech = function () {
+                    let contents = WuxSheetMain.MultiRowGroup(
+                        [buildJobSelection(), buildSpiritChangeSection()],
+                        WuxSheetMain.Table.FlexTable, 2);
+                    contents = WuxSheetMain.TabBlock(contents);
+
+                    let sectionDef = WuxDef.Get("Title_TechniqueChange");
+                    return `${WuxSheet.MainPageDisplayInput()}
+                    ${WuxSheet.PageDisplay("ActionsData",
+                        WuxSheetMain.CollapsibleTab(
+                            sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
+                            sectionDef.getTitle(), contents))}`;
                 },
 
                 buildFormeActions = function () {
                     let contents = "";
 
-                    contents += buildJobSelection();
                     contents += buildBaseFilterButtons();
                     contents += repeatingFormeSection();
                     contents += repeatingCustomTechniquesSection();
-                    
+
                     contents = WuxSheetMain.TabBlock(contents);
                     let sectionDef = WuxDef.Get("Title_Techniques");
                     return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
@@ -11954,8 +11980,37 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 buildJobSelection = function () {
                     let jobSelection = new JobSelectionBuilder();
-                    return `${WuxSheet.MainPageDisplayInput()}
-                    ${WuxSheet.PageDisplay("ActionsData", jobSelection.print())}`;
+                    let specialTechs = buildJobChangeTechniques();
+                    let contents = WuxSheetMain.HiddenField(WuxDef.Get("AdvancementJob").getAttribute(),
+                        jobSelection.print() + specialTechs);
+                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup");
+                },
+                buildSpiritChangeSection = function () {
+                    let affinityFilter = [WuxDef.Get("Unaspected")].concat(
+                        WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])
+                    );
+                    let affinitySelect = WuxSheetMain.Select(WuxDef.GetAttribute("Affinity"), affinityFilter, false);
+                    
+                    let builder = new StaticTechniqueDisplayBuilder(WuxDef.Get("Action"), "-sc");
+                    let useAttr = WuxDef.Get("Action_Use").getAttribute("-sc");
+                    let versionAttr = builder.getActionTypeAttribute("TechVersion");
+                    
+                    let content = `${WuxSheetMain.Header(WuxDef.GetTitle("Title_ChangeAffinity"))}
+                        ${affinitySelect}
+                        <input type="hidden" name="${useAttr}" value="" />
+                        <input type="hidden" name="${versionAttr}" value="" />
+                        ${builder.print()}`;
+                    let contents = WuxSheetMain.HiddenField(WuxDef.Get("Perk_Spirit Conduit").getAttribute(), content);
+                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup");
+                },
+                buildJobChangeTechniques = function () {
+                    let builder = new StaticTechniqueDisplayBuilder(WuxDef.Get("Action"), "-jc");
+                    let useAttr = WuxDef.Get("Action_Use").getAttribute("-jc");
+                    let versionAttr = builder.getActionTypeAttribute("TechVersion");
+                    let content = `<input type="hidden" name="${useAttr}" value="" />
+                        <input type="hidden" name="${versionAttr}" value="" />
+                        ${builder.print()}`;
+                    return `<div class="wuxRepeatingFlexSection">${content}</div>`;
                 },
                 repeatingFormeSection = function () {
                     let repeaterDefinition = WuxDef.Get("RepeatingFormeTech");
@@ -15640,18 +15695,28 @@ class FilterDisplayBuilder {
         `;
     }
 }
+class StaticTechniqueDisplayBuilder extends TechniqueRepeaterDisplayBuilderUsable {
+    printName() {
+        let useVariable = WuxDef.Get("Action_Use").getVariable(this.rootSuffix);
+        let contents = `<button class="wuxFeatureHeaderNameButton" type="roll" value="@{${useVariable}}">
+            ${this.printSpanActionTypeAttribute("TechName")}
+        </button>`;
+        return this.printNameField(contents);
+    }
+}
+
 class JobSelectionBuilder {
     constructor() {
         this.jobDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Job")]);
         this.jobSelectDefinition = WuxDef.Get("Forme_SelectJob");
     }
-    
+
     print() {
         return `${WuxSheetMain.Header(this.jobSelectDefinition.getTitle())}
         <div class="wuxJobSelection">
         ${this.buildJobSelectButton()}
         </div>
-        <div class="wuxRow">$nbsp;</div>`;
+        <div class="wuxRow">&nbsp;</div>`;
     }
     buildJobSelectButton() {
         let output = "";
@@ -15673,4 +15738,3 @@ class JobSelectionBuilder {
         );
     }
 }
-

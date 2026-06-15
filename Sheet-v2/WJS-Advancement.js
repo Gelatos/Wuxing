@@ -6,15 +6,18 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 			Debug.Log("Finish Character Creation Build");
 			let attributeHandler = new WorkerAttributeHandler();
 
-			let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Technique", "Perk"]);
+			let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Technique"]);
 			pointManagers.commitChanges(attributeHandler);
+
+			let perkWorker = new WuxPerkWorkerBuild();
+			perkWorker.commitChanges(attributeHandler);
 
 			let trainingWorker = new WuxTrainingWorkerBuild();
 			trainingWorker.commitChanges(attributeHandler);
 
 			let advancementWorker = new WuxAdvancementWorkerBuild();
 			advancementWorker.commitChanges(attributeHandler);
-			
+
 			WuxWorkerActions.UpdateAllFormeActions(attributeHandler);
 			WuxWorkerAttributes.UpdateStats(attributeHandler);
 			WuxWorkerPerks.UpdateStats(attributeHandler);
@@ -24,6 +27,7 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 			WuxWorkerStyles.UpdateStats(attributeHandler);
 			WuxWorkerAdvancement.UpdateStats(attributeHandler);
 			WuxWorkerGeneral.UpdateStats(attributeHandler);
+			WuxWorkerPerks.RefreshStats(attributeHandler);
 
 			leavePageVariables(attributeHandler);
 			
@@ -371,9 +375,12 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			loader.showLoadingScreen(() => {
 				let attributeHandler = new WorkerAttributeHandler();
 	
-				let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Perk"]);
+				let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute"]);
 				pointManagers.commitChanges(attributeHandler);
-	
+
+				let perkWorker = new WuxPerkWorkerBuild();
+				perkWorker.commitChanges(attributeHandler);
+
 				let advancementWorker = new WuxAdvancementWorkerBuild();
 				advancementWorker.commitChanges(attributeHandler);
 
@@ -399,9 +406,12 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			loader.showLoadingScreen(() => {
 				let attributeHandler = new WorkerAttributeHandler();
 	
-				let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique", "Perk"]);
+				let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute", "Technique"]);
 				pointManagers.resetChanges(attributeHandler);
-	
+
+				let perkWorker = new WuxPerkWorkerBuild();
+				perkWorker.resetChanges(attributeHandler);
+
 				let advancementWorker = new WuxAdvancementWorkerBuild();
 				advancementWorker.resetChanges(attributeHandler);
 
@@ -412,6 +422,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 				WuxWorkerStyles.UpdateStats(attributeHandler);
 				WuxWorkerActions.UpdateAllFormeActions(attributeHandler);
 				updateStats(attributeHandler);
+				WuxWorkerPerks.RefreshStats(attributeHandler);
 	
 				leavePageVariables(attributeHandler);
 
@@ -551,6 +562,9 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				for (let i = 0; i < formulaDefinitions.length; i++) {
+					if (formulaDefinitions[i].group === "Type" || formulaDefinitions[i].group === "Perk") {
+						continue;
+					}
 					if (formulaDefinitions[i].isResource) {
 						attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
 						attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].formula.getValue(attrHandler));
@@ -652,7 +666,6 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 				if (perk.group === "Perk Technique") {
 					WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
 				}
-				refreshStats(attributeHandler);
 				attributeHandler.run();
 			});
 			crAttributeHandler.run();

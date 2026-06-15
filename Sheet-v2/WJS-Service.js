@@ -866,6 +866,17 @@ class WuxPerkWorkerBuild extends WuxWorkerBuild {
 		return variables;
 	}
 
+	setBuildStatVariables(attributeHandler) {
+		this.buildStats.iterate(function (buildStat) {
+			let perk = WuxPerks.GetByVariableName(buildStat.name);
+			if (perk && perk.group === "Branch Perks") {
+				attributeHandler.addUpdate(buildStat.name, parseInt(buildStat.value) > 0 ? "on" : "0");
+			} else {
+				attributeHandler.addUpdate(buildStat.name, buildStat.value);
+			}
+		});
+	}
+
 	getBoostTechniques() {
 		let techniques = [];
 		this.iterateBuildStats(function (techniqueVariableData) {
@@ -1245,6 +1256,16 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			return undefined;
 		}
 		return version;
+	}
+}
+
+class StaticTechniqueDataAttributeHandler extends TechniqueDataAttributeHandler {
+	getVariableWithoutBase(key, suffix) {
+		let output = WuxDef.GetVariable(key, suffix, this.baseSuffix);
+		if (this.repeater != undefined) {
+			output = this.repeater.getFieldName(this.id, output);
+		}
+		return output;
 	}
 }
 
