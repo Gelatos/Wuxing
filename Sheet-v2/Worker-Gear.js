@@ -305,201 +305,6 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         attrHandler.addUpdate(popupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), isOn ? "on" : 0);
         return newRowId;
     }
-    const populateItemInspectionEquipment = function (attrHandler, itemPopupRepeater, eventinfo) {
-        let itemGroup = getItemGroupType(eventinfo);
-        if (itemGroup == "") {
-            return null;
-        }
-        attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), 
-            `${itemGroup.group}${itemGroup.category != undefined ? ` ${itemGroup.category}` : ""} Items`);
-
-        let firstItem = null;
-        let itemFilter;
-        if (itemGroup.type == "Equipment" || itemGroup.type == "Consumable") {
-            if (itemGroup.category == undefined) {
-                itemFilter = WuxItems.Filter([new DatabaseFilterData("group", itemGroup.group)]);
-            }
-            else {
-                itemFilter = WuxItems.Filter([new DatabaseFilterData("group", itemGroup.group), new DatabaseFilterData("category", itemGroup.category)]);
-            }
-        } else if (itemGroup.type == "Goods") {
-            itemFilter = WuxGoods.Filter([new DatabaseFilterData("group", itemGroup.group)]);
-        }
-
-        itemFilter.forEach(function (item) {
-            let newRowId = itemPopupRepeater.generateRowId();
-            attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectName")), item.name);
-            attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectType")), itemGroup.type);
-
-            if (firstItem == null) {
-                firstItem = {
-                    item: item,
-                    id: newRowId
-                }
-                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "on");
-            } else {
-                attrHandler.addUpdate(itemPopupRepeater.getFieldName(newRowId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), 0);
-            }
-        });
-
-        return firstItem;
-    };
-    const getItemGroupType = function (eventinfo) {
-
-        switch (eventinfo.sourceAttribute) {
-            case WuxDef.GetVariable("Page_AddMeleeWeapon"):
-                return {
-                    group: "Weapon",
-                    category: "Melee",
-                    type: "Equipment"
-                };
-            case WuxDef.GetVariable("Page_AddRangedWeapon"):
-                return {
-                    group: "Weapon",
-                    category: "Ranged",
-                    type: "Equipment"
-                };
-            case WuxDef.GetVariable("Page_AddTool"):
-                return {
-                    group: "Tool",
-                    category: undefined,
-                    type: "Equipment"
-                };
-            case WuxDef.GetVariable("Page_AddCommsTool"):
-                return {
-                    group: "Tool",
-                    category: "Comms",
-                    type: "Equipment"
-                };
-            case WuxDef.GetVariable("Page_AddLightTool"):
-                return {
-                    group: "Tool",
-                    category: "Light",
-                    type: "Equipment"
-                };
-            case WuxDef.GetVariable("Page_AddBindingsTool"):
-                return {
-                    group: "Tool",
-                    category: "Bindings",
-                    type: "Equipment"
-                };
-            case WuxDef.GetVariable("Page_AddMiscTool"):
-                return {
-                    group: "Tool",
-                    category: "",
-                    type: "Equipment"
-                };
-            case WuxDef.GetVariable("Page_AddHeadGear"):
-                return {
-                    group: "Head Gear",
-                    category: undefined,
-                    type: "Equipment"
-                };
-            case WuxDef.GetVariable("Page_AddFaceGear"):
-                return {
-                    group: "Face Gear",
-                    category: undefined,
-                    type: "Equipment"
-                };
-            case WuxDef.GetVariable("Page_AddChestGear"):
-                return {
-                    group: "Chest Gear",
-                    category: undefined,
-                    type: "Equipment"
-                };
-            case WuxDef.GetVariable("Page_AddArmGear"):
-                return {
-                    group: "Arm Gear",
-                    category: undefined,
-                    type: "Equipment"
-                };
-            case WuxDef.GetVariable("Page_AddLegGear"):
-                return {
-                    group: "Leg Gear",
-                    category: undefined,
-                    type: "Equipment"
-                };
-            case WuxDef.GetVariable("Page_AddFootGear"):
-                return {
-                    group: "Foot Gear",
-                    category: undefined,
-                    type: "Equipment"
-                };
-            case WuxDef.GetVariable("Page_AddMiscGear"):
-                return {
-                    group: "Gear",
-                    category: undefined,
-                    type: "Equipment"
-                };
-            case WuxDef.GetVariable("Page_AddRecoveryItem"):
-                return {
-                    group: "Recovery",
-                    category: undefined,
-                    type: "Consumable"
-                };
-            case WuxDef.GetVariable("Page_AddTonicItem"):
-                return {
-                    group: "Tonic",
-                    category: undefined,
-                    type: "Consumable"
-                };
-            case WuxDef.GetVariable("Page_AddBombItem"):
-                return {
-                    group: "Bomb",
-                    category: undefined,
-                    type: "Consumable"
-                };
-            case WuxDef.GetVariable("Page_AddBeverageItem"):
-                return {
-                    group: "Beverage",
-                    category: undefined,
-                    type: "Consumable"
-                };
-            case WuxDef.GetVariable("Page_AddMaterial"):
-                return {
-                    group: "Material",
-                    category: undefined,
-                    type: "Goods"
-                };
-            case WuxDef.GetVariable("Page_AddCompound"):
-                return {
-                    group: "Compound",
-                    category: undefined,
-                    type: "Goods"
-                };
-            case WuxDef.GetVariable("Page_AddAnimalGood"):
-                return {
-                    group: "Animal Good",
-                    category: undefined,
-                    type: "Goods"
-                };
-            case WuxDef.GetVariable("Page_AddSupplement"):
-                return {
-                    group: "Supplement",
-                    category: undefined,
-                    type: "Goods"
-                };
-            case WuxDef.GetVariable("Page_AddFruit"):
-                return {
-                    group: "Fruit",
-                    category: undefined,
-                    type: "Goods"
-                };
-            case WuxDef.GetVariable("Page_AddVegetable"):
-                return {
-                    group: "Vegetable",
-                    category: undefined,
-                    type: "Goods"
-                };
-            case WuxDef.GetVariable("Page_AddStarch"):
-                return {
-                    group: "Starch",
-                    category: undefined,
-                    type: "Goods"
-                };
-        }
-        return "";
-    };
     const getGearVariable = function (attribute, suffix) {
         let baseDefinition = WuxDef.Get("Gear");
         return baseDefinition.getVariable(`-${WuxDef.GetVariable(attribute, suffix)}`);
@@ -525,33 +330,16 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let selectedId = EquipmentRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
 
             attributeHandler.addMod(EquipmentRepeater.getFieldName(selectedId, getGearVariable("ItemName")));
-            let itemType = "";
-            let hasItemCount = false;
-            switch (repeatingSectionName) {
-                case "RepeatingEquipment":
-                    itemType = "Equipment";
-                    break;
-                case "RepeatingConsumables":
-                    itemType = "Consumable";
-                    hasItemCount = true;
-                    attributeHandler.addMod(EquipmentRepeater.getFieldName(selectedId, getGearVariable("ItemCount")));
-                    break;
-                case "RepeatingGoods":
-                    itemType = "Goods";
-                    hasItemCount = true;
-                    attributeHandler.addMod(EquipmentRepeater.getFieldName(selectedId, getGearVariable("ItemCount")));
-                    break;
-            }
-            
+
             let jinVar = WuxDef.GetVariable("Currency_Jin");
             attributeHandler.addMod(jinVar);
-            
+
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let itemName = attrHandler.parseString(EquipmentRepeater.getFieldName(selectedId, getGearVariable("ItemName")));
                 let item = WuxItems.Get(itemName);
                 attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
                 attrHandler.addUpdate(EquipmentRepeater.getFieldName(selectedId, getGearVariable("ItemAction")), "0");
-                
+
                 let cost = parseInt(item.value);
                 if (isNaN(cost)) {
                     cost = 0;
@@ -559,12 +347,6 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 let jin = attrHandler.parseInt(jinVar);
                 jin -= cost;
                 attrHandler.addUpdate(jinVar, jin.toString());
-                
-                if (hasItemCount) {
-                    let count = attrHandler.parseInt(EquipmentRepeater.getFieldName(selectedId, getGearVariable("ItemCount")), 0);
-                    count++;
-                    attrHandler.addUpdate(EquipmentRepeater.getFieldName(selectedId, getGearVariable("ItemCount")), count.toString());
-                }
             });
             attributeHandler.run();
         },
@@ -612,17 +394,6 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             attributeHandler.run();
         },
 
-        openEquipmentAdditionItemInspection = function (eventinfo, addType) {
-            let attributeHandler = new WorkerAttributeHandler();
-            WuxWorkerInspectPopup.OpenItemInspection(attributeHandler, function (attrHandler, itemPopupRepeater) {
-                attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "on");
-                attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), addType);
-
-                return populateItemInspectionEquipment(attrHandler, itemPopupRepeater, eventinfo);
-            });
-            attributeHandler.run();
-        },
-
         unequipSetGear = function (eventinfo, slotIndex, equipSlotFieldName) {
             unequipSetItem(eventinfo, slotIndex, equipSlotFieldName);
         },
@@ -637,7 +408,6 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         PurchaseGear: purchaseGear,
         DeleteGear: deleteGear,
         InspectGear: inspectGear,
-        OpenEquipmentAdditionItemInspection: openEquipmentAdditionItemInspection,
         UnequipSetGear: unequipSetGear,
         InspectSetGear: inspectSetGear
     };

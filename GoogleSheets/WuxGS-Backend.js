@@ -469,33 +469,12 @@ var GearBuilder = GearBuilder || (function () {
     var
         print = function () {
             let output = "";
-            output += listenerOpenItemInspectPopup();
             output += listenerPurchaseRepeatingEquipment();
             output += listenerEquipRepeatingEquipment();
             output += listenerDeleteRepeatingEquipment();
             output += listenerInspectRepeatingEquipment();
             output += listenerSetGearOptions();
             return output;
-        },
-        listenerOpenItemInspectPopup = function () {
-            return `${WuxSheetBackend.OnChange(
-                [WuxDef.GetVariable("Page_AddMeleeWeapon"), WuxDef.GetVariable("Page_AddRangedWeapon"),
-                    WuxDef.GetVariable("Page_AddTool"), WuxDef.GetVariable("Page_AddCommsTool"),
-                    WuxDef.GetVariable("Page_AddLightTool"), WuxDef.GetVariable("Page_AddBindingsTool"),
-                    WuxDef.GetVariable("Page_AddMiscTool"), WuxDef.GetVariable("Page_AddHeadGear"),
-                    WuxDef.GetVariable("Page_AddFaceGear"), WuxDef.GetVariable("Page_AddChestGear"),
-                    WuxDef.GetVariable("Page_AddArmGear"), WuxDef.GetVariable("Page_AddLegGear"),
-                    WuxDef.GetVariable("Page_AddFootGear"), WuxDef.GetVariable("Page_AddMiscGear")],
-                `WuxWorkerGear.OpenEquipmentAdditionItemInspection(eventinfo, "Add Equipment")`, true)}
-                ${WuxSheetBackend.OnChange(
-                [WuxDef.GetVariable("Page_AddRecoveryItem"), WuxDef.GetVariable("Page_AddTonicItem"), 
-                    WuxDef.GetVariable("Page_AddBombItem"), WuxDef.GetVariable("Page_AddBeverageItem")],
-                `WuxWorkerGear.OpenEquipmentAdditionItemInspection(eventinfo, "Add Consumable")`, true)}
-                ${WuxSheetBackend.OnChange(
-                [WuxDef.GetVariable("Page_AddMaterial"), WuxDef.GetVariable("Page_AddCompound"),
-                    WuxDef.GetVariable("Page_AddSupplement"), WuxDef.GetVariable("Page_AddAnimalGood"),
-                    WuxDef.GetVariable("Page_AddFruit"), WuxDef.GetVariable("Page_AddVegetable"), WuxDef.GetVariable("Page_AddStarch")],
-                `WuxWorkerGear.OpenEquipmentAdditionItemInspection(eventinfo, "Add Good")`, true)}`;
         },
         listenerEquipRepeatingEquipment = function () {
             return `${WuxSheetBackend.OnChange(
@@ -509,35 +488,17 @@ var GearBuilder = GearBuilder || (function () {
         listenerPurchaseRepeatingEquipment = function () {
             return `${WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_Purchase")}`],
-                `WuxWorkerGear.PurchaseGear(eventinfo, "RepeatingEquipment")`, true)}
-                ${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Gear_Purchase")}`],
-                `WuxWorkerGear.PurchaseGear(eventinfo, "RepeatingConsumables")`, true)}
-                ${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Purchase")}`],
-                `WuxWorkerGear.PurchaseGear(eventinfo, "RepeatingGoods")`, true)}`;
+                `WuxWorkerGear.PurchaseGear(eventinfo, "RepeatingEquipment")`, true)}`;
         },
         listenerDeleteRepeatingEquipment = function () {
             return `${WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_Delete")}`],
-                `WuxWorkerGear.DeleteGear(eventinfo, "RepeatingEquipment")`, true)}
-                ${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Gear_Delete")}`],
-                `WuxWorkerGear.DeleteGear(eventinfo, "RepeatingConsumables")`, true)}
-                ${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Delete")}`],
-                `WuxWorkerGear.DeleteGear(eventinfo, "RepeatingGoods")`, true)}`;
+                `WuxWorkerGear.DeleteGear(eventinfo, "RepeatingEquipment")`, true)}`;
         },
         listenerInspectRepeatingEquipment = function () {
             return `${WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectGear(eventinfo, "RepeatingEquipment")`, true)}
-                ${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectGear(eventinfo, "RepeatingConsumables")`, true)}
-                ${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectGear(eventinfo, "RepeatingGoods")`, true)}`;
+                `WuxWorkerGear.InspectGear(eventinfo, "RepeatingEquipment")`, true)}`;
         },
         listenerSetGearOptions = function () {
             let output = "";
