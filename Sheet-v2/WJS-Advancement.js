@@ -366,6 +366,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			WuxWorkerSkills.RefreshStats(attributeHandler);
 			WuxWorkerJobs.RefreshStats(attributeHandler);
 			WuxWorkerStyles.RefreshStats(attributeHandler);
+			WuxWorkerKnowledges.RefreshStats(attributeHandler);
 
 			attributeHandler.run();
 		},

@@ -1007,7 +1007,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let tierOptions = WuxDef.Filter([new DatabaseFilterData("group", "LoreTier")]);
 
                             let subTypeSelect = `<select class="wuxInput wuxLoreDescription" name="${WuxDef.GetAttribute("Lore_SubType")}">
-                                <option value="0">-</option>
+                                <option value="0">Choose Lore Type</option>
                                 ${subLores.map(k => `<option value="${k.name}">${k.name}</option>`).join("\n                                ")}
                                 <option value="1">Custom</option>
                             </select>`;

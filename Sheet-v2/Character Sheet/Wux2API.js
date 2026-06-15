@@ -11072,7 +11072,7 @@ class SandboxRepeatingSectionHandler extends RepeatingSectionHandler {
 class WorkerBuildStat extends dbObj {
     importJson(json) {
         this.name = json.name;
-        this.value = parseInt(json.value);
+        this.value = json.value;
     }
 
     importSheets(dataArray) {
@@ -12349,7 +12349,7 @@ var WuxDef = WuxDef || (function() {
                 "linkedGroups":[],
                 "isResource":""},
             "LoreTier0":{"name":"LoreTier0","fieldName":"loretier0","group":"LoreTier","descriptions":[""],
-                "variable":"0","title":"-","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
+                "variable":"0","title":"Choose Tier","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
             "LoreTier1":{"name":"LoreTier1","fieldName":"loretier1","group":"LoreTier","descriptions":[""],
@@ -15427,7 +15427,7 @@ var WuxDef = WuxDef || (function() {
                 "variable":"lor-name{0}{1}","title":"Type","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Lore_Description":{"name":"Lore_Description","fieldName":"description","group":"Lore","descriptions":[""],
+            "Lore_Description":{"name":"Lore_Description","fieldName":"description","group":"Lore","descriptions":["Description"],
                 "variable":"lor-description{0}{1}","title":"Type","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},

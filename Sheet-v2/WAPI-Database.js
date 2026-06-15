@@ -5599,7 +5599,7 @@ class SandboxRepeatingSectionHandler extends RepeatingSectionHandler {
 class WorkerBuildStat extends dbObj {
     importJson(json) {
         this.name = json.name;
-        this.value = parseInt(json.value);
+        this.value = json.value;
     }
 
     importSheets(dataArray) {
