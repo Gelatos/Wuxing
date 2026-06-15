@@ -8613,20 +8613,18 @@ class TechniqueAssessment {
             case "Def_Logic":
             case "Def_Resolve":
                 // 2 = 2, 3 = 4, 4 = 6, 5 = 8
-                output.value = Math.ceil(output.value + Math.max(Math.ceil(output.value * 0.75 - 1.5), 0));
+                output.value = Math.ceil(Math.abs(output.value) + Math.max(Math.ceil(Math.abs(output.value) * 0.75 - 1.5), 0)) * (effect.subType == "Penalty" ? -1 : 1);
                 break;
             case "Def_Evasion":
             case "Def_Insight":
-                output.value = 1 + Math.ceil(output.value + Math.max(Math.ceil(output.value * 0.75 - 1.5), 0));
+                output.value = (effect.subType == "Penalty" ? 0 : 1) + Math.ceil(Math.abs(output.value) + Math.max(Math.ceil(Math.abs(output.value) * 0.75 - 1.5), 0)) * (effect.subType == "Penalty" ? -1 : 1);
                 break;
             case "StartEN":
                 output.value = Math.ceil(output.value * 2);
                 break;
             case "Cmb_Mv":
-                output.value = Math.ceil(output.value * 2);
-                break;
             case "Cmb_MvDash":
-                output.value = Math.ceil(output.value * 1.25);
+                output.value = Math.ceil(output.value * 2);
                 break;
         }
 
