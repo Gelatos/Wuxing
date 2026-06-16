@@ -62,6 +62,37 @@ class FilterPopupAttributeHandler extends BasePopupAttributeHandler {
     getFilterVariable() {
         return this.sectionDefinition.getVariable(WuxDef._filter);
     }
+    getItemFilters() {
+        if (!this.equipmentFilterDefinitions) { return 0; }
+        let itemFilters = [];
+        let keys = this.equipmentFilterDefinitions.getKeys();
+        for (let key of keys) {
+            let definitions = this.equipmentFilterDefinitions.getDefinitions(key);
+            if (definitions.length > 0) {
+                let baseDefinition = WuxDef.Get(key);
+                let filterField = baseDefinition.getDescription("");
+                let activeValues = [];
+                definitions.forEach((definition) => {
+                    if (this.attrHandler.parseString(this.equipmentFilterDefinitions.getCompoundVariable(definition)) == "on") {
+                        let value;
+                        if (definition.group === "Trait") {
+                            value = definition.name.replace("Trait_", "");
+                        } else {
+                            value = definition.abbreviation != "" ? definition.abbreviation : definition.title;
+                        }
+                        activeValues.push(value);
+                    }
+                });
+                if (activeValues.length > 0) {
+                    itemFilters.push(new DatabaseFilterData(filterField, activeValues));
+                }
+            }
+        }
+        if (itemFilters.length == 0) {
+            return 0;
+        }
+        return itemFilters;
+    }
 }
 
 class FilterPopup {
@@ -155,6 +186,32 @@ class StyleFilterPopup extends FilterPopup {
     }
 }
 
+class ItemFilterPopup extends FilterPopup {
+    open() {
+        super.open("Popup_CustomItemsFilter", "ItemFilter", "Item");
+    }
+
+    applyFilter() {
+        let filterPopup = this;
+        this.attributeHandler.addMod(this.equipmentFilterDefinitions.getAllVariables());
+
+        let capturedFilters = [];
+
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            let filterPopupAttrHandler = new FilterPopupAttributeHandler(attrHandler, filterPopup.filterDefinitions, filterPopup.equipmentFilterDefinitions);
+            let itemFilters = filterPopupAttrHandler.getItemFilters();
+            capturedFilters = Array.isArray(itemFilters) ? itemFilters : [];
+            filterPopupAttrHandler.hide();
+        });
+
+        this.attributeHandler.addFinishCallback(function () {
+            WuxWorkerInspectPopup.OpenItemFilterInspection(capturedFilters, WuxDef.GetTitle("Popup_CustomItemsFilter"), "Add Equipment");
+        });
+
+        this.attributeHandler.run();
+    }
+}
+
 var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
     'use strict';
 
@@ -168,6 +225,12 @@ var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
             Debug.Log("Open Custom Style Filter Popup");
             let attributeHandler = new WorkerAttributeHandler();
             new StyleFilterPopup(attributeHandler).open();
+            attributeHandler.run();
+        },
+        openItemFilter = function () {
+            Debug.Log("Open Item Filter Popup");
+            let attributeHandler = new WorkerAttributeHandler();
+            new ItemFilterPopup(attributeHandler).open();
             attributeHandler.run();
         },
         close = function () {
@@ -188,6 +251,8 @@ var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
                     new TechniqueFilterPopup(attributeHandler2).applyFilter();
                 } else if (popupType === "CustomStyle") {
                     new StyleFilterPopup(attributeHandler2).applyFilter();
+                } else if (popupType === "ItemFilter") {
+                    new ItemFilterPopup(attributeHandler2).applyFilter();
                 }
             });
 
@@ -205,6 +270,7 @@ var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
     return {
         OpenFormeTechnique : openFormeTechnique,
         OpenCustomStyleFilter: openCustomStyleFilter,
+        OpenItemFilter: openItemFilter,
         Close: close,
         ApplyFilter: applyFilter,
         RemoveFilter: removeFilter,

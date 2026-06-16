@@ -403,6 +403,11 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         },
 
         openFindItems = function (eventinfo) {
+            if (eventinfo.sourceAttribute === WuxDef.GetVariable("Popup_FindItemsByFilter")) {
+                WuxWorkerFilterPopup.OpenItemFilter();
+                return;
+            }
+
             let equipmentTypes = WuxDef.Filter([new DatabaseFilterData("group", "EquipmentType")]);
             let matchedDef;
             for (let i = 0; i < equipmentTypes.length; i++) {

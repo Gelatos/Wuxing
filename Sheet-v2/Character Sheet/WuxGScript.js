@@ -6407,11 +6407,11 @@ class EquipmentFilterDefinitions extends BaseFilteredDefinitions{
                 new DatabaseFilterData("group", "EquipmentFilterType"),
                 new DatabaseFilterData("subGroup", baseGroupFilters[i].getTitle())]);
         }
-        this.definitionDatabase["FilterType_WeaponKeywords"] = WuxDef.Filter([
+        this.definitionDatabase["EquipFilter_WeaponKeywords"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Trait"),
             new DatabaseFilterData("subGroup", ["Martial Trait", "Aim Trait"])
         ]);
-        this.definitionDatabase["FilterType_ToolKeywords"] = WuxDef.Filter([
+        this.definitionDatabase["EquipFilter_ToolKeywords"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Trait"),
             new DatabaseFilterData("subGroup", "Tool Trait")
         ]);
