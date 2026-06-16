@@ -469,12 +469,20 @@ var GearBuilder = GearBuilder || (function () {
     var
         print = function () {
             let output = "";
+            output += listenerFindItemsButtons();
             output += listenerPurchaseRepeatingEquipment();
             output += listenerEquipRepeatingEquipment();
             output += listenerDeleteRepeatingEquipment();
             output += listenerInspectRepeatingEquipment();
             output += listenerSetGearOptions();
             return output;
+        },
+        listenerFindItemsButtons = function () {
+            let equipmentTypes = WuxDef.Filter([new DatabaseFilterData("group", "EquipmentType")]);
+            let variables = equipmentTypes.map(def => def.getVariable());
+            variables.push(WuxDef.GetVariable("Popup_FindItemsByFilter"));
+            variables.push(WuxDef.GetVariable("Popup_FindItemsByTechnique"));
+            return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindItems(eventinfo)`, true);
         },
         listenerEquipRepeatingEquipment = function () {
             return `${WuxSheetBackend.OnChange(

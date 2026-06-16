@@ -621,8 +621,24 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
                         <div>
                         ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsEquipment())}
+                        ${WuxSheetMain.Row("&nbsp;")}
+                        ${addEquipmentFilterButtons()}
                     </div>`;
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
+                },
+
+                addEquipmentFilterButtons = function () {
+                    let equipmentTypes = WuxDef.Filter([new DatabaseFilterData("group", "EquipmentType")]);
+                    let findByFilterDef = WuxDef.Get("Popup_FindItemsByFilter");
+                    let findByTechniqueDef = WuxDef.Get("Popup_FindItemsByTechnique");
+                    let items = [];
+                    for (let i = 0; i < equipmentTypes.length; i++) {
+                        items.push(WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(equipmentTypes[i].getAttribute(), equipmentTypes[i].getTitle(), "wuxWidth120")));
+                    }
+                    items.push(WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(findByFilterDef.getAttribute(), findByFilterDef.getTitle(), "wuxWidth120")));
+                    items.push(WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(findByTechniqueDef.getAttribute(), findByTechniqueDef.getTitle(), "wuxWidth120")));
+                    return `${WuxSheetMain.Header(WuxDef.GetTitle("Page_AddItem"))}
+                        ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 3)}`;
                 },
 
                 addRepeaterContentsEquipment = function () {

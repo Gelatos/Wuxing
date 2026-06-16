@@ -449,7 +449,7 @@ class ExtendedTechniqueStyleDatabase extends Database {
 class ExtendedUsableItemDatabase extends Database {
 
     constructor(data, dataCreationCallback) {
-        let filters = ["group", "subGroup", "category", "action", "skill", "range"];
+        let filters = ["group", "category", "bulk", "traits"];
         super(data, filters, dataCreationCallback);
     }
 
@@ -465,6 +465,40 @@ class ExtendedUsableItemDatabase extends Database {
                 this.get(data.name).technique.importEffectsFromTechnique(data.technique);
             } else {
                 this.add(data.name, data);
+            }
+        }
+    }
+
+    performAddSortingGroups(value) {
+        for (let property in this.sortingGroups) {
+            if (property == "group") {
+                if (value.group.indexOf(";") >= 0) {
+                    let groups = value.group.split(";");
+                    for (let i = 0; i < groups.length; i++) {
+                        if (groups[i].trim() != "") {
+                            this.addSortingGroup("group", groups[i].trim(), value);
+                        }
+                    }
+                }
+                else {
+                    this.addSortingGroup("group", value.group, value);
+                }
+            }
+            else if (property == "traits") {
+                if (value.traits.indexOf(";") >= 0) {
+                    let groups = value.traits.split(";");
+                    for (let i = 0; i < groups.length; i++) {
+                        if (groups[i].trim() != "") {
+                            this.addSortingGroup("traits", groups[i].trim(), value);
+                        }
+                    }
+                }
+                else {
+                    this.addSortingGroup("traits", value.traits, value);
+                }
+            }
+            else if (value != undefined && value.hasOwnProperty(property)) {
+                this.addSortingGroup(property, value[property], value);
             }
         }
     }
