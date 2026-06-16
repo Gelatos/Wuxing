@@ -407,6 +407,10 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 WuxWorkerFilterPopup.OpenItemFilter();
                 return;
             }
+            if (eventinfo.sourceAttribute === WuxDef.GetVariable("Popup_FindItemsByTechnique")) {
+                WuxWorkerFilterPopup.OpenItemTechFilter();
+                return;
+            }
 
             let equipmentTypes = WuxDef.Filter([new DatabaseFilterData("group", "EquipmentType")]);
             let matchedDef;

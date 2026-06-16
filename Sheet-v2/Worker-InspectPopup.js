@@ -130,6 +130,16 @@ class FilteredItemsInventoryItemHandler extends InspectionInventoryItemHandler {
     }
 }
 
+class ItemListInventoryItemHandler extends InspectionInventoryItemHandler {
+    constructor(items) {
+        super();
+        for (let item of items) {
+            if (item == undefined) continue;
+            this.addItem(new InspectionInventoryItem(item.name, item.name, false, "", 0, []));
+        }
+    }
+}
+
 class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
     constructor(attrHandler) {
         super(attrHandler);
@@ -794,6 +804,18 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         performItemFilterInspection(filters, title, addType);
     };
 
+    const performItemListInspection = function (items, title, addType) {
+        let inventoryItems = new ItemListInventoryItemHandler(items);
+        let attributeHandler = new WorkerAttributeHandler();
+        openItemInspection(attributeHandler, title, inventoryItems.items, addType);
+        attributeHandler.run();
+    };
+
+    const openItemListInspection = function (items, title, addType) {
+        Debug.Log("Open Item List Inspection");
+        performItemListInspection(items, title, addType);
+    };
+
     const performStyleFilterInspection = function (filters, title) {
         let inventoryItems = new FilteredStylesInventoryItemHandler(filters,
             function (tier, affinity) {
@@ -1086,6 +1108,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
     return {
         OpenItemInspection: openItemInspection,
         OpenItemFilterInspection: openItemFilterInspection,
+        OpenItemListInspection: openItemListInspection,
         OpenTechniqueInspection: openTechniqueInspection,
         OpenPerkTechniqueInspection: openPerkTechniqueInspection,
         OpenStyleFilterTechniqueInspection: openStyleFilterTechniqueInspection,

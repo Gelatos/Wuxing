@@ -186,6 +186,49 @@ class StyleFilterPopup extends FilterPopup {
     }
 }
 
+class ItemTechFilterPopup extends FilterPopup {
+    open() {
+        super.open("Popup_CustomItemTechFilter", "ItemTechFilter", "Technique");
+    }
+
+    applyFilter() {
+        let filterPopup = this;
+        this.attributeHandler.addMod(this.filterDefinitions.getAllVariables());
+
+        let capturedItems = [];
+
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            let filterPopupAttrHandler = new FilterPopupAttributeHandler(attrHandler, filterPopup.filterDefinitions, filterPopup.equipmentFilterDefinitions);
+            let techniqueFilters = filterPopupAttrHandler.getTechniqueFilters();
+            filterPopupAttrHandler.hide();
+
+            let techFilters = Array.isArray(techniqueFilters) ? [...techniqueFilters] : [];
+            techFilters.push(new DatabaseFilterData("style", "Gear"));
+
+            let matchingTechniques = WuxTechs.Filter(techFilters);
+
+            let itemNameSet = new Set();
+            for (let technique of matchingTechniques) {
+                let commonTechItems = WuxItems.GetSortedGroup("commonTechniques", technique.name);
+                for (let itemName of commonTechItems) {
+                    itemNameSet.add(itemName);
+                }
+                if (WuxItems.Has(technique.name)) {
+                    itemNameSet.add(technique.name);
+                }
+            }
+
+            capturedItems = Array.from(itemNameSet).map(name => WuxItems.Get(name)).filter(item => item != undefined);
+        });
+
+        this.attributeHandler.addFinishCallback(function () {
+            WuxWorkerInspectPopup.OpenItemListInspection(capturedItems, WuxDef.GetTitle("Popup_CustomItemTechFilter"), "Add Equipment");
+        });
+
+        this.attributeHandler.run();
+    }
+}
+
 class ItemFilterPopup extends FilterPopup {
     open() {
         super.open("Popup_CustomItemsFilter", "ItemFilter", "Item");
@@ -233,6 +276,12 @@ var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
             new ItemFilterPopup(attributeHandler).open();
             attributeHandler.run();
         },
+        openItemTechFilter = function () {
+            Debug.Log("Open Item Technique Filter Popup");
+            let attributeHandler = new WorkerAttributeHandler();
+            new ItemTechFilterPopup(attributeHandler).open();
+            attributeHandler.run();
+        },
         close = function () {
             let attributeHandler = new WorkerAttributeHandler();
             new FilterPopup(attributeHandler).close();
@@ -253,6 +302,8 @@ var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
                     new StyleFilterPopup(attributeHandler2).applyFilter();
                 } else if (popupType === "ItemFilter") {
                     new ItemFilterPopup(attributeHandler2).applyFilter();
+                } else if (popupType === "ItemTechFilter") {
+                    new ItemTechFilterPopup(attributeHandler2).applyFilter();
                 }
             });
 
@@ -271,6 +322,7 @@ var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
         OpenFormeTechnique : openFormeTechnique,
         OpenCustomStyleFilter: openCustomStyleFilter,
         OpenItemFilter: openItemFilter,
+        OpenItemTechFilter: openItemTechFilter,
         Close: close,
         ApplyFilter: applyFilter,
         RemoveFilter: removeFilter,
