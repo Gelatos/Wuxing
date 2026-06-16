@@ -128,3 +128,30 @@ class TechniqueFilterDefinitions extends BaseFilteredDefinitions{
     }
 }
 
+class EquipmentFilterDefinitions extends BaseFilteredDefinitions{
+    constructor(baseDefinitionName) {
+        super(baseDefinitionName);
+    }
+
+    initializeDatabase() {
+        this.definitionDatabase = {};
+        let baseGroupFilters = WuxDef.Filter([
+            new DatabaseFilterData("group", "EquipmentFilterType"),
+            new DatabaseFilterData("subGroup", "BaseGroup")]);
+        for (let i = 0; i < baseGroupFilters.length; i++) {
+            this.definitionDatabase[baseGroupFilters[i].name] = WuxDef.Filter([
+                new DatabaseFilterData("group", "EquipmentFilterType"),
+                new DatabaseFilterData("subGroup", baseGroupFilters[i].getTitle())]);
+        }
+        this.definitionDatabase["FilterType_WeaponKeywords"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Trait"),
+            new DatabaseFilterData("subGroup", ["Martial Trait", "Aim Trait"])
+        ]);
+        this.definitionDatabase["FilterType_ToolKeywords"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Trait"),
+            new DatabaseFilterData("subGroup", "Tool Trait")
+        ]);
+
+    }
+}
+

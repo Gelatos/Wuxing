@@ -637,7 +637,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     }
                     items.push(WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(findByFilterDef.getAttribute(), findByFilterDef.getTitle(), "wuxWidth120")));
                     items.push(WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(findByTechniqueDef.getAttribute(), findByTechniqueDef.getTitle(), "wuxWidth120")));
-                    return `${WuxSheetMain.Header(WuxDef.GetTitle("Page_AddItem"))}
+                    return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddEquipment"))}
                         ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 3)}`;
                 },
 

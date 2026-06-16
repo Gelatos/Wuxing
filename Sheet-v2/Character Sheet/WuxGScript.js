@@ -449,7 +449,7 @@ class ExtendedTechniqueStyleDatabase extends Database {
 class ExtendedUsableItemDatabase extends Database {
 
     constructor(data, dataCreationCallback) {
-        let filters = ["group", "subGroup", "category", "action", "skill", "range"];
+        let filters = ["group", "category", "bulk", "traits"];
         super(data, filters, dataCreationCallback);
     }
 
@@ -465,6 +465,40 @@ class ExtendedUsableItemDatabase extends Database {
                 this.get(data.name).technique.importEffectsFromTechnique(data.technique);
             } else {
                 this.add(data.name, data);
+            }
+        }
+    }
+
+    performAddSortingGroups(value) {
+        for (let property in this.sortingGroups) {
+            if (property == "group") {
+                if (value.group.indexOf(";") >= 0) {
+                    let groups = value.group.split(";");
+                    for (let i = 0; i < groups.length; i++) {
+                        if (groups[i].trim() != "") {
+                            this.addSortingGroup("group", groups[i].trim(), value);
+                        }
+                    }
+                }
+                else {
+                    this.addSortingGroup("group", value.group, value);
+                }
+            }
+            else if (property == "traits") {
+                if (value.traits.indexOf(";") >= 0) {
+                    let groups = value.traits.split(";");
+                    for (let i = 0; i < groups.length; i++) {
+                        if (groups[i].trim() != "") {
+                            this.addSortingGroup("traits", groups[i].trim(), value);
+                        }
+                    }
+                }
+                else {
+                    this.addSortingGroup("traits", value.traits, value);
+                }
+            }
+            else if (value != undefined && value.hasOwnProperty(property)) {
+                this.addSortingGroup(property, value[property], value);
             }
         }
     }
@@ -11483,7 +11517,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let contents = "";
                     contents += buildCurrency();
                     contents += buildEquipment();
-                    contents += buildItems();
                     return WuxSheetMain.Build(contents);
                 },
 
@@ -11527,9 +11560,22 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         <div>
                         ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsEquipment())}
                         ${WuxSheetMain.Row("&nbsp;")}
-                        ${addEquipmentButtons()}
+                        ${addEquipmentFilterButtons()}
                     </div>`;
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
+                },
+
+                addEquipmentFilterButtons = function () {
+                    let findByTypeDef = WuxDef.Get("Popup_FindItemsByType");
+                    let findByFilterDef = WuxDef.Get("Popup_FindItemsByFilter");
+                    let findByTechniqueDef = WuxDef.Get("Popup_FindItemsByTechnique");
+                    let items = [
+                        WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(findByTypeDef.getAttribute(), findByTypeDef.getTitle(), "wuxWidth120")),
+                        WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(findByFilterDef.getAttribute(), findByFilterDef.getTitle(), "wuxWidth120")),
+                        WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(findByTechniqueDef.getAttribute(), findByTechniqueDef.getTitle(), "wuxWidth120"))
+                    ];
+                    return `${WuxSheetMain.Header(WuxDef.GetTitle("Page_AddItem"))}
+                        ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 3)}`;
                 },
 
                 addRepeaterContentsEquipment = function () {
@@ -11539,17 +11585,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         ${WuxSheetMain.SubMenuButton(actionFieldName, addSubmenuContentsEquipment())}
                         <div class="wuxEquipableName"><span class="wuxDescription" name="${nameFieldName}"></span></div>`
                     );
-                },
-
-                addRepeaterContentsItem = function () {
-                    let nameFieldName = getGearAttribute("ItemName");
-                    let actionFieldName = getGearAttribute("ItemAction");
-                    let countFieldName = getGearAttribute("ItemCount");
-                    return `
-                        <div class="wuxEquipableSubMenu">${WuxSheetMain.SubMenuButton(actionFieldName, addSubmenuContentsItem())}</div>
-                        ${WuxSheetMain.CustomInput("number", countFieldName, "wuxInput wuxWidth25")}
-                        <div class="wuxEquipableName"><span class="wuxDescription" name="${nameFieldName}"></span></div>`
-                        ;
                 },
 
                 addSubmenuContentsEquipment = function () {
@@ -11562,12 +11597,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         ${WuxSheetMain.HiddenAuxField(equippedDef.getAttribute(),
                         `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), WuxSheetMain.Span(WuxDef.GetAttribute("Gear_ItemEquipMenu")))}
                             ${WuxSheetMain.SubMenuOptionButton(equipWeaponDef.getAttribute(), `<span>${equipWeaponDef.getTitle()}</span>`)}`)}
-                        ${addSubmenuContents()}
-                    `;
-                },
-
-                addSubmenuContentsItem = function () {
-                    return `${buildItemTemplate()}
                         ${addSubmenuContents()}
                     `;
                 },
@@ -11641,30 +11670,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     </div>`;
                 },
 
-                addEquipmentButtons = function () {
-                    let weaponsPopupDef = WuxDef.Get("Page_AddMeleeWeapon");
-                    let rangedPopupDef = WuxDef.Get("Page_AddRangedWeapon");
-                    let toolPopupDef = WuxDef.Get("Page_AddTool");
-                    let commsPopupDef = WuxDef.Get("Page_AddCommsTool");
-                    let lightPopupDef = WuxDef.Get("Page_AddLightTool");
-                    let bindingsPopupDef = WuxDef.Get("Page_AddBindingsTool");
-                    let miscPopupDef = WuxDef.Get("Page_AddMiscTool");
-                    let headPopupDef = WuxDef.Get("Page_AddHeadGear");
-                    let facePopupDef = WuxDef.Get("Page_AddFaceGear");
-                    let chestPopupDef = WuxDef.Get("Page_AddChestGear");
-                    let armPopupDef = WuxDef.Get("Page_AddArmGear");
-                    let legPopupDef = WuxDef.Get("Page_AddLegGear");
-                    let footPopupDef = WuxDef.Get("Page_AddFootGear");
-                    let miscGearPopupDef = WuxDef.Get("Page_AddMiscGear");
-                    return addItemGenerationButtons([
-                        weaponsPopupDef, rangedPopupDef, toolPopupDef,
-                        // commsPopupDef, lightPopupDef, bindingsPopupDef, miscPopupDef, 
-                        headPopupDef, facePopupDef, chestPopupDef, armPopupDef, legPopupDef,
-                        footPopupDef, miscGearPopupDef
-                    ], 3);
-                },
-
-                equippedEquipment = function () {
+equippedEquipment = function () {
                     let contents = "";
                     contents += `${WuxSheetMain.Header(`${WuxDef.GetTitle("Page_Equipped")}`)}`;
                     let emptyName = WuxDef.GetTitle("Page_SlotEmpty");
@@ -11713,69 +11719,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         ${WuxSheetMain.SubMenuOptionButton(definition.getAttribute(index + WuxDef._info),
                         `<span>${WuxDef.GetTitle("Forme_SeeTechniques")}</span>`)}
             `;
-                },
-
-                buildItems = function () {
-                    let contents = "";
-
-                    contents += WuxSheetMain.MultiRowGroup([ownedConsumables(), ownedGoods()], WuxSheetMain.Table.FlexTable, 2);
-
-                    contents = WuxSheetMain.TabBlock(contents);
-
-                    let definition = WuxDef.Get("Page_GearItems");
-                    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
-                },
-
-                ownedConsumables = function () {
-                    let repeatingDef = WuxDef.Get("RepeatingConsumables");
-
-                    let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
-                        <div>
-                        ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsItem())}
-                        ${WuxSheetMain.Row("&nbsp;")}
-                        ${addConsumablesButtons()}
-                    </div>`;
-                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
-                },
-
-                ownedGoods = function () {
-                    let repeatingDef = WuxDef.Get("RepeatingGoods");
-
-                    let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
-                        <div>
-                        ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsItem())}
-                        ${WuxSheetMain.Row("&nbsp;")}
-                        ${addGoodsButtons()}
-                    </div>`;
-                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
-                },
-
-                addConsumablesButtons = function () {
-                    return addItemGenerationButtons([
-                        WuxDef.Get("Page_AddRecoveryItem"),
-                        WuxDef.Get("Page_AddTonicItem"),
-                        WuxDef.Get("Page_AddBombItem"),
-                        WuxDef.Get("Page_AddBeverageItem")
-                    ], 2);
-                },
-
-                addGoodsButtons = function () {
-                    return addItemGenerationButtons([
-                        WuxDef.Get("Page_AddMaterial"), WuxDef.Get("Page_AddCompound"),
-                        WuxDef.Get("Page_AddSupplement"), WuxDef.Get("Page_AddAnimalGood"),
-                        WuxDef.Get("Page_AddFruit"), WuxDef.Get("Page_AddVegetable"), WuxDef.Get("Page_AddStarch")
-                    ], 2);
-                },
-
-                addItemGenerationButtons = function (definitions, rowSize) {
-                    let contents = [];
-                    for (let i = 0; i < definitions.length; i++) {
-                        contents.push(WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(definitions[i].getAttribute(), definitions[i].getTitle(), "wuxWidth120")));
-                    }
-
-                    return `${WuxSheetMain.Header(`${WuxDef.GetTitle("Page_AddItem")}`)}
-                    ${WuxSheetMain.MultiRowGroup(
-                        contents, WuxSheetMain.Table.FlexTable, rowSize)}`;
                 },
 
                 getGearAttribute = function (attribute, suffix) {
@@ -12808,7 +12751,7 @@ var GearBuilder = GearBuilder || (function () {
     var
         print = function () {
             let output = "";
-            output += listenerOpenItemInspectPopup();
+            output += listenerFindItemsButtons();
             output += listenerPurchaseRepeatingEquipment();
             output += listenerEquipRepeatingEquipment();
             output += listenerDeleteRepeatingEquipment();
@@ -12816,25 +12759,12 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerSetGearOptions();
             return output;
         },
-        listenerOpenItemInspectPopup = function () {
-            return `${WuxSheetBackend.OnChange(
-                [WuxDef.GetVariable("Page_AddMeleeWeapon"), WuxDef.GetVariable("Page_AddRangedWeapon"),
-                    WuxDef.GetVariable("Page_AddTool"), WuxDef.GetVariable("Page_AddCommsTool"),
-                    WuxDef.GetVariable("Page_AddLightTool"), WuxDef.GetVariable("Page_AddBindingsTool"),
-                    WuxDef.GetVariable("Page_AddMiscTool"), WuxDef.GetVariable("Page_AddHeadGear"),
-                    WuxDef.GetVariable("Page_AddFaceGear"), WuxDef.GetVariable("Page_AddChestGear"),
-                    WuxDef.GetVariable("Page_AddArmGear"), WuxDef.GetVariable("Page_AddLegGear"),
-                    WuxDef.GetVariable("Page_AddFootGear"), WuxDef.GetVariable("Page_AddMiscGear")],
-                `WuxWorkerGear.OpenEquipmentAdditionItemInspection(eventinfo, "Add Equipment")`, true)}
-                ${WuxSheetBackend.OnChange(
-                [WuxDef.GetVariable("Page_AddRecoveryItem"), WuxDef.GetVariable("Page_AddTonicItem"), 
-                    WuxDef.GetVariable("Page_AddBombItem"), WuxDef.GetVariable("Page_AddBeverageItem")],
-                `WuxWorkerGear.OpenEquipmentAdditionItemInspection(eventinfo, "Add Consumable")`, true)}
-                ${WuxSheetBackend.OnChange(
-                [WuxDef.GetVariable("Page_AddMaterial"), WuxDef.GetVariable("Page_AddCompound"),
-                    WuxDef.GetVariable("Page_AddSupplement"), WuxDef.GetVariable("Page_AddAnimalGood"),
-                    WuxDef.GetVariable("Page_AddFruit"), WuxDef.GetVariable("Page_AddVegetable"), WuxDef.GetVariable("Page_AddStarch")],
-                `WuxWorkerGear.OpenEquipmentAdditionItemInspection(eventinfo, "Add Good")`, true)}`;
+        listenerFindItemsButtons = function () {
+            return WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Popup_FindItemsByType"),
+                    WuxDef.GetVariable("Popup_FindItemsByFilter"),
+                    WuxDef.GetVariable("Popup_FindItemsByTechnique")],
+                `WuxWorkerGear.OpenFindItems(eventinfo)`, true);
         },
         listenerEquipRepeatingEquipment = function () {
             return `${WuxSheetBackend.OnChange(
@@ -12848,35 +12778,17 @@ var GearBuilder = GearBuilder || (function () {
         listenerPurchaseRepeatingEquipment = function () {
             return `${WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_Purchase")}`],
-                `WuxWorkerGear.PurchaseGear(eventinfo, "RepeatingEquipment")`, true)}
-                ${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Gear_Purchase")}`],
-                `WuxWorkerGear.PurchaseGear(eventinfo, "RepeatingConsumables")`, true)}
-                ${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Purchase")}`],
-                `WuxWorkerGear.PurchaseGear(eventinfo, "RepeatingGoods")`, true)}`;
+                `WuxWorkerGear.PurchaseGear(eventinfo, "RepeatingEquipment")`, true)}`;
         },
         listenerDeleteRepeatingEquipment = function () {
             return `${WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_Delete")}`],
-                `WuxWorkerGear.DeleteGear(eventinfo, "RepeatingEquipment")`, true)}
-                ${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Gear_Delete")}`],
-                `WuxWorkerGear.DeleteGear(eventinfo, "RepeatingConsumables")`, true)}
-                ${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Delete")}`],
-                `WuxWorkerGear.DeleteGear(eventinfo, "RepeatingGoods")`, true)}`;
+                `WuxWorkerGear.DeleteGear(eventinfo, "RepeatingEquipment")`, true)}`;
         },
         listenerInspectRepeatingEquipment = function () {
             return `${WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectGear(eventinfo, "RepeatingEquipment")`, true)}
-                ${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectGear(eventinfo, "RepeatingConsumables")`, true)}
-                ${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectGear(eventinfo, "RepeatingGoods")`, true)}`;
+                `WuxWorkerGear.InspectGear(eventinfo, "RepeatingEquipment")`, true)}`;
         },
         listenerSetGearOptions = function () {
             let output = "";
