@@ -12250,17 +12250,26 @@ var DisplayPopups = DisplayPopups || (function () {
     
             var
                 print = function () {
+                    let filterPopupDisplayTypeAttr = WuxDef.GetAttribute("Popup_FilterPopupDisplayType");
                     let contents = `${printClearFilterButton()}
-                    ${buildTechniqueFilters()}
+                    ${WuxSheet.PageDisplayInput(filterPopupDisplayTypeAttr)}
+                    ${WuxSheet.PageDisplay("FilterTechnique", buildTechniqueFilters())}
+                    ${WuxSheet.PageDisplay("FilterItem", buildItemFilters())}
                     ${printApplyFilterButton()}`;
                     return `<div class="wuxFilterPopupContents">${contents}</div>`;
                 },
                 printHeader = function () {
                     return printApplyFilterButton();
                 },
-                
+
                 buildTechniqueFilters = function () {
                     let filterDefinitions = new TechniqueFilterDefinitions("TechFilterPopup");
+                    let filterDisplay = new FilterDisplayBuilder(filterDefinitions);
+                    return `${filterDisplay.print()}`;
+                },
+
+                buildItemFilters = function () {
+                    let filterDefinitions = new EquipmentFilterDefinitions("Popup_FindItemsByFilter");
                     let filterDisplay = new FilterDisplayBuilder(filterDefinitions);
                     return `${filterDisplay.print()}`;
                 },

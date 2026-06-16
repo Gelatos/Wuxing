@@ -1672,7 +1672,9 @@ input[type=hidden].wuxInteractiveExpandingContent-flag[value="on"] + .wuxInterac
 .wuxPageDisplay-Notes,
 .wuxPageDisplay-NPC,
 .wuxPageDisplay-Location,
-.wuxPageDisplay-Chapter
+.wuxPageDisplay-Chapter,
+.wuxPageDisplay-FilterTechnique,
+.wuxPageDisplay-FilterItem
 {
     display: none;
 }
@@ -1708,7 +1710,9 @@ input[type=hidden].wuxPageDisplay-Flag[value="Gear"] ~ .wuxPageDisplay-Gear,
 input[type=hidden].wuxPageDisplay-Flag[value="Notes"] ~ .wuxPageDisplay-Notes,
 input[type=hidden].wuxPageDisplay-Flag[value="NPC"] ~ .wuxPageDisplay-NPC,
 input[type=hidden].wuxPageDisplay-Flag[value="Location"] ~ .wuxPageDisplay-Location,
-input[type=hidden].wuxPageDisplay-Flag[value="Chapter"] ~ .wuxPageDisplay-Chapter
+input[type=hidden].wuxPageDisplay-Flag[value="Chapter"] ~ .wuxPageDisplay-Chapter,
+input[type=hidden].wuxPageDisplay-Flag[value="Technique"] ~ .wuxPageDisplay-FilterTechnique,
+input[type=hidden].wuxPageDisplay-Flag[value="Item"] ~ .wuxPageDisplay-FilterItem
 {
     display: block;
 }
