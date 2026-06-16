@@ -449,7 +449,7 @@ class ExtendedTechniqueStyleDatabase extends Database {
 class ExtendedUsableItemDatabase extends Database {
 
     constructor(data, dataCreationCallback) {
-        let filters = ["group", "category", "bulk", "traits"];
+        let filters = ["group", "category", "bulk", "traits", "commonTechniques"];
         super(data, filters, dataCreationCallback);
     }
 

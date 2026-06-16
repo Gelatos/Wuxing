@@ -400,6 +400,28 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
 
         inspectSetGear = function (eventinfo, slotIndex, equipSlotFieldName) {
             seeSetItemTechniques(eventinfo, equipSlotFieldName, "Gear");
+        },
+
+        openFindItems = function (eventinfo) {
+            let equipmentTypes = WuxDef.Filter([new DatabaseFilterData("group", "EquipmentType")]);
+            let matchedDef;
+            for (let i = 0; i < equipmentTypes.length; i++) {
+                if (equipmentTypes[i].getVariable() === eventinfo.sourceAttribute) {
+                    matchedDef = equipmentTypes[i];
+                    break;
+                }
+            }
+            if (matchedDef == undefined) { return; }
+
+            let filters = [];
+            for (let i = 0; i < matchedDef.descriptions.length; i++) {
+                let parts = matchedDef.descriptions[i].split(":");
+                if (parts.length === 2) {
+                    filters.push(new DatabaseFilterData(parts[0], parts[1]));
+                }
+            }
+
+            WuxWorkerInspectPopup.OpenItemFilterInspection(filters, matchedDef.title, "Add Equipment");
         };
 
     return {
@@ -409,7 +431,8 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         DeleteGear: deleteGear,
         InspectGear: inspectGear,
         UnequipSetGear: unequipSetGear,
-        InspectSetGear: inspectSetGear
+        InspectSetGear: inspectSetGear,
+        OpenFindItems: openFindItems
     };
 }());
 

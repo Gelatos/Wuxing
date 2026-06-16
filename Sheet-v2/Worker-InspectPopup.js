@@ -357,26 +357,31 @@ class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
             return;
         }
 
-        // Show item stats and its embedded technique (written to the default/no-suffix slot)
+        // Show item stats (name/group/traits).
         this.itemDataAttributeHandler.setItemInfo(item);
 
-        // Show common Gear techniques in slots 1-3: each base technique followed by its
-        // variants (using the technique name as the style filter), identical to the
-        // technique inspection pattern.
+        // Build the ordered list of techniques to show: the item's embedded
+        // technique first (when present), followed by each common Gear technique
+        // and its variants (using the technique name as the style filter).
+        // The whole technique panel is gated on slot 0's visibility, so the first
+        // available technique must occupy slot 0 or nothing renders.
+        let techniques = [];
+        if (item.itemType == "UsableItem" && item.hasTechnique) {
+            techniques.push(item.technique);
+        }
         let commonTechniques = item.getCommonTechniques ? item.getCommonTechniques() : [];
-        let allCommonTechniques = [];
         for (let technique of commonTechniques) {
-            allCommonTechniques.push(technique);
+            techniques.push(technique);
             let variants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
             for (let variant of variants) {
-                allCommonTechniques.push(variant);
+                techniques.push(variant);
             }
         }
-        for (let i = 0; i < 3; i++) {
-            let index = i + 1;
-            if (i < allCommonTechniques.length) {
-                let t = allCommonTechniques[i];
-                this.techniqueAttributeHandler.setBaseSuffix(index);
+
+        for (let slot = 0; slot <= 3; slot++) {
+            if (slot < techniques.length) {
+                let t = techniques[slot];
+                this.techniqueAttributeHandler.setBaseSuffix(slot);
                 this.techniqueAttributeHandler.setTechniqueInfo(t);
                 this.techniqueAttributeHandler.setVisibilityAttribute(true);
                 this.attrHandler.addRepeatingSectionRowUpdate(
@@ -385,7 +390,7 @@ class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
                     getTechHeader(t.affinity)
                 );
             } else {
-                this.hideTechnique(index);
+                this.hideTechnique(slot);
             }
         }
     }

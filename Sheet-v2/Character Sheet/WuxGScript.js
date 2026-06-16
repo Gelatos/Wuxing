@@ -449,7 +449,7 @@ class ExtendedTechniqueStyleDatabase extends Database {
 class ExtendedUsableItemDatabase extends Database {
 
     constructor(data, dataCreationCallback) {
-        let filters = ["group", "category", "bulk", "traits"];
+        let filters = ["group", "category", "bulk", "traits", "commonTechniques"];
         super(data, filters, dataCreationCallback);
     }
 
@@ -6392,6 +6392,33 @@ class TechniqueFilterDefinitions extends BaseFilteredDefinitions{
     }
 }
 
+class EquipmentFilterDefinitions extends BaseFilteredDefinitions{
+    constructor(baseDefinitionName) {
+        super(baseDefinitionName);
+    }
+
+    initializeDatabase() {
+        this.definitionDatabase = {};
+        let baseGroupFilters = WuxDef.Filter([
+            new DatabaseFilterData("group", "EquipmentFilterType"),
+            new DatabaseFilterData("subGroup", "BaseGroup")]);
+        for (let i = 0; i < baseGroupFilters.length; i++) {
+            this.definitionDatabase[baseGroupFilters[i].name] = WuxDef.Filter([
+                new DatabaseFilterData("group", "EquipmentFilterType"),
+                new DatabaseFilterData("subGroup", baseGroupFilters[i].getTitle())]);
+        }
+        this.definitionDatabase["FilterType_WeaponKeywords"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Trait"),
+            new DatabaseFilterData("subGroup", ["Martial Trait", "Aim Trait"])
+        ]);
+        this.definitionDatabase["FilterType_ToolKeywords"] = WuxDef.Filter([
+            new DatabaseFilterData("group", "Trait"),
+            new DatabaseFilterData("subGroup", "Tool Trait")
+        ]);
+
+    }
+}
+
 // noinspection JSUnusedGlobalSymbols,HtmlUnknownAttribute,ES6ConvertVarToLetConst,JSUnresolvedReference,SpellCheckingInspection
 // noinspection ES6ConvertVarToLetConst
 
@@ -11566,15 +11593,16 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 },
 
                 addEquipmentFilterButtons = function () {
-                    let findByTypeDef = WuxDef.Get("Popup_FindItemsByType");
+                    let equipmentTypes = WuxDef.Filter([new DatabaseFilterData("group", "EquipmentType")]);
                     let findByFilterDef = WuxDef.Get("Popup_FindItemsByFilter");
                     let findByTechniqueDef = WuxDef.Get("Popup_FindItemsByTechnique");
-                    let items = [
-                        WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(findByTypeDef.getAttribute(), findByTypeDef.getTitle(), "wuxWidth120")),
-                        WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(findByFilterDef.getAttribute(), findByFilterDef.getTitle(), "wuxWidth120")),
-                        WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(findByTechniqueDef.getAttribute(), findByTechniqueDef.getTitle(), "wuxWidth120"))
-                    ];
-                    return `${WuxSheetMain.Header(WuxDef.GetTitle("Page_AddItem"))}
+                    let items = [];
+                    for (let i = 0; i < equipmentTypes.length; i++) {
+                        items.push(WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(equipmentTypes[i].getAttribute(), equipmentTypes[i].getTitle(), "wuxWidth120")));
+                    }
+                    items.push(WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(findByFilterDef.getAttribute(), findByFilterDef.getTitle(), "wuxWidth120")));
+                    items.push(WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(findByTechniqueDef.getAttribute(), findByTechniqueDef.getTitle(), "wuxWidth120")));
+                    return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddEquipment"))}
                         ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 3)}`;
                 },
 
@@ -12760,11 +12788,11 @@ var GearBuilder = GearBuilder || (function () {
             return output;
         },
         listenerFindItemsButtons = function () {
-            return WuxSheetBackend.OnChange(
-                [WuxDef.GetVariable("Popup_FindItemsByType"),
-                    WuxDef.GetVariable("Popup_FindItemsByFilter"),
-                    WuxDef.GetVariable("Popup_FindItemsByTechnique")],
-                `WuxWorkerGear.OpenFindItems(eventinfo)`, true);
+            let equipmentTypes = WuxDef.Filter([new DatabaseFilterData("group", "EquipmentType")]);
+            let variables = equipmentTypes.map(def => def.getVariable());
+            variables.push(WuxDef.GetVariable("Popup_FindItemsByFilter"));
+            variables.push(WuxDef.GetVariable("Popup_FindItemsByTechnique"));
+            return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindItems(eventinfo)`, true);
         },
         listenerEquipRepeatingEquipment = function () {
             return `${WuxSheetBackend.OnChange(
