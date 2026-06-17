@@ -21,7 +21,7 @@ class CharacterBackgroundBuilder {
     backgroundBasics() {
         let sheetNameField = `${WuxSheet.MainPageDisplayInput()}
                 ${WuxSheet.PageDisplay("OriginData", WuxDefinition.BuildTextInput(WuxDef.Get("CharSheetName"), WuxDef.GetAttribute("CharSheetName")))}
-                ${WuxSheet.PageDisplay("CoreData", WuxDefinition.BuildTextInput(WuxDef.Get("SheetName"), WuxDef.GetAttribute("SheetName")))}`;
+                ${WuxSheet.PageDisplay("CharacterData", WuxDefinition.BuildTextInput(WuxDef.Get("SheetName"), WuxDef.GetAttribute("SheetName")))}`;
         let nameFields = WuxSheetMain.MultiRowGroup([
                 WuxSheetMain.Table.FlexTableGroup(sheetNameField),
                 WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName")), " wuxFlexTableItemGroup2")],
@@ -43,10 +43,14 @@ class CharacterBackgroundBuilder {
         let quickDescriptionField = WuxDefinition.BuildTextarea(WuxDef.Get("QuickDescription"), WuxDef.GetAttribute("QuickDescription"),
             "wuxInput wuxHeight30");
         
+        let startingJinField = `${WuxSheet.MainPageDisplayInput()}
+                ${WuxSheet.PageDisplay("OriginData", WuxDefinition.BuildTextInput(WuxDef.Get("Title_StartingJin"), WuxDef.GetAttribute("Jin")))}`;
+        
         return WuxSheetMain.Table.FlexTableGroup(`${nameFields}
         ${ancestryFields}
         ${affinityField}
-        ${quickDescriptionField}`);
+        ${quickDescriptionField}
+        ${startingJinField}`);
     }
 
     backgroundBackstory() {
