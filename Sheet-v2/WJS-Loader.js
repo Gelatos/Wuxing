@@ -3,6 +3,9 @@ var wuxCurrentVersion = "1.0.11";
 var upgrade_to_1_0_11 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.11");
 
+	attributeHandler.addRepeatingSection("RepeatingEquipment");
+	attributeHandler.addRepeatingSection("RepeatingConsumables");
+
 	let loreRepeaterIds = [
 		"RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
 		"RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
@@ -22,6 +25,9 @@ var upgrade_to_1_0_11 = function (currentVersion) {
 	}
 
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
+		attributeHandler.getRepeatingSection("RepeatingEquipment").removeAllIds();
+		attributeHandler.getRepeatingSection("RepeatingConsumables").removeAllIds();
+
 		let loreWorker = new WuxLoreWorkerBuild();
 		loreWorker.buildStats = new WorkerBuildStats();
 

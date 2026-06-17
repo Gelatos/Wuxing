@@ -583,25 +583,12 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 },
 
                 buildCurrency = function () {
-                    let contents = "";
-                    contents += WuxSheetMain.MultiRowGroup(currencyContent(), WuxSheetMain.Table.FlexTable, 3);
-
-                    contents = WuxSheetMain.TabBlock(contents);
+                    let jinDef = WuxDef.Get("Jin");
+                    let contents = WuxSheetMain.TabBlock(WuxDefinition.BuildHeader(jinDef) +
+                        WuxSheetMain.CustomInput("number", jinDef.getAttribute(), "wuxInput wuxMinWidth100"));
 
                     let definition = WuxDef.Get("Page_GearCurrency");
                     return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
-                },
-
-                currencyContent = function () {
-                    let output = [];
-                    let resourceDefs = WuxDef.Filter([new DatabaseFilterData("group", "Currency")]);
-
-                    for (let i = 0; i < resourceDefs.length; i++) {
-                        let contents = WuxDefinition.BuildHeader(resourceDefs[i]) +
-                            WuxSheetMain.CustomInput("number", resourceDefs[i].getAttribute(), "wuxInput wuxMinWidth100");
-                        output.push(WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150"));
-                    }
-                    return output;
                 },
 
                 buildEquipment = function () {
@@ -651,10 +638,10 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
                             <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
                         </div>
-                        <div class="wuxFloatRight">
-                            ${WuxSheetMain.Button(equipDef.getAttribute(), `&#9881; ${equipDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                        <div class="wuxEquippableButtonGroup">
+                            ${WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle()}`, "wuxRepeatingTechActionButton")}
                             ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
-                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `&#10008; ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
                         </div>`);
 
                     return WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents);
@@ -959,9 +946,9 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return `<div class="wuxMultiRow" style="min-width: 300px;">
                         ${tierOutput}
                         <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>
-                        <div class="wuxFloatRight">
+                        <div class="wuxEquippableButtonGroup">
                             ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
-                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `&#10008; ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
                         </div>
                     </div>`;
                 },

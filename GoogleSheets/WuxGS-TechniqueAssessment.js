@@ -554,6 +554,9 @@ class TechniqueAssessment {
             case "Cmb_MvDash":
                 output.value = Math.ceil(output.value * 2);
                 break;
+            case "ConsumableSlots":
+                output.value = Math.ceil(output.value * 2);
+                break;
         }
 
         this.addPointsRubric(output.value, message);

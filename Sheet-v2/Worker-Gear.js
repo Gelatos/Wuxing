@@ -362,35 +362,39 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         },
 
         inspectGear = function (eventinfo, repeatingSectionName) {
-            let EquipmentRepeater = new WorkerRepeatingSectionHandler(repeatingSectionName);
-            let selectedId = EquipmentRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
             let attributeHandler = new WorkerAttributeHandler();
-            
-            let itemType = "";
-            switch (repeatingSectionName) {
-                case "RepeatingEquipment":
-                    itemType = "Equipment";
-                    break;
-                case "RepeatingConsumables":
-                    itemType = "Consumable";
-                    break;
-                case "RepeatingGoods":
-                    itemType = "Goods";
-                    break;
-            }
-            
+            attributeHandler.addRepeatingSection(repeatingSectionName);
+            let repeater = attributeHandler.getRepeatingSection(repeatingSectionName);
+            let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let itemNameVar = getGearVariable("ItemName");
+            repeater.addFieldNames([itemNameVar]);
 
-            EquipmentRepeater.getIds(function (equipRepeater) {
-                equipRepeater.iterate(function (id) {
-                    attributeHandler.addMod(equipRepeater.getFieldName(id, getGearVariable("ItemName")));
-                });
-                WuxWorkerInspectPopup.OpenItemInspection(attributeHandler, function (attrHandler, itemPopupRepeater) {
-                        attrHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
-                        attrHandler.addUpdate(equipRepeater.getFieldName(selectedId, getGearVariable("ItemAction")), "0");
-                        return populateInspectionElements(attrHandler, itemPopupRepeater, equipRepeater, selectedId, itemType);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let inventoryItems = [];
+                let selectedItem = undefined;
+
+                repeater.iterate(function (id) {
+                    let itemName = attrHandler.parseString(repeater.getFieldName(id, itemNameVar));
+                    let item = WuxItems.Get(itemName);
+                    if (item == undefined || item.group === "") return;
+
+                    let inventoryItem = new InspectionInventoryItem(itemName, itemName, false);
+                    if (id === selectedId) {
+                        selectedItem = inventoryItem;
+                    } else {
+                        inventoryItems.push(inventoryItem);
                     }
-                );
+                });
+
+                if (selectedItem !== undefined) {
+                    inventoryItems.unshift(selectedItem);
+                }
+
+                let attributeHandler2 = new WorkerAttributeHandler();
+                WuxWorkerInspectPopup.OpenItemInspection(attributeHandler2, "Owned Equipment", inventoryItems);
+                attributeHandler2.run();
             });
+
             attributeHandler.run();
         },
 

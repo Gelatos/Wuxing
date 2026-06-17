@@ -466,6 +466,12 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     Equipables
 ========================================*/
 
+.wuxEquipableEntryRow
+{
+    display: block;
+    width: 100%;
+}
+
 .wuxEquipableSubMenu
 {
     position: relative;
@@ -493,6 +499,12 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
 {
     font-size: 9px;
     font-style: italic;
+}
+
+.wuxEquippableButtonGroup
+{
+    float: right;
+    height: 12px;
 }
 
 /*========================================

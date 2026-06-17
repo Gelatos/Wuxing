@@ -8687,6 +8687,9 @@ class TechniqueAssessment {
             case "Cmb_MvDash":
                 output.value = Math.ceil(output.value * 2);
                 break;
+            case "ConsumableSlots":
+                output.value = Math.ceil(output.value * 2);
+                break;
         }
 
         this.addPointsRubric(output.value, message);
@@ -11542,7 +11545,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
             var
                 print = function () {
                     let contents = "";
-                    contents += buildCurrency();
                     contents += buildEquipment();
                     return WuxSheetMain.Build(contents);
                 },
@@ -11616,10 +11618,10 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
                             <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
                         </div>
-                        <div class="wuxFloatRight">
-                            ${WuxSheetMain.Button(equipDef.getAttribute(), `&#9881; ${equipDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                        <div class="wuxEquippableButtonGroup">
+                            ${WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle()}`, "wuxRepeatingTechActionButton")}
                             ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
-                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `&#10008; ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
                         </div>`);
 
                     return WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents);
@@ -11924,9 +11926,9 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return `<div class="wuxMultiRow" style="min-width: 300px;">
                         ${tierOutput}
                         <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>
-                        <div class="wuxFloatRight">
+                        <div class="wuxEquippableButtonGroup">
                             ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
-                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `&#10008; ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
                         </div>
                     </div>`;
                 },
@@ -13689,9 +13691,9 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let deleteDef = WuxDef.Get("Forme_Delete");
                             let rowContents = `<div class="wuxMultiRow" style="min-width: 300px;">
                                 <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>
-                                <div class="wuxFloatRight">
+                                <div class="wuxEquippableButtonGroup">
                                     ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.Button(deleteDef.getAttribute(), `&#10008; ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                                    ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
                                 </div>
                             </div>`;
                             let repeaterSection = WuxSheetMain.Table.FlexTableGroup(
