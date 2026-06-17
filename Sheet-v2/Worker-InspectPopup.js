@@ -170,18 +170,27 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectId"), "");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), "");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType", "2"), "");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd", "2"), "0");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPurchaseAffordable"), "0");
     };
     setPopupType(popupType) {
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), popupType);
     }
-    setAddType(addType) {
-        if (addType == undefined) {
-            this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
-            this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), "");
-            return;
-        }
+    setAddType(addTypes) {
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), "");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd", "2"), "0");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType", "2"), "");
+
+        if (!Array.isArray(addTypes) || addTypes.length === 0) return;
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "on");
-        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), addType);
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), addTypes[0]);
+
+        if (addTypes.length > 1) {
+            this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd", "2"), "on");
+            this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType", "2"), addTypes[1]);
+        }
     }
 
     initializePopup(attrHandler) {}
@@ -355,6 +364,7 @@ class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
         for (let i = 0; i <= 3; i++) {
             this.hideTechnique(i);
         }
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPurchaseAffordable"), "0");
     }
 
     setSelectedItemData(selectedItemName) {
@@ -364,8 +374,14 @@ class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
             for (let i = 0; i <= 3; i++) {
                 this.hideTechnique(i);
             }
+            this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPurchaseAffordable"), "0");
             return;
         }
+
+        let cost = parseInt(item.value);
+        let jin = this.attrHandler.parseInt(WuxDef.GetVariable("Jin"));
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPurchaseAffordable"),
+            (!isNaN(cost) && jin >= cost) ? "on" : "0");
 
         // Show item stats (name/group/traits).
         this.itemDataAttributeHandler.setItemInfo(item);
@@ -411,6 +427,7 @@ class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
         for (let i = 0; i <= 3; i++) {
             this.hideTechnique(i);
         }
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPurchaseAffordable"), "0");
     }
 }
 
@@ -457,7 +474,7 @@ class InspectionPopup {
     addItem() {
         let inspectPopup = this;
         this.attributeHandler.addRepeatingSection(this.inspectPopupInventoryId);
-        
+
         let itemNameVar = WuxDef.GetVariable("Popup_ItemSelectName");
         let selectedIdVar = WuxDef.GetVariable("Popup_InspectSelectId");
         this.attributeHandler.getRepeatingSection(this.inspectPopupInventoryId).addFieldNames([itemNameVar]);
@@ -465,15 +482,36 @@ class InspectionPopup {
 
         this.attributeHandler.addGetAttrCallback(function (attrHandler) {
             inspectPopup.setup(attrHandler);
-            
+
             let repeater = inspectPopup.attributeHandler.getRepeatingSection(inspectPopup.inspectPopupInventoryId);
             let selectedItemId = attrHandler.parseString(selectedIdVar);
             let itemName = attrHandler.parseString(repeater.getFieldName(selectedItemId, itemNameVar));
             inspectPopup.performAddItem(attrHandler, itemName);
         });
     }
-    
+
     performAddItem(attrHandler, itemName) {}
+
+    addItem2() {
+        let inspectPopup = this;
+        this.attributeHandler.addRepeatingSection(this.inspectPopupInventoryId);
+
+        let itemNameVar = WuxDef.GetVariable("Popup_ItemSelectName");
+        let selectedIdVar = WuxDef.GetVariable("Popup_InspectSelectId");
+        this.attributeHandler.getRepeatingSection(this.inspectPopupInventoryId).addFieldNames([itemNameVar]);
+        this.attributeHandler.addMod(selectedIdVar);
+
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            inspectPopup.setup(attrHandler);
+
+            let repeater = inspectPopup.attributeHandler.getRepeatingSection(inspectPopup.inspectPopupInventoryId);
+            let selectedItemId = attrHandler.parseString(selectedIdVar);
+            let itemName = attrHandler.parseString(repeater.getFieldName(selectedItemId, itemNameVar));
+            inspectPopup.performAddItem2(attrHandler, itemName);
+        });
+    }
+
+    performAddItem2(attrHandler, itemName) {}
 }
 class PerkTechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
     constructor(attributeHandler) {
@@ -610,9 +648,25 @@ class ItemInspectionPopup extends InspectionPopup {
         this.inspectPopupAttrHandler = new ItemInspectPopupAttributeHandler(attrHandler);
     }
 
+    open(inventoryTitle, inventoryItems, addType) {
+        this.attributeHandler.addMod(WuxDef.GetVariable("Jin"));
+        super.open(inventoryTitle, inventoryItems, addType);
+    }
+
+    selectItem(selectedId) {
+        this.attributeHandler.addMod(WuxDef.GetVariable("Jin"));
+        super.selectItem(selectedId);
+    }
+
     addItem() {
         this.attributeHandler.addMod(WuxDef.GetVariable("Popup_InspectAddType"));
         super.addItem();
+    }
+
+    addItem2() {
+        this.attributeHandler.addMod(WuxDef.GetVariable("Popup_InspectAddType", "2"));
+        this.attributeHandler.addMod(WuxDef.GetVariable("Jin"));
+        super.addItem2();
     }
 
     performAddItem(attrHandler, itemName) {
@@ -634,6 +688,22 @@ class ItemInspectionPopup extends InspectionPopup {
                 let item = WuxGoods.Get(itemName);
                 if (item == undefined) break;
                 this.performAddSelectedInspectElementGoods(attrHandler, item);
+                break;
+            }
+        }
+    }
+
+    performAddItem2(attrHandler, itemName) {
+        Debug.Log(`Purchasing Inspect Element ${itemName}`);
+        switch (attrHandler.parseString(WuxDef.GetVariable("Popup_InspectAddType", "2"))) {
+            case "Purchase Equipment": {
+                let item = WuxItems.Get(itemName);
+                if (item == undefined) break;
+                this.performAddSelectedInspectElementEquipment(attrHandler, item);
+                let cost = parseInt(item.value);
+                if (isNaN(cost)) cost = 0;
+                let jinVar = WuxDef.GetVariable("Jin");
+                attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost).toString());
                 break;
             }
         }
@@ -790,6 +860,15 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 inspectPopup.close();
                 inspectPopup.attributeHandler.run();
             });
+        },
+
+        addSelectedInspectElement2 = function () {
+            Debug.Log("Add SelectedInspection 2");
+            getOpenInspectionPopup((inspectPopup) => {
+                inspectPopup.addItem2();
+                inspectPopup.close();
+                inspectPopup.attributeHandler.run();
+            });
         };
 
     const performItemFilterInspection = function (filters, title, addType) {
@@ -910,7 +989,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             });
 
             let attributeHandler2 = new WorkerAttributeHandler();
-            openTechniqueInspection(attributeHandler2, title, filteredItems, "Add Style");
+            openTechniqueInspection(attributeHandler2, title, filteredItems, ["Add Style"]);
             attributeHandler2.run();
         });
 
@@ -1116,7 +1195,8 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         OpenCustomStyleFilterInspection: openCustomStyleFilterInspection,
         SelectInspectionItemFromActiveGroup: selectInspectionItemFromActiveGroup,
         Close: close,
-        AddSelectedInspectElement: addSelectedInspectElement
+        AddSelectedInspectElement: addSelectedInspectElement,
+        AddSelectedInspectElement2: addSelectedInspectElement2
     };
 }());
 

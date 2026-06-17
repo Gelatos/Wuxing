@@ -1158,9 +1158,18 @@ var DisplayPopups = DisplayPopups || (function () {
                 },
 
                 printAddButton = function () {
-                    return WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd"),
-                        WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick"),
-                            `<span name="${WuxDef.GetAttribute("Popup_InspectAddType")}">Add</span>`));
+                    let addType2Attr = WuxDef.GetAttribute("Popup_InspectAddType", "2");
+                    let disabledPurchaseButton = `<div class="wuxButton wuxButtonDisabled"><span name="${addType2Attr}"></span></div>`;
+
+                    return  WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd", "2"),
+                            `<span class="wuxSubHeader">${WuxDef.GetTitle("Title_YourJin")}: <span name="${WuxDef.GetAttribute("Jin")}"></span></span>` +
+                            WuxSheetMain.HiddenFieldToggle(WuxDef.GetAttribute("Popup_InspectPurchaseAffordable"),
+                                WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick", "2"),
+                                    `<span name="${addType2Attr}"></span>`),
+                                disabledPurchaseButton)) +
+                        WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd"),
+                            WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick"),
+                                `<span name="${WuxDef.GetAttribute("Popup_InspectAddType")}">Add</span>`));
                 },
 
                 buildItemRepeater = function () {

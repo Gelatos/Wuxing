@@ -499,6 +499,12 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     text-transform: capitalize;
 }
 
+.wuxPopupHeader .wuxSubHeader
+{
+    flex: 1;
+    margin-right: 20px;
+}
+
 .wuxPopup .wuxButton
 {
     min-width: 20px;
@@ -515,6 +521,17 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
 {
     flex: 1;
     margin-right: 20px;
+}
+
+.wuxPopupHeader .wuxButton.wuxButtonDisabled {
+    background: #cccccc;
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.wuxPopupHeader .wuxButton.wuxButtonDisabled span {
+    color: #666666;
 }
 
 .wuxPopup .wuxButton.wuxPopupClose

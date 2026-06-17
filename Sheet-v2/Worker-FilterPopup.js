@@ -222,7 +222,7 @@ class ItemTechFilterPopup extends FilterPopup {
         });
 
         this.attributeHandler.addFinishCallback(function () {
-            WuxWorkerInspectPopup.OpenItemListInspection(capturedItems, WuxDef.GetTitle("Popup_CustomItemTechFilter"), "Add Equipment");
+            WuxWorkerInspectPopup.OpenItemListInspection(capturedItems, WuxDef.GetTitle("Popup_CustomItemTechFilter"), ["Add Equipment", "Purchase Equipment"]);
         });
 
         this.attributeHandler.run();
@@ -248,7 +248,7 @@ class ItemFilterPopup extends FilterPopup {
         });
 
         this.attributeHandler.addFinishCallback(function () {
-            WuxWorkerInspectPopup.OpenItemFilterInspection(capturedFilters, WuxDef.GetTitle("Popup_CustomItemsFilter"), "Add Equipment");
+            WuxWorkerInspectPopup.OpenItemFilterInspection(capturedFilters, WuxDef.GetTitle("Popup_CustomItemsFilter"), ["Add Equipment", "Purchase Equipment"]);
         });
 
         this.attributeHandler.run();

@@ -3,31 +3,31 @@
 ========================================*/
 
 textarea {
-    resize: vertical; 
+    resize: vertical;
 }
 
-select 
-{
+select {
     height: inherit;
     padding: 0px;
     margin: 0px;
 }
 
-input[type=number]
-{
+input[type=number] {
     -moz-appearance: textfield;
     appearance: textfield;
 }
 
 input[type=number]::-webkit-outer-spin-button,
-input[type=number]::-webkit-inner-spin-button
-{
+input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
 .ui-dialog-content.ui-widget-content > p > strong + input {
-    width: 100% !important; width: -moz-available !important; width: -webkit-fill-available !important; width: fill-available !important;
+    width: 100% !important;
+    width: -moz-available !important;
+    width: -webkit-fill-available !important;
+    width: fill-available !important;
 }
 
 
@@ -84,8 +84,7 @@ input[type=number]::-webkit-inner-spin-button
 }
 
 .repcontrol .repcontrol_edit:hover:after,
-.repcontrol .repcontrol_add:hover:before
-{
+.repcontrol .repcontrol_add:hover:before {
     background-color: #9e9e9e;
 }
 
@@ -94,8 +93,7 @@ input[type=number]::-webkit-inner-spin-button
 }
 
 .itemcontrol .repcontrol_del,
-.itemcontrol .repcontrol_move 
-{
+.itemcontrol .repcontrol_move {
     font-size: 9px;
     margin-top: 0px;
     padding: 0px;
@@ -104,20 +102,17 @@ input[type=number]::-webkit-inner-spin-button
 
 }
 
-.itemcontrol .repcontrol_del
-{
+.itemcontrol .repcontrol_del {
     background-color: red;
     color: white;
 }
 
-.wuxNoRepControl .repcontrol 
-{
+.wuxNoRepControl .repcontrol {
     display: none;
 }
 
 .wuxRepeatingFlexSection,
-.wuxRepeatingFlexSection .repcontainer
-{
+.wuxRepeatingFlexSection .repcontainer {
     width: 100%;
     display: flex;
     flex-flow: wrap row;
@@ -125,10 +120,9 @@ input[type=number]::-webkit-inner-spin-button
 }
 
 .wuxRepeatingFlexSection .repcontainer > .repitem,
-.wuxRepeatingItemsInline .repcontainer > .repitem 
-{
+.wuxRepeatingItemsInline .repcontainer > .repitem {
     display: inline-block;
-	flex: 1;
+    flex: 1;
 }
 
 
@@ -136,8 +130,7 @@ input[type=number]::-webkit-inner-spin-button
   Master Layout
 ========================================*/
 
-.wuxCharacterSheet
-{
+.wuxCharacterSheet {
     position: absolute;
     top: 20px;
     left: 0px;
@@ -147,23 +140,20 @@ input[type=number]::-webkit-inner-spin-button
     padding-bottom: 30px;
     margin: 0px;
 
-	background: #3A3D3E;
+    background: #3A3D3E;
     border: 0px black solid;
     border-radius: 10px;
 }
 
-.wuxHiddenFields
-{
+.wuxHiddenFields {
     display: none;
 }
 
-.wuxInnerHeader
-{
+.wuxInnerHeader {
     pointer-events: none;
 }
 
-.wumMainSheet 
-{
+.wumMainSheet {
     display: flex;
     /* flex-flow: row;
     align-content: flex-start; */
@@ -173,26 +163,22 @@ input[type=number]::-webkit-inner-spin-button
   Segments
 ========================================*/
 
-.wuxMainContent
-{
+.wuxMainContent {
     display: inline-block;
     flex: 5;
-    
+
     width: calc(100% - 90px);
 }
 
-input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxMainContent
-{
+input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxMainContent {
     width: calc(100% - 250px);
 }
 
-.wuxSegment
-{
-	position: relative;
+.wuxSegment {
+    position: relative;
 }
 
-input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment 
-{
+input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment {
     display: none;
 }
 
@@ -201,8 +187,7 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment
 ========================================*/
 
 .wuxStickyHeader,
-.wuxSheetHeader
-{
+.wuxSheetHeader {
     position: relative;
     width: 100%;
     flex-basis: 100%;
@@ -212,28 +197,24 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment
 
 .wuxLayoutItem,
 .wuxLargeLayoutItem,
-.wuxSmallLayoutItem
-{
+.wuxSmallLayoutItem {
     position: relative;
     display: inline-block;
     height: auto;
     vertical-align: top;
 }
 
-.wuxLayoutItem
-{
+.wuxLayoutItem {
     min-width: 245px;
     flex: 2;
 }
 
-.wuxLargeLayoutItem
-{
+.wuxLargeLayoutItem {
     min-width: 220px;
     flex: 4;
 }
 
-.wuxSmallLayoutItem
-{
+.wuxSmallLayoutItem {
     min-width: 120px;
     flex: 1;
 }
@@ -243,8 +224,7 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment
 ========================================*/
 
 .wuxFloatHeader,
-.wuxFloatSidebar
-{
+.wuxFloatSidebar {
     position: sticky;
     left: 0;
     padding-bottom: 5px;
@@ -252,16 +232,14 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment
     background: linear-gradient(to bottom, #3A3D3EFF 85%, #3A3D3E00 100%);
 }
 
-.wuxFloatHeader
-{
+.wuxFloatHeader {
     width: 100%;
     flex-basis: 100%;
     top: 0;
     z-index: 9999;
 }
 
-.wuxFloatSidebar
-{
+.wuxFloatSidebar {
     float: left;
     flex: 1;
     top: 80px;
@@ -270,19 +248,19 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment
     height: calc(100vh - 100px);
     max-height: calc(100vh - 100px);
     margin-right: 10px;
-	padding: 0px;
+    padding: 0px;
 
-	background: #1d1e1f;
+    background: #1d1e1f;
     background-image: linear-gradient(to bottom, #222425 0%, #3A3D3E 30%, #222425 100%);
     border-radius: 0px 10px 0px 0px;
     /* border-style: solid; */
     /* border-width: 0px 3px 3px 0px;
     border-radius: 0px 0px 5px 0px; */
-    
+
     z-index: 9998;
     overflow-x: hidden;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 }
 
 .wuxFloatSidebarHeader {
@@ -302,14 +280,13 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment
     vertical-align: bottom;
     text-transform: capitalize;
 
-	background: #1d1e1f;
+    background: #1d1e1f;
     border-bottom: 3px solid;
     border-color: transparent transparent #71B9DE transparent;
     border-radius: 0px 10px 0px 0px;
 }
 
-.wuxFloatSidebarContents
-{
+.wuxFloatSidebarContents {
     position: relative;
     left: 0px;
     display: inherit;
@@ -318,21 +295,19 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment
     min-height: 100%;
     padding: 5px;
 
-	/* background: #1d1e1f;
+    /* background: #1d1e1f;
     background-image: linear-gradient(to bottom, #3A3D3E 0%, #1d1e1f 30%, #3A3D3E 100%);
     border-style: solid;
     border-width: 0px 3px 3px 0px;
     border-radius: 0px 0px 5px 0px; */
 }
 
-input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar
-{
+input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar {
     width: 240px;
 }
 
-.wuxSideBarExtend
-{
-    opacity: 0;    
+.wuxSideBarExtend {
+    opacity: 0;
     position: absolute;
     top: 0px;
     right: -3px;
@@ -343,29 +318,23 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar
 }
 
 
-.wuxSideBarExtend:hover + .wuxFloatSidebarHeader
-{
+.wuxSideBarExtend:hover + .wuxFloatSidebarHeader {
     background: #deaf72;
 }
 
-.wuxFloatSidebar::-webkit-scrollbar 
-{
+.wuxFloatSidebar::-webkit-scrollbar {
     display: none;
 }
 
-.wuxFloatSidebar .wuxSubheader
-{
+.wuxFloatSidebar .wuxSubheader {
     font-size: 9px;
 }
 
 .wuxSideBarTitle
-
-/*========================================
-  Tabs
-========================================*/
-
-.wuxTab
-{
+    /*========================================
+      Tabs
+    ========================================*/
+.wuxTab {
     position: relative;
     width: 100%;
 
@@ -374,8 +343,7 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar
     align-content: flex-start;
 }
 
-.wuxTabHeader
-{
+.wuxTabHeader {
     position: relative;
     display: inline-block;
     margin-bottom: 15px;
@@ -392,15 +360,14 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar
     vertical-align: bottom;
     text-transform: capitalize;
 
-	background: #1d1e1f;
+    background: #1d1e1f;
     border-bottom: 3px solid;
     border-color: transparent transparent #71B9DE transparent;
     border-radius: 10px 10px 0px 0px;
 }
 
-.wuxTab-flag
-{
-    opacity: 0;    
+.wuxTab-flag {
+    opacity: 0;
     position: absolute;
     top: 0px;
     right: -3px;
@@ -411,13 +378,11 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar
 }
 
 
-.wuxTab-flag:hover + .wuxTabHeader
-{
+.wuxTab-flag:hover + .wuxTabHeader {
     background: #deaf72;
 }
 
-.wuxTab-flag:not(:checked) ~ .wuxTab
-{
+.wuxTab-flag:not(:checked) ~ .wuxTab {
     display: none;
 }
 
@@ -425,47 +390,41 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar
   Tab Buttons
 ========================================*/
 
-.wuxTabButtonRow
-{
+.wuxTabButtonRow {
     display: flex;
     flex-flow: nowrap row-reverse;
     align-content: flex-start;
-    
+
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: thin;
 }
 
-.wuxTabButtonRow::-webkit-scrollbar 
-{
+.wuxTabButtonRow::-webkit-scrollbar {
     display: none;
 }
 
 .wuxTabButton,
-.wuxTabOptionButton
-{
+.wuxTabOptionButton {
     position: relative;
     min-height: 20px;
     min-width: 90px;
 }
 
-.wuxTabButton
-{
+.wuxTabButton {
     flex: 2;
 }
 
-.wuxTabButtonSelected
-{
+.wuxTabButtonSelected {
     flex: 3;
 }
 
 .wuxTabButton input[type=radio],
-.wuxTabButton input[type=checkbox] 
-{
+.wuxTabButton input[type=checkbox] {
     position: absolute;
     top: 0px;
-	left: 0px;
-	right: 0px;
+    left: 0px;
+    right: 0px;
     min-height: 20px;
     min-width: 60px;
 
@@ -474,8 +433,7 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar
     opacity: 0;
 }
 
-.wuxTabButton span 
-{
+.wuxTabButton span {
     display: block;
     width: 100%;
     height: 100%;
@@ -492,30 +450,26 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar
 }
 
 .wuxTabButton input[type=radio]:checked + span,
-.wuxTabButton input[type=checkbox]:checked + span
-{
+.wuxTabButton input[type=checkbox]:checked + span {
     color: #FFFFFF;
-	background: #512800;
+    background: #512800;
 }
 
 .wuxTabButton input[type=radio]:hover + span,
-.wuxTabButton input[type=checkbox]:hover + span
-{
+.wuxTabButton input[type=checkbox]:hover + span {
     color: #FFFFFF;
     background: #86530f;
     background: linear-gradient(to right, #86530f, #815822, #6e420a);
 }
 
-.wuxTabButtonSelected span
-{
+.wuxTabButtonSelected span {
     color: #FFFFFF;
     font-size: 14px;
 
-	background: #512800;
+    background: #512800;
 }
 
-.wuxTabOptionButton
-{
+.wuxTabOptionButton {
     flex: 1;
 
     text-align: center;
@@ -529,15 +483,14 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar
     border-radius: 5px;
 }
 
-.wuxTabOptionButton input[type=checkbox]
-{
+.wuxTabOptionButton input[type=checkbox] {
     position: absolute;
     display: block;
-    opacity: 0;    
+    opacity: 0;
     left: 0px;
-	right: 0px;
-	top: 0px;
-	bottom: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
     z-index: 100;
 }
 
@@ -545,12 +498,11 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar
   Sections
 ========================================*/
 
-.wuxSheetHeader
-{
+.wuxSheetHeader {
     margin-bottom: 5px;
 }
-.wuxSheetHeader span
-{
+
+.wuxSheetHeader span {
     display: inline-block;
     width: 240px;
 
@@ -567,16 +519,14 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar
     border-image: linear-gradient(to right, #ffffffff 0%, #ffffff00 70%) 1;
 }
 
-.wuxSectionBlock
-{
+.wuxSectionBlock {
     position: relative;
     width: 100%;
     margin-bottom: 10px;
 }
 
 .wuxSectionHeader,
-.wuxStyleSectionHeader
-{
+.wuxStyleSectionHeader {
     position: relative;
     display: inline-block;
     min-width: 100px;
@@ -593,11 +543,10 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar
     text-transform: capitalize;
 }
 
-.wuxSectionHeader
-{
+.wuxSectionHeader {
     max-width: 210px;
 
-	background: #512800;
+    background: #512800;
     background: linear-gradient(320deg, #512800 0%, #4b1e00 20%, #512800 50%, #4b1e00 80%, #512800 100%);
     border-style: solid;
     border-width: 3px;
@@ -605,38 +554,33 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar
     border-color: #000 #000 transparent #000;
 }
 
-.wuxStyleSectionHeader
-{
+.wuxStyleSectionHeader {
     font-size: 15px;
 }
 
-input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
-{
+input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader {
     color: #1d1e1f;
     background: #f4f6f8;
 }
 
-.wuxSectionContent-flag:hover + .wuxSectionHeader
-{
+.wuxSectionContent-flag:hover + .wuxSectionHeader {
     background: #86530f;
     background: linear-gradient(to right, #86530f, #815822, #6e420a);
 }
 
-.wuxSectionHeaderFooter
-{
+.wuxSectionHeaderFooter {
     position: relative;
     display: block;
     width: calc(100% - 5px);
-	height: 0px;
-	margin-bottom: 3px;
+    height: 0px;
+    margin-bottom: 3px;
 
-	border-bottom: 3px solid #a6a6a6;
+    border-bottom: 3px solid #a6a6a6;
 }
 
 .wuxSectionContent,
 .wuxSectionContentCollapsed,
-.wuxTabContent
-{
+.wuxTabContent {
     position: relative;
     left: 0px;
     display: inherit;
@@ -644,7 +588,7 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
     width: calc(100% - 18px);
     padding: 5px;
 
-	background: #1d1e1f;
+    background: #1d1e1f;
     background-image: linear-gradient(to bottom, #3A3D3E 0%, #1d1e1f 30%, #3A3D3E 100%);
     border-style: solid;
     border-width: 0px 3px 3px 0px;
@@ -652,41 +596,35 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 }
 
 .wuxSectionContent,
-.wuxSectionContentCollapsed
-{
+.wuxSectionContentCollapsed {
     top: -3px;
 
     border-color: #a6a6a6 #a6a6a6 #a6a6a6 transparent;
     border-image: linear-gradient(to right, #a6a6a600 0%, #a6a6a600 35%, #a6a6a6FF 40%) 1;
 }
 
-.wuxTabContent
-{
+.wuxTabContent {
     top: -16px;
 
     border-color: #71B9DE #71B9DE #71B9DE transparent;
     border-image: linear-gradient(to right, #a6a6a600 0%, #a6a6a600 20%, #71B9DE 25%) 1;
 }
 
-.wuxSectionContentCollapsed
-{
+.wuxSectionContentCollapsed {
     line-height: 15px;
     border-width: 0px 3px 0px 0px;
 }
 
 .wuxLargeLayoutItem .wuxSectionContent,
-.wuxLargeLayoutItem .wuxSectionContentCollapsed
-{
+.wuxLargeLayoutItem .wuxSectionContentCollapsed {
     border-image: linear-gradient(to right, #a6a6a600 0%, #a6a6a600 40%, #a6a6a6FF 45%) 1;
 }
 
-.wuxLargeLayoutItem .wuxTabContent
-{
+.wuxLargeLayoutItem .wuxTabContent {
     border-image: linear-gradient(to right, #a6a6a600 0%, #a6a6a600 40%, #71B9DE 45%) 1;
 }
 
-.wuxSectionContentSet 
-{
+.wuxSectionContentSet {
     position: relative;
     width: 100%;
 }
@@ -696,8 +634,7 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 ========================================*/
 
 .wuxSectionBlock .wuxFieldSet,
-.wuxSectionBlock .wuxSubSection
-{
+.wuxSectionBlock .wuxSubSection {
     position: relative;
     display: block;
     height: auto;
@@ -705,8 +642,7 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
     margin: 0px;
 }
 
-.wuxSectionBlock .wuxSubSection
-{
+.wuxSectionBlock .wuxSubSection {
     margin-left: 10px;
 }
 
@@ -716,8 +652,7 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 .wuxSectionBlock .wuxMultiRow,
 .wuxSectionBlock .wuxSpacerRow,
 .wuxSectionBlock .wuxActionRow,
-.wuxSectionBlock .wuxMultiActionRow
-{
+.wuxSectionBlock .wuxMultiActionRow {
     position: relative;
     display: block;
     padding: 2px 0px;
@@ -729,37 +664,31 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 }
 
 .wuxSectionBlock .wuxRow,
-.wuxSectionBlock .wuxActionRow
-{
+.wuxSectionBlock .wuxActionRow {
     height: auto;
 }
 
-.wuxSectionBlock .wuxTabRow
-{
+.wuxSectionBlock .wuxTabRow {
     height: 14px;
 }
 
-.wuxSectionBlock .wuxSpacerRow
-{
+.wuxSectionBlock .wuxSpacerRow {
     height: 0;
     font-size: 0;
 }
 
-.wuxSectionBlock .wuxFormRow
-{
+.wuxSectionBlock .wuxFormRow {
     display: inline-block;
     width: 114px;
     vertical-align: top;
 }
 
-.wuxSectionBlock .wuxFormRow.wuxSizeLarge
-{
+.wuxSectionBlock .wuxFormRow.wuxSizeLarge {
     width: 240px;
 }
 
 .wuxSectionBlock .wuxActionRow input[type="checkbox"],
-.wuxSectionBlock .wuxMultiActionRow input[type="checkbox"]
-{
+.wuxSectionBlock .wuxMultiActionRow input[type="checkbox"] {
     display: inline-block;
     width: 12px;
     height: 12px;
@@ -775,14 +704,12 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 }
 
 .wuxSectionBlock .wuxActionRow button,
-.wuxSectionBlock .wuxMultiActionRow button
-{
+.wuxSectionBlock .wuxMultiActionRow button {
     border: none;
     font-size: 12px;
 }
 
-.wuxSectionBlock .wuxSubCategory
-{
+.wuxSectionBlock .wuxSubCategory {
     position: relative;
     display: block;
     height: auto;
@@ -797,8 +724,7 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
     border-image: linear-gradient(to right, #ffffffff 0%, #ffffff00 40%) 1;
 }
 
-.wuxSectionBlock .wuxInteractiveBlock .wuxHeader
-{
+.wuxSectionBlock .wuxInteractiveBlock .wuxHeader {
     color: #71B9DE;
 }
 
@@ -812,8 +738,7 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 .sheet-rolltemplate-ctthk .sheet-wuxInlineRow,
 .sheet-rolltemplate-ctdesc .sheet-wuxInlineRow,
 .sheet-rolltemplate-ctinteract .sheet-wuxInlineRow,
-.sheet-rolltemplate-ctintro .sheet-wuxInlineRow
-{
+.sheet-rolltemplate-ctintro .sheet-wuxInlineRow {
     white-space: nowrap;
 }
 
@@ -822,54 +747,47 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 ========================================*/
 
 .wuxHeader,
-.sheet-rolltemplate-systemInfoBox .sheet-wuxHeader
-{
+.sheet-rolltemplate-systemInfoBox .sheet-wuxHeader {
     position: relative;
     display: inline-block;
     width: 100%;
-	padding-top: 5px;
-    
+    padding-top: 5px;
+
     color: #DE9B72;
     font-size: 14px;
     font-weight: bold;
 }
 
-.wuxSectionBlock .wuxHeader
-{
+.wuxSectionBlock .wuxHeader {
     border-bottom: 2px solid #DE9B72;
     border-image: linear-gradient(to right, #DE9B72ff 0%, #DE9B72ff 50%, #DE9B7200 100%) 1;
 }
 
 .wuxHeader2,
-.wuxData
-{
+.wuxData {
     position: relative;
     display: inline-block;
-    
+
     color: #d0d0d0;
     font-size: 12px;
     font-weight: bold;
 }
 
-.wuxHeader2
-{
-	padding-top: 5px;
+.wuxHeader2 {
+    padding-top: 5px;
     width: 100%;
 }
 
-.wuxData
-{
+.wuxData {
     width: auto;
 }
 
-.wuxSectionBlock .wuxHeader2
-{
+.wuxSectionBlock .wuxHeader2 {
     border-bottom: 1px solid #d0d0d0;
     border-image: linear-gradient(to right, #A0A0A0 0%, #A0A0A0 50%, #A0A0A0 100%) 1;
 }
 
-.wuxSubheader
-{
+.wuxSubheader {
     display: inline;
     margin-top: -3px;
     vertical-align: bottom;
@@ -880,8 +798,7 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 }
 
 .wuxDescription,
-.sheet-rolltemplate-technique .sheet-wuxDescription
-{
+.sheet-rolltemplate-technique .sheet-wuxDescription {
     position: relative;
     color: #f4f6f8;
     font-size: 12px;
@@ -891,23 +808,20 @@ input[type=checkbox].wuxSectionContent-flag:not(:checked) + .wuxSectionHeader
 }
 
 span.wuxDescription,
-.wuxDescription p
-{
-	display: inline-block;
+.wuxDescription p {
+    display: inline-block;
     white-space: pre-line;
     text-align: left;
 }
 
-div.wuxDescription .wuxTitle
-{
+div.wuxDescription .wuxTitle {
     display: inline-block;
     width: 40px;
 
     font-weight: bold;
 }
 
-.wuxInput
-{
+.wuxInput {
     display: inline-block;
     width: 95%;
     height: auto;
@@ -917,19 +831,17 @@ div.wuxDescription .wuxTitle
 
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-	background: #cacbcf;
+    background: #cacbcf;
 }
 
-textarea.wuxInput
-{
+textarea.wuxInput {
     width: 92%;
     /*margin: 0px -4px 0px 0px;*/
     /*padding: 3px 4px 3px 5px;*/
     vertical-align: bottom;
 }
 
-.wuxInputLabel
-{
+.wuxInputLabel {
     display: inline-block;
     height: auto;
     margin: 0px 5px;
@@ -939,7 +851,7 @@ textarea.wuxInput
     color: #1d1e1f;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-	background: #9e9fa1;
+    background: #9e9fa1;
 }
 
 /*========================================
@@ -949,24 +861,22 @@ textarea.wuxInput
 .wuxButton,
 .wuxSmallButton,
 .wuxPictosButton,
-.wuxPostButton
-{
+.wuxPostButton {
     position: relative;
     display: inline-block;
     height: 26px;
     width: auto;
     min-width: 36px;
     margin-right: 3px;
-    
+
     align-content: center;
 }
 
 .wuxButton,
 .wuxSmallButton,
-.wuxPostButton
-{
+.wuxPostButton {
 
-    background: linear-gradient(to bottom, 
+    background: linear-gradient(to bottom,
     #f4f6f8 0%,
     #e1e2e4 80%);
     text-shadow: none;
@@ -974,32 +884,28 @@ textarea.wuxInput
     border: 1px solid black;
 }
 
-.wuxPictosButton
-{
+.wuxPictosButton {
     background: none;
     font-family: pictos, serif;
 }
 
 button[type=roll].wuxButton,
-button[type=roll].wuxSmallButton 
-{
+button[type=roll].wuxSmallButton {
     left: 5px;
     height: 22px;
 }
 
 div.wuxButton,
 div.wuxSmallButton,
-div.wuxPostButton
-{
+div.wuxPostButton {
     top: 1px;
 }
 
 .wuxButton:hover,
 .wuxSmallButton:hover,
 button[type=roll].wuxButton:hover,
-button[type=roll].wuxSmallButton:hover
-{
-    background: linear-gradient(to bottom, 
+button[type=roll].wuxSmallButton:hover {
+    background: linear-gradient(to bottom,
     #f4f6f8 0%,
     #cacbcf 70%,
     #a8aaac 100%);
@@ -1009,8 +915,7 @@ button[type=roll].wuxSmallButton:hover
 .wuxButton input[type=checkbox],
 .wuxSmallButton input[type=checkbox],
 .wuxPictosButton input[type=checkbox],
-.wuxPostButton input[type=checkbox]
-{
+.wuxPostButton input[type=checkbox] {
     position: absolute;
     display: block;
     opacity: 0;
@@ -1027,15 +932,14 @@ button[type=roll].wuxPictosButton span,
 button[type=roll].wuxPostButton span,
 div.wuxButton span,
 div.wuxSmallButton span,
-div.wuxPostButton span
-{
+div.wuxPostButton span {
     display: block;
     pointer-events: none;
     padding: 0 10px;
-    
+
     text-align: center;
     line-height: 11px;
-    
+
     color: #1d1e1f;
     font-size: 10px;
     font-weight: normal;
@@ -1044,8 +948,7 @@ div.wuxPostButton span
 button[type=roll].wuxButton span,
 button[type=roll].wuxSmallButton span,
 button[type=roll].wuxPictosButton span,
-button[type=roll].wuxPostButton span
-{
+button[type=roll].wuxPostButton span {
     position: relative;
     top: 1px;
     display: block;
@@ -1060,38 +963,46 @@ button[type=roll].wuxPictosButton span span,
 button[type=roll].wuxPostButton span span,
 .wuxButton span span,
 .wuxSmallButton span span,
-.wuxPostButton span span
-{
+.wuxPostButton span span {
     display: inline;
     width: auto;
 }
 
+.wuxButton.wuxButtonDisabled {
+    background: #cccccc;
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.wuxButton.wuxButtonDisabled span {
+    color: #666666;
+}
+
 div.wuxPostButton,
-button[type=roll].wuxPostButton
-{
+button[type=roll].wuxPostButton {
     height: 17px;
     margin: 0 5px 0 0;
     width: calc(100% - 10px);
 
     text-shadow: none;
-    
+
     background-image: linear-gradient(to bottom, #512800 0%, #4b1e00 50%);
     border-width: 0;
     border-radius: 5px;
 }
+
 button[type=roll].wuxPostButton {
     height: 14px;
 }
 
 div.wuxPostButton:hover,
-button[type=roll].wuxPostButton:hover
-{
+button[type=roll].wuxPostButton:hover {
     background-image: linear-gradient(to bottom, #764200 0%, #764200 70%);
 }
 
 div.wuxPostButton span,
-button.wuxPostButton[type=roll] span
-{
+button.wuxPostButton[type=roll] span {
     position: relative;
     left: -6px;
     display: inline-block;
@@ -1108,8 +1019,7 @@ button.wuxPostButton[type=roll] span
 
 button[type=roll].wuxButton::before,
 button[type=roll].wuxSmallButton::before,
-button.wuxPostButton[type=roll]::before
-{
+button.wuxPostButton[type=roll]::before {
     content: "" !important;
 }
 
@@ -7151,6 +7061,12 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     text-transform: capitalize;
 }
 
+.wuxPopupHeader .wuxSubHeader
+{
+    flex: 1;
+    margin-right: 20px;
+}
+
 .wuxPopup .wuxButton
 {
     min-width: 20px;
@@ -7167,6 +7083,17 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
 {
     flex: 1;
     margin-right: 20px;
+}
+
+.wuxPopupHeader .wuxButton.wuxButtonDisabled {
+    background: #cccccc;
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.wuxPopupHeader .wuxButton.wuxButtonDisabled span {
+    color: #666666;
 }
 
 .wuxPopup .wuxButton.wuxPopupClose

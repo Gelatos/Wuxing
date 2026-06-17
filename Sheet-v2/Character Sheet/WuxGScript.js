@@ -12126,9 +12126,18 @@ var DisplayPopups = DisplayPopups || (function () {
                 },
 
                 printAddButton = function () {
-                    return WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd"),
-                        WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick"),
-                            `<span name="${WuxDef.GetAttribute("Popup_InspectAddType")}">Add</span>`));
+                    let addType2Attr = WuxDef.GetAttribute("Popup_InspectAddType", "2");
+                    let disabledPurchaseButton = `<div class="wuxButton wuxButtonDisabled"><span name="${addType2Attr}"></span></div>`;
+
+                    return  WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd", "2"),
+                            `<span class="wuxSubHeader">${WuxDef.GetTitle("Title_YourJin")}: <span name="${WuxDef.GetAttribute("Jin")}"></span></span>` +
+                            WuxSheetMain.HiddenFieldToggle(WuxDef.GetAttribute("Popup_InspectPurchaseAffordable"),
+                                WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick", "2"),
+                                    `<span name="${addType2Attr}"></span>`),
+                                disabledPurchaseButton)) +
+                        WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd"),
+                            WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick"),
+                                `<span name="${WuxDef.GetAttribute("Popup_InspectAddType")}">Add</span>`));
                 },
 
                 buildItemRepeater = function () {
@@ -12720,7 +12729,6 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerEquipRepeatingEquipment();
             output += listenerDeleteRepeatingEquipment();
             output += listenerInspectRepeatingEquipment();
-            output += listenerEquipmentItemVisibility();
             output += listenerSetGearOptions();
             return output;
         },
@@ -12754,12 +12762,6 @@ var GearBuilder = GearBuilder || (function () {
             return `${WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_Inspect")}`],
                 `WuxWorkerGear.InspectGear(eventinfo, "RepeatingEquipment")`, true)}`;
-        },
-        listenerEquipmentItemVisibility = function () {
-            let itemIsVisibleVar = WuxDef.Get("Gear").getVariable(`-${WuxDef.GetVariable("ItemIsVisible")}`);
-            return `${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingEquipment")}:${itemIsVisibleVar}`],
-                `WuxWorkerGear.UpdateEquipmentVisibility(eventinfo)`, true)}`;
         },
         listenerSetGearOptions = function () {
             let output = "";
@@ -12952,10 +12954,10 @@ var PopupBuilder = PopupBuilder || (function () {
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
         listenerInspectPopupButtons = function () {
-            let groupVariableNames = [`${WuxDef.GetVariable("Popup_InspectAddClick")}`];
-            let output = `WuxWorkerInspectPopup.AddSelectedInspectElement()`;
-
-            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+            return `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Popup_InspectAddClick")}`],
+                `WuxWorkerInspectPopup.AddSelectedInspectElement()`, false)}
+                ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Popup_InspectAddClick", "2")}`],
+                `WuxWorkerInspectPopup.AddSelectedInspectElement2()`, false)}`;
         },
         listenerUpdateRepeatingItemInspectPopupItems = function () {
             let repeatingSection = WuxDef.GetVariable("ItemPopupValues");

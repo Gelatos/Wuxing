@@ -456,7 +456,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 }
             }
 
-            WuxWorkerInspectPopup.OpenItemFilterInspection(filters, matchedDef.title, "Add Equipment");
+            WuxWorkerInspectPopup.OpenItemFilterInspection(filters, matchedDef.title, ["Add Equipment", "Purchase Equipment"]);
         };
 
     return {

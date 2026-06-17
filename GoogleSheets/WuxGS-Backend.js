@@ -699,10 +699,10 @@ var PopupBuilder = PopupBuilder || (function () {
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
         listenerInspectPopupButtons = function () {
-            let groupVariableNames = [`${WuxDef.GetVariable("Popup_InspectAddClick")}`];
-            let output = `WuxWorkerInspectPopup.AddSelectedInspectElement()`;
-
-            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+            return `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Popup_InspectAddClick")}`],
+                `WuxWorkerInspectPopup.AddSelectedInspectElement()`, false)}
+                ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Popup_InspectAddClick", "2")}`],
+                `WuxWorkerInspectPopup.AddSelectedInspectElement2()`, false)}`;
         },
         listenerUpdateRepeatingItemInspectPopupItems = function () {
             let repeatingSection = WuxDef.GetVariable("ItemPopupValues");
