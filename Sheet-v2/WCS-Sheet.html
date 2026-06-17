@@ -2115,14 +2115,14 @@
 											<fieldset class="repeating_perks">
 												<div class="wuxMultiRow" style="min-width: 300px;">
 													<div class="wuxEquipableName"><span class="wuxDescription" name="attr_forme-name"></span></div>
-													<div class="wuxFloatRight">
+													<div class="wuxEquippableButtonGroup">
 														<div class="wuxButton wuxRepeatingTechActionButton">
 															<input type="checkbox" name="attr_forme-inspect">
 															<span>&#9673; Inspect</span>
 														</div>
 														<div class="wuxButton wuxRepeatingTechActionButton">
 															<input type="checkbox" name="attr_forme-delete">
-															<span>&#10008; Delete</span>
+															<span><span style="color:#cc3333;">&#10008;</span> Delete</span>
 														</div>
 													</div>
 												</div>
@@ -12630,62 +12630,6 @@
 		</div><input type="hidden" class="wuxSideBarExtend-flag" name="attr_pag-sidebar" />
 		<div class="wuxMainContent">
 			<div class="wuxSegment">
-				<input type="checkbox" class="wuxTab-flag" name="attr_pag-gearcurrency_tab_expand" checked="checked" />
-				<div class="wuxTabHeader">
-					<div class="wuxInteractiveInnerExpandBlock">
-						<input type="checkbox" class="wuxInteractiveExpandingContent-flag" name="attr_pag-gearcurrency_tab_expand" />
-						<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_pag-gearcurrency_tab_expand" />
-						<span class="wuxInteractiveExpandIcon">&#9662;</span>
-						<input type="hidden" class="wuxInteractiveExpandIcon-flag" name="attr_pag-gearcurrency_tab_expand" />
-						<span class="wuxInteractiveExpandAuxIcon">&#9656;</span>
-					</div><span>Currency</span>
-				</div>
-				<div class="wuxTab">
-					<div class="wuxSectionBlock wuxLayoutItem">
-						<div class="wuxTabContent">
-							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup wuxMinWidth150">
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Jin
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Jin</div>
-
-												<span class="wuxDescription">The currency of Minerva. This is paper money accepted throughout the continent of Wuxing due to Minerva's trade agreements throughout the land.</span>
-											</div>
-										</span></div><input type="number" class="wuxInput wuxMinWidth100" name="attr_crn-jin" />
-								</div>
-								<div class="wuxFlexTableItemGroup wuxMinWidth150">
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Gold
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Gold</div>
-
-												<span class="wuxDescription">A rare resource known for its usages in magical material building. It was the preferred trading material until its use as a magical binding made it more scarse. Still, many small communities will use it for trade.</span>
-											</div>
-										</span></div><input type="number" class="wuxInput wuxMinWidth100" name="attr_crn-gold" />
-								</div>
-								<div class="wuxFlexTableItemGroup wuxMinWidth150">
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												CP
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">CP</div>
-
-												<span class="wuxDescription">A coin currency that is popular in Apollo, Juno, and smaller civilizations. It is largely being replaced by the Minervan Jin due to the inconvenience of coins, but change at this scale is often difficult.</span>
-											</div>
-										</span></div><input type="number" class="wuxInput wuxMinWidth100" name="attr_crn-cp" />
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="wuxSegment">
 				<input type="checkbox" class="wuxTab-flag" name="attr_pag-gearequipment_tab_expand" checked="checked" />
 				<div class="wuxTabHeader">
 					<div class="wuxInteractiveInnerExpandBlock">
@@ -12701,66 +12645,92 @@
 						<div class="wuxTabContent">
 							<div class="wuxFlexTable">
 								<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
+									<div class="wuxHeader">Currency</div>
+									<div class="wuxWidth160">
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Jin
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Jin</div>
+
+													<span class="wuxDescription">The currency of the modern age. Originating in Minerva, this is paper money accepted throughout the continent of Wuxing due to Minerva's trade agreements throughout the land.</span>
+												</div>
+											</span></div>
+										<input type="number" class="wuxInput wuxMinWidth100" name="attr_" />
+									</div>
+									<div class="wuxRow">&nbsp;</div>
 									<div class="wuxHeader">Owned Equipment</div>
 									<div>
-										<div class="wuxNoRepControl">
-											<fieldset class="repeating_equipment">
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemisvisible" value="0">
-												<div class="wuxHiddenField">
-													<div class="wuxEquipableEntryRow">
-														<div class="wuxEquipableName">
-															<span class="wuxDescription" name="attr_gear-itemname"></span>
-															<span class="wuxSubHeader" name="attr_gear-itemgroup"></span>
-														</div>
-														<div class="wuxEquippableButtonGroup">
-															<div class="wuxButton wuxRepeatingTechActionButton">
-																<input type="checkbox" name="attr_gear-equip">
-																<span>&#9881; Equip</span>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-eqipmentisvisible" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxNoRepControl">
+												<fieldset class="repeating_equipment">
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemisvisible" value="0">
+													<div class="wuxHiddenField">
+														<div class="wuxMultiRow">
+															<div class="wuxEquipableName">
+																<span class="wuxDescription" name="attr_gear-itemname"></span>
+																<span class="wuxSubHeader" name="attr_gear-itemgroup"></span>
 															</div>
-															<div class="wuxButton wuxRepeatingTechActionButton">
-																<input type="checkbox" name="attr_gear-inspect">
-																<span>&#9673; Inspect</span>
-															</div>
-															<div class="wuxButton wuxRepeatingTechActionButton">
-																<input type="checkbox" name="attr_gear-delete">
-																<span>&#10008; Delete</span>
+															<div class="wuxEquippableButtonGroup">
+																<div class="wuxButton wuxRepeatingTechActionButton">
+																	<input type="checkbox" name="attr_gear-equip">
+																	<span><span style="color:#c8a020;">&#9881;</span> Equip</span>
+																</div>
+																<div class="wuxButton wuxRepeatingTechActionButton">
+																	<input type="checkbox" name="attr_gear-inspect">
+																	<span>&#9673; Inspect</span>
+																</div>
+																<div class="wuxButton wuxRepeatingTechActionButton">
+																	<input type="checkbox" name="attr_gear-delete">
+																	<span><span style="color:#cc3333;">&#10008;</span> Delete</span>
+																</div>
 															</div>
 														</div>
 													</div>
-												</div>
 
-											</fieldset>
+												</fieldset>
+											</div>
 										</div>
+
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-eqipmentisvisible" value="0">
+										<div class="wuxHiddenAuxField">
+											<div class="wuxRow"><div class="wuxDescription">None</div></div>
+										</div>
+
 										<div class="wuxRow">&nbsp;</div>
 										<div class="wuxHeader">Add Equipment</div>
 										<div class="wuxFlexTable">
-											<div class="wuxFlexTableItemGroup">
+											<div class="wuxFlexTableItemGroup wuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
 													<input type="checkbox" name="attr_equiptype-weapon">
-													<span>Weapon</span>
+													<span>Search Weapon</span>
 												</div>
 											</div>
-											<div class="wuxFlexTableItemGroup">
+											<div class="wuxFlexTableItemGroup wuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
 													<input type="checkbox" name="attr_equiptype-apparel">
-													<span>Apparel</span>
-												</div>
-											</div>
-											<div class="wuxFlexTableItemGroup">
-												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_equiptype-tool">
-													<span>Tool</span>
+													<span>Search Apparel</span>
 												</div>
 											</div>
 										</div>
 										<div class="wuxFlexTable">
-											<div class="wuxFlexTableItemGroup">
+											<div class="wuxFlexTableItemGroup wuxMaxWidth220">
+												<div class="wuxButton wuxWidth120">
+													<input type="checkbox" name="attr_equiptype-tool">
+													<span>Search Tool</span>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup wuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
 													<input type="checkbox" name="attr_popup-finditemsbyfilter">
 													<span>Custom Filter Items</span>
 												</div>
 											</div>
-											<div class="wuxFlexTableItemGroup">
+										</div>
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup wuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
 													<input type="checkbox" name="attr_popup-finditemsbytechnique">
 													<span>Custom Filter Items By Technique</span>
@@ -14016,14 +13986,14 @@
 													<div class="wuxMultiRow" style="min-width: 300px;">
 
 														<div class="wuxEquipableName"><span class="wuxDescription" name="attr_forme-name"></span></div>
-														<div class="wuxFloatRight">
+														<div class="wuxEquippableButtonGroup">
 															<div class="wuxButton wuxRepeatingTechActionButton">
 																<input type="checkbox" name="attr_forme-inspect">
 																<span>&#9673; Inspect</span>
 															</div>
 															<div class="wuxButton wuxRepeatingTechActionButton">
 																<input type="checkbox" name="attr_forme-delete">
-																<span>&#10008; Delete</span>
+																<span><span style="color:#cc3333;">&#10008;</span> Delete</span>
 															</div>
 														</div>
 													</div>
@@ -18499,6 +18469,9 @@ WuxWorkerGear.DeleteGear(eventinfo, "RepeatingEquipment")
 });
 on("change:repeating_equipment:gear-inspect", function (eventinfo) {
 WuxWorkerGear.InspectGear(eventinfo, "RepeatingEquipment")
+});
+on("change:repeating_equipment:gear-itemisvisible", function (eventinfo) {
+WuxWorkerGear.UpdateEquipmentVisibility(eventinfo)
 });
 on("change:gear-weaponslot1_build", function (eventinfo) {
 WuxWorkerGear.UnequipSetGear(eventinfo, 1, "gear-weaponslot1")

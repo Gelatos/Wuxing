@@ -27,6 +27,7 @@ var upgrade_to_1_0_11 = function (currentVersion) {
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
 		attributeHandler.getRepeatingSection("RepeatingEquipment").removeAllIds();
 		attributeHandler.getRepeatingSection("RepeatingConsumables").removeAllIds();
+		attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "0");
 
 		let loreWorker = new WuxLoreWorkerBuild();
 		loreWorker.buildStats = new WorkerBuildStats();

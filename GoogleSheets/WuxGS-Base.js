@@ -577,18 +577,8 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
             var
                 print = function () {
                     let contents = "";
-                    contents += buildCurrency();
                     contents += buildEquipment();
                     return WuxSheetMain.Build(contents);
-                },
-
-                buildCurrency = function () {
-                    let jinDef = WuxDef.Get("Jin");
-                    let contents = WuxSheetMain.TabBlock(WuxDefinition.BuildHeader(jinDef) +
-                        WuxSheetMain.CustomInput("number", jinDef.getAttribute(), "wuxInput wuxMinWidth100"));
-
-                    let definition = WuxDef.Get("Page_GearCurrency");
-                    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
                 },
 
                 buildEquipment = function () {
@@ -604,28 +594,48 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
                 ownedEquipment = function () {
                     let repeatingDef = WuxDef.Get("RepeatingEquipment");
+                    let eqipmentIsVisibleAttr = WuxDef.GetAttribute("Gear_EqipmentIsVisible");
+                    let repeaterContent = buildRepeater(repeatingDef.getVariable(), addRepeaterContentsEquipment());
 
-                    let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
-                        <div>
-                        ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsEquipment())}
+                    let contents = `${buildCurrency()}
+                        ${WuxSheetMain.Row("&nbsp;")}
+                        ${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                    <div>
+                        ${WuxSheetMain.HiddenFieldToggle(eqipmentIsVisibleAttr, repeaterContent, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}
                         ${WuxSheetMain.Row("&nbsp;")}
                         ${addEquipmentFilterButtons()}
                     </div>`;
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
 
+                buildCurrency = function () {
+                    let jinDef = WuxDef.Get("Jin");
+                    return `${WuxSheetMain.Header(`${WuxDef.GetTitle("Page_GearCurrency")}`)}
+                    <div class="wuxWidth160">
+                        ${WuxDefinition.BuildHeader(jinDef)}
+                        ${WuxSheetMain.CustomInput("number", jinDef.getAttribute(), "wuxInput wuxMinWidth100")}
+                    </div>`;
+                },
+
                 addEquipmentFilterButtons = function () {
                     let equipmentTypes = WuxDef.Filter([new DatabaseFilterData("group", "EquipmentType")]);
                     let findByFilterDef = WuxDef.Get("Popup_FindItemsByFilter");
                     let findByTechniqueDef = WuxDef.Get("Popup_FindItemsByTechnique");
+                    let searchButtonDef = WuxDef.Get("Popup_SearchButton");
                     let items = [];
                     for (let i = 0; i < equipmentTypes.length; i++) {
-                        items.push(WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(equipmentTypes[i].getAttribute(), equipmentTypes[i].getTitle(), "wuxWidth120")));
+                        items.push(WuxSheetMain.Table.FlexTableGroup(
+                            WuxSheetMain.Button(equipmentTypes[i].getAttribute(), searchButtonDef.getTitle(equipmentTypes[i].getTitle()), "wuxWidth120"), 
+                            "wuxMaxWidth220"));
                     }
-                    items.push(WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(findByFilterDef.getAttribute(), findByFilterDef.getTitle(), "wuxWidth120")));
-                    items.push(WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Button(findByTechniqueDef.getAttribute(), findByTechniqueDef.getTitle(), "wuxWidth120")));
+                    items.push(WuxSheetMain.Table.FlexTableGroup(
+                        WuxSheetMain.Button(findByFilterDef.getAttribute(), findByFilterDef.getTitle(), "wuxWidth120"), 
+                        "wuxMaxWidth220"));
+                    items.push(WuxSheetMain.Table.FlexTableGroup(
+                        WuxSheetMain.Button(findByTechniqueDef.getAttribute(), findByTechniqueDef.getTitle(), "wuxWidth120"), 
+                        "wuxMaxWidth220"));
                     return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddEquipment"))}
-                        ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 3)}`;
+                        ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 2)}`;
                 },
 
                 addRepeaterContentsEquipment = function () {

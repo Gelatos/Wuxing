@@ -644,6 +644,7 @@ class ItemInspectionPopup extends InspectionPopup {
         let repeater = new WorkerRepeatingSectionHandler("RepeatingEquipment");
         let newRowId = repeater.generateRowId();
         this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
+        attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "on");
     };
     performAddSelectedInspectElementConsumable(attrHandler, item) {
         Debug.Log(`Adding Consumable ${item.name}`);

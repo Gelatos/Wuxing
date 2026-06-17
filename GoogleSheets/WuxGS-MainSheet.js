@@ -1282,7 +1282,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             let definition = WuxDef.Get("Page_Gear");
             let characterCreationContents = characterCreationNavigation(definition, definition.title);
             let output = buildCharacterCreationSplit("Core",
-                mainPageNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), ""), 
+                mainPageNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), ""),
                 characterCreationContents);
             return buildSection(output, WuxSheetMain.Info.DefaultContents(definition));
         },

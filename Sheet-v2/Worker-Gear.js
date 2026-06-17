@@ -351,6 +351,26 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             attributeHandler.run();
         },
 
+        updateEquipmentVisibility = function () {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("RepeatingEquipment");
+            let repeater = attributeHandler.getRepeatingSection("RepeatingEquipment");
+            let itemIsVisibleVar = getGearVariable("ItemIsVisible");
+            repeater.addFieldNames([itemIsVisibleVar]);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let anyVisible = false;
+                repeater.iterate(function (id) {
+                    if (attrHandler.parseString(repeater.getFieldName(id, itemIsVisibleVar)) === "on") {
+                        anyVisible = true;
+                    }
+                });
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), anyVisible ? "on" : "0");
+            });
+
+            attributeHandler.run();
+        },
+
         deleteGear = function (eventinfo, repeatingSectionName) {
             let EquipmentRepeater = new WorkerRepeatingSectionHandler(repeatingSectionName);
             let selectedId = EquipmentRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
@@ -359,6 +379,8 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
             attributeHandler.run();
+
+            updateEquipmentVisibility();
         },
 
         inspectGear = function (eventinfo, repeatingSectionName) {
@@ -445,7 +467,8 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         InspectGear: inspectGear,
         UnequipSetGear: unequipSetGear,
         InspectSetGear: inspectSetGear,
-        OpenFindItems: openFindItems
+        OpenFindItems: openFindItems,
+        UpdateEquipmentVisibility: updateEquipmentVisibility
     };
 }());
 
