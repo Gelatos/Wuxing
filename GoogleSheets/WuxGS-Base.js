@@ -642,98 +642,25 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 },
 
                 addRepeaterContentsEquipment = function () {
-                    let nameFieldName = getGearAttribute("ItemName");
-                    let actionFieldName = getGearAttribute("ItemAction");
-                    return WuxSheetMain.MultiRow(`
-                        ${WuxSheetMain.SubMenuButton(actionFieldName, addSubmenuContentsEquipment())}
-                        <div class="wuxEquipableName"><span class="wuxDescription" name="${nameFieldName}"></span></div>`
-                    );
-                },
-
-                addSubmenuContentsEquipment = function () {
-                    let equippedDef = WuxDef.Get("Gear_ItemIsEquipped");
-                    let equipWeaponDef = WuxDef.Get("Gear_EquipWeapon");
-
-                    return `${buildItemTemplate()}
-                        ${WuxSheetMain.HiddenField(equippedDef.getAttribute(),
-                        `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), `<span>${WuxDef.GetTitle("Gear_Unequip")}</span>`)}`)}
-                        ${WuxSheetMain.HiddenAuxField(equippedDef.getAttribute(),
-                        `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), WuxSheetMain.Span(WuxDef.GetAttribute("Gear_ItemEquipMenu")))}
-                            ${WuxSheetMain.SubMenuOptionButton(equipWeaponDef.getAttribute(), `<span>${equipWeaponDef.getTitle()}</span>`)}`)}
-                        ${addSubmenuContents()}
-                    `;
-                },
-
-                addSubmenuContents = function () {
-                    let purchaseeDef = WuxDef.Get("Gear_Purchase");
-                    let deleteDef = WuxDef.Get("Gear_Delete");
+                    let equipDef = WuxDef.Get("Gear_Equip");
                     let inspectDef = WuxDef.Get("Gear_Inspect");
+                    let deleteDef = WuxDef.Get("Gear_Delete");
 
-                    return `
-                        ${WuxSheetMain.SubMenuOptionButton(purchaseeDef.getAttribute(), WuxSheetMain.Span(purchaseeDef.getAttribute(WuxDef._tab), "Purchase"))}
-                        ${WuxSheetMain.SubMenuOptionButton(deleteDef.getAttribute(), `<span>${deleteDef.getTitle()}</span>`)}
-                        ${WuxSheetMain.SubMenuOptionButton(inspectDef.getAttribute(), `<span>${inspectDef.getTitle()}</span>`)}
-                    `;
-                },
-
-                buildItemTemplate = function () {
-                    return `
-                    <div class="wuxFeature">
-                        <div class="wuxFeatureHeader wuxFeatureHeader-Item">
-                            <div class="wuxFeatureHeaderDisplayBlock">
-                                <span class="wuxFeatureHeaderName" name="${getGearAttribute("ItemName")}"></span>
-                                <div class="wuxFeatureHeaderInfo"><span name="${getGearAttribute("ItemGroup")}"></span></div>
-                                <div class="wuxFeatureHeaderInfo"><span name="${getGearAttribute("ItemStats")}"></span></div>
-                                <div class="wuxFeatureHeaderInfo">
-                                    <span><strong>Traits: </strong></span>
-                                    <input type="hidden" class="wuxHiddenField-flag" name="${getGearAttribute("ItemTrait", 0)}" value="0" />
-                                    <div class="wuxHiddenInlineAuxField">
-                                        <span>None</span>
-                                    </div>
-                                    ${buildTooltipSection("ItemTrait", 0)}
-                                    ${buildTooltipSection("ItemTrait", 1)}
-                                    ${buildTooltipSection("ItemTrait", 2)}
-                                    ${buildTooltipSection("ItemTrait", 3)}
-                                </div>
-                            </div>
+                    let rowContents = WuxSheetMain.MultiRow(`
+                        <div class="wuxEquipableName">
+                            <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
+                            <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
                         </div>
-                        
-                        <input type="hidden" class="wuxHiddenField-flag" name="${getGearAttribute("ItemDescription")}" value="0" />
-                        <div class="wuxHiddenField">
-                            <div class="wuxFeatureFunctionBlock">
-                                <div class="wuxFeatureFunctionBlockFlavorText">
-                                    <span name="${getGearAttribute("ItemDescription")}"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    `;
+                        <div class="wuxFloatRight">
+                            ${WuxSheetMain.Button(equipDef.getAttribute(), `&#9881; ${equipDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                            ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `&#10008; ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                        </div>`);
+
+                    return WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents);
                 },
 
-                buildTooltipSection = function (baseAttribute, index, delimiter) {
-                    return `<input type="hidden" class="wuxHiddenField-flag" name="${getGearAttribute(baseAttribute, index)}" value="0" />
-                    <div class="wuxHiddenInlineField">
-                        ${index == 0 ? "" : `<span>${delimiter == undefined ? "; " : delimiter}</span>`}
-                        <span class="wuxTooltip">
-                            <span class="wuxTooltipText" name="${getGearAttribute(baseAttribute, index)}">-</span>
-                            <div class="wuxTooltipContent">
-                                <div class="wuxHeader2"><span name="${getGearAttribute(baseAttribute, index)}">-</span></div>
-                                <span class="wuxDescription"><em>Technique Trait</em></span>
-                                <span class="wuxDescription" name="${getGearAttribute(baseAttribute, index + "desc0")}"></span>
-                                <input type="hidden" class="wuxHiddenField-flag" name="${getGearAttribute(baseAttribute, index + "desc1")}" value="0" />
-                                <div class="wuxHiddenField">
-                                    <span class="wuxDescription" name="${getGearAttribute(baseAttribute, index + "desc1")}"></span>
-                                </div>
-                                <input type="hidden" class="wuxHiddenField-flag" name="${getGearAttribute(baseAttribute, index + "desc2")}" value="0" />
-                                <div class="wuxHiddenField">
-                                    <span class="wuxDescription" name="${getGearAttribute(baseAttribute, index + "desc2")}"></span>
-                                </div>
-                            </div>
-                        </span>
-                    </div>`;
-                },
-
-equippedEquipment = function () {
+                equippedEquipment = function () {
                     let contents = "";
                     contents += `${WuxSheetMain.Header(`${WuxDef.GetTitle("Page_Equipped")}`)}`;
                     let emptyName = WuxDef.GetTitle("Page_SlotEmpty");

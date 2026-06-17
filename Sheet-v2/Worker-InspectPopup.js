@@ -610,26 +610,34 @@ class ItemInspectionPopup extends InspectionPopup {
         this.inspectPopupAttrHandler = new ItemInspectPopupAttributeHandler(attrHandler);
     }
 
-    addItem (attrHandler) {
-        Debug.Log(`Adding Inspect Element ${attrHandler.parseString(WuxDef.GetUntypedVariable("Popup", "ItemName"))}`);
+    addItem() {
+        this.attributeHandler.addMod(WuxDef.GetVariable("Popup_InspectAddType"));
+        super.addItem();
+    }
+
+    performAddItem(attrHandler, itemName) {
+        Debug.Log(`Adding Inspect Element ${itemName}`);
         switch (attrHandler.parseString(WuxDef.GetVariable("Popup_InspectAddType"))) {
-            case "Add Equipment":
-                this.performAddSelectedInspectElementEquipment(attrHandler,
-                    WuxItems.Get(attrHandler.parseString(WuxDef.GetUntypedVariable("Popup", "ItemName")))
-                );
+            case "Add Equipment": {
+                let item = WuxItems.Get(itemName);
+                if (item == undefined) break;
+                this.performAddSelectedInspectElementEquipment(attrHandler, item);
                 break;
-            case "Add Consumable":
-                this.performAddSelectedInspectElementConsumable(attrHandler,
-                    WuxItems.Get(attrHandler.parseString(WuxDef.GetUntypedVariable("Popup", "ItemName")))
-                );
+            }
+            case "Add Consumable": {
+                let item = WuxItems.Get(itemName);
+                if (item == undefined) break;
+                this.performAddSelectedInspectElementConsumable(attrHandler, item);
                 break;
-            case "Add Good":
-                this.performAddSelectedInspectElementGoods(attrHandler,
-                    WuxGoods.Get(attrHandler.parseString(WuxDef.GetUntypedVariable("Popup", "ItemName")))
-                );
+            }
+            case "Add Good": {
+                let item = WuxGoods.Get(itemName);
+                if (item == undefined) break;
+                this.performAddSelectedInspectElementGoods(attrHandler, item);
                 break;
+            }
         }
-    };
+    }
 
     performAddSelectedInspectElementEquipment(attrHandler, item) {
         Debug.Log(`Adding Equipment ${item.name}`);
@@ -657,22 +665,12 @@ class ItemInspectionPopup extends InspectionPopup {
     };
     performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item) {
         let displayData = new ItemDisplayData(item);
+        const field = (name) => repeater.getFieldName(newRowId, this.getGearVariable(name));
 
-        let equipMenuText = this.getEquipMenuText(item);
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_ItemEquipMenu")), equipMenuText);
-        let purchaseMenuText = `${WuxDef.GetTitle("Gear_Purchase")} (${item.value})`;
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_Purchase", WuxDef._tab)), purchaseMenuText);
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemName")), displayData.name);
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemGroup")), displayData.group);
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemStats")), displayData.stats);
-
-        if (displayData.traits.length > 0) {
-            let databaseAttributeHandler = new DatabaseItemAttributeHandler(attrHandler);
-            databaseAttributeHandler.addDefinitions(displayData.traits, repeater.getFieldName(newRowId, this.getGearVariable("ItemTrait")), 3);
-        }
-        if (displayData.description != "") {
-            attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemDescription")), displayData.description);
-        }
+        attrHandler.addUpdate(field("ItemIsVisible"), "on");
+        attrHandler.addUpdate(field("ItemName"),      displayData.name);
+        attrHandler.addUpdate(field("ItemGroup"),      displayData.group);
+        attrHandler.addUpdate(field("ItemBulk"),      displayData.bulk);
     };
     performAddSelectedInspectElementTechnique(attrHandler, repeater, newRowId, technique) {
         let techniqueItemAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");
@@ -785,6 +783,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         },
 
         addSelectedInspectElement = function () {
+            Debug.Log("Add SelectedInspection");
             getOpenInspectionPopup((inspectPopup) => {
                 inspectPopup.addItem();
                 inspectPopup.close();

@@ -2119,11 +2119,19 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     width: 60px;
 }
 
-.wuxEquipableName
+.wuxEquipableName,
+.wuxEquipableName .wuxSubHeader
 {
     display: inline-block;
     margin-left: 5px;
-    width: calc(95% - 130px);
+    font-size: 11px;
+    color: #e1e1e1;
+}
+
+.wuxEquipableName .wuxSubHeader
+{
+    font-size: 9px;
+    font-style: italic;
 }
 
 /*========================================
