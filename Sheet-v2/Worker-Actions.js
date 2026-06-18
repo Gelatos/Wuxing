@@ -456,9 +456,14 @@ var WuxWorkerActionsService = WuxWorkerActionsService || (function () {
                 // set the breakdown
                 let attributeBreakdown = {};
                 for (let definition of allModifierDefs) {
-                    let formula = definition.formula.getString();
-                    let value = definition.formula.getValue(attrHandler);
-                    attributeBreakdown[definition.name] = ["-- Base Calculation --", formula == value ? formula : `${formula} = ${value}`, ""];
+                    let formula = definition.formula.getBaseString();
+                    let totalValue = definition.formula.getValue(attrHandler);
+                    let baseValue = totalValue
+                        - attrHandler.parseInt(definition.getVariable(WuxDef._perk))
+                        - attrHandler.parseInt(definition.getVariable(WuxDef._tech))
+                        - attrHandler.parseInt(definition.getVariable(WuxDef._gear))
+                        - attrHandler.parseInt(definition.getVariable(WuxDef._techset));
+                    attributeBreakdown[definition.name] = ["-- Base Calculation --", formula == baseValue ? formula : `${formula} = ${baseValue}`, ""];
                 }
 
                 addBoostStyleTechModifiers(attrHandler, techBoosters);

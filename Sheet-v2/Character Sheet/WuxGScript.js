@@ -4086,6 +4086,73 @@ class FormulaData {
         return printOutput;
     }
 
+    getBaseString() {
+        let output = "";
+        this.workers.forEach((worker) => {
+            if (worker.variableName.length > 0 && worker.definitionName.length === 0) return;
+            if (worker.definitionName.length > 0) {
+                let definition = WuxDef.Get(worker.definitionName[0]);
+                if (definition != undefined) {
+                    if (output != "") {
+                        output += " + ";
+                    }
+                    if (definition.group == "StatBonus") {
+                        output += `${definition.formula.getBaseString()} `;
+                    } else if (worker.multiplier != 1) {
+                        if (isNaN(parseFloat(worker.multiplier))) {
+                            let text = "";
+                            if (worker.multiplier == "adv-cr") {
+                                text = WuxDef.GetTitle("CR");
+                            }
+                            else {
+                                text = WuxDef.GetTitle(worker.multiplier);
+                            }
+                            output += `[${definition.title} x ${text}] `;
+                        } else if (worker.multiplier > 1) {
+                            output += `[${definition.title} x ${worker.multiplier}] `;
+                        } else {
+                            switch (worker.multiplier) {
+                                case 0.5:
+                                    output += `[½ ${definition.title}] `;
+                                    break;
+                                case 0.33:
+                                    output += `[⅓ ${definition.title}] `;
+                                    break;
+                                case 0.25:
+                                    output += `[¼ ${definition.title}] `;
+                                    break;
+                                case 0.2:
+                                    output += `[⅕ ${definition.title}] `;
+                                    break;
+                            }
+                        }
+                    } else {
+                        let secondDefinition;
+                        if (worker.definitionName.length > 1) {
+                            secondDefinition = WuxDef.Get(worker.definitionName[1]);
+                        }
+                        if (secondDefinition != undefined && secondDefinition != "" && secondDefinition.getTitle() != "") {
+                            output += `[Highest of ${definition.getTitle()} or ${secondDefinition.getTitle()}] `;
+                        }
+                        else {
+                            output += `[${definition.title}] `;
+                        }
+                    }
+
+                    if (worker.max > 0) {
+                        output += `(max:${worker.max}) `;
+                    }
+                }
+            } else if (worker.value > 0) {
+                output += `${output != "" ? "+ " : ""} ${worker.value} `;
+            }
+            else if (worker.value < 0) {
+                output += `- ${Math.abs(worker.value)} `;
+            }
+        });
+        return output;
+    }
+
     getString() {
         let output = "";
         this.workers.forEach((worker) => {
