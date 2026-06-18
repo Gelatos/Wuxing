@@ -666,6 +666,15 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 				}
 				if (perk.group === "Perk Technique") {
 					WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+				} else {
+					attributeHandler.addFinishCallback(function () {
+						let statsHandler = new WorkerAttributeHandler();
+						statsHandler.addMod([WuxDef.GetVariable("BoostStyleTech"), WuxDef.GetVariable("BoostGearTech"), WuxDef.GetVariable("BoostPerkTech")]);
+						statsHandler.addGetAttrCallback(function (attrHandler) {
+							WuxWorkerActionsService.SetTechniqueBoosters(attrHandler);
+						});
+						statsHandler.run();
+					});
 				}
 				attributeHandler.run();
 			});
