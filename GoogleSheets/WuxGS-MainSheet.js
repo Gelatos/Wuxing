@@ -1097,7 +1097,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), output, true);
         },
 
-        buildTechSection = function () {
+        buildTechDebugSection = function () {
             let contents = "";
             let refreshTechDef = WuxDef.Get("RefreshTech");
             contents += WuxSheetMain.Button(refreshTechDef.getAttribute(), refreshTechDef.getTitle(), "wuxSizePercent");
@@ -1105,8 +1105,19 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             let refreshField = sectionDefinition.getAttribute(WuxDef._refresh);
             contents += WuxSheetMain.Button(refreshField, "Update Techniques", "wuxSizePercent");
 
-            let titleDefinition = WuxDef.Get("Action_Techniques");
+            let titleDefinition = WuxDef.Get("Title_Debug");
             return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), contents, true);
+        },
+
+        buildGearDebugSection = function () {
+            let contents = "";
+            let updateDef = WuxDef.Get("Gear_UpdateEquipment");
+            contents += WuxSheetMain.Button(updateDef.getAttribute(), updateDef.getTitle(), "wuxSizePercent");
+            let removeDef = WuxDef.Get("Gear_RemoveEquipment");
+            contents += WuxSheetMain.Button(removeDef.getAttribute(), removeDef.getTitle(), "wuxSizePercent");
+
+            let titleDefinition = WuxDef.Get("Title_Debug");
+            return collapsibleHeader(`${titleDefinition.getTitle()}`, titleDefinition.getAttribute(), contents, true);
         };
     return {
         Build: build,
@@ -1118,7 +1129,8 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
         BuildChatSection: buildChatSection,
         BuildLanguageSection: buildLanguageSection,
         BuildChecksSection: buildChecksSection,
-        BuildTechSection: buildTechSection
+        BuildTechDebugSection: buildTechDebugSection,
+        BuildGearDebugSection: buildGearDebugSection
     };
 }());
 

@@ -662,6 +662,7 @@ class ItemInspectionPopup extends InspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("Popup_InspectAddType"));
         this.attributeHandler.addMod(WuxDef.GetVariable("EquipmentSlots"));
         this.attributeHandler.addMod(WuxDef.GetVariable("Equipment", WuxDef._build));
+        this.attributeHandler.addMod(WuxDef.GetVariable("Equipment", WuxDef._build + WuxDef._max));
         this.attributeHandler.addRepeatingSection("RepeatingEquipment");
         this.attributeHandler.getRepeatingSection("RepeatingEquipment").addFieldNames([this.getGearVariable("ItemName")]);
         super.addItem();
@@ -672,6 +673,7 @@ class ItemInspectionPopup extends InspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("Jin"));
         this.attributeHandler.addMod(WuxDef.GetVariable("EquipmentSlots"));
         this.attributeHandler.addMod(WuxDef.GetVariable("Equipment", WuxDef._build));
+        this.attributeHandler.addMod(WuxDef.GetVariable("Equipment", WuxDef._build + WuxDef._max));
         this.attributeHandler.addRepeatingSection("RepeatingEquipment");
         this.attributeHandler.getRepeatingSection("RepeatingEquipment").addFieldNames([this.getGearVariable("ItemName")]);
         super.addItem2();
@@ -755,6 +757,14 @@ class ItemInspectionPopup extends InspectionPopup {
         existingRepeater.iterate(function (id) {
             attrHandler.addUpdate(existingRepeater.getFieldName(id, slotOpenVar), slotOpenState);
         });
+
+        let equipBuildMaxVar = WuxDef.GetVariable("Equipment", WuxDef._build + WuxDef._max);
+        let equipBuildMaxRaw = attrHandler.parseString(equipBuildMaxVar);
+        let equipBuildMax = [];
+        try { equipBuildMax = JSON.parse(equipBuildMaxRaw); } catch (e) {}
+        if (!Array.isArray(equipBuildMax)) equipBuildMax = [];
+        equipBuildMax.push(item.name);
+        attrHandler.addUpdate(equipBuildMaxVar, JSON.stringify(equipBuildMax));
     };
     performAddSelectedInspectElementConsumable(attrHandler, item) {
         Debug.Log(`Adding Consumable ${item.name}`);

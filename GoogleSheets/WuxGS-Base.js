@@ -557,11 +557,14 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
             var
                 printEquipment = function () {
-                    let contents = "";
-                    contents += WuxSheetSidebar.BuildChatSection();
-                    contents += WuxSheetSidebar.BuildChecksSection();
-                    contents += WuxSheetSidebar.BuildBoonSection();
-                    // contents += WuxSheetSidebar.BuildLanguageSection();
+                    let coreContents = `${WuxSheetSidebar.BuildChatSection()}
+                        ${WuxSheetSidebar.BuildChecksSection()}
+                        ${WuxSheetSidebar.BuildBoonSection()}
+                        ${WuxSheetSidebar.BuildGearDebugSection()}`;
+                    let builderContents = WuxSheetSidebar.BuildGearDebugSection();
+                    let contents = `${WuxSheet.PageSetPageDisplayInput()}
+                        ${WuxSheet.PageDisplay("Core", coreContents)}
+                        ${WuxSheet.PageDisplay("Builder", builderContents)}`;
                     return WuxSheetSidebar.Build("", contents);
                 }
 
@@ -731,13 +734,14 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         WuxSheetSidebar.Build("", `${WuxSheetSidebar.BuildChatSection()}
                         ${WuxSheetSidebar.BuildChecksSection()}
                         ${WuxSheetSidebar.BuildBoonSection()}
-                        ${WuxSheetSidebar.BuildTechSection()}`))}
-                    ${WuxSheet.PageDisplay("StylesData", 
+                        ${WuxSheetSidebar.BuildTechDebugSection()}`))}
+                    ${WuxSheet.PageDisplay("StylesData",
                         WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Technique"))))}`;
                 },
 
                 buildTechPointsSection = function (fieldName, header) {
-                    return WuxSheetSidebar.BuildPointsSection(fieldName, header);
+                    return `${WuxSheetSidebar.BuildPointsSection(fieldName, header)}
+                    ${WuxSheetSidebar.BuildTechDebugSection()}`;
                 }
 
             return {

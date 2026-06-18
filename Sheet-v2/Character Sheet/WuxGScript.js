@@ -10554,7 +10554,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), output, true);
         },
 
-        buildTechSection = function () {
+        buildTechDebugSection = function () {
             let contents = "";
             let refreshTechDef = WuxDef.Get("RefreshTech");
             contents += WuxSheetMain.Button(refreshTechDef.getAttribute(), refreshTechDef.getTitle(), "wuxSizePercent");
@@ -10562,8 +10562,19 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             let refreshField = sectionDefinition.getAttribute(WuxDef._refresh);
             contents += WuxSheetMain.Button(refreshField, "Update Techniques", "wuxSizePercent");
 
-            let titleDefinition = WuxDef.Get("Action_Techniques");
+            let titleDefinition = WuxDef.Get("Title_Debug");
             return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), contents, true);
+        },
+
+        buildGearDebugSection = function () {
+            let contents = "";
+            let updateDef = WuxDef.Get("Gear_UpdateEquipment");
+            contents += WuxSheetMain.Button(updateDef.getAttribute(), updateDef.getTitle(), "wuxSizePercent");
+            let removeDef = WuxDef.Get("Gear_RemoveEquipment");
+            contents += WuxSheetMain.Button(removeDef.getAttribute(), removeDef.getTitle(), "wuxSizePercent");
+
+            let titleDefinition = WuxDef.Get("Title_Debug");
+            return collapsibleHeader(`${titleDefinition.getTitle()}`, titleDefinition.getAttribute(), contents, true);
         };
     return {
         Build: build,
@@ -10575,7 +10586,8 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
         BuildChatSection: buildChatSection,
         BuildLanguageSection: buildLanguageSection,
         BuildChecksSection: buildChecksSection,
-        BuildTechSection: buildTechSection
+        BuildTechDebugSection: buildTechDebugSection,
+        BuildGearDebugSection: buildGearDebugSection
     };
 }());
 
@@ -11525,11 +11537,14 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
             var
                 printEquipment = function () {
-                    let contents = "";
-                    contents += WuxSheetSidebar.BuildChatSection();
-                    contents += WuxSheetSidebar.BuildChecksSection();
-                    contents += WuxSheetSidebar.BuildBoonSection();
-                    // contents += WuxSheetSidebar.BuildLanguageSection();
+                    let coreContents = `${WuxSheetSidebar.BuildChatSection()}
+                        ${WuxSheetSidebar.BuildChecksSection()}
+                        ${WuxSheetSidebar.BuildBoonSection()}
+                        ${WuxSheetSidebar.BuildGearDebugSection()}`;
+                    let builderContents = WuxSheetSidebar.BuildGearDebugSection();
+                    let contents = `${WuxSheet.PageSetPageDisplayInput()}
+                        ${WuxSheet.PageDisplay("Core", coreContents)}
+                        ${WuxSheet.PageDisplay("Builder", builderContents)}`;
                     return WuxSheetSidebar.Build("", contents);
                 }
 
@@ -11699,13 +11714,14 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         WuxSheetSidebar.Build("", `${WuxSheetSidebar.BuildChatSection()}
                         ${WuxSheetSidebar.BuildChecksSection()}
                         ${WuxSheetSidebar.BuildBoonSection()}
-                        ${WuxSheetSidebar.BuildTechSection()}`))}
-                    ${WuxSheet.PageDisplay("StylesData", 
+                        ${WuxSheetSidebar.BuildTechDebugSection()}`))}
+                    ${WuxSheet.PageDisplay("StylesData",
                         WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Technique"))))}`;
                 },
 
                 buildTechPointsSection = function (fieldName, header) {
-                    return WuxSheetSidebar.BuildPointsSection(fieldName, header);
+                    return `${WuxSheetSidebar.BuildPointsSection(fieldName, header)}
+                    ${WuxSheetSidebar.BuildTechDebugSection()}`;
                 }
 
             return {
@@ -12710,6 +12726,8 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerDeleteRepeatingEquipment();
             output += listenerInspectRepeatingEquipment();
             output += listenerInspectSyncedEquipment();
+            output += listenerUpdateEquipment();
+            output += listenerRemoveAllEquipment();
             output += listenerSetGearOptions();
             return output;
         },
@@ -12758,6 +12776,16 @@ var GearBuilder = GearBuilder || (function () {
             return `${WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingSyncedEquipment")}:${WuxDef.GetVariable("Gear_Inspect")}`],
                 `WuxWorkerGear.InspectGear(eventinfo, "RepeatingSyncedEquipment")`, true)}`;
+        },
+        listenerUpdateEquipment = function () {
+            return `${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Gear_UpdateEquipment")],
+                `WuxWorkerGear.UpdateEquipment(eventinfo)`, true)}`;
+        },
+        listenerRemoveAllEquipment = function () {
+            return `${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Gear_RemoveEquipment")],
+                `WuxWorkerGear.RemoveAllEquipment(eventinfo)`, true)}`;
         },
         listenerSetGearOptions = function () {
             let output = "";

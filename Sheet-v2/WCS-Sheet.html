@@ -12536,118 +12536,166 @@
 					<span>&#10217&#10217 </span>
 				</div>
 				<div class="wuxTab">
-					<div class="wuxFloatSidebarContents">
-						<div class="wuxInteractiveBlock wuxSizeTiny">
-							<div class="wuxInteractiveInnerBlock">
-								<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_ttl-chat">
-								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_ttl-chat">
-								<span class="wuxInteractiveIcon">&#9656;</span>
-								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_ttl-chat">
-								<span class="wuxInteractiveAuxIcon">&#9662;</span>
+					<div class="wuxFloatSidebarContents"><input type="hidden" class="wuxPageDisplay-Flag" name="attr_pgs" value="Builder" />
+						<div class="wuxPageDisplay-Core">
+							<div class="wuxInteractiveBlock wuxSizeTiny">
+								<div class="wuxInteractiveInnerBlock">
+									<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_ttl-chat">
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_ttl-chat">
+									<span class="wuxInteractiveIcon">&#9656;</span>
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_ttl-chat">
+									<span class="wuxInteractiveAuxIcon">&#9662;</span>
 
-								<div class="wuxHeader">Chat</div>
-							</div>
-							<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_ttl-chat">
-							<div class="wuxInteractiveExpandingAuxContent">
-								<input type="hidden" class="wuxInput" name="attr_chat-target" />
-								<div class="wuxRow"><select class="wuxInput" name="attr_chat-type" value="0">
-										<option value="ctmsg">Speak</option>
-										<option value="ctwsp">Whisper</option>
-										<option value="ctyell">Yell</option>
-										<option value="ctcomms">Comms</option>
-										<option value="ctthk">Think</option>
-										<option value="ctdesc">Describe</option>
-									</select></div>
-								<div class="wuxRow"><select class="wuxInput" name="attr_chat-posttarget" value="0">
-										<option value="0">Post To Chat</option>
-										<option value="1">Post To Notebook</option>
-									</select></div>
-								<div class="wuxRow">&nbsp;</div><textarea class="wuxInput wuxHeight150" name="attr_chat-message"></textarea><input type="hidden" class="wuxHiddenField-flag" name="attr_chat-posttarget" value="0">
-								<div class="wuxHiddenAuxField">
-									<div class="wuxNoRepControl wuxEmotePostGroup">
-										<fieldset class="repeating_activeemotes">
-											<button class="wuxPostButton" type="roll" value="&{template:@{chat-type}} {{url=@{chat-post_url}}} {{emote=@{chat-post_name}}} {{name=@{display_name}}} {{title=@{display_name}@{chat-target}}} {{language=@{chat-language}}} {{message=@{chat-message}}} @{chat-languagetag}">
-												<span name="attr_chat-post_name">emote</span>
-											</button>
-											<input type="hidden" name="attr_chat-post_url">
-										</fieldset>
-									</div>
+									<div class="wuxHeader">Chat</div>
 								</div>
-								<input type="hidden" class="wuxHiddenField-flag" name="attr_chat-posttarget" value="0">
-								<div class="wuxHiddenField">
-									<div class="wuxNoRepControl wuxEmotePostGroup">
-										<fieldset class="repeating_activeemotesnotes">
-											<div class="wuxButton wuxPostButton">
-												<input type="checkbox" name="attr_chat-post_emotenote">
-												<span><span name="attr_chat-post_name">emote</span></span>
+								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_ttl-chat">
+								<div class="wuxInteractiveExpandingAuxContent">
+									<input type="hidden" class="wuxInput" name="attr_chat-target" />
+									<div class="wuxRow"><select class="wuxInput" name="attr_chat-type" value="0">
+											<option value="ctmsg">Speak</option>
+											<option value="ctwsp">Whisper</option>
+											<option value="ctyell">Yell</option>
+											<option value="ctcomms">Comms</option>
+											<option value="ctthk">Think</option>
+											<option value="ctdesc">Describe</option>
+										</select></div>
+									<div class="wuxRow"><select class="wuxInput" name="attr_chat-posttarget" value="0">
+											<option value="0">Post To Chat</option>
+											<option value="1">Post To Notebook</option>
+										</select></div>
+									<div class="wuxRow">&nbsp;</div><textarea class="wuxInput wuxHeight150" name="attr_chat-message"></textarea><input type="hidden" class="wuxHiddenField-flag" name="attr_chat-posttarget" value="0">
+									<div class="wuxHiddenAuxField">
+										<div class="wuxNoRepControl wuxEmotePostGroup">
+											<fieldset class="repeating_activeemotes">
+												<button class="wuxPostButton" type="roll" value="&{template:@{chat-type}} {{url=@{chat-post_url}}} {{emote=@{chat-post_name}}} {{name=@{display_name}}} {{title=@{display_name}@{chat-target}}} {{language=@{chat-language}}} {{message=@{chat-message}}} @{chat-languagetag}">
+													<span name="attr_chat-post_name">emote</span>
+												</button>
+												<input type="hidden" name="attr_chat-post_url">
+											</fieldset>
+										</div>
+									</div>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_chat-posttarget" value="0">
+									<div class="wuxHiddenField">
+										<div class="wuxNoRepControl wuxEmotePostGroup">
+											<fieldset class="repeating_activeemotesnotes">
+												<div class="wuxButton wuxPostButton">
+													<input type="checkbox" name="attr_chat-post_emotenote">
+													<span><span name="attr_chat-post_name">emote</span></span>
+												</div>
+												<input type="hidden" name="attr_chat-post_url">
+											</fieldset>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class="wuxInteractiveBlock wuxSizeTiny">
+								<div class="wuxInteractiveInnerBlock">
+									<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_check">
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_check">
+									<span class="wuxInteractiveIcon">&#9656;</span>
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_check">
+									<span class="wuxInteractiveAuxIcon">&#9662;</span>
+
+									<div class="wuxHeader">Checks</div>
+								</div>
+								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_check">
+								<div class="wuxInteractiveExpandingAuxContent">
+									<button class="wuxButton wuxSizePercent" type="roll" value="!cshowgroup @{sheetname}@@@?{What will you show?|Defenses|Senses}"><span>Show Stat</span></button><button class="wuxButton wuxSizePercent" type="roll" value="!cskillgroupcheck @{sheetname}@@@?{Choose a Skill Group to Roll|Athletics|Magic|Persuade|Cunning|Craft|Device|Perception|Lore};?{Advantage|0}"><span>Roll Skill</span></button>
+								</div>
+							</div>
+							<div class="wuxInteractiveBlock wuxSizeTiny">
+								<div class="wuxInteractiveInnerBlock">
+									<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_ttl-boon">
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_ttl-boon">
+									<span class="wuxInteractiveIcon">&#9656;</span>
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_ttl-boon">
+									<span class="wuxInteractiveAuxIcon">&#9662;</span>
+
+									<div class="wuxHeader">Boons</div>
+								</div>
+								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_ttl-boon">
+								<div class="wuxInteractiveExpandingAuxContent">
+									<div class="wuxFlexTable">
+										<div class="wuxInteractiveInnerBlock">
+											<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_boon-rest" />
+											<div class="wuxInteractiveContent">
+												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-rest" />
+												<span class="wuxInteractiveIcon">&#9635;</span>
+												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-rest" />
+												<span class="wuxInteractiveAuxIcon">&#9634;</span>
+												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-rest" />
+												<div class="wuxHeader2">Rest</div>
 											</div>
-											<input type="hidden" name="attr_chat-post_url">
-										</fieldset>
+										</div>
+										<div class="wuxInteractiveInnerBlock">
+											<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_boon-savor" />
+											<div class="wuxInteractiveContent">
+												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-savor" />
+												<span class="wuxInteractiveIcon">&#9635;</span>
+												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-savor" />
+												<span class="wuxInteractiveAuxIcon">&#9634;</span>
+												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-savor" />
+												<div class="wuxHeader2">Savor</div>
+											</div>
+										</div>
+										<div class="wuxInteractiveInnerBlock">
+											<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_boon-truth" />
+											<div class="wuxInteractiveContent">
+												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-truth" />
+												<span class="wuxInteractiveIcon">&#9635;</span>
+												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-truth" />
+												<span class="wuxInteractiveAuxIcon">&#9634;</span>
+												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-truth" />
+												<div class="wuxHeader2">Truth</div>
+											</div>
+										</div>
 									</div>
 								</div>
+							</div>
+							<div class="wuxInteractiveBlock wuxSizeTiny">
+								<div class="wuxInteractiveInnerBlock">
+									<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_ttl-debug">
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_ttl-debug">
+									<span class="wuxInteractiveIcon">&#9656;</span>
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_ttl-debug">
+									<span class="wuxInteractiveAuxIcon">&#9662;</span>
 
+									<div class="wuxHeader">Debug (Gear)</div>
+								</div>
+								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_ttl-debug">
+								<div class="wuxInteractiveExpandingAuxContent">
+									<div class="wuxButton wuxSizePercent">
+										<input type="checkbox" name="attr_gear-updateequipment">
+										<span>Update Equipment</span>
+									</div>
+									<div class="wuxButton wuxSizePercent">
+										<input type="checkbox" name="attr_gear-removeequipment">
+										<span>Remove All Equipment</span>
+									</div>
+								</div>
 							</div>
 						</div>
-						<div class="wuxInteractiveBlock wuxSizeTiny">
-							<div class="wuxInteractiveInnerBlock">
-								<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_check">
-								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_check">
-								<span class="wuxInteractiveIcon">&#9656;</span>
-								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_check">
-								<span class="wuxInteractiveAuxIcon">&#9662;</span>
+						<div class="wuxPageDisplay-Builder">
+							<div class="wuxInteractiveBlock wuxSizeTiny">
+								<div class="wuxInteractiveInnerBlock">
+									<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_ttl-debug">
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_ttl-debug">
+									<span class="wuxInteractiveIcon">&#9656;</span>
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_ttl-debug">
+									<span class="wuxInteractiveAuxIcon">&#9662;</span>
 
-								<div class="wuxHeader">Checks</div>
-							</div>
-							<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_check">
-							<div class="wuxInteractiveExpandingAuxContent">
-								<button class="wuxButton wuxSizePercent" type="roll" value="!cshowgroup @{sheetname}@@@?{What will you show?|Defenses|Senses}"><span>Show Stat</span></button><button class="wuxButton wuxSizePercent" type="roll" value="!cskillgroupcheck @{sheetname}@@@?{Choose a Skill Group to Roll|Athletics|Magic|Persuade|Cunning|Craft|Device|Perception|Lore};?{Advantage|0}"><span>Roll Skill</span></button>
-							</div>
-						</div>
-						<div class="wuxInteractiveBlock wuxSizeTiny">
-							<div class="wuxInteractiveInnerBlock">
-								<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_ttl-boon">
-								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_ttl-boon">
-								<span class="wuxInteractiveIcon">&#9656;</span>
-								<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_ttl-boon">
-								<span class="wuxInteractiveAuxIcon">&#9662;</span>
-
-								<div class="wuxHeader">Boons</div>
-							</div>
-							<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_ttl-boon">
-							<div class="wuxInteractiveExpandingAuxContent">
-								<div class="wuxFlexTable">
-									<div class="wuxInteractiveInnerBlock">
-										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_boon-rest" />
-										<div class="wuxInteractiveContent">
-											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-rest" />
-											<span class="wuxInteractiveIcon">&#9635;</span>
-											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-rest" />
-											<span class="wuxInteractiveAuxIcon">&#9634;</span>
-											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-rest" />
-											<div class="wuxHeader2">Rest</div>
-										</div>
+									<div class="wuxHeader">Debug (Gear)</div>
+								</div>
+								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_ttl-debug">
+								<div class="wuxInteractiveExpandingAuxContent">
+									<div class="wuxButton wuxSizePercent">
+										<input type="checkbox" name="attr_gear-updateequipment">
+										<span>Update Equipment</span>
 									</div>
-									<div class="wuxInteractiveInnerBlock">
-										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_boon-savor" />
-										<div class="wuxInteractiveContent">
-											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-savor" />
-											<span class="wuxInteractiveIcon">&#9635;</span>
-											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-savor" />
-											<span class="wuxInteractiveAuxIcon">&#9634;</span>
-											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-savor" />
-											<div class="wuxHeader2">Savor</div>
-										</div>
-									</div>
-									<div class="wuxInteractiveInnerBlock">
-										<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_boon-truth" />
-										<div class="wuxInteractiveContent">
-											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-truth" />
-											<span class="wuxInteractiveIcon">&#9635;</span>
-											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-truth" />
-											<span class="wuxInteractiveAuxIcon">&#9634;</span>
-											<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-truth" />
-											<div class="wuxHeader2">Truth</div>
-										</div>
+									<div class="wuxButton wuxSizePercent">
+										<input type="checkbox" name="attr_gear-removeequipment">
+										<span>Remove All Equipment</span>
 									</div>
 								</div>
 							</div>
@@ -12784,7 +12832,6 @@
 										</span></div>
 									<span class="wuxDescription"><span name="attr_equipment" value="0"></span> / <span name="attr_equipmentslotcount"></span></span>
 									<div class="wuxHeader">Equipped</div>
-									<div class="wuxRow">&nbsp;</div>
 									<div>
 										<div class="wuxNoRepControl">
 											<fieldset class="repeating_syncequipment">
@@ -13048,15 +13095,15 @@
 							</div>
 							<div class="wuxInteractiveBlock wuxSizeTiny">
 								<div class="wuxInteractiveInnerBlock">
-									<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_act-techniques">
-									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_act-techniques">
+									<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_ttl-debug">
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_ttl-debug">
 									<span class="wuxInteractiveIcon">&#9656;</span>
-									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_act-techniques">
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_ttl-debug">
 									<span class="wuxInteractiveAuxIcon">&#9662;</span>
 
-									<div class="wuxHeader">Techniques</div>
+									<div class="wuxHeader">Debug</div>
 								</div>
-								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_act-techniques">
+								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_ttl-debug">
 								<div class="wuxInteractiveExpandingAuxContent">
 									<div class="wuxButton wuxSizePercent">
 										<input type="checkbox" name="attr_refresh_all_techniques">
@@ -13093,6 +13140,28 @@
 										<span class="wuxFontSize7">/ </span>
 										<span class="wuxFontSize7" name='attr_tch_max' value="0">0</span>
 									</span>
+								</div>
+							</div>
+							<div class="wuxInteractiveBlock wuxSizeTiny">
+								<div class="wuxInteractiveInnerBlock">
+									<input class="wuxInteractiveContent-flag" type="checkbox" name="attr_ttl-debug">
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_ttl-debug">
+									<span class="wuxInteractiveIcon">&#9656;</span>
+									<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_ttl-debug">
+									<span class="wuxInteractiveAuxIcon">&#9662;</span>
+
+									<div class="wuxHeader">Debug</div>
+								</div>
+								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_ttl-debug">
+								<div class="wuxInteractiveExpandingAuxContent">
+									<div class="wuxButton wuxSizePercent">
+										<input type="checkbox" name="attr_refresh_all_techniques">
+										<span>Delete All Techniques</span>
+									</div>
+									<div class="wuxButton wuxSizePercent">
+										<input type="checkbox" name="attr_act-formetechniques_refresh">
+										<span>Update Techniques</span>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -18222,11 +18291,17 @@ WuxWorkerGear.InspectGear(eventinfo, "RepeatingEquipment")
 on("change:repeating_syncequipment:gear-inspect", function (eventinfo) {
 WuxWorkerGear.InspectGear(eventinfo, "RepeatingSyncedEquipment")
 });
-on("change:gear-weaponslot1_build", function (eventinfo) {
-WuxWorkerGear.UnequipSetGear(eventinfo, 1, "gear-weaponslot1")
+on("change:gear-updateequipment", function (eventinfo) {
+WuxWorkerGear.UpdateEquipment(eventinfo)
 });
-on("change:gear-weaponslot1_info", function (eventinfo) {
-WuxWorkerGear.InspectSetGear(eventinfo, 1, "gear-weaponslot1")
+on("change:gear-removeequipment", function (eventinfo) {
+WuxWorkerGear.RemoveAllEquipment(eventinfo)
+});
+on("change:", function (eventinfo) {
+WuxWorkerGear.UnequipSetGear(eventinfo, 1, "")
+});
+on("change:", function (eventinfo) {
+WuxWorkerGear.InspectSetGear(eventinfo, 1, "")
 });
 on("change:gear-equipmentslot1_build", function (eventinfo) {
 WuxWorkerGear.UnequipSetGear(eventinfo, 1, "gear-equipmentslot1")

@@ -477,6 +477,8 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerDeleteRepeatingEquipment();
             output += listenerInspectRepeatingEquipment();
             output += listenerInspectSyncedEquipment();
+            output += listenerUpdateEquipment();
+            output += listenerRemoveAllEquipment();
             output += listenerSetGearOptions();
             return output;
         },
@@ -525,6 +527,16 @@ var GearBuilder = GearBuilder || (function () {
             return `${WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingSyncedEquipment")}:${WuxDef.GetVariable("Gear_Inspect")}`],
                 `WuxWorkerGear.InspectGear(eventinfo, "RepeatingSyncedEquipment")`, true)}`;
+        },
+        listenerUpdateEquipment = function () {
+            return `${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Gear_UpdateEquipment")],
+                `WuxWorkerGear.UpdateEquipment(eventinfo)`, true)}`;
+        },
+        listenerRemoveAllEquipment = function () {
+            return `${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Gear_RemoveEquipment")],
+                `WuxWorkerGear.RemoveAllEquipment(eventinfo)`, true)}`;
         },
         listenerSetGearOptions = function () {
             let output = "";

@@ -475,8 +475,10 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let syncedRepeater = attributeHandler.getRepeatingSection("RepeatingSyncedEquipment");
             let selectedId = equipRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
             let itemNameVar = getGearVariable("ItemName");
+            let equipBuildMaxVar = WuxDef.GetVariable("Equipment", WuxDef._build + WuxDef._max);
             equipRepeater.addFieldNames([itemNameVar]);
             syncedRepeater.addFieldNames([itemNameVar]);
+            attributeHandler.addMod(equipBuildMaxVar);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let deletedItemName = attrHandler.parseString(equipRepeater.getFieldName(selectedId, itemNameVar));
@@ -489,6 +491,14 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                         return true;
                     }
                 });
+
+                let equipBuildMaxRaw = attrHandler.parseString(equipBuildMaxVar);
+                let equipBuildMax = [];
+                try { equipBuildMax = JSON.parse(equipBuildMaxRaw); } catch (e) {}
+                if (!Array.isArray(equipBuildMax)) equipBuildMax = [];
+                let index = equipBuildMax.indexOf(deletedItemName);
+                if (index !== -1) equipBuildMax.splice(index, 1);
+                attrHandler.addUpdate(equipBuildMaxVar, JSON.stringify(equipBuildMax));
             });
 
             attributeHandler.run();
@@ -568,7 +578,96 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             }
 
             WuxWorkerInspectPopup.OpenItemFilterInspection(filters, matchedDef.title, ["Add Equipment", "Purchase Equipment"]);
-        };
+        },
+
+        updateEquipment = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("RepeatingEquipment");
+            attributeHandler.addRepeatingSection("RepeatingSyncedEquipment");
+
+            let equipRepeater = attributeHandler.getRepeatingSection("RepeatingEquipment");
+            let syncedRepeater = attributeHandler.getRepeatingSection("RepeatingSyncedEquipment");
+            let itemNameVar = getGearVariable("ItemName");
+            let itemIsVisibleVar = getGearVariable("ItemIsVisible");
+            equipRepeater.addFieldNames([itemNameVar]);
+            syncedRepeater.addFieldNames([itemNameVar]);
+
+            let equipBuildVar = WuxDef.GetVariable("Equipment", WuxDef._build);
+            let equipBuildMaxVar = WuxDef.GetVariable("Equipment", WuxDef._build + WuxDef._max);
+            attributeHandler.addMod(equipBuildVar);
+            attributeHandler.addMod(equipBuildMaxVar);
+            attributeHandler.addMod(WuxDef.GetVariable("EquipmentSlots"));
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let equipBuildRaw = attrHandler.parseString(equipBuildVar);
+                let equipBuild = [];
+                try { equipBuild = JSON.parse(equipBuildRaw); } catch (e) {}
+                if (!Array.isArray(equipBuild)) equipBuild = [];
+
+                let equipBuildMaxRaw = attrHandler.parseString(equipBuildMaxVar);
+                let equipBuildMax = [];
+                try { equipBuildMax = JSON.parse(equipBuildMaxRaw); } catch (e) {}
+                if (!Array.isArray(equipBuildMax)) equipBuildMax = [];
+
+                equipBuildMax = [...new Set(equipBuildMax)];
+                equipBuild = [...new Set(equipBuild.filter(name => equipBuildMax.includes(name)))];
+
+                let equipSet = new Set(equipBuild);
+                let slotsMax = attrHandler.parseInt(WuxDef.GetVariable("EquipmentSlots"));
+                let slotOpenState = equipBuild.length < slotsMax ? "0" : "on";
+
+                let anyVisible = false;
+                equipRepeater.iterate(function (id) {
+                    let itemName = attrHandler.parseString(equipRepeater.getFieldName(id, itemNameVar));
+                    let isEquipped = equipSet.has(itemName);
+                    if (!isEquipped) anyVisible = true;
+                    attrHandler.addUpdate(equipRepeater.getFieldName(id, itemIsVisibleVar), isEquipped ? "0" : "on");
+                    attrHandler.addUpdate(equipRepeater.getFieldName(id, getGearVariable("ItemSlotOpen")), slotOpenState);
+                });
+
+                syncedRepeater.iterate(function (id) {
+                    let itemName = attrHandler.parseString(syncedRepeater.getFieldName(id, itemNameVar));
+                    attrHandler.addUpdate(syncedRepeater.getFieldName(id, itemIsVisibleVar), equipSet.has(itemName) ? "on" : "0");
+                });
+
+                attrHandler.addUpdate(equipBuildVar, JSON.stringify(equipBuild));
+                attrHandler.addUpdate(equipBuildMaxVar, JSON.stringify(equipBuildMax));
+                attrHandler.addUpdate(WuxDef.GetVariable("Equipment"), equipBuild.length.toString());
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), anyVisible ? "on" : "0");
+            });
+
+            attributeHandler.run();
+        },
+
+        removeAllEquipment = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("RepeatingEquipment");
+            attributeHandler.addRepeatingSection("RepeatingSyncedEquipment");
+
+            let equipRepeater = attributeHandler.getRepeatingSection("RepeatingEquipment");
+            let syncedRepeater = attributeHandler.getRepeatingSection("RepeatingSyncedEquipment");
+            equipRepeater.addFieldNames([getGearVariable("ItemName")]);
+            syncedRepeater.addFieldNames([getGearVariable("ItemName")]);
+
+            let equipBuildVar = WuxDef.GetVariable("Equipment", WuxDef._build);
+            let equipBuildMaxVar = WuxDef.GetVariable("Equipment", WuxDef._build + WuxDef._max);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                equipRepeater.iterate(function (id) {
+                    equipRepeater.removeId(id);
+                });
+                syncedRepeater.iterate(function (id) {
+                    syncedRepeater.removeId(id);
+                });
+
+                attrHandler.addUpdate(equipBuildVar, JSON.stringify([]));
+                attrHandler.addUpdate(equipBuildMaxVar, JSON.stringify([]));
+                attrHandler.addUpdate(WuxDef.GetVariable("Equipment"), "0");
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "0");
+            });
+
+            attributeHandler.run();
+        }
 
     return {
         ToggleEquipItem: toggleEquipItem,
@@ -581,7 +680,9 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         UnequipSetGear: unequipSetGear,
         InspectSetGear: inspectSetGear,
         OpenFindItems: openFindItems,
-        UpdateEquipmentVisibility: updateEquipmentVisibility
+        UpdateEquipmentVisibility: updateEquipmentVisibility,
+        UpdateEquipment: updateEquipment,
+        RemoveAllEquipment: removeAllEquipment
     };
 }());
 
