@@ -660,12 +660,20 @@ class ItemInspectionPopup extends InspectionPopup {
 
     addItem() {
         this.attributeHandler.addMod(WuxDef.GetVariable("Popup_InspectAddType"));
+        this.attributeHandler.addMod(WuxDef.GetVariable("EquipmentSlots"));
+        this.attributeHandler.addMod(WuxDef.GetVariable("Equipment", WuxDef._build));
+        this.attributeHandler.addRepeatingSection("RepeatingEquipment");
+        this.attributeHandler.getRepeatingSection("RepeatingEquipment").addFieldNames([this.getGearVariable("ItemName")]);
         super.addItem();
     }
 
     addItem2() {
         this.attributeHandler.addMod(WuxDef.GetVariable("Popup_InspectAddType", "2"));
         this.attributeHandler.addMod(WuxDef.GetVariable("Jin"));
+        this.attributeHandler.addMod(WuxDef.GetVariable("EquipmentSlots"));
+        this.attributeHandler.addMod(WuxDef.GetVariable("Equipment", WuxDef._build));
+        this.attributeHandler.addRepeatingSection("RepeatingEquipment");
+        this.attributeHandler.getRepeatingSection("RepeatingEquipment").addFieldNames([this.getGearVariable("ItemName")]);
         super.addItem2();
     }
 
@@ -710,6 +718,20 @@ class ItemInspectionPopup extends InspectionPopup {
     }
 
     performAddSelectedInspectElementEquipment(attrHandler, item) {
+        let existingRepeater = attrHandler.getRepeatingSection("RepeatingEquipment");
+        let itemNameVar = this.getGearVariable("ItemName");
+        let duplicate = false;
+        existingRepeater.iterate(function (id) {
+            if (attrHandler.parseString(existingRepeater.getFieldName(id, itemNameVar)) === item.name) {
+                duplicate = true;
+                return true;
+            }
+        });
+        if (duplicate) {
+            Debug.Log(`Equipment ${item.name} already owned, skipping`);
+            return;
+        }
+
         Debug.Log(`Adding Equipment ${item.name}`);
         let repeater = new WorkerRepeatingSectionHandler("RepeatingEquipment");
         let newRowId = repeater.generateRowId();
@@ -721,6 +743,18 @@ class ItemInspectionPopup extends InspectionPopup {
         attrHandler.addUpdate(syncedRepeater.getFieldName(syncedRowId, this.getGearVariable("ItemIsVisible")), "0");
 
         attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "on");
+
+        let equipBuildVar = WuxDef.GetVariable("Equipment", WuxDef._build);
+        let equipBuildRaw = attrHandler.parseString(equipBuildVar);
+        let equipBuild = [];
+        try { equipBuild = JSON.parse(equipBuildRaw); } catch (e) {}
+        if (!Array.isArray(equipBuild)) equipBuild = [];
+        let slotOpenState = equipBuild.length >= attrHandler.parseInt(WuxDef.GetVariable("EquipmentSlots")) ? "on" : "0";
+        let slotOpenVar = this.getGearVariable("ItemSlotOpen");
+        attrHandler.addUpdate(repeater.getFieldName(newRowId, slotOpenVar), slotOpenState);
+        existingRepeater.iterate(function (id) {
+            attrHandler.addUpdate(existingRepeater.getFieldName(id, slotOpenVar), slotOpenState);
+        });
     };
     performAddSelectedInspectElementConsumable(attrHandler, item) {
         Debug.Log(`Adding Consumable ${item.name}`);

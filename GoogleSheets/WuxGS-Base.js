@@ -649,7 +649,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
                         </div>
                         <div class="wuxEquippableButtonGroup">
-                            ${WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                            ${WuxSheetMain.HiddenAuxSpanField(getGearAttribute("ItemSlotOpen"), WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle()}`, "wuxRepeatingTechActionButton"))}
                             ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
                             ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
                         </div>`);
@@ -674,7 +674,12 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let repeaterContent = buildRepeater(repeatingDef.getVariable(),
                         WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents));
 
-                    let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                    let slotDisplay = WuxDefinition.BuildText(
+                        WuxDef.Get("EquipmentSlots"),
+                        `<span name="${WuxDef.GetAttribute("Equipment")}" value="0"></span> / <span name="${WuxDef.GetAttribute("EquipmentSlots")}"></span>`);
+
+                    let contents = `${slotDisplay}
+                        ${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
                         <div>
                             ${repeaterContent}
                         </div>`;
