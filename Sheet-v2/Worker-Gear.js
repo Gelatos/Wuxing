@@ -309,6 +309,19 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         let baseDefinition = WuxDef.Get("Gear");
         return baseDefinition.getVariable(`-${WuxDef.GetVariable(attribute, suffix)}`);
     };
+
+    const collectEquippedTraits = function (equipBuild) {
+        let allTitles = new Set();
+        equipBuild.forEach(function (itemName) {
+            let item = WuxItems.Get(itemName);
+            if (item == undefined || !item.traits || item.traits === "") return;
+            WuxDef.GetValues(item.traits, ";", "Trait_").forEach(function (def) {
+                allTitles.add(def.getTitle());
+            });
+        });
+        let sorted = [...allTitles].sort();
+        return { jsonArray: sorted, display: sorted.length > 0 ? sorted.join(", ") : "None" };
+    };
     'use strict';
 
     const toggleEquipItem = function (eventinfo) {
@@ -400,6 +413,10 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 attrHandler.addUpdate(WuxDef.GetVariable("Equipment"), equipBuild.length.toString());
                 let slotOpenState = equipBuild.length < attrHandler.parseInt(WuxDef.GetVariable("EquipmentSlots")) ? "0" : "on";
 
+                let equippedTraits = collectEquippedTraits(equipBuild);
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits", WuxDef._max), JSON.stringify(equippedTraits.jsonArray));
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits"), equippedTraits.display);
+
                 attrHandler.addUpdate(equipRepeater.getFieldName(selectedId, itemIsVisibleVar), "0");
 
                 let anyVisible = false;
@@ -452,6 +469,10 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 attrHandler.addUpdate(equipBuildVar, JSON.stringify(equipBuild));
                 attrHandler.addUpdate(WuxDef.GetVariable("Equipment"), equipBuild.length.toString());
                 let slotOpenState = equipBuild.length < attrHandler.parseInt(WuxDef.GetVariable("EquipmentSlots")) ? "0" : "on";
+
+                let equippedTraits = collectEquippedTraits(equipBuild);
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits", WuxDef._max), JSON.stringify(equippedTraits.jsonArray));
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits"), equippedTraits.display);
 
                 attrHandler.addUpdate(syncedRepeater.getFieldName(selectedId, itemIsVisibleVar), "0");
 

@@ -644,6 +644,10 @@ class FormeTechniqueDatabase {
         attributeHandler.addMod(this.gearBuildMaxVar);
         this.gearEquipBuild = [];
         this.gearEquipBuildMax = [];
+
+        this.equippedItemTraitsVar = WuxDef.GetVariable("Gear_EquippedItemTraits", WuxDef._max);
+        attributeHandler.addMod(this.equippedItemTraitsVar);
+        this.equippedItemTraits = [];
     }
     setFormeSlotsDefinitionData () {
         this.formeDefinitions = [
@@ -702,6 +706,10 @@ class FormeTechniqueDatabase {
         let gearBuildMaxRaw = attrHandler.parseString(this.gearBuildMaxVar);
         try { this.gearEquipBuildMax = JSON.parse(gearBuildMaxRaw); } catch (e) {}
         if (!Array.isArray(this.gearEquipBuildMax)) this.gearEquipBuildMax = [];
+
+        let equippedItemTraitsRaw = attrHandler.parseString(this.equippedItemTraitsVar);
+        try { this.equippedItemTraits = JSON.parse(equippedItemTraitsRaw); } catch (e) {}
+        if (!Array.isArray(this.equippedItemTraits)) this.equippedItemTraits = [];
     }
 
     registerTechDictionary(attrHandler) {
@@ -808,7 +816,21 @@ class FormeTechniqueDatabase {
             }
         }
 
+        if (!this.checkTechniqueItemTraits(technique)) {
+            return false;
+        }
+
         return true;
+    }
+    checkTechniqueItemTraits(technique) {
+        if (!technique.itemTraits || technique.itemTraits === "") return true;
+        let requiredTraits = technique.itemTraits.split(";").map(s => s.trim()).filter(s => s !== "");
+        if (requiredTraits.length === 0) return true;
+        return requiredTraits.every(traitKey => {
+            let def = WuxDef.Get(traitKey);
+            if (def == undefined) return false;
+            return this.equippedItemTraits.includes(def.getTitle());
+        });
     }
     checkTechniqueIsVisibleInFilter(technique) {
         if (this.filters == 0) {
@@ -960,7 +982,7 @@ class FormeTechniqueDatabase {
 
     tryAddGearTechniqueToTechDictionary(technique, isEquipped) {
         if (!this.techDictionary.has(technique.name)) {
-            let isVisible = isEquipped && this.checkTechniqueIsVisibleInFilter(technique);
+            let isVisible = isEquipped && this.checkTechniqueIsVisibleInFilter(technique) && this.checkTechniqueItemTraits(technique);
             this.techDictionary.add(technique.name, {
                 technique: technique,
                 techniqueRank: 1,

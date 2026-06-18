@@ -681,7 +681,12 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         WuxDef.Get("EquipmentSlots"),
                         `<span name="${WuxDef.GetAttribute("Equipment")}" value="0"></span> / <span name="${WuxDef.GetAttribute("EquipmentSlots")}"></span>`);
 
+                    let traitsDisplay = WuxDefinition.BuildText(
+                        WuxDef.Get("Gear_EquippedItemTraits"),
+                        `<span name="${WuxDef.GetAttribute("Gear_EquippedItemTraits")}"></span>`);
+
                     let contents = `${slotDisplay}
+                        ${traitsDisplay}
                         ${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
                         <div>
                             ${repeaterContent}
