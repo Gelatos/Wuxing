@@ -665,6 +665,7 @@ class ItemInspectionPopup extends InspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("Equipment", WuxDef._build + WuxDef._max));
         this.attributeHandler.addRepeatingSection("RepeatingEquipment");
         this.attributeHandler.getRepeatingSection("RepeatingEquipment").addFieldNames([this.getGearVariable("ItemName")]);
+        WuxWorkerActions.UpdateAllActionsFromMenu(this.attributeHandler);
         super.addItem();
     }
 
@@ -676,6 +677,7 @@ class ItemInspectionPopup extends InspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("Equipment", WuxDef._build + WuxDef._max));
         this.attributeHandler.addRepeatingSection("RepeatingEquipment");
         this.attributeHandler.getRepeatingSection("RepeatingEquipment").addFieldNames([this.getGearVariable("ItemName")]);
+        WuxWorkerActions.UpdateAllActionsFromMenu(this.attributeHandler);
         super.addItem2();
     }
 

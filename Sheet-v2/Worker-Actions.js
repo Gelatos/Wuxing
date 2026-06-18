@@ -637,6 +637,13 @@ class FormeTechniqueDatabase {
 
         this.perkWorker = new WuxPerkWorkerBuild();
         attributeHandler.addMod(this.perkWorker.attrBuildDraft);
+
+        this.gearBuildVar = WuxDef.GetVariable("Equipment", WuxDef._build);
+        this.gearBuildMaxVar = WuxDef.GetVariable("Equipment", WuxDef._build + WuxDef._max);
+        attributeHandler.addMod(this.gearBuildVar);
+        attributeHandler.addMod(this.gearBuildMaxVar);
+        this.gearEquipBuild = [];
+        this.gearEquipBuildMax = [];
     }
     setFormeSlotsDefinitionData () {
         this.formeDefinitions = [
@@ -687,6 +694,14 @@ class FormeTechniqueDatabase {
                 this.equippedSlots.push(attrHandler.parseString(slot.mainDef.getVariable(i)));
             }
         }
+
+        let gearBuildRaw = attrHandler.parseString(this.gearBuildVar);
+        try { this.gearEquipBuild = JSON.parse(gearBuildRaw); } catch (e) {}
+        if (!Array.isArray(this.gearEquipBuild)) this.gearEquipBuild = [];
+
+        let gearBuildMaxRaw = attrHandler.parseString(this.gearBuildMaxVar);
+        try { this.gearEquipBuildMax = JSON.parse(gearBuildMaxRaw); } catch (e) {}
+        if (!Array.isArray(this.gearEquipBuildMax)) this.gearEquipBuildMax = [];
     }
 
     registerTechDictionary(attrHandler) {
@@ -700,6 +715,7 @@ class FormeTechniqueDatabase {
                 WuxWorkerActionsService.TryAddTechniqueToBoosters(attrHandler, technique, formeTechDatabase.boosterFieldName);
             }
         });
+        formeTechDatabase.addGearItemTechniques();
         this.techSorter.getSortOrder("Action", formeTechDatabase.techDictionary);
         this.sortList = [this.techSorter.listSize];
         WuxWorkerActionsService.SetTechniqueBoosters(attrHandler);
@@ -924,5 +940,35 @@ class FormeTechniqueDatabase {
         return Object.values(this.techDictionary.values).filter(v =>
             !v.isSet
         );
+    }
+
+    addGearItemTechniques() {
+        let gearEquipSet = new Set(this.gearEquipBuild);
+        this.gearEquipBuildMax.forEach(itemName => {
+            let item = WuxItems.Get(itemName);
+            if (item == undefined) return;
+            let isEquipped = gearEquipSet.has(itemName);
+            if (item.hasTechnique && item.technique != undefined) {
+                this.tryAddGearTechniqueToTechDictionary(item.technique, isEquipped);
+            }
+            let commonTechniques = item.getCommonTechniques ? item.getCommonTechniques() : [];
+            commonTechniques.forEach(technique => {
+                this.tryAddGearTechniqueToTechDictionary(technique, isEquipped);
+            });
+        });
+    }
+
+    tryAddGearTechniqueToTechDictionary(technique, isEquipped) {
+        if (!this.techDictionary.has(technique.name)) {
+            let isVisible = isEquipped && this.checkTechniqueIsVisibleInFilter(technique);
+            this.techDictionary.add(technique.name, {
+                technique: technique,
+                techniqueRank: 1,
+                isSet: false,
+                isActive: true,
+                isVisible: isVisible,
+                sortOrder: -1
+            });
+        }
     }
 }

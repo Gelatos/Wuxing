@@ -419,6 +419,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 });
             });
 
+            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
             attributeHandler.run();
         },
 
@@ -463,6 +464,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "on");
             });
 
+            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
             attributeHandler.run();
         },
 
@@ -475,8 +477,9 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let syncedRepeater = attributeHandler.getRepeatingSection("RepeatingSyncedEquipment");
             let selectedId = equipRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
             let itemNameVar = getGearVariable("ItemName");
+            let itemIsVisibleVar = getGearVariable("ItemIsVisible");
             let equipBuildMaxVar = WuxDef.GetVariable("Equipment", WuxDef._build + WuxDef._max);
-            equipRepeater.addFieldNames([itemNameVar]);
+            equipRepeater.addFieldNames([itemNameVar, itemIsVisibleVar]);
             syncedRepeater.addFieldNames([itemNameVar]);
             attributeHandler.addMod(equipBuildMaxVar);
 
@@ -492,6 +495,14 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                     }
                 });
 
+                let anyVisible = false;
+                equipRepeater.iterate(function (id) {
+                    if (id !== selectedId && attrHandler.parseString(equipRepeater.getFieldName(id, itemIsVisibleVar)) === "on") {
+                        anyVisible = true;
+                    }
+                });
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), anyVisible ? "on" : "0");
+
                 let equipBuildMaxRaw = attrHandler.parseString(equipBuildMaxVar);
                 let equipBuildMax = [];
                 try { equipBuildMax = JSON.parse(equipBuildMaxRaw); } catch (e) {}
@@ -501,6 +512,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 attrHandler.addUpdate(equipBuildMaxVar, JSON.stringify(equipBuildMax));
             });
 
+            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
             attributeHandler.run();
         },
 
@@ -636,6 +648,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), anyVisible ? "on" : "0");
             });
 
+            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
             attributeHandler.run();
         },
 
@@ -666,6 +679,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "0");
             });
 
+            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
             attributeHandler.run();
         }
 
