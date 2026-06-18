@@ -472,8 +472,11 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerFindItemsButtons();
             output += listenerPurchaseRepeatingEquipment();
             output += listenerEquipRepeatingEquipment();
+            output += listenerEquipGearItem();
+            output += listenerUnequipGearItem();
             output += listenerDeleteRepeatingEquipment();
             output += listenerInspectRepeatingEquipment();
+            output += listenerInspectSyncedEquipment();
             output += listenerSetGearOptions();
             return output;
         },
@@ -498,6 +501,16 @@ var GearBuilder = GearBuilder || (function () {
                 [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_Purchase")}`],
                 `WuxWorkerGear.PurchaseGear(eventinfo, "RepeatingEquipment")`, true)}`;
         },
+        listenerEquipGearItem = function () {
+            return `${WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_Equip")}`],
+                `WuxWorkerGear.EquipGear(eventinfo)`, true)}`;
+        },
+        listenerUnequipGearItem = function () {
+            return `${WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingSyncedEquipment")}:${WuxDef.GetVariable("Gear_Unequip")}`],
+                `WuxWorkerGear.UnequipGear(eventinfo)`, true)}`;
+        },
         listenerDeleteRepeatingEquipment = function () {
             return `${WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_Delete")}`],
@@ -507,6 +520,11 @@ var GearBuilder = GearBuilder || (function () {
             return `${WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_Inspect")}`],
                 `WuxWorkerGear.InspectGear(eventinfo, "RepeatingEquipment")`, true)}`;
+        },
+        listenerInspectSyncedEquipment = function () {
+            return `${WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingSyncedEquipment")}:${WuxDef.GetVariable("Gear_Inspect")}`],
+                `WuxWorkerGear.InspectGear(eventinfo, "RepeatingSyncedEquipment")`, true)}`;
         },
         listenerSetGearOptions = function () {
             let output = "";

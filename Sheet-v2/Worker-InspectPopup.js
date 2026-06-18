@@ -714,6 +714,12 @@ class ItemInspectionPopup extends InspectionPopup {
         let repeater = new WorkerRepeatingSectionHandler("RepeatingEquipment");
         let newRowId = repeater.generateRowId();
         this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
+
+        let syncedRepeater = new WorkerRepeatingSectionHandler("RepeatingSyncedEquipment");
+        let syncedRowId = syncedRepeater.generateRowId();
+        this.performAddSelectedInspectElementItem(attrHandler, syncedRepeater, syncedRowId, item);
+        attrHandler.addUpdate(syncedRepeater.getFieldName(syncedRowId, this.getGearVariable("ItemIsVisible")), "0");
+
         attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "on");
     };
     performAddSelectedInspectElementConsumable(attrHandler, item) {

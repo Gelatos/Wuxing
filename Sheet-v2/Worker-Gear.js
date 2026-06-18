@@ -371,16 +371,111 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             attributeHandler.run();
         },
 
-        deleteGear = function (eventinfo, repeatingSectionName) {
-            let EquipmentRepeater = new WorkerRepeatingSectionHandler(repeatingSectionName);
-            let selectedId = EquipmentRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
-            EquipmentRepeater.removeId(selectedId);
-
+        equipGear = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
-            attributeHandler.addUpdate(WuxDef.GetVariable("Popup_SubMenuActive"), "0");
-            attributeHandler.run();
+            attributeHandler.addRepeatingSection("RepeatingEquipment");
+            attributeHandler.addRepeatingSection("RepeatingSyncedEquipment");
 
-            updateEquipmentVisibility();
+            let equipRepeater = attributeHandler.getRepeatingSection("RepeatingEquipment");
+            let syncedRepeater = attributeHandler.getRepeatingSection("RepeatingSyncedEquipment");
+            let selectedId = equipRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let itemNameVar = getGearVariable("ItemName");
+            let itemIsVisibleVar = getGearVariable("ItemIsVisible");
+            let equipBuildVar = WuxDef.GetVariable("Equipment", WuxDef._build);
+
+            equipRepeater.addFieldNames([itemNameVar]);
+            syncedRepeater.addFieldNames([itemNameVar]);
+            attributeHandler.addMod(equipBuildVar);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let itemName = attrHandler.parseString(equipRepeater.getFieldName(selectedId, itemNameVar));
+
+                let equipBuildRaw = attrHandler.parseString(equipBuildVar);
+                let equipBuild = [];
+                try { equipBuild = JSON.parse(equipBuildRaw); } catch (e) {}
+                if (!Array.isArray(equipBuild)) equipBuild = [];
+                equipBuild.push(itemName);
+                attrHandler.addUpdate(equipBuildVar, JSON.stringify(equipBuild));
+
+                attrHandler.addUpdate(equipRepeater.getFieldName(selectedId, itemIsVisibleVar), "0");
+
+                syncedRepeater.iterate(function (id) {
+                    if (attrHandler.parseString(syncedRepeater.getFieldName(id, itemNameVar)) === itemName) {
+                        attrHandler.addUpdate(syncedRepeater.getFieldName(id, itemIsVisibleVar), "on");
+                        return true;
+                    }
+                });
+            });
+
+            attributeHandler.run();
+        },
+
+        unequipGear = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("RepeatingEquipment");
+            attributeHandler.addRepeatingSection("RepeatingSyncedEquipment");
+
+            let equipRepeater = attributeHandler.getRepeatingSection("RepeatingEquipment");
+            let syncedRepeater = attributeHandler.getRepeatingSection("RepeatingSyncedEquipment");
+            let selectedId = syncedRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let itemNameVar = getGearVariable("ItemName");
+            let itemIsVisibleVar = getGearVariable("ItemIsVisible");
+            let equipBuildVar = WuxDef.GetVariable("Equipment", WuxDef._build);
+
+            equipRepeater.addFieldNames([itemNameVar]);
+            syncedRepeater.addFieldNames([itemNameVar]);
+            attributeHandler.addMod(equipBuildVar);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let itemName = attrHandler.parseString(syncedRepeater.getFieldName(selectedId, itemNameVar));
+
+                let equipBuildRaw = attrHandler.parseString(equipBuildVar);
+                let equipBuild = [];
+                try { equipBuild = JSON.parse(equipBuildRaw); } catch (e) {}
+                if (!Array.isArray(equipBuild)) equipBuild = [];
+                let index = equipBuild.indexOf(itemName);
+                if (index !== -1) equipBuild.splice(index, 1);
+                attrHandler.addUpdate(equipBuildVar, JSON.stringify(equipBuild));
+
+                attrHandler.addUpdate(syncedRepeater.getFieldName(selectedId, itemIsVisibleVar), "0");
+
+                equipRepeater.iterate(function (id) {
+                    if (attrHandler.parseString(equipRepeater.getFieldName(id, itemNameVar)) === itemName) {
+                        attrHandler.addUpdate(equipRepeater.getFieldName(id, itemIsVisibleVar), "on");
+                        return true;
+                    }
+                });
+            });
+
+            attributeHandler.run();
+        },
+
+        deleteGear = function (eventinfo, repeatingSectionName) {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection(repeatingSectionName);
+            attributeHandler.addRepeatingSection("RepeatingSyncedEquipment");
+
+            let equipRepeater = attributeHandler.getRepeatingSection(repeatingSectionName);
+            let syncedRepeater = attributeHandler.getRepeatingSection("RepeatingSyncedEquipment");
+            let selectedId = equipRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let itemNameVar = getGearVariable("ItemName");
+            equipRepeater.addFieldNames([itemNameVar]);
+            syncedRepeater.addFieldNames([itemNameVar]);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let deletedItemName = attrHandler.parseString(equipRepeater.getFieldName(selectedId, itemNameVar));
+
+                equipRepeater.removeId(selectedId);
+
+                syncedRepeater.iterate(function (id) {
+                    if (attrHandler.parseString(syncedRepeater.getFieldName(id, itemNameVar)) === deletedItemName) {
+                        syncedRepeater.removeId(id);
+                        return true;
+                    }
+                });
+            });
+
+            attributeHandler.run();
         },
 
         inspectGear = function (eventinfo, repeatingSectionName) {
@@ -463,6 +558,8 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         ToggleEquipItem: toggleEquipItem,
         EquipWeapon: equipWeapon,
         PurchaseGear: purchaseGear,
+        EquipGear: equipGear,
+        UnequipGear: unequipGear,
         DeleteGear: deleteGear,
         InspectGear: inspectGear,
         UnequipSetGear: unequipSetGear,

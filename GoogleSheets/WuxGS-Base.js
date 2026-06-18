@@ -658,54 +658,27 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 },
 
                 equippedEquipment = function () {
-                    let contents = "";
-                    contents += `${WuxSheetMain.Header(`${WuxDef.GetTitle("Page_Equipped")}`)}`;
-                    let emptyName = WuxDef.GetTitle("Page_SlotEmpty");
+                    let repeatingDef = WuxDef.Get("RepeatingSyncedEquipment");
+                    let unequipDef = WuxDef.Get("Gear_Unequip");
+                    let inspectDef = WuxDef.Get("Gear_Inspect");
 
-                    let weaponSlotDef = WuxDef.Get("Gear_WeaponSlot");
-                    contents += buildEquipSlot(weaponSlotDef, 1, emptyName);
-                    contents += buildWeaponDamage();
+                    let rowContents = WuxSheetMain.MultiRow(`
+                        <div class="wuxEquipableName">
+                            <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
+                        </div>
+                        <div class="wuxEquippableButtonGroup">
+                            ${WuxSheetMain.Button(unequipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${unequipDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                            ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                        </div>`);
 
-                    let slotDef = WuxDef.Get("Gear_EquipmentSlot");
-                    let countAttr = WuxDef.GetAttribute("EquipmentSlots");
-                    let maxSlots = 9;
+                    let repeaterContent = buildRepeater(repeatingDef.getVariable(),
+                        WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents));
 
-                    for (let i = 1; i <= maxSlots; i++) {
-                        contents += WuxSheetMain.HiddenIndexField(countAttr, i, buildEquipSlot(slotDef, i, emptyName));
-                    }
+                    let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                        <div>
+                            ${repeaterContent}
+                        </div>`;
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
-                },
-
-                buildEquipSlot = function (definition, index, emptyName) {
-                    return `${WuxSheetMain.Header2(`${definition.title} ${index}`)}
-                    ${WuxSheetMain.Input("hidden", definition.getAttribute(index + WuxDef._expand), "0")}
-                    ${WuxSheetMain.HiddenField(definition.getAttribute(index), `<div class="wuxDescription">
-                        ${WuxSheetMain.SubMenuButton(definition.getAttribute(index + WuxDef._expand),
-                        addSubmenuContentsEquippedSlots(definition, index))}
-                        ${WuxSheetMain.Span(definition.getAttribute(index))}
-                    </div>`)}
-                    ${WuxSheetMain.HiddenAuxField(definition.getAttribute(index), WuxSheetMain.Desc(`<span>${emptyName}</span>`))}`;
-                },
-
-                buildWeaponDamage = function () {
-                    let damageDefField = WuxDef.GetAttribute("WeaponDamage");
-                    let damageValField = WuxDef.GetAttribute("WeaponDamageVal");
-                    return `${WuxSheetMain.Input("Hidden", damageDefField, "0")}
-                    ${WuxSheetMain.Input("Hidden", damageValField, "0")}
-                    ${WuxSheetMain.HiddenField(damageDefField, `<div class="wuxDescription">
-                        ${WuxSheetMain.Span(damageValField)}
-                    </div>`)}
-                    ${WuxSheetMain.HiddenAuxField(damageDefField, `<div class="wuxDescription">
-                        <span>Force Damage</span>
-                    </div>`)}`;
-                },
-
-                addSubmenuContentsEquippedSlots = function (definition, index) {
-                    return `${WuxSheetMain.SubMenuOptionButton(definition.getAttribute(index + WuxDef._build),
-                        `<span>${WuxDef.GetTitle("Forme_Unequip")}</span>`)}
-                        ${WuxSheetMain.SubMenuOptionButton(definition.getAttribute(index + WuxDef._info),
-                        `<span>${WuxDef.GetTitle("Forme_SeeTechniques")}</span>`)}
-            `;
                 },
 
                 getGearAttribute = function (attribute, suffix) {
