@@ -3249,17 +3249,18 @@ class BaseTechniqueEffectDisplayData {
                 return;
             case "Jump":
                 let jump = "";
-                if (effect.effect != "") {
-                    jump += `${effect.effect} spaces high`;
+                let jumpHeight = parseInt(effect.effect);
+                if (!isNaN(jumpHeight) && jumpHeight != 0) {
+                    jump += `${jumpHeight} space${jumpHeight > 1 ? "s" : ""} high`;
                 } 
                 let calc = this.formatCalcBonus(effect);
                 if (calc > 0) {
                     if (jump != "") {
                         jump += " and ";
                     }
-                    jump += `${calc} spaces wide`;
+                    jump += `${calc} space${calc > 1 ? "s" : ""} wide`;
                 }
-                this.effectDescription += `${this.formatTarget(effect)} jumps ${jump}`;
+                this.effectDescription += `${this.formatTargetJump(effect)} ${jump}`;
                 return;
             case "Pushed":
                 this.effectDescription += `${this.formatTargetCopula(effect)} Pushed ${this.formatCalcBonus(effect)} spaces ${effect.effect == "" ? "from you" : effect.effect}`;
@@ -3324,6 +3325,10 @@ class BaseTechniqueEffectDisplayData {
 
     formatTargetCopula(effect) {
         return this.formatTarget(effect, " is", " are");
+    }
+
+    formatTargetJump(effect) {
+        return this.formatTarget(effect, " jumps", " jump");
     }
 
     formatTarget(effect, targetSuffix, selfSuffix) {
@@ -3427,7 +3432,7 @@ class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
         try {
             formulaString = effect.formula.getString();
         } catch (e) {
-            formulaString = `Something went wrong: ${JSON.stringify(effect.formula)}`;
+            formulaString = `Something went wrong: ${JSON.stringify(e)}`;
         }
         if (formulaString != "" && output != "") {
             output += " + ";
@@ -3462,7 +3467,7 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
                 continue;
             }
             effect.dVal = enhanceEffect.dVal;
-            effect.formula = enhanceEffect.formula;
+            effect.formula = new FormulaData(enhanceEffect.formula);
 
             this.formatEffect(effect, technique);
             this.effects.push(this.effectDescription);
@@ -3499,25 +3504,37 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
         let bonus = this.formatCalcBonus(effect);
         switch (effect.subType) {
             case "FreeMove":
-                this.effectDescription += `Increase Free Move distance by ${bonus} spaces`;
+                this.effectDescription += `Increase Free Move distance by ${bonus} space${bonus > 1 ? "s" : ""}`;
                 return;
             case "Pushed":
-                this.effectDescription += `Increase Pushed distance by ${bonus} spaces`;
+                this.effectDescription += `Increase Pushed distance by ${bonus} space${bonus > 1 ? "s" : ""}`;
                 return;
             case "Pulled":
-                this.effectDescription += `Increase Pulled distance by ${bonus} spaces`;
+                this.effectDescription += `Increase Pulled distance by ${bonus} space${bonus > 1 ? "s" : ""}`;
                 return;
             case "ForceMove":
-                this.effectDescription += `Increase Force Move distance by ${bonus} spaces`;
+                this.effectDescription += `Increase Force Move distance by ${bonus} space${bonus > 1 ? "s" : ""}`;
                 return;
             case "Sneak":
-                this.effectDescription += `Increase Sneak movement by ${bonus} spaces`;
+                this.effectDescription += `Increase Sneak movement by ${bonus} space${bonus > 1 ? "s" : ""}`;
                 return;
             case "Teleport":
-                this.effectDescription += `Increase teleport distance by ${bonus} spaces`;
+                this.effectDescription += `Increase teleport distance by ${bonus} space${bonus > 1 ? "s" : ""}`;
                 return;
             case "Jump":
-                this.effectDescription += `Increase jump distance by ${bonus} spaces`;
+                let jump = "";
+                let jumpHeight = parseInt(effect.effect);
+                if (!isNaN(jumpHeight) && jumpHeight != 0) {
+                    jump += `${jumpHeight} space${jumpHeight > 1 ? "s" : ""} high`;
+                }
+                if (bonus > 0) {
+                    if (jump != "") {
+                        jump += " and ";
+                    }
+                    jump += `${bonus} space${bonus > 1 ? "s" : ""} wide`;
+                }
+                
+                this.effectDescription += `Increase jump distance by ${jump}`;
                 return;
             case "Charge":
                 this.effectDescription += `Increase Move Charge by ${bonus}`;
@@ -3526,7 +3543,7 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
                 this.effectDescription += `Increase Temporal Movement Actions by ${bonus}`;
                 return;
             default:
-                this.effectDescription += `Increase movement by ${bonus} spaces`;
+                this.effectDescription += `Increase movement by ${bonus} space${bonus > 1 ? "s" : ""}`;
         }
     }
 
@@ -3540,7 +3557,7 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
         try {
             formulaString = effect.formula.getString();
         } catch (e) {
-            formulaString = `Something went wrong: ${JSON.stringify(effect.formula)}`;
+            formulaString = `Something went wrong: ${e}`;
         }
         if (formulaString != "" && output != "") {
             output += " + ";
@@ -3649,7 +3666,7 @@ class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
         try {
             formulaString = effect.formula.getString();
         } catch (e) {
-            formulaString = `Something went wrong: ${JSON.stringify(effect.formula)}`;
+            formulaString = `Something went wrong: ${e}`;
         }
         if (formulaString != "" && output != "") {
             output += " + ";
@@ -4160,6 +4177,7 @@ class FormulaData {
     getString() {
         let output = "";
         this.workers.forEach((worker) => {
+            Debug.Log(`Hello ${worker.value}`);
             if (worker.definitionName.length > 0) {
                 let definition = WuxDef.Get(worker.definitionName[0]);
                 if (definition != undefined) {
@@ -4213,7 +4231,8 @@ class FormulaData {
                         output += `(max:${worker.max}) `;
                     }
                 }
-            } else if (worker.value > 0) {
+            } 
+            else if (worker.value > 0) {
                 output += `${output != "" ? "+ " : ""} ${worker.value} `;
             }
             else if (worker.value < 0) {

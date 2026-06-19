@@ -8720,17 +8720,18 @@ class BaseTechniqueEffectDisplayData {
                 return;
             case "Jump":
                 let jump = "";
-                if (effect.effect != "") {
-                    jump += `${effect.effect} spaces high`;
+                let jumpHeight = parseInt(effect.effect);
+                if (!isNaN(jumpHeight) && jumpHeight != 0) {
+                    jump += `${jumpHeight} space${jumpHeight > 1 ? "s" : ""} high`;
                 } 
                 let calc = this.formatCalcBonus(effect);
                 if (calc > 0) {
                     if (jump != "") {
                         jump += " and ";
                     }
-                    jump += `${calc} spaces wide`;
+                    jump += `${calc} space${calc > 1 ? "s" : ""} wide`;
                 }
-                this.effectDescription += `${this.formatTarget(effect)} jumps ${jump}`;
+                this.effectDescription += `${this.formatTargetJump(effect)} ${jump}`;
                 return;
             case "Pushed":
                 this.effectDescription += `${this.formatTargetCopula(effect)} Pushed ${this.formatCalcBonus(effect)} spaces ${effect.effect == "" ? "from you" : effect.effect}`;
@@ -8795,6 +8796,10 @@ class BaseTechniqueEffectDisplayData {
 
     formatTargetCopula(effect) {
         return this.formatTarget(effect, " is", " are");
+    }
+
+    formatTargetJump(effect) {
+        return this.formatTarget(effect, " jumps", " jump");
     }
 
     formatTarget(effect, targetSuffix, selfSuffix) {
@@ -8898,7 +8903,7 @@ class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
         try {
             formulaString = effect.formula.getString();
         } catch (e) {
-            formulaString = `Something went wrong: ${JSON.stringify(effect.formula)}`;
+            formulaString = `Something went wrong: ${JSON.stringify(e)}`;
         }
         if (formulaString != "" && output != "") {
             output += " + ";
@@ -8933,7 +8938,7 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
                 continue;
             }
             effect.dVal = enhanceEffect.dVal;
-            effect.formula = enhanceEffect.formula;
+            effect.formula = new FormulaData(enhanceEffect.formula);
 
             this.formatEffect(effect, technique);
             this.effects.push(this.effectDescription);
@@ -8970,25 +8975,37 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
         let bonus = this.formatCalcBonus(effect);
         switch (effect.subType) {
             case "FreeMove":
-                this.effectDescription += `Increase Free Move distance by ${bonus} spaces`;
+                this.effectDescription += `Increase Free Move distance by ${bonus} space${bonus > 1 ? "s" : ""}`;
                 return;
             case "Pushed":
-                this.effectDescription += `Increase Pushed distance by ${bonus} spaces`;
+                this.effectDescription += `Increase Pushed distance by ${bonus} space${bonus > 1 ? "s" : ""}`;
                 return;
             case "Pulled":
-                this.effectDescription += `Increase Pulled distance by ${bonus} spaces`;
+                this.effectDescription += `Increase Pulled distance by ${bonus} space${bonus > 1 ? "s" : ""}`;
                 return;
             case "ForceMove":
-                this.effectDescription += `Increase Force Move distance by ${bonus} spaces`;
+                this.effectDescription += `Increase Force Move distance by ${bonus} space${bonus > 1 ? "s" : ""}`;
                 return;
             case "Sneak":
-                this.effectDescription += `Increase Sneak movement by ${bonus} spaces`;
+                this.effectDescription += `Increase Sneak movement by ${bonus} space${bonus > 1 ? "s" : ""}`;
                 return;
             case "Teleport":
-                this.effectDescription += `Increase teleport distance by ${bonus} spaces`;
+                this.effectDescription += `Increase teleport distance by ${bonus} space${bonus > 1 ? "s" : ""}`;
                 return;
             case "Jump":
-                this.effectDescription += `Increase jump distance by ${bonus} spaces`;
+                let jump = "";
+                let jumpHeight = parseInt(effect.effect);
+                if (!isNaN(jumpHeight) && jumpHeight != 0) {
+                    jump += `${jumpHeight} space${jumpHeight > 1 ? "s" : ""} high`;
+                }
+                if (bonus > 0) {
+                    if (jump != "") {
+                        jump += " and ";
+                    }
+                    jump += `${bonus} space${bonus > 1 ? "s" : ""} wide`;
+                }
+                
+                this.effectDescription += `Increase jump distance by ${jump}`;
                 return;
             case "Charge":
                 this.effectDescription += `Increase Move Charge by ${bonus}`;
@@ -8997,7 +9014,7 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
                 this.effectDescription += `Increase Temporal Movement Actions by ${bonus}`;
                 return;
             default:
-                this.effectDescription += `Increase movement by ${bonus} spaces`;
+                this.effectDescription += `Increase movement by ${bonus} space${bonus > 1 ? "s" : ""}`;
         }
     }
 
@@ -9011,7 +9028,7 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
         try {
             formulaString = effect.formula.getString();
         } catch (e) {
-            formulaString = `Something went wrong: ${JSON.stringify(effect.formula)}`;
+            formulaString = `Something went wrong: ${e}`;
         }
         if (formulaString != "" && output != "") {
             output += " + ";
@@ -9120,7 +9137,7 @@ class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
         try {
             formulaString = effect.formula.getString();
         } catch (e) {
-            formulaString = `Something went wrong: ${JSON.stringify(effect.formula)}`;
+            formulaString = `Something went wrong: ${e}`;
         }
         if (formulaString != "" && output != "") {
             output += " + ";
@@ -9631,6 +9648,7 @@ class FormulaData {
     getString() {
         let output = "";
         this.workers.forEach((worker) => {
+            Debug.Log(`Hello ${worker.value}`);
             if (worker.definitionName.length > 0) {
                 let definition = WuxDef.Get(worker.definitionName[0]);
                 if (definition != undefined) {
@@ -9684,7 +9702,8 @@ class FormulaData {
                         output += `(max:${worker.max}) `;
                     }
                 }
-            } else if (worker.value > 0) {
+            } 
+            else if (worker.value > 0) {
                 output += `${output != "" ? "+ " : ""} ${worker.value} `;
             }
             else if (worker.value < 0) {
@@ -25267,7 +25286,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Force","traits":""},
                 "isCustom":false,"rank":0},
             "Frostbloom Whip Trip":{"name":"Frostbloom Whip Trip","fieldName":"frostbloom_whip_trip","group":"Dmg_Force; Stat_Prone; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Tripping Whip","version":"2.0","affinity":"Wood","tier":2,"action":"Full","forms":"","impacts":"","en":3,"willPower":20,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1-3","rangeType":"FilterType_RangeClose","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Whip","trigger":"","flavorText":"A well-aimed wrap of the whip pulls the target off their feet; Frostbloom consumes cold to strike with greater force.","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Tripping Whip","version":"2.1","affinity":"Wood","tier":2,"action":"Full","forms":"","impacts":"","en":3,"willPower":20,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1-3","rangeType":"FilterType_RangeClose","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Whip","trigger":"","flavorText":"A well-aimed wrap of the whip pulls the target off their feet; Frostbloom consumes cold to strike with greater force.","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1","T2"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"1","dVal":"4","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -25289,7 +25308,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Force","traits":""},
                 "isCustom":false,"rank":0},
             "Ashfall Whip Trip":{"name":"Ashfall Whip Trip","fieldName":"ashfall_whip_trip","group":"Dmg_Force; Stat_Prone; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Tripping Whip","version":"2.0","affinity":"Earth","tier":2,"action":"Full","forms":"","impacts":"","en":3,"willPower":20,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1-3","rangeType":"FilterType_RangeClose","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Whip","trigger":"","flavorText":"A well-aimed wrap of the whip pulls the target off their feet; Ashfall feeds on fire to deliver more force.","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Tripping Whip","version":"2.1","affinity":"Earth","tier":2,"action":"Full","forms":"","impacts":"","en":3,"willPower":20,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1-3","rangeType":"FilterType_RangeClose","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Whip","trigger":"","flavorText":"A well-aimed wrap of the whip pulls the target off their feet; Ashfall feeds on fire to deliver more force.","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1","T2"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"1","dVal":"4","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -25311,7 +25330,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Force","traits":""},
                 "isCustom":false,"rank":0},
             "Cryoshock Whip Trip":{"name":"Cryoshock Whip Trip","fieldName":"cryoshock_whip_trip","group":"Dmg_Force; Stat_Prone; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Tripping Whip","version":"2.0","affinity":"Water","tier":2,"action":"Full","forms":"","impacts":"","en":3,"willPower":20,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1-3","rangeType":"FilterType_RangeClose","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Whip","trigger":"","flavorText":"A well-aimed wrap of the whip pulls the target off their feet; Cryoshock draws on static to intensify the impact.","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Tripping Whip","version":"2.1","affinity":"Water","tier":2,"action":"Full","forms":"","impacts":"","en":3,"willPower":20,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1-3","rangeType":"FilterType_RangeClose","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Whip","trigger":"","flavorText":"A well-aimed wrap of the whip pulls the target off their feet; Cryoshock draws on static to intensify the impact.","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1","T2"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"1","dVal":"4","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -25333,7 +25352,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Force","traits":""},
                 "isCustom":false,"rank":0},
             "Whip Grab":{"name":"Whip Grab","fieldName":"whip_grab","group":"","descriptions":[],
-                "variable":"","techSet":"Style","version":"2.0","affinity":"","tier":2,"action":"Swift","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"1/Round","skill":"","hasAdv":"","range":"1-3","rangeType":"FilterType_RangeClose","target":"Target","size":1,"requirement":"The target must be an unattended object that you could latch onto and is no more than 15 Bulk.","itemTraits":"Trait_Whip","trigger":"","flavorText":"","coreDefense":"","definitions":[],
+                "variable":"","techSet":"Style","version":"2.1","affinity":"","tier":2,"action":"Swift","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"1/Round","skill":"","hasAdv":"","range":"1-3","rangeType":"FilterType_RangeClose","target":"Target","size":1,"requirement":"The target must be an unattended object that you could latch onto and is no more than 15 Bulk.","itemTraits":"Trait_Whip","trigger":"","flavorText":"","coreDefense":"","definitions":[],
                 "effects":{"keys":["T0"],
                     "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                             "effect":"You may grab the object and pull it to your space.","traits":""}},
@@ -25345,7 +25364,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"You may grab the object and pull it to your space.","traits":""},
                 "isCustom":false,"rank":0},
             "Whip Swing":{"name":"Whip Swing","fieldName":"whip_swing","group":"","descriptions":[],
-                "variable":"","techSet":"Whip Grab","version":"2.0","affinity":"","tier":2,"action":"Quick","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"1-3","rangeType":"FilterType_RangeClose","target":"Target","size":1,"requirement":"The target must be an object at least 2 spaces above you that you could latch onto.","itemTraits":"Trait_Whip","trigger":"","flavorText":"","coreDefense":"","definitions":[],
+                "variable":"","techSet":"Whip Grab","version":"2.1","affinity":"","tier":2,"action":"Quick","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"1-3","rangeType":"FilterType_RangeClose","target":"Target","size":1,"requirement":"The target must be an object at least 2 spaces above you that you could latch onto.","itemTraits":"Trait_Whip","trigger":"","flavorText":"","coreDefense":"","definitions":[],
                 "effects":{"keys":["T0"],
                     "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                             "effect":"You may jump a number of spaces equal to double the distance you are from the target object.","traits":""}},
@@ -25357,7 +25376,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"You may jump a number of spaces equal to double the distance you are from the target object.","traits":""},
                 "isCustom":false,"rank":0},
             "Whip Crack":{"name":"Whip Crack","fieldName":"whip_crack","group":"Branch_BindingMatter; Dmg_Force; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Style","version":"2.0","affinity":"","tier":3,"action":"Quick","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1-3","rangeType":"FilterType_RangeClose","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Whip","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Style","version":"2.1","affinity":"","tier":3,"action":"Quick","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1-3","rangeType":"FilterType_RangeClose","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Whip","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"1","dVal":"5","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -25374,7 +25393,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Force","traits":""},
                 "isCustom":false,"rank":0},
             "Vine Whip Crack":{"name":"Vine Whip Crack","fieldName":"vine_whip_crack","group":"Dmg_Force; Stat_Vined; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Whip Crack","version":"2.0","affinity":"Wood","tier":3,"action":"Quick","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1-3","rangeType":"FilterType_RangeClose","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Whip","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Whip Crack","version":"2.1","affinity":"Wood","tier":3,"action":"Quick","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1-3","rangeType":"FilterType_RangeClose","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Whip","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"1","dVal":"4","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -25396,7 +25415,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Force","traits":""},
                 "isCustom":false,"rank":0},
             "Sand Whip Crack":{"name":"Sand Whip Crack","fieldName":"sand_whip_crack","group":"Dmg_Force; Stat_Earthblight; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Whip Crack","version":"2.0","affinity":"Earth","tier":3,"action":"Quick","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1-3","rangeType":"FilterType_RangeClose","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Whip","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Whip Crack","version":"2.1","affinity":"Earth","tier":3,"action":"Quick","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1-3","rangeType":"FilterType_RangeClose","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Whip","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"1","dVal":"4","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -26237,7 +26256,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"","traits":""},
                 "isCustom":false,"rank":0},
             "Cleaving Slam":{"name":"Cleaving Slam","fieldName":"cleaving_slam","group":"Branch_GenEnergy; Dmg_Force; Stat_Prone; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Style","version":"2.0","affinity":"","tier":4,"action":"Full","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1","rangeType":"FilterType_RangeMelee","target":"Cone","size":2,"requirement":"","itemTraits":"Trait_Hammer","trigger":"","flavorText":"","coreDefense":"Brace","definitions":[],
+                "variable":"","techSet":"Style","version":"2.1","affinity":"","tier":4,"action":"Full","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1","rangeType":"FilterType_RangeMelee","target":"Cone","size":2,"requirement":"","itemTraits":"Trait_Hammer","trigger":"","flavorText":"","coreDefense":"Brace","definitions":[],
                 "effects":{"keys":["T0","T1"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"Ehancing","enhancing":"","dVal":"7","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -26257,7 +26276,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Force","traits":""},
                 "isCustom":false,"rank":0},
             "Blightburn Cleave Slam":{"name":"Blightburn Cleave Slam","fieldName":"blightburn_cleave_slam","group":"Dmg_Force; Stat_Prone; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Slam Down","version":"2.0","affinity":"Fire","tier":4,"action":"Full","forms":"","impacts":"","en":4,"willPower":40,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1","rangeType":"FilterType_RangeMelee","target":"Cone","size":2,"requirement":"","itemTraits":"Trait_Hammer","trigger":"","flavorText":"","coreDefense":"Brace","definitions":[],
+                "variable":"","techSet":"Slam Down","version":"2.1","affinity":"Fire","tier":4,"action":"Full","forms":"","impacts":"","en":4,"willPower":40,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1","rangeType":"FilterType_RangeMelee","target":"Cone","size":2,"requirement":"","itemTraits":"Trait_Hammer","trigger":"","flavorText":"","coreDefense":"Brace","definitions":[],
                 "effects":{"keys":["T0","T1","T2"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"Ehancing","enhancing":"","dVal":"4","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -26279,7 +26298,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Force","traits":""},
                 "isCustom":false,"rank":0},
             "Ironsand Cleave Slam":{"name":"Ironsand Cleave Slam","fieldName":"ironsand_cleave_slam","group":"Dmg_Force; Stat_Prone; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Slam Down","version":"2.0","affinity":"Metal","tier":4,"action":"Full","forms":"","impacts":"","en":4,"willPower":40,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1","rangeType":"FilterType_RangeMelee","target":"Cone","size":2,"requirement":"","itemTraits":"Trait_Hammer","trigger":"","flavorText":"","coreDefense":"Brace","definitions":[],
+                "variable":"","techSet":"Slam Down","version":"2.1","affinity":"Metal","tier":4,"action":"Full","forms":"","impacts":"","en":4,"willPower":40,"boon":0,"resourceCost":"","limits":"","skill":"Martial","hasAdv":"","range":"1","rangeType":"FilterType_RangeMelee","target":"Cone","size":2,"requirement":"","itemTraits":"Trait_Hammer","trigger":"","flavorText":"","coreDefense":"Brace","definitions":[],
                 "effects":{"keys":["T0","T1","T2"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"Ehancing","enhancing":"","dVal":"4","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -26808,7 +26827,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"","traits":""},
                 "isCustom":false,"rank":0},
             "Run And Gun":{"name":"Run And Gun","fieldName":"run_and_gun","group":"Branch_GrowthEnergy; TechFilterType_Utility; Trait_Move-Special; Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Style","version":"2.0","affinity":"","tier":3,"action":"Quick","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Handgun","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Style","version":"2.1","affinity":"","tier":3,"action":"Quick","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Handgun","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1"],
                     "values":{"T0":{"name":"T0","defense":"","target":"Self","type":"Move","subType":"FreeMove","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"Cmb_MvDash","workers":[{"variableName":["cmb-movedash"],
                                     "definitionName":["Cmb_MvDash"],
@@ -26830,7 +26849,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"","traits":""},
                 "isCustom":false,"rank":0},
             "Frostbloom Run N Gun":{"name":"Frostbloom Run N Gun","fieldName":"frostbloom_run_n_gun","group":"TechFilterType_Utility; Trait_Move-Special; Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Run And Gun","version":"2.0","affinity":"Wood","tier":3,"action":"Quick","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Handgun","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Run And Gun","version":"2.1","affinity":"Wood","tier":3,"action":"Quick","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Handgun","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1","T2"],
                     "values":{"T0":{"name":"T0","defense":"","target":"Self","type":"Move","subType":"FreeMove","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"Cmb_MvDash","workers":[{"variableName":["cmb-movedash"],
                                     "definitionName":["Cmb_MvDash"],
@@ -26854,7 +26873,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"","traits":""},
                 "isCustom":false,"rank":0},
             "Ashfall Run N Gun":{"name":"Ashfall Run N Gun","fieldName":"ashfall_run_n_gun","group":"TechFilterType_Utility; Trait_Move-Special; Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Run And Gun","version":"2.0","affinity":"Earth","tier":3,"action":"Quick","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Handgun","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Run And Gun","version":"2.1","affinity":"Earth","tier":3,"action":"Quick","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Handgun","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1","T2"],
                     "values":{"T0":{"name":"T0","defense":"","target":"Self","type":"Move","subType":"FreeMove","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"Cmb_MvDash","workers":[{"variableName":["cmb-movedash"],
                                     "definitionName":["Cmb_MvDash"],
@@ -26878,7 +26897,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"","traits":""},
                 "isCustom":false,"rank":0},
             "Cryoshock Run N Gun":{"name":"Cryoshock Run N Gun","fieldName":"cryoshock_run_n_gun","group":"TechFilterType_Utility; Trait_Move-Special; Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Run And Gun","version":"2.0","affinity":"Water","tier":3,"action":"Quick","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Handgun","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Run And Gun","version":"2.1","affinity":"Water","tier":3,"action":"Quick","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Handgun","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1","T2"],
                     "values":{"T0":{"name":"T0","defense":"","target":"Self","type":"Move","subType":"FreeMove","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"Cmb_MvDash","workers":[{"variableName":["cmb-movedash"],
                                     "definitionName":["Cmb_MvDash"],
@@ -26902,7 +26921,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"","traits":""},
                 "isCustom":false,"rank":0},
             "Execution Shot":{"name":"Execution Shot","fieldName":"execution_shot","group":"Branch_GenEnergy; Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Style","version":"2.0","affinity":"","tier":4,"action":"Full","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-3","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Handgun","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Style","version":"2.1","affinity":"","tier":4,"action":"Full","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-3","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Handgun","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"","dVal":"6","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -26921,7 +26940,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Piercing","traits":""},
                 "isCustom":false,"rank":0},
             "Execution Blightburn":{"name":"Execution Blightburn","fieldName":"execution_blightburn","group":"Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Execution Shot","version":"2.0","affinity":"Fire","tier":4,"action":"Full","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-3","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Handgun","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Execution Shot","version":"2.1","affinity":"Fire","tier":4,"action":"Full","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-3","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Handgun","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"","dVal":"6","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -26940,7 +26959,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Piercing","traits":""},
                 "isCustom":false,"rank":0},
             "Execution Ironsand":{"name":"Execution Ironsand","fieldName":"execution_ironsand","group":"Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Execution Shot","version":"2.0","affinity":"Metal","tier":4,"action":"Full","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-3","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Handgun","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Execution Shot","version":"2.1","affinity":"Metal","tier":4,"action":"Full","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-3","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Handgun","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"","dVal":"6","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -27035,7 +27054,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Piercing","traits":""},
                 "isCustom":false,"rank":0},
             "Focused Called Shot":{"name":"Focused Called Shot","fieldName":"focused_called_shot","group":"Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Style","version":"2.0","affinity":"","tier":2,"action":"Full","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-8","rangeType":"FilterType_RangeLong","target":"Target","size":1,"requirement":"You must have used Call Shot this round and the target must be the target of Call Shot.","itemTraits":"Trait_Longshot","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Style","version":"2.1","affinity":"","tier":2,"action":"Full","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-8","rangeType":"FilterType_RangeLong","target":"Target","size":1,"requirement":"You must have used Call Shot this round and the target must be the target of Call Shot.","itemTraits":"Trait_Longshot","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"1","dVal":"1","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -27054,7 +27073,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Piercing","traits":""},
                 "isCustom":false,"rank":0},
             "Call Shot":{"name":"Call Shot","fieldName":"call_shot","group":"TechFilterType_Utility; Trait_EN; Stat_Hindered","descriptions":[],
-                "variable":"","techSet":"Focused Called Shot; Fleeting Called Shot","version":"2.0","affinity":"","tier":2,"action":"Assist","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"2-8","rangeType":"FilterType_RangeLong","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Longshot","trigger":"","flavorText":"","coreDefense":"","definitions":[],
+                "variable":"","techSet":"Focused Called Shot; Fleeting Called Shot","version":"2.1","affinity":"","tier":2,"action":"Assist","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"2-8","rangeType":"FilterType_RangeLong","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Longshot","trigger":"","flavorText":"","coreDefense":"","definitions":[],
                 "effects":{"keys":["T0","T1"],
                     "values":{"T0":{"name":"T0","defense":"","target":"Self","type":"EN","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"1","workers":[{"variableName":[],
                                     "definitionName":[],
@@ -27131,7 +27150,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Piercing","traits":""},
                 "isCustom":false,"rank":0},
             "Cloaking Snipe":{"name":"Cloaking Snipe","fieldName":"cloaking_snipe","group":"Branch_GrowthEnergy; Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Style","version":"2.0","affinity":"","tier":3,"action":"Full","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-8","rangeType":"FilterType_RangeLong","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Longshot","trigger":"","flavorText":"A calm, steady shot from optimal range, maximizing precision.","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Style","version":"2.1","affinity":"","tier":3,"action":"Full","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-8","rangeType":"FilterType_RangeLong","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Longshot","trigger":"","flavorText":"A calm, steady shot from optimal range, maximizing precision.","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1","T2"],
                     "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                             "effect":"After this attack, if you are in cover you immediately gain the Hidden status.","traits":""},
@@ -27151,7 +27170,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"After this attack, if you are in cover you immediately gain the Hidden status.","traits":""},
                 "isCustom":false,"rank":0},
             "Cloak Frostbloom Snipe":{"name":"Cloak Frostbloom Snipe","fieldName":"cloak_frostbloom_snipe","group":"Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Hidden Snipe","version":"2.0","affinity":"Wood","tier":3,"action":"Full","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-8","rangeType":"FilterType_RangeLong","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Longshot","trigger":"","flavorText":"A calm, steady shot from optimal range, maximizing precision.","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Hidden Snipe","version":"2.1","affinity":"Wood","tier":3,"action":"Full","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-8","rangeType":"FilterType_RangeLong","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Longshot","trigger":"","flavorText":"A calm, steady shot from optimal range, maximizing precision.","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1","T2"],
                     "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                             "effect":"After this attack, if you are in cover you immediately gain the Hidden status.","traits":""},
@@ -27171,7 +27190,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"After this attack, if you are in cover you immediately gain the Hidden status.","traits":""},
                 "isCustom":false,"rank":0},
             "Cloak Ashfall Snipe":{"name":"Cloak Ashfall Snipe","fieldName":"cloak_ashfall_snipe","group":"Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Hidden Snipe","version":"2.0","affinity":"Earth","tier":3,"action":"Full","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-8","rangeType":"FilterType_RangeLong","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Longshot","trigger":"","flavorText":"A calm, steady shot from optimal range, maximizing precision.","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Hidden Snipe","version":"2.1","affinity":"Earth","tier":3,"action":"Full","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-8","rangeType":"FilterType_RangeLong","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Longshot","trigger":"","flavorText":"A calm, steady shot from optimal range, maximizing precision.","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1","T2"],
                     "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                             "effect":"After this attack, if you are in cover you immediately gain the Hidden status.","traits":""},
@@ -27191,7 +27210,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"After this attack, if you are in cover you immediately gain the Hidden status.","traits":""},
                 "isCustom":false,"rank":0},
             "Cloak Cryoshock Snipe":{"name":"Cloak Cryoshock Snipe","fieldName":"cloak_cryoshock_snipe","group":"Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Hidden Snipe","version":"2.0","affinity":"Water","tier":3,"action":"Full","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-8","rangeType":"FilterType_RangeLong","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Longshot","trigger":"","flavorText":"A calm, steady shot from optimal range, maximizing precision.","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Hidden Snipe","version":"2.1","affinity":"Water","tier":3,"action":"Full","forms":"","impacts":"","en":4,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-8","rangeType":"FilterType_RangeLong","target":"Target","size":1,"requirement":"","itemTraits":"Trait_Longshot","trigger":"","flavorText":"A calm, steady shot from optimal range, maximizing precision.","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1","T2"],
                     "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                             "effect":"After this attack, if you are in cover you immediately gain the Hidden status.","traits":""},
@@ -27211,7 +27230,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"After this attack, if you are in cover you immediately gain the Hidden status.","traits":""},
                 "isCustom":false,"rank":0},
             "Fleeting Called Shot":{"name":"Fleeting Called Shot","fieldName":"fleeting_called_shot","group":"TechFilterType_Utility; Trait_Move-Special; Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Style","version":"2.0","affinity":"","tier":4,"action":"Full","forms":"","impacts":"","en":5,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-8","rangeType":"FilterType_RangeLong","target":"Target","size":1,"requirement":"You must have used Call Shot this round and the target must be the target of Call Shot.","itemTraits":"Trait_Longshot","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Style","version":"2.1","affinity":"","tier":4,"action":"Full","forms":"","impacts":"","en":5,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-8","rangeType":"FilterType_RangeLong","target":"Target","size":1,"requirement":"You must have used Call Shot this round and the target must be the target of Call Shot.","itemTraits":"Trait_Longshot","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1","T2"],
                     "values":{"T0":{"name":"T0","defense":"","target":"Self","type":"Move","subType":"FreeMove","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"Cmb_MvDash","workers":[{"variableName":["cmb-movedash"],
                                     "definitionName":["Cmb_MvDash"],
@@ -27400,7 +27419,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Piercing","traits":""},
                 "isCustom":false,"rank":0},
             "Running Bladecast":{"name":"Running Bladecast","fieldName":"running_bladecast","group":"Branch_GrowthEnergy; TechFilterType_Utility; Trait_Move; Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Style","version":"2.0","affinity":"","tier":2,"action":"Quick","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Style","version":"2.1","affinity":"","tier":2,"action":"Quick","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1"],
                     "values":{"T0":{"name":"T0","defense":"","target":"Self","type":"Move","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"Cmb_MvDash","workers":[{"variableName":["cmb-movedash"],
                                     "definitionName":["Cmb_MvDash"],
@@ -27422,7 +27441,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"","traits":""},
                 "isCustom":false,"rank":0},
             "Vini ng Run Bladecast":{"name":"Vini ng Run Bladecast","fieldName":"vini_ng_run_bladecast","group":"TechFilterType_Utility; Trait_Move; Dmg_Piercing; Stat_Vined; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Running Bladecast","version":"2.0","affinity":"Wood","tier":2,"action":"Quick","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Running Bladecast","version":"2.1","affinity":"Wood","tier":2,"action":"Quick","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1","T2"],
                     "values":{"T0":{"name":"T0","defense":"","target":"Self","type":"Move","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"Cmb_MvDash","workers":[{"variableName":["cmb-movedash"],
                                     "definitionName":["Cmb_MvDash"],
@@ -27449,7 +27468,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"","traits":""},
                 "isCustom":false,"rank":0},
             "Muddy Run Bladecast":{"name":"Muddy Run Bladecast","fieldName":"muddy_run_bladecast","group":"TechFilterType_Utility; Trait_Move; Dmg_Piercing; Stat_Earthblight; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Running Bladecast","version":"2.0","affinity":"Earth","tier":2,"action":"Quick","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Running Bladecast","version":"2.1","affinity":"Earth","tier":2,"action":"Quick","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1","T2"],
                     "values":{"T0":{"name":"T0","defense":"","target":"Self","type":"Move","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"Cmb_MvDash","workers":[{"variableName":["cmb-movedash"],
                                     "definitionName":["Cmb_MvDash"],
@@ -27476,7 +27495,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"","traits":""},
                 "isCustom":false,"rank":0},
             "Pinpoint Bladecast":{"name":"Pinpoint Bladecast","fieldName":"pinpoint_bladecast","group":"Branch_NobleMartialEnergy; Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Style","version":"2.0","affinity":"","tier":3,"action":"Full","forms":"","impacts":"Accurate","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Style","version":"2.1","affinity":"","tier":3,"action":"Full","forms":"","impacts":"Accurate","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"1","dVal":"7","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -27493,7 +27512,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Piercing","traits":""},
                 "isCustom":false,"rank":0},
             "Firebomb Bladecast":{"name":"Firebomb Bladecast","fieldName":"firebomb_bladecast","group":"Dmg_Burn; Stat_Aflame; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Pinpoint Bladecast","version":"2.0","affinity":"Fire","tier":3,"action":"Full","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShortArea","target":"Blast","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Pinpoint Bladecast","version":"2.1","affinity":"Fire","tier":3,"action":"Full","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShortArea","target":"Blast","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"1","dVal":"4","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -27515,7 +27534,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Burn","traits":""},
                 "isCustom":false,"rank":0},
             "Staticbomb Bladecast":{"name":"Staticbomb Bladecast","fieldName":"staticbomb_bladecast","group":"Dmg_Energy; Stat_Static; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Pinpoint Bladecast","version":"2.0","affinity":"Metal","tier":3,"action":"Full","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShortArea","target":"Blast","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Pinpoint Bladecast","version":"2.1","affinity":"Metal","tier":3,"action":"Full","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShortArea","target":"Blast","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"1","dVal":"4","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -27537,7 +27556,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Energy","traits":""},
                 "isCustom":false,"rank":0},
             "Coldblast Bladecast":{"name":"Coldblast Bladecast","fieldName":"coldblast_bladecast","group":"Dmg_Cold; Stat_Chilled; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Pinpoint Bladecast","version":"2.0","affinity":"Water","tier":3,"action":"Full","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShortArea","target":"Blast","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Pinpoint Bladecast","version":"2.1","affinity":"Water","tier":3,"action":"Full","forms":"","impacts":"","en":3,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShortArea","target":"Blast","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"1","dVal":"4","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -27559,7 +27578,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Cold","traits":""},
                 "isCustom":false,"rank":0},
             "Swift Bladecast":{"name":"Swift Bladecast","fieldName":"swift_bladecast","group":"Branch_BindingMatter; Dmg_Piercing; Dmg_Psyche; Stat_Hindered; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Style","version":"2.0","affinity":"","tier":3,"action":"Swift","forms":"","impacts":"","en":1,"willPower":0,"boon":0,"resourceCost":"","limits":"1/Turn","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Style","version":"2.1","affinity":"","tier":3,"action":"Swift","forms":"","impacts":"","en":1,"willPower":0,"boon":0,"resourceCost":"","limits":"1/Turn","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "willBreakEffect":{"name":"","defense":"WillBreak","target":"","type":"Status","subType":"Set","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                     "effect":"Stat_Flustered","traits":""},
                 "effects":{"keys":["T0","T1","T2"],
@@ -27584,7 +27603,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Piercing","traits":""},
                 "isCustom":false,"rank":0},
             "Pincushion":{"name":"Pincushion","fieldName":"pincushion","group":"Branch_GrowthEnergy; Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Style","version":"2.0","affinity":"","tier":4,"action":"Quick","forms":"","impacts":"Accurate","en":5,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Style","version":"2.1","affinity":"","tier":4,"action":"Quick","forms":"","impacts":"Accurate","en":5,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"1","dVal":"3","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -27605,7 +27624,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Piercing","traits":""},
                 "isCustom":false,"rank":0},
             "Frostbloom Pincushion":{"name":"Frostbloom Pincushion","fieldName":"frostbloom_pincushion","group":"Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Pincushion","version":"2.0","affinity":"Wood","tier":4,"action":"Quick","forms":"","impacts":"Accurate","en":5,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Pincushion","version":"2.1","affinity":"Wood","tier":4,"action":"Quick","forms":"","impacts":"Accurate","en":5,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"1","dVal":"3","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -27627,7 +27646,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Piercing","traits":""},
                 "isCustom":false,"rank":0},
             "Ashfall Pincushion":{"name":"Ashfall Pincushion","fieldName":"ashfall_pincushion","group":"Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Pincushion","version":"2.0","affinity":"Earth","tier":4,"action":"Quick","forms":"","impacts":"Accurate","en":5,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Pincushion","version":"2.1","affinity":"Earth","tier":4,"action":"Quick","forms":"","impacts":"Accurate","en":5,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"1","dVal":"3","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -27648,7 +27667,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"Dmg_Piercing","traits":""},
                 "isCustom":false,"rank":0},
             "Cryoshock Pincushion":{"name":"Cryoshock Pincushion","fieldName":"cryoshock_pincushion","group":"Dmg_Piercing; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Pincushion","version":"2.0","affinity":"Water","tier":4,"action":"Quick","forms":"","impacts":"Accurate","en":5,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
+                "variable":"","techSet":"Pincushion","version":"2.1","affinity":"Water","tier":4,"action":"Quick","forms":"","impacts":"Accurate","en":5,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"Aim","hasAdv":"","range":"2-5","rangeType":"FilterType_RangeShort","target":"Target","size":1,"requirement":"","itemTraits":"Trait_ThrownBlade","trigger":"","flavorText":"","coreDefense":"Evasion","definitions":[],
                 "effects":{"keys":["T0","T1"],
                     "values":{"T0":{"name":"T0","defense":"Core","target":"","type":"Damage","subType":"","enhancing":"1","dVal":"3","dType":"6","formula":{"formulaString":"Potency","workers":[{"variableName":["potency"],
                                     "definitionName":["Potency"],
@@ -29263,9 +29282,9 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"2","traits":""},
                 "isCustom":false,"rank":0},
             "Spring":{"name":"Spring","fieldName":"spring","group":"TechFilterType_Utility; Trait_Move; TechFilterType_Combat","descriptions":[],
-                "variable":"","techSet":"Leap","version":"2.0","affinity":"","tier":1,"action":"Swift","forms":"","impacts":"","en":1,"willPower":0,"boon":0,"resourceCost":"","limits":"1/Round","skill":"Physique","hasAdv":"","range":"","rangeType":"FilterType_RangeSelf","target":"Self","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"You spring forward using your powerful legs, propelling yourself swiftly.","coreDefense":"11","definitions":[],
+                "variable":"","techSet":"Leap","version":"2.1","affinity":"","tier":1,"action":"Swift","forms":"","impacts":"","en":1,"willPower":0,"boon":0,"resourceCost":"","limits":"1/Round","skill":"Physique","hasAdv":"","range":"","rangeType":"FilterType_RangeSelf","target":"Self","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"You spring forward using your powerful legs, propelling yourself swiftly.","coreDefense":"11","definitions":[],
                 "effects":{"keys":["T0","T1"],
-                    "values":{"T0":{"name":"T0","defense":"","target":"Self","type":"Move","subType":"Jump","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"2","workers":[{"variableName":[],
+                    "values":{"T0":{"name":"T0","defense":"","target":"Self","type":"Move","subType":"Jump","enhancing":"1","dVal":"","dType":"","formula":{"formulaString":"2","workers":[{"variableName":[],
                                     "definitionName":[],
                                     "value":2,"multiplier":1,"max":0}]},
                             "effect":"0","traits":""},
@@ -29280,7 +29299,7 @@ var WuxTechs = WuxTechs || (function() {
                                 "value":1,"multiplier":1,"max":0}]},
                         "effect":"","traits":""}},
                 "damageTypes":[],
-                "endEffectConditionName":"","endEffectConditionEffect":"","techniqueEffect":{"name":"T0","defense":"","target":"Self","type":"Move","subType":"Jump","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"2","workers":[{"variableName":[],
+                "endEffectConditionName":"","endEffectConditionEffect":"","techniqueEffect":{"name":"T0","defense":"","target":"Self","type":"Move","subType":"Jump","enhancing":"1","dVal":"","dType":"","formula":{"formulaString":"2","workers":[{"variableName":[],
                             "definitionName":[],
                             "value":2,"multiplier":1,"max":0}]},
                     "effect":"0","traits":""},
@@ -36315,7 +36334,7 @@ var WuxTechs = WuxTechs || (function() {
                 "isCustom":false,"rank":0,"secondEffectConditionName":"TechNewTargets","secondEffectConditionEffect":"Five magic restraints are secured on one character."}
             ,
             "Pouch":{"name":"Pouch","fieldName":"pouch","group":"","descriptions":[],
-                "variable":"","techSet":"Gear","version":"2.0","affinity":"","tier":2,"action":"Passive","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"FilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],
+                "variable":"","techSet":"Gear","version":"2.1","affinity":"","tier":2,"action":"Passive","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"FilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],
                 "effects":{"keys":["T0"],
                     "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"2","workers":[{"variableName":[],
                                     "definitionName":[],
@@ -36331,7 +36350,7 @@ var WuxTechs = WuxTechs || (function() {
                     "effect":"ConsumableSlots","traits":""},
                 "isCustom":false,"rank":0},
             "Backpack":{"name":"Backpack","fieldName":"backpack","group":"","descriptions":[],
-                "variable":"","techSet":"Gear","version":"2.0","affinity":"","tier":2,"action":"Passive","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"FilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],
+                "variable":"","techSet":"Gear","version":"2.1","affinity":"","tier":2,"action":"Passive","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"FilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],
                 "effects":{"keys":["T0"],
                     "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"3","workers":[{"variableName":[],
                                     "definitionName":[],
@@ -38876,7 +38895,7 @@ var WuxItems = WuxItems || (function() {
             ,
             "Pouch":{"name":"Pouch","fieldName":"","group":"Tool","descriptions":[],
                 "variable":"","category":"Misc","itemType":"UsableItem","bulk":3,"value":45,"traits":"","description":"This pack is supported by two straps that can be loosened or tightened to fit most body types. It can be adjusted to any facing along its wearer’s waist, torso, or leg. The pack can store consumable items.","valMod":1,"skill":"Build","dc":12,"time":1,"components":"","commonTechniques":"","technique":{"name":"Pouch","fieldName":"pouch","group":"","descriptions":[],
-                    "variable":"","techSet":"Gear","version":"2.0","affinity":"","tier":2,"action":"Passive","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"FilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],
+                    "variable":"","techSet":"Gear","version":"2.1","affinity":"","tier":2,"action":"Passive","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"FilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],
                     "effects":{"keys":["T0"],
                         "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"2","workers":[{"variableName":[],
                                         "definitionName":[],
@@ -38894,7 +38913,7 @@ var WuxItems = WuxItems || (function() {
                 "hasTechnique":true},
             "Backpack":{"name":"Backpack","fieldName":"","group":"Tool","descriptions":[],
                 "variable":"","category":"Misc","itemType":"UsableItem","bulk":10,"value":300,"traits":"","description":"This cloth knapsack has one large pocket that closes with a buckled strap and holds about 2 cubic feet of material. Some may have one or more smaller pockets on the sides.","valMod":2,"skill":"Build","dc":12,"time":2,"components":"","commonTechniques":"","technique":{"name":"Backpack","fieldName":"backpack","group":"","descriptions":[],
-                    "variable":"","techSet":"Gear","version":"2.0","affinity":"","tier":2,"action":"Passive","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"FilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],
+                    "variable":"","techSet":"Gear","version":"2.1","affinity":"","tier":2,"action":"Passive","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"FilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],
                     "effects":{"keys":["T0"],
                         "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"3","workers":[{"variableName":[],
                                         "definitionName":[],
