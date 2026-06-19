@@ -625,7 +625,10 @@ var ActionBuilder = ActionBuilder || (function () {
                 `WuxWorkerFilterPopup.RemoveFilter()`, true)}
                 ${WuxSheetBackend.OnChange(
                 [WuxDef.GetVariable("Forme_CustomStyleFilter")],
-                `WuxWorkerFilterPopup.OpenCustomStyleFilter()`, true)}`;
+                `WuxWorkerFilterPopup.OpenCustomStyleFilter()`, true)}
+                ${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Forme_RecommendedStyles")],
+                `WuxWorkerInspectPopup.OpenRecommendedStylesInspection()`, true)}`;
         },
         listenerStyleAutoFilterButtons = function () {
             let autoFilters = WuxDef.Filter([new DatabaseFilterData("group", "TechAutoFilter")]);

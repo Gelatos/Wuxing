@@ -784,8 +784,10 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             return WuxSheetMain.HiddenFieldToggle(skillDefinition.getAttribute(WuxDef._learn),
                                     `<div class="wuxIsKeySkill">${interactHeader}</div>`,
                                     `${interactHeader}`) +
+                                WuxSheetMain.Desc(skill.quickDescription) +
                                 WuxSheetMain.HiddenField(skillDefinition.getAttribute(WuxDef._rank),
-                                    `<div class="wuxMarginLeft50">${expertiseHeader}</div>`);
+                                    `<div class="wuxMarginLeft20">${expertiseHeader}</div>`) + 
+                                WuxSheetMain.Row("&nbsp;");
                         },
                         printInteractiveSkillHeader = function (skill, skillDefinition) {
                             let abilityScores = [WuxDef.GetAbbreviation(skill.abilityScore)];

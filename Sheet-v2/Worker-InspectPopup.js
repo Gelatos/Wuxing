@@ -1053,6 +1053,175 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         performStyleFilterInspection(filters, title);
     };
 
+    const openRecommendedStylesInspection = function () {
+        Debug.Log("Open Recommended Styles Inspection");
+
+        let skillWorker = new WuxSkillWorkerBuild();
+        let jobWorker = new WuxBasicWorkerBuild("Job");
+        let styleWorker = new WuxStyleWorkerBuild();
+
+        let attributeHandler = new WorkerAttributeHandler();
+        attributeHandler.addMod([
+            skillWorker.attrBuildDraft,
+            jobWorker.attrBuildDraft,
+            styleWorker.attrBuildDraft,
+            WuxDef.GetVariable("Gear_EquippedItemTraits", WuxDef._max),
+            WuxDef.GetVariable("Affinity"),
+            WuxDef.GetVariable("AdvancedAffinity"),
+            WuxDef.GetVariable("Ancestry"),
+            WuxDef.GetVariable("CR", WuxDef._max)
+        ]);
+
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            skillWorker.setBuildStatsDraft(attrHandler);
+            jobWorker.setBuildStatsDraft(attrHandler);
+            styleWorker.setBuildStatsDraft(attrHandler);
+
+            // Build set of all relevant skill titles: trained skills + key skills
+            let allSkillTitles = new Set();
+            let allSkillDefs = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
+
+            // Trained skills: build a lookup from variable name -> value
+            let skillRanksByVar = {};
+            skillWorker.iterateBuildStats(function (buildStat) {
+                skillRanksByVar[buildStat.name] = buildStat.value;
+            });
+            for (let i = 0; i < allSkillDefs.length; i++) {
+                let rankVar = allSkillDefs[i].getVariable(WuxDef._rank);
+                let rank = skillRanksByVar[rankVar];
+                if (rank != null && rank !== "0" && rank !== "") {
+                    allSkillTitles.add(allSkillDefs[i].title);
+                }
+            }
+
+            // Key skills from job styles + learned technique skills
+            let keySkillTitles = WuxWorkerSkills.GetKeySkillTitles(jobWorker, styleWorker);
+            keySkillTitles.forEach(function (skill) { allSkillTitles.add(skill); });
+
+            // Equipped item traits
+            let equippedItemTraits = [];
+            try {
+                let parsed = JSON.parse(attrHandler.parseString(WuxDef.GetVariable("Gear_EquippedItemTraits", WuxDef._max)));
+                if (Array.isArray(parsed)) equippedItemTraits = parsed;
+            } catch (e) {}
+
+            // If any item traits are equipped, exclude generic weapon skills from the skill filter
+            if (equippedItemTraits.length > 0) {
+                allSkillTitles.delete("Aim");
+                allSkillTitles.delete("Martial");
+            }
+
+            // User affinity data for restrictions (always applied)
+            let advancedAffinityRaw = attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity"));
+            let advancedAffinities = advancedAffinityRaw.split(";").map(function (s) { return s.trim(); }).filter(function (s) { return s !== ""; });
+            let userAffinities = [
+                attrHandler.parseString(WuxDef.GetVariable("Affinity")),
+                ...advancedAffinities,
+                attrHandler.parseString(WuxDef.GetVariable("Ancestry"))
+            ];
+            let userCr = attrHandler.parseInt(WuxDef.GetVariable("CR", WuxDef._max));
+
+            // Learned style names to exclude
+            let learnedStyleNames = new Set(styleWorker.getStyles().map(function (s) { return s.name; }));
+
+            // All base style techniques (techSet == "Style")
+            let allStyleNames = [...WuxTechs.GetSortedGroup("style", "Style"), "Style"];
+            let allStyleTechs = WuxTechs.Filter([new DatabaseFilterData("style", allStyleNames)]);
+            let allBaseStyles = allStyleTechs.filter(function (t) { return t.techSet === "Style"; });
+
+            // Skill filter: styles where any technique has a matching plain skill
+            let skillMatchedStyleNames = new Set();
+            if (allSkillTitles.size > 0) {
+                let skillMatchedTechs = WuxTechs.Filter([
+                    new DatabaseFilterData("skill", [...allSkillTitles]),
+                    new DatabaseFilterData("style", allStyleNames)
+                ]);
+                for (let i = 0; i < skillMatchedTechs.length; i++) {
+                    let tech = skillMatchedTechs[i];
+                    if (tech.techSet === "Style") {
+                        skillMatchedStyleNames.add(tech.name);
+                    } else {
+                        let base = WuxTechs.Get(tech.techSet);
+                        if (base != undefined && base.techSet === "Style") {
+                            skillMatchedStyleNames.add(base.name);
+                        }
+                    }
+                }
+            }
+
+            // Item trait filter: styles where any technique requires an equipped trait
+            let itemTraitMatchedStyleNames = new Set();
+            if (equippedItemTraits.length > 0) {
+                for (let i = 0; i < allBaseStyles.length; i++) {
+                    let baseStyle = allBaseStyles[i];
+                    let styleTechs = WuxTechs.Filter([new DatabaseFilterData("style", baseStyle.name)]);
+                    let matched = false;
+                    for (let j = 0; j < styleTechs.length && !matched; j++) {
+                        let tech = styleTechs[j];
+                        if (!tech.itemTraits || tech.itemTraits === "") continue;
+                        let traits = tech.itemTraits.split(";").map(function (s) { return s.trim(); }).filter(function (s) { return s !== ""; });
+                        if (traits.some(function (traitKey) {
+                            let def = WuxDef.Get(traitKey);
+                            return def != undefined && equippedItemTraits.includes(def.getTitle());
+                        })) {
+                            matched = true;
+                        }
+                    }
+                    if (matched) itemTraitMatchedStyleNames.add(baseStyle.name);
+                }
+            }
+
+            // Union both sets, exclude learned, always apply level/affinity restrictions
+            let recommendedStyles = allBaseStyles.filter(function (style) {
+                if (!skillMatchedStyleNames.has(style.name) && !itemTraitMatchedStyleNames.has(style.name)) return false;
+                if (learnedStyleNames.has(style.name)) return false;
+                if (style.tier > userCr) return false;
+                if (style.affinity !== "") {
+                    let affinityParts = style.affinity.split(";").map(function (s) { return s.trim(); });
+                    if (!affinityParts.some(function (part) { return userAffinities.includes(part); })) return false;
+                }
+                return true;
+            });
+
+            // Build inventory items from the pre-filtered sorted list
+            let inventoryItemHandler = new InspectionInventoryItemHandler();
+            let sortedStyles = WuxTechs.SortFilteredTechniquesByRequirement(recommendedStyles);
+            let maxTier = 9;
+            for (let tier = 1; tier <= maxTier; tier++) {
+                let tierData = sortedStyles.get(tier);
+                tierData.iterate(function (techsByAffinity, affinity) {
+                    if (techsByAffinity.length === 0) return;
+
+                    let level = Format.GetLevelPrerequisites(tier);
+                    let itemTitle = level > 0 ? `Level ${level}` : "";
+                    if (affinity !== "") {
+                        itemTitle = itemTitle !== "" ? `${affinity} - ${itemTitle}` : affinity;
+                    }
+                    if (itemTitle === "") itemTitle = "Level 1";
+                    inventoryItemHandler.addItem(new InspectionInventoryItem(itemTitle, "", true, affinity, tier));
+
+                    techsByAffinity.forEach(function (technique) {
+                        let iconAffinities = technique.getAffinityParts();
+                        let variants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
+                        for (let i = 0; i < variants.length; i++) {
+                            let variantParts = variants[i].getAffinityParts();
+                            for (let j = 0; j < variantParts.length; j++) {
+                                if (!iconAffinities.includes(variantParts[j])) iconAffinities.push(variantParts[j]);
+                            }
+                        }
+                        inventoryItemHandler.addItem(new InspectionInventoryItem(technique.name, technique.name, false, undefined, undefined, iconAffinities));
+                    });
+                });
+            }
+
+            let attributeHandler2 = new WorkerAttributeHandler();
+            openTechniqueInspection(attributeHandler2, "Recommended Styles", inventoryItemHandler.items, ["Add Style"]);
+            attributeHandler2.run();
+        });
+
+        attributeHandler.run();
+    };
+
     const openStyleFilterTechniqueInspection = function (eventinfo) {
         Debug.Log("Open Style Filter Technique Inspection");
 
@@ -1245,6 +1414,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         OpenStyleFilterTechniqueInspection: openStyleFilterTechniqueInspection,
         OpenPerkFilterTechniqueInspection: openPerkFilterTechniqueInspection,
         OpenCustomStyleFilterInspection: openCustomStyleFilterInspection,
+        OpenRecommendedStylesInspection: openRecommendedStylesInspection,
         SelectInspectionItemFromActiveGroup: selectInspectionItemFromActiveGroup,
         Close: close,
         AddSelectedInspectElement: addSelectedInspectElement,

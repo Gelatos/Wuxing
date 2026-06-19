@@ -1478,6 +1478,7 @@ class SkillData extends WuxDatabaseData {
         this.abilityScore = json.abilityScore;
         this.abilityScore2 = json.abilityScore2;
         this.descriptions = json.descriptions;
+        this.quickDescription = json.quickDescription;
     }
 
     importSheets(dataArray) {
@@ -1496,7 +1497,8 @@ class SkillData extends WuxDatabaseData {
         i++;
         this.descriptions = ["" + dataArray[i]];
         i++;
-
+        this.quickDescription = "" + dataArray[i];
+        i++;
     }
 
     createEmpty() {
@@ -1507,6 +1509,8 @@ class SkillData extends WuxDatabaseData {
         this.subGroup = "";
         this.abilityScore = "";
         this.abilityScore2 = "";
+        this.descriptions = [""];
+        this.quickDescription = "";
     }
 
     createDefinition(baseDefinition) {

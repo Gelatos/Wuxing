@@ -65,49 +65,58 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
             });
         },
         
+        getKeySkillTitles = function (jobWorker, styleWorker) {
+            let keySkillTitles = new Set();
+
+            jobWorker.iterateBuildStats(function (styleVariableData) {
+                if (styleVariableData.value == null || styleVariableData.value <= 0) {
+                    return;
+                }
+                let style = WuxStyles.GetByVariableName(styleVariableData.name);
+                if (style == undefined) return;
+                let skills = style.skills.split(";");
+                for (let i = 0; i < skills.length; i++) {
+                    let skill = skills[i].trim();
+                    if (skill) {
+                        Debug.Log(`Adding ${skill} to key skills`);
+                        keySkillTitles.add(skill);
+                    }
+                }
+            });
+
+            let techniques = styleWorker.getTechniques();
+            for (let i = 0; i < techniques.length; i++) {
+                let skill = techniques[i].skill.trim();
+                if (skill) {
+                    Debug.Log(`Adding ${skill} to key skills`);
+                    keySkillTitles.add(skill);
+                }
+            }
+
+            return keySkillTitles;
+        },
+
         updateKeySkills = function (attributeHandler) {
             let jobWorker = new WuxBasicWorkerBuild("Job");
             let styleWorker = new WuxStyleWorkerBuild();
             attributeHandler.addMod([jobWorker.attrBuildDraft, styleWorker.attrBuildDraft]);
-            
+
             attributeHandler.addGetAttrCallback(function (attrHandler) {
-                let styleSkillDictionary = new Dictionary();
                 jobWorker.setBuildStatsDraft(attrHandler);
                 styleWorker.setBuildStatsDraft(attrHandler);
 
-                jobWorker.iterateBuildStats(function (styleVariableData) {
-                    if (styleVariableData.value == null || styleVariableData.value <= 0) {
-                        return;
-                    }
-                    let style = WuxStyles.GetByVariableName(styleVariableData.name);
-                    let skills = style.skills.split(";");
-                    for (let i = 0; i < skills.length; i++) {
-                        let skill = skills[i].trim();
-                        styleSkillDictionary.add(skill, 0);
-                        Debug.Log(`Adding ${skill} to key skills`);
-                    }
-                });
-
-                let techniques = styleWorker.getTechniques();
-                for (let i = 0; i < techniques.length; i++) {
-                    let technique = techniques[i];
-                    if (technique.skill.trim() == "") {
-                        continue;
-                    }
-                    Debug.Log(`Adding ${technique.skill} to key skills`);
-                    styleSkillDictionary.add(technique.skill, 0);
-                }
+                let keySkillTitles = getKeySkillTitles(jobWorker, styleWorker);
 
                 let skillDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
                 for (let i = 0; i < skillDefinitions.length; i++) {
-                    if (styleSkillDictionary.keys.includes(skillDefinitions[i].title)) {
+                    let isKeySkill = keySkillTitles.has(skillDefinitions[i].title);
+                    if (isKeySkill) {
                         Debug.Log(`Found ${skillDefinitions[i].title} as a skill in key skills`);
                     }
                     attrHandler.addUpdate(
-                        skillDefinitions[i].getVariable(WuxDef._learn), 
-                        styleSkillDictionary.keys.includes(skillDefinitions[i].title) ? "on" : "0");
+                        skillDefinitions[i].getVariable(WuxDef._learn),
+                        isKeySkill ? "on" : "0");
                 }
-                
             });
         }
 
@@ -115,7 +124,8 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
         UpdateBuildPoints: updateBuildPoints,
         RefreshStats: refreshStats,
         UpdateStats: updateStats,
-        UpdateKeySkills: updateKeySkills
+        UpdateKeySkills: updateKeySkills,
+        GetKeySkillTitles: getKeySkillTitles
     };
 }());
 

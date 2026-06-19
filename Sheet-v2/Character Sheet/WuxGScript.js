@@ -1478,6 +1478,7 @@ class SkillData extends WuxDatabaseData {
         this.abilityScore = json.abilityScore;
         this.abilityScore2 = json.abilityScore2;
         this.descriptions = json.descriptions;
+        this.quickDescription = json.quickDescription;
     }
 
     importSheets(dataArray) {
@@ -1496,7 +1497,8 @@ class SkillData extends WuxDatabaseData {
         i++;
         this.descriptions = ["" + dataArray[i]];
         i++;
-
+        this.quickDescription = "" + dataArray[i];
+        i++;
     }
 
     createEmpty() {
@@ -1507,6 +1509,8 @@ class SkillData extends WuxDatabaseData {
         this.subGroup = "";
         this.abilityScore = "";
         this.abilityScore2 = "";
+        this.descriptions = [""];
+        this.quickDescription = "";
     }
 
     createDefinition(baseDefinition) {
@@ -10726,7 +10730,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
     };
     const buildCharacterCreationTabs = function (sheetName) {
         let output = "";
-        let tabNames = ["Advancement", "Gear", "Knowledge", "Styles", "Attributes", "Jobs", "Origin"];
+        let tabNames = ["Advancement", "Knowledge", "Styles", "Gear", "Attributes", "Jobs", "Origin"];
 
         for (let i = 0; i < tabNames.length; i++) {
             output += buildTabButton("radio", WuxDef.GetAttribute("Page"), tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
@@ -12946,7 +12950,10 @@ var ActionBuilder = ActionBuilder || (function () {
                 `WuxWorkerFilterPopup.RemoveFilter()`, true)}
                 ${WuxSheetBackend.OnChange(
                 [WuxDef.GetVariable("Forme_CustomStyleFilter")],
-                `WuxWorkerFilterPopup.OpenCustomStyleFilter()`, true)}`;
+                `WuxWorkerFilterPopup.OpenCustomStyleFilter()`, true)}
+                ${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Forme_RecommendedStyles")],
+                `WuxWorkerInspectPopup.OpenRecommendedStylesInspection()`, true)}`;
         },
         listenerStyleAutoFilterButtons = function () {
             let autoFilters = WuxDef.Filter([new DatabaseFilterData("group", "TechAutoFilter")]);
@@ -14030,8 +14037,10 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             return WuxSheetMain.HiddenFieldToggle(skillDefinition.getAttribute(WuxDef._learn),
                                     `<div class="wuxIsKeySkill">${interactHeader}</div>`,
                                     `${interactHeader}`) +
+                                WuxSheetMain.Desc(skill.quickDescription) +
                                 WuxSheetMain.HiddenField(skillDefinition.getAttribute(WuxDef._rank),
-                                    `<div class="wuxMarginLeft50">${expertiseHeader}</div>`);
+                                    `<div class="wuxMarginLeft20">${expertiseHeader}</div>`) + 
+                                WuxSheetMain.Row("&nbsp;");
                         },
                         printInteractiveSkillHeader = function (skill, skillDefinition) {
                             let abilityScores = [WuxDef.GetAbbreviation(skill.abilityScore)];
