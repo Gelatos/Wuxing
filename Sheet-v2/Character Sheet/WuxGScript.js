@@ -550,6 +550,9 @@ class ExtendedDefinitionDatabase extends Database {
         if (value.modifiers.includes(WuxDef._techset)) {
             this.addSortingGroup("techMods", WuxDef._techset, value);
         }
+        if (value.modifiers.includes(WuxDef._gear)) {
+            this.addSortingGroup("techMods", WuxDef._gear, value);
+        }
         if (value.isResource) {
             this.addSortingGroup("hasMax", "true", value);
         }

@@ -728,7 +728,7 @@ class FormeTechniqueDatabase {
                 WuxWorkerActionsService.TryAddTechniqueToBoosters(attrHandler, technique, formeTechDatabase.boosterFieldName);
             }
         });
-        formeTechDatabase.addGearItemTechniques();
+        formeTechDatabase.addGearItemTechniques(attrHandler);
         this.techSorter.getSortOrder("Action", formeTechDatabase.techDictionary);
         this.sortList = [this.techSorter.listSize];
         WuxWorkerActionsService.SetTechniqueBoosters(attrHandler);
@@ -969,20 +969,25 @@ class FormeTechniqueDatabase {
         );
     }
 
-    addGearItemTechniques() {
+    addGearItemTechniques(attrHandler) {
         let gearEquipSet = new Set(this.gearEquipBuild);
+        let newGearBoosters = [];
         this.gearEquipBuildMax.forEach(itemName => {
             let item = WuxItems.Get(itemName);
             if (item == undefined) return;
             let isEquipped = gearEquipSet.has(itemName);
             if (item.hasTechnique && item.technique != undefined) {
                 this.tryAddGearTechniqueToTechDictionary(item.technique, isEquipped);
+                if (isEquipped && item.technique.action == "Passive" && !newGearBoosters.includes(itemName)) {
+                    newGearBoosters.push(itemName);
+                }
             }
             let commonTechniques = item.getCommonTechniques ? item.getCommonTechniques() : [];
             commonTechniques.forEach(technique => {
                 this.tryAddGearTechniqueToTechDictionary(technique, isEquipped);
             });
         });
+        attrHandler.addUpdate(WuxDef.GetVariable("BoostGearTech"), JSON.stringify(newGearBoosters));
     }
 
     tryAddGearTechniqueToTechDictionary(technique, isEquipped) {
