@@ -11706,15 +11706,21 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let deleteDef = WuxDef.Get("Gear_Delete");
 
                     let rowContents = WuxSheetMain.MultiRow(`
-                        <input class="wuxEquipableCount" type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
-                        <div class="wuxEquipableName">
-                            <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
-                            <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
-                        </div>
-                        <div class="wuxEquippableButtonGroup">
-                            ${WuxSheetMain.HiddenAuxSpanField(getGearAttribute("ItemSlotOpen"), WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle()}`, "wuxRepeatingTechActionButton"))}
-                            ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
-                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                        <div class="wuxEquipableRow">
+                            <div class="wuxEquipableCountCol">
+                                <input type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
+                            </div>
+                            <div class="wuxEquipableBody">
+                                <div class="wuxEquipableName">
+                                    <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
+                                    <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
+                                </div>
+                                <div class="wuxEquipableButtonRow">
+                                    ${WuxSheetMain.HiddenAuxSpanField(getGearAttribute("ItemSlotOpen"), WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle()}`, "wuxRepeatingTechActionButton"))}
+                                    ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                                    ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                                </div>
+                            </div>
                         </div>`);
 
                     return WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents);
@@ -11812,15 +11818,21 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let deleteDef = WuxDef.Get("Gear_Delete");
 
                     let rowContents = WuxSheetMain.MultiRow(`
-                        <input class="wuxEquipableCount" type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
-                        <div class="wuxEquipableName">
-                            <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
-                            <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
-                        </div>
-                        <div class="wuxEquippableButtonGroup">
-                            ${WuxSheetMain.HiddenAuxSpanField(getGearAttribute("ItemSlotOpen"), WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle()}`, "wuxRepeatingTechActionButton"))}
-                            ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
-                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                        <div class="wuxEquipableRow">
+                            <div class="wuxEquipableCountCol">
+                                <input type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
+                            </div>
+                            <div class="wuxEquipableBody">
+                                <div class="wuxEquipableName">
+                                    <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
+                                    <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
+                                </div>
+                                <div class="wuxEquipableButtonRow">
+                                    ${WuxSheetMain.HiddenAuxSpanField(getGearAttribute("ItemSlotOpen"), WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle()}`, "wuxRepeatingTechActionButton"))}
+                                    ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                                    ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                                </div>
+                            </div>
                         </div>`);
 
                     return WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents);
