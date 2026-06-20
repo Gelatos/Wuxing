@@ -663,7 +663,7 @@ class FormeTechniqueDatabase {
             },
             {
                 mainDef: WuxDef.Get("Gear_EquipmentSlot"),
-                max: parseInt(WuxDef.Get("Gear_EquipmentSlotCount").formula.getValue()),
+                max: parseInt(WuxDef.Get("EquipmentSlots").formula.getValue()),
                 countDef: WuxDef.Get("EquipmentSlots")
             }
         ];

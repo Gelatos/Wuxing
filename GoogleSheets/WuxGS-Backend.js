@@ -470,6 +470,12 @@ var GearBuilder = GearBuilder || (function () {
         print = function () {
             let output = "";
             output += listenerFindItemsButtons();
+            output += listenerFindConsumablesButtons();
+            output += listenerEquipConsumable();
+            output += listenerUnequipConsumable();
+            output += listenerDeleteRepeatingConsumable();
+            output += listenerInspectRepeatingConsumable();
+            output += listenerInspectSyncedConsumable();
             output += listenerPurchaseRepeatingEquipment();
             output += listenerEquipRepeatingEquipment();
             output += listenerEquipGearItem();
@@ -488,6 +494,36 @@ var GearBuilder = GearBuilder || (function () {
             variables.push(WuxDef.GetVariable("Popup_FindItemsByFilter"));
             variables.push(WuxDef.GetVariable("Popup_FindItemsByTechnique"));
             return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindItems(eventinfo)`, true);
+        },
+        listenerFindConsumablesButtons = function () {
+            let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
+            let variables = consuTypes.map(def => def.getVariable());
+            return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindConsumables(eventinfo)`, true);
+        },
+        listenerEquipConsumable = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Gear_Equip")}`],
+                `WuxWorkerGear.EquipConsumable(eventinfo)`, true);
+        },
+        listenerUnequipConsumable = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingSyncConsumables")}:${WuxDef.GetVariable("Gear_Unequip")}`],
+                `WuxWorkerGear.UnequipConsumable(eventinfo)`, true);
+        },
+        listenerDeleteRepeatingConsumable = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Gear_Delete")}`],
+                `WuxWorkerGear.DeleteConsumable(eventinfo)`, true);
+        },
+        listenerInspectRepeatingConsumable = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Gear_Inspect")}`],
+                `WuxWorkerGear.InspectConsumable(eventinfo, "RepeatingConsumables")`, true);
+        },
+        listenerInspectSyncedConsumable = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingSyncConsumables")}:${WuxDef.GetVariable("Gear_Inspect")}`],
+                `WuxWorkerGear.InspectConsumable(eventinfo, "RepeatingSyncConsumables")`, true);
         },
         listenerEquipRepeatingEquipment = function () {
             return `${WuxSheetBackend.OnChange(

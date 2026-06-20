@@ -229,6 +229,9 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 switch (attrHandler.parseString(nameFieldName)) {
                     case WuxDef.GetTitle("Popup_ItemInspectionName"):
+                    case WuxDef.GetTitle("Popup_EquipmentInspectionName"):
+                    case WuxDef.GetTitle("Popup_ConsumablesInspectionName"):
+                    case WuxDef.GetTitle("Popup_GearInspectionName"):
                     case WuxDef.GetTitle("Popup_TechniqueInspectionName"):
                     case WuxDef.GetTitle("Popup_PerkInspectionName"):
                         WuxWorkerInspectPopup.Close();

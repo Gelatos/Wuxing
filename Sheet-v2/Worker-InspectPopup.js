@@ -770,11 +770,52 @@ class ItemInspectionPopup extends InspectionPopup {
     };
     performAddSelectedInspectElementConsumable(attrHandler, item) {
         Debug.Log(`Adding Consumable ${item.name}`);
+
+        let existingRepeater = attrHandler.getRepeatingSection("RepeatingConsumables");
+        let itemNameVar = this.getGearVariable("ItemName");
+        let duplicate = false;
+        existingRepeater.iterate(function (id) {
+            if (attrHandler.parseString(existingRepeater.getFieldName(id, itemNameVar)) === item.name) {
+                duplicate = true;
+                return true;
+            }
+        });
+        if (duplicate) {
+            Debug.Log(`Consumable ${item.name} already owned, skipping`);
+            return;
+        }
+
         let repeater = new WorkerRepeatingSectionHandler("RepeatingConsumables");
         let newRowId = repeater.generateRowId();
         this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
         this.performAddSelectedInspectElementTechnique(attrHandler, repeater, newRowId, item.technique);
 
+        let syncedRepeater = new WorkerRepeatingSectionHandler("RepeatingSyncConsumables");
+        let syncedRowId = syncedRepeater.generateRowId();
+        this.performAddSelectedInspectElementItem(attrHandler, syncedRepeater, syncedRowId, item);
+        attrHandler.addUpdate(syncedRepeater.getFieldName(syncedRowId, this.getGearVariable("ItemIsVisible")), "0");
+
+        attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "on");
+
+        let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
+        let consuBuildRaw = attrHandler.parseString(consuBuildVar);
+        let consuBuild = [];
+        try { consuBuild = JSON.parse(consuBuildRaw); } catch (e) {}
+        if (!Array.isArray(consuBuild)) consuBuild = [];
+        let slotOpenState = consuBuild.length >= attrHandler.parseInt(WuxDef.GetVariable("ConsumableSlots")) ? "on" : "0";
+        let slotOpenVar = this.getGearVariable("ItemSlotOpen");
+        attrHandler.addUpdate(repeater.getFieldName(newRowId, slotOpenVar), slotOpenState);
+        existingRepeater.iterate(function (id) {
+            attrHandler.addUpdate(existingRepeater.getFieldName(id, slotOpenVar), slotOpenState);
+        });
+
+        let consuBuildMaxVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build + WuxDef._max);
+        let consuBuildMaxRaw = attrHandler.parseString(consuBuildMaxVar);
+        let consuBuildMax = [];
+        try { consuBuildMax = JSON.parse(consuBuildMaxRaw); } catch (e) {}
+        if (!Array.isArray(consuBuildMax)) consuBuildMax = [];
+        consuBuildMax.push(item.name);
+        attrHandler.addUpdate(consuBuildMaxVar, JSON.stringify(consuBuildMax));
     };
     performAddSelectedInspectElementGoods(attrHandler, item) {
         Debug.Log(`Adding Goods ${item.name}`);
@@ -822,6 +863,51 @@ class ItemInspectionPopup extends InspectionPopup {
     };
 }
 
+class ConsumablesInspectPopupAttributeHandler extends ItemInspectPopupAttributeHandler {
+    constructor(attributeHandler) {
+        super(attributeHandler);
+        this.titleDefinitionName = "Popup_ConsumablesInspectionName";
+    }
+}
+
+class ConsumablesInspectionPopup extends ItemInspectionPopup {
+    setup(attrHandler) {
+        this.inspectPopupAttrHandler = new ConsumablesInspectPopupAttributeHandler(attrHandler);
+    }
+
+    addItem() {
+        this.attributeHandler.addMod(WuxDef.GetVariable("Popup_InspectAddType"));
+        this.attributeHandler.addMod(WuxDef.GetVariable("ConsumableSlots"));
+        this.attributeHandler.addMod(WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build));
+        this.attributeHandler.addMod(WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build + WuxDef._max));
+        this.attributeHandler.addRepeatingSection("RepeatingConsumables");
+        this.attributeHandler.getRepeatingSection("RepeatingConsumables").addFieldNames([this.getGearVariable("ItemName")]);
+        InspectionPopup.prototype.addItem.call(this);
+    }
+
+    addItem2() {
+        this.attributeHandler.addMod(WuxDef.GetVariable("Popup_InspectAddType", "2"));
+        this.attributeHandler.addMod(WuxDef.GetVariable("Jin"));
+        this.attributeHandler.addMod(WuxDef.GetVariable("ConsumableSlots"));
+        this.attributeHandler.addMod(WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build));
+        this.attributeHandler.addMod(WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build + WuxDef._max));
+        this.attributeHandler.addRepeatingSection("RepeatingConsumables");
+        this.attributeHandler.getRepeatingSection("RepeatingConsumables").addFieldNames([this.getGearVariable("ItemName")]);
+        InspectionPopup.prototype.addItem2.call(this);
+    }
+
+    performAddItem2(attrHandler, itemName) {
+        if (attrHandler.parseString(WuxDef.GetVariable("Popup_InspectAddType", "2")) !== "Purchase Consumable") return;
+        let item = WuxItems.Get(itemName);
+        if (item == undefined) return;
+        this.performAddSelectedInspectElementConsumable(attrHandler, item);
+        let cost = parseInt(item.value);
+        if (isNaN(cost)) cost = 0;
+        let jinVar = WuxDef.GetVariable("Jin");
+        attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost).toString());
+    }
+}
+
 var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
     const getOpenInspectionPopup = function (callback) {
         let attributeHandler = new WorkerAttributeHandler();
@@ -840,6 +926,9 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                     break;
                 case "Popup_ItemInspectionName":
                     inspectPopup = new ItemInspectionPopup(attributeHandler2);
+                    break;
+                case "Popup_ConsumablesInspectionName":
+                    inspectPopup = new ConsumablesInspectionPopup(attributeHandler2);
                     break;
             }
             if (inspectPopup != undefined) {
@@ -896,6 +985,9 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                     case "Popup_ItemInspectionName":
                         inspectPopup = new ItemInspectionPopup(attributeHandler2);
                         break;
+                    case "Popup_ConsumablesInspectionName":
+                        inspectPopup = new ConsumablesInspectionPopup(attributeHandler2);
+                        break;
                 }
                 if (inspectPopup != undefined) {
                     inspectPopup.selectItem(selectedId);
@@ -933,6 +1025,21 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
     const openItemFilterInspection = function (filters, title, addType) {
         Debug.Log("Open Item Filter Inspection");
         performItemFilterInspection(filters, title, addType);
+    };
+
+    const openConsumableInspection = function (attributeHandler, inventoryTitle, inventoryItems, addType) {
+        Debug.Log("Open Consumable Popup");
+        let inspectPopup = new ConsumablesInspectionPopup(attributeHandler);
+        inspectPopup.open(inventoryTitle, inventoryItems, addType);
+    };
+
+    const openConsumableFilterInspection = function (filters, title) {
+        Debug.Log("Open Consumable Filter Inspection");
+        let inventoryItems = new FilteredItemsInventoryItemHandler(filters);
+        let attributeHandler = new WorkerAttributeHandler();
+        let inspectPopup = new ConsumablesInspectionPopup(attributeHandler);
+        inspectPopup.open(title, inventoryItems.items, ["Add Consumable", "Purchase Consumable"]);
+        attributeHandler.run();
     };
 
     const performItemListInspection = function (items, title, addType) {
@@ -1414,6 +1521,8 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         OpenStyleFilterTechniqueInspection: openStyleFilterTechniqueInspection,
         OpenPerkFilterTechniqueInspection: openPerkFilterTechniqueInspection,
         OpenCustomStyleFilterInspection: openCustomStyleFilterInspection,
+        OpenConsumableInspection: openConsumableInspection,
+        OpenConsumableFilterInspection: openConsumableFilterInspection,
         OpenRecommendedStylesInspection: openRecommendedStylesInspection,
         SelectInspectionItemFromActiveGroup: selectInspectionItemFromActiveGroup,
         Close: close,

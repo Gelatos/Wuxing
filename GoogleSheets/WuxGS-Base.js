@@ -620,7 +620,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             "wuxMaxWidth220"));
                     }
                     return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddConsumable"))}
-                        ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 2)}`;
+                        ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 3)}`;
                 },
 
                 addRepeaterContentsConsumables = function () {
@@ -725,7 +725,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         WuxSheetMain.Button(findByTechniqueDef.getAttribute(), findByTechniqueDef.getTitle(), "wuxWidth120"), 
                         "wuxMaxWidth220"));
                     return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddEquipment"))}
-                        ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 2)}`;
+                        ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 3)}`;
                 },
 
                 addRepeaterContentsEquipment = function () {
