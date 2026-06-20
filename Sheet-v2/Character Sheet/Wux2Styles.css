@@ -2045,6 +2045,15 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     color: #e1e1e1;
 }
 
+.wuxEquipableCount
+{
+    display: inline-block;
+    width: 40px;
+
+    line-height: 12px;
+    font-size: 10px;
+}
+
 .wuxEquipableName .wuxSubHeader
 {
     font-size: 9px;

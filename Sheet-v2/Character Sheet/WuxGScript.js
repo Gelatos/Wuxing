@@ -10665,6 +10665,10 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             contents += WuxSheetMain.Button(updateDef.getAttribute(), updateDef.getTitle(), "wuxSizePercent");
             let removeDef = WuxDef.Get("Gear_RemoveEquipment");
             contents += WuxSheetMain.Button(removeDef.getAttribute(), removeDef.getTitle(), "wuxSizePercent");
+            let updateConsuDef = WuxDef.Get("Gear_UpdateConsumables");
+            contents += WuxSheetMain.Button(updateConsuDef.getAttribute(), updateConsuDef.getTitle(), "wuxSizePercent");
+            let removeConsuDef = WuxDef.Get("Gear_RemoveConsumables");
+            contents += WuxSheetMain.Button(removeConsuDef.getAttribute(), removeConsuDef.getTitle(), "wuxSizePercent");
 
             let titleDefinition = WuxDef.Get("Title_Debug");
             return collapsibleHeader(`${titleDefinition.getTitle()}`, titleDefinition.getAttribute(), contents, true);
@@ -11702,6 +11706,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let deleteDef = WuxDef.Get("Gear_Delete");
 
                     let rowContents = WuxSheetMain.MultiRow(`
+                        <input class="wuxEquipableCount" type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
                         <div class="wuxEquipableName">
                             <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
                             <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
@@ -11807,6 +11812,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let deleteDef = WuxDef.Get("Gear_Delete");
 
                     let rowContents = WuxSheetMain.MultiRow(`
+                        <input class="wuxEquipableCount" type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
                         <div class="wuxEquipableName">
                             <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
                             <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
@@ -12919,6 +12925,8 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerInspectSyncedEquipment();
             output += listenerUpdateEquipment();
             output += listenerRemoveAllEquipment();
+            output += listenerUpdateConsumables();
+            output += listenerRemoveAllConsumables();
             output += listenerSetGearOptions();
             return output;
         },
@@ -13007,6 +13015,16 @@ var GearBuilder = GearBuilder || (function () {
             return `${WuxSheetBackend.OnChange(
                 [WuxDef.GetVariable("Gear_RemoveEquipment")],
                 `WuxWorkerGear.RemoveAllEquipment(eventinfo)`, true)}`;
+        },
+        listenerUpdateConsumables = function () {
+            return `${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Gear_UpdateConsumables")],
+                `WuxWorkerGear.UpdateConsumables(eventinfo)`, true)}`;
+        },
+        listenerRemoveAllConsumables = function () {
+            return `${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Gear_RemoveConsumables")],
+                `WuxWorkerGear.RemoveAllConsumables(eventinfo)`, true)}`;
         },
         listenerSetGearOptions = function () {
             let output = "";

@@ -394,9 +394,10 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let selectedId = equipRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
             let itemNameVar = getGearVariable("ItemName");
             let itemIsVisibleVar = getGearVariable("ItemIsVisible");
+            let itemCountVar = getGearVariable("ItemCount");
             let equipBuildVar = WuxDef.GetVariable("Equipment", WuxDef._build);
 
-            equipRepeater.addFieldNames([itemNameVar, itemIsVisibleVar]);
+            equipRepeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
             syncedRepeater.addFieldNames([itemNameVar]);
             attributeHandler.addMod(equipBuildVar);
             attributeHandler.addMod(WuxDef.GetVariable("EquipmentSlots"));
@@ -417,13 +418,19 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits", WuxDef._max), JSON.stringify(equippedTraits.jsonArray));
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits"), equippedTraits.display);
 
-                attrHandler.addUpdate(equipRepeater.getFieldName(selectedId, itemIsVisibleVar), "0");
+                let currentCount = attrHandler.parseInt(equipRepeater.getFieldName(selectedId, itemCountVar)) || 1;
+                let newCount = currentCount - 1;
+                attrHandler.addUpdate(equipRepeater.getFieldName(selectedId, itemCountVar), newCount);
+                if (newCount <= 0) {
+                    attrHandler.addUpdate(equipRepeater.getFieldName(selectedId, itemIsVisibleVar), "0");
+                }
 
                 let anyVisible = false;
                 equipRepeater.iterate(function (id) {
-                    if (id !== selectedId && attrHandler.parseString(equipRepeater.getFieldName(id, itemIsVisibleVar)) === "on") {
-                        anyVisible = true;
-                    }
+                    let isVisible = id === selectedId
+                        ? newCount > 0
+                        : attrHandler.parseString(equipRepeater.getFieldName(id, itemIsVisibleVar)) === "on";
+                    if (isVisible) anyVisible = true;
                     attrHandler.addUpdate(equipRepeater.getFieldName(id, getGearVariable("ItemSlotOpen")), slotOpenState);
                 });
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), anyVisible ? "on" : "0");
@@ -452,7 +459,8 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let itemIsVisibleVar = getGearVariable("ItemIsVisible");
             let equipBuildVar = WuxDef.GetVariable("Equipment", WuxDef._build);
 
-            equipRepeater.addFieldNames([itemNameVar]);
+            let itemCountVar = getGearVariable("ItemCount");
+            equipRepeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
             syncedRepeater.addFieldNames([itemNameVar]);
             attributeHandler.addMod(equipBuildVar);
             attributeHandler.addMod(WuxDef.GetVariable("EquipmentSlots"));
@@ -476,12 +484,24 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
 
                 attrHandler.addUpdate(syncedRepeater.getFieldName(selectedId, itemIsVisibleVar), "0");
 
+                let foundInBase = false;
                 equipRepeater.iterate(function (id) {
                     if (attrHandler.parseString(equipRepeater.getFieldName(id, itemNameVar)) === itemName) {
+                        foundInBase = true;
+                        let currentCount = attrHandler.parseInt(equipRepeater.getFieldName(id, itemCountVar)) || 0;
+                        attrHandler.addUpdate(equipRepeater.getFieldName(id, itemCountVar), currentCount + 1);
                         attrHandler.addUpdate(equipRepeater.getFieldName(id, itemIsVisibleVar), "on");
                     }
                     attrHandler.addUpdate(equipRepeater.getFieldName(id, getGearVariable("ItemSlotOpen")), slotOpenState);
                 });
+                if (!foundInBase) {
+                    let newRepeater = new WorkerRepeatingSectionHandler("RepeatingEquipment");
+                    let newRowId = newRepeater.generateRowId();
+                    attrHandler.addUpdate(newRepeater.getFieldName(newRowId, itemNameVar), itemName);
+                    attrHandler.addUpdate(newRepeater.getFieldName(newRowId, itemIsVisibleVar), "on");
+                    attrHandler.addUpdate(newRepeater.getFieldName(newRowId, itemCountVar), 1);
+                    attrHandler.addUpdate(newRepeater.getFieldName(newRowId, getGearVariable("ItemSlotOpen")), slotOpenState);
+                }
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "on");
             });
 
@@ -492,29 +512,19 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         deleteGear = function (eventinfo, repeatingSectionName) {
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addRepeatingSection(repeatingSectionName);
-            attributeHandler.addRepeatingSection("RepeatingSyncedEquipment");
 
             let equipRepeater = attributeHandler.getRepeatingSection(repeatingSectionName);
-            let syncedRepeater = attributeHandler.getRepeatingSection("RepeatingSyncedEquipment");
             let selectedId = equipRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
             let itemNameVar = getGearVariable("ItemName");
             let itemIsVisibleVar = getGearVariable("ItemIsVisible");
             let equipBuildMaxVar = WuxDef.GetVariable("Equipment", WuxDef._build + WuxDef._max);
             equipRepeater.addFieldNames([itemNameVar, itemIsVisibleVar]);
-            syncedRepeater.addFieldNames([itemNameVar]);
             attributeHandler.addMod(equipBuildMaxVar);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let deletedItemName = attrHandler.parseString(equipRepeater.getFieldName(selectedId, itemNameVar));
 
                 equipRepeater.removeId(selectedId);
-
-                syncedRepeater.iterate(function (id) {
-                    if (attrHandler.parseString(syncedRepeater.getFieldName(id, itemNameVar)) === deletedItemName) {
-                        syncedRepeater.removeId(id);
-                        return true;
-                    }
-                });
 
                 let anyVisible = false;
                 equipRepeater.iterate(function (id) {
@@ -577,17 +587,15 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         equipConsumable = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addRepeatingSection("RepeatingConsumables");
-            attributeHandler.addRepeatingSection("RepeatingSyncConsumables");
 
             let consuRepeater = attributeHandler.getRepeatingSection("RepeatingConsumables");
-            let syncedRepeater = attributeHandler.getRepeatingSection("RepeatingSyncConsumables");
             let selectedId = consuRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
             let itemNameVar = getGearVariable("ItemName");
             let itemIsVisibleVar = getGearVariable("ItemIsVisible");
+            let itemCountVar = getGearVariable("ItemCount");
             let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
 
-            consuRepeater.addFieldNames([itemNameVar, itemIsVisibleVar]);
-            syncedRepeater.addFieldNames([itemNameVar]);
+            consuRepeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
             attributeHandler.addMod(consuBuildVar);
             attributeHandler.addMod(WuxDef.GetVariable("ConsumableSlots"));
 
@@ -603,23 +611,27 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableSlot"), consuBuild.length.toString());
                 let slotOpenState = consuBuild.length < attrHandler.parseInt(WuxDef.GetVariable("ConsumableSlots")) ? "0" : "on";
 
-                attrHandler.addUpdate(consuRepeater.getFieldName(selectedId, itemIsVisibleVar), "0");
+                let currentCount = attrHandler.parseInt(consuRepeater.getFieldName(selectedId, itemCountVar)) || 1;
+                let newCount = currentCount - 1;
+                attrHandler.addUpdate(consuRepeater.getFieldName(selectedId, itemCountVar), newCount);
+                if (newCount <= 0) {
+                    attrHandler.addUpdate(consuRepeater.getFieldName(selectedId, itemIsVisibleVar), "0");
+                }
 
                 let anyVisible = false;
                 consuRepeater.iterate(function (id) {
-                    if (id !== selectedId && attrHandler.parseString(consuRepeater.getFieldName(id, itemIsVisibleVar)) === "on") {
-                        anyVisible = true;
-                    }
+                    let isVisible = id === selectedId
+                        ? newCount > 0
+                        : attrHandler.parseString(consuRepeater.getFieldName(id, itemIsVisibleVar)) === "on";
+                    if (isVisible) anyVisible = true;
                     attrHandler.addUpdate(consuRepeater.getFieldName(id, getGearVariable("ItemSlotOpen")), slotOpenState);
                 });
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), anyVisible ? "on" : "0");
 
-                syncedRepeater.iterate(function (id) {
-                    if (attrHandler.parseString(syncedRepeater.getFieldName(id, itemNameVar)) === itemName) {
-                        attrHandler.addUpdate(syncedRepeater.getFieldName(id, itemIsVisibleVar), "on");
-                        return true;
-                    }
-                });
+                let newSyncedRepeater = new WorkerRepeatingSectionHandler("RepeatingSyncConsumables");
+                let newSyncedRowId = newSyncedRepeater.generateRowId();
+                attrHandler.addUpdate(newSyncedRepeater.getFieldName(newSyncedRowId, itemNameVar), itemName);
+                attrHandler.addUpdate(newSyncedRepeater.getFieldName(newSyncedRowId, itemIsVisibleVar), "on");
             });
 
             WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
@@ -638,7 +650,8 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let itemIsVisibleVar = getGearVariable("ItemIsVisible");
             let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
 
-            consuRepeater.addFieldNames([itemNameVar]);
+            let itemCountVar = getGearVariable("ItemCount");
+            consuRepeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
             syncedRepeater.addFieldNames([itemNameVar]);
             attributeHandler.addMod(consuBuildVar);
             attributeHandler.addMod(WuxDef.GetVariable("ConsumableSlots"));
@@ -658,12 +671,24 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
 
                 attrHandler.addUpdate(syncedRepeater.getFieldName(selectedId, itemIsVisibleVar), "0");
 
+                let foundInBase = false;
                 consuRepeater.iterate(function (id) {
                     if (attrHandler.parseString(consuRepeater.getFieldName(id, itemNameVar)) === itemName) {
+                        foundInBase = true;
+                        let currentCount = attrHandler.parseInt(consuRepeater.getFieldName(id, itemCountVar)) || 0;
+                        attrHandler.addUpdate(consuRepeater.getFieldName(id, itemCountVar), currentCount + 1);
                         attrHandler.addUpdate(consuRepeater.getFieldName(id, itemIsVisibleVar), "on");
                     }
                     attrHandler.addUpdate(consuRepeater.getFieldName(id, getGearVariable("ItemSlotOpen")), slotOpenState);
                 });
+                if (!foundInBase) {
+                    let newRepeater = new WorkerRepeatingSectionHandler("RepeatingConsumables");
+                    let newRowId = newRepeater.generateRowId();
+                    attrHandler.addUpdate(newRepeater.getFieldName(newRowId, itemNameVar), itemName);
+                    attrHandler.addUpdate(newRepeater.getFieldName(newRowId, itemIsVisibleVar), "on");
+                    attrHandler.addUpdate(newRepeater.getFieldName(newRowId, itemCountVar), 1);
+                    attrHandler.addUpdate(newRepeater.getFieldName(newRowId, getGearVariable("ItemSlotOpen")), slotOpenState);
+                }
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "on");
             });
 
@@ -674,30 +699,20 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         deleteConsumable = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addRepeatingSection("RepeatingConsumables");
-            attributeHandler.addRepeatingSection("RepeatingSyncConsumables");
 
             let consuRepeater = attributeHandler.getRepeatingSection("RepeatingConsumables");
-            let syncedRepeater = attributeHandler.getRepeatingSection("RepeatingSyncConsumables");
             let selectedId = consuRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
             let itemNameVar = getGearVariable("ItemName");
             let itemIsVisibleVar = getGearVariable("ItemIsVisible");
             let consuBuildMaxVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build + WuxDef._max);
 
             consuRepeater.addFieldNames([itemNameVar, itemIsVisibleVar]);
-            syncedRepeater.addFieldNames([itemNameVar]);
             attributeHandler.addMod(consuBuildMaxVar);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let deletedItemName = attrHandler.parseString(consuRepeater.getFieldName(selectedId, itemNameVar));
 
                 consuRepeater.removeId(selectedId);
-
-                syncedRepeater.iterate(function (id) {
-                    if (attrHandler.parseString(syncedRepeater.getFieldName(id, itemNameVar)) === deletedItemName) {
-                        syncedRepeater.removeId(id);
-                        return true;
-                    }
-                });
 
                 let anyVisible = false;
                 consuRepeater.iterate(function (id) {
@@ -878,6 +893,92 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             attributeHandler.run();
         },
 
+        updateConsumables = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("RepeatingConsumables");
+            attributeHandler.addRepeatingSection("RepeatingSyncConsumables");
+
+            let consuRepeater = attributeHandler.getRepeatingSection("RepeatingConsumables");
+            let syncedRepeater = attributeHandler.getRepeatingSection("RepeatingSyncConsumables");
+            let itemNameVar = getGearVariable("ItemName");
+            let itemIsVisibleVar = getGearVariable("ItemIsVisible");
+            let itemCountVar = getGearVariable("ItemCount");
+            consuRepeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
+            syncedRepeater.addFieldNames([itemNameVar, itemIsVisibleVar]);
+
+            let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
+            let consuBuildMaxVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build + WuxDef._max);
+            attributeHandler.addMod(consuBuildVar);
+            attributeHandler.addMod(consuBuildMaxVar);
+            attributeHandler.addMod(WuxDef.GetVariable("ConsumableSlots"));
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let consuBuildRaw = attrHandler.parseString(consuBuildVar);
+                let consuBuild = [];
+                try { consuBuild = JSON.parse(consuBuildRaw); } catch (e) {}
+                if (!Array.isArray(consuBuild)) consuBuild = [];
+
+                let consuBuildMaxRaw = attrHandler.parseString(consuBuildMaxVar);
+                let consuBuildMax = [];
+                try { consuBuildMax = JSON.parse(consuBuildMaxRaw); } catch (e) {}
+                if (!Array.isArray(consuBuildMax)) consuBuildMax = [];
+
+                consuBuildMax = [...new Set(consuBuildMax)];
+                consuBuild = consuBuild.filter(name => consuBuildMax.includes(name));
+
+                let slotsMax = attrHandler.parseInt(WuxDef.GetVariable("ConsumableSlots"));
+                let slotOpenState = consuBuild.length < slotsMax ? "0" : "on";
+
+                let anyVisible = false;
+                consuRepeater.iterate(function (id) {
+                    let count = attrHandler.parseInt(consuRepeater.getFieldName(id, itemCountVar)) || 0;
+                    let visible = count > 0;
+                    if (visible) anyVisible = true;
+                    attrHandler.addUpdate(consuRepeater.getFieldName(id, itemIsVisibleVar), visible ? "on" : "0");
+                    attrHandler.addUpdate(consuRepeater.getFieldName(id, getGearVariable("ItemSlotOpen")), slotOpenState);
+                });
+
+                syncedRepeater.iterate(function (id) {
+                    attrHandler.addUpdate(syncedRepeater.getFieldName(id, itemIsVisibleVar), "on");
+                });
+
+                attrHandler.addUpdate(consuBuildVar, JSON.stringify(consuBuild));
+                attrHandler.addUpdate(consuBuildMaxVar, JSON.stringify(consuBuildMax));
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableSlot"), consuBuild.length.toString());
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), anyVisible ? "on" : "0");
+            });
+
+            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+            attributeHandler.run();
+        },
+
+        removeAllConsumables = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("RepeatingConsumables");
+            attributeHandler.addRepeatingSection("RepeatingSyncConsumables");
+
+            let consuRepeater = attributeHandler.getRepeatingSection("RepeatingConsumables");
+            let syncedRepeater = attributeHandler.getRepeatingSection("RepeatingSyncConsumables");
+            consuRepeater.addFieldNames([getGearVariable("ItemName")]);
+            syncedRepeater.addFieldNames([getGearVariable("ItemName")]);
+
+            let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
+            let consuBuildMaxVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build + WuxDef._max);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                consuRepeater.removeAllIds();
+                syncedRepeater.removeAllIds();
+
+                attrHandler.addUpdate(consuBuildVar, JSON.stringify([]));
+                attrHandler.addUpdate(consuBuildMaxVar, JSON.stringify([]));
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableSlot"), "0");
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "0");
+            });
+
+            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+            attributeHandler.run();
+        },
+
         removeAllEquipment = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addRepeatingSection("RepeatingEquipment");
@@ -892,17 +993,15 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let equipBuildMaxVar = WuxDef.GetVariable("Equipment", WuxDef._build + WuxDef._max);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
-                equipRepeater.iterate(function (id) {
-                    equipRepeater.removeId(id);
-                });
-                syncedRepeater.iterate(function (id) {
-                    syncedRepeater.removeId(id);
-                });
+                equipRepeater.removeAllIds();
+                syncedRepeater.removeAllIds();
 
                 attrHandler.addUpdate(equipBuildVar, JSON.stringify([]));
                 attrHandler.addUpdate(equipBuildMaxVar, JSON.stringify([]));
                 attrHandler.addUpdate(WuxDef.GetVariable("Equipment"), "0");
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "0");
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits", WuxDef._max), JSON.stringify([]));
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits"), "None");
             });
 
             WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
@@ -927,7 +1026,9 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         InspectConsumable: inspectConsumable,
         UpdateEquipmentVisibility: updateEquipmentVisibility,
         UpdateEquipment: updateEquipment,
-        RemoveAllEquipment: removeAllEquipment
+        RemoveAllEquipment: removeAllEquipment,
+        UpdateConsumables: updateConsumables,
+        RemoveAllConsumables: removeAllConsumables
     };
 }());
 

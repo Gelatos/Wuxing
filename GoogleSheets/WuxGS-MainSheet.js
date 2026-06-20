@@ -1115,6 +1115,10 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             contents += WuxSheetMain.Button(updateDef.getAttribute(), updateDef.getTitle(), "wuxSizePercent");
             let removeDef = WuxDef.Get("Gear_RemoveEquipment");
             contents += WuxSheetMain.Button(removeDef.getAttribute(), removeDef.getTitle(), "wuxSizePercent");
+            let updateConsuDef = WuxDef.Get("Gear_UpdateConsumables");
+            contents += WuxSheetMain.Button(updateConsuDef.getAttribute(), updateConsuDef.getTitle(), "wuxSizePercent");
+            let removeConsuDef = WuxDef.Get("Gear_RemoveConsumables");
+            contents += WuxSheetMain.Button(removeConsuDef.getAttribute(), removeConsuDef.getTitle(), "wuxSizePercent");
 
             let titleDefinition = WuxDef.Get("Title_Debug");
             return collapsibleHeader(`${titleDefinition.getTitle()}`, titleDefinition.getAttribute(), contents, true);

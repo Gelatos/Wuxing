@@ -12673,6 +12673,14 @@
 										<input type="checkbox" name="attr_gear-removeequipment">
 										<span>Remove All Equipment</span>
 									</div>
+									<div class="wuxButton wuxSizePercent">
+										<input type="checkbox" name="attr_gear-updateconsumables">
+										<span>Update Consumables</span>
+									</div>
+									<div class="wuxButton wuxSizePercent">
+										<input type="checkbox" name="attr_gear-removeconsumables">
+										<span>Remove All Consumables</span>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -12696,6 +12704,14 @@
 									<div class="wuxButton wuxSizePercent">
 										<input type="checkbox" name="attr_gear-removeequipment">
 										<span>Remove All Equipment</span>
+									</div>
+									<div class="wuxButton wuxSizePercent">
+										<input type="checkbox" name="attr_gear-updateconsumables">
+										<span>Update Consumables</span>
+									</div>
+									<div class="wuxButton wuxSizePercent">
+										<input type="checkbox" name="attr_gear-removeconsumables">
+										<span>Remove All Consumables</span>
 									</div>
 								</div>
 							</div>
@@ -12745,6 +12761,7 @@
 													<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemisvisible" value="0">
 													<div class="wuxHiddenField">
 														<div class="wuxMultiRow">
+															<input class="wuxEquipableCount" type="number" name="attr_gear-itemcount" value="1" min="0">
 															<div class="wuxEquipableName">
 																<span class="wuxDescription" name="attr_gear-itemname"></span>
 																<span class="wuxSubHeader" name="attr_gear-itemgroup"></span>
@@ -12897,6 +12914,7 @@
 													<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemisvisible" value="0">
 													<div class="wuxHiddenField">
 														<div class="wuxMultiRow">
+															<input class="wuxEquipableCount" type="number" name="attr_gear-itemcount" value="1" min="0">
 															<div class="wuxEquipableName">
 																<span class="wuxDescription" name="attr_gear-itemname"></span>
 																<span class="wuxSubHeader" name="attr_gear-itemgroup"></span>
@@ -18465,6 +18483,12 @@ WuxWorkerGear.UpdateEquipment(eventinfo)
 });
 on("change:gear-removeequipment", function (eventinfo) {
 WuxWorkerGear.RemoveAllEquipment(eventinfo)
+});
+on("change:gear-updateconsumables", function (eventinfo) {
+WuxWorkerGear.UpdateConsumables(eventinfo)
+});
+on("change:gear-removeconsumables", function (eventinfo) {
+WuxWorkerGear.RemoveAllConsumables(eventinfo)
 });
 on("change:", function (eventinfo) {
 WuxWorkerGear.UnequipSetGear(eventinfo, 1, "")

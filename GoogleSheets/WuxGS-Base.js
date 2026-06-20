@@ -629,6 +629,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let deleteDef = WuxDef.Get("Gear_Delete");
 
                     let rowContents = WuxSheetMain.MultiRow(`
+                        <input class="wuxEquipableCount" type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
                         <div class="wuxEquipableName">
                             <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
                             <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
@@ -734,6 +735,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let deleteDef = WuxDef.Get("Gear_Delete");
 
                     let rowContents = WuxSheetMain.MultiRow(`
+                        <input class="wuxEquipableCount" type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
                         <div class="wuxEquipableName">
                             <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
                             <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
