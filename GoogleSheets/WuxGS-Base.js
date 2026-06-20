@@ -581,7 +581,94 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 print = function () {
                     let contents = "";
                     contents += buildEquipment();
+                    contents += buildConsumables();
                     return WuxSheetMain.Build(contents);
+                },
+
+                buildConsumables = function () {
+                    let contents = "";
+
+                    contents += WuxSheetMain.MultiRowGroup([ownedConsumables(), slottedConsumables()], WuxSheetMain.Table.FlexTable, 2);
+
+                    contents = WuxSheetMain.TabBlock(contents);
+
+                    let definition = WuxDef.Get("Page_GearConsumables");
+                    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                },
+
+                ownedConsumables = function () {
+                    let repeatingDef = WuxDef.Get("RepeatingConsumables");
+                    let eqipmentIsVisibleAttr = WuxDef.GetAttribute("Gear_EqipmentIsVisible");
+                    let repeaterContent = buildRepeater(repeatingDef.getVariable(), addRepeaterContentsConsumables());
+
+                    let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                    <div>
+                        ${WuxSheetMain.HiddenFieldToggle(eqipmentIsVisibleAttr, repeaterContent, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}
+                        ${WuxSheetMain.Row("&nbsp;")}
+                        ${addConsumableFilterButtons()}
+                    </div>`;
+                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
+                },
+
+                addConsumableFilterButtons = function () {
+                    let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
+                    let searchButtonDef = WuxDef.Get("Popup_SearchButton");
+                    let items = [];
+                    for (let i = 0; i < consuTypes.length; i++) {
+                        items.push(WuxSheetMain.Table.FlexTableGroup(
+                            WuxSheetMain.Button(consuTypes[i].getAttribute(), searchButtonDef.getTitle(consuTypes[i].getTitle()), "wuxWidth120"),
+                            "wuxMaxWidth220"));
+                    }
+                    return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddConsumable"))}
+                        ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 2)}`;
+                },
+
+                addRepeaterContentsConsumables = function () {
+                    let equipDef = WuxDef.Get("Gear_Equip");
+                    let inspectDef = WuxDef.Get("Gear_Inspect");
+                    let deleteDef = WuxDef.Get("Gear_Delete");
+
+                    let rowContents = WuxSheetMain.MultiRow(`
+                        <div class="wuxEquipableName">
+                            <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
+                            <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
+                        </div>
+                        <div class="wuxEquippableButtonGroup">
+                            ${WuxSheetMain.HiddenAuxSpanField(getGearAttribute("ItemSlotOpen"), WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle()}`, "wuxRepeatingTechActionButton"))}
+                            ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                        </div>`);
+
+                    return WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents);
+                },
+
+                slottedConsumables = function () {
+                    let repeatingDef = WuxDef.Get("RepeatingSyncConsumables");
+                    let unequipDef = WuxDef.Get("Gear_Unequip");
+                    let inspectDef = WuxDef.Get("Gear_Inspect");
+
+                    let rowContents = WuxSheetMain.MultiRow(`
+                        <div class="wuxEquipableName">
+                            <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
+                        </div>
+                        <div class="wuxEquippableButtonGroup">
+                            ${WuxSheetMain.Button(unequipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${unequipDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                            ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                        </div>`);
+
+                    let repeaterContent = buildRepeater(repeatingDef.getVariable(),
+                        WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents));
+
+                    let slotDisplay = WuxDefinition.BuildText(
+                        WuxDef.Get("ConsumableSlots"),
+                        `<span name="${WuxDef.GetAttribute("Gear_ConsumableSlot")}" value="0"></span> / <span name="${WuxDef.GetAttribute("ConsumableSlots")}"></span>`);
+
+                    let contents = `${slotDisplay}
+                        ${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                        <div>
+                            ${repeaterContent}
+                        </div>`;
+                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                 },
 
                 buildEquipment = function () {
