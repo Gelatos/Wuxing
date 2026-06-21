@@ -6798,7 +6798,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         return new WuxDataDatabase(arr, arr => {return new LoreData(arr)});
     };
     const createJobs = function (arr) {
-        return new WuxDataDatabase(arr, arr => {return new JobData(arr)});
+        return new WuxDataDatabase(arr, arr => {return new JobData(arr)}, ["group", "difficulty"]);
     };
     const createGoods = function (arr) {
         return new Database(arr, ["group"], function (arr) {
@@ -13922,8 +13922,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 let perks = groups[groupName];
                                 let fieldName = `attr_perk-group-${groupName.toLowerCase().replace(/\s+/g, "-")}`;
                                 let headerFn = groupName === "Character Perks"
-                                    ? WuxSheetMain.CollapsibleHeader
-                                    : WuxSheetMain.CollapsibleHeaderInverse;
+                                    ? WuxSheetMain.CollapsibleHeaderInverse
+                                    : WuxSheetMain.CollapsibleHeader;
                                 contents += WuxSheetMain.Header(headerFn(`<span>${groupName}</span>`, fieldName));
                                 let columns = ["", ""];
                                 for (let i = 0; i < perks.length; i++) {

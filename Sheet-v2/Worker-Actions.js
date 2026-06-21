@@ -410,23 +410,27 @@ var WuxWorkerActionsService = WuxWorkerActionsService || (function () {
                 vitalityDef.getVariable(), vitalityDef.getVariable(WuxDef._max)]);
             let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
             
-            // grab all formulas that get modified based on techniques 
+            // grab all formulas that get modified based on techniques
             let allModifierDefs = [];
+            let allModifierDefNames = new Set();
             let techniqueSetModifierDefs = WuxDef.Filter(new DatabaseFilterData("techMods", WuxDef._techset));
             for (let item of techniqueSetModifierDefs) {
-                if (!allModifierDefs.includes(item)) {
+                if (!allModifierDefNames.has(item.name)) {
+                    allModifierDefNames.add(item.name);
                     allModifierDefs.push(item);
                 }
             }
             let techniqueModifierDefs = WuxDef.Filter(new DatabaseFilterData("techMods", WuxDef._tech));
             for (let item of techniqueModifierDefs) {
-                if (!allModifierDefs.includes(item)) {
+                if (!allModifierDefNames.has(item.name)) {
+                    allModifierDefNames.add(item.name);
                     allModifierDefs.push(item);
                 }
             }
             let gearModifierDefs = WuxDef.Filter(new DatabaseFilterData("techMods", WuxDef._gear));
             for (let item of gearModifierDefs) {
-                if (!allModifierDefs.includes(item)) {
+                if (!allModifierDefNames.has(item.name)) {
+                    allModifierDefNames.add(item.name);
                     allModifierDefs.push(item);
                 }
             }
@@ -445,12 +449,15 @@ var WuxWorkerActionsService = WuxWorkerActionsService || (function () {
                 // reset all statistics that have modifiers
                 for (let i = 0; i < techniqueModifierDefs.length; i++) {
                     attrHandler.addUpdate(techniqueModifierDefs[i].getVariable(WuxDef._tech), 0);
+                    attrHandler.addUpdate(techniqueModifierDefs[i].getVariable(WuxDef._tech, WuxDef._info), JSON.stringify([]));
                 }
                 for (let i = 0; i < gearModifierDefs.length; i++) {
                     attrHandler.addUpdate(gearModifierDefs[i].getVariable(WuxDef._gear), 0);
+                    attrHandler.addUpdate(gearModifierDefs[i].getVariable(WuxDef._gear, WuxDef._info), JSON.stringify([]));
                 }
                 for (let i = 0; i < techniqueSetModifierDefs.length; i++) {
                     attrHandler.addUpdate(techniqueSetModifierDefs[i].getVariable(WuxDef._techset), 0);
+                    attrHandler.addUpdate(techniqueSetModifierDefs[i].getVariable(WuxDef._techset, WuxDef._info), JSON.stringify([]));
                 }
                 
                 // set the breakdown
