@@ -285,7 +285,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         return new WuxDataDatabase(arr, arr => {return new LoreData(arr)});
     };
     const createJobs = function (arr) {
-        return new WuxDataDatabase(arr, arr => {return new JobData(arr)});
+        return new WuxDataDatabase(arr, arr => {return new JobData(arr)}, ["group", "difficulty"]);
     };
     const createGoods = function (arr) {
         return new Database(arr, ["group"], function (arr) {

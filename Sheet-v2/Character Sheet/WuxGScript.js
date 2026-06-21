@@ -12641,6 +12641,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
             output += listenerUpdatePerkPoints();
             output += listenerUpdateSecondAffinityBranch();
             output += listenerPerkAutoFilterButtons();
+            output += listenerSetIsPlayer();
             output += listenerUpdateJobBuildPoints();
             output += listenerSeeJobTechniques();
             output += listenerUpdateSkillBuildPoints();
@@ -12718,6 +12719,9 @@ var AdvancementBackend = AdvancementBackend || (function () {
             let perkFilters = WuxDef.Filter([new DatabaseFilterData("group", "PerkAutoFilter")]);
             let groupVariableNames = perkFilters.map(def => def.getVariable());
             return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerInspectPopup.OpenPerkFilterTechniqueInspection(eventinfo)`, true);
+        },
+        listenerSetIsPlayer = function () {
+            return WuxSheetBackend.OnChange([WuxDef.GetVariable("Title_IsPlayer")], `WuxWorkerPerks.SetIsPlayer(eventinfo)`, true);
         },
         listenerUpdateJobBuildPoints = function () {
             let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"));
@@ -13909,9 +13913,18 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 }
                                 groups[perk.group].push(perk);
                             });
-                            for (let groupName in groups) {
+                            let groupNames = Object.keys(groups).sort((a, b) => {
+                                if (a === "Character Perks") return 1;
+                                if (b === "Character Perks") return -1;
+                                return 0;
+                            });
+                            for (let groupName of groupNames) {
                                 let perks = groups[groupName];
-                                contents += WuxSheetMain.Header(groupName);
+                                let fieldName = `attr_perk-group-${groupName.toLowerCase().replace(/\s+/g, "-")}`;
+                                let headerFn = groupName === "Character Perks"
+                                    ? WuxSheetMain.CollapsibleHeader
+                                    : WuxSheetMain.CollapsibleHeaderInverse;
+                                contents += WuxSheetMain.Header(headerFn(`<span>${groupName}</span>`, fieldName));
                                 let columns = ["", ""];
                                 for (let i = 0; i < perks.length; i++) {
                                     if (perks[i] == undefined) {
@@ -13919,10 +13932,13 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                     }
                                     columns[i % 2] += printBasicPerk(perks[i]);
                                 }
-                                contents += WuxSheetMain.MultiRowGroup(
+                                let groupContents = WuxSheetMain.MultiRowGroup(
                                     [WuxSheetMain.Table.FlexTableGroup(columns[0]),
                                      WuxSheetMain.Table.FlexTableGroup(columns[1])],
                                     WuxSheetMain.Table.FlexTable, 2);
+                                contents += groupName === "Character Perks"
+                                    ? WuxSheetMain.HiddenField(fieldName, groupContents)
+                                    : WuxSheetMain.HiddenAuxField(fieldName, groupContents);
                             }
                             return contents;
                         },
@@ -15530,6 +15546,11 @@ class CharacterBackgroundBuilder {
     }
 
     backgroundBasics() {
+        let isPlayerField = `${WuxSheet.MainPageDisplayInput()}
+            ${WuxSheet.PageDisplay("OriginData", WuxDefinition.BuildSelect(WuxDef.Get("Title_IsPlayer"), WuxDef.GetAttribute("Title_IsPlayer"),
+                WuxDef.Filter([new DatabaseFilterData("group", "IsPlayer")]), false))}`;
+
+
         let sheetNameField = `${WuxSheet.MainPageDisplayInput()}
                 ${WuxSheet.PageDisplay("OriginData", WuxDefinition.BuildTextInput(WuxDef.Get("CharSheetName"), WuxDef.GetAttribute("CharSheetName")))}
                 ${WuxSheet.PageDisplay("CharacterData", WuxDefinition.BuildTextInput(WuxDef.Get("SheetName"), WuxDef.GetAttribute("SheetName")))}`;
@@ -15557,7 +15578,8 @@ class CharacterBackgroundBuilder {
         let startingJinField = `${WuxSheet.MainPageDisplayInput()}
                 ${WuxSheet.PageDisplay("OriginData", WuxDefinition.BuildTextInput(WuxDef.Get("Title_StartingJin"), WuxDef.GetAttribute("Jin")))}`;
         
-        return WuxSheetMain.Table.FlexTableGroup(`${nameFields}
+        return WuxSheetMain.Table.FlexTableGroup(`${isPlayerField}
+        ${nameFields}
         ${ancestryFields}
         ${affinityField}
         ${quickDescriptionField}

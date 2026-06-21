@@ -818,6 +818,22 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 			});
 			WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
 			attributeHandler.run();
+		},
+
+		setIsPlayer = function (eventinfo) {
+			Debug.Log("eventinfo.newValue: " + eventinfo.newValue);
+			let newValue = parseInt(eventinfo.newValue) || 0;
+			if (newValue !== 1) return;
+			let perk = WuxPerks.Get("Bonus Vitality");
+			Debug.Log("perk is: " + perk.name);
+			if (perk == undefined) return;
+			let perkVar = new PerkData(perk).createDefinition(WuxDef.Get("Perk")).getVariable();
+			let attributeHandler = new WorkerAttributeHandler();
+			attributeHandler.addUpdate(perkVar, 1);
+			attributeHandler.addFinishCallback(function () {
+				updateBuildPoints({ sourceAttribute: perkVar, newValue: "1" });
+			});
+			attributeHandler.run();
 		}
 
 	return {
@@ -827,7 +843,8 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 		RefreshStats: refreshStats,
 		UpdateStats: updateStats,
 		InspectListPerk: inspectListPerk,
-		DeleteListPerk: deleteListPerk
+		DeleteListPerk: deleteListPerk,
+		SetIsPlayer: setIsPlayer
 	};
 }());
 

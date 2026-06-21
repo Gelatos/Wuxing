@@ -19,6 +19,11 @@ class CharacterBackgroundBuilder {
     }
 
     backgroundBasics() {
+        let isPlayerField = `${WuxSheet.MainPageDisplayInput()}
+            ${WuxSheet.PageDisplay("OriginData", WuxDefinition.BuildSelect(WuxDef.Get("Title_IsPlayer"), WuxDef.GetAttribute("Title_IsPlayer"),
+                WuxDef.Filter([new DatabaseFilterData("group", "IsPlayer")]), false))}`;
+
+
         let sheetNameField = `${WuxSheet.MainPageDisplayInput()}
                 ${WuxSheet.PageDisplay("OriginData", WuxDefinition.BuildTextInput(WuxDef.Get("CharSheetName"), WuxDef.GetAttribute("CharSheetName")))}
                 ${WuxSheet.PageDisplay("CharacterData", WuxDefinition.BuildTextInput(WuxDef.Get("SheetName"), WuxDef.GetAttribute("SheetName")))}`;
@@ -46,7 +51,8 @@ class CharacterBackgroundBuilder {
         let startingJinField = `${WuxSheet.MainPageDisplayInput()}
                 ${WuxSheet.PageDisplay("OriginData", WuxDefinition.BuildTextInput(WuxDef.Get("Title_StartingJin"), WuxDef.GetAttribute("Jin")))}`;
         
-        return WuxSheetMain.Table.FlexTableGroup(`${nameFields}
+        return WuxSheetMain.Table.FlexTableGroup(`${isPlayerField}
+        ${nameFields}
         ${ancestryFields}
         ${affinityField}
         ${quickDescriptionField}

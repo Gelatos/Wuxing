@@ -136,6 +136,23 @@
 							<div class="wuxHiddenAuxField">
 								<div class="wuxFlexTable">
 									<div class="wuxFlexTableItemGroup">
+										<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
+										<div class="wuxPageDisplay-OriginData">
+											<div class="wuxHeader2"><span class="wuxTooltip">
+													<span class="wuxTooltipText">
+														Is this a Player Character
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Is this a Player Character</div>
+
+														<span class="wuxDescription">Is this character a player character. Setting this to Yes will automatically setup the sheet with default player character values.</span>
+													</div>
+												</span></div>
+											<select class="wuxInput" name="attr_ttl-isplayer" value="0">
+												<option value="0">Not a Player</option>
+												<option value="1">Player Character</option>
+											</select>
+										</div>
 										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroup">
 												<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
@@ -1801,232 +1818,293 @@
 							<div class="wuxMultiRow">
 								<div class="wuxDescription">Skill Points are used to gain new skills or skill augments.</div>
 							</div>
-							<div class="wuxHeader">Character Perks</div>
-							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader2">Bonus Vitality</div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-bonus_vitality" value="" placeholder="0" />
-										<div class="wuxInputLabel">Cost: 0 perk point, Max: <span name="attr_perk-bonus_vitality_max"></span></div>
-									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxDescription">Gain +1 Vitality per rank. Player characters should start with at least 1 Vitality.</div>
-									</div>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader2">Bonus Potency</div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-bonus_potency" value="" placeholder="0" />
-										<div class="wuxInputLabel">Cost: 0 perk point, Max: <span name="attr_perk-bonus_potency_max"></span></div>
-									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxDescription">Gain +1 Potency per rank.This perk is not intended for player characters.</div>
-									</div>
-								</div>
-							</div>
-							<div class="wuxHeader">Branch Perks</div>
-							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader2">Second Affinity</div>
-									<div class="wuxInteractiveBlock">
-										<div class="wuxInteractiveInnerBlock">
-											<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-second_affinity" />
-											<div class="wuxInteractiveContent">
-												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-second_affinity" />
-												<span class="wuxInteractiveIcon">&#9635;</span>
-												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-second_affinity" />
-												<span class="wuxInteractiveAuxIcon">&#9634;</span>
-												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-second_affinity" />
-												<div class="wuxInputLabel">Cost: 1 perk point</div>
-											</div>
+							<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
+
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_perk-group-branch-perks" value="0">
+									<span class="wuxHiddenInlineField">
+										<div class="wuxButton wuxStyleHeaderButton">
+											<input type="checkbox" name="attr_perk-group-branch-perks">
+											<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
 										</div>
-										<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_perk-second_affinity">
-										<div class="wuxInteractiveExpandingContent">
-											<select class="wuxInput" name="attr_perk-second_affinity_affinity" value="0">
-												<option value="0">-</option>
-												<option value="Wood">Wood Affinity</option>
-												<option value="Fire">Fire Affinity</option>
-												<option value="Earth">Earth Affinity</option>
-												<option value="Metal">Metal Affinity</option>
-												<option value="Water">Water Affinity</option>
-											</select><span class="wuxDescription" name="attr_perk-second_affinity_learn"></span>
+									</span>
+
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_perk-group-branch-perks" value="0">
+									<span class="wuxHiddenInlineAuxField">
+										<div class="wuxButton wuxStyleHeaderButton">
+											<input type="checkbox" name="attr_perk-group-branch-perks">
+											<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
 										</div>
-									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxDescription">Human Only. Gain a second elemental affinity.</div>
-									</div>
-									<div class="wuxHeader2">Light Magic</div>
-									<div class="wuxMultiRow">
+									</span>
+
+								</span><span>Branch Perks</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_perk-group-branch-perks" value="0">
+							<div class="wuxHiddenAuxField">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader2">Second Affinity</div>
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
-												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-light_magic" />
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-second_affinity" />
 												<div class="wuxInteractiveContent">
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-light_magic" />
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-second_affinity" />
 													<span class="wuxInteractiveIcon">&#9635;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-light_magic" />
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-second_affinity" />
 													<span class="wuxInteractiveAuxIcon">&#9634;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-light_magic" />
-													<div class="wuxInputLabel">Cost: 3 perk point</div>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-second_affinity" />
+													<div class="wuxInputLabel">Cost: 1 perk point</div>
+												</div>
+											</div>
+											<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_perk-second_affinity">
+											<div class="wuxInteractiveExpandingContent">
+												<select class="wuxInput" name="attr_perk-second_affinity_affinity" value="0">
+													<option value="0">-</option>
+													<option value="Wood">Wood Affinity</option>
+													<option value="Fire">Fire Affinity</option>
+													<option value="Earth">Earth Affinity</option>
+													<option value="Metal">Metal Affinity</option>
+													<option value="Water">Water Affinity</option>
+												</select><span class="wuxDescription" name="attr_perk-second_affinity_learn"></span>
+											</div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription">Human Only. Gain a second elemental affinity.</div>
+										</div>
+										<div class="wuxHeader2">Light Magic</div>
+										<div class="wuxMultiRow">
+											<div class="wuxInteractiveBlock">
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-light_magic" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-light_magic" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-light_magic" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-light_magic" />
+														<div class="wuxInputLabel">Cost: 3 perk point</div>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxDescription">Fire Affinity Only. You can now learn Light affinty techniques that can blind and create illusions.</div>
-									</div>
-									<div class="wuxHeader2">Blood Magic</div>
-									<div class="wuxMultiRow">
-										<div class="wuxInteractiveBlock">
-											<div class="wuxInteractiveInnerBlock">
-												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-blood_magic" />
-												<div class="wuxInteractiveContent">
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-blood_magic" />
-													<span class="wuxInteractiveIcon">&#9635;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-blood_magic" />
-													<span class="wuxInteractiveAuxIcon">&#9634;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-blood_magic" />
-													<div class="wuxInputLabel">Cost: 3 perk point</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription">Fire Affinity Only. You can now learn Light affinty techniques that can blind and create illusions.</div>
+										</div>
+										<div class="wuxHeader2">Blood Magic</div>
+										<div class="wuxMultiRow">
+											<div class="wuxInteractiveBlock">
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-blood_magic" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-blood_magic" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-blood_magic" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-blood_magic" />
+														<div class="wuxInputLabel">Cost: 3 perk point</div>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxDescription">Metal Affinity Only. You can now learn Blood affinty techniques that both heal and paralyze targets.</div>
-									</div>
-									<div class="wuxHeader2">Spirit Conduit</div>
-									<div class="wuxMultiRow">
-										<div class="wuxInteractiveBlock">
-											<div class="wuxInteractiveInnerBlock">
-												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-spirit_conduit" />
-												<div class="wuxInteractiveContent">
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-spirit_conduit" />
-													<span class="wuxInteractiveIcon">&#9635;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-spirit_conduit" />
-													<span class="wuxInteractiveAuxIcon">&#9634;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-spirit_conduit" />
-													<div class="wuxInputLabel">Cost: 2 perk point</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription">Metal Affinity Only. You can now learn Blood affinty techniques that both heal and paralyze targets.</div>
+										</div>
+										<div class="wuxHeader2">Spirit Conduit</div>
+										<div class="wuxMultiRow">
+											<div class="wuxInteractiveBlock">
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-spirit_conduit" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-spirit_conduit" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-spirit_conduit" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-spirit_conduit" />
+														<div class="wuxInputLabel">Cost: 2 perk point</div>
+													</div>
 												</div>
 											</div>
 										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription">Unaspected Human Only. You can hold multiple spirits inside of your body. You are able to swap your active spirit as a swift action for the cost of 2 EN.</div>
+										</div>
 									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxDescription">Unaspected Human Only. You can hold multiple spirits inside of your body. You are able to swap your active spirit as a swift action for the cost of 2 EN.</div>
-									</div>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader2">Corrosion Magic</div>
-									<div class="wuxMultiRow">
-										<div class="wuxInteractiveBlock">
-											<div class="wuxInteractiveInnerBlock">
-												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-corrosion_magic" />
-												<div class="wuxInteractiveContent">
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-corrosion_magic" />
-													<span class="wuxInteractiveIcon">&#9635;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-corrosion_magic" />
-													<span class="wuxInteractiveAuxIcon">&#9634;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-corrosion_magic" />
-													<div class="wuxInputLabel">Cost: 3 perk point</div>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader2">Corrosion Magic</div>
+										<div class="wuxMultiRow">
+											<div class="wuxInteractiveBlock">
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-corrosion_magic" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-corrosion_magic" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-corrosion_magic" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-corrosion_magic" />
+														<div class="wuxInputLabel">Cost: 3 perk point</div>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxDescription">Wood Affinity Only. You can now learn Corrosion affinity techniques granting access to acids and poisons.</div>
-									</div>
-									<div class="wuxHeader2">Shadow Magic</div>
-									<div class="wuxMultiRow">
-										<div class="wuxInteractiveBlock">
-											<div class="wuxInteractiveInnerBlock">
-												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-shadow_magic" />
-												<div class="wuxInteractiveContent">
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-shadow_magic" />
-													<span class="wuxInteractiveIcon">&#9635;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-shadow_magic" />
-													<span class="wuxInteractiveAuxIcon">&#9634;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-shadow_magic" />
-													<div class="wuxInputLabel">Cost: 3 perk point</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription">Wood Affinity Only. You can now learn Corrosion affinity techniques granting access to acids and poisons.</div>
+										</div>
+										<div class="wuxHeader2">Shadow Magic</div>
+										<div class="wuxMultiRow">
+											<div class="wuxInteractiveBlock">
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-shadow_magic" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-shadow_magic" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-shadow_magic" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-shadow_magic" />
+														<div class="wuxInputLabel">Cost: 3 perk point</div>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxDescription">Earth Affinity Only. You can now learn Shadow affinity techniques that can blind and hide.</div>
-									</div>
-									<div class="wuxHeader2">Time Magic</div>
-									<div class="wuxMultiRow">
-										<div class="wuxInteractiveBlock">
-											<div class="wuxInteractiveInnerBlock">
-												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-time_magic" />
-												<div class="wuxInteractiveContent">
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-time_magic" />
-													<span class="wuxInteractiveIcon">&#9635;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-time_magic" />
-													<span class="wuxInteractiveAuxIcon">&#9634;</span>
-													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-time_magic" />
-													<div class="wuxInputLabel">Cost: 3 perk point</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription">Earth Affinity Only. You can now learn Shadow affinity techniques that can blind and hide.</div>
+										</div>
+										<div class="wuxHeader2">Time Magic</div>
+										<div class="wuxMultiRow">
+											<div class="wuxInteractiveBlock">
+												<div class="wuxInteractiveInnerBlock">
+													<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_perk-time_magic" />
+													<div class="wuxInteractiveContent">
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-time_magic" />
+														<span class="wuxInteractiveIcon">&#9635;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-time_magic" />
+														<span class="wuxInteractiveAuxIcon">&#9634;</span>
+														<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_perk-time_magic" />
+														<div class="wuxInputLabel">Cost: 3 perk point</div>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxDescription">Water Affinity Only. You can now learn Time affinity techniques that allow specialized movement actions.</div>
-									</div>
-								</div>
-							</div>
-							<div class="wuxHeader">Stat Boost Perks</div>
-							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader2">Increase HP</div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-increase_hp" value="" placeholder="0" />
-										<div class="wuxInputLabel">Cost: 1 perk point, Max: <span name="attr_perk-increase_hp_max"></span></div>
-									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxDescription">Gain 10 HP</div>
-									</div>
-									<div class="wuxHeader2">Increase Base Speed</div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-increase_base_speed" value="" placeholder="0" />
-										<div class="wuxInputLabel">Cost: 2 perk point, Max: <span name="attr_perk-increase_base_speed_max"></span></div>
-									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxDescription">Gain +1 Base Speed</div>
-									</div>
-									<div class="wuxHeader2">Increase Armor</div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-increase_armor" value="" placeholder="0" />
-										<div class="wuxInputLabel">Cost: 1 perk point, Max: <span name="attr_perk-increase_armor_max"></span></div>
-									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxDescription">Gain +1 Armor</div>
-									</div>
-									<div class="wuxHeader2">Bonus Equipment Slots</div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-bonus_equipment_slots" value="" placeholder="0" />
-										<div class="wuxInputLabel">Cost: 1 perk point, Max: <span name="attr_perk-bonus_equipment_slots_max"></span></div>
-									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxDescription">Gain +1 Equipment Slot</div>
-									</div>
-								</div>
-								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader2">Increase WILL</div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-increase_will" value="" placeholder="0" />
-										<div class="wuxInputLabel">Cost: 1 perk point, Max: <span name="attr_perk-increase_will_max"></span></div>
-									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxDescription">Gain 10 WILL</div>
-									</div>
-									<div class="wuxHeader2">Increase Dash Speed</div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-increase_dash_speed" value="" placeholder="0" />
-										<div class="wuxInputLabel">Cost: 2 perk point, Max: <span name="attr_perk-increase_dash_speed_max"></span></div>
-									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxDescription">Gain +1 Dash Speed</div>
-									</div>
-									<div class="wuxHeader2">Increase Starting EN</div>
-									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-increase_starting_en" value="" placeholder="0" />
-										<div class="wuxInputLabel">Cost: 2 perk point, Max: <span name="attr_perk-increase_starting_en_max"></span></div>
-									</div>
-									<div class="wuxMultiRow">
-										<div class="wuxDescription">Gain +1 Starting EN</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription">Water Affinity Only. You can now learn Time affinity techniques that allow specialized movement actions.</div>
+										</div>
 									</div>
 								</div>
 							</div>
+							<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
+
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_perk-group-stat-boost-perks" value="0">
+									<span class="wuxHiddenInlineField">
+										<div class="wuxButton wuxStyleHeaderButton">
+											<input type="checkbox" name="attr_perk-group-stat-boost-perks">
+											<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
+										</div>
+									</span>
+
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_perk-group-stat-boost-perks" value="0">
+									<span class="wuxHiddenInlineAuxField">
+										<div class="wuxButton wuxStyleHeaderButton">
+											<input type="checkbox" name="attr_perk-group-stat-boost-perks">
+											<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
+										</div>
+									</span>
+
+								</span><span>Stat Boost Perks</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_perk-group-stat-boost-perks" value="0">
+							<div class="wuxHiddenAuxField">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader2">Increase HP</div>
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-increase_hp" value="" placeholder="0" />
+											<div class="wuxInputLabel">Cost: 1 perk point, Max: <span name="attr_perk-increase_hp_max"></span></div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription">Gain 10 HP</div>
+										</div>
+										<div class="wuxHeader2">Increase Base Speed</div>
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-increase_base_speed" value="" placeholder="0" />
+											<div class="wuxInputLabel">Cost: 2 perk point, Max: <span name="attr_perk-increase_base_speed_max"></span></div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription">Gain +1 Base Speed</div>
+										</div>
+										<div class="wuxHeader2">Increase Armor</div>
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-increase_armor" value="" placeholder="0" />
+											<div class="wuxInputLabel">Cost: 1 perk point, Max: <span name="attr_perk-increase_armor_max"></span></div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription">Gain +1 Armor</div>
+										</div>
+										<div class="wuxHeader2">Bonus Equipment Slots</div>
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-bonus_equipment_slots" value="" placeholder="0" />
+											<div class="wuxInputLabel">Cost: 1 perk point, Max: <span name="attr_perk-bonus_equipment_slots_max"></span></div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription">Gain +1 Equipment Slot</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader2">Increase WILL</div>
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-increase_will" value="" placeholder="0" />
+											<div class="wuxInputLabel">Cost: 1 perk point, Max: <span name="attr_perk-increase_will_max"></span></div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription">Gain 10 WILL</div>
+										</div>
+										<div class="wuxHeader2">Increase Dash Speed</div>
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-increase_dash_speed" value="" placeholder="0" />
+											<div class="wuxInputLabel">Cost: 2 perk point, Max: <span name="attr_perk-increase_dash_speed_max"></span></div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription">Gain +1 Dash Speed</div>
+										</div>
+										<div class="wuxHeader2">Increase Starting EN</div>
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-increase_starting_en" value="" placeholder="0" />
+											<div class="wuxInputLabel">Cost: 2 perk point, Max: <span name="attr_perk-increase_starting_en_max"></span></div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription">Gain +1 Starting EN</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
+
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_perk-group-character-perks" value="0">
+									<span class="wuxHiddenInlineField">
+										<div class="wuxButton wuxStyleHeaderButton">
+											<input type="checkbox" name="attr_perk-group-character-perks">
+											<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
+										</div>
+									</span>
+
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_perk-group-character-perks" value="0">
+									<span class="wuxHiddenInlineAuxField">
+										<div class="wuxButton wuxStyleHeaderButton">
+											<input type="checkbox" name="attr_perk-group-character-perks">
+											<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
+										</div>
+									</span>
+
+								</span><span>Character Perks</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_perk-group-character-perks" value="0">
+							<div class="wuxHiddenField">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader2">Bonus Vitality</div>
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-bonus_vitality" value="" placeholder="0" />
+											<div class="wuxInputLabel">Cost: 0 perk point, Max: <span name="attr_perk-bonus_vitality_max"></span></div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription">Gain +1 Vitality per rank. Player characters should start with at least 1 Vitality.</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader2">Bonus Potency</div>
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_perk-bonus_potency" value="" placeholder="0" />
+											<div class="wuxInputLabel">Cost: 0 perk point, Max: <span name="attr_perk-bonus_potency_max"></span></div>
+										</div>
+										<div class="wuxMultiRow">
+											<div class="wuxDescription">Gain +1 Potency per rank.This perk is not intended for player characters.</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
 						</div>
 					</div>
 				</div>
@@ -10031,6 +10109,23 @@
 								<div class="wuxHiddenAuxField">
 									<div class="wuxFlexTable">
 										<div class="wuxFlexTableItemGroup">
+											<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
+											<div class="wuxPageDisplay-OriginData">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Is this a Player Character
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Is this a Player Character</div>
+
+															<span class="wuxDescription">Is this character a player character. Setting this to Yes will automatically setup the sheet with default player character values.</span>
+														</div>
+													</span></div>
+												<select class="wuxInput" name="attr_ttl-isplayer" value="0">
+													<option value="0">Not a Player</option>
+													<option value="1">Player Character</option>
+												</select>
+											</div>
 											<div class="wuxFlexTable">
 												<div class="wuxFlexTableItemGroup">
 													<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
@@ -18306,6 +18401,9 @@ WuxWorkerPerks.UpdateSecondAffinityBranch(eventinfo)
 });
 on("change:perkfilter-cost2perk change:perkfilter-cost3perk change:perkfilter-cost4perk", function (eventinfo) {
 WuxWorkerInspectPopup.OpenPerkFilterTechniqueInspection(eventinfo)
+});
+on("change:ttl-isplayer", function (eventinfo) {
+WuxWorkerPerks.SetIsPlayer(eventinfo)
 });
 on("change:job-fighter change:job-brawler change:job-labourer change:job-sentinel change:job-warden change:job-bulwark change:job-exemplar change:job-kineticist change:job-rogue change:job-hunter change:job-sniper change:job-warmage change:job-trooper change:job-geomancer change:job-magus change:job-spellwright change:job-tactician change:job-bard change:job-scholar change:job-medic change:job-alchemist change:job-culinarian change:job-merchant change:job-courtier change:job-diplomat change:job-detective change:job-inquisitor change:job-preacher change:job-etherealist change:job-phantasm change:job-shade change:job-yaksa", function (eventinfo) {
 WuxWorkerJobs.UpdateBuildPoints(eventinfo)

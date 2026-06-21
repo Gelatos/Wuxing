@@ -465,9 +465,18 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 }
                                 groups[perk.group].push(perk);
                             });
-                            for (let groupName in groups) {
+                            let groupNames = Object.keys(groups).sort((a, b) => {
+                                if (a === "Character Perks") return 1;
+                                if (b === "Character Perks") return -1;
+                                return 0;
+                            });
+                            for (let groupName of groupNames) {
                                 let perks = groups[groupName];
-                                contents += WuxSheetMain.Header(groupName);
+                                let fieldName = `attr_perk-group-${groupName.toLowerCase().replace(/\s+/g, "-")}`;
+                                let headerFn = groupName === "Character Perks"
+                                    ? WuxSheetMain.CollapsibleHeaderInverse
+                                    : WuxSheetMain.CollapsibleHeader;
+                                contents += WuxSheetMain.Header(headerFn(`<span>${groupName}</span>`, fieldName));
                                 let columns = ["", ""];
                                 for (let i = 0; i < perks.length; i++) {
                                     if (perks[i] == undefined) {
@@ -475,10 +484,13 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                     }
                                     columns[i % 2] += printBasicPerk(perks[i]);
                                 }
-                                contents += WuxSheetMain.MultiRowGroup(
+                                let groupContents = WuxSheetMain.MultiRowGroup(
                                     [WuxSheetMain.Table.FlexTableGroup(columns[0]),
                                      WuxSheetMain.Table.FlexTableGroup(columns[1])],
                                     WuxSheetMain.Table.FlexTable, 2);
+                                contents += groupName === "Character Perks"
+                                    ? WuxSheetMain.HiddenField(fieldName, groupContents)
+                                    : WuxSheetMain.HiddenAuxField(fieldName, groupContents);
                             }
                             return contents;
                         },
