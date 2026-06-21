@@ -624,6 +624,8 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 },
 
                 addRepeaterContentsConsumables = function () {
+                    let buyDef = WuxDef.Get("Gear_Buy");
+                    let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
                     let equipDef = WuxDef.Get("Gear_Equip");
                     let inspectDef = WuxDef.Get("Gear_Inspect");
                     let deleteDef = WuxDef.Get("Gear_Delete");
@@ -639,6 +641,8 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                     <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
                                 </div>
                                 <div class="wuxEquipableButtonRow">
+                                    ${WuxSheetMain.Button(buyDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
+                                    ${WuxSheetMain.Button(buyBulkDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyBulkDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
                                     ${WuxSheetMain.HiddenAuxSpanField(getGearAttribute("ItemSlotOpen"), WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle()}`, "wuxRepeatingTechActionButton"))}
                                     ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
                                     ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}

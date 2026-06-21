@@ -12775,7 +12775,7 @@
 																		<span class="wuxHiddenInlineAuxField">
 																			<div class="wuxButton wuxRepeatingTechActionButton">
 																				<input type="checkbox" name="attr_gear-equip">
-																				<span><span style="color:#c8a020;">&#9881;</span> Equip</span>
+																				<span><span style="color:#c8a020;">&#9881;</span> Equip </span>
 																			</div>
 																		</span>
 
@@ -12930,11 +12930,19 @@
 																		<span class="wuxSubHeader" name="attr_gear-itemgroup"></span>
 																	</div>
 																	<div class="wuxEquipableButtonRow">
+																		<div class="wuxButton wuxRepeatingTechActionButton">
+																			<input type="checkbox" name="attr_gear-buy">
+																			<span><span style="color:#5bc0de;">&#9670;</span> <span name="attr_gear-buy_info"></span></span>
+																		</div>
+																		<div class="wuxButton wuxRepeatingTechActionButton">
+																			<input type="checkbox" name="attr_gear-buybulk">
+																			<span><span style="color:#5bc0de;">&#9670;</span> <span name="attr_gear-buybulk_info"></span></span>
+																		</div>
 																		<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemslotopen" value="0">
 																		<span class="wuxHiddenInlineAuxField">
 																			<div class="wuxButton wuxRepeatingTechActionButton">
 																				<input type="checkbox" name="attr_gear-equip">
-																				<span><span style="color:#c8a020;">&#9881;</span> Equip</span>
+																				<span><span style="color:#c8a020;">&#9881;</span> Equip </span>
 																			</div>
 																		</span>
 
@@ -18448,6 +18456,12 @@ WuxWorkerGear.OpenFindItems(eventinfo)
 });
 on("change:consutype-recovery change:consutype-tonic change:consutype-bomb", function (eventinfo) {
 WuxWorkerGear.OpenFindConsumables(eventinfo)
+});
+on("change:repeating_consumables:gear-buy", function (eventinfo) {
+WuxWorkerGear.BuyConsumable(eventinfo)
+});
+on("change:repeating_consumables:gear-buybulk", function (eventinfo) {
+WuxWorkerGear.BuyConsumableBulk(eventinfo)
 });
 on("change:repeating_consumables:gear-equip", function (eventinfo) {
 WuxWorkerGear.EquipConsumable(eventinfo)

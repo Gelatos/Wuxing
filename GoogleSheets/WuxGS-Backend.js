@@ -471,6 +471,8 @@ var GearBuilder = GearBuilder || (function () {
             let output = "";
             output += listenerFindItemsButtons();
             output += listenerFindConsumablesButtons();
+            output += listenerBuyConsumable();
+            output += listenerBuyConsumableBulk();
             output += listenerEquipConsumable();
             output += listenerUnequipConsumable();
             output += listenerDeleteRepeatingConsumable();
@@ -501,6 +503,16 @@ var GearBuilder = GearBuilder || (function () {
             let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
             let variables = consuTypes.map(def => def.getVariable());
             return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindConsumables(eventinfo)`, true);
+        },
+        listenerBuyConsumable = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Gear_Buy")}`],
+                `WuxWorkerGear.BuyConsumable(eventinfo)`, true);
+        },
+        listenerBuyConsumableBulk = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Gear_BuyBulk")}`],
+                `WuxWorkerGear.BuyConsumableBulk(eventinfo)`, true);
         },
         listenerEquipConsumable = function () {
             return WuxSheetBackend.OnChange(

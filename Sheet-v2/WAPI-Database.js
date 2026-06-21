@@ -2103,10 +2103,9 @@ class DefinitionData extends WuxDatabaseData {
 
     getTitle(mod, mod1) {
         if (mod == undefined) {
-            return this.title;
+            mod = ["", ""];
         }
-
-        if (mod1 != undefined) {
+        else if (mod1 != undefined) {
             mod = [mod, mod1];
         }
 

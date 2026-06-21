@@ -803,11 +803,19 @@ class ItemInspectionPopup extends InspectionPopup {
                 return true;
             }
         });
+        let itemValue = parseInt(item.value) || 0;
+        let buyDef = WuxDef.Get("Gear_Buy");
+        let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
+        let buyInfoVar = WuxDef.GetVariable("Gear_Buy", WuxDef._info);
+        let buyMaxInfoVar = WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info);
+
         if (duplicateId != null) {
             Debug.Log(`Consumable ${item.name} already owned, incrementing count`);
             let countField = existingRepeater.getFieldName(duplicateId, itemCountVar);
             let currentCount = attrHandler.parseInt(countField) || 1;
             attrHandler.addUpdate(countField, currentCount + 1);
+            attrHandler.addUpdate(existingRepeater.getFieldName(duplicateId, buyInfoVar), buyDef.getTitle(`1 (${itemValue}J)`));
+            attrHandler.addUpdate(existingRepeater.getFieldName(duplicateId, buyMaxInfoVar), buyBulkDef.getTitle(`10 (${itemValue * 10}J)`));
             if (attrHandler.parseString(existingRepeater.getFieldName(duplicateId, this.getGearVariable("ItemIsVisible"))) !== "on") {
                 attrHandler.addUpdate(existingRepeater.getFieldName(duplicateId, this.getGearVariable("ItemIsVisible")), "on");
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "on");
@@ -819,6 +827,9 @@ class ItemInspectionPopup extends InspectionPopup {
         let newRowId = repeater.generateRowId();
         this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
         this.performAddSelectedInspectElementTechnique(attrHandler, repeater, newRowId, item.technique);
+
+        attrHandler.addUpdate(repeater.getFieldName(newRowId, buyInfoVar), buyDef.getTitle(`1 (${itemValue}J)`));
+        attrHandler.addUpdate(repeater.getFieldName(newRowId, buyMaxInfoVar), buyBulkDef.getTitle(`10 (${itemValue * 10}J)`));
 
         attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "on");
 

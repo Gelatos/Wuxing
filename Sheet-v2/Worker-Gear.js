@@ -584,6 +584,47 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             attributeHandler.run();
         },
 
+        buyConsumable = function (eventinfo) {
+            buyConsumableWithCount(eventinfo, 1);
+        },
+
+        buyConsumableBulk = function (eventinfo) {
+            buyConsumableWithCount(eventinfo, 10);
+        },
+
+        buyConsumableWithCount = function (eventinfo, quantity) {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("RepeatingConsumables");
+
+            let consuRepeater = attributeHandler.getRepeatingSection("RepeatingConsumables");
+            let selectedId = consuRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let itemNameVar = getGearVariable("ItemName");
+            let itemIsVisibleVar = getGearVariable("ItemIsVisible");
+            let itemCountVar = getGearVariable("ItemCount");
+            let jinVar = WuxDef.GetVariable("Jin");
+
+            consuRepeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
+            attributeHandler.addMod(jinVar);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let itemName = attrHandler.parseString(consuRepeater.getFieldName(selectedId, itemNameVar));
+                let item = WuxItems.Get(itemName);
+
+                let cost = parseInt(item.value) || 0;
+                let totalCost = cost * quantity;
+                let jin = attrHandler.parseInt(jinVar);
+                jin -= totalCost;
+                attrHandler.addUpdate(jinVar, jin.toString());
+
+                let currentCount = attrHandler.parseInt(consuRepeater.getFieldName(selectedId, itemCountVar)) || 0;
+                let newCount = currentCount + quantity;
+                attrHandler.addUpdate(consuRepeater.getFieldName(selectedId, itemCountVar), newCount);
+                attrHandler.addUpdate(consuRepeater.getFieldName(selectedId, itemIsVisibleVar), "on");
+            });
+
+            attributeHandler.run();
+        },
+
         equipConsumable = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addRepeatingSection("RepeatingConsumables");
@@ -1020,6 +1061,8 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         InspectSetGear: inspectSetGear,
         OpenFindItems: openFindItems,
         OpenFindConsumables: openFindConsumables,
+        BuyConsumable: buyConsumable,
+        BuyConsumableBulk: buyConsumableBulk,
         EquipConsumable: equipConsumable,
         UnequipConsumable: unequipConsumable,
         DeleteConsumable: deleteConsumable,
