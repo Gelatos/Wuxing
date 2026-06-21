@@ -628,8 +628,10 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         equipConsumable = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addRepeatingSection("RepeatingConsumables");
+            attributeHandler.addRepeatingSection("RepeatingSyncConsumables");
 
             let consuRepeater = attributeHandler.getRepeatingSection("RepeatingConsumables");
+            let syncedRepeater = attributeHandler.getRepeatingSection("RepeatingSyncConsumables");
             let selectedId = consuRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
             let itemNameVar = getGearVariable("ItemName");
             let itemIsVisibleVar = getGearVariable("ItemIsVisible");
@@ -637,6 +639,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
 
             consuRepeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
+            syncedRepeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
             attributeHandler.addMod(consuBuildVar);
             attributeHandler.addMod(WuxDef.GetVariable("ConsumableSlots"));
 
@@ -669,10 +672,25 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 });
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), anyVisible ? "on" : "0");
 
-                let newSyncedRepeater = new WorkerRepeatingSectionHandler("RepeatingSyncConsumables");
-                let newSyncedRowId = newSyncedRepeater.generateRowId();
-                attrHandler.addUpdate(newSyncedRepeater.getFieldName(newSyncedRowId, itemNameVar), itemName);
-                attrHandler.addUpdate(newSyncedRepeater.getFieldName(newSyncedRowId, itemIsVisibleVar), "on");
+                let existingSyncedId = null;
+                syncedRepeater.iterate(function (id) {
+                    let syncedName = attrHandler.parseString(syncedRepeater.getFieldName(id, itemNameVar));
+                    let syncedVisible = attrHandler.parseString(syncedRepeater.getFieldName(id, itemIsVisibleVar));
+                    if (syncedName === itemName && syncedVisible === "on") {
+                        existingSyncedId = id;
+                    }
+                });
+
+                if (existingSyncedId !== null) {
+                    let syncedCount = attrHandler.parseInt(syncedRepeater.getFieldName(existingSyncedId, itemCountVar)) || 0;
+                    attrHandler.addUpdate(syncedRepeater.getFieldName(existingSyncedId, itemCountVar), syncedCount + 1);
+                } else {
+                    let newSyncedRepeater = new WorkerRepeatingSectionHandler("RepeatingSyncConsumables");
+                    let newSyncedRowId = newSyncedRepeater.generateRowId();
+                    attrHandler.addUpdate(newSyncedRepeater.getFieldName(newSyncedRowId, itemNameVar), itemName);
+                    attrHandler.addUpdate(newSyncedRepeater.getFieldName(newSyncedRowId, itemIsVisibleVar), "on");
+                    attrHandler.addUpdate(newSyncedRepeater.getFieldName(newSyncedRowId, itemCountVar), 1);
+                }
             });
 
             WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
@@ -693,7 +711,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
 
             let itemCountVar = getGearVariable("ItemCount");
             consuRepeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
-            syncedRepeater.addFieldNames([itemNameVar]);
+            syncedRepeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
             attributeHandler.addMod(consuBuildVar);
             attributeHandler.addMod(WuxDef.GetVariable("ConsumableSlots"));
 
@@ -710,7 +728,13 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableSlot"), consuBuild.length.toString());
                 let slotOpenState = consuBuild.length < attrHandler.parseInt(WuxDef.GetVariable("ConsumableSlots")) ? "0" : "on";
 
-                attrHandler.addUpdate(syncedRepeater.getFieldName(selectedId, itemIsVisibleVar), "0");
+                let syncedCount = attrHandler.parseInt(syncedRepeater.getFieldName(selectedId, itemCountVar)) || 1;
+                let newSyncedCount = syncedCount - 1;
+                if (newSyncedCount <= 0) {
+                    attrHandler.addUpdate(syncedRepeater.getFieldName(selectedId, itemIsVisibleVar), "0");
+                } else {
+                    attrHandler.addUpdate(syncedRepeater.getFieldName(selectedId, itemCountVar), newSyncedCount);
+                }
 
                 let foundInBase = false;
                 consuRepeater.iterate(function (id) {
@@ -945,7 +969,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let itemIsVisibleVar = getGearVariable("ItemIsVisible");
             let itemCountVar = getGearVariable("ItemCount");
             consuRepeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
-            syncedRepeater.addFieldNames([itemNameVar, itemIsVisibleVar]);
+            syncedRepeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
 
             let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
             let consuBuildMaxVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build + WuxDef._max);
@@ -980,7 +1004,8 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 });
 
                 syncedRepeater.iterate(function (id) {
-                    attrHandler.addUpdate(syncedRepeater.getFieldName(id, itemIsVisibleVar), "on");
+                    let syncedCount = attrHandler.parseInt(syncedRepeater.getFieldName(id, itemCountVar)) || 0;
+                    attrHandler.addUpdate(syncedRepeater.getFieldName(id, itemIsVisibleVar), syncedCount > 0 ? "on" : "0");
                 });
 
                 attrHandler.addUpdate(consuBuildVar, JSON.stringify(consuBuild));

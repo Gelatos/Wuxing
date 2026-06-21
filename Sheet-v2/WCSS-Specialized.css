@@ -514,7 +514,12 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
 {
     float: right;
     height: 12px;
+}
 
+.wuxEquippableButtonGroup .wuxButton
+{
+    height: 12px;
+    float: none;
 }
 
 /*========================================
