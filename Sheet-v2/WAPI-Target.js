@@ -2249,7 +2249,16 @@ var TargetReference = TargetReference || (function () {
                     tokenTargetData.combatDetails.onUpdateMoveSpeedValue(attrHandler, attrHandler.parseInt(speedVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateDashSpeedValue(attrHandler, attrHandler.parseInt(dashVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateWeaponDamageType(attrHandler, attrHandler.parseInt(weaponDamageVar, 0, false));
-                    tokenTargetData.setCombatDetails(attrHandler);
+                    let tokenNoteReference = undefined;
+                    if (tokenTargetData.isCharacter()) {
+                        tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
+                        tokenNoteReference.surges.current = attrHandler.parseInt(surgeVar, 0, false);
+                        tokenNoteReference.surges.max = attrHandler.parseInt(surgeVar, 0, true);
+                        tokenNoteReference.vitality.current = attrHandler.parseInt(vitalityVar, 0, false);
+                        tokenNoteReference.vitality.max = attrHandler.parseInt(vitalityVar, 0, true);
+                        tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
+                    }
+                    tokenTargetData.setCombatDetails(attrHandler, tokenNoteReference);
                 });
                 attributeHandler.run();
             });
