@@ -1356,7 +1356,7 @@ class TokenTargetEffectsData {
 
         this.tokenTargetData.addWill(attributeHandler, -1 * damageRoll.total,
             function (results, attrHandler, attributeVar, tokenTargetData) {
-                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} psyche damage.`);
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} will damage.`);
                 if (results.remainder < 0) {
                     // the target can take a will break
                     if (willBreakEffect != undefined) {

@@ -731,7 +731,7 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
     
     consumeWill(techniqueConsumptionResolver, attrHandler, resourceObject) {
         let willDamageRoll = new DamageRoll();
-        willDamageRoll.addModToRoll(resourceObject.resourceValue);
+        willDamageRoll.addModToRoll(parseInt(resourceObject.resourceValue) || 0);
         
         let willBreakTechEffect = new TechniqueEffect();
         willBreakTechEffect.name = "T0";
@@ -1552,7 +1552,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
         }
     }
     
-    getDamageType(techniqueEffect) {
+    getDamageType(attrGetters, techniqueEffect) {
         let damageType = WuxDef.GetTitle(techniqueEffect.effect);
         if (damageType == "Weapon") {
             damageType = this.senderTokenEffect.tokenTargetData.combatDetails.getWeaponDamage();
@@ -3987,7 +3987,7 @@ class TokenTargetEffectsData {
 
         this.tokenTargetData.addWill(attributeHandler, -1 * damageRoll.total,
             function (results, attrHandler, attributeVar, tokenTargetData) {
-                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} psyche damage.`);
+                targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} will damage.`);
                 if (results.remainder < 0) {
                     // the target can take a will break
                     if (willBreakEffect != undefined) {

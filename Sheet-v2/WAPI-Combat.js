@@ -679,7 +679,7 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
     
     consumeWill(techniqueConsumptionResolver, attrHandler, resourceObject) {
         let willDamageRoll = new DamageRoll();
-        willDamageRoll.addModToRoll(resourceObject.resourceValue);
+        willDamageRoll.addModToRoll(parseInt(resourceObject.resourceValue) || 0);
         
         let willBreakTechEffect = new TechniqueEffect();
         willBreakTechEffect.name = "T0";
@@ -1500,7 +1500,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
         }
     }
     
-    getDamageType(techniqueEffect) {
+    getDamageType(attrGetters, techniqueEffect) {
         let damageType = WuxDef.GetTitle(techniqueEffect.effect);
         if (damageType == "Weapon") {
             damageType = this.senderTokenEffect.tokenTargetData.combatDetails.getWeaponDamage();
