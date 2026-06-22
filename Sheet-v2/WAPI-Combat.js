@@ -246,7 +246,8 @@ var WuxConflictManager = WuxConflictManager || (function () {
                     let newAttributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
                     tokenEffect.performDamageRolls(attrGetter, newAttributeHandler);
                     removeStartOfRoundStatuses(tokenTargetData, newAttributeHandler, messages);
-                    
+                    applyFocusEffect(tokenTargetData, newAttributeHandler, messages);
+
                     newAttributeHandler.addFinishCallback(function () {
                         messages = messages.concat(tokenEffect.effectMessages);
                     })
@@ -331,6 +332,18 @@ var WuxConflictManager = WuxConflictManager || (function () {
                 tokenTargetData.removeStatus(attrHandler, "Stat_Shock Aegis");
                 tokenTargetData.removeStatus(attrHandler, "Stat_Static");
                 messages.push(`${tokenTargetData.displayName} no longer has static and Shock Aegis ends`);
+            }
+        },
+        applyFocusEffect = function (tokenTargetData, attrHandler, messages) {
+            if (!tokenTargetData.hasStatus(attrHandler, "Stat_Focus")) {
+                return;
+            }
+            if (tokenTargetData.hasStatus(attrHandler, "Stat_Downed")) {
+                tokenTargetData.removeStatus(attrHandler, "Stat_Focus");
+                messages.push(`${tokenTargetData.displayName} is Downed and loses Focus.`);
+            } else {
+                tokenTargetData.addEnergy(attrHandler, -1);
+                messages.push(`${tokenTargetData.displayName} spends 1 EN to maintain Focus.`);
             }
         },
         sendStartRoundMessage = function (messages) {
@@ -598,6 +611,7 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
         this.tokenEffect = {};
         this.resources = {};
         this.newResourceValues = {};
+        this.focus = false;
     }
     
     initializeData(contentData) {
@@ -621,6 +635,7 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
         if (techniqueData.will != 0) {
             this.resources["WILL"] = techniqueData.will;
         }
+        this.focus = techniqueData.focus;
     }
     
     addInitialMessage() {
@@ -729,6 +744,11 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
                 resourceObject.callback(techniqueConsumptionResolver, attributeHandler, resourceObject);
             }
         });
+
+        if (techniqueConsumptionResolver.focus) {
+            techniqueConsumptionResolver.tokenEffect.tokenTargetData.addStatus(attributeHandler, "Stat_Focus", 1);
+            techniqueConsumptionResolver.tokenEffect.addMessage(`${techniqueConsumptionResolver.tokenEffect.tokenTargetData.displayName} gains Focus.`);
+        }
 
         attributeHandler.addFinishCallback(function () {
             techniqueConsumptionResolver.printPrivateMessages();
