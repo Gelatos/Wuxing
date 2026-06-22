@@ -839,7 +839,7 @@ class TokenTargetData extends TargetData {
 
     modifyBarAttribute(attributeHandler, barIndex, value, modCallback, finishCallback) {
         let currentValue = this.token.get(`bar${barIndex}_value`);
-        if (currentValue == "" || currentValue == undefined) {
+        if (currentValue === "" || currentValue === undefined) {
             return;
         }
         
@@ -965,6 +965,7 @@ class TokenTargetEffectsData {
         this.statusEffects = {};
         this.spentSurge = false;
         this.removeStatusMessage = "";
+        this.willBreakButtonAdded = false;
     }
 
     addMessage(message) {
@@ -993,6 +994,7 @@ class TokenTargetEffectsData {
                 case "HP Heal":
                     tokenTargetEffect.takeHpHealing(attrSetter, damageRoll);
                     break;
+                case "Will":
                 case "Psyche":
                     tokenTargetEffect.modifyDamageRollHalveDamage(damageRoll);
                     tokenTargetEffect.modifyDamageRollResistanceCheck(damageRoll);
@@ -1358,9 +1360,9 @@ class TokenTargetEffectsData {
             function (results, attrHandler, attributeVar, tokenTargetData) {
                 targetEffect.effectMessages.push(`${tokenTargetData.displayName} takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} will damage.`);
                 if (results.remainder < 0) {
-                    // the target can take a will break
-                    if (willBreakEffect != undefined) {
-                        targetEffect.effectMessages.push(`<span class="sheet-wuxInlineRow">[Use Will Break Effect](${willBreakEffect.printWillBreakString()})</span> `)
+                    if (willBreakEffect != undefined && !targetEffect.willBreakButtonAdded) {
+                        targetEffect.willBreakButtonAdded = true;
+                        targetEffect.effectMessages.push(`<span class="sheet-wuxInlineRow">[Use Will Break Effect](${willBreakEffect.printWillBreakString()})</span> `);
                     }
                 }
                 tokenTargetData.applyResultsToWill(results, attrHandler, attributeVar, tokenTargetData);
@@ -1395,7 +1397,7 @@ class TokenTargetEffectsData {
                     Debug.Log(`Current surges for ${targetEffect.tokenTargetData.displayName} is ${surgeResults.current}/${surgeResults.max}`);
                 }
 
-                if (surgeResults.current > 0) {
+                if (surgeResults.current > 0 && !isNaN(results.max)) {
                     surgeResults.newValue = surgeResults.current - 1;
                     results.newValue = results.max;
                     Debug.Log("Setting will results to " + results.newValue);

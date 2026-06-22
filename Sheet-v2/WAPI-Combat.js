@@ -1206,7 +1206,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                     techUseResolver.targetTokenEffect.halveAllDamage = false;
                 }
                 else if (techniqueEffect.defense == "") {
-                    passCheck = true;
+                    passCheck = techUseResolver.passedCheck;
                 }
                 else {
                     if (techniqueEffect.type == "Damage") {
@@ -1367,7 +1367,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
         }
         else if (subType == "Status") {
             let statusEffectName = Format.GetDefinitionName("Status", subTypeParts[1]);
-            if (tokenEffect.hasStatus(attrSetters.getObjByTarget(techniqueEffect), statusEffectName)) {
+            if (tokenEffect.tokenTargetData.hasStatus(attrSetters.getObjByTarget(techniqueEffect), statusEffectName)) {
                 let statusEffect = WuxDef.GetTitle(statusEffectName);
                 this.addMessage(`Adding bonus damage from ${statusEffect} conditional`);
 
@@ -1380,7 +1380,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
         }
         else if (subType == "Cond") {
             let statusEffectName = Format.GetDefinitionName("Status", subTypeParts[1]);
-            if (this.senderTokenEffect.hasStatus(attrSetters.getObjByTarget(techniqueEffect), statusEffectName)) {
+            if (this.senderTokenEffect.tokenTargetData.hasStatus(attrSetters.getObjByTarget(techniqueEffect), statusEffectName)) {
                 let statusEffect = WuxDef.GetTitle(statusEffectName);
                 this.addMessage(`Adding bonus damage from ${statusEffect} conditional`);
 
@@ -1392,7 +1392,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
             }
         }
         if (techniqueEffect.effect == "Psyche") {
-            let roll = this.calculateFormula(techniqueEffect, attrGetters.sender);
+            roll = this.calculateFormula(techniqueEffect, attrGetters.sender);
             roll.setDamageType("Psyche");
         }
         else {
