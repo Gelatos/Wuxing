@@ -1026,6 +1026,11 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             }
             this.addMessage(`${this.senderTokenEffect.tokenTargetData.displayName} is Rallied: +${rally} Advantage. Removed Rally status.`);
         }
+        let exhausted = this.senderTokenEffect.tokenTargetData.getStatusRank(senderAttributeHandler, "Stat_Exhausted");
+        if (exhausted > 0) {
+            advantage -= exhausted;
+            this.addMessage(`${this.senderTokenEffect.tokenTargetData.displayName} is Exhausted: +${exhausted} Disadvantage.`);
+        }
 
         // add advantages based on what statuses the target has
         if (this.technique.getTraits().includes("Social")) {
@@ -1078,6 +1083,11 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
                 this.targetTokenEffect.tokenTargetData.removeStatus(targetAttributeHandler, "Stat_Distracted");
             }
             this.addMessage(`${this.targetTokenEffect.tokenTargetData.displayName} is Distracted: +${distracted} Disadvantage. Removed Distracted status.`);
+        }
+        let targetExhausted = this.targetTokenEffect.tokenTargetData.getStatusRank(senderAttributeHandler, "Stat_Exhausted");
+        if (targetExhausted > 0) {
+            advantage -= targetExhausted;
+            this.addMessage(`${this.targetTokenEffect.tokenTargetData.displayName} is Exhausted: +${targetExhausted} Advantage.`);
         }
         
         return advantage;

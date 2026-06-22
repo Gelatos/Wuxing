@@ -334,6 +334,7 @@ class TokenTargetData extends TargetData {
         let subAttributeHandler = new SandboxAttributeHandler(attributeHandler.characterId);
         if (value == true) {
             this.addStatus(subAttributeHandler, "Stat_Downed", 1);
+            this.addStatus(subAttributeHandler, "Stat_Dazed", 1);
         }
         else {
             this.removeStatus(subAttributeHandler, "Stat_Downed");
