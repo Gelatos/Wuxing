@@ -312,6 +312,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
 
     const equipSlotStateAttr = "gear-equipmentslotstate";
     const consuSlotStateAttr = "gear-consumableslotstate";
+    const apparelSlotVar = WuxDef.GetVariable("Gear_EquipmentSlot", WuxDef._gear);
 
     const getSlotState = function (count, max) {
         if (count > max) return "over";
@@ -407,9 +408,10 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let equipBuildVar = WuxDef.GetVariable("Equipment", WuxDef._build);
 
             equipRepeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
-            syncedRepeater.addFieldNames([itemNameVar]);
+            syncedRepeater.addFieldNames([itemNameVar, itemIsVisibleVar]);
             attributeHandler.addMod(equipBuildVar);
             attributeHandler.addMod(WuxDef.GetVariable("EquipmentSlots"));
+            attributeHandler.addMod(apparelSlotVar);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let itemName = attrHandler.parseString(equipRepeater.getFieldName(selectedId, itemNameVar));
@@ -419,6 +421,48 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 try { equipBuild = JSON.parse(equipBuildRaw); } catch (e) {}
                 if (!Array.isArray(equipBuild)) equipBuild = [];
                 equipBuild.push(itemName);
+
+                // Apparel slot enforcement: swap out any item already occupying this slot
+                let slotJson = {};
+                try { slotJson = JSON.parse(attrHandler.parseString(apparelSlotVar) || "{}"); } catch (e) {}
+                if (typeof slotJson !== "object" || slotJson === null) slotJson = {};
+
+                let item = WuxItems.Get(itemName);
+                if (item != undefined && item.group === "Apparel" && item.category !== "") {
+                    let slot = item.category;
+                    let oldItemName = slotJson[slot];
+                    if (oldItemName != undefined && oldItemName !== itemName) {
+                        let oldIndex = equipBuild.indexOf(oldItemName);
+                        if (oldIndex !== -1) equipBuild.splice(oldIndex, 1);
+
+                        syncedRepeater.iterate(function (id) {
+                            if (attrHandler.parseString(syncedRepeater.getFieldName(id, itemNameVar)) === oldItemName) {
+                                attrHandler.addUpdate(syncedRepeater.getFieldName(id, itemIsVisibleVar), "0");
+                                return true;
+                            }
+                        });
+
+                        let foundInBase = false;
+                        equipRepeater.iterate(function (id) {
+                            if (attrHandler.parseString(equipRepeater.getFieldName(id, itemNameVar)) === oldItemName) {
+                                foundInBase = true;
+                                let currentCount = attrHandler.parseInt(equipRepeater.getFieldName(id, itemCountVar)) || 0;
+                                attrHandler.addUpdate(equipRepeater.getFieldName(id, itemCountVar), currentCount + 1);
+                                attrHandler.addUpdate(equipRepeater.getFieldName(id, itemIsVisibleVar), "on");
+                            }
+                        });
+                        if (!foundInBase) {
+                            let swapRepeater = new WorkerRepeatingSectionHandler("RepeatingEquipment");
+                            let swapRowId = swapRepeater.generateRowId();
+                            attrHandler.addUpdate(swapRepeater.getFieldName(swapRowId, itemNameVar), oldItemName);
+                            attrHandler.addUpdate(swapRepeater.getFieldName(swapRowId, itemIsVisibleVar), "on");
+                            attrHandler.addUpdate(swapRepeater.getFieldName(swapRowId, itemCountVar), 1);
+                        }
+                    }
+                    slotJson[slot] = itemName;
+                    attrHandler.addUpdate(apparelSlotVar, JSON.stringify(slotJson));
+                }
+
                 attrHandler.addUpdate(equipBuildVar, JSON.stringify(equipBuild));
                 attrHandler.addUpdate(WuxDef.GetVariable("Equipment"), equipBuild.length.toString());
                 let slotsMax = attrHandler.parseInt(WuxDef.GetVariable("EquipmentSlots"));
@@ -473,6 +517,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             syncedRepeater.addFieldNames([itemNameVar]);
             attributeHandler.addMod(equipBuildVar);
             attributeHandler.addMod(WuxDef.GetVariable("EquipmentSlots"));
+            attributeHandler.addMod(apparelSlotVar);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let itemName = attrHandler.parseString(syncedRepeater.getFieldName(selectedId, itemNameVar));
@@ -483,6 +528,19 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 if (!Array.isArray(equipBuild)) equipBuild = [];
                 let index = equipBuild.indexOf(itemName);
                 if (index !== -1) equipBuild.splice(index, 1);
+
+                // Remove from apparel slot JSON if applicable
+                let item = WuxItems.Get(itemName);
+                if (item != undefined && item.group === "Apparel" && item.category !== "") {
+                    let slotJson = {};
+                    try { slotJson = JSON.parse(attrHandler.parseString(apparelSlotVar) || "{}"); } catch (e) {}
+                    if (typeof slotJson !== "object" || slotJson === null) slotJson = {};
+                    if (slotJson[item.category] === itemName) {
+                        delete slotJson[item.category];
+                        attrHandler.addUpdate(apparelSlotVar, JSON.stringify(slotJson));
+                    }
+                }
+
                 attrHandler.addUpdate(equipBuildVar, JSON.stringify(equipBuild));
                 attrHandler.addUpdate(WuxDef.GetVariable("Equipment"), equipBuild.length.toString());
                 let slotsMax = attrHandler.parseInt(WuxDef.GetVariable("EquipmentSlots"));
@@ -1104,6 +1162,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 attrHandler.addUpdate(equipBuildMaxVar, JSON.stringify([]));
                 attrHandler.addUpdate(WuxDef.GetVariable("Equipment"), "0");
                 attrHandler.addUpdate(equipSlotStateAttr, "0");
+                attrHandler.addUpdate(apparelSlotVar, JSON.stringify({}));
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "0");
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits", WuxDef._max), JSON.stringify([]));
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits"), "None");
@@ -1166,6 +1225,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 attrHandler.addUpdate(equipBuildVar, JSON.stringify([]));
                 attrHandler.addUpdate(WuxDef.GetVariable("Equipment"), "0");
                 attrHandler.addUpdate(equipSlotStateAttr, "0");
+                attrHandler.addUpdate(apparelSlotVar, JSON.stringify({}));
                 let equippedTraits = collectEquippedTraits([]);
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits", WuxDef._max), JSON.stringify(equippedTraits.jsonArray));
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits"), equippedTraits.display);

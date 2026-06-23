@@ -871,6 +871,10 @@ class ItemInspectionPopup extends InspectionPopup {
         attrHandler.addUpdate(field("ItemName"),      displayData.name);
         attrHandler.addUpdate(field("ItemGroup"),      displayData.group);
         attrHandler.addUpdate(field("ItemBulk"),      displayData.bulk);
+        attrHandler.addUpdate(
+            repeater.getFieldName(newRowId, this.getGearVariable("ItemSubGroup")),
+            item.category || ""
+        );
     };
     performAddSelectedInspectElementTechnique(attrHandler, repeater, newRowId, technique) {
         let techniqueItemAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");

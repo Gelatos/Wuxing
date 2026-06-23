@@ -11856,6 +11856,8 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let equipDef = WuxDef.Get("Gear_Equip");
                     let inspectDef = WuxDef.Get("Gear_Inspect");
                     let deleteDef = WuxDef.Get("Gear_Delete");
+                    let subGroupAttr = getGearAttribute("ItemSubGroup");
+                    let equipButtonContent = '<span style="color:#c8a020;">&#9881;</span> ' + equipDef.getTitle('<span name="' + subGroupAttr + '"></span>');
 
                     let rowContents = WuxSheetMain.MultiRow(`
                         <div class="wuxEquipableRow">
@@ -11868,7 +11870,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                     <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
                                 </div>
                                 <div class="wuxEquipableButtonRow">
-                                    ${WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                                    ${WuxSheetMain.Button(equipDef.getAttribute(), equipButtonContent, "wuxRepeatingTechActionButton")}
                                     ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                     ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                 </div>
@@ -11888,6 +11890,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         <div class="wuxEquipableBody">
                             <div class="wuxEquipableName">
                                 <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
+                                <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
                             </div>
                             <div class="wuxEquipableButtonRow">
                                 ${WuxSheetMain.Button(unequipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${unequipDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
