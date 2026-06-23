@@ -4188,7 +4188,6 @@ class FormulaData {
     getString() {
         let output = "";
         this.workers.forEach((worker) => {
-            Debug.Log(`Hello ${worker.value}`);
             if (worker.definitionName.length > 0) {
                 let definition = WuxDef.Get(worker.definitionName[0]);
                 if (definition != undefined) {

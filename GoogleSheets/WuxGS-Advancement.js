@@ -428,8 +428,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let titleDefinition = WuxDef.Get("Title_Advancement");
                             contents += WuxSheetMain.Header(titleDefinition.getTitle());
 
-                            contents += WuxDefinition.BuildText(WuxDef.Get("Advancement"),
-                                `${WuxSheetMain.Span(WuxDef.GetAttribute("Advancement"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("Advancement", WuxDef._max))}`);
+                            contents += WuxSheetMain.SlotDisplay("Adv. Pts", "", WuxDef.GetAttribute("Advancement"), WuxDef.GetAttribute("Advancement", WuxDef._max));
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementTechnique"), WuxDef.GetAttribute("AdvancementTechnique"), `cost: 2 advancement points`);
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("TrainingKnowledge"), WuxDef.GetAttribute("TrainingKnowledge"), `cost: 1 advancement point`);
 
@@ -441,8 +440,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let perkDef = WuxDef.Get("Perk");
                             let perkPageDef = WuxDef.Get("Page_Perks");
                             contents += WuxSheetMain.Header(`${perkPageDef.getTitle()}`);
-                            contents += WuxDefinition.BuildText(perkDef,
-                                `${WuxSheetMain.Span(perkDef.getAttribute())} / ${WuxSheetMain.Span(perkDef.getAttribute(WuxDef._max))}`);
+                            contents += WuxSheetMain.SlotDisplay("Perk Pts", "", perkDef.getAttribute(), perkDef.getAttribute(WuxDef._max));
                             let advJobDef = WuxDef.Get("AdvancementJob");
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementJob"), advJobDef.getAttribute(), `cost: 2 perk points`);
                             contents += WuxSheetMain.MultiRow(`<div class="wuxDescription">${advJobDef.getDescription()}</div>`);

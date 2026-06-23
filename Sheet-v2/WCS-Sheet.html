@@ -1716,17 +1716,7 @@
 								<div class="wuxFlexTableItemGroup">
 									<div class="wuxFlexTableItemGroup">
 										<div class="wuxHeader">Advancement</div>
-										<div class="wuxHeader2"><span class="wuxTooltip">
-												<span class="wuxTooltipText">
-													Advancement Points
-												</span>
-												<div class="wuxTooltipContent">
-													<div class="wuxHeader2">Advancement Points</div>
-
-													<span class="wuxDescription">Advancement points are a currency used to gain more knowledges or styles. </span><span class="wuxDescription">Player characters start with two advancement points and gain an additional point whenever they gain a level. You can gain bonus advancement points by gaining training points and converting them to advancement points after reaching 60 of them.</span>
-												</div>
-											</span></div>
-										<span class="wuxDescription"><span name="attr_adv"></span> / <span name="attr_adv_max"></span></span>
+										<div class="wuxSlotSection"><span class="wuxSlotLabel">Adv. Pts</span><input type="hidden" class="wuxSlotStateFlag" name="" value="0"><span class="wuxSlotData"><span name="attr_adv" value="0">0</span> <span class="wuxFontSize7">/ <span name="attr_adv_max">0</span></span></span></div>
 										<div class="wuxHeader2"><span class="wuxTooltip">
 												<span class="wuxTooltipText">
 													Style Points
@@ -1775,17 +1765,7 @@
 					<div class="wuxSectionBlock wuxLayoutItem">
 						<div class="wuxTabContent">
 							<div class="wuxHeader">Perks</div>
-							<div class="wuxHeader2"><span class="wuxTooltip">
-									<span class="wuxTooltipText">
-										Perk Points
-									</span>
-									<div class="wuxTooltipContent">
-										<div class="wuxHeader2">Perk Points</div>
-
-										<span class="wuxDescription">Perks are bonuses granted to a character to represent special aspects of how they function as a character. To purchase a perk, select it from the list by checking its checkbox.</span><span class="wuxDescription">There is a limit as to how many perks a character may have based on the points they have gained. </span>
-									</div>
-								</span></div>
-							<span class="wuxDescription"><span name="attr_perk"></span> / <span name="attr_perk_max"></span></span>
+							<div class="wuxSlotSection"><span class="wuxSlotLabel">Perk Pts</span><input type="hidden" class="wuxSlotStateFlag" name="" value="0"><span class="wuxSlotData"><span name="attr_perk" value="0">0</span> <span class="wuxFontSize7">/ <span name="attr_perk_max">0</span></span></span></div>
 							<div class="wuxHeader2"><span class="wuxTooltip">
 									<span class="wuxTooltipText">
 										Job Points
@@ -12877,14 +12857,10 @@
 																		<span class="wuxSubHeader" name="attr_gear-itemgroup"></span>
 																	</div>
 																	<div class="wuxEquipableButtonRow">
-																		<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemslotopen" value="0">
-																		<span class="wuxHiddenInlineAuxField">
-																			<div class="wuxButton wuxRepeatingTechActionButton">
-																				<input type="checkbox" name="attr_gear-equip">
-																				<span><span style="color:#c8a020;">&#9881;</span> Equip </span>
-																			</div>
-																		</span>
-
+																		<div class="wuxButton wuxRepeatingTechActionButton">
+																			<input type="checkbox" name="attr_gear-equip">
+																			<span><span style="color:#c8a020;">&#9881;</span> Equip </span>
+																		</div>
 																		<div class="wuxButton wuxRepeatingTechActionButton">
 																			<input type="checkbox" name="attr_gear-inspect">
 																			<span>&#9673; Inspect</span>
@@ -12947,17 +12923,7 @@
 									</div>
 								</div>
 								<div class="wuxFlexTableItemGroup wuxMinWidth150">
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Equipment Slots
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Equipment Slots</div>
-
-												<span class="wuxDescription">The number of Equipment Slots this character has available. All equipped gear is always considered Resonated by the user. This means your equipment cannot be targeted by others' magic unless you are unconscious.</span>
-											</div>
-										</span></div>
-									<span class="wuxDescription"><span name="attr_equipment" value="0"></span> / <span name="attr_equipmentslotcount"></span></span>
+									<div class="wuxSlotSection"><span class="wuxSlotLabel">Slots</span><input type="hidden" class="wuxSlotStateFlag" name="attr_gear-equipmentslotstate" value="0"><span class="wuxSlotData"><span name="attr_equipment" value="0">0</span> <span class="wuxFontSize7">/ <span name="attr_equipmentslotcount">0</span></span></span></div>
 									<div class="wuxHeader2"><span class="wuxTooltip">
 											<span class="wuxTooltipText">
 												Equipped Item Traits
@@ -13054,14 +13020,10 @@
 																			<input type="checkbox" name="attr_gear-buybulk">
 																			<span><span style="color:#5bc0de;">&#9670;</span> <span name="attr_gear-buybulk_info"></span></span>
 																		</div>
-																		<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemslotopen" value="0">
-																		<span class="wuxHiddenInlineAuxField">
-																			<div class="wuxButton wuxRepeatingTechActionButton">
-																				<input type="checkbox" name="attr_gear-equip">
-																				<span><span style="color:#c8a020;">&#9881;</span> Equip </span>
-																			</div>
-																		</span>
-
+																		<div class="wuxButton wuxRepeatingTechActionButton">
+																			<input type="checkbox" name="attr_gear-equip">
+																			<span><span style="color:#c8a020;">&#9881;</span> Equip </span>
+																		</div>
 																		<div class="wuxButton wuxRepeatingTechActionButton">
 																			<input type="checkbox" name="attr_gear-inspect">
 																			<span>&#9673; Inspect</span>
@@ -13110,17 +13072,7 @@
 									</div>
 								</div>
 								<div class="wuxFlexTableItemGroup wuxMinWidth150">
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Consumable Slots
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Consumable Slots</div>
-
-												<span class="wuxDescription">The number of Consumable Slots the character has available. These items can be quickly accessed via pockets or pouches.</span>
-											</div>
-										</span></div>
-									<span class="wuxDescription"><span name="attr_gear-consumableslot" value="0"></span> / <span name="attr_consumableslotcount"></span></span>
+									<div class="wuxSlotSection"><span class="wuxSlotLabel">Slots</span><input type="hidden" class="wuxSlotStateFlag" name="attr_gear-consumableslotstate" value="0"><span class="wuxSlotData"><span name="attr_gear-consumableslot" value="0">0</span> <span class="wuxFontSize7">/ <span name="attr_consumableslotcount">0</span></span></span></div>
 									<div class="wuxHeader">Equipped Instant Consumables</div>
 									<div style="float:right;">
 										<div class="wuxButton wuxRepeatingTechActionButton">

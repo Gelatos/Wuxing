@@ -682,10 +682,10 @@ button.wuxRepeatingTechActionButton span {
     margin: 0;
     padding: 0;
     vertical-align: top;
-    font-size: 9px !important;
+    font-size: 11px !important;
     font-weight: normal !important;
     font-style: normal !important;
-    line-height: 12px !important;
+    line-height: 13px !important;
 }
 
 div.wuxRepeatingTechActionButton:hover,
@@ -702,6 +702,62 @@ button.wuxRepeatingTechActionButton:hover span {
 
 button.wuxRepeatingTechActionButton[type=roll]::before {
     content: "" !important;
+}
+
+/*========================================
+    Slot count display
+========================================*/
+
+.wuxSlotSection {
+    display: block;
+    max-width: 150px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+}
+
+.wuxSlotSection .wuxSlotLabel {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: bottom;
+    width: 38%;
+    padding: 0 4px 0 5px;
+    text-align: right;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 16px;
+    text-transform: capitalize;
+    color: #ffffdf;
+    background: linear-gradient(to right, #86530f, #815822, #6e420a);
+    border: 1px solid #000;
+    border-width: 1px 0 1px 1px;
+    border-bottom: 2px solid #000;
+    border-radius: 5px 0 0 5px;
+}
+
+.wuxSlotSection .wuxSlotData {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: bottom;
+    width: 62%;
+    padding: 0 4px 0 5px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 14.5px;
+    color: #fff;
+    background-color: #ba7417;
+    border: 1px solid #000;
+    border-bottom: 2px solid #000;
+    border-radius: 0 5px 5px 0;
+}
+
+input.wuxSlotStateFlag[value="full"] + .wuxSlotData {
+    background-color: #2a7a2a;
+}
+
+input.wuxSlotStateFlag[value="over"] + .wuxSlotData {
+    background-color: #8b1a1a;
 }
 
 /*========================================

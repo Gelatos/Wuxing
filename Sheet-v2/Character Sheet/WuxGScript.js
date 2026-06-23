@@ -4188,7 +4188,6 @@ class FormulaData {
     getString() {
         let output = "";
         this.workers.forEach((worker) => {
-            Debug.Log(`Hello ${worker.value}`);
             if (worker.definitionName.length > 0) {
                 let definition = WuxDef.Get(worker.definitionName[0]);
                 if (definition != undefined) {
@@ -10067,6 +10066,10 @@ var WuxSheetMain = WuxSheetMain || (function () {
             };
         }()),
 
+        slotDisplay = function (label, stateAttrName, currentAttrName, maxAttrName) {
+            return `<div class="wuxSlotSection"><span class="wuxSlotLabel">${label}</span><input type="hidden" class="wuxSlotStateFlag" name="${stateAttrName}" value="0"><span class="wuxSlotData"><span name="${currentAttrName}" value="0">0</span> <span class="wuxFontSize7">/ <span name="${maxAttrName}">0</span></span></span></div>`;
+        },
+
         distinctSection = distinctSection || (function () {
             'use strict';
             var
@@ -10248,7 +10251,8 @@ var WuxSheetMain = WuxSheetMain || (function () {
         DistinctSection: distinctSection,
         InteractionElement: interactionElement,
         Chat: chat,
-        Language: language
+        Language: language,
+        SlotDisplay: slotDisplay
     };
 }());
 
@@ -11732,7 +11736,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                 <div class="wuxEquipableButtonRow">
                                     ${WuxSheetMain.Button(buyDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
                                     ${WuxSheetMain.Button(buyBulkDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyBulkDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.HiddenAuxSpanField(getGearAttribute("ItemSlotOpen"), WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle("")}`, "wuxRepeatingTechActionButton"))}
+                                    ${WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                     ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                     ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                 </div>
@@ -11779,9 +11783,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         }
                     }
 
-                    let slotDisplay = WuxDefinition.BuildText(
-                        WuxDef.Get("ConsumableSlots"),
-                        `<span name="${WuxDef.GetAttribute("Gear_ConsumableSlot")}" value="0"></span> / <span name="${WuxDef.GetAttribute("ConsumableSlots")}"></span>`);
+                    let slotDisplay = WuxSheetMain.SlotDisplay("Slots", "attr_gear-consumableslotstate", WuxDef.GetAttribute("Gear_ConsumableSlot"), WuxDef.GetAttribute("ConsumableSlots"));
 
                     let unequipAllDef = WuxDef.Get("Gear_UnequipAll");
                     let contents = `${slotDisplay}
@@ -11866,7 +11868,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                     <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
                                 </div>
                                 <div class="wuxEquipableButtonRow">
-                                    ${WuxSheetMain.HiddenAuxSpanField(getGearAttribute("ItemSlotOpen"), WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle("")}`, "wuxRepeatingTechActionButton"))}
+                                    ${WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                     ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                     ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                 </div>
@@ -11897,9 +11899,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let repeaterContent = buildRepeater(repeatingDef.getVariable(),
                         WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents));
 
-                    let slotDisplay = WuxDefinition.BuildText(
-                        WuxDef.Get("EquipmentSlots"),
-                        `<span name="${WuxDef.GetAttribute("Equipment")}" value="0"></span> / <span name="${WuxDef.GetAttribute("EquipmentSlots")}"></span>`);
+                    let slotDisplay = WuxSheetMain.SlotDisplay("Slots", "attr_gear-equipmentslotstate", WuxDef.GetAttribute("Equipment"), WuxDef.GetAttribute("EquipmentSlots"));
 
                     let traitsDisplay = WuxDefinition.BuildText(
                         WuxDef.Get("Gear_EquippedItemTraits"),
@@ -13986,8 +13986,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let titleDefinition = WuxDef.Get("Title_Advancement");
                             contents += WuxSheetMain.Header(titleDefinition.getTitle());
 
-                            contents += WuxDefinition.BuildText(WuxDef.Get("Advancement"),
-                                `${WuxSheetMain.Span(WuxDef.GetAttribute("Advancement"))} / ${WuxSheetMain.Span(WuxDef.GetAttribute("Advancement", WuxDef._max))}`);
+                            contents += WuxSheetMain.SlotDisplay("Adv. Pts", "", WuxDef.GetAttribute("Advancement"), WuxDef.GetAttribute("Advancement", WuxDef._max));
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementTechnique"), WuxDef.GetAttribute("AdvancementTechnique"), `cost: 2 advancement points`);
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("TrainingKnowledge"), WuxDef.GetAttribute("TrainingKnowledge"), `cost: 1 advancement point`);
 
@@ -13999,8 +13998,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let perkDef = WuxDef.Get("Perk");
                             let perkPageDef = WuxDef.Get("Page_Perks");
                             contents += WuxSheetMain.Header(`${perkPageDef.getTitle()}`);
-                            contents += WuxDefinition.BuildText(perkDef,
-                                `${WuxSheetMain.Span(perkDef.getAttribute())} / ${WuxSheetMain.Span(perkDef.getAttribute(WuxDef._max))}`);
+                            contents += WuxSheetMain.SlotDisplay("Perk Pts", "", perkDef.getAttribute(), perkDef.getAttribute(WuxDef._max));
                             let advJobDef = WuxDef.Get("AdvancementJob");
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementJob"), advJobDef.getAttribute(), `cost: 2 perk points`);
                             contents += WuxSheetMain.MultiRow(`<div class="wuxDescription">${advJobDef.getDescription()}</div>`);

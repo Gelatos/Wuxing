@@ -505,6 +505,10 @@ var WuxSheetMain = WuxSheetMain || (function () {
             };
         }()),
 
+        slotDisplay = function (label, stateAttrName, currentAttrName, maxAttrName) {
+            return `<div class="wuxSlotSection"><span class="wuxSlotLabel">${label}</span><input type="hidden" class="wuxSlotStateFlag" name="${stateAttrName}" value="0"><span class="wuxSlotData"><span name="${currentAttrName}" value="0">0</span> <span class="wuxFontSize7">/ <span name="${maxAttrName}">0</span></span></span></div>`;
+        },
+
         distinctSection = distinctSection || (function () {
             'use strict';
             var
@@ -686,7 +690,8 @@ var WuxSheetMain = WuxSheetMain || (function () {
         DistinctSection: distinctSection,
         InteractionElement: interactionElement,
         Chat: chat,
-        Language: language
+        Language: language,
+        SlotDisplay: slotDisplay
     };
 }());
 

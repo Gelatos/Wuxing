@@ -775,8 +775,7 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
         let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
         let consuSlotVar = WuxDef.GetVariable("Gear_ConsumableSlot");
         let slotMaxVar = WuxDef.GetVariable("ConsumableSlots");
-        let slotOpenAttrName = WuxDef.Get("Gear").getVariable("-" + WuxDef.GetVariable("ItemSlotOpen"));
-        let repeatingPrefix = WuxDef.GetVariable("RepeatingConsumables") + "_";
+        let consuSlotStateAttr = "gear-consumableslotstate";
 
         attributeHandler.addAttribute([countVar, consuBuildVar, consuSlotVar, slotMaxVar]);
 
@@ -797,14 +796,13 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
             attrHandler.addUpdate(consuSlotVar, consuBuild.length.toString());
 
             let slotMax = attrHandler.parseInt(slotMaxVar) || 0;
-            let slotOpenState = consuBuild.length < slotMax ? "0" : "on";
-            let allAttrs = findObjs({ _characterid: charId, _type: "attribute" });
-            allAttrs.forEach(function (attr) {
-                let name = attr.get("name");
-                if (name.startsWith(repeatingPrefix) && name.endsWith("_" + slotOpenAttrName)) {
-                    attr.set("current", slotOpenState);
-                }
-            });
+            let slotState = consuBuild.length > slotMax ? "over" : (consuBuild.length >= slotMax && slotMax > 0 ? "full" : "0");
+            let slotStateAttrs = findObjs({ _characterid: charId, _type: "attribute", name: consuSlotStateAttr });
+            if (slotStateAttrs.length > 0) {
+                slotStateAttrs[0].set("current", slotState);
+            } else {
+                createObj("attribute", { _characterid: charId, name: consuSlotStateAttr, current: slotState });
+            }
         });
     }
     

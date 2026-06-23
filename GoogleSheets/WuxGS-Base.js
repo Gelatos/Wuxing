@@ -643,7 +643,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                 <div class="wuxEquipableButtonRow">
                                     ${WuxSheetMain.Button(buyDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
                                     ${WuxSheetMain.Button(buyBulkDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyBulkDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.HiddenAuxSpanField(getGearAttribute("ItemSlotOpen"), WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle("")}`, "wuxRepeatingTechActionButton"))}
+                                    ${WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                     ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                     ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                 </div>
@@ -690,9 +690,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         }
                     }
 
-                    let slotDisplay = WuxDefinition.BuildText(
-                        WuxDef.Get("ConsumableSlots"),
-                        `<span name="${WuxDef.GetAttribute("Gear_ConsumableSlot")}" value="0"></span> / <span name="${WuxDef.GetAttribute("ConsumableSlots")}"></span>`);
+                    let slotDisplay = WuxSheetMain.SlotDisplay("Slots", "attr_gear-consumableslotstate", WuxDef.GetAttribute("Gear_ConsumableSlot"), WuxDef.GetAttribute("ConsumableSlots"));
 
                     let unequipAllDef = WuxDef.Get("Gear_UnequipAll");
                     let contents = `${slotDisplay}
@@ -777,7 +775,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                     <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
                                 </div>
                                 <div class="wuxEquipableButtonRow">
-                                    ${WuxSheetMain.HiddenAuxSpanField(getGearAttribute("ItemSlotOpen"), WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle("")}`, "wuxRepeatingTechActionButton"))}
+                                    ${WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                     ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                     ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                 </div>
@@ -808,9 +806,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let repeaterContent = buildRepeater(repeatingDef.getVariable(),
                         WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents));
 
-                    let slotDisplay = WuxDefinition.BuildText(
-                        WuxDef.Get("EquipmentSlots"),
-                        `<span name="${WuxDef.GetAttribute("Equipment")}" value="0"></span> / <span name="${WuxDef.GetAttribute("EquipmentSlots")}"></span>`);
+                    let slotDisplay = WuxSheetMain.SlotDisplay("Slots", "attr_gear-equipmentslotstate", WuxDef.GetAttribute("Equipment"), WuxDef.GetAttribute("EquipmentSlots"));
 
                     let traitsDisplay = WuxDefinition.BuildText(
                         WuxDef.Get("Gear_EquippedItemTraits"),
