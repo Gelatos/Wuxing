@@ -3812,6 +3812,7 @@ class ItemDisplayData {
     setCrafting() {
         this.craftData = [];
         this.craftDesc = [];
+        if (!this.item.skill) return;
         let isBlueprint = this.item.skill == "Build";
         
         this.addDefinitionToCraftDesc(WuxDef.Get(isBlueprint ? "System_CraftingBlueprint" : "System_CraftingRecipe"));

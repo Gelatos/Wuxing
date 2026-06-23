@@ -3812,6 +3812,7 @@ class ItemDisplayData {
     setCrafting() {
         this.craftData = [];
         this.craftDesc = [];
+        if (!this.item.skill) return;
         let isBlueprint = this.item.skill == "Build";
         
         this.addDefinitionToCraftDesc(WuxDef.Get(isBlueprint ? "System_CraftingBlueprint" : "System_CraftingRecipe"));
@@ -11675,6 +11676,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let contents = "";
                     contents += buildEquipment();
                     contents += buildConsumables();
+                    contents += buildGearItems();
                     return WuxSheetMain.Build(contents);
                 },
 
@@ -11793,6 +11795,115 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             ${rows}
                         </div>`;
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
+                },
+
+                buildGearItems = function () {
+                    let contents = WuxSheetMain.MultiRowGroup([storedGear(), storedGoods()], WuxSheetMain.Table.FlexTable, 2);
+                    contents = WuxSheetMain.TabBlock(contents);
+                    let definition = WuxDef.Get("Page_GearItems");
+                    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                },
+
+                storedGear = function () {
+                    let repeatingDef = WuxDef.Get("RepeatingGear");
+                    let buyDef = WuxDef.Get("Gear_Buy");
+                    let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
+                    let inspectDef = WuxDef.Get("Gear_Inspect");
+                    let deleteDef = WuxDef.Get("Gear_Delete");
+
+                    let rowContents = WuxSheetMain.MultiRow(`
+                        <div class="wuxEquipableRow">
+                            <div class="wuxEquipableCountCol">
+                                <input type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
+                            </div>
+                            <div class="wuxEquipableBody">
+                                <div class="wuxEquipableName">
+                                    <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
+                                    <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
+                                </div>
+                                <div class="wuxEquipableButtonRow">
+                                    ${WuxSheetMain.Button(buyDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
+                                    ${WuxSheetMain.Button(buyBulkDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyBulkDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
+                                    ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                                    ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                                </div>
+                            </div>
+                        </div>`);
+
+                    let repeaterContent = buildRepeater("repeating_gear",
+                        WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents));
+
+                    let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                        <div>
+                            ${repeaterContent}
+                            ${WuxSheetMain.Row("&nbsp;")}
+                            ${addGearFilterButtons()}
+                        </div>`;
+                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
+                },
+
+                addGearFilterButtons = function () {
+                    let gearTypes = WuxDef.Filter([new DatabaseFilterData("group", "GearType")]);
+                    let searchButtonDef = WuxDef.Get("Popup_SearchButton");
+                    let items = [];
+                    for (let i = 0; i < gearTypes.length; i++) {
+                        items.push(WuxSheetMain.Table.FlexTableGroup(
+                            WuxSheetMain.Button(gearTypes[i].getAttribute(), searchButtonDef.getTitle(gearTypes[i].getTitle()), "wuxWidth120"),
+                            "wuxMaxWidth220"));
+                    }
+                    return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddGear"))}
+                        ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 3)}`;
+                },
+
+                storedGoods = function () {
+                    let repeatingDef = WuxDef.Get("RepeatingGoods");
+                    let buyDef = WuxDef.Get("Gear_Buy");
+                    let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
+                    let inspectDef = WuxDef.Get("Gear_Inspect");
+                    let deleteDef = WuxDef.Get("Gear_Delete");
+
+                    let rowContents = WuxSheetMain.MultiRow(`
+                        <div class="wuxEquipableRow">
+                            <div class="wuxEquipableCountCol">
+                                <input type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
+                            </div>
+                            <div class="wuxEquipableBody">
+                                <div class="wuxEquipableName">
+                                    <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
+                                    <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
+                                </div>
+                                <div class="wuxEquipableButtonRow">
+                                    ${WuxSheetMain.Button(buyDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
+                                    ${WuxSheetMain.Button(buyBulkDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyBulkDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
+                                    ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                                    ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                                </div>
+                            </div>
+                        </div>`);
+
+                    let repeaterContent = buildRepeater(repeatingDef.getVariable(),
+                        WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents));
+
+                    let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                        <div>
+                            ${repeaterContent}
+                            ${WuxSheetMain.Row("&nbsp;")}
+                            ${addGoodsFilterButtons()}
+                        </div>`;
+                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
+                },
+
+                addGoodsFilterButtons = function () {
+                    let goodsTypes = WuxDef.Filter([new DatabaseFilterData("group", "GoodsType")]);
+                    let searchButtonDef = WuxDef.Get("Popup_SearchButton");
+                    let items = [];
+                    for (let i = 0; i < goodsTypes.length; i++) {
+                        items.push(WuxSheetMain.Table.FlexTableGroup(
+                            WuxSheetMain.Button(goodsTypes[i].getAttribute(), searchButtonDef.getTitle(goodsTypes[i].getTitle()), "wuxWidth120"),
+                            "wuxMaxWidth220"));
+                    }
+                    return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddGood"))}
+                        ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 3)}`;
                 },
 
                 buildEquipment = function () {
@@ -12410,15 +12521,22 @@ var DisplayPopups = DisplayPopups || (function () {
                     let addType2Attr = WuxDef.GetAttribute("Popup_InspectAddType", "2");
                     let disabledPurchaseButton = `<div class="wuxButton wuxButtonDisabled"><span name="${addType2Attr}"></span></div>`;
 
-                    return  WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd", "2"),
-                            `<span class="wuxSubHeader">${WuxDef.GetTitle("Title_YourJin")}: <span name="${WuxDef.GetAttribute("Jin")}"></span></span>` +
-                            WuxSheetMain.HiddenFieldToggle(WuxDef.GetAttribute("Popup_InspectPurchaseAffordable"),
-                                WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick", "2"),
-                                    `<span name="${addType2Attr}"></span>`),
-                                disabledPurchaseButton)) +
+                    let costDef = WuxDef.Get("Title_InspectionItemCost");
+                    let jinAndCost = `<div style="display:flex;flex-direction:column;">` +
+                        `<div class="wuxSlotSection"><span class="wuxSlotLabel">${WuxDef.GetTitle("Title_YourJin")}</span><span class="wuxSlotData"><span name="${WuxDef.GetAttribute("Jin")}"></span><span> J</span></span></div>` +
+                        `<div class="wuxSlotSection"><span class="wuxSlotLabel">${costDef.getTitle()}</span><span class="wuxSlotData"><span name="${costDef.getAttribute()}"></span></span></div>` +
+                        `</div>`;
+                    let buttons = `<div style="display:flex;flex-direction:column;gap:4px;">` +
+                        WuxSheetMain.HiddenFieldToggle(WuxDef.GetAttribute("Popup_InspectPurchaseAffordable"),
+                            WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick", "2"),
+                                `<span name="${addType2Attr}"></span>`),
+                            disabledPurchaseButton) +
                         WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd"),
                             WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick"),
-                                `<span name="${WuxDef.GetAttribute("Popup_InspectAddType")}">Add</span>`));
+                                `<span name="${WuxDef.GetAttribute("Popup_InspectAddType")}">Add</span>`)) +
+                        `</div>`;
+                    return WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd", "2"),
+                        jinAndCost + buttons);
                 },
 
                 buildItemRepeater = function () {
@@ -13010,6 +13128,16 @@ var GearBuilder = GearBuilder || (function () {
         print = function () {
             let output = "";
             output += listenerFindItemsButtons();
+            output += listenerFindGearButtons();
+            output += listenerFindGoodsButtons();
+            output += listenerBuyGearItem();
+            output += listenerBuyGearItemBulk();
+            output += listenerInspectGearItem();
+            output += listenerDeleteGearItem();
+            output += listenerBuyGoodsItem();
+            output += listenerBuyGoodsItemBulk();
+            output += listenerInspectGoodsItem();
+            output += listenerDeleteGoodsItem();
             output += listenerFindConsumablesButtons();
             output += listenerBuyConsumable();
             output += listenerBuyConsumableBulk();
@@ -13040,6 +13168,56 @@ var GearBuilder = GearBuilder || (function () {
             variables.push(WuxDef.GetVariable("Popup_FindItemsByFilter"));
             variables.push(WuxDef.GetVariable("Popup_FindItemsByTechnique"));
             return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindItems(eventinfo)`, true);
+        },
+        listenerFindGearButtons = function () {
+            let gearTypes = WuxDef.Filter([new DatabaseFilterData("group", "GearType")]);
+            let variables = gearTypes.map(def => def.getVariable());
+            return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindGear(eventinfo)`, true);
+        },
+        listenerFindGoodsButtons = function () {
+            let goodsTypes = WuxDef.Filter([new DatabaseFilterData("group", "GoodsType")]);
+            let variables = goodsTypes.map(def => def.getVariable());
+            return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindGoods(eventinfo)`, true);
+        },
+        listenerBuyGearItem = function () {
+            return WuxSheetBackend.OnChange(
+                [`repeating_gear:${WuxDef.GetVariable("Gear_Buy")}`],
+                `WuxWorkerGear.BuyGearItem(eventinfo)`, true);
+        },
+        listenerBuyGearItemBulk = function () {
+            return WuxSheetBackend.OnChange(
+                [`repeating_gear:${WuxDef.GetVariable("Gear_BuyBulk")}`],
+                `WuxWorkerGear.BuyGearItemBulk(eventinfo)`, true);
+        },
+        listenerInspectGearItem = function () {
+            return WuxSheetBackend.OnChange(
+                [`repeating_gear:${WuxDef.GetVariable("Gear_Inspect")}`],
+                `WuxWorkerGear.InspectGearItem(eventinfo)`, true);
+        },
+        listenerDeleteGearItem = function () {
+            return WuxSheetBackend.OnChange(
+                [`repeating_gear:${WuxDef.GetVariable("Gear_Delete")}`],
+                `WuxWorkerGear.DeleteGearItem(eventinfo)`, true);
+        },
+        listenerBuyGoodsItem = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Buy")}`],
+                `WuxWorkerGear.BuyGoodsItem(eventinfo)`, true);
+        },
+        listenerBuyGoodsItemBulk = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_BuyBulk")}`],
+                `WuxWorkerGear.BuyGoodsItemBulk(eventinfo)`, true);
+        },
+        listenerInspectGoodsItem = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Inspect")}`],
+                `WuxWorkerGear.InspectGoodsItem(eventinfo)`, true);
+        },
+        listenerDeleteGoodsItem = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Delete")}`],
+                `WuxWorkerGear.DeleteGoodsItem(eventinfo)`, true);
         },
         listenerFindConsumablesButtons = function () {
             let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);

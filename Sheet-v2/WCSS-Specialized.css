@@ -710,8 +710,9 @@ button.wuxRepeatingTechActionButton[type=roll]::before {
 
 .wuxSlotSection {
     display: block;
-    max-width: 150px;
+    width: auto;
     margin-bottom: 4px;
+    margin-right: 10px;
     white-space: nowrap;
 }
 
@@ -719,7 +720,7 @@ button.wuxRepeatingTechActionButton[type=roll]::before {
     display: inline-block;
     box-sizing: border-box;
     vertical-align: bottom;
-    width: 38%;
+    min-width: 70px;
     padding: 0 4px 0 5px;
     text-align: right;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -739,7 +740,7 @@ button.wuxRepeatingTechActionButton[type=roll]::before {
     display: inline-block;
     box-sizing: border-box;
     vertical-align: bottom;
-    width: 62%;
+    width: 80px;
     padding: 0 4px 0 5px;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 13px;

@@ -474,6 +474,16 @@ var GearBuilder = GearBuilder || (function () {
         print = function () {
             let output = "";
             output += listenerFindItemsButtons();
+            output += listenerFindGearButtons();
+            output += listenerFindGoodsButtons();
+            output += listenerBuyGearItem();
+            output += listenerBuyGearItemBulk();
+            output += listenerInspectGearItem();
+            output += listenerDeleteGearItem();
+            output += listenerBuyGoodsItem();
+            output += listenerBuyGoodsItemBulk();
+            output += listenerInspectGoodsItem();
+            output += listenerDeleteGoodsItem();
             output += listenerFindConsumablesButtons();
             output += listenerBuyConsumable();
             output += listenerBuyConsumableBulk();
@@ -504,6 +514,56 @@ var GearBuilder = GearBuilder || (function () {
             variables.push(WuxDef.GetVariable("Popup_FindItemsByFilter"));
             variables.push(WuxDef.GetVariable("Popup_FindItemsByTechnique"));
             return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindItems(eventinfo)`, true);
+        },
+        listenerFindGearButtons = function () {
+            let gearTypes = WuxDef.Filter([new DatabaseFilterData("group", "GearType")]);
+            let variables = gearTypes.map(def => def.getVariable());
+            return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindGear(eventinfo)`, true);
+        },
+        listenerFindGoodsButtons = function () {
+            let goodsTypes = WuxDef.Filter([new DatabaseFilterData("group", "GoodsType")]);
+            let variables = goodsTypes.map(def => def.getVariable());
+            return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindGoods(eventinfo)`, true);
+        },
+        listenerBuyGearItem = function () {
+            return WuxSheetBackend.OnChange(
+                [`repeating_gear:${WuxDef.GetVariable("Gear_Buy")}`],
+                `WuxWorkerGear.BuyGearItem(eventinfo)`, true);
+        },
+        listenerBuyGearItemBulk = function () {
+            return WuxSheetBackend.OnChange(
+                [`repeating_gear:${WuxDef.GetVariable("Gear_BuyBulk")}`],
+                `WuxWorkerGear.BuyGearItemBulk(eventinfo)`, true);
+        },
+        listenerInspectGearItem = function () {
+            return WuxSheetBackend.OnChange(
+                [`repeating_gear:${WuxDef.GetVariable("Gear_Inspect")}`],
+                `WuxWorkerGear.InspectGearItem(eventinfo)`, true);
+        },
+        listenerDeleteGearItem = function () {
+            return WuxSheetBackend.OnChange(
+                [`repeating_gear:${WuxDef.GetVariable("Gear_Delete")}`],
+                `WuxWorkerGear.DeleteGearItem(eventinfo)`, true);
+        },
+        listenerBuyGoodsItem = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Buy")}`],
+                `WuxWorkerGear.BuyGoodsItem(eventinfo)`, true);
+        },
+        listenerBuyGoodsItemBulk = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_BuyBulk")}`],
+                `WuxWorkerGear.BuyGoodsItemBulk(eventinfo)`, true);
+        },
+        listenerInspectGoodsItem = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Inspect")}`],
+                `WuxWorkerGear.InspectGoodsItem(eventinfo)`, true);
+        },
+        listenerDeleteGoodsItem = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Delete")}`],
+                `WuxWorkerGear.DeleteGoodsItem(eventinfo)`, true);
         },
         listenerFindConsumablesButtons = function () {
             let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
