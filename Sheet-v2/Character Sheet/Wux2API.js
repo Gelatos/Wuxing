@@ -836,6 +836,12 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
         let tokenEffect = this.tokenEffect;
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
+            let isIngested = item.traits.split(";").map(function (t) { return t.trim(); }).includes("Ingested");
+            if (isIngested && tokenEffect.tokenTargetData.hasStatus(attrHandler, "Stat_Sickened")) {
+                tokenEffect.addMessage(`${tokenEffect.tokenTargetData.displayName} is Sickened and cannot consume ${itemName} — the item must be eaten.`);
+                return;
+            }
+
             let currentCount = attrHandler.parseInt(countVar) || 0;
             if (currentCount <= 0) {
                 tokenEffect.addMessage(`You do not have ${itemName} equipped`);
