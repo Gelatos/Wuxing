@@ -248,6 +248,20 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 });
                 attributeHandler.run();
             });
+        },
+
+        updateTechniqueChangeVisibility = function () {
+            let attributeHandler = new WorkerAttributeHandler();
+            let advJobVar = WuxDef.GetVariable("AdvancementJob");
+            let spiritConduitVar = WuxDef.GetVariable("Perk_Spirit Conduit");
+            attributeHandler.addMod([advJobVar, spiritConduitVar]);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let hasMultipleJobs = attrHandler.parseInt(advJobVar) > 0;
+                let hasSpiritConduit = attrHandler.parseString(spiritConduitVar) !== "0" && attrHandler.parseString(spiritConduitVar) !== "";
+                let isVisible = (hasMultipleJobs || hasSpiritConduit) ? "on" : "0";
+                attrHandler.addUpdate(WuxDef.GetVariable("Title_TechniqueChange", WuxDef._build), isVisible);
+            });
+            attributeHandler.run();
         }
     ;
 
@@ -262,6 +276,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         RemoveAllOldStyleData: removeAllOldStyleData,
         SetCustomTechnique: setCustomTechnique,
         QuickFilterFormeActions: quickFilterFormeActions,
+        UpdateTechniqueChangeVisibility: updateTechniqueChangeVisibility,
     };
 }());
 

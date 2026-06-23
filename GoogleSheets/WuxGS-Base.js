@@ -905,9 +905,10 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let sectionDef = WuxDef.Get("Title_TechniqueChange");
                     return `${WuxSheet.MainPageDisplayInput()}
                     ${WuxSheet.PageDisplay("ActionsData",
-                        WuxSheetMain.CollapsibleTab(
-                            sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
-                            sectionDef.getTitle(), contents))}`;
+                        WuxSheetMain.HiddenField(sectionDef.getAttribute(WuxDef._build),
+                            WuxSheetMain.CollapsibleTab(
+                                sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
+                                sectionDef.getTitle(), contents)))}`;
                 },
 
                 buildFormeActions = function () {

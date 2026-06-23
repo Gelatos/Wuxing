@@ -673,6 +673,7 @@ var ActionBuilder = ActionBuilder || (function () {
             output += listenerTechniquesFilterPopup();
             output += listenerStyleAutoFilterButtons();
             output += listenerBaseFilterButtons();
+            output += listenerUpdateTechniqueChangeVisibility();
             return output;
         },
         listenerRankRepeatingStyles = function () {
@@ -743,6 +744,11 @@ var ActionBuilder = ActionBuilder || (function () {
                 groupVariableNames.push(baseFilters[i].getVariable());
             }
             return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerActions.QuickFilterFormeActions(eventinfo)`, true);
+        },
+        listenerUpdateTechniqueChangeVisibility = function () {
+            return WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("AdvancementJob"), WuxDef.GetVariable("Perk_Spirit Conduit")],
+                `WuxWorkerActions.UpdateTechniqueChangeVisibility()`, true);
         }
     return {
         Print: print

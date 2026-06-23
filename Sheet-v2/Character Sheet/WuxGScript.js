@@ -11998,9 +11998,10 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let sectionDef = WuxDef.Get("Title_TechniqueChange");
                     return `${WuxSheet.MainPageDisplayInput()}
                     ${WuxSheet.PageDisplay("ActionsData",
-                        WuxSheetMain.CollapsibleTab(
-                            sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
-                            sectionDef.getTitle(), contents))}`;
+                        WuxSheetMain.HiddenField(sectionDef.getAttribute(WuxDef._build),
+                            WuxSheetMain.CollapsibleTab(
+                                sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
+                                sectionDef.getTitle(), contents)))}`;
                 },
 
                 buildFormeActions = function () {
@@ -13205,6 +13206,7 @@ var ActionBuilder = ActionBuilder || (function () {
             output += listenerTechniquesFilterPopup();
             output += listenerStyleAutoFilterButtons();
             output += listenerBaseFilterButtons();
+            output += listenerUpdateTechniqueChangeVisibility();
             return output;
         },
         listenerRankRepeatingStyles = function () {
@@ -13275,6 +13277,11 @@ var ActionBuilder = ActionBuilder || (function () {
                 groupVariableNames.push(baseFilters[i].getVariable());
             }
             return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerActions.QuickFilterFormeActions(eventinfo)`, true);
+        },
+        listenerUpdateTechniqueChangeVisibility = function () {
+            return WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("AdvancementJob"), WuxDef.GetVariable("Perk_Spirit Conduit")],
+                `WuxWorkerActions.UpdateTechniqueChangeVisibility()`, true);
         }
     return {
         Print: print
