@@ -667,15 +667,25 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             if (item == undefined) { continue; }
                             let countMod = item.technique.fieldName.replace(/_/g, "");
                             let countAttribute = WuxDef.GetAttribute("ItemCount", countMod);
+                            let displayData = new TechniqueDisplayData(item.technique);
+                            displayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
+                            displayData.technique.displayname = displayData.displayname;
+                            displayData.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
+                            displayData.itemName = item.name;
                             let rowContents = WuxSheetMain.MultiRow(`
-                                <div class="wuxEquipableName">
-                                    <span class="wuxDescription" name="${countAttribute}" value="0">${item.name}</span>
-                                    <span class="wuxDescription">${item.name}</span>
+                            <div class="wuxEquipableRow">
+                                <div class="wuxEquipableBody">
+                                    <div class="wuxEquipableName">
+                                        <span class="wuxDescription" name="${countAttribute}" value="0">${item.name}</span>
+                                        <span class="wuxDescription">${item.name}</span>
+                                    </div>
+                                    <div class="wuxEquipableButtonRow">
+                                        <button class="wuxRepeatingTechActionButton" type="roll" value="${displayData.getSheetRollTemplate(true)}"><span style="color:#4caf50;">&#9654;</span><span> Use</span></button>
+                                        ${WuxSheetMain.Button(unequipDef.getAttribute(countMod), `<span style="color:#c8a020;">&#9881;</span> ${unequipDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                                        ${WuxSheetMain.Button(inspectDef.getAttribute(countMod), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                                    </div>
                                 </div>
-                                <div class="wuxEquippableButtonGroup">
-                                    ${WuxSheetMain.Button(unequipDef.getAttribute(countMod), `<span style="color:#c8a020;">&#9881;</span> ${unequipDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.Button(inspectDef.getAttribute(countMod), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                                </div>`);
+                            </div>`);
                             rows += WuxSheetMain.HiddenField(countAttribute, rowContents);
                         }
                     }
@@ -684,8 +694,10 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         WuxDef.Get("ConsumableSlots"),
                         `<span name="${WuxDef.GetAttribute("Gear_ConsumableSlot")}" value="0"></span> / <span name="${WuxDef.GetAttribute("ConsumableSlots")}"></span>`);
 
+                    let unequipAllDef = WuxDef.Get("Gear_UnequipAll");
                     let contents = `${slotDisplay}
                         ${WuxSheetMain.Header(`${syncedDef.getTitle()}`)}
+                        <div style="float:right;">${WuxSheetMain.Button(unequipAllDef.getAttribute("consumable"), `<span style="color:#c8a020;">&#9881;</span> ${unequipAllDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>
                         <div>
                             ${rows}
                         </div>`;
@@ -781,13 +793,17 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let inspectDef = WuxDef.Get("Gear_Inspect");
 
                     let rowContents = WuxSheetMain.MultiRow(`
-                        <div class="wuxEquipableName">
-                            <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
+                    <div class="wuxEquipableRow">
+                        <div class="wuxEquipableBody">
+                            <div class="wuxEquipableName">
+                                <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
+                            </div>
+                            <div class="wuxEquipableButtonRow">
+                                ${WuxSheetMain.Button(unequipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${unequipDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                                ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                            </div>
                         </div>
-                        <div class="wuxEquippableButtonGroup">
-                            ${WuxSheetMain.Button(unequipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${unequipDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                            ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                        </div>`);
+                    </div>`);
 
                     let repeaterContent = buildRepeater(repeatingDef.getVariable(),
                         WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents));
@@ -800,9 +816,11 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         WuxDef.Get("Gear_EquippedItemTraits"),
                         `<span name="${WuxDef.GetAttribute("Gear_EquippedItemTraits")}"></span>`);
 
+                    let unequipAllDef = WuxDef.Get("Gear_UnequipAll");
                     let contents = `${slotDisplay}
                         ${traitsDisplay}
                         ${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                        <div style="float:right;">${WuxSheetMain.Button(unequipAllDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${unequipAllDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>
                         <div>
                             ${repeaterContent}
                         </div>`;
@@ -1089,10 +1107,14 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                     return `<div class="wuxMultiRow" style="min-width: 300px;">
                         ${tierOutput}
-                        <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>
-                        <div class="wuxEquippableButtonGroup">
-                            ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
-                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                        <div class="wuxEquipableRow">
+                            <div class="wuxEquipableBody">
+                                <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>
+                                <div class="wuxEquipableButtonRow">
+                                    ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                                    ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                                </div>
+                            </div>
                         </div>
                     </div>`;
                 },

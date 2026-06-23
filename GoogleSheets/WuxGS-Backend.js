@@ -491,8 +491,10 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerInspectSyncedEquipment();
             output += listenerUpdateEquipment();
             output += listenerRemoveAllEquipment();
+            output += listenerUnequipAllGear();
             output += listenerUpdateConsumables();
             output += listenerRemoveAllConsumables();
+            output += listenerUnequipAllConsumables();
             output += listenerSetGearOptions();
             return output;
         },
@@ -613,6 +615,16 @@ var GearBuilder = GearBuilder || (function () {
             return `${WuxSheetBackend.OnChange(
                 [WuxDef.GetVariable("Gear_RemoveEquipment")],
                 `WuxWorkerGear.RemoveAllEquipment(eventinfo)`, true)}`;
+        },
+        listenerUnequipAllGear = function () {
+            return `${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Gear_UnequipAll")],
+                `WuxWorkerGear.UnequipAllGear(eventinfo)`, true)}`;
+        },
+        listenerUnequipAllConsumables = function () {
+            return `${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Gear_UnequipAll", "consumable")],
+                `WuxWorkerGear.UnequipAllConsumables(eventinfo)`, true)}`;
         },
         listenerUpdateConsumables = function () {
             return `${WuxSheetBackend.OnChange(

@@ -561,10 +561,14 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let inspectDef = WuxDef.Get("Forme_Inspect");
                             let deleteDef = WuxDef.Get("Forme_Delete");
                             let rowContents = `<div class="wuxMultiRow" style="min-width: 300px;">
-                                <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>
-                                <div class="wuxEquippableButtonGroup">
-                                    ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                                <div class="wuxEquipableRow">
+                                    <div class="wuxEquipableBody">
+                                        <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>
+                                        <div class="wuxEquipableButtonRow">
+                                            ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>`;
                             let repeaterSection = WuxSheetMain.Table.FlexTableGroup(
