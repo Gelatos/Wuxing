@@ -833,10 +833,17 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
 
         let itemName = this.item;
         let charId = this.tokenEffect.tokenTargetData.charId;
+        let tokenEffect = this.tokenEffect;
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
             let currentCount = attrHandler.parseInt(countVar) || 0;
-            attrHandler.addUpdate(countVar, Math.max(0, currentCount - 1));
+            if (currentCount <= 0) {
+                tokenEffect.addMessage(`You do not have ${itemName} equipped`);
+                return;
+            }
+
+            tokenEffect.addMessage(`Consumed ${itemName}`);
+            attrHandler.addUpdate(countVar, currentCount - 1);
 
             let consuBuildRaw = attrHandler.parseString(consuBuildVar);
             let consuBuild = [];
