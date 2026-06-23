@@ -654,31 +654,40 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 },
 
                 slottedConsumables = function () {
-                    let repeatingDef = WuxDef.Get("RepeatingSyncConsumables");
+                    let syncedDef = WuxDef.Get("Title_EquippedInstantConsumables");
                     let unequipDef = WuxDef.Get("Gear_Unequip");
                     let inspectDef = WuxDef.Get("Gear_Inspect");
 
-                    let rowContents = WuxSheetMain.MultiRow(`
-                        <div class="wuxEquipableName">
-                            <span name="${getGearAttribute("ItemCount")}"></span>
-                            <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
-                        </div>
-                        <div class="wuxEquippableButtonGroup">
-                            ${WuxSheetMain.Button(unequipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${unequipDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                            ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                        </div>`);
-
-                    let repeaterContent = buildRepeater(repeatingDef.getVariable(),
-                        WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents));
+                    let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
+                    let rows = "";
+                    for (let i = 0; i < consuTypes.length; i++) {
+                        let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].getTitle()));
+                        for (let j = 0; j < itemKeys.length; j++) {
+                            let item = itemKeys[j];
+                            if (item == undefined) { continue; }
+                            let countMod = item.technique.fieldName.replace(/_/g, "");
+                            let countAttribute = WuxDef.GetAttribute("ItemCount", countMod);
+                            let rowContents = WuxSheetMain.MultiRow(`
+                                <div class="wuxEquipableName">
+                                    <span class="wuxDescription" name="${countAttribute}" value="0">${item.name}</span>
+                                    <span class="wuxDescription">${item.name}</span>
+                                </div>
+                                <div class="wuxEquippableButtonGroup">
+                                    ${WuxSheetMain.Button(unequipDef.getAttribute(countMod), `<span style="color:#c8a020;">&#9881;</span> ${unequipDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                                    ${WuxSheetMain.Button(inspectDef.getAttribute(countMod), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                                </div>`);
+                            rows += WuxSheetMain.HiddenField(countAttribute, rowContents);
+                        }
+                    }
 
                     let slotDisplay = WuxDefinition.BuildText(
                         WuxDef.Get("ConsumableSlots"),
                         `<span name="${WuxDef.GetAttribute("Gear_ConsumableSlot")}" value="0"></span> / <span name="${WuxDef.GetAttribute("ConsumableSlots")}"></span>`);
 
                     let contents = `${slotDisplay}
-                        ${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                        ${WuxSheetMain.Header(`${syncedDef.getTitle()}`)}
                         <div>
-                            ${repeaterContent}
+                            ${rows}
                         </div>`;
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                 },
@@ -960,10 +969,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
                     let output = "";
                     for (let i = 0; i < consuTypes.length; i++) {
-                        Debug.Log("looking at consumable type: " + consuTypes[i].getTitle());
                         let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].getTitle()));
                         for (let j = 0; j < itemKeys.length; j++) {
-                            Debug.Log("looking at item type: " + itemKeys[j].name);
                             output += buildItemTechniqueDisplay(itemKeys[j]);
                         }
                     }

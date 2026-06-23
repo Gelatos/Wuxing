@@ -32,8 +32,10 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                 attributeHandler.addFormulaMods(formulaDefinitions[i]);
             }
 
+            let perkDefName = WuxDef.Get("Perk").name;
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 for (let i = 0; i < formulaDefinitions.length; i++) {
+                    if (formulaDefinitions[i].group === perkDefName) { continue; }
                     if (formulaDefinitions[i].isResource) {
                         attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
                         attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].formula.getValue(attrHandler));

@@ -628,10 +628,8 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         equipConsumable = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addRepeatingSection("RepeatingConsumables");
-            attributeHandler.addRepeatingSection("RepeatingSyncConsumables");
 
             let consuRepeater = attributeHandler.getRepeatingSection("RepeatingConsumables");
-            let syncedRepeater = attributeHandler.getRepeatingSection("RepeatingSyncConsumables");
             let selectedId = consuRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
             let itemNameVar = getGearVariable("ItemName");
             let itemIsVisibleVar = getGearVariable("ItemIsVisible");
@@ -639,9 +637,22 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
 
             consuRepeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
-            syncedRepeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
             attributeHandler.addMod(consuBuildVar);
             attributeHandler.addMod(WuxDef.GetVariable("ConsumableSlots"));
+
+            let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
+            let itemCountAttrMap = {};
+            for (let i = 0; i < consuTypes.length; i++) {
+                let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].getTitle()));
+                for (let j = 0; j < itemKeys.length; j++) {
+                    let item = itemKeys[j];
+                    if (item == undefined) continue;
+                    let countMod = item.technique.fieldName.replace(/_/g, "");
+                    let countAttr = WuxDef.GetVariable("ItemCount", countMod);
+                    itemCountAttrMap[item.name] = countAttr;
+                    attributeHandler.addMod(countAttr);
+                }
+            }
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let itemName = attrHandler.parseString(consuRepeater.getFieldName(selectedId, itemNameVar));
@@ -672,24 +683,10 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 });
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), anyVisible ? "on" : "0");
 
-                let existingSyncedId = null;
-                syncedRepeater.iterate(function (id) {
-                    let syncedName = attrHandler.parseString(syncedRepeater.getFieldName(id, itemNameVar));
-                    let syncedVisible = attrHandler.parseString(syncedRepeater.getFieldName(id, itemIsVisibleVar));
-                    if (syncedName === itemName && syncedVisible === "on") {
-                        existingSyncedId = id;
-                    }
-                });
-
-                if (existingSyncedId !== null) {
-                    let syncedCount = attrHandler.parseInt(syncedRepeater.getFieldName(existingSyncedId, itemCountVar)) || 0;
-                    attrHandler.addUpdate(syncedRepeater.getFieldName(existingSyncedId, itemCountVar), syncedCount + 1);
-                } else {
-                    let newSyncedRepeater = new WorkerRepeatingSectionHandler("RepeatingSyncConsumables");
-                    let newSyncedRowId = newSyncedRepeater.generateRowId();
-                    attrHandler.addUpdate(newSyncedRepeater.getFieldName(newSyncedRowId, itemNameVar), itemName);
-                    attrHandler.addUpdate(newSyncedRepeater.getFieldName(newSyncedRowId, itemIsVisibleVar), "on");
-                    attrHandler.addUpdate(newSyncedRepeater.getFieldName(newSyncedRowId, itemCountVar), 1);
+                let countAttr = itemCountAttrMap[itemName];
+                if (countAttr != undefined) {
+                    let currentItemCount = attrHandler.parseInt(countAttr) || 0;
+                    attrHandler.addUpdate(countAttr, currentItemCount + 1);
                 }
             });
 
@@ -697,27 +694,29 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             attributeHandler.run();
         },
 
-        unequipConsumable = function (eventinfo) {
+        unequipConsumable = function (eventinfo, itemName) {
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addRepeatingSection("RepeatingConsumables");
-            attributeHandler.addRepeatingSection("RepeatingSyncConsumables");
 
             let consuRepeater = attributeHandler.getRepeatingSection("RepeatingConsumables");
-            let syncedRepeater = attributeHandler.getRepeatingSection("RepeatingSyncConsumables");
-            let selectedId = syncedRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
             let itemNameVar = getGearVariable("ItemName");
             let itemIsVisibleVar = getGearVariable("ItemIsVisible");
+            let itemCountVar = getGearVariable("ItemCount");
             let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
 
-            let itemCountVar = getGearVariable("ItemCount");
             consuRepeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
-            syncedRepeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
             attributeHandler.addMod(consuBuildVar);
             attributeHandler.addMod(WuxDef.GetVariable("ConsumableSlots"));
 
-            attributeHandler.addGetAttrCallback(function (attrHandler) {
-                let itemName = attrHandler.parseString(syncedRepeater.getFieldName(selectedId, itemNameVar));
+            let item = WuxItems.Get(itemName);
+            let countAttr = undefined;
+            if (item != undefined) {
+                let countMod = item.technique.fieldName.replace(/_/g, "");
+                countAttr = WuxDef.GetVariable("ItemCount", countMod);
+                attributeHandler.addMod(countAttr);
+            }
 
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let consuBuildRaw = attrHandler.parseString(consuBuildVar);
                 let consuBuild = [];
                 try { consuBuild = JSON.parse(consuBuildRaw); } catch (e) {}
@@ -728,12 +727,9 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableSlot"), consuBuild.length.toString());
                 let slotOpenState = consuBuild.length < attrHandler.parseInt(WuxDef.GetVariable("ConsumableSlots")) ? "0" : "on";
 
-                let syncedCount = attrHandler.parseInt(syncedRepeater.getFieldName(selectedId, itemCountVar)) || 1;
-                let newSyncedCount = syncedCount - 1;
-                if (newSyncedCount <= 0) {
-                    attrHandler.addUpdate(syncedRepeater.getFieldName(selectedId, itemIsVisibleVar), "0");
-                } else {
-                    attrHandler.addUpdate(syncedRepeater.getFieldName(selectedId, itemCountVar), newSyncedCount);
+                if (countAttr != undefined) {
+                    let currentItemCount = attrHandler.parseInt(countAttr) || 1;
+                    attrHandler.addUpdate(countAttr, Math.max(0, currentItemCount - 1));
                 }
 
                 let foundInBase = false;
@@ -831,6 +827,42 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
 
                 let attributeHandler2 = new WorkerAttributeHandler();
                 WuxWorkerInspectPopup.OpenConsumableInspection(attributeHandler2, "Owned Consumables", inventoryItems, ["Add Consumable"]);
+                attributeHandler2.run();
+            });
+
+            attributeHandler.run();
+        },
+
+        inspectSyncedConsumable = function (eventinfo, itemName) {
+            let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod(consuBuildVar);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let consuBuildRaw = attrHandler.parseString(consuBuildVar);
+                let consuBuild = [];
+                try { consuBuild = JSON.parse(consuBuildRaw); } catch (e) {}
+                if (!Array.isArray(consuBuild)) consuBuild = [];
+
+                let equippedNames = new Set(consuBuild);
+                let inventoryItems = [];
+                let selectedItem = undefined;
+
+                equippedNames.forEach(function (name) {
+                    let inventoryItem = new InspectionInventoryItem(name, name, false);
+                    if (name === itemName) {
+                        selectedItem = inventoryItem;
+                    } else {
+                        inventoryItems.push(inventoryItem);
+                    }
+                });
+
+                if (selectedItem !== undefined) {
+                    inventoryItems.unshift(selectedItem);
+                }
+
+                let attributeHandler2 = new WorkerAttributeHandler();
+                WuxWorkerInspectPopup.OpenConsumableInspection(attributeHandler2, "Equipped Consumables", inventoryItems, ["Add Consumable"]);
                 attributeHandler2.run();
             });
 
@@ -1092,6 +1124,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         UnequipConsumable: unequipConsumable,
         DeleteConsumable: deleteConsumable,
         InspectConsumable: inspectConsumable,
+        InspectSyncedConsumable: inspectSyncedConsumable,
         UpdateEquipmentVisibility: updateEquipmentVisibility,
         UpdateEquipment: updateEquipment,
         RemoveAllEquipment: removeAllEquipment,

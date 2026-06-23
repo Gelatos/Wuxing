@@ -27,7 +27,6 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 			WuxWorkerStyles.UpdateStats(attributeHandler);
 			WuxWorkerAdvancement.UpdateStats(attributeHandler);
 			WuxWorkerGeneral.UpdateStats(attributeHandler);
-			WuxWorkerPerks.RefreshStats(attributeHandler);
 
 			leavePageVariables(attributeHandler);
 			

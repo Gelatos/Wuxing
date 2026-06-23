@@ -13109,30 +13109,254 @@
 									<span class="wuxDescription"><span name="attr_gear-consumableslot" value="0"></span> / <span name="attr_consumableslotcount"></span></span>
 									<div class="wuxHeader">Equipped Instant Consumables</div>
 									<div>
-										<div class="wuxNoRepControl">
-											<fieldset class="repeating_syncconsumable">
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemisvisible" value="0">
-												<div class="wuxHiddenField">
-													<div class="wuxMultiRow">
-														<div class="wuxEquipableName">
-															<span name="attr_gear-itemcount"></span>
-															<span class="wuxDescription" name="attr_gear-itemname"></span>
-														</div>
-														<div class="wuxEquippableButtonGroup">
-															<div class="wuxButton wuxRepeatingTechActionButton">
-																<input type="checkbox" name="attr_gear-unequip">
-																<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
-															</div>
-															<div class="wuxButton wuxRepeatingTechActionButton">
-																<input type="checkbox" name="attr_gear-inspect">
-																<span>&#9673; Inspect</span>
-															</div>
-														</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcounthealgel" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxMultiRow">
+												<div class="wuxEquipableName">
+													<input type="number" name="attr_itemcounthealgel" value="0" min="0">
+													<span class="wuxDescription">Heal Gel</span>
+												</div>
+												<div class="wuxEquippableButtonGroup">
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-unequiphealgel">
+														<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+													</div>
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-inspecthealgel">
+														<span>&#9673; Inspect</span>
 													</div>
 												</div>
-
-											</fieldset>
+											</div>
 										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountcompressbalm" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxMultiRow">
+												<div class="wuxEquipableName">
+													<input type="number" name="attr_itemcountcompressbalm" value="0" min="0">
+													<span class="wuxDescription">Compress Balm</span>
+												</div>
+												<div class="wuxEquippableButtonGroup">
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-unequipcompressbalm">
+														<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+													</div>
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-inspectcompressbalm">
+														<span>&#9673; Inspect</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountcleansingliquid" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxMultiRow">
+												<div class="wuxEquipableName">
+													<input type="number" name="attr_itemcountcleansingliquid" value="0" min="0">
+													<span class="wuxDescription">Cleansing Liquid</span>
+												</div>
+												<div class="wuxEquippableButtonGroup">
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-unequipcleansingliquid">
+														<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+													</div>
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-inspectcleansingliquid">
+														<span>&#9673; Inspect</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountinstantheat" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxMultiRow">
+												<div class="wuxEquipableName">
+													<input type="number" name="attr_itemcountinstantheat" value="0" min="0">
+													<span class="wuxDescription">Instant Heat</span>
+												</div>
+												<div class="wuxEquippableButtonGroup">
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-unequipinstantheat">
+														<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+													</div>
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-inspectinstantheat">
+														<span>&#9673; Inspect</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountstaticremover" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxMultiRow">
+												<div class="wuxEquipableName">
+													<input type="number" name="attr_itemcountstaticremover" value="0" min="0">
+													<span class="wuxDescription">Static Remover</span>
+												</div>
+												<div class="wuxEquippableButtonGroup">
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-unequipstaticremover">
+														<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+													</div>
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-inspectstaticremover">
+														<span>&#9673; Inspect</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcounthealingstimulant" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxMultiRow">
+												<div class="wuxEquipableName">
+													<input type="number" name="attr_itemcounthealingstimulant" value="0" min="0">
+													<span class="wuxDescription">Healing Stimulant</span>
+												</div>
+												<div class="wuxEquippableButtonGroup">
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-unequiphealingstimulant">
+														<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+													</div>
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-inspecthealingstimulant">
+														<span>&#9673; Inspect</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountdashdrug" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxMultiRow">
+												<div class="wuxEquipableName">
+													<input type="number" name="attr_itemcountdashdrug" value="0" min="0">
+													<span class="wuxDescription">Dash Drug</span>
+												</div>
+												<div class="wuxEquippableButtonGroup">
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-unequipdashdrug">
+														<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+													</div>
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-inspectdashdrug">
+														<span>&#9673; Inspect</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountpowertonic" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxMultiRow">
+												<div class="wuxEquipableName">
+													<input type="number" name="attr_itemcountpowertonic" value="0" min="0">
+													<span class="wuxDescription">Power Tonic</span>
+												</div>
+												<div class="wuxEquippableButtonGroup">
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-unequippowertonic">
+														<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+													</div>
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-inspectpowertonic">
+														<span>&#9673; Inspect</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountinstantcalm" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxMultiRow">
+												<div class="wuxEquipableName">
+													<input type="number" name="attr_itemcountinstantcalm" value="0" min="0">
+													<span class="wuxDescription">Instant Calm</span>
+												</div>
+												<div class="wuxEquippableButtonGroup">
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-unequipinstantcalm">
+														<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+													</div>
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-inspectinstantcalm">
+														<span>&#9673; Inspect</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountenergydrink" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxMultiRow">
+												<div class="wuxEquipableName">
+													<input type="number" name="attr_itemcountenergydrink" value="0" min="0">
+													<span class="wuxDescription">Energy Drink</span>
+												</div>
+												<div class="wuxEquippableButtonGroup">
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-unequipenergydrink">
+														<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+													</div>
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-inspectenergydrink">
+														<span>&#9673; Inspect</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountimpactbomb" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxMultiRow">
+												<div class="wuxEquipableName">
+													<input type="number" name="attr_itemcountimpactbomb" value="0" min="0">
+													<span class="wuxDescription">Impact Bomb</span>
+												</div>
+												<div class="wuxEquippableButtonGroup">
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-unequipimpactbomb">
+														<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+													</div>
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-inspectimpactbomb">
+														<span>&#9673; Inspect</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountblastbomb" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxMultiRow">
+												<div class="wuxEquipableName">
+													<input type="number" name="attr_itemcountblastbomb" value="0" min="0">
+													<span class="wuxDescription">Blast Bomb</span>
+												</div>
+												<div class="wuxEquippableButtonGroup">
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-unequipblastbomb">
+														<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+													</div>
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-inspectblastbomb">
+														<span>&#9673; Inspect</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountdynamite" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxMultiRow">
+												<div class="wuxEquipableName">
+													<input type="number" name="attr_itemcountdynamite" value="0" min="0">
+													<span class="wuxDescription">Dynamite</span>
+												</div>
+												<div class="wuxEquippableButtonGroup">
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-unequipdynamite">
+														<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+													</div>
+													<div class="wuxButton wuxRepeatingTechActionButton">
+														<input type="checkbox" name="attr_gear-inspectdynamite">
+														<span>&#9673; Inspect</span>
+													</div>
+												</div>
+											</div>
+										</div>
+
 									</div>
 								</div>
 							</div>
@@ -14773,637 +14997,688 @@
 							</div>
 							<div class="wuxRow">&nbsp;</div>
 							<div class="wuxHeader">Instant Consumables</div>
-							<div class="wuxFlexTable">
-								<div class="wuxFeature wuxActionFeature">
-									<div class="wuxFeatureHeader">
-										<div class="wuxFeatureHeaderDisplayBlock">
-											<div class="wuxFeatureHeaderDisplayTitleBlock">
-												<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcounthealgel" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Heal Gel}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Core0Data=If Target has a surge, they must spend one and heal &#91;Regen Value&#93; Hit Points}}{{Core1Data=Target loses any condition of your choice}}{{Core0Tooltip=&#91;&#93;}}{{checkData=!chtech Heal Gel-0$$&#64;{sheetname}}}{{targetData=!utech Heal Gel-0$$&#64;{sheetname}}}">
-														<span>Heal Gel</span>
-													</button></div>
-												<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
-												<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayInfoBlock">
-												<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>1</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Range</div>
-															<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
-														</div>
-													</span></div>
-												<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayCostBlock">
+							<div class="wuxFlexTable"><input type="hidden" class="wuxHiddenField-flag" name="attr_itemcounthealgel" value="0">
+								<div class="wuxHiddenField">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcounthealgel" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Heal Gel}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Core0Data=If Target has a surge, they must spend one and heal &#91;Regen Value&#93; Hit Points}}{{Core1Data=Target loses any condition of your choice}}{{Core0Tooltip=&#91;&#93;}}{{checkData=!chtech Heal Gel-0$$&#64;{sheetname}}}{{targetData=!utech Heal Gel-0$$&#64;{sheetname}}}">
+															<span>Heal Gel</span>
+														</button></div>
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>1</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Range</div>
+																<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
+															</div>
+														</span></div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
 
 
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="wuxFeatureInfoDisplayBlock">
+										<div class="wuxFeatureInfoDisplayBlock">
 
-										<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
+											<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
 
-										<div class="wuxFeatureHeaderInfoEffect-Core">
-											<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-											<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>Effects</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Core Effects</div>
-															<span class="wuxDescription">[]</span>
-														</div>
-													</span></span></div>
-											<div class="wuxFeatureHeaderInfoContents"><span>If Target has a surge, they must spend one and heal [Regen Value] Hit Points
-													Target loses any condition of your choice</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>Effects</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Core Effects</div>
+																<span class="wuxDescription">[]</span>
+															</div>
+														</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>If Target has a surge, they must spend one and heal [Regen Value] Hit Points
+														Target loses any condition of your choice</span></div>
+											</div>
+
+
+
+
+
 										</div>
-
-
-
-
-
 									</div>
+
 								</div>
-								<div class="wuxFeature wuxActionFeature">
-									<div class="wuxFeatureHeader">
-										<div class="wuxFeatureHeaderDisplayBlock">
-											<div class="wuxFeatureHeaderDisplayTitleBlock">
-												<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountcompressbalm" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Compress Balm}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Def-0=1}}{{CheckTitle=DC 10 Medicine}}{{Check0Data=If Target has a surge, they must spend one and heal 3d6 + &#91;Regen Value&#93; Hit Points}}{{Check0Tooltip=&#91;DC X Skill Check&#93;}}{{Check1Tooltip=When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill&#39;s value. If this value is equal to or greater than X you pass the check and all of the effects listed in this block occur.}}{{checkData=!chtech Compress Balm-0$$&#64;{sheetname}}}{{targetData=!utech Compress Balm-0$$&#64;{sheetname}}}">
-														<span>Compress Balm</span>
-													</button></div>
-												<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
-												<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayInfoBlock">
-												<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>1</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Range</div>
-															<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
-														</div>
-													</span></div>
-												<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayCostBlock">
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountcompressbalm" value="0">
+								<div class="wuxHiddenField">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountcompressbalm" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Compress Balm}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Def-0=1}}{{CheckTitle=DC 10 Medicine}}{{Check0Data=If Target has a surge, they must spend one and heal 3d6 + &#91;Regen Value&#93; Hit Points}}{{Check0Tooltip=&#91;DC X Skill Check&#93;}}{{Check1Tooltip=When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill&#39;s value. If this value is equal to or greater than X you pass the check and all of the effects listed in this block occur.}}{{checkData=!chtech Compress Balm-0$$&#64;{sheetname}}}{{targetData=!utech Compress Balm-0$$&#64;{sheetname}}}">
+															<span>Compress Balm</span>
+														</button></div>
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>1</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Range</div>
+																<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
+															</div>
+														</span></div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
 
 
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="wuxFeatureInfoDisplayBlock">
+										<div class="wuxFeatureInfoDisplayBlock">
 
-										<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
-
+											<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
 
 
-										<div class="wuxFeatureHeaderInfoEffect-Check">
-											<input type="hidden" class="wuxFeatureHeader-flag" value="0">
-											<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>DC 10 Medicine</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Skill Check Effects</div>
-															<span class="wuxDescription">[DC X Skill Check]</span><br /><span class="wuxDescription">When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill's value. If this value is equal to or greater than X you pass the check and all of the effects listed in this block occur.</span>
-														</div>
-													</span></span></div>
-											<div class="wuxFeatureHeaderInfoContents"><span>If Target has a surge, they must spend one and heal 3d6 + [Regen Value] Hit Points</span></div>
+
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="0">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>DC 10 Medicine</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Skill Check Effects</div>
+																<span class="wuxDescription">[DC X Skill Check]</span><br /><span class="wuxDescription">When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill's value. If this value is equal to or greater than X you pass the check and all of the effects listed in this block occur.</span>
+															</div>
+														</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>If Target has a surge, they must spend one and heal 3d6 + [Regen Value] Hit Points</span></div>
+											</div>
+
+
+
 										</div>
-
-
-
 									</div>
+
 								</div>
-								<div class="wuxFeature wuxActionFeature">
-									<div class="wuxFeatureHeader">
-										<div class="wuxFeatureHeaderDisplayBlock">
-											<div class="wuxFeatureHeaderDisplayTitleBlock">
-												<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountcleansingliquid" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Cleansing Liquid}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Core0Data=Target loses the Aflame Status. Target loses the Earthblight Status}}{{Core0Tooltip=&#91;Aflame&#93;}}{{Core1Tooltip=You are on fire. At the start of each round you take 1d6 fire damage per rank of the Aflame condition. This condition ends when you are doused by water.}}{{Core2Tooltip=}}{{Core3Tooltip=&#91;Earthblight&#93;}}{{Core4Tooltip=Earth clings to you, reducing your abiility to defend yourself. You gain weakness to force and piercing damage equal to your Earthblight rank x 2. Your Dash Speed is reduced by your Earthblight rank. If you are Soaked this condition ends.}}{{checkData=!chtech Cleansing Liquid-0$$&#64;{sheetname}}}{{targetData=!utech Cleansing Liquid-0$$&#64;{sheetname}}}">
-														<span>Cleansing Liquid</span>
-													</button></div>
-												<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
-												<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayInfoBlock">
-												<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>1</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Range</div>
-															<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
-														</div>
-													</span></div>
-												<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayCostBlock">
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountcleansingliquid" value="0">
+								<div class="wuxHiddenField">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountcleansingliquid" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Cleansing Liquid}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Core0Data=Target loses the Aflame Status. Target loses the Earthblight Status}}{{Core0Tooltip=&#91;Aflame&#93;}}{{Core1Tooltip=You are on fire. At the start of each round you take 1d6 fire damage per rank of the Aflame condition. This condition ends when you are doused by water.}}{{Core2Tooltip=}}{{Core3Tooltip=&#91;Earthblight&#93;}}{{Core4Tooltip=Earth clings to you, reducing your abiility to defend yourself. You gain weakness to force and piercing damage equal to your Earthblight rank x 2. Your Dash Speed is reduced by your Earthblight rank. If you are Soaked this condition ends.}}{{checkData=!chtech Cleansing Liquid-0$$&#64;{sheetname}}}{{targetData=!utech Cleansing Liquid-0$$&#64;{sheetname}}}">
+															<span>Cleansing Liquid</span>
+														</button></div>
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>1</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Range</div>
+																<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
+															</div>
+														</span></div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
 
 
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="wuxFeatureInfoDisplayBlock">
+										<div class="wuxFeatureInfoDisplayBlock">
 
-										<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
+											<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
 
-										<div class="wuxFeatureHeaderInfoEffect-Core">
-											<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-											<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>Effects</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Core Effects</div>
-															<span class="wuxDescription">[Aflame]</span><br /><span class="wuxDescription">You are on fire. At the start of each round you take 1d6 fire damage per rank of the Aflame condition. This condition ends when you are doused by water.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Earthblight]</span><br /><span class="wuxDescription">Earth clings to you, reducing your abiility to defend yourself. You gain weakness to force and piercing damage equal to your Earthblight rank x 2. Your Dash Speed is reduced by your Earthblight rank. If you are Soaked this condition ends.</span>
-														</div>
-													</span></span></div>
-											<div class="wuxFeatureHeaderInfoContents"><span>Target loses the Aflame Status. Target loses the Earthblight Status</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>Effects</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Core Effects</div>
+																<span class="wuxDescription">[Aflame]</span><br /><span class="wuxDescription">You are on fire. At the start of each round you take 1d6 fire damage per rank of the Aflame condition. This condition ends when you are doused by water.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Earthblight]</span><br /><span class="wuxDescription">Earth clings to you, reducing your abiility to defend yourself. You gain weakness to force and piercing damage equal to your Earthblight rank x 2. Your Dash Speed is reduced by your Earthblight rank. If you are Soaked this condition ends.</span>
+															</div>
+														</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target loses the Aflame Status. Target loses the Earthblight Status</span></div>
+											</div>
+
+
+
+
+
 										</div>
-
-
-
-
-
 									</div>
+
 								</div>
-								<div class="wuxFeature wuxActionFeature">
-									<div class="wuxFeatureHeader">
-										<div class="wuxFeatureHeaderDisplayBlock">
-											<div class="wuxFeatureHeaderDisplayTitleBlock">
-												<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountinstantheat" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Instant Heat}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Core0Data=Target loses the Chilled Status. Target loses the Vined Status}}{{Core0Tooltip=&#91;Chilled&#93;}}{{Core1Tooltip=You gain weakness to cold damage equal to your Chilled rank x 2. Your Base Speed is reduced by your chilled rank. This condition ends when you are warmed or are set on fire.}}{{Core2Tooltip=}}{{Core3Tooltip=&#91;Vined&#93;}}{{Core4Tooltip=Your Base Speed is reduced by your vined rank. When you have the Aflame condition, all ranks of vined are added to the Aflame condition and you immediately take the aflame damage; the vined condition then ends.}}{{checkData=!chtech Instant Heat-0$$&#64;{sheetname}}}{{targetData=!utech Instant Heat-0$$&#64;{sheetname}}}">
-														<span>Instant Heat</span>
-													</button></div>
-												<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
-												<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayInfoBlock">
-												<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>1</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Range</div>
-															<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
-														</div>
-													</span></div>
-												<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayCostBlock">
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountinstantheat" value="0">
+								<div class="wuxHiddenField">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountinstantheat" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Instant Heat}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Core0Data=Target loses the Chilled Status. Target loses the Vined Status}}{{Core0Tooltip=&#91;Chilled&#93;}}{{Core1Tooltip=You gain weakness to cold damage equal to your Chilled rank x 2. Your Base Speed is reduced by your chilled rank. This condition ends when you are warmed or are set on fire.}}{{Core2Tooltip=}}{{Core3Tooltip=&#91;Vined&#93;}}{{Core4Tooltip=Your Base Speed is reduced by your vined rank. When you have the Aflame condition, all ranks of vined are added to the Aflame condition and you immediately take the aflame damage; the vined condition then ends.}}{{checkData=!chtech Instant Heat-0$$&#64;{sheetname}}}{{targetData=!utech Instant Heat-0$$&#64;{sheetname}}}">
+															<span>Instant Heat</span>
+														</button></div>
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>1</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Range</div>
+																<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
+															</div>
+														</span></div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
 
 
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="wuxFeatureInfoDisplayBlock">
+										<div class="wuxFeatureInfoDisplayBlock">
 
-										<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
+											<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
 
-										<div class="wuxFeatureHeaderInfoEffect-Core">
-											<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-											<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>Effects</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Core Effects</div>
-															<span class="wuxDescription">[Chilled]</span><br /><span class="wuxDescription">You gain weakness to cold damage equal to your Chilled rank x 2. Your Base Speed is reduced by your chilled rank. This condition ends when you are warmed or are set on fire.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Vined]</span><br /><span class="wuxDescription">Your Base Speed is reduced by your vined rank. When you have the Aflame condition, all ranks of vined are added to the Aflame condition and you immediately take the aflame damage; the vined condition then ends.</span>
-														</div>
-													</span></span></div>
-											<div class="wuxFeatureHeaderInfoContents"><span>Target loses the Chilled Status. Target loses the Vined Status</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>Effects</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Core Effects</div>
+																<span class="wuxDescription">[Chilled]</span><br /><span class="wuxDescription">You gain weakness to cold damage equal to your Chilled rank x 2. Your Base Speed is reduced by your chilled rank. This condition ends when you are warmed or are set on fire.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Vined]</span><br /><span class="wuxDescription">Your Base Speed is reduced by your vined rank. When you have the Aflame condition, all ranks of vined are added to the Aflame condition and you immediately take the aflame damage; the vined condition then ends.</span>
+															</div>
+														</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target loses the Chilled Status. Target loses the Vined Status</span></div>
+											</div>
+
+
+
+
+
 										</div>
-
-
-
-
-
 									</div>
+
 								</div>
-								<div class="wuxFeature wuxActionFeature">
-									<div class="wuxFeatureHeader">
-										<div class="wuxFeatureHeaderDisplayBlock">
-											<div class="wuxFeatureHeaderDisplayTitleBlock">
-												<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountstaticremover" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Static Remover}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Core0Data=Target loses the Static Status. Target loses the Jolted Status}}{{Core0Tooltip=&#91;Static&#93;}}{{Core1Tooltip=You gain weakness to energy damage equal to your Shocked rank x 2. Your Armor is reduced by your shocked rank. }}{{Core2Tooltip=}}{{Core3Tooltip=&#91;Jolted&#93;}}{{Core4Tooltip=You can only perform one quick action on your turn. You cannot perform full actions.}}{{checkData=!chtech Static Remover-0$$&#64;{sheetname}}}{{targetData=!utech Static Remover-0$$&#64;{sheetname}}}">
-														<span>Static Remover</span>
-													</button></div>
-												<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
-												<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayInfoBlock">
-												<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>1</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Range</div>
-															<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
-														</div>
-													</span></div>
-												<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayCostBlock">
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountstaticremover" value="0">
+								<div class="wuxHiddenField">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountstaticremover" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Static Remover}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Core0Data=Target loses the Static Status. Target loses the Jolted Status}}{{Core0Tooltip=&#91;Static&#93;}}{{Core1Tooltip=You gain weakness to energy damage equal to your Shocked rank x 2. Your Armor is reduced by your shocked rank. }}{{Core2Tooltip=}}{{Core3Tooltip=&#91;Jolted&#93;}}{{Core4Tooltip=You can only perform one quick action on your turn. You cannot perform full actions.}}{{checkData=!chtech Static Remover-0$$&#64;{sheetname}}}{{targetData=!utech Static Remover-0$$&#64;{sheetname}}}">
+															<span>Static Remover</span>
+														</button></div>
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>1</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Range</div>
+																<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
+															</div>
+														</span></div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
 
 
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="wuxFeatureInfoDisplayBlock">
+										<div class="wuxFeatureInfoDisplayBlock">
 
-										<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
+											<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
 
-										<div class="wuxFeatureHeaderInfoEffect-Core">
-											<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-											<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>Effects</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Core Effects</div>
-															<span class="wuxDescription">[Static]</span><br /><span class="wuxDescription">You gain weakness to energy damage equal to your Shocked rank x 2. Your Armor is reduced by your shocked rank. </span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Jolted]</span><br /><span class="wuxDescription">You can only perform one quick action on your turn. You cannot perform full actions.</span>
-														</div>
-													</span></span></div>
-											<div class="wuxFeatureHeaderInfoContents"><span>Target loses the Static Status. Target loses the Jolted Status</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>Effects</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Core Effects</div>
+																<span class="wuxDescription">[Static]</span><br /><span class="wuxDescription">You gain weakness to energy damage equal to your Shocked rank x 2. Your Armor is reduced by your shocked rank. </span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Jolted]</span><br /><span class="wuxDescription">You can only perform one quick action on your turn. You cannot perform full actions.</span>
+															</div>
+														</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target loses the Static Status. Target loses the Jolted Status</span></div>
+											</div>
+
+
+
+
+
 										</div>
-
-
-
-
-
 									</div>
+
 								</div>
-								<div class="wuxFeature wuxActionFeature">
-									<div class="wuxFeatureHeader">
-										<div class="wuxFeatureHeaderDisplayBlock">
-											<div class="wuxFeatureHeaderDisplayTitleBlock">
-												<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcounthealingstimulant" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Healing Stimulant}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Def-0=1}}{{CheckTitle=DC 13 Medicine}}{{Check0Data=If Target has a surge, they must spend one and heal 4d6 + &#91;Regen Value&#93; Hit Points}}{{Check1Data=Target loses any condition of your choice}}{{Check0Tooltip=&#91;DC X Skill Check&#93;}}{{Check1Tooltip=When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill&#39;s value. If this value is equal to or greater than X you pass the check and all of the effects listed in this block occur.}}{{Check2Tooltip=}}{{Check3Tooltip=&#91;&#93;}}{{checkData=!chtech Healing Stimulant-0$$&#64;{sheetname}}}{{targetData=!utech Healing Stimulant-0$$&#64;{sheetname}}}">
-														<span>Healing Stimulant</span>
-													</button></div>
-												<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
-												<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayInfoBlock">
-												<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>1</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Range</div>
-															<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
-														</div>
-													</span></div>
-												<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayCostBlock">
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcounthealingstimulant" value="0">
+								<div class="wuxHiddenField">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcounthealingstimulant" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Healing Stimulant}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Def-0=1}}{{CheckTitle=DC 13 Medicine}}{{Check0Data=If Target has a surge, they must spend one and heal 4d6 + &#91;Regen Value&#93; Hit Points}}{{Check1Data=Target loses any condition of your choice}}{{Check0Tooltip=&#91;DC X Skill Check&#93;}}{{Check1Tooltip=When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill&#39;s value. If this value is equal to or greater than X you pass the check and all of the effects listed in this block occur.}}{{Check2Tooltip=}}{{Check3Tooltip=&#91;&#93;}}{{checkData=!chtech Healing Stimulant-0$$&#64;{sheetname}}}{{targetData=!utech Healing Stimulant-0$$&#64;{sheetname}}}">
+															<span>Healing Stimulant</span>
+														</button></div>
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>1</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Range</div>
+																<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
+															</div>
+														</span></div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
 
 
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="wuxFeatureInfoDisplayBlock">
+										<div class="wuxFeatureInfoDisplayBlock">
 
-										<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
-
+											<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
 
 
-										<div class="wuxFeatureHeaderInfoEffect-Check">
-											<input type="hidden" class="wuxFeatureHeader-flag" value="0">
-											<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>DC 13 Medicine</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Skill Check Effects</div>
-															<span class="wuxDescription">[DC X Skill Check]</span><br /><span class="wuxDescription">When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill's value. If this value is equal to or greater than X you pass the check and all of the effects listed in this block occur.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
-														</div>
-													</span></span></div>
-											<div class="wuxFeatureHeaderInfoContents"><span>If Target has a surge, they must spend one and heal 4d6 + [Regen Value] Hit Points
-													Target loses any condition of your choice</span></div>
+
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="0">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>DC 13 Medicine</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Skill Check Effects</div>
+																<span class="wuxDescription">[DC X Skill Check]</span><br /><span class="wuxDescription">When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill's value. If this value is equal to or greater than X you pass the check and all of the effects listed in this block occur.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
+															</div>
+														</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>If Target has a surge, they must spend one and heal 4d6 + [Regen Value] Hit Points
+														Target loses any condition of your choice</span></div>
+											</div>
+
+
+
 										</div>
-
-
-
 									</div>
+
 								</div>
-								<div class="wuxFeature wuxActionFeature">
-									<div class="wuxFeatureHeader">
-										<div class="wuxFeatureHeaderDisplayBlock">
-											<div class="wuxFeatureHeaderDisplayTitleBlock">
-												<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountdashdrug" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Dash Drug}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Def-0=1}}{{CheckTitle=DC 10 Medicine}}{{Check0Data=Target may Free Move up to 3 + &#91;Dash Speed&#93; spaces}}{{Check1Data=Target loses any condition of your choice}}{{Check0Tooltip=&#91;DC X Skill Check&#93;}}{{Check1Tooltip=When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill&#39;s value. If this value is equal to or greater than X you pass the check and all of the effects listed in this block occur.}}{{Check2Tooltip=}}{{Check3Tooltip=&#91;Move&#93;}}{{Check4Tooltip=When a character moves, that character can move into any adjacent space, as long as the space isn’t occupied by an obstruction and is one that they would be able to move in. For example, characters can&#39;t move straight up unless they can fly.}}{{Check5Tooltip=Each space you move consumes 1 space of your movement on conpletion of the move. When moving diagonally, you must consume 1 additional space of movement upon entering the space. You are unable to move any more spaces once you are at 0 movement.}}{{Check6Tooltip=Sometimes a character will be required to swim to enter a large body of liquid or climb when moving across a terrain vertically. These are special forms of movement done as part of any Move action.}}{{Check7Tooltip=When swimming or climbing you must consume 1 additional space of movement upon entering the space. A successful DC 10 Physique skill check may be required before entering a space if it is especially difficult to swim or climb.}}{{Check8Tooltip=}}{{Check9Tooltip=&#91;&#93;}}{{checkData=!chtech Dash Drug-0$$&#64;{sheetname}}}{{targetData=!utech Dash Drug-0$$&#64;{sheetname}}}">
-														<span>Dash Drug</span>
-													</button></div>
-												<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
-												<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayInfoBlock">
-												<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>1</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Range</div>
-															<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
-														</div>
-													</span></div>
-												<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayCostBlock">
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountdashdrug" value="0">
+								<div class="wuxHiddenField">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountdashdrug" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Dash Drug}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Def-0=1}}{{CheckTitle=DC 10 Medicine}}{{Check0Data=Target may Free Move up to 3 + &#91;Dash Speed&#93; spaces}}{{Check1Data=Target loses any condition of your choice}}{{Check0Tooltip=&#91;DC X Skill Check&#93;}}{{Check1Tooltip=When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill&#39;s value. If this value is equal to or greater than X you pass the check and all of the effects listed in this block occur.}}{{Check2Tooltip=}}{{Check3Tooltip=&#91;Move&#93;}}{{Check4Tooltip=When a character moves, that character can move into any adjacent space, as long as the space isn’t occupied by an obstruction and is one that they would be able to move in. For example, characters can&#39;t move straight up unless they can fly.}}{{Check5Tooltip=Each space you move consumes 1 space of your movement on conpletion of the move. When moving diagonally, you must consume 1 additional space of movement upon entering the space. You are unable to move any more spaces once you are at 0 movement.}}{{Check6Tooltip=Sometimes a character will be required to swim to enter a large body of liquid or climb when moving across a terrain vertically. These are special forms of movement done as part of any Move action.}}{{Check7Tooltip=When swimming or climbing you must consume 1 additional space of movement upon entering the space. A successful DC 10 Physique skill check may be required before entering a space if it is especially difficult to swim or climb.}}{{Check8Tooltip=}}{{Check9Tooltip=&#91;&#93;}}{{checkData=!chtech Dash Drug-0$$&#64;{sheetname}}}{{targetData=!utech Dash Drug-0$$&#64;{sheetname}}}">
+															<span>Dash Drug</span>
+														</button></div>
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>1</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Range</div>
+																<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
+															</div>
+														</span></div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
 
 
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="wuxFeatureInfoDisplayBlock">
+										<div class="wuxFeatureInfoDisplayBlock">
 
-										<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
-
+											<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
 
 
-										<div class="wuxFeatureHeaderInfoEffect-Check">
-											<input type="hidden" class="wuxFeatureHeader-flag" value="0">
-											<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>DC 10 Medicine</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Skill Check Effects</div>
-															<span class="wuxDescription">[DC X Skill Check]</span><br /><span class="wuxDescription">When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill's value. If this value is equal to or greater than X you pass the check and all of the effects listed in this block occur.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Move]</span><br /><span class="wuxDescription">When a character moves, that character can move into any adjacent space, as long as the space isn’t occupied by an obstruction and is one that they would be able to move in. For example, characters can't move straight up unless they can fly.</span><br /><span class="wuxDescription">Each space you move consumes 1 space of your movement on conpletion of the move. When moving diagonally, you must consume 1 additional space of movement upon entering the space. You are unable to move any more spaces once you are at 0 movement.</span><br /><span class="wuxDescription">Sometimes a character will be required to swim to enter a large body of liquid or climb when moving across a terrain vertically. These are special forms of movement done as part of any Move action.</span><br /><span class="wuxDescription">When swimming or climbing you must consume 1 additional space of movement upon entering the space. A successful DC 10 Physique skill check may be required before entering a space if it is especially difficult to swim or climb.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
-														</div>
-													</span></span></div>
-											<div class="wuxFeatureHeaderInfoContents"><span>Target may Free Move up to 3 + [Dash Speed] spaces
-													Target loses any condition of your choice</span></div>
+
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="0">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>DC 10 Medicine</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Skill Check Effects</div>
+																<span class="wuxDescription">[DC X Skill Check]</span><br /><span class="wuxDescription">When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill's value. If this value is equal to or greater than X you pass the check and all of the effects listed in this block occur.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Move]</span><br /><span class="wuxDescription">When a character moves, that character can move into any adjacent space, as long as the space isn’t occupied by an obstruction and is one that they would be able to move in. For example, characters can't move straight up unless they can fly.</span><br /><span class="wuxDescription">Each space you move consumes 1 space of your movement on conpletion of the move. When moving diagonally, you must consume 1 additional space of movement upon entering the space. You are unable to move any more spaces once you are at 0 movement.</span><br /><span class="wuxDescription">Sometimes a character will be required to swim to enter a large body of liquid or climb when moving across a terrain vertically. These are special forms of movement done as part of any Move action.</span><br /><span class="wuxDescription">When swimming or climbing you must consume 1 additional space of movement upon entering the space. A successful DC 10 Physique skill check may be required before entering a space if it is especially difficult to swim or climb.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
+															</div>
+														</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target may Free Move up to 3 + [Dash Speed] spaces
+														Target loses any condition of your choice</span></div>
+											</div>
+
+
+
 										</div>
-
-
-
 									</div>
+
 								</div>
-								<div class="wuxFeature wuxActionFeature">
-									<div class="wuxFeatureHeader">
-										<div class="wuxFeatureHeaderDisplayBlock">
-											<div class="wuxFeatureHeaderDisplayTitleBlock">
-												<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountpowertonic" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Power Tonic}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Def-0=1}}{{CheckTitle=DC 10 Medicine}}{{Check0Data=Target gains the Empowered Status. Target gains 2 ranks in the }}{{Check0Tooltip=&#91;DC X Skill Check&#93;}}{{Check1Tooltip=When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill&#39;s value. If this value is equal to or greater than X you pass the check and all of the effects listed in this block occur.}}{{Check2Tooltip=}}{{Check3Tooltip=&#91;Empowered&#93;}}{{Check4Tooltip=The next time you deal hp damage with an attack you add 3 + Character Rank to the damage. }}{{Check5Tooltip=}}{{Check6Tooltip=&#91;&#93;}}{{checkData=!chtech Power Tonic-0$$&#64;{sheetname}}}{{targetData=!utech Power Tonic-0$$&#64;{sheetname}}}">
-														<span>Power Tonic</span>
-													</button></div>
-												<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
-												<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayInfoBlock">
-												<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>1</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Range</div>
-															<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
-														</div>
-													</span></div>
-												<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayCostBlock">
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountpowertonic" value="0">
+								<div class="wuxHiddenField">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountpowertonic" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Power Tonic}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Def-0=1}}{{CheckTitle=DC 10 Medicine}}{{Check0Data=Target gains the Empowered Status. Target gains 2 ranks in the }}{{Check0Tooltip=&#91;DC X Skill Check&#93;}}{{Check1Tooltip=When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill&#39;s value. If this value is equal to or greater than X you pass the check and all of the effects listed in this block occur.}}{{Check2Tooltip=}}{{Check3Tooltip=&#91;Empowered&#93;}}{{Check4Tooltip=The next time you deal hp damage with an attack you add 3 + Character Rank to the damage. }}{{Check5Tooltip=}}{{Check6Tooltip=&#91;&#93;}}{{checkData=!chtech Power Tonic-0$$&#64;{sheetname}}}{{targetData=!utech Power Tonic-0$$&#64;{sheetname}}}">
+															<span>Power Tonic</span>
+														</button></div>
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>1</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Range</div>
+																<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
+															</div>
+														</span></div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
 
 
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="wuxFeatureInfoDisplayBlock">
+										<div class="wuxFeatureInfoDisplayBlock">
 
-										<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
-
+											<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
 
 
-										<div class="wuxFeatureHeaderInfoEffect-Check">
-											<input type="hidden" class="wuxFeatureHeader-flag" value="0">
-											<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>DC 10 Medicine</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Skill Check Effects</div>
-															<span class="wuxDescription">[DC X Skill Check]</span><br /><span class="wuxDescription">When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill's value. If this value is equal to or greater than X you pass the check and all of the effects listed in this block occur.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Empowered]</span><br /><span class="wuxDescription">The next time you deal hp damage with an attack you add 3 + Character Rank to the damage. </span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
-														</div>
-													</span></span></div>
-											<div class="wuxFeatureHeaderInfoContents"><span>Target gains the Empowered Status. Target gains 2 ranks in the </span></div>
+
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="0">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>DC 10 Medicine</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Skill Check Effects</div>
+																<span class="wuxDescription">[DC X Skill Check]</span><br /><span class="wuxDescription">When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill's value. If this value is equal to or greater than X you pass the check and all of the effects listed in this block occur.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Empowered]</span><br /><span class="wuxDescription">The next time you deal hp damage with an attack you add 3 + Character Rank to the damage. </span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
+															</div>
+														</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target gains the Empowered Status. Target gains 2 ranks in the </span></div>
+											</div>
+
+
+
 										</div>
-
-
-
 									</div>
+
 								</div>
-								<div class="wuxFeature wuxActionFeature">
-									<div class="wuxFeatureHeader">
-										<div class="wuxFeatureHeaderDisplayBlock">
-											<div class="wuxFeatureHeaderDisplayTitleBlock">
-												<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountinstantcalm" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Instant Calm}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Core0Data=Target loses all emotions of their choice}}{{Core0Tooltip=&#91;&#93;}}{{checkData=!chtech Instant Calm-0$$&#64;{sheetname}}}{{targetData=!utech Instant Calm-0$$&#64;{sheetname}}}">
-														<span>Instant Calm</span>
-													</button></div>
-												<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
-												<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayInfoBlock">
-												<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>1</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Range</div>
-															<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
-														</div>
-													</span></div>
-												<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayCostBlock">
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountinstantcalm" value="0">
+								<div class="wuxHiddenField">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountinstantcalm" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Instant Calm}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Core0Data=Target loses all emotions of their choice}}{{Core0Tooltip=&#91;&#93;}}{{checkData=!chtech Instant Calm-0$$&#64;{sheetname}}}{{targetData=!utech Instant Calm-0$$&#64;{sheetname}}}">
+															<span>Instant Calm</span>
+														</button></div>
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>1</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Range</div>
+																<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
+															</div>
+														</span></div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
 
 
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="wuxFeatureInfoDisplayBlock">
+										<div class="wuxFeatureInfoDisplayBlock">
 
-										<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
+											<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
 
-										<div class="wuxFeatureHeaderInfoEffect-Core">
-											<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-											<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>Effects</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Core Effects</div>
-															<span class="wuxDescription">[]</span>
-														</div>
-													</span></span></div>
-											<div class="wuxFeatureHeaderInfoContents"><span>Target loses all emotions of their choice</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>Effects</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Core Effects</div>
+																<span class="wuxDescription">[]</span>
+															</div>
+														</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target loses all emotions of their choice</span></div>
+											</div>
+
+
+
+
+
 										</div>
-
-
-
-
-
 									</div>
+
 								</div>
-								<div class="wuxFeature wuxActionFeature">
-									<div class="wuxFeatureHeader">
-										<div class="wuxFeatureHeaderDisplayBlock">
-											<div class="wuxFeatureHeaderDisplayTitleBlock">
-												<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountenergydrink" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Energy Drink}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Core0Data=Target gains 2 EN}}{{Core0Tooltip=&#91;EN&#93;}}{{Core1Tooltip=EN is a resource that is spent when using more powerful techniques. Usually you will generate some at the start of every round in a combat. Some techniques can also generate EN.}}{{checkData=!chtech Energy Drink-0$$&#64;{sheetname}}}{{targetData=!utech Energy Drink-0$$&#64;{sheetname}}}">
-														<span>Energy Drink</span>
-													</button></div>
-												<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
-												<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayInfoBlock">
-												<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>1</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Range</div>
-															<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
-														</div>
-													</span></div>
-												<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayCostBlock">
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountenergydrink" value="0">
+								<div class="wuxHiddenField">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountenergydrink" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Energy Drink}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{Core0Data=Target gains 2 EN}}{{Core0Tooltip=&#91;EN&#93;}}{{Core1Tooltip=EN is a resource that is spent when using more powerful techniques. Usually you will generate some at the start of every round in a combat. Some techniques can also generate EN.}}{{checkData=!chtech Energy Drink-0$$&#64;{sheetname}}}{{targetData=!utech Energy Drink-0$$&#64;{sheetname}}}">
+															<span>Energy Drink</span>
+														</button></div>
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>1</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Range</div>
+																<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[]</span>
+															</div>
+														</span></div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target or Self</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
 
 
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="wuxFeatureInfoDisplayBlock">
+										<div class="wuxFeatureInfoDisplayBlock">
 
-										<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
+											<div class="wuxFeatureHeaderInfoTraits"><strong><span>Traits</span>.</strong> <span>The target must be willing to consume this item.</span></div>
 
-										<div class="wuxFeatureHeaderInfoEffect-Core">
-											<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-											<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>Effects</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Core Effects</div>
-															<span class="wuxDescription">[EN]</span><br /><span class="wuxDescription">EN is a resource that is spent when using more powerful techniques. Usually you will generate some at the start of every round in a combat. Some techniques can also generate EN.</span>
-														</div>
-													</span></span></div>
-											<div class="wuxFeatureHeaderInfoContents"><span>Target gains 2 EN</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>Effects</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Core Effects</div>
+																<span class="wuxDescription">[EN]</span><br /><span class="wuxDescription">EN is a resource that is spent when using more powerful techniques. Usually you will generate some at the start of every round in a combat. Some techniques can also generate EN.</span>
+															</div>
+														</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target gains 2 EN</span></div>
+											</div>
+
+
+
+
+
 										</div>
-
-
-
-
-
 									</div>
+
 								</div>
-								<div class="wuxFeature wuxActionFeature">
-									<div class="wuxFeatureHeader">
-										<div class="wuxFeatureHeaderDisplayBlock">
-											<div class="wuxFeatureHeaderDisplayTitleBlock">
-												<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountimpactbomb" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Impact Bomb}}{{type-Quick=1}}{{action=Quick}}{{Range=2-5}}{{Target=One Target}}{{Def-Evasion=1}}{{CheckTitle=Aim vs. Evasion}}{{Check0Data=Target takes 2d6 + &#91;Potency&#93; Force damage}}{{Check0Tooltip=&#91;Skill Check vs. X&#93;}}{{Check1Tooltip=When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill&#39;s value. If this total value is equal to or greater than the target&#39;s X defense you pass the check and all of the effects listed in this block occur.}}{{Check2Tooltip=}}{{Check3Tooltip=&#91;Damage&#93;}}{{Check4Tooltip=This technique deals damage to the target&#39;s HP or Willpower, decreasing their current value.}}{{checkData=!chtech Impact Bomb-0$$&#64;{sheetname}}}{{targetData=!utech Impact Bomb-0$$&#64;{sheetname}}}">
-														<span>Impact Bomb</span>
-													</button></div>
-												<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
-												<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayInfoBlock">
-												<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>2-5</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Range</div>
-															<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription">Range values that don't include 1 in their range are not allowed to be used in melee range. If a target is directly adjacent to the user the target is invalid.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Target]</span><br /><span class="wuxDescription">A range of Target has a single specified target character or object for the technique. This technique may have special qualities that also affect the user.</span>
-														</div>
-													</span></div>
-												<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayCostBlock">
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountimpactbomb" value="0">
+								<div class="wuxHiddenField">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountimpactbomb" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Impact Bomb}}{{type-Quick=1}}{{action=Quick}}{{Range=2-5}}{{Target=One Target}}{{Def-Evasion=1}}{{CheckTitle=Aim vs. Evasion}}{{Check0Data=Target takes 2d6 + &#91;Potency&#93; Force damage}}{{Check0Tooltip=&#91;Skill Check vs. X&#93;}}{{Check1Tooltip=When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill&#39;s value. If this total value is equal to or greater than the target&#39;s X defense you pass the check and all of the effects listed in this block occur.}}{{Check2Tooltip=}}{{Check3Tooltip=&#91;Damage&#93;}}{{Check4Tooltip=This technique deals damage to the target&#39;s HP or Willpower, decreasing their current value.}}{{checkData=!chtech Impact Bomb-0$$&#64;{sheetname}}}{{targetData=!utech Impact Bomb-0$$&#64;{sheetname}}}">
+															<span>Impact Bomb</span>
+														</button></div>
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>2-5</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Range</div>
+																<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription">Range values that don't include 1 in their range are not allowed to be used in melee range. If a target is directly adjacent to the user the target is invalid.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Target]</span><br /><span class="wuxDescription">A range of Target has a single specified target character or object for the technique. This technique may have special qualities that also affect the user.</span>
+															</div>
+														</span></div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>One Target</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
 
 
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="wuxFeatureInfoDisplayBlock">
+										<div class="wuxFeatureInfoDisplayBlock">
 
 
 
 
 
-										<div class="wuxFeatureHeaderInfoEffect-Check">
-											<input type="hidden" class="wuxFeatureHeader-flag" value="Evasion">
-											<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>Aim vs. Evasion</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Skill Check Effects</div>
-															<span class="wuxDescription">[Skill Check vs. X]</span><br /><span class="wuxDescription">When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill's value. If this total value is equal to or greater than the target's X defense you pass the check and all of the effects listed in this block occur.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Damage]</span><br /><span class="wuxDescription">This technique deals damage to the target's HP or Willpower, decreasing their current value.</span>
-														</div>
-													</span></span></div>
-											<div class="wuxFeatureHeaderInfoContents"><span>Target takes 2d6 + [Potency] Force damage</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Evasion">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>Aim vs. Evasion</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Skill Check Effects</div>
+																<span class="wuxDescription">[Skill Check vs. X]</span><br /><span class="wuxDescription">When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill's value. If this total value is equal to or greater than the target's X defense you pass the check and all of the effects listed in this block occur.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Damage]</span><br /><span class="wuxDescription">This technique deals damage to the target's HP or Willpower, decreasing their current value.</span>
+															</div>
+														</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target takes 2d6 + [Potency] Force damage</span></div>
+											</div>
+
+
+
 										</div>
-
-
-
 									</div>
+
 								</div>
-								<div class="wuxFeature wuxActionFeature">
-									<div class="wuxFeatureHeader">
-										<div class="wuxFeatureHeaderDisplayBlock">
-											<div class="wuxFeatureHeaderDisplayTitleBlock">
-												<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountblastbomb" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Blast Bomb}}{{type-Full=1}}{{action=Full}}{{Range=2-5}}{{Target=Blast 1}}{{Def-Evasion=1}}{{CheckTitle=Aim vs. Evasion}}{{Check0Data=Target takes 4d6 + &#91;Potency&#93; Force damage}}{{Check0Tooltip=&#91;Skill Check vs. X&#93;}}{{Check1Tooltip=When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill&#39;s value. If this total value is equal to or greater than the target&#39;s X defense you pass the check and all of the effects listed in this block occur.}}{{Check2Tooltip=}}{{Check3Tooltip=&#91;Damage&#93;}}{{Check4Tooltip=This technique deals damage to the target&#39;s HP or Willpower, decreasing their current value.}}{{checkData=!chtech Blast Bomb-0$$&#64;{sheetname}}}{{targetData=!utech Blast Bomb-0$$&#64;{sheetname}}}">
-														<span>Blast Bomb</span>
-													</button></div>
-												<input type="hidden" class="wuxFeatureHeader-flag" value="Full">
-												<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Full</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayInfoBlock">
-												<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>2-5</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Range</div>
-															<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription">Range values that don't include 1 in their range are not allowed to be used in melee range. If a target is directly adjacent to the user the target is invalid.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Blast X]</span><br /><span class="wuxDescription">Choose a point within the defined range. This technique affects all characters within a radius of X spaces. Cover and line of sight for the technique are calculated based on the center of the blast, rather than the position of the user.</span>
-														</div>
-													</span></div>
-												<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>Blast 1</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayCostBlock">
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountblastbomb" value="0">
+								<div class="wuxHiddenField">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountblastbomb" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Blast Bomb}}{{type-Full=1}}{{action=Full}}{{Range=2-5}}{{Target=Blast 1}}{{Def-Evasion=1}}{{CheckTitle=Aim vs. Evasion}}{{Check0Data=Target takes 4d6 + &#91;Potency&#93; Force damage}}{{Check0Tooltip=&#91;Skill Check vs. X&#93;}}{{Check1Tooltip=When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill&#39;s value. If this total value is equal to or greater than the target&#39;s X defense you pass the check and all of the effects listed in this block occur.}}{{Check2Tooltip=}}{{Check3Tooltip=&#91;Damage&#93;}}{{Check4Tooltip=This technique deals damage to the target&#39;s HP or Willpower, decreasing their current value.}}{{checkData=!chtech Blast Bomb-0$$&#64;{sheetname}}}{{targetData=!utech Blast Bomb-0$$&#64;{sheetname}}}">
+															<span>Blast Bomb</span>
+														</button></div>
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Full">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Full</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>2-5</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Range</div>
+																<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription">Range values that don't include 1 in their range are not allowed to be used in melee range. If a target is directly adjacent to the user the target is invalid.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Blast X]</span><br /><span class="wuxDescription">Choose a point within the defined range. This technique affects all characters within a radius of X spaces. Cover and line of sight for the technique are calculated based on the center of the blast, rather than the position of the user.</span>
+															</div>
+														</span></div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>Blast 1</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
 
 
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="wuxFeatureInfoDisplayBlock">
+										<div class="wuxFeatureInfoDisplayBlock">
 
 
 
 
 
-										<div class="wuxFeatureHeaderInfoEffect-Check">
-											<input type="hidden" class="wuxFeatureHeader-flag" value="Evasion">
-											<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>Aim vs. Evasion</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Skill Check Effects</div>
-															<span class="wuxDescription">[Skill Check vs. X]</span><br /><span class="wuxDescription">When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill's value. If this total value is equal to or greater than the target's X defense you pass the check and all of the effects listed in this block occur.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Damage]</span><br /><span class="wuxDescription">This technique deals damage to the target's HP or Willpower, decreasing their current value.</span>
-														</div>
-													</span></span></div>
-											<div class="wuxFeatureHeaderInfoContents"><span>Target takes 4d6 + [Potency] Force damage</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Evasion">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>Aim vs. Evasion</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Skill Check Effects</div>
+																<span class="wuxDescription">[Skill Check vs. X]</span><br /><span class="wuxDescription">When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill's value. If this total value is equal to or greater than the target's X defense you pass the check and all of the effects listed in this block occur.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Damage]</span><br /><span class="wuxDescription">This technique deals damage to the target's HP or Willpower, decreasing their current value.</span>
+															</div>
+														</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target takes 4d6 + [Potency] Force damage</span></div>
+											</div>
+
+
+
 										</div>
-
-
-
 									</div>
+
 								</div>
-								<div class="wuxFeature wuxActionFeature">
-									<div class="wuxFeatureHeader">
-										<div class="wuxFeatureHeaderDisplayBlock">
-											<div class="wuxFeatureHeaderDisplayTitleBlock">
-												<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountdynamite" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Dynamite}}{{type-Full=1}}{{action=Full}}{{Range=2-5}}{{Target=Blast 1}}{{Core0Data=This technique does not trigger until 3 rounds have passed after it has been used at which point it explodes at the start of the 4th round.}}{{Def-Evasion=1}}{{CheckTitle=Aim vs. Evasion}}{{Check0Data=Target takes 7d6 + &#91;Potency&#93; Force damage}}{{Check0Tooltip=&#91;Skill Check vs. X&#93;}}{{Check1Tooltip=When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill&#39;s value. If this total value is equal to or greater than the target&#39;s X defense you pass the check and all of the effects listed in this block occur.}}{{Check2Tooltip=}}{{Check3Tooltip=&#91;Damage&#93;}}{{Check4Tooltip=This technique deals damage to the target&#39;s HP or Willpower, decreasing their current value.}}{{checkData=!chtech Dynamite-0$$&#64;{sheetname}}}{{targetData=!utech Dynamite-0$$&#64;{sheetname}}}">
-														<span>Dynamite</span>
-													</button></div>
-												<input type="hidden" class="wuxFeatureHeader-flag" value="Full">
-												<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Full</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayInfoBlock">
-												<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>2-5</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Range</div>
-															<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription">Range values that don't include 1 in their range are not allowed to be used in melee range. If a target is directly adjacent to the user the target is invalid.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Blast X]</span><br /><span class="wuxDescription">Choose a point within the defined range. This technique affects all characters within a radius of X spaces. Cover and line of sight for the technique are calculated based on the center of the blast, rather than the position of the user.</span>
-														</div>
-													</span></div>
-												<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>Blast 1</span></div>
-											</div>
-											<div class="wuxFeatureHeaderDisplayCostBlock">
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountdynamite" value="0">
+								<div class="wuxHiddenField">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><input type="number" class="wuxFeatureHeaderNameCount" name="attr_itemcountdynamite" value="0"><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Dynamite}}{{type-Full=1}}{{action=Full}}{{Range=2-5}}{{Target=Blast 1}}{{Core0Data=This technique does not trigger until 3 rounds have passed after it has been used at which point it explodes at the start of the 4th round.}}{{Def-Evasion=1}}{{CheckTitle=Aim vs. Evasion}}{{Check0Data=Target takes 7d6 + &#91;Potency&#93; Force damage}}{{Check0Tooltip=&#91;Skill Check vs. X&#93;}}{{Check1Tooltip=When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill&#39;s value. If this total value is equal to or greater than the target&#39;s X defense you pass the check and all of the effects listed in this block occur.}}{{Check2Tooltip=}}{{Check3Tooltip=&#91;Damage&#93;}}{{Check4Tooltip=This technique deals damage to the target&#39;s HP or Willpower, decreasing their current value.}}{{checkData=!chtech Dynamite-0$$&#64;{sheetname}}}{{targetData=!utech Dynamite-0$$&#64;{sheetname}}}">
+															<span>Dynamite</span>
+														</button></div>
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Full">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Full</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>2-5</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Range</div>
+																<span class="wuxDescription">This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.</span><br /><span class="wuxDescription">Range values that don't include 1 in their range are not allowed to be used in melee range. If a target is directly adjacent to the user the target is invalid.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Blast X]</span><br /><span class="wuxDescription">Choose a point within the defined range. This technique affects all characters within a radius of X spaces. Cover and line of sight for the technique are calculated based on the center of the blast, rather than the position of the user.</span>
+															</div>
+														</span></div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType"><span>Blast 1</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
 
 
+												</div>
 											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+
+
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span>Effects</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>This technique does not trigger until 3 rounds have passed after it has been used at which point it explodes at the start of the 4th round.</span></div>
+											</div>
+
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Evasion">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>Aim vs. Evasion</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Skill Check Effects</div>
+																<span class="wuxDescription">[Skill Check vs. X]</span><br /><span class="wuxDescription">When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill's value. If this total value is equal to or greater than the target's X defense you pass the check and all of the effects listed in this block occur.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Damage]</span><br /><span class="wuxDescription">This technique deals damage to the target's HP or Willpower, decreasing their current value.</span>
+															</div>
+														</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target takes 7d6 + [Potency] Force damage</span></div>
+											</div>
+
+
+
 										</div>
 									</div>
-									<div class="wuxFeatureInfoDisplayBlock">
 
-
-
-										<div class="wuxFeatureHeaderInfoEffect-Core">
-											<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-											<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span>Effects</span></span></div>
-											<div class="wuxFeatureHeaderInfoContents"><span>This technique does not trigger until 3 rounds have passed after it has been used at which point it explodes at the start of the 4th round.</span></div>
-										</div>
-
-										<div class="wuxFeatureHeaderInfoEffect-Check">
-											<input type="hidden" class="wuxFeatureHeader-flag" value="Evasion">
-											<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
-														<span class="wuxTooltipText"><strong>Aim vs. Evasion</strong></span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Skill Check Effects</div>
-															<span class="wuxDescription">[Skill Check vs. X]</span><br /><span class="wuxDescription">When you use this technique make a skill check by rolling 2d6 and adding it to your appropriate skill's value. If this total value is equal to or greater than the target's X defense you pass the check and all of the effects listed in this block occur.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Damage]</span><br /><span class="wuxDescription">This technique deals damage to the target's HP or Willpower, decreasing their current value.</span>
-														</div>
-													</span></span></div>
-											<div class="wuxFeatureHeaderInfoContents"><span>Target takes 7d6 + [Potency] Force damage</span></div>
-										</div>
-
-
-
-									</div>
 								</div>
 							</div>
 							<div class="wuxRow">&nbsp;</div>
@@ -19207,8 +19482,44 @@ WuxWorkerGear.BuyConsumableBulk(eventinfo)
 on("change:repeating_consumables:gear-equip", function (eventinfo) {
 WuxWorkerGear.EquipConsumable(eventinfo)
 });
-on("change:repeating_syncconsumable:gear-unequip", function (eventinfo) {
-WuxWorkerGear.UnequipConsumable(eventinfo)
+on("change:gear-unequiphealgel", function (eventinfo) {
+WuxWorkerGear.UnequipConsumable(eventinfo, "Heal Gel")
+});
+on("change:gear-unequipcompressbalm", function (eventinfo) {
+WuxWorkerGear.UnequipConsumable(eventinfo, "Compress Balm")
+});
+on("change:gear-unequipcleansingliquid", function (eventinfo) {
+WuxWorkerGear.UnequipConsumable(eventinfo, "Cleansing Liquid")
+});
+on("change:gear-unequipinstantheat", function (eventinfo) {
+WuxWorkerGear.UnequipConsumable(eventinfo, "Instant Heat")
+});
+on("change:gear-unequipstaticremover", function (eventinfo) {
+WuxWorkerGear.UnequipConsumable(eventinfo, "Static Remover")
+});
+on("change:gear-unequiphealingstimulant", function (eventinfo) {
+WuxWorkerGear.UnequipConsumable(eventinfo, "Healing Stimulant")
+});
+on("change:gear-unequipdashdrug", function (eventinfo) {
+WuxWorkerGear.UnequipConsumable(eventinfo, "Dash Drug")
+});
+on("change:gear-unequippowertonic", function (eventinfo) {
+WuxWorkerGear.UnequipConsumable(eventinfo, "Power Tonic")
+});
+on("change:gear-unequipinstantcalm", function (eventinfo) {
+WuxWorkerGear.UnequipConsumable(eventinfo, "Instant Calm")
+});
+on("change:gear-unequipenergydrink", function (eventinfo) {
+WuxWorkerGear.UnequipConsumable(eventinfo, "Energy Drink")
+});
+on("change:gear-unequipimpactbomb", function (eventinfo) {
+WuxWorkerGear.UnequipConsumable(eventinfo, "Impact Bomb")
+});
+on("change:gear-unequipblastbomb", function (eventinfo) {
+WuxWorkerGear.UnequipConsumable(eventinfo, "Blast Bomb")
+});
+on("change:gear-unequipdynamite", function (eventinfo) {
+WuxWorkerGear.UnequipConsumable(eventinfo, "Dynamite")
 });
 on("change:repeating_consumables:gear-delete", function (eventinfo) {
 WuxWorkerGear.DeleteConsumable(eventinfo)
@@ -19216,8 +19527,44 @@ WuxWorkerGear.DeleteConsumable(eventinfo)
 on("change:repeating_consumables:gear-inspect", function (eventinfo) {
 WuxWorkerGear.InspectConsumable(eventinfo, "RepeatingConsumables")
 });
-on("change:repeating_syncconsumable:gear-inspect", function (eventinfo) {
-WuxWorkerGear.InspectConsumable(eventinfo, "RepeatingSyncConsumables")
+on("change:gear-inspecthealgel", function (eventinfo) {
+WuxWorkerGear.InspectSyncedConsumable(eventinfo, "Heal Gel")
+});
+on("change:gear-inspectcompressbalm", function (eventinfo) {
+WuxWorkerGear.InspectSyncedConsumable(eventinfo, "Compress Balm")
+});
+on("change:gear-inspectcleansingliquid", function (eventinfo) {
+WuxWorkerGear.InspectSyncedConsumable(eventinfo, "Cleansing Liquid")
+});
+on("change:gear-inspectinstantheat", function (eventinfo) {
+WuxWorkerGear.InspectSyncedConsumable(eventinfo, "Instant Heat")
+});
+on("change:gear-inspectstaticremover", function (eventinfo) {
+WuxWorkerGear.InspectSyncedConsumable(eventinfo, "Static Remover")
+});
+on("change:gear-inspecthealingstimulant", function (eventinfo) {
+WuxWorkerGear.InspectSyncedConsumable(eventinfo, "Healing Stimulant")
+});
+on("change:gear-inspectdashdrug", function (eventinfo) {
+WuxWorkerGear.InspectSyncedConsumable(eventinfo, "Dash Drug")
+});
+on("change:gear-inspectpowertonic", function (eventinfo) {
+WuxWorkerGear.InspectSyncedConsumable(eventinfo, "Power Tonic")
+});
+on("change:gear-inspectinstantcalm", function (eventinfo) {
+WuxWorkerGear.InspectSyncedConsumable(eventinfo, "Instant Calm")
+});
+on("change:gear-inspectenergydrink", function (eventinfo) {
+WuxWorkerGear.InspectSyncedConsumable(eventinfo, "Energy Drink")
+});
+on("change:gear-inspectimpactbomb", function (eventinfo) {
+WuxWorkerGear.InspectSyncedConsumable(eventinfo, "Impact Bomb")
+});
+on("change:gear-inspectblastbomb", function (eventinfo) {
+WuxWorkerGear.InspectSyncedConsumable(eventinfo, "Blast Bomb")
+});
+on("change:gear-inspectdynamite", function (eventinfo) {
+WuxWorkerGear.InspectSyncedConsumable(eventinfo, "Dynamite")
 });
 on("change:repeating_equipment:", function (eventinfo) {
 WuxWorkerGear.PurchaseGear(eventinfo, "RepeatingEquipment")

@@ -524,9 +524,20 @@ var GearBuilder = GearBuilder || (function () {
                 `WuxWorkerGear.EquipConsumable(eventinfo)`, true);
         },
         listenerUnequipConsumable = function () {
-            return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingSyncConsumables")}:${WuxDef.GetVariable("Gear_Unequip")}`],
-                `WuxWorkerGear.UnequipConsumable(eventinfo)`, true);
+            let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
+            let output = "";
+            for (let i = 0; i < consuTypes.length; i++) {
+                let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].getTitle()));
+                for (let j = 0; j < itemKeys.length; j++) {
+                    let item = itemKeys[j];
+                    if (item == undefined) continue;
+                    let countMod = item.technique.fieldName.replace(/_/g, "");
+                    output += WuxSheetBackend.OnChange(
+                        [WuxDef.GetVariable("Gear_Unequip", countMod)],
+                        `WuxWorkerGear.UnequipConsumable(eventinfo, "${item.name}")`, true);
+                }
+            }
+            return output;
         },
         listenerDeleteRepeatingConsumable = function () {
             return WuxSheetBackend.OnChange(
@@ -539,9 +550,20 @@ var GearBuilder = GearBuilder || (function () {
                 `WuxWorkerGear.InspectConsumable(eventinfo, "RepeatingConsumables")`, true);
         },
         listenerInspectSyncedConsumable = function () {
-            return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingSyncConsumables")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectConsumable(eventinfo, "RepeatingSyncConsumables")`, true);
+            let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
+            let output = "";
+            for (let i = 0; i < consuTypes.length; i++) {
+                let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].getTitle()));
+                for (let j = 0; j < itemKeys.length; j++) {
+                    let item = itemKeys[j];
+                    if (item == undefined) continue;
+                    let countMod = item.technique.fieldName.replace(/_/g, "");
+                    output += WuxSheetBackend.OnChange(
+                        [WuxDef.GetVariable("Gear_Inspect", countMod)],
+                        `WuxWorkerGear.InspectSyncedConsumable(eventinfo, "${item.name}")`, true);
+                }
+            }
+            return output;
         },
         listenerEquipRepeatingEquipment = function () {
             return `${WuxSheetBackend.OnChange(
