@@ -1006,8 +1006,9 @@ button[type=roll].wuxFeatureHeaderNameButton span,
 .wuxFeatureHeaderNameCount
 {
     flex-shrink: 0;
-    max-width: 28px;
+    max-width: 20px;
     text-align: center;
+    margin-left: 5px;
 }
 
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderName {

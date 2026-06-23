@@ -612,6 +612,7 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
         this.resources = {};
         this.newResourceValues = {};
         this.focus = false;
+        this.item = "";
     }
     
     initializeData(contentData) {
@@ -636,6 +637,7 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
             this.resources["WILL"] = techniqueData.will;
         }
         this.focus = techniqueData.focus;
+        this.item = techniqueData.item || "";
     }
     
     addInitialMessage() {
@@ -750,11 +752,60 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
             techniqueConsumptionResolver.tokenEffect.addMessage(`${techniqueConsumptionResolver.tokenEffect.tokenTargetData.displayName} gains Focus.`);
         }
 
+        techniqueConsumptionResolver.consumeItem(attributeHandler);
+
         attributeHandler.addFinishCallback(function () {
             techniqueConsumptionResolver.printPrivateMessages();
         });
 
         attributeHandler.run();
+    }
+
+    consumeItem(attributeHandler) {
+        if (this.item == "") return;
+
+        let item = WuxItems.Get(this.item);
+        if (item == undefined) {
+            Debug.LogError(`[consumeItem] Could not find item: ${this.item}`);
+            return;
+        }
+
+        let countMod = item.technique.fieldName.replace(/_/g, "");
+        let countVar = WuxDef.GetVariable("ItemCount", countMod);
+        let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
+        let consuSlotVar = WuxDef.GetVariable("Gear_ConsumableSlot");
+        let slotMaxVar = WuxDef.GetVariable("ConsumableSlots");
+        let slotOpenAttrName = WuxDef.Get("Gear").getVariable("-" + WuxDef.GetVariable("ItemSlotOpen"));
+        let repeatingPrefix = WuxDef.GetVariable("RepeatingConsumables") + "_";
+
+        attributeHandler.addAttribute([countVar, consuBuildVar, consuSlotVar, slotMaxVar]);
+
+        let itemName = this.item;
+        let charId = this.tokenEffect.tokenTargetData.charId;
+
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            let currentCount = attrHandler.parseInt(countVar) || 0;
+            attrHandler.addUpdate(countVar, Math.max(0, currentCount - 1));
+
+            let consuBuildRaw = attrHandler.parseString(consuBuildVar);
+            let consuBuild = [];
+            try { consuBuild = JSON.parse(consuBuildRaw); } catch (e) {}
+            if (!Array.isArray(consuBuild)) consuBuild = [];
+            let idx = consuBuild.indexOf(itemName);
+            if (idx !== -1) consuBuild.splice(idx, 1);
+            attrHandler.addUpdate(consuBuildVar, JSON.stringify(consuBuild));
+            attrHandler.addUpdate(consuSlotVar, consuBuild.length.toString());
+
+            let slotMax = attrHandler.parseInt(slotMaxVar) || 0;
+            let slotOpenState = consuBuild.length < slotMax ? "0" : "on";
+            let allAttrs = findObjs({ _characterid: charId, _type: "attribute" });
+            allAttrs.forEach(function (attr) {
+                let name = attr.get("name");
+                if (name.startsWith(repeatingPrefix) && name.endsWith("_" + slotOpenAttrName)) {
+                    attr.set("current", slotOpenState);
+                }
+            });
+        });
     }
     
     printPrivateMessages() {

@@ -957,6 +957,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     displayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
                     displayData.technique.displayname = displayData.displayname;
                     displayData.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
+                    displayData.itemName = item.name;
                     let countMod = item.technique.fieldName.replace(/_/g, "");
                     let countAttribute = WuxDef.GetAttribute("ItemCount", countMod);
                     let techDisplayDataBuilder = new TechniqueDisplayBuilderUsableWithCount(displayData);

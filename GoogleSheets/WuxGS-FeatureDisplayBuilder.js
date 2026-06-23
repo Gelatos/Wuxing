@@ -318,7 +318,7 @@ class TechniqueDisplayBuilderUsableWithCount extends TechniqueDisplayBuilderUsab
     }
     printName() {
         let countInput = this.countAttribute
-            ? `<input type="number" class="wuxFeatureHeaderNameCount" name="${this.countAttribute}" value="0">`
+            ? `<span class="wuxFeatureHeaderNameCount" name="${this.countAttribute}">0</span>`
             : "";
         let contents = `${countInput}<button class="wuxFeatureHeaderNameButton" type="roll" value="${this.displayData.getSheetRollTemplate(true)}">
             ${this.printSpan(this.displayData.name)}

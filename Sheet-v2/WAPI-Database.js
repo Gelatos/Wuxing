@@ -1190,6 +1190,7 @@ class TechniqueResources extends dbObj {
         this.en = json.en;
         this.will = json.will;
         this.focus = json.focus === true;
+        this.item = json.item || "";
     }
 
     importSheets(dataArray) {
@@ -1202,6 +1203,8 @@ class TechniqueResources extends dbObj {
         i++;
         this.focus = dataArray[i] === true || dataArray[i] === "true";
         i++;
+        this.item = dataArray[i] ? "" + dataArray[i] : "";
+        i++;
     }
 
     createEmpty() {
@@ -1210,6 +1213,7 @@ class TechniqueResources extends dbObj {
         this.en = 0;
         this.will = 0;
         this.focus = false;
+        this.item = "";
     }
 
     sanitizeSheetRollAction(sheetRoll) {
@@ -2394,6 +2398,7 @@ class TechniqueDisplayData {
         this.trigger = "";
         this.flavorText = "";
         this.isOnEnter = false;
+        this.itemName = "";
 
         this.actionType = ""
         this.actionName = "";
@@ -2743,8 +2748,8 @@ class TechniqueDisplayData {
         }
         output += this.rollTemplateEffects();
         if (addTechnique) {
-            if (this.enCost > 0 || this.willCost > 0) {
-                let consumeData = new TechniqueResources([this.technique.name, this.enCost, this.willCost, this.technique.limits == "Focus"]);
+            if (this.enCost > 0 || this.willCost > 0 || this.technique.limits == "Focus" || this.itemName != "") {
+                let consumeData = new TechniqueResources([this.technique.name, this.enCost, this.willCost, this.technique.limits == "Focus", this.itemName]);
                 output += `{{consumeData=!ctech ${consumeData.sanitizeSheetRollAction(JSON.stringify(consumeData))}$$${this.sheetname}}}`;
             }
             if (this.technique.effects.keys.length > 0) {
