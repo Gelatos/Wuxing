@@ -1056,9 +1056,25 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         };
 
     const performItemFilterInspection = function (filters, title, addType) {
-        let inventoryItems = new FilteredItemsInventoryItemHandler(filters);
+        let filteredItems = WuxItems.Filter(filters);
+        let groups = {};
+        for (let item of filteredItems) {
+            if (item == undefined) continue;
+            let subGroupKey = item.category;
+            if (!groups[subGroupKey]) {
+                let subGroupTitle = item.category !== "" ? `${item.group} (${item.category})` : item.group;
+                groups[subGroupKey] = { title: subGroupTitle, items: [] };
+            }
+            groups[subGroupKey].items.push(new InspectionInventoryItem(item.name, item.name, false, "", 0, []));
+        }
+        let groupKeys = Object.keys(groups).sort();
+        let inventoryItems = [];
+        for (let key of groupKeys) {
+            inventoryItems.push(new InspectionInventoryItem(groups[key].title, "", true));
+            inventoryItems = inventoryItems.concat(groups[key].items);
+        }
         let attributeHandler = new WorkerAttributeHandler();
-        openItemInspection(attributeHandler, title, inventoryItems.items, addType);
+        openItemInspection(attributeHandler, title, inventoryItems, addType);
         attributeHandler.run();
     };
 

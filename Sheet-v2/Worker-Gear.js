@@ -622,24 +622,43 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             repeater.addFieldNames([itemNameVar]);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
-                let inventoryItems = [];
-                let selectedItem = undefined;
+                let groups = {};
+                let selectedSubGroup = null;
 
                 repeater.iterate(function (id) {
                     let itemName = attrHandler.parseString(repeater.getFieldName(id, itemNameVar));
                     let item = WuxItems.Get(itemName);
                     if (item == undefined || item.group === "") return;
 
+                    let subGroupKey = item.category;
+                    if (!groups[subGroupKey]) {
+                        let subGroupTitle = item.category !== "" ? `${item.group} (${item.category})` : item.group;
+                        groups[subGroupKey] = { title: subGroupTitle, selected: [], rest: [] };
+                    }
+
                     let inventoryItem = new InspectionInventoryItem(itemName, itemName, false);
                     if (id === selectedId) {
-                        selectedItem = inventoryItem;
+                        groups[subGroupKey].selected.push(inventoryItem);
+                        selectedSubGroup = subGroupKey;
                     } else {
-                        inventoryItems.push(inventoryItem);
+                        groups[subGroupKey].rest.push(inventoryItem);
                     }
                 });
 
-                if (selectedItem !== undefined) {
-                    inventoryItems.unshift(selectedItem);
+                let groupKeys = Object.keys(groups).sort();
+                if (selectedSubGroup !== null) {
+                    let idx = groupKeys.indexOf(selectedSubGroup);
+                    if (idx !== -1) {
+                        groupKeys.splice(idx, 1);
+                        groupKeys.unshift(selectedSubGroup);
+                    }
+                }
+
+                let inventoryItems = [];
+                for (let key of groupKeys) {
+                    inventoryItems.push(new InspectionInventoryItem(groups[key].title, "", true));
+                    inventoryItems = inventoryItems.concat(groups[key].selected);
+                    inventoryItems = inventoryItems.concat(groups[key].rest);
                 }
 
                 let attributeHandler2 = new WorkerAttributeHandler();
