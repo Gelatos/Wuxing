@@ -4890,7 +4890,7 @@ class CombatDetails {
     }
 
     printTooltip() {
-        let output = `${this.displayName} [CR${this.cr}] ${this.affinity == 0 ? "" : ` ${this.affinity}`}${this.job}`;
+        let output = `${this.displayName} [CR${this.cr}] ${this.affinity == 0 ? "" : ` ${this.affinity}`} ${this.job}`;
         output += ` =========================== `;
         output += `${this.defenses.printDefenses(this.cr)} - `;
         switch (this.displayStyle) {
@@ -4981,17 +4981,21 @@ class CombatDetailsDefenses {
     }
     
     printDefenses() {
-        let output = "Defs:";
-        output += `${WuxDef.GetAbbreviation("Def_Evasion")}${this.evasion};.`;
-        output += `${WuxDef.GetAbbreviation("Def_Brace")}${this.brace};.`;
-        output += `${WuxDef.GetAbbreviation("Def_Warding")}${this.warding};.`;
-        output += `${WuxDef.GetAbbreviation("Def_Reflex")}${this.reflex}`;
+        let defParts = [];
+        if (this.evasion != 0) defParts.push(`${WuxDef.GetAbbreviation("Def_Evasion")}${this.evasion}`);
+        if (this.brace != 0) defParts.push(`${WuxDef.GetAbbreviation("Def_Brace")}${this.brace}`);
+        if (this.warding != 0) defParts.push(`${WuxDef.GetAbbreviation("Def_Warding")}${this.warding}`);
+        if (this.reflex != 0) defParts.push(`${WuxDef.GetAbbreviation("Def_Reflex")}${this.reflex}`);
+        let output = defParts.length > 0 ? `Defs:${defParts.join(";.")}` : "";
         
-        output += " Sens:";
-        output += `${WuxDef.GetAbbreviation("Def_Resolve")}${this.resolve};.`;
-        output += `${WuxDef.GetAbbreviation("Def_Insight")}${this.insight};.`;
-        output += `${WuxDef.GetAbbreviation("Def_Logic")}${this.logic}`;
-        
+        let senseParts = [];
+        if (this.resolve != 0) senseParts.push(`${WuxDef.GetAbbreviation("Def_Resolve")}${this.resolve}`);
+        if (this.insight != 0) senseParts.push(`${WuxDef.GetAbbreviation("Def_Insight")}${this.insight}`);
+        if (this.logic != 0) senseParts.push(`${WuxDef.GetAbbreviation("Def_Logic")}${this.logic}`);
+        if (senseParts.length > 0) {
+            output += ` Sens:${senseParts.join(";.")}`;
+        }
+
         return output;
     }
     
