@@ -892,6 +892,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                     contents += buildBaseFilterButtons();
                     contents += repeatingFormeSection();
+                    contents += buildInstantConsumablesSection();
                     contents += repeatingCustomTechniquesSection();
 
                     contents = WuxSheetMain.TabBlock(contents);
@@ -937,8 +938,40 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     displayData.technique.displayname = displayData.displayname;
                     displayData.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
                     let techDisplayDataBuilder = new TechniqueDisplayBuilderUsable(displayData);
-                    techDisplayDataBuilder.setFeatureBonusClasses("wuxWidth300");
+                    techDisplayDataBuilder.setFeatureBonusClasses("wuxActionFeature");
                     return techDisplayDataBuilder.print();
+                },
+
+                buildItemTechniqueDisplay = function (item) {
+                    if (item == undefined || !item.hasTechnique) { return ""; }
+                    let displayData = new TechniqueDisplayData(item.technique);
+                    displayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
+                    displayData.technique.displayname = displayData.displayname;
+                    displayData.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
+                    let countMod = item.technique.fieldName.replace(/_/g, "");
+                    let countAttribute = WuxDef.GetAttribute("ItemCount", countMod);
+                    let techDisplayDataBuilder = new TechniqueDisplayBuilderUsableWithCount(displayData);
+                    techDisplayDataBuilder.setFeatureBonusClasses("wuxActionFeature");
+                    techDisplayDataBuilder.setCountAttribute(countAttribute);
+                    return WuxSheetMain.HiddenField(countAttribute, techDisplayDataBuilder.print());
+                },
+
+                buildInstantConsumablesSection = function () {
+                    let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
+                    let output = "";
+                    for (let i = 0; i < consuTypes.length; i++) {
+                        Debug.Log("looking at consumable type: " + consuTypes[i].getTitle());
+                        let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].getTitle()));
+                        for (let j = 0; j < itemKeys.length; j++) {
+                            Debug.Log("looking at item type: " + itemKeys[j].name);
+                            output += buildItemTechniqueDisplay(itemKeys[j]);
+                        }
+                    }
+                    if (output == "") { return ""; }
+                    let sectionDef = WuxDef.Get("Title_InstantConsumables");
+                    return `${WuxSheetMain.Header(sectionDef.getTitle())}
+                    <div class="wuxFlexTable">${output}</div>
+                    ${WuxSheetMain.Row("&nbsp;")}`;
                 },
                 repeatingFormeSection = function () {
                     let repeaterDefinition = WuxDef.Get("RepeatingFormeTech");

@@ -312,6 +312,21 @@ class TechniqueDisplayBuilderUsable extends TechniqueDisplayBuilder {
     }
 }
 
+class TechniqueDisplayBuilderUsableWithCount extends TechniqueDisplayBuilderUsable {
+    setCountAttribute(countAttribute) {
+        this.countAttribute = countAttribute;
+    }
+    printName() {
+        let countInput = this.countAttribute
+            ? `<input type="number" class="wuxFeatureHeaderNameCount" name="${this.countAttribute}" value="0">`
+            : "";
+        let contents = `${countInput}<button class="wuxFeatureHeaderNameButton" type="roll" value="${this.displayData.getSheetRollTemplate(true)}">
+            ${this.printSpan(this.displayData.name)}
+        </button>`
+        return this.printNameField(contents);
+    }
+}
+
 class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
     constructor(baseDefinition, rootSuffix) {
         super();

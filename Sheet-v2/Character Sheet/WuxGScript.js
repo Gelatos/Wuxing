@@ -1189,6 +1189,7 @@ class TechniqueResources extends dbObj {
         this.name = json.name;
         this.en = json.en;
         this.will = json.will;
+        this.focus = json.focus === true;
     }
 
     importSheets(dataArray) {
@@ -1199,6 +1200,8 @@ class TechniqueResources extends dbObj {
         i++;
         this.will = "" + dataArray[i];
         i++;
+        this.focus = dataArray[i] === true || dataArray[i] === "true";
+        i++;
     }
 
     createEmpty() {
@@ -1206,6 +1209,7 @@ class TechniqueResources extends dbObj {
         this.name = "";
         this.en = 0;
         this.will = 0;
+        this.focus = false;
     }
 
     sanitizeSheetRollAction(sheetRoll) {
@@ -2740,7 +2744,7 @@ class TechniqueDisplayData {
         output += this.rollTemplateEffects();
         if (addTechnique) {
             if (this.enCost > 0 || this.willCost > 0) {
-                let consumeData = new TechniqueResources([this.technique.name, this.enCost, this.willCost]);
+                let consumeData = new TechniqueResources([this.technique.name, this.enCost, this.willCost, this.technique.limits == "Focus"]);
                 output += `{{consumeData=!ctech ${consumeData.sanitizeSheetRollAction(JSON.stringify(consumeData))}$$${this.sheetname}}}`;
             }
             if (this.technique.effects.keys.length > 0) {
@@ -4886,7 +4890,7 @@ class CombatDetails {
     }
 
     printTooltip() {
-        let output = `${this.displayName} [CR${this.cr}] ${this.affinity == 0 ? "" : ` ${this.affinity}`}${this.job}`;
+        let output = `${this.displayName} [CR${this.cr}] ${this.affinity == 0 ? "" : ` ${this.affinity}`} ${this.job}`;
         output += ` =========================== `;
         output += `${this.defenses.printDefenses(this.cr)} - `;
         switch (this.displayStyle) {
@@ -4977,17 +4981,21 @@ class CombatDetailsDefenses {
     }
     
     printDefenses() {
-        let output = "Defs:";
-        output += `${WuxDef.GetAbbreviation("Def_Evasion")}${this.evasion};.`;
-        output += `${WuxDef.GetAbbreviation("Def_Brace")}${this.brace};.`;
-        output += `${WuxDef.GetAbbreviation("Def_Warding")}${this.warding};.`;
-        output += `${WuxDef.GetAbbreviation("Def_Reflex")}${this.reflex}`;
+        let defParts = [];
+        if (this.evasion != 0) defParts.push(`${WuxDef.GetAbbreviation("Def_Evasion")}${this.evasion}`);
+        if (this.brace != 0) defParts.push(`${WuxDef.GetAbbreviation("Def_Brace")}${this.brace}`);
+        if (this.warding != 0) defParts.push(`${WuxDef.GetAbbreviation("Def_Warding")}${this.warding}`);
+        if (this.reflex != 0) defParts.push(`${WuxDef.GetAbbreviation("Def_Reflex")}${this.reflex}`);
+        let output = defParts.length > 0 ? `Defs:${defParts.join(";.")}` : "";
         
-        output += " Sens:";
-        output += `${WuxDef.GetAbbreviation("Def_Resolve")}${this.resolve};.`;
-        output += `${WuxDef.GetAbbreviation("Def_Insight")}${this.insight};.`;
-        output += `${WuxDef.GetAbbreviation("Def_Logic")}${this.logic}`;
-        
+        let senseParts = [];
+        if (this.resolve != 0) senseParts.push(`${WuxDef.GetAbbreviation("Def_Resolve")}${this.resolve}`);
+        if (this.insight != 0) senseParts.push(`${WuxDef.GetAbbreviation("Def_Insight")}${this.insight}`);
+        if (this.logic != 0) senseParts.push(`${WuxDef.GetAbbreviation("Def_Logic")}${this.logic}`);
+        if (senseParts.length > 0) {
+            output += ` Sens:${senseParts.join(";.")}`;
+        }
+
         return output;
     }
     
@@ -11968,6 +11976,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                     contents += buildBaseFilterButtons();
                     contents += repeatingFormeSection();
+                    contents += buildInstantConsumablesSection();
                     contents += repeatingCustomTechniquesSection();
 
                     contents = WuxSheetMain.TabBlock(contents);
@@ -12013,8 +12022,40 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     displayData.technique.displayname = displayData.displayname;
                     displayData.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
                     let techDisplayDataBuilder = new TechniqueDisplayBuilderUsable(displayData);
-                    techDisplayDataBuilder.setFeatureBonusClasses("wuxWidth300");
+                    techDisplayDataBuilder.setFeatureBonusClasses("wuxActionFeature");
                     return techDisplayDataBuilder.print();
+                },
+
+                buildItemTechniqueDisplay = function (item) {
+                    if (item == undefined || !item.hasTechnique) { return ""; }
+                    let displayData = new TechniqueDisplayData(item.technique);
+                    displayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
+                    displayData.technique.displayname = displayData.displayname;
+                    displayData.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
+                    let countMod = item.technique.fieldName.replace(/_/g, "");
+                    let countAttribute = WuxDef.GetAttribute("ItemCount", countMod);
+                    let techDisplayDataBuilder = new TechniqueDisplayBuilderUsableWithCount(displayData);
+                    techDisplayDataBuilder.setFeatureBonusClasses("wuxActionFeature");
+                    techDisplayDataBuilder.setCountAttribute(countAttribute);
+                    return techDisplayDataBuilder.print();
+                },
+
+                buildInstantConsumablesSection = function () {
+                    let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
+                    let output = "";
+                    for (let i = 0; i < consuTypes.length; i++) {
+                        Debug.Log("looking at consumable type: " + consuTypes[i].getTitle());
+                        let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].getTitle()));
+                        for (let j = 0; j < itemKeys.length; j++) {
+                            Debug.Log("looking at item type: " + itemKeys[j].name);
+                            output += buildItemTechniqueDisplay(itemKeys[j]);
+                        }
+                    }
+                    if (output == "") { return ""; }
+                    let sectionDef = WuxDef.Get("Title_InstantConsumables");
+                    return `${WuxSheetMain.Header(sectionDef.getTitle())}
+                    <div class="wuxFlexTable">${output}</div>
+                    ${WuxSheetMain.Row("&nbsp;")}`;
                 },
                 repeatingFormeSection = function () {
                     let repeaterDefinition = WuxDef.Get("RepeatingFormeTech");
@@ -15247,6 +15288,21 @@ class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
 class TechniqueDisplayBuilderUsable extends TechniqueDisplayBuilder {
     printName() {
         let contents = `<button class="wuxFeatureHeaderNameButton" type="roll" value="${this.displayData.getSheetRollTemplate(true)}">
+            ${this.printSpan(this.displayData.name)}
+        </button>`
+        return this.printNameField(contents);
+    }
+}
+
+class TechniqueDisplayBuilderUsableWithCount extends TechniqueDisplayBuilderUsable {
+    setCountAttribute(countAttribute) {
+        this.countAttribute = countAttribute;
+    }
+    printName() {
+        let countInput = this.countAttribute
+            ? `<input type="number" class="wuxFeatureHeaderNameCount" name="${this.countAttribute}" value="0">`
+            : "";
+        let contents = `${countInput}<button class="wuxFeatureHeaderNameButton" type="roll" value="${this.displayData.getSheetRollTemplate(true)}">
             ${this.printSpan(this.displayData.name)}
         </button>`
         return this.printNameField(contents);

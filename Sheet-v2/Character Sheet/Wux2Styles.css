@@ -2251,7 +2251,8 @@ div.wuxRepeatingTechActionButton:hover span {
     background-color: #ffeded;
 }
 
-.wuxRepeatingFlexSection .wuxFeature
+.wuxRepeatingFlexSection .wuxFeature,
+.wuxFeature.wuxActionFeature
 {
     min-width: 240px;
     max-width: 240px;
@@ -2538,6 +2539,25 @@ button[type=roll].wuxFeatureHeaderNameButton span,
 
     font-size: 12px;
     font-weight: bold;
+}
+
+.wuxFeatureHeaderName
+{
+    display: flex;
+    align-items: center;
+}
+
+.wuxFeatureHeaderName .wuxFeatureHeaderNameButton
+{
+    flex: 1;
+    width: auto;
+}
+
+.wuxFeatureHeaderNameCount
+{
+    flex-shrink: 0;
+    max-width: 28px;
+    text-align: center;
 }
 
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderName {
