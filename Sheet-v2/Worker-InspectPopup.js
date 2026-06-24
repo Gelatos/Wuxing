@@ -152,6 +152,7 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
     show(inventoryTitle, inventoryItems, addType) {
         super.show(this.titleDefinitionName);
         this.resetInspectionVariables();
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_FilterPopupActive"), "0");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupActive"), "on");
         
         this.setPopupType(this.titleDefinitionName);

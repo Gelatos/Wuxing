@@ -12,6 +12,7 @@ class FilterPopupAttributeHandler extends BasePopupAttributeHandler {
     show(popupTitleDefinitionName) {
         super.show(popupTitleDefinitionName);
         this.resetFilterVariables();
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupActive"), "0");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_FilterPopupActive"), "on");
     }
 

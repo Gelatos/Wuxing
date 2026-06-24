@@ -1093,7 +1093,7 @@ class GearValueAssessment {
             if (componentType == "Goods") {
                 component = WuxGoods.Get(componentName);
             } else if (componentType == "GoodsCat") {
-                let filteredGoods = WuxGoods.Filter([new DatabaseFilterData("category", name)]);
+                let filteredGoods = WuxGoods.Filter([new DatabaseFilterData("category", componentName)]);
                 component = WuxGoods.Get(filteredGoods[0]);
             } else if (componentType == "Item") {
                 component = WuxItems.Get(componentName);

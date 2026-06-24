@@ -2972,6 +2972,13 @@ class BaseTechniqueEffectDisplayData {
                 }
                 this.formatDescriptionEffect(effect);
                 break;
+            case "Overdose":
+                let statusEffect = WuxDef.Get("Stat_Dazed");
+                if (this.effectType != "Overdose") {
+                    this.effectType = effect.type;
+                    this.addDefintionToEffectDescription(statusEffect);
+                }
+                this.formatOverdoseEffect(statusEffect, technique);
             default:
                 this.effectType = effect.type;
                 this.formatDescriptionEffect(effect);
@@ -3316,6 +3323,10 @@ class BaseTechniqueEffectDisplayData {
 
     formatFreeFocusEffect() {
         this.effectDescription += `You may maintain focus on the triggering technique without expending EN and it does not count against your limit of focus techniques`;
+    }
+
+    formatOverdoseEffect(statusEffect, technique) {
+        return `If the target has already consumed ${Format.IndefiniteArticle(technique.name)} ${technique.name} since their last Brief Rest, they gain the ${statusEffect.name} status at the start of next round.`;
     }
 
     formatDescriptionEffect(effect) {
@@ -3768,7 +3779,7 @@ class ItemDisplayData {
         let quantityDelimiter = " ";
         let typeDelimiter = "_";
         
-        components = components.split(setDelimiter);
+        components = components.split(setDelimiter).map(c => c.trim());
 
         this.craftComponents = [];
         let splitter = "";
@@ -3792,6 +3803,7 @@ class ItemDisplayData {
                     item = WuxGoods.Get(name);
                     type = "Goods Category";
                     break;
+                case "Item":
                 default:
                     item = WuxItems.Get(name);
                     break;
@@ -6172,6 +6184,20 @@ var Format = Format || (function () {
             sheetRoll = sheetRoll.replace(/]/g, "&#93;");
             sheetRoll = sheetRoll.replace(/\n/g, "&&");
             return sheetRoll;
+        },
+
+        indefiniteArticle = function (word) {
+            if (!word) return "a";
+            const vowelSoundExceptions = ["hour", "heir", "honest", "honor", "herb"];
+            const consonantSoundExceptions = ["uni", "use", "eu", "ewe", "one", "once"];
+            let lower = word.toLowerCase();
+            for (let ex of vowelSoundExceptions) {
+                if (lower.startsWith(ex)) return "an";
+            }
+            for (let ex of consonantSoundExceptions) {
+                if (lower.startsWith(ex)) return "a";
+            }
+            return /^[aeiou]/i.test(word) ? "an" : "a";
         }
 
     ;
@@ -6192,7 +6218,8 @@ var Format = Format || (function () {
         ParseMacroJSON: parseMacroJSON,
         SanitizeMacroRollTemplate: sanitizeMacroRollTemplate,
         SanitizeSheetRoll: sanitizeSheetRoll,
-        SanitizeSheetRollAction: sanitizeSheetRollAction
+        SanitizeSheetRollAction: sanitizeSheetRollAction,
+        IndefiniteArticle: indefiniteArticle
     };
 }());
 
