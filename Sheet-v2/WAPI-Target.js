@@ -441,7 +441,7 @@ class TokenTargetData extends TargetData {
         attributeHandler.addAttribute(surgeDef, vitalityDef);
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
-            let tokenNoteRef = new TokenNoteReference();
+            let tokenNoteRef = new TokenNoteReference(tokenTargetData.getTokenNote());
             tokenNoteRef.surges.current = attrHandler.parseInt(surgeDef, 0, true);
             tokenNoteRef.surges.max = tokenNoteRef.surges.current;
             tokenNoteRef.vitality.current = attrHandler.parseInt(vitalityDef, 0, true);
@@ -1537,7 +1537,7 @@ class TokenNoteReference {
         }
         this.surges = json.surges == undefined ? {current: 0, max: 0} : json.surges;
         this.vitality = json.vitality == undefined ? {current: 0, max: 0} : json.vitality;
-        this.teamIndex = json.teamIndex;
+        this.teamIndex = json.teamIndex ?? 0;
     }
 }
 
