@@ -412,7 +412,7 @@ class TechniqueAssessment {
             output.pointCalc.push("Assist");
         }
         else if (technique.action == "Swift") {
-            let lookupName = WuxDef.GetAbbreviation("Job") + "_" + technique.techSet;
+            let lookupName = WuxDef.GetAbbreviation("Job") + "_" + technique.techSet.split(";")[0].trim();
             if (WuxDef.GetTitle(lookupName) == "") {
                 output.points = Math.ceil(output.points * 0.5);
                 output.pointCalc.push("Swift Job");
@@ -531,7 +531,7 @@ class TechniqueAssessment {
         switch (effect.effect) {
             case "HP":
             case "WILL":
-                output.value = Math.ceil(output.value * 0.1);
+                output.value = Math.ceil(output.value * 0.075);
                 break;
             case "Cmb_HV":
                 output.value = Math.ceil(output.value * 0.2);
@@ -548,11 +548,20 @@ class TechniqueAssessment {
                 output.value = (effect.subType == "Penalty" ? 0 : 1) + Math.ceil(Math.abs(output.value) + Math.max(Math.ceil(Math.abs(output.value) * 0.75 - 1.5), 0)) * (effect.subType == "Penalty" ? -1 : 1);
                 break;
             case "StartEN":
+            case "RoundEN":
                 output.value = Math.ceil(output.value * 2);
                 break;
             case "Cmb_Mv":
             case "Cmb_MvDash":
                 output.value = Math.ceil(output.value * 2);
+                break;
+            case "Cmb_Armor":
+            case "Cmb_BurnResist":
+            case "Cmb_ColdResist":
+            case "Cmb_EnergyResist":
+            case "Cmb_ForceResist":
+            case "Cmb_PiercingResist":
+            case "Cmb_PsycheResist":
                 break;
             case "ConsumableSlots":
                 output.value = Math.ceil(output.value * 2);
@@ -1227,6 +1236,9 @@ class TechniqueAssessment {
     }
 
     addTargetedPointsRubric(effect, points) {
+        if (effect.target == "Self") {
+            return;
+        }
         let output = this.getTargetPointsRubric(effect, points);
         if (output.points == 0) {
             return;

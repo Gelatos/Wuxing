@@ -2178,14 +2178,6 @@
 											</div>
 										</div>
 									</div>
-									<div class="wuxFlexTable">
-										<div class="wuxFlexTableItemGroup">
-											<div class="wuxButton wuxWidth160">
-												<input type="checkbox" name="attr_perkfilter-cost4perk">
-												<span>Cost 4 Perks</span>
-											</div>
-										</div>
-									</div>
 								</div>
 								<div class="wuxFlexTableItemGroup">
 									<div class="wuxHeader">Learned Perks</div>
@@ -12936,12 +12928,16 @@
 										</span></div>
 									<span class="wuxDescription"><span name="attr_gear-equippeditemtraits"></span></span>
 									<div class="wuxHeader">Equipped</div>
-									<div style="float:right;">
-										<div class="wuxButton wuxRepeatingTechActionButton">
-											<input type="checkbox" name="attr_gear-unequipall">
-											<span><span style="color:#c8a020;">&#9881;</span> Unequip All</span>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_equipment" value="0">
+									<div class="wuxHiddenField">
+										<div style="float:right;">
+											<div class="wuxButton wuxRepeatingTechActionButton">
+												<input type="checkbox" name="attr_gear-unequipall">
+												<span><span style="color:#c8a020;">&#9881;</span> Unequip All</span>
+											</div>
 										</div>
 									</div>
+
 									<div>
 										<div class="wuxNoRepControl">
 											<fieldset class="repeating_syncequipment">
@@ -13075,12 +13071,16 @@
 								<div class="wuxFlexTableItemGroup wuxMinWidth150">
 									<div class="wuxSlotSection"><span class="wuxSlotLabel">Slots</span><input type="hidden" class="wuxSlotStateFlag" name="attr_gear-consumableslotstate" value="0"><span class="wuxSlotData"><span name="attr_gear-consumableslot" value="0">0</span> <span class="wuxFontSize7">/ <span name="attr_consumableslotcount">0</span></span></span></div>
 									<div class="wuxHeader">Equipped Instant Consumables</div>
-									<div style="float:right;">
-										<div class="wuxButton wuxRepeatingTechActionButton">
-											<input type="checkbox" name="attr_gear-unequipallconsumable">
-											<span><span style="color:#c8a020;">&#9881;</span> Unequip All</span>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-consumableslot" value="0">
+									<div class="wuxHiddenField">
+										<div style="float:right;">
+											<div class="wuxButton wuxRepeatingTechActionButton">
+												<input type="checkbox" name="attr_gear-unequipallconsumable">
+												<span><span style="color:#c8a020;">&#9881;</span> Unequip All</span>
+											</div>
 										</div>
 									</div>
+
 									<div>
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcounthealgel" value="0">
 										<div class="wuxHiddenField">
@@ -19782,7 +19782,7 @@ WuxWorkerPerks.UpdateBuildPoints(eventinfo)
 on("change:perk-second_affinity_affinity", function (eventinfo) {
 WuxWorkerPerks.UpdateSecondAffinityBranch(eventinfo)
 });
-on("change:perkfilter-cost2perk change:perkfilter-cost3perk change:perkfilter-cost4perk", function (eventinfo) {
+on("change:perkfilter-cost2perk change:perkfilter-cost3perk", function (eventinfo) {
 WuxWorkerInspectPopup.OpenPerkFilterTechniqueInspection(eventinfo)
 });
 on("change:ttl-isplayer", function (eventinfo) {

@@ -696,7 +696,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let unequipAllDef = WuxDef.Get("Gear_UnequipAll");
                     let contents = `${slotDisplay}
                         ${WuxSheetMain.Header(`${syncedDef.getTitle()}`)}
-                        <div style="float:right;">${WuxSheetMain.Button(unequipAllDef.getAttribute("consumable"), `<span style="color:#c8a020;">&#9881;</span> ${unequipAllDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>
+                        ${WuxSheetMain.HiddenField(WuxDef.GetAttribute("Gear_ConsumableSlot"), `<div style="float:right;">${WuxSheetMain.Button(unequipAllDef.getAttribute("consumable"), `<span style="color:#c8a020;">&#9881;</span> ${unequipAllDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>`)}
                         <div>
                             ${rows}
                         </div>`;
@@ -929,7 +929,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let contents = `${slotDisplay}
                         ${traitsDisplay}
                         ${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
-                        <div style="float:right;">${WuxSheetMain.Button(unequipAllDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${unequipAllDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>
+                        ${WuxSheetMain.HiddenField(WuxDef.GetAttribute("Equipment"), `<div style="float:right;">${WuxSheetMain.Button(unequipAllDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${unequipAllDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>`)}
                         <div>
                             ${repeaterContent}
                         </div>`;
