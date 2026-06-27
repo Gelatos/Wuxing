@@ -1616,10 +1616,10 @@ class JobData extends WuxDatabaseData {
         this.name = "";
         this.fieldName = "";
         this.group = "";
-        this.category = "";
+        this.role = "";
+        this.subRole = "";
         this.difficulty = 0;
         this.skills = "";
-        this.recommendedStyles = "";
         this.techniques = [];
     }
 
@@ -1628,11 +1628,11 @@ class JobData extends WuxDatabaseData {
         this.name = json.name;
         this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
-        this.category = json.category;
+        this.role = json.role;
+        this.subRole = json.subRole;
         this.difficulty = json.difficulty;
         this.skills = json.skills;
         this.descriptions = json.descriptions;
-        this.recommendedStyles = json.recommendedStyles;
         this.techniques = json.techniques;
     }
 
@@ -1644,7 +1644,9 @@ class JobData extends WuxDatabaseData {
         this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i];
         i++;
-        this.category = "" + dataArray[i];
+        this.role = "" + dataArray[i];
+        i++;
+        this.subRole = "" + dataArray[i];
         i++;
         this.difficulty = parseInt(dataArray[i]);
         this.difficulty = isNaN(this.difficulty) ? 0 : this.difficulty;
@@ -1652,8 +1654,6 @@ class JobData extends WuxDatabaseData {
         this.skills = "" + dataArray[i];
         i++;
         this.descriptions = [("" + dataArray[i])];
-        i++;
-        this.recommendedStyles = "" + dataArray[i];
         i++;
         this.techniques = this.createJobTechnique(dataArray.slice(i));
         i++;
@@ -1695,7 +1695,7 @@ class JobData extends WuxDatabaseData {
         style.name = this.name;
         style.fieldName = this.fieldName;
         style.group = "Job";
-        style.subGroup = this.group;
+        style.subGroup = this.role;
         style.skills = this.skills;
         style.description = this.description;
         style.affinity = "";

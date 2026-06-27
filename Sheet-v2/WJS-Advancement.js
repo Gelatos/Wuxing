@@ -1042,11 +1042,34 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 				}
 				attrHandler.addUpdate(WuxDef.GetVariable("Language", WuxDef._true), JSON.stringify(languages));
 			});
+		},
+
+		setLoreDescription = function (eventinfo) {
+			let subType = eventinfo.newValue;
+			let descAttr = eventinfo.sourceAttribute.replace(loreSubTypeVar, WuxDef.GetVariable("Lore_Description"));
+			if (subType === "0" || subType === "") {
+				return;
+			}
+			if (subType === "1") {
+				let attributeHandler = new WorkerAttributeHandler();
+				attributeHandler.addUpdate(descAttr, "");
+				attributeHandler.run();
+				return;
+			}
+			let loreDef = WuxDef.Get("Lore_" + subType);
+			if (loreDef == undefined) {
+				return;
+			}
+			let description = loreDef.getDescription("");
+			let attributeHandler = new WorkerAttributeHandler();
+			attributeHandler.addUpdate(descAttr, description);
+			attributeHandler.run();
 		}
 
 	return {
 		UpdateBuildPoints: updateBuildPoints,
 		RefreshStats: refreshStats,
-		UpdateStats: updateStats
+		UpdateStats: updateStats,
+		SetLoreDescription: setLoreDescription
 	};
 }());

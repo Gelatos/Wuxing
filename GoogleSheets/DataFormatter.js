@@ -744,6 +744,9 @@ function AssessAll() {
     if (TryAssessAllTechniques(sheet)) {
         return;
     }
+    if (TryAssessAllGear(sheet)) {
+        return;
+    }
     if (SetStyleEffects(sheet)) {
         return;
     }
@@ -755,6 +758,9 @@ function AssessAllFromPosition() {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getActiveSheet();
     if (AssessAllTechniquesFromPosition(sheet)) {
+        return;
+    }
+    if (TryAssessAllGearFromPosition(sheet)) {
         return;
     }
     if (SetStyleEffectsFromPosition(sheet)) {
@@ -857,13 +863,57 @@ function AssessGearAtRow(sheet, rowIndex) {
         return itemData.finalRow;
     } else {
         assessingCell.setValue("");
-        valueCell.setValue("");
         return rowIndex + 1;
     }
 }
 
 function AssessConsumableAtRow(sheet, rowIndex) {
-    AssessGearAtRow(sheet, rowIndex);
+    return AssessGearAtRow(sheet, rowIndex);
+}
+
+function TryAssessAllGear(sheet) {
+    if (sheet.getSheetName() == "Gear" || sheet.getSheetName() == "Consumables") {
+        AssessAllGearByStartRow(sheet, 2);
+        return true;
+    }
+    return false;
+}
+
+function TryAssessAllGearFromPosition(sheet) {
+    if (sheet.getSheetName() == "Gear" || sheet.getSheetName() == "Consumables") {
+        const range = sheet.getActiveRange();
+        let row = range.getRow();
+        row = AssessGearAtRow(sheet, row);
+        AssessAllGearByStartRow(sheet, row);
+        return true;
+    }
+    return false;
+}
+
+function AssessAllGearByStartRow(sheet, startRow) {
+    const lastRow = sheet.getLastRow();
+    let versionColumn = getNamedColumn(sheet, "Version");
+    let assessColumn = getNamedColumn(sheet, "Assessment");
+    let groupsColumn = getNamedColumn(sheet, "Generated Groups");
+    let rowIndex = startRow;
+    let itemData;
+    while (rowIndex < lastRow) {
+        let assessingCell = sheet.getRange(rowIndex, assessColumn, 1, 1);
+        assessingCell.setValue("Calculating...")
+
+        itemData = GetGearForAssessment(sheet, rowIndex, assessColumn);
+        if (itemData != undefined) {
+            rowIndex = itemData.finalRow;
+            if (itemData.item.hasTechnique) {
+                let assessment = new TechniqueAssessment(
+                    itemData.item.technique, sheet, itemData.row, versionColumn, assessColumn, groupsColumn);
+                assessment.printCellValues();
+            }
+        } else {
+            assessingCell.setValue("");
+            rowIndex++;
+        }
+    }
 }
 
 function AssessAllTechniquesByStartRow(sheet, startRow) {
@@ -982,7 +1032,7 @@ function GetGearForAssessment(sheet, row, assessColumn) {
                 return {item: startItem, row: row, finalRow: row};
             }
 
-            if (newItem.action != "") {
+            if (newItem.technique.action != "") {
                 baseItem = newItem;
                 break;
             } else {
@@ -1129,7 +1179,7 @@ class GearValueAssessment {
 }
 
 function SetStyleEffects(sheet) {
-    if (sheet.getSheetName() == "Styles" || sheet.getSheetName() == "Jobs") {
+    if (sheet.getSheetName() == "Styles") {
         SetAllStyleKeywords(sheet, 2);
         return true;
     }
@@ -1137,7 +1187,7 @@ function SetStyleEffects(sheet) {
 }
 
 function SetStyleEffectFromPosition(sheet) {
-    if (sheet.getSheetName() == "Styles" || sheet.getSheetName() == "Jobs") {
+    if (sheet.getSheetName() == "Styles") {
         const range = sheet.getActiveRange();
         let row = range.getRow();
         SetStyleKeywordAtRow(sheet, row);
@@ -1147,7 +1197,7 @@ function SetStyleEffectFromPosition(sheet) {
 }
 
 function SetStyleEffectsFromPosition(sheet) {
-    if (sheet.getSheetName() == "Styles" || sheet.getSheetName() == "Jobs") {
+    if (sheet.getSheetName() == "Styles") {
         const range = sheet.getActiveRange();
         let row = range.getRow();
         SetAllStyleKeywords(sheet, row);

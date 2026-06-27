@@ -1616,10 +1616,10 @@ class JobData extends WuxDatabaseData {
         this.name = "";
         this.fieldName = "";
         this.group = "";
-        this.category = "";
+        this.role = "";
+        this.subRole = "";
         this.difficulty = 0;
         this.skills = "";
-        this.recommendedStyles = "";
         this.techniques = [];
     }
 
@@ -1628,11 +1628,11 @@ class JobData extends WuxDatabaseData {
         this.name = json.name;
         this.fieldName = Format.ToFieldName(this.name);
         this.group = json.group;
-        this.category = json.category;
+        this.role = json.role;
+        this.subRole = json.subRole;
         this.difficulty = json.difficulty;
         this.skills = json.skills;
         this.descriptions = json.descriptions;
-        this.recommendedStyles = json.recommendedStyles;
         this.techniques = json.techniques;
     }
 
@@ -1644,7 +1644,9 @@ class JobData extends WuxDatabaseData {
         this.fieldName = Format.ToFieldName(this.name);
         this.group = "" + dataArray[i];
         i++;
-        this.category = "" + dataArray[i];
+        this.role = "" + dataArray[i];
+        i++;
+        this.subRole = "" + dataArray[i];
         i++;
         this.difficulty = parseInt(dataArray[i]);
         this.difficulty = isNaN(this.difficulty) ? 0 : this.difficulty;
@@ -1652,8 +1654,6 @@ class JobData extends WuxDatabaseData {
         this.skills = "" + dataArray[i];
         i++;
         this.descriptions = [("" + dataArray[i])];
-        i++;
-        this.recommendedStyles = "" + dataArray[i];
         i++;
         this.techniques = this.createJobTechnique(dataArray.slice(i));
         i++;
@@ -1695,7 +1695,7 @@ class JobData extends WuxDatabaseData {
         style.name = this.name;
         style.fieldName = this.fieldName;
         style.group = "Job";
-        style.subGroup = this.group;
+        style.subGroup = this.role;
         style.skills = this.skills;
         style.description = this.description;
         style.affinity = "";
@@ -7297,6 +7297,9 @@ function AssessAll() {
     if (TryAssessAllTechniques(sheet)) {
         return;
     }
+    if (TryAssessAllGear(sheet)) {
+        return;
+    }
     if (SetStyleEffects(sheet)) {
         return;
     }
@@ -7308,6 +7311,9 @@ function AssessAllFromPosition() {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getActiveSheet();
     if (AssessAllTechniquesFromPosition(sheet)) {
+        return;
+    }
+    if (TryAssessAllGearFromPosition(sheet)) {
         return;
     }
     if (SetStyleEffectsFromPosition(sheet)) {
@@ -7410,13 +7416,57 @@ function AssessGearAtRow(sheet, rowIndex) {
         return itemData.finalRow;
     } else {
         assessingCell.setValue("");
-        valueCell.setValue("");
         return rowIndex + 1;
     }
 }
 
 function AssessConsumableAtRow(sheet, rowIndex) {
-    AssessGearAtRow(sheet, rowIndex);
+    return AssessGearAtRow(sheet, rowIndex);
+}
+
+function TryAssessAllGear(sheet) {
+    if (sheet.getSheetName() == "Gear" || sheet.getSheetName() == "Consumables") {
+        AssessAllGearByStartRow(sheet, 2);
+        return true;
+    }
+    return false;
+}
+
+function TryAssessAllGearFromPosition(sheet) {
+    if (sheet.getSheetName() == "Gear" || sheet.getSheetName() == "Consumables") {
+        const range = sheet.getActiveRange();
+        let row = range.getRow();
+        row = AssessGearAtRow(sheet, row);
+        AssessAllGearByStartRow(sheet, row);
+        return true;
+    }
+    return false;
+}
+
+function AssessAllGearByStartRow(sheet, startRow) {
+    const lastRow = sheet.getLastRow();
+    let versionColumn = getNamedColumn(sheet, "Version");
+    let assessColumn = getNamedColumn(sheet, "Assessment");
+    let groupsColumn = getNamedColumn(sheet, "Generated Groups");
+    let rowIndex = startRow;
+    let itemData;
+    while (rowIndex < lastRow) {
+        let assessingCell = sheet.getRange(rowIndex, assessColumn, 1, 1);
+        assessingCell.setValue("Calculating...")
+
+        itemData = GetGearForAssessment(sheet, rowIndex, assessColumn);
+        if (itemData != undefined) {
+            rowIndex = itemData.finalRow;
+            if (itemData.item.hasTechnique) {
+                let assessment = new TechniqueAssessment(
+                    itemData.item.technique, sheet, itemData.row, versionColumn, assessColumn, groupsColumn);
+                assessment.printCellValues();
+            }
+        } else {
+            assessingCell.setValue("");
+            rowIndex++;
+        }
+    }
 }
 
 function AssessAllTechniquesByStartRow(sheet, startRow) {
@@ -7535,7 +7585,7 @@ function GetGearForAssessment(sheet, row, assessColumn) {
                 return {item: startItem, row: row, finalRow: row};
             }
 
-            if (newItem.action != "") {
+            if (newItem.technique.action != "") {
                 baseItem = newItem;
                 break;
             } else {
@@ -7682,7 +7732,7 @@ class GearValueAssessment {
 }
 
 function SetStyleEffects(sheet) {
-    if (sheet.getSheetName() == "Styles" || sheet.getSheetName() == "Jobs") {
+    if (sheet.getSheetName() == "Styles") {
         SetAllStyleKeywords(sheet, 2);
         return true;
     }
@@ -7690,7 +7740,7 @@ function SetStyleEffects(sheet) {
 }
 
 function SetStyleEffectFromPosition(sheet) {
-    if (sheet.getSheetName() == "Styles" || sheet.getSheetName() == "Jobs") {
+    if (sheet.getSheetName() == "Styles") {
         const range = sheet.getActiveRange();
         let row = range.getRow();
         SetStyleKeywordAtRow(sheet, row);
@@ -7700,7 +7750,7 @@ function SetStyleEffectFromPosition(sheet) {
 }
 
 function SetStyleEffectsFromPosition(sheet) {
-    if (sheet.getSheetName() == "Styles" || sheet.getSheetName() == "Jobs") {
+    if (sheet.getSheetName() == "Styles") {
         const range = sheet.getActiveRange();
         let row = range.getRow();
         SetAllStyleKeywords(sheet, row);
@@ -8673,7 +8723,7 @@ class TechniqueAssessment {
             output.pointCalc.push("Full");
         }
         else if (technique.action == "Assist") {
-            output.points += 3;
+            output.points += 1;
             output.pointCalc.push("Assist");
         }
         else if (technique.action == "Swift") {
@@ -9327,7 +9377,7 @@ class TechniqueAssessment {
             this.addImpactTrait("TechFilterType_Utility");
             this.addImpactTrait(impactTrait);
         }
-        if (effect.target != "Self") {
+        if (impactTrait == `Trait_ForceMove`) {
             this.addDefensePointsRubric(effect, output.value);
         }
         this.addTargetedPointsRubric(effect, output.value);
@@ -9335,6 +9385,7 @@ class TechniqueAssessment {
 
     getEnAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
+        output.value -= 1;
         output.value *= 2;
         let message = `(EN)`;
         this.addPointsRubric(output.value, message);
@@ -12797,6 +12848,7 @@ var TrainingBackend = TrainingBackend || (function () {
             output += listenerSetTrainingPointsUpdate();
             output += listenerSetAdvancementKnowledgePoints();
             output += listenerUpdateKnowledgeBuildPoints();
+            output += listenerUpdateLoreDescription();
             return output;
 
         },
@@ -12854,6 +12906,19 @@ var TrainingBackend = TrainingBackend || (function () {
             }
             let output = `WuxWorkerKnowledges.UpdateBuildPoints(eventinfo)`;
 
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+
+        listenerUpdateLoreDescription = function () {
+            const loreRepeaterIds = [
+                "RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
+                "RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+            ];
+            let groupVariableNames = [];
+            for (let i = 0; i < loreRepeaterIds.length; i++) {
+                groupVariableNames.push(`${WuxDef.GetVariable(loreRepeaterIds[i])}:${WuxDef.GetVariable("Lore_SubType")}`);
+            }
+            let output = `WuxWorkerKnowledges.SetLoreDescription(eventinfo)`;
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         }
     return {
@@ -14822,10 +14887,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                             repeaterContents += WuxSheetMain.HiddenIndexField(
                                 WuxDef.GetAttribute("Lore_SubType"), 1,
-                                WuxSheetMain.Input("text", WuxDef.GetAttribute("Lore_Name"), "", WuxDef.GetTitle("Lore_Name")));
+                                WuxSheetMain.CustomInput("text", WuxDef.GetAttribute("Lore_Name"), "wuxLoreName", ` placeholder="${WuxDef.GetTitle("Lore_Name")}"`))
 
+                            repeaterContents += `<span class="wuxLoreDescriptionArea" name="${WuxDef.GetAttribute("Lore_Description")}"></span>`;
                             repeaterContents += WuxSheetMain.Textarea(
-                                WuxDef.GetAttribute("Lore_Description"), "wuxInput wuxHeight30", WuxDef.GetTitle("Lore_Description"));
+                                WuxDef.GetAttribute("Lore_Description"), "wuxInput wuxHeight30 wuxLoreDescriptionArea", WuxDef.GetTitle("Lore_Description"));
 
                             let specializedLoreDef = WuxDef.Get("Title_SpecializedLore");
                             return `<div class="wuxMarginLeft50">

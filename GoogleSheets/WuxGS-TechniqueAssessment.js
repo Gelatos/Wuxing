@@ -408,7 +408,7 @@ class TechniqueAssessment {
             output.pointCalc.push("Full");
         }
         else if (technique.action == "Assist") {
-            output.points += 3;
+            output.points += 1;
             output.pointCalc.push("Assist");
         }
         else if (technique.action == "Swift") {
@@ -1062,7 +1062,7 @@ class TechniqueAssessment {
             this.addImpactTrait("TechFilterType_Utility");
             this.addImpactTrait(impactTrait);
         }
-        if (effect.target != "Self") {
+        if (impactTrait == `Trait_ForceMove`) {
             this.addDefensePointsRubric(effect, output.value);
         }
         this.addTargetedPointsRubric(effect, output.value);
@@ -1070,6 +1070,7 @@ class TechniqueAssessment {
 
     getEnAssessment(effect, attributeHandler) {
         let output = this.getDiceFormula(effect, attributeHandler);
+        output.value -= 1;
         output.value *= 2;
         let message = `(EN)`;
         this.addPointsRubric(output.value, message);

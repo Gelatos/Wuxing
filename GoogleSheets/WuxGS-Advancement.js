@@ -1037,10 +1037,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                             repeaterContents += WuxSheetMain.HiddenIndexField(
                                 WuxDef.GetAttribute("Lore_SubType"), 1,
-                                WuxSheetMain.Input("text", WuxDef.GetAttribute("Lore_Name"), "", WuxDef.GetTitle("Lore_Name")));
+                                WuxSheetMain.CustomInput("text", WuxDef.GetAttribute("Lore_Name"), "wuxLoreName", ` placeholder="${WuxDef.GetTitle("Lore_Name")}"`))
 
+                            repeaterContents += `<span class="wuxLoreDescriptionArea" name="${WuxDef.GetAttribute("Lore_Description")}"></span>`;
                             repeaterContents += WuxSheetMain.Textarea(
-                                WuxDef.GetAttribute("Lore_Description"), "wuxInput wuxHeight30", WuxDef.GetTitle("Lore_Description"));
+                                WuxDef.GetAttribute("Lore_Description"), "wuxInput wuxHeight30 wuxLoreDescriptionArea", WuxDef.GetTitle("Lore_Description"));
 
                             let specializedLoreDef = WuxDef.Get("Title_SpecializedLore");
                             return `<div class="wuxMarginLeft50">

@@ -829,6 +829,7 @@ div.wuxDescription .wuxTitle {
     padding: 3px 4px 3px 5px;
     vertical-align: bottom;
 
+    color: #1d1e1f;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
     background: #cacbcf;
@@ -1116,8 +1117,7 @@ input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGrou
 }
 
 span.wuxFlexTableItemData,
-.wuxFlexTableItemData span,
-.wuxFlexTableItemData input
+.wuxFlexTableItemData span
 {
     color: #f4f6f8;
     font-size: 12px;
@@ -1956,6 +1956,42 @@ input[type=hidden].wuxAncestrySelection-flag[value="Human"] + .wuxAncestrySelect
     display: inline-block;
     margin-left: 5px;
     width: calc(95% - 121px);
+}
+
+.wuxLoreName
+{
+    display: inline-block;
+    width: 95%;
+    color: #1d1e1f;
+    background: #cacbcf;
+}
+
+span.wuxLoreDescriptionArea
+{
+    display: block;
+    width: 92%;
+    height: auto;
+    padding: 3px 4px 3px 5px;
+    color: #1d1e1f;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    white-space: pre-wrap;
+    background: #cacbcf;
+}
+
+textarea.wuxLoreDescriptionArea
+{
+    display: none;
+}
+
+input[type=hidden].wuxHiddenIndexField-flag[value="1"] ~ span.wuxLoreDescriptionArea
+{
+    display: none;
+}
+
+input[type=hidden].wuxHiddenIndexField-flag[value="1"] ~ textarea.wuxLoreDescriptionArea
+{
+    display: block;
 }
 
 /*========================================

@@ -408,6 +408,42 @@ input[type=hidden].wuxAncestrySelection-flag[value="Human"] + .wuxAncestrySelect
     width: calc(95% - 121px);
 }
 
+.wuxLoreName
+{
+    display: inline-block;
+    width: 95%;
+    color: #1d1e1f;
+    background: #cacbcf;
+}
+
+span.wuxLoreDescriptionArea
+{
+    display: block;
+    width: 92%;
+    height: auto;
+    padding: 3px 4px 3px 5px;
+    color: #1d1e1f;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    white-space: pre-wrap;
+    background: #cacbcf;
+}
+
+textarea.wuxLoreDescriptionArea
+{
+    display: none;
+}
+
+input[type=hidden].wuxHiddenIndexField-flag[value="1"] ~ span.wuxLoreDescriptionArea
+{
+    display: none;
+}
+
+input[type=hidden].wuxHiddenIndexField-flag[value="1"] ~ textarea.wuxLoreDescriptionArea
+{
+    display: block;
+}
+
 /*========================================
     Emote Post
 ========================================*/

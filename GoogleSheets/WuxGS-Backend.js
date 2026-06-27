@@ -104,6 +104,7 @@ var TrainingBackend = TrainingBackend || (function () {
             output += listenerSetTrainingPointsUpdate();
             output += listenerSetAdvancementKnowledgePoints();
             output += listenerUpdateKnowledgeBuildPoints();
+            output += listenerUpdateLoreDescription();
             return output;
 
         },
@@ -161,6 +162,19 @@ var TrainingBackend = TrainingBackend || (function () {
             }
             let output = `WuxWorkerKnowledges.UpdateBuildPoints(eventinfo)`;
 
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+
+        listenerUpdateLoreDescription = function () {
+            const loreRepeaterIds = [
+                "RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
+                "RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+            ];
+            let groupVariableNames = [];
+            for (let i = 0; i < loreRepeaterIds.length; i++) {
+                groupVariableNames.push(`${WuxDef.GetVariable(loreRepeaterIds[i])}:${WuxDef.GetVariable("Lore_SubType")}`);
+            }
+            let output = `WuxWorkerKnowledges.SetLoreDescription(eventinfo)`;
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         }
     return {
