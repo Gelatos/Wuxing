@@ -1062,9 +1062,7 @@ class TechniqueAssessment {
             this.addImpactTrait("TechFilterType_Utility");
             this.addImpactTrait(impactTrait);
         }
-        if (impactTrait == `Trait_ForceMove`) {
-            this.addDefensePointsRubric(effect, output.value);
-        }
+        this.addDefensePointsRubric(effect, output.value);
         this.addTargetedPointsRubric(effect, output.value);
     }
 

@@ -9377,9 +9377,7 @@ class TechniqueAssessment {
             this.addImpactTrait("TechFilterType_Utility");
             this.addImpactTrait(impactTrait);
         }
-        if (impactTrait == `Trait_ForceMove`) {
-            this.addDefensePointsRubric(effect, output.value);
-        }
+        this.addDefensePointsRubric(effect, output.value);
         this.addTargetedPointsRubric(effect, output.value);
     }
 
@@ -12763,8 +12761,20 @@ var WuxSheetBackend = WuxSheetBackend || (function () {
             // });\n`;
         }
     ;
+    const onRemove = function (variables, contents) {
+            let output = "";
+            for (let i = 0; i < variables.length; i++) {
+                if (output != "") {
+                    output += " ";
+                }
+                output += `remove:${variables[i]}`;
+            }
+            return `on("${output}", function (eventinfo) {\n${contents}\n});\n`;
+        }
+    ;
     return {
-        OnChange: onChange
+        OnChange: onChange,
+        OnRemove: onRemove
     };
 }());
 
@@ -12848,6 +12858,7 @@ var TrainingBackend = TrainingBackend || (function () {
             output += listenerSetTrainingPointsUpdate();
             output += listenerSetAdvancementKnowledgePoints();
             output += listenerUpdateKnowledgeBuildPoints();
+            output += listenerRemoveLoreSpecialization();
             output += listenerUpdateLoreDescription();
             return output;
 
@@ -12907,6 +12918,16 @@ var TrainingBackend = TrainingBackend || (function () {
             let output = `WuxWorkerKnowledges.UpdateBuildPoints(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+
+        listenerRemoveLoreSpecialization = function () {
+            const loreRepeaterIds = [
+                "RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
+                "RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+            ];
+            let repeaterVarNames = loreRepeaterIds.map(id => WuxDef.GetVariable(id));
+            let output = `WuxWorkerKnowledges.UpdateBuildPoints(eventinfo)`;
+            return WuxSheetBackend.OnRemove(repeaterVarNames, output);
         },
 
         listenerUpdateLoreDescription = function () {
@@ -14892,6 +14913,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             repeaterContents += `<span class="wuxLoreDescriptionArea" name="${WuxDef.GetAttribute("Lore_Description")}"></span>`;
                             repeaterContents += WuxSheetMain.Textarea(
                                 WuxDef.GetAttribute("Lore_Description"), "wuxInput wuxHeight30 wuxLoreDescriptionArea", WuxDef.GetTitle("Lore_Description"));
+                            repeaterContents += WuxSheetMain.Row("&nbsp;");
 
                             let specializedLoreDef = WuxDef.Get("Title_SpecializedLore");
                             return `<div class="wuxMarginLeft50">
@@ -16091,8 +16113,6 @@ class CharacterStatisticsBuilder {
         let levelDef = WuxDef.Get("Level");
         let jobDef = WuxDef.Get("Forme_JobSlot");
         let crDef = WuxDef.Get("CR");
-        let recallDef = WuxDef.Get("Recall");
-        let recallField = `<div class="wuxRow">${this.printStat(recallDef, recallDef.getTitle(), recallDef.getAttribute())}</div>`;
 
         let filteredStats = WuxDef.Filter([new DatabaseFilterData("subGroup", "CoreResource")]);
         let resourceContents = "";
@@ -16158,13 +16178,6 @@ class CharacterStatisticsBuilder {
     printHeader(header) {
         return WuxSheetMain.Header(header);
     }
-    printSetValue(definition, fieldAttr) {
-        return `<div class="wuxFlexTableItemGroup">
-            <strong>${WuxSheetMain.Tooltip.Text(definition.title,
-            this.printDefinitionTooltipContents(definition))}</strong>
-            ${WuxSheetMain.Span(fieldAttr)}
-        </div>`;
-    }
 
     printSetStat(definition, title, fieldAttr) {
         return `<div class="wuxFlexTableItemGroup">
@@ -16211,8 +16224,10 @@ class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
         </div>`;
         let rightColumn = `<div class="wuxCharacterStatistics">
             ${this.printSkills()}
+            <span class="wuxRow">&nbsp;</span>
+            ${this.printKnowledges()}
         </div>`;
-        
+
         return WuxSheetMain.MultiRowGroup(
             [WuxSheetMain.Table.FlexTableGroup(leftColumn), WuxSheetMain.Table.FlexTableGroup(rightColumn)],
             WuxSheetMain.Table.FlexTable, 2);
@@ -16223,6 +16238,58 @@ class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
         let contents = this.printHeader(WuxDef.GetTitle("Attribute"));
         for (let definition of filteredStats) {
             contents += this.printSetStat(definition, definition.getTitle(), definition.getAttribute());
+        }
+        return contents;
+    }
+
+    printLoreStat(nameAttr, descAttr, statAttr) {
+        return `<div class="wuxFlexTableItemGroup">
+            ${WuxSheetMain.Tooltip.Text(
+                `<span name="${nameAttr}"></span>`,
+                `${WuxSheetMain.Header2(`<span name="${nameAttr}"></span>`)}<span class="wuxDescription" name="${descAttr}"></span>`
+            )}
+            <div class="wuxCharacterStatisticsStat">
+                ${WuxSheetMain.Span(statAttr)}
+            </div>
+        </div>`;
+    }
+
+    printKnowledges() {
+        const loreRepeaterIds = [
+            "RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
+            "RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+        ];
+        let loreCategoryDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "LoreCategory"));
+        let recallDef = WuxDef.Get("Recall");
+        let generalLoreTitle = WuxDef.GetTitle("Title_GeneralLore");
+        let loreCategoryDef = WuxDef.Get("Title_LoreCategory");
+        let contents = this.printHeader(WuxDef.GetTitle("Page_Knowledge"));
+        contents += WuxSheetMain.Row(this.printStat(recallDef, recallDef.getTitle(), recallDef.getAttribute(), recallDef.getAttribute(WuxDef._info)));
+
+        for (let i = 0; i < loreCategoryDefinitions.length; i++) {
+            let categoryDef = loreCategoryDefinitions[i];
+            let repeaterDef = WuxDef.Get(loreRepeaterIds[i]);
+
+            let categoryHeader = WuxSheetMain.Header2(loreCategoryDef.getTitle(categoryDef.getTitle()));
+
+            let categoryContents = WuxSheetMain.HiddenField(categoryDef.getAttribute(WuxDef._rank),
+                `<div class="wuxFlexTableItemGroup">${WuxSheetMain.Tooltip.Text(generalLoreTitle, this.printDefinitionTooltipContents(categoryDef))}</div>`);
+
+            categoryContents += `<div class="wuxNoRepControl"><fieldset class="${repeaterDef.getVariable()}">
+                ${this.printLoreStat(
+                    WuxDef.GetAttribute("Lore_SubType"),
+                    WuxDef.GetAttribute("Lore_Description"),
+                    WuxDef.GetAttribute("Lore_Tier")
+                )}
+            </fieldset></div>`;
+
+            contents += `<input type="hidden" class="wuxHiddenField-flag" name="${categoryDef.getAttribute("_display")}" value="0">
+            <div class="wuxHiddenBlockField">
+                ${categoryHeader}
+                <div class="wuxFlexTable">
+                    ${categoryContents}
+                </div>
+            </div>`;
         }
         return contents;
     }

@@ -5370,12 +5370,12 @@
 										<span>Yaksa</span>
 									</div>
 								</span>
-								<input type="hidden" class="wuxHiddenField-flag" name="attr_job-scholar" value="0">
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_job-tactician" value="0">
 								<span class="wuxHiddenInlineField">
-									<input type="hidden" class="wuxJobSelection-flag" name="attr_job-scholar_learn" />
+									<input type="hidden" class="wuxJobSelection-flag" name="attr_job-tactician_learn" />
 									<div class="wuxButton ">
-										<input type="checkbox" name="attr_forme-selectjob" value="Scholar">
-										<span>Scholar</span>
+										<input type="checkbox" name="attr_forme-selectjob" value="Tactician">
+										<span>Tactician</span>
 									</div>
 								</span>
 								<input type="hidden" class="wuxHiddenField-flag" name="attr_job-bard" value="0">
@@ -6647,6 +6647,7 @@
 														<input type="text" class="wuxLoreName" name="attr_lor-name" placeholder="Specialization Name" />
 													</div>
 													<span class="wuxLoreDescriptionArea" name="attr_lor-description"></span><textarea class="wuxInput wuxHeight30 wuxLoreDescriptionArea" name="attr_lor-description" placeholder="Description"></textarea>
+													<div class="wuxRow">&nbsp;</div>
 												</fieldset>
 											</div>
 										</div>
@@ -6701,6 +6702,7 @@
 														<input type="text" class="wuxLoreName" name="attr_lor-name" placeholder="Specialization Name" />
 													</div>
 													<span class="wuxLoreDescriptionArea" name="attr_lor-description"></span><textarea class="wuxInput wuxHeight30 wuxLoreDescriptionArea" name="attr_lor-description" placeholder="Description"></textarea>
+													<div class="wuxRow">&nbsp;</div>
 												</fieldset>
 											</div>
 										</div>
@@ -6760,6 +6762,7 @@
 														<input type="text" class="wuxLoreName" name="attr_lor-name" placeholder="Specialization Name" />
 													</div>
 													<span class="wuxLoreDescriptionArea" name="attr_lor-description"></span><textarea class="wuxInput wuxHeight30 wuxLoreDescriptionArea" name="attr_lor-description" placeholder="Description"></textarea>
+													<div class="wuxRow">&nbsp;</div>
 												</fieldset>
 											</div>
 										</div>
@@ -6815,6 +6818,7 @@
 														<input type="text" class="wuxLoreName" name="attr_lor-name" placeholder="Specialization Name" />
 													</div>
 													<span class="wuxLoreDescriptionArea" name="attr_lor-description"></span><textarea class="wuxInput wuxHeight30 wuxLoreDescriptionArea" name="attr_lor-description" placeholder="Description"></textarea>
+													<div class="wuxRow">&nbsp;</div>
 												</fieldset>
 											</div>
 										</div>
@@ -6871,6 +6875,7 @@
 														<input type="text" class="wuxLoreName" name="attr_lor-name" placeholder="Specialization Name" />
 													</div>
 													<span class="wuxLoreDescriptionArea" name="attr_lor-description"></span><textarea class="wuxInput wuxHeight30 wuxLoreDescriptionArea" name="attr_lor-description" placeholder="Description"></textarea>
+													<div class="wuxRow">&nbsp;</div>
 												</fieldset>
 											</div>
 										</div>
@@ -6925,6 +6930,7 @@
 														<input type="text" class="wuxLoreName" name="attr_lor-name" placeholder="Specialization Name" />
 													</div>
 													<span class="wuxLoreDescriptionArea" name="attr_lor-description"></span><textarea class="wuxInput wuxHeight30 wuxLoreDescriptionArea" name="attr_lor-description" placeholder="Description"></textarea>
+													<div class="wuxRow">&nbsp;</div>
 												</fieldset>
 											</div>
 										</div>
@@ -6980,6 +6986,7 @@
 														<input type="text" class="wuxLoreName" name="attr_lor-name" placeholder="Specialization Name" />
 													</div>
 													<span class="wuxLoreDescriptionArea" name="attr_lor-description"></span><textarea class="wuxInput wuxHeight30 wuxLoreDescriptionArea" name="attr_lor-description" placeholder="Description"></textarea>
+													<div class="wuxRow">&nbsp;</div>
 												</fieldset>
 											</div>
 										</div>
@@ -8844,6 +8851,270 @@
 															<span class="wuxDescription" name="attr_skl-resonance_info"></span>
 														</div>
 													</span>
+												</div>
+											</div>
+											<span class="wuxRow">&nbsp;</span>
+											<div class="wuxHeader">Knowledge</div>
+											<div class="wuxRow">
+												<div class="wuxFlexTableItemGroup">
+													<span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Recall
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Recall</div>
+															<span class="wuxDescription">Recall is your ability to remember information learned in the past. It is used as a modifier whenever making Lore checks to remember knowledge.</span>
+														</div>
+													</span>
+													<div class="wuxCharacterStatisticsStat">
+														<span class="wuxTooltip">
+															<span class="wuxTooltipText">
+																<span name="attr_gen-recall"></span>
+															</span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Recall</div>
+																<span class="wuxDescription" name="attr_gen-recall_info"></span>
+															</div>
+														</span>
+													</div>
+												</div>
+											</div><input type="hidden" class="wuxHiddenField-flag" name="attr_lrc-academic_display" value="0">
+											<div class="wuxHiddenBlockField">
+												<div class="wuxHeader2">Academic Lore</div>
+												<div class="wuxFlexTable">
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_lrc-academic_rank" value="0">
+													<div class="wuxHiddenField">
+														<div class="wuxFlexTableItemGroup"><span class="wuxTooltip">
+																<span class="wuxTooltipText">
+																	General Lore Trained
+																</span>
+																<div class="wuxTooltipContent">
+																	<div class="wuxHeader2">Academic</div>
+																	<span class="wuxDescription">This represents general education for academic study for the purposes of functioning in modern society.</span>
+																</div>
+															</span></div>
+													</div>
+													<div class="wuxNoRepControl">
+														<fieldset class="repeating_academicknowledge">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxTooltip">
+																	<span class="wuxTooltipText">
+																		<span name="attr_lor-subtype"></span>
+																	</span>
+																	<div class="wuxTooltipContent">
+																		<div class="wuxHeader2"><span name="attr_lor-subtype"></span></div><span class="wuxDescription" name="attr_lor-description"></span>
+																	</div>
+																</span>
+																<div class="wuxCharacterStatisticsStat">
+																	<span name="attr_lor-tier"></span>
+																</div>
+															</div>
+														</fieldset>
+													</div>
+												</div>
+											</div><input type="hidden" class="wuxHiddenField-flag" name="attr_lrc-profession_display" value="0">
+											<div class="wuxHiddenBlockField">
+												<div class="wuxHeader2">Profession Lore</div>
+												<div class="wuxFlexTable">
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_lrc-profession_rank" value="0">
+													<div class="wuxHiddenField">
+														<div class="wuxFlexTableItemGroup"><span class="wuxTooltip">
+																<span class="wuxTooltipText">
+																	General Lore Trained
+																</span>
+																<div class="wuxTooltipContent">
+																	<div class="wuxHeader2">Profession</div>
+																	<span class="wuxDescription">Profession is the general knowledge of any kind of job, what they do, and how it is performed.</span>
+																</div>
+															</span></div>
+													</div>
+													<div class="wuxNoRepControl">
+														<fieldset class="repeating_professionknowledge">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxTooltip">
+																	<span class="wuxTooltipText">
+																		<span name="attr_lor-subtype"></span>
+																	</span>
+																	<div class="wuxTooltipContent">
+																		<div class="wuxHeader2"><span name="attr_lor-subtype"></span></div><span class="wuxDescription" name="attr_lor-description"></span>
+																	</div>
+																</span>
+																<div class="wuxCharacterStatisticsStat">
+																	<span name="attr_lor-tier"></span>
+																</div>
+															</div>
+														</fieldset>
+													</div>
+												</div>
+											</div><input type="hidden" class="wuxHiddenField-flag" name="attr_lrc-craftmanship_display" value="0">
+											<div class="wuxHiddenBlockField">
+												<div class="wuxHeader2">Craftmanship Lore</div>
+												<div class="wuxFlexTable">
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_lrc-craftmanship_rank" value="0">
+													<div class="wuxHiddenField">
+														<div class="wuxFlexTableItemGroup"><span class="wuxTooltip">
+																<span class="wuxTooltipText">
+																	General Lore Trained
+																</span>
+																<div class="wuxTooltipContent">
+																	<div class="wuxHeader2">Craftmanship</div>
+																	<span class="wuxDescription">The knowledge of creating items through manipulation of substances and materials. A knowledge check here will help one identify techniques used to create an object but not necessarily how to recreate it.</span>
+																</div>
+															</span></div>
+													</div>
+													<div class="wuxNoRepControl">
+														<fieldset class="repeating_craftmanshipknowledge">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxTooltip">
+																	<span class="wuxTooltipText">
+																		<span name="attr_lor-subtype"></span>
+																	</span>
+																	<div class="wuxTooltipContent">
+																		<div class="wuxHeader2"><span name="attr_lor-subtype"></span></div><span class="wuxDescription" name="attr_lor-description"></span>
+																	</div>
+																</span>
+																<div class="wuxCharacterStatisticsStat">
+																	<span name="attr_lor-tier"></span>
+																</div>
+															</div>
+														</fieldset>
+													</div>
+												</div>
+											</div><input type="hidden" class="wuxHiddenField-flag" name="attr_lrc-geography_display" value="0">
+											<div class="wuxHiddenBlockField">
+												<div class="wuxHeader2">Geography Lore</div>
+												<div class="wuxFlexTable">
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_lrc-geography_rank" value="0">
+													<div class="wuxHiddenField">
+														<div class="wuxFlexTableItemGroup"><span class="wuxTooltip">
+																<span class="wuxTooltipText">
+																	General Lore Trained
+																</span>
+																<div class="wuxTooltipContent">
+																	<div class="wuxHeader2">Geography</div>
+																	<span class="wuxDescription">Geography represents general knowledge of terrains and locations within an area.</span>
+																</div>
+															</span></div>
+													</div>
+													<div class="wuxNoRepControl">
+														<fieldset class="repeating_geographyknowledge">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxTooltip">
+																	<span class="wuxTooltipText">
+																		<span name="attr_lor-subtype"></span>
+																	</span>
+																	<div class="wuxTooltipContent">
+																		<div class="wuxHeader2"><span name="attr_lor-subtype"></span></div><span class="wuxDescription" name="attr_lor-description"></span>
+																	</div>
+																</span>
+																<div class="wuxCharacterStatisticsStat">
+																	<span name="attr_lor-tier"></span>
+																</div>
+															</div>
+														</fieldset>
+													</div>
+												</div>
+											</div><input type="hidden" class="wuxHiddenField-flag" name="attr_lrc-history_display" value="0">
+											<div class="wuxHiddenBlockField">
+												<div class="wuxHeader2">History Lore</div>
+												<div class="wuxFlexTable">
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_lrc-history_rank" value="0">
+													<div class="wuxHiddenField">
+														<div class="wuxFlexTableItemGroup"><span class="wuxTooltip">
+																<span class="wuxTooltipText">
+																	General Lore Trained
+																</span>
+																<div class="wuxTooltipContent">
+																	<div class="wuxHeader2">History</div>
+																	<span class="wuxDescription">History knowledges represent known history of civilizations and any legends that may exist.</span>
+																</div>
+															</span></div>
+													</div>
+													<div class="wuxNoRepControl">
+														<fieldset class="repeating_historyknowledge">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxTooltip">
+																	<span class="wuxTooltipText">
+																		<span name="attr_lor-subtype"></span>
+																	</span>
+																	<div class="wuxTooltipContent">
+																		<div class="wuxHeader2"><span name="attr_lor-subtype"></span></div><span class="wuxDescription" name="attr_lor-description"></span>
+																	</div>
+																</span>
+																<div class="wuxCharacterStatisticsStat">
+																	<span name="attr_lor-tier"></span>
+																</div>
+															</div>
+														</fieldset>
+													</div>
+												</div>
+											</div><input type="hidden" class="wuxHiddenField-flag" name="attr_lrc-culture_display" value="0">
+											<div class="wuxHiddenBlockField">
+												<div class="wuxHeader2">Culture Lore</div>
+												<div class="wuxFlexTable">
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_lrc-culture_rank" value="0">
+													<div class="wuxHiddenField">
+														<div class="wuxFlexTableItemGroup"><span class="wuxTooltip">
+																<span class="wuxTooltipText">
+																	General Lore Trained
+																</span>
+																<div class="wuxTooltipContent">
+																	<div class="wuxHeader2">Culture</div>
+																	<span class="wuxDescription">Culture knowledge represents information on societal customs, art, and entertainment options.</span>
+																</div>
+															</span></div>
+													</div>
+													<div class="wuxNoRepControl">
+														<fieldset class="repeating_cultureknowledge">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxTooltip">
+																	<span class="wuxTooltipText">
+																		<span name="attr_lor-subtype"></span>
+																	</span>
+																	<div class="wuxTooltipContent">
+																		<div class="wuxHeader2"><span name="attr_lor-subtype"></span></div><span class="wuxDescription" name="attr_lor-description"></span>
+																	</div>
+																</span>
+																<div class="wuxCharacterStatisticsStat">
+																	<span name="attr_lor-tier"></span>
+																</div>
+															</div>
+														</fieldset>
+													</div>
+												</div>
+											</div><input type="hidden" class="wuxHiddenField-flag" name="attr_lrc-religion_display" value="0">
+											<div class="wuxHiddenBlockField">
+												<div class="wuxHeader2">Religion Lore</div>
+												<div class="wuxFlexTable">
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_lrc-religion_rank" value="0">
+													<div class="wuxHiddenField">
+														<div class="wuxFlexTableItemGroup"><span class="wuxTooltip">
+																<span class="wuxTooltipText">
+																	General Lore Trained
+																</span>
+																<div class="wuxTooltipContent">
+																	<div class="wuxHeader2">Religion</div>
+																	<span class="wuxDescription">Religion knowledge represent known tenets, famous people and creatures of the religion, and information about legends, beliefs, and organizations.</span>
+																</div>
+															</span></div>
+													</div>
+													<div class="wuxNoRepControl">
+														<fieldset class="repeating_religionknowledge">
+															<div class="wuxFlexTableItemGroup">
+																<span class="wuxTooltip">
+																	<span class="wuxTooltipText">
+																		<span name="attr_lor-subtype"></span>
+																	</span>
+																	<div class="wuxTooltipContent">
+																		<div class="wuxHeader2"><span name="attr_lor-subtype"></span></div><span class="wuxDescription" name="attr_lor-description"></span>
+																	</div>
+																</span>
+																<div class="wuxCharacterStatisticsStat">
+																	<span name="attr_lor-tier"></span>
+																</div>
+															</div>
+														</fieldset>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -13522,12 +13793,12 @@
 															<span>Yaksa</span>
 														</div>
 													</span>
-													<input type="hidden" class="wuxHiddenField-flag" name="attr_job-scholar" value="0">
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_job-tactician" value="0">
 													<span class="wuxHiddenInlineField">
-														<input type="hidden" class="wuxJobSelection-flag" name="attr_job-scholar_learn" />
+														<input type="hidden" class="wuxJobSelection-flag" name="attr_job-tactician_learn" />
 														<div class="wuxButton ">
-															<input type="checkbox" name="attr_forme-selectjob" value="Scholar">
-															<span>Scholar</span>
+															<input type="checkbox" name="attr_forme-selectjob" value="Tactician">
+															<span>Tactician</span>
 														</div>
 													</span>
 													<input type="hidden" class="wuxHiddenField-flag" name="attr_job-bard" value="0">
@@ -18483,7 +18754,10 @@ on("change:trn-tp_knowledge", function (eventinfo) {
 WuxWorkerAdvancement.SetAdvancementPointsUpdate(eventinfo);
 
 });
-on("change:lng-minere_rank change:lng-junal_rank change:lng-apollen_rank change:lng-lib_rank change:lng-cert_rank change:lng-dustell_rank change:lng-muralic_rank change:lng-shira_rank change:lng-ciel_rank change:lng-citeq_rank change:lng-manstan_rank change:lng-salkan_rank change:lng-sansic_rank change:lng-silq_rank change:lng-kleikan_rank change:lng-shorespeak_rank change:lng-verdeni_rank change:lng-emotion_rank change:lng-empathy_rank change:lng-jovean_rank change:lng-mytikan_rank change:lrc-Academics_rank change:lrc-profession_rank change:lrc-craftmanship_rank change:lrc-geography_rank change:lrc-history_rank change:lrc-culture_rank change:lrc-religion_rank change:lrc-academic_rank change:lrc-profession_rank change:lrc-craftmanship_rank change:lrc-geography_rank change:lrc-history_rank change:lrc-culture_rank change:lrc-religion_rank change:repeating_academicknowledge:lor-tier change:repeating_professionknowledge:lor-tier change:repeating_craftmanshipknowledge:lor-tier change:repeating_geographyknowledge:lor-tier change:repeating_historyknowledge:lor-tier change:repeating_cultureknowledge:lor-tier change:repeating_religionknowledge:lor-tier", function (eventinfo) {
+on("change:lng-minere_rank change:lng-junal_rank change:lng-apollen_rank change:lng-lib_rank change:lng-cert_rank change:lng-dustell_rank change:lng-muralic_rank change:lng-shira_rank change:lng-ciel_rank change:lng-citeq_rank change:lng-manstan_rank change:lng-salkan_rank change:lng-sansic_rank change:lng-silq_rank change:lng-kleikan_rank change:lng-shorespeak_rank change:lng-verdeni_rank change:lng-emotion_rank change:lng-empathy_rank change:lng-jovean_rank change:lng-mytikan_rank change:lrc-academic_rank change:lrc-profession_rank change:lrc-craftmanship_rank change:lrc-geography_rank change:lrc-history_rank change:lrc-culture_rank change:lrc-religion_rank change:repeating_academicknowledge:lor-tier change:repeating_professionknowledge:lor-tier change:repeating_craftmanshipknowledge:lor-tier change:repeating_geographyknowledge:lor-tier change:repeating_historyknowledge:lor-tier change:repeating_cultureknowledge:lor-tier change:repeating_religionknowledge:lor-tier", function (eventinfo) {
+WuxWorkerKnowledges.UpdateBuildPoints(eventinfo)
+});
+on("remove:repeating_academicknowledge remove:repeating_professionknowledge remove:repeating_craftmanshipknowledge remove:repeating_geographyknowledge remove:repeating_historyknowledge remove:repeating_cultureknowledge remove:repeating_religionknowledge", function (eventinfo) {
 WuxWorkerKnowledges.UpdateBuildPoints(eventinfo)
 });
 on("change:repeating_academicknowledge:lor-subtype change:repeating_professionknowledge:lor-subtype change:repeating_craftmanshipknowledge:lor-subtype change:repeating_geographyknowledge:lor-subtype change:repeating_historyknowledge:lor-subtype change:repeating_cultureknowledge:lor-subtype change:repeating_religionknowledge:lor-subtype", function (eventinfo) {
@@ -18533,10 +18807,10 @@ WuxWorkerInspectPopup.OpenPerkFilterTechniqueInspection(eventinfo)
 on("change:ttl-isplayer", function (eventinfo) {
 WuxWorkerPerks.SetIsPlayer(eventinfo)
 });
-on("change:job-fighter change:job-labourer change:job-sentinel change:job-brawler change:job-warden change:job-sniper change:job-rogue change:job-exemplar change:job-hunter change:job-warmage change:job-geomancer change:job-kineticist change:job-trooper change:job-yaksa change:job-scholar change:job-bard change:job-spellwright change:job-shade change:job-medic change:job-alchemist change:job-preacher change:job-merchant change:job-courtier change:job-diplomat change:job-phantasm", function (eventinfo) {
+on("change:job-fighter change:job-labourer change:job-sentinel change:job-brawler change:job-warden change:job-sniper change:job-rogue change:job-exemplar change:job-hunter change:job-warmage change:job-geomancer change:job-kineticist change:job-trooper change:job-yaksa change:job-tactician change:job-bard change:job-spellwright change:job-shade change:job-medic change:job-alchemist change:job-preacher change:job-merchant change:job-courtier change:job-diplomat change:job-phantasm", function (eventinfo) {
 WuxWorkerJobs.UpdateBuildPoints(eventinfo)
 });
-on("change:job-fighter_info change:job-labourer_info change:job-sentinel_info change:job-brawler_info change:job-warden_info change:job-sniper_info change:job-rogue_info change:job-exemplar_info change:job-hunter_info change:job-warmage_info change:job-geomancer_info change:job-kineticist_info change:job-trooper_info change:job-yaksa_info change:job-scholar_info change:job-bard_info change:job-spellwright_info change:job-shade_info change:job-medic_info change:job-alchemist_info change:job-preacher_info change:job-merchant_info change:job-courtier_info change:job-diplomat_info change:job-phantasm_info", function (eventinfo) {
+on("change:job-fighter_info change:job-labourer_info change:job-sentinel_info change:job-brawler_info change:job-warden_info change:job-sniper_info change:job-rogue_info change:job-exemplar_info change:job-hunter_info change:job-warmage_info change:job-geomancer_info change:job-kineticist_info change:job-trooper_info change:job-yaksa_info change:job-tactician_info change:job-bard_info change:job-spellwright_info change:job-shade_info change:job-medic_info change:job-alchemist_info change:job-preacher_info change:job-merchant_info change:job-courtier_info change:job-diplomat_info change:job-phantasm_info", function (eventinfo) {
 WuxWorkerJobs.SeeTechniques(eventinfo)
 });
 on("change:skl-aesthetics_rank change:skl-agility_rank change:skl-aim_rank change:skl-alchemy_rank change:skl-analyze_rank change:skl-build_rank change:skl-charm_rank change:skl-cook_rank change:skl-demoralize_rank change:skl-energize_rank change:skl-empathy_rank change:skl-flux_rank change:skl-glyphwork_rank change:skl-inspire_rank change:skl-martial_rank change:skl-materialize_rank change:skl-medicine_rank change:skl-misdirect_rank change:skl-musicianship_rank change:skl-notice_rank change:skl-physio_rank change:skl-physique_rank change:skl-pilot_rank change:skl-rationalize_rank change:skl-resonance_rank change:skl-tinker_rank change:skl-transmute_rank change:skl-aesthetics_expertise change:skl-agility_expertise change:skl-aim_expertise change:skl-alchemy_expertise change:skl-analyze_expertise change:skl-build_expertise change:skl-charm_expertise change:skl-cook_expertise change:skl-demoralize_expertise change:skl-energize_expertise change:skl-empathy_expertise change:skl-flux_expertise change:skl-glyphwork_expertise change:skl-inspire_expertise change:skl-martial_expertise change:skl-materialize_expertise change:skl-medicine_expertise change:skl-misdirect_expertise change:skl-musicianship_expertise change:skl-notice_expertise change:skl-physio_expertise change:skl-physique_expertise change:skl-pilot_expertise change:skl-rationalize_expertise change:skl-resonance_expertise change:skl-tinker_expertise change:skl-transmute_expertise", function (eventinfo) {
@@ -18966,7 +19240,7 @@ WuxWorkerActions.QuickFilterFormeActions(eventinfo)
 on("change:adv-ap_job change:perk-spirit_conduit", function (eventinfo) {
 WuxWorkerActions.UpdateTechniqueChangeVisibility()
 });
-on("change:note-opennotebookactions change:note-notebookactions0 change:note-notebookactions1 change:note-notebookactions2 change:note-notebookactions3 change:repeating_jobstyles:forme-actions change::forme-actions change:repeating_styles:forme-actions change:forme-jobslot1_submenu change:forme-advancedslot1_submenu change:forme-styleslot1_submenu change:forme-jobslot2_submenu change:forme-advancedslot2_submenu change:forme-styleslot2_submenu change:forme-jobslot3_submenu change:forme-advancedslot3_submenu change:forme-styleslot3_submenu change:forme-styleslot4_submenu change:forme-styleslot5_submenu change:forme-styleslot6_submenu change:repeating_equipment:gear-itemaction change:repeating_consumables:gear-itemaction change:repeating_goods:gear-itemaction change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change:repeating_consumables:act-actions change::act-actions change::act-actions change::act-actions change::act-actions change:repeating_customtech:act-actions change:job-fighter_expand change:job-labourer_expand change:job-sentinel_expand change:job-brawler_expand change:job-warden_expand change:job-sniper_expand change:job-rogue_expand change:job-exemplar_expand change:job-hunter_expand change:job-warmage_expand change:job-geomancer_expand change:job-kineticist_expand change:job-trooper_expand change:job-yaksa_expand change:job-scholar_expand change:job-bard_expand change:job-spellwright_expand change:job-shade_expand change:job-medic_expand change:job-alchemist_expand change:job-preacher_expand change:job-merchant_expand change:job-courtier_expand change:job-diplomat_expand change:job-phantasm_expand", function (eventinfo) {
+on("change:note-opennotebookactions change:note-notebookactions0 change:note-notebookactions1 change:note-notebookactions2 change:note-notebookactions3 change:repeating_jobstyles:forme-actions change::forme-actions change:repeating_styles:forme-actions change:forme-jobslot1_submenu change:forme-advancedslot1_submenu change:forme-styleslot1_submenu change:forme-jobslot2_submenu change:forme-advancedslot2_submenu change:forme-styleslot2_submenu change:forme-jobslot3_submenu change:forme-advancedslot3_submenu change:forme-styleslot3_submenu change:forme-styleslot4_submenu change:forme-styleslot5_submenu change:forme-styleslot6_submenu change:repeating_equipment:gear-itemaction change:repeating_consumables:gear-itemaction change:repeating_goods:gear-itemaction change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change:repeating_consumables:act-actions change::act-actions change::act-actions change::act-actions change::act-actions change:repeating_customtech:act-actions change:job-fighter_expand change:job-labourer_expand change:job-sentinel_expand change:job-brawler_expand change:job-warden_expand change:job-sniper_expand change:job-rogue_expand change:job-exemplar_expand change:job-hunter_expand change:job-warmage_expand change:job-geomancer_expand change:job-kineticist_expand change:job-trooper_expand change:job-yaksa_expand change:job-tactician_expand change:job-bard_expand change:job-spellwright_expand change:job-shade_expand change:job-medic_expand change:job-alchemist_expand change:job-preacher_expand change:job-merchant_expand change:job-courtier_expand change:job-diplomat_expand change:job-phantasm_expand", function (eventinfo) {
 WuxWorkerGeneral.OpenSubMenu(eventinfo)
 });
 on("change:popup-submenuactive", function (eventinfo) {

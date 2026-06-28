@@ -1907,6 +1907,11 @@ input[type=hidden].wuxAncestrySelection-flag[value="Human"] + .wuxAncestrySelect
     margin: 2px 0;
  }
 
+.wuxCharacterStatistics .wuxHiddenBlockField
+{
+    flex-basis: 100%;
+}
+
 .wuxCharacterStatistics .wuxFlexTableItemGroup
 {
     display: inline-block;
@@ -1992,6 +1997,23 @@ input[type=hidden].wuxHiddenIndexField-flag[value="1"] ~ span.wuxLoreDescription
 input[type=hidden].wuxHiddenIndexField-flag[value="1"] ~ textarea.wuxLoreDescriptionArea
 {
     display: block;
+}
+
+.wuxKnowledgeCategoryDesc
+{
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 10px;
+    font-style: italic;
+    color: #a0a0b0;
+}
+
+.wuxKnowledgeLoreList
+{
+    padding-left: 12px;
+    white-space: pre-line;
+    font-size: 11px;
+    color: #d0d0d0;
 }
 
 /*========================================

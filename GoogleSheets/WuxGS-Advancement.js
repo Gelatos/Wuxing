@@ -1042,6 +1042,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             repeaterContents += `<span class="wuxLoreDescriptionArea" name="${WuxDef.GetAttribute("Lore_Description")}"></span>`;
                             repeaterContents += WuxSheetMain.Textarea(
                                 WuxDef.GetAttribute("Lore_Description"), "wuxInput wuxHeight30 wuxLoreDescriptionArea", WuxDef.GetTitle("Lore_Description"));
+                            repeaterContents += WuxSheetMain.Row("&nbsp;");
 
                             let specializedLoreDef = WuxDef.Get("Title_SpecializedLore");
                             return `<div class="wuxMarginLeft50">

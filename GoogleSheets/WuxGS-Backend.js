@@ -19,8 +19,20 @@ var WuxSheetBackend = WuxSheetBackend || (function () {
             // });\n`;
         }
     ;
+    const onRemove = function (variables, contents) {
+            let output = "";
+            for (let i = 0; i < variables.length; i++) {
+                if (output != "") {
+                    output += " ";
+                }
+                output += `remove:${variables[i]}`;
+            }
+            return `on("${output}", function (eventinfo) {\n${contents}\n});\n`;
+        }
+    ;
     return {
-        OnChange: onChange
+        OnChange: onChange,
+        OnRemove: onRemove
     };
 }());
 
@@ -104,6 +116,7 @@ var TrainingBackend = TrainingBackend || (function () {
             output += listenerSetTrainingPointsUpdate();
             output += listenerSetAdvancementKnowledgePoints();
             output += listenerUpdateKnowledgeBuildPoints();
+            output += listenerRemoveLoreSpecialization();
             output += listenerUpdateLoreDescription();
             return output;
 
@@ -163,6 +176,16 @@ var TrainingBackend = TrainingBackend || (function () {
             let output = `WuxWorkerKnowledges.UpdateBuildPoints(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+
+        listenerRemoveLoreSpecialization = function () {
+            const loreRepeaterIds = [
+                "RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
+                "RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+            ];
+            let repeaterVarNames = loreRepeaterIds.map(id => WuxDef.GetVariable(id));
+            let output = `WuxWorkerKnowledges.UpdateBuildPoints(eventinfo)`;
+            return WuxSheetBackend.OnRemove(repeaterVarNames, output);
         },
 
         listenerUpdateLoreDescription = function () {
