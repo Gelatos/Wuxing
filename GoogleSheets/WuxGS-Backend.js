@@ -513,14 +513,16 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerFindItemsButtons();
             output += listenerFindGearButtons();
             output += listenerFindGoodsButtons();
+            output += listenerFindFoodButtons();
+            output += listenerFindIngButtons();
             output += listenerBuyGearItem();
             output += listenerBuyGearItemBulk();
             output += listenerInspectGearItem();
             output += listenerDeleteGearItem();
-            output += listenerBuyGoodsItem();
-            output += listenerBuyGoodsItemBulk();
-            output += listenerInspectGoodsItem();
-            output += listenerDeleteGoodsItem();
+            output += listenerBuyFoodsItem();
+            output += listenerBuyFoodsItemBulk();
+            output += listenerInspectFoodsItem();
+            output += listenerDeleteFoodsItem();
             output += listenerFindConsumablesButtons();
             output += listenerBuyConsumable();
             output += listenerBuyConsumableBulk();
@@ -560,7 +562,17 @@ var GearBuilder = GearBuilder || (function () {
         listenerFindGoodsButtons = function () {
             let goodsTypes = WuxDef.Filter([new DatabaseFilterData("group", "GoodsType")]);
             let variables = goodsTypes.map(def => def.getVariable());
-            return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindGoods(eventinfo)`, true);
+            return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindGoodsForGear(eventinfo)`, true);
+        },
+        listenerFindFoodButtons = function () {
+            let foodTypes = WuxDef.Filter([new DatabaseFilterData("group", "FoodType")]);
+            let variables = foodTypes.map(def => def.getVariable());
+            return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindFoodsItem(eventinfo)`, true);
+        },
+        listenerFindIngButtons = function () {
+            let ingTypes = WuxDef.Filter([new DatabaseFilterData("group", "IngType")]);
+            let variables = ingTypes.map(def => def.getVariable());
+            return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindIngsItem(eventinfo)`, true);
         },
         listenerBuyGearItem = function () {
             return WuxSheetBackend.OnChange(
@@ -582,25 +594,25 @@ var GearBuilder = GearBuilder || (function () {
                 [`repeating_gear:${WuxDef.GetVariable("Gear_Delete")}`],
                 `WuxWorkerGear.DeleteGearItem(eventinfo)`, true);
         },
-        listenerBuyGoodsItem = function () {
+        listenerBuyFoodsItem = function () {
             return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Buy")}`],
-                `WuxWorkerGear.BuyGoodsItem(eventinfo)`, true);
+                [`${WuxDef.GetVariable("RepeatingFoods")}:${WuxDef.GetVariable("Gear_Buy")}`],
+                `WuxWorkerGear.BuyFoodsItem(eventinfo)`, true);
         },
-        listenerBuyGoodsItemBulk = function () {
+        listenerBuyFoodsItemBulk = function () {
             return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_BuyBulk")}`],
-                `WuxWorkerGear.BuyGoodsItemBulk(eventinfo)`, true);
+                [`${WuxDef.GetVariable("RepeatingFoods")}:${WuxDef.GetVariable("Gear_BuyBulk")}`],
+                `WuxWorkerGear.BuyFoodsItemBulk(eventinfo)`, true);
         },
-        listenerInspectGoodsItem = function () {
+        listenerInspectFoodsItem = function () {
             return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectGoodsItem(eventinfo)`, true);
+                [`${WuxDef.GetVariable("RepeatingFoods")}:${WuxDef.GetVariable("Gear_Inspect")}`],
+                `WuxWorkerGear.InspectFoodsItem(eventinfo)`, true);
         },
-        listenerDeleteGoodsItem = function () {
+        listenerDeleteFoodsItem = function () {
             return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Delete")}`],
-                `WuxWorkerGear.DeleteGoodsItem(eventinfo)`, true);
+                [`${WuxDef.GetVariable("RepeatingFoods")}:${WuxDef.GetVariable("Gear_Delete")}`],
+                `WuxWorkerGear.DeleteFoodsItem(eventinfo)`, true);
         },
         listenerFindConsumablesButtons = function () {
             let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
@@ -900,7 +912,7 @@ var PopupBuilder = PopupBuilder || (function () {
             let actionFieldName = `${WuxDef.GetVariable("Gear")}-${WuxDef.GetVariable("ItemAction")}`;
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingEquipment")}:${actionFieldName}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingConsumables")}:${actionFieldName}`]);
-            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingGoods")}:${actionFieldName}`]);
+            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingFoods")}:${actionFieldName}`]);
             
             for (let i = 1; i <= 3; i++) {
                 groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingJobTech", i)}:${WuxDef.GetVariable("Action_Actions")}`]);

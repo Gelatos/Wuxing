@@ -704,7 +704,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 },
 
                 buildGearItems = function () {
-                    let contents = WuxSheetMain.MultiRowGroup([storedGear(), storedGoods()], WuxSheetMain.Table.FlexTable, 2);
+                    let contents = WuxSheetMain.MultiRowGroup([storedGear(), storedFoods()], WuxSheetMain.Table.FlexTable, 2);
                     contents = WuxSheetMain.TabBlock(contents);
                     let definition = WuxDef.Get("Page_GearItems");
                     return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
@@ -737,6 +737,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         </div>`);
 
                     let repeaterContent = buildRepeater("repeating_gear",
+                        `<input type="hidden" name="${getGearAttribute("ItemMainGroup")}" value="0">` +
                         WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents));
 
                     let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
@@ -749,20 +750,26 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 },
 
                 addGearFilterButtons = function () {
-                    let gearTypes = WuxDef.Filter([new DatabaseFilterData("group", "GearType")]);
                     let searchButtonDef = WuxDef.Get("Popup_SearchButton");
-                    let items = [];
+                    let gearTypes = WuxDef.Filter([new DatabaseFilterData("group", "GearType")]);
+                    let gearItems = [];
                     for (let i = 0; i < gearTypes.length; i++) {
-                        items.push(WuxSheetMain.Table.FlexTableGroup(
+                        gearItems.push(WuxSheetMain.Table.FlexTableGroup(
                             WuxSheetMain.Button(gearTypes[i].getAttribute(), searchButtonDef.getTitle(gearTypes[i].getTitle()), "wuxWidth120"),
                             "wuxMaxWidth220"));
                     }
+                    let goodsTypes = WuxDef.Filter([new DatabaseFilterData("group", "GoodsType")]);
+                    for (let i = 0; i < goodsTypes.length; i++) {
+                        gearItems.push(WuxSheetMain.Table.FlexTableGroup(
+                            WuxSheetMain.Button(goodsTypes[i].getAttribute(), searchButtonDef.getTitle(goodsTypes[i].getTitle()), "wuxWidth120"),
+                            "wuxMaxWidth220"));
+                    }
                     return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddGear"))}
-                        ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 3)}`;
+                        ${WuxSheetMain.MultiRowGroup(gearItems, WuxSheetMain.Table.FlexTable, 3)}`;
                 },
 
-                storedGoods = function () {
-                    let repeatingDef = WuxDef.Get("RepeatingGoods");
+                storedFoods = function () {
+                    let repeatingDef = WuxDef.Get("RepeatingFoods");
                     let buyDef = WuxDef.Get("Gear_Buy");
                     let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
                     let inspectDef = WuxDef.Get("Gear_Inspect");
@@ -788,28 +795,35 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         </div>`);
 
                     let repeaterContent = buildRepeater(repeatingDef.getVariable(),
+                        `<input type="hidden" name="${getGearAttribute("ItemMainGroup")}" value="0">` +
                         WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents));
 
                     let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
                         <div>
                             ${repeaterContent}
                             ${WuxSheetMain.Row("&nbsp;")}
-                            ${addGoodsFilterButtons()}
+                            ${addFoodsFilterButtons()}
                         </div>`;
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
 
-                addGoodsFilterButtons = function () {
-                    let goodsTypes = WuxDef.Filter([new DatabaseFilterData("group", "GoodsType")]);
+                addFoodsFilterButtons = function () {
                     let searchButtonDef = WuxDef.Get("Popup_SearchButton");
-                    let items = [];
-                    for (let i = 0; i < goodsTypes.length; i++) {
-                        items.push(WuxSheetMain.Table.FlexTableGroup(
-                            WuxSheetMain.Button(goodsTypes[i].getAttribute(), searchButtonDef.getTitle(goodsTypes[i].getTitle()), "wuxWidth120"),
+                    let foodTypes = WuxDef.Filter([new DatabaseFilterData("group", "FoodType")]);
+                    let foodItems = [];
+                    for (let i = 0; i < foodTypes.length; i++) {
+                        foodItems.push(WuxSheetMain.Table.FlexTableGroup(
+                            WuxSheetMain.Button(foodTypes[i].getAttribute(), searchButtonDef.getTitle(foodTypes[i].getTitle()), "wuxWidth120"),
                             "wuxMaxWidth220"));
                     }
-                    return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddGood"))}
-                        ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 3)}`;
+                    let ingTypes = WuxDef.Filter([new DatabaseFilterData("group", "IngType")]);
+                    for (let i = 0; i < ingTypes.length; i++) {
+                        foodItems.push(WuxSheetMain.Table.FlexTableGroup(
+                            WuxSheetMain.Button(ingTypes[i].getAttribute(), searchButtonDef.getTitle(ingTypes[i].getTitle()), "wuxWidth120"),
+                            "wuxMaxWidth220"));
+                    }
+                    return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddConsumable"))}
+                        ${WuxSheetMain.MultiRowGroup(foodItems, WuxSheetMain.Table.FlexTable, 3)}`;
                 },
 
                 buildEquipment = function () {

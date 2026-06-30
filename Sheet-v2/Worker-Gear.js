@@ -1044,12 +1044,14 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let itemNameVar = getGearVariable("ItemName");
             let itemIsVisibleVar = getGearVariable("ItemIsVisible");
             let itemCountVar = getGearVariable("ItemCount");
+            let itemMainGroupVar = getGearVariable("ItemMainGroup");
             let jinVar = WuxDef.GetVariable("Jin");
-            repeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar]);
+            repeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar, itemMainGroupVar]);
             attributeHandler.addMod(jinVar);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let itemName = attrHandler.parseString(repeater.getFieldName(selectedId, itemNameVar));
-                let item = WuxItems.Get(itemName);
+                let mainGroup = attrHandler.parseString(repeater.getFieldName(selectedId, itemMainGroupVar));
+                let item = mainGroup === "Goods" ? WuxGoods.Get(itemName) : WuxItems.Get(itemName);
                 if (item == undefined) return;
                 let cost = parseInt(item.value) || 0;
                 attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost * quantity).toString());
@@ -1106,20 +1108,23 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let repeater = attributeHandler.getRepeatingSection("RepeatingGear");
             let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
             let itemNameVar = getGearVariable("ItemName");
-            repeater.addFieldNames([itemNameVar]);
+            let itemMainGroupVar = getGearVariable("ItemMainGroup");
+            repeater.addFieldNames([itemNameVar, itemMainGroupVar]);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let groups = {};
                 let selectedSubGroup = null;
                 repeater.iterate(function (id) {
                     let itemName = attrHandler.parseString(repeater.getFieldName(id, itemNameVar));
-                    let item = WuxItems.Get(itemName);
+                    let mainGroup = attrHandler.parseString(repeater.getFieldName(id, itemMainGroupVar));
+                    let item = mainGroup === "Goods" ? WuxGoods.Get(itemName) : WuxItems.Get(itemName);
                     if (item == undefined || item.group === "") return;
                     let subGroupKey = item.category;
                     if (!groups[subGroupKey]) {
                         let subGroupTitle = item.category !== "" ? `${item.group} (${item.category})` : item.group;
                         groups[subGroupKey] = { title: subGroupTitle, selected: [], rest: [] };
                     }
-                    let inventoryItem = new InspectionInventoryItem(itemName, itemName, false);
+                    let databaseName = mainGroup === "Goods" ? `Goods:${itemName}` : itemName;
+                    let inventoryItem = new InspectionInventoryItem(itemName, databaseName, false);
                     if (id === selectedId) {
                         groups[subGroupKey].selected.push(inventoryItem);
                         selectedSubGroup = subGroupKey;
@@ -1206,6 +1211,166 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addRepeatingSection("RepeatingGoods");
             let repeater = attributeHandler.getRepeatingSection("RepeatingGoods");
+            let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            repeater.addFieldNames([getGearVariable("ItemIsVisible")]);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                repeater.removeId(selectedId);
+            });
+            attributeHandler.run();
+        },
+
+        openFindGoodsForGear = function (eventinfo) {
+            let goodsTypes = WuxDef.Filter([new DatabaseFilterData("group", "GoodsType")]);
+            let matchedDef;
+            for (let i = 0; i < goodsTypes.length; i++) {
+                if (goodsTypes[i].getVariable() === eventinfo.sourceAttribute) {
+                    matchedDef = goodsTypes[i];
+                    break;
+                }
+            }
+            if (matchedDef == undefined) { return; }
+
+            let filters = [];
+            for (let i = 0; i < matchedDef.descriptions.length; i++) {
+                let parts = matchedDef.descriptions[i].split(":");
+                if (parts.length === 2) {
+                    filters.push(new DatabaseFilterData(parts[0], parts[1]));
+                }
+            }
+
+            WuxWorkerInspectPopup.OpenGoodsForGearFilterInspection(filters, matchedDef.title, ["Add Gear", "Purchase Gear"]);
+        },
+
+        openFindFoodsItem = function (eventinfo) {
+            let foodTypes = WuxDef.Filter([new DatabaseFilterData("group", "FoodType")]);
+            let matchedDef;
+            for (let i = 0; i < foodTypes.length; i++) {
+                if (foodTypes[i].getVariable() === eventinfo.sourceAttribute) {
+                    matchedDef = foodTypes[i];
+                    break;
+                }
+            }
+            if (matchedDef == undefined) { return; }
+
+            let filters = [];
+            for (let i = 0; i < matchedDef.descriptions.length; i++) {
+                let parts = matchedDef.descriptions[i].split(":");
+                if (parts.length === 2) {
+                    filters.push(new DatabaseFilterData(parts[0], parts[1]));
+                }
+            }
+
+            WuxWorkerInspectPopup.OpenFoodsFilterInspection(filters, matchedDef.title, ["Add Food", "Purchase Food"]);
+        },
+
+        openFindIngsItem = function (eventinfo) {
+            let ingTypes = WuxDef.Filter([new DatabaseFilterData("group", "IngType")]);
+            let matchedDef;
+            for (let i = 0; i < ingTypes.length; i++) {
+                if (ingTypes[i].getVariable() === eventinfo.sourceAttribute) {
+                    matchedDef = ingTypes[i];
+                    break;
+                }
+            }
+            if (matchedDef == undefined) { return; }
+
+            let filters = [];
+            for (let i = 0; i < matchedDef.descriptions.length; i++) {
+                let parts = matchedDef.descriptions[i].split(":");
+                if (parts.length === 2) {
+                    filters.push(new DatabaseFilterData(parts[0], parts[1]));
+                }
+            }
+
+            WuxWorkerInspectPopup.OpenIngsFilterInspection(filters, matchedDef.title, ["Add Ingredient", "Purchase Ingredient"]);
+        },
+
+        buyFoodsItemWithCount = function (eventinfo, quantity) {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("RepeatingFoods");
+            let repeater = attributeHandler.getRepeatingSection("RepeatingFoods");
+            let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let itemNameVar = getGearVariable("ItemName");
+            let itemIsVisibleVar = getGearVariable("ItemIsVisible");
+            let itemCountVar = getGearVariable("ItemCount");
+            let itemMainGroupVar = getGearVariable("ItemMainGroup");
+            let jinVar = WuxDef.GetVariable("Jin");
+            repeater.addFieldNames([itemNameVar, itemIsVisibleVar, itemCountVar, itemMainGroupVar]);
+            attributeHandler.addMod(jinVar);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let itemName = attrHandler.parseString(repeater.getFieldName(selectedId, itemNameVar));
+                let mainGroup = attrHandler.parseString(repeater.getFieldName(selectedId, itemMainGroupVar));
+                let item = mainGroup === "Goods" ? WuxGoods.Get(itemName) : WuxItems.Get(itemName);
+                if (item == undefined) return;
+                let cost = parseInt(item.value) || 0;
+                attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost * quantity).toString());
+                let currentCount = attrHandler.parseInt(repeater.getFieldName(selectedId, itemCountVar)) || 0;
+                attrHandler.addUpdate(repeater.getFieldName(selectedId, itemCountVar), currentCount + quantity);
+                attrHandler.addUpdate(repeater.getFieldName(selectedId, itemIsVisibleVar), "on");
+            });
+            attributeHandler.run();
+        },
+
+        buyFoodsItem = function (eventinfo) {
+            buyFoodsItemWithCount(eventinfo, 1);
+        },
+
+        buyFoodsItemBulk = function (eventinfo) {
+            buyFoodsItemWithCount(eventinfo, 10);
+        },
+
+        inspectFoodsItem = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("RepeatingFoods");
+            let repeater = attributeHandler.getRepeatingSection("RepeatingFoods");
+            let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let itemNameVar = getGearVariable("ItemName");
+            let itemMainGroupVar = getGearVariable("ItemMainGroup");
+            repeater.addFieldNames([itemNameVar, itemMainGroupVar]);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let groups = {};
+                let selectedSubGroup = null;
+                repeater.iterate(function (id) {
+                    let itemName = attrHandler.parseString(repeater.getFieldName(id, itemNameVar));
+                    let mainGroup = attrHandler.parseString(repeater.getFieldName(id, itemMainGroupVar));
+                    let item = mainGroup === "Goods" ? WuxGoods.Get(itemName) : WuxItems.Get(itemName);
+                    if (item == undefined || item.group === "") return;
+                    let subGroupKey = item.category;
+                    if (!groups[subGroupKey]) {
+                        let subGroupTitle = item.category !== "" ? `${item.group} (${item.category})` : item.group;
+                        groups[subGroupKey] = { title: subGroupTitle, selected: [], rest: [] };
+                    }
+                    let databaseName = mainGroup === "Goods" ? `Goods:${itemName}` : itemName;
+                    let inventoryItem = new InspectionInventoryItem(itemName, databaseName, false);
+                    if (id === selectedId) {
+                        groups[subGroupKey].selected.push(inventoryItem);
+                        selectedSubGroup = subGroupKey;
+                    } else {
+                        groups[subGroupKey].rest.push(inventoryItem);
+                    }
+                });
+                let groupKeys = Object.keys(groups).sort();
+                if (selectedSubGroup !== null) {
+                    let idx = groupKeys.indexOf(selectedSubGroup);
+                    if (idx !== -1) { groupKeys.splice(idx, 1); groupKeys.unshift(selectedSubGroup); }
+                }
+                let inventoryItems = [];
+                for (let key of groupKeys) {
+                    inventoryItems.push(new InspectionInventoryItem(groups[key].title, "", true));
+                    inventoryItems = inventoryItems.concat(groups[key].selected);
+                    inventoryItems = inventoryItems.concat(groups[key].rest);
+                }
+                let attributeHandler2 = new WorkerAttributeHandler();
+                WuxWorkerInspectPopup.OpenFoodsInspection(attributeHandler2, "Owned Foods", inventoryItems, ["Add Food", "Purchase Food"]);
+                attributeHandler2.run();
+            });
+            attributeHandler.run();
+        },
+
+        deleteFoodsItem = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("RepeatingFoods");
+            let repeater = attributeHandler.getRepeatingSection("RepeatingFoods");
             let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
             repeater.addFieldNames([getGearVariable("ItemIsVisible")]);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -1551,14 +1716,21 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         OpenFindItems: openFindItems,
         OpenFindGear: openFindGear,
         OpenFindGoods: openFindGoods,
+        OpenFindGoodsForGear: openFindGoodsForGear,
+        OpenFindFoodsItem: openFindFoodsItem,
+        OpenFindIngsItem: openFindIngsItem,
         BuyGearItem: buyGearItem,
         BuyGearItemBulk: buyGearItemBulk,
         BuyGoodsItem: buyGoodsItem,
         BuyGoodsItemBulk: buyGoodsItemBulk,
+        BuyFoodsItem: buyFoodsItem,
+        BuyFoodsItemBulk: buyFoodsItemBulk,
         InspectGearItem: inspectGearItem,
         InspectGoodsItem: inspectGoodsItem,
+        InspectFoodsItem: inspectFoodsItem,
         DeleteGearItem: deleteGearItem,
         DeleteGoodsItem: deleteGoodsItem,
+        DeleteFoodsItem: deleteFoodsItem,
         OpenFindConsumables: openFindConsumables,
         BuyConsumable: buyConsumable,
         BuyConsumableBulk: buyConsumableBulk,

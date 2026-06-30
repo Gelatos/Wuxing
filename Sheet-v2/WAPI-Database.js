@@ -2926,6 +2926,12 @@ class BaseTechniqueEffectDisplayData {
                 }
                 this.formatBreakFocusEffect(effect);
                 break;
+            case "CallAssist":
+                if (this.effectType != "CallAssist") {
+                    this.effectType = effect.type;
+                }
+                this.formatCallAssistEffect(effect);
+                break;
             case "Boost":
                 this.effectType = effect.type;
                 this.formatBoostEffect(effect);
@@ -3116,7 +3122,7 @@ class BaseTechniqueEffectDisplayData {
                 this.effectDescription += `Raise or lower the severity of an influence on your target`;
                 return;
             case "Reveal":
-                this.effectDescription += "A related influence to the statement is revealed to you. You learn whether the influence is supportive or oppositional";
+                this.effectDescription += "A related influence is revealed to you.";
                 return;
             case "RevealNeg":
                 this.effectDescription += "A related oppositional influence to the statement is revealed to you";
@@ -3208,6 +3214,10 @@ class BaseTechniqueEffectDisplayData {
         this.effectDescription += `A technique of your choice that is being focused on by the target ends`;
     }
 
+    formatCallAssistEffect() {
+        this.effectDescription += `${this.formatTarget(effect, "may", "may")} use an Assist action.`;
+    }
+
     formatResistanceEffect(effect) {
         let resistance = WuxDef.GetTitle("Resistance");
         let damageType = WuxDef.GetTitle(effect.effect);
@@ -3241,19 +3251,19 @@ class BaseTechniqueEffectDisplayData {
         let count = this.formatCalcBonus(effect);
         switch (effect.subType) {
             case "Count":
-                this.effectDescription += `You create ${count} ${effect.effect} at the targeted spaces.`;
+                this.effectDescription += `You create ${count} ${effect.effect} at the targeted space(s). `;
                 if (count > 1) {
-                    this.effectDescription += ` Each object must be within range of this technique.`;
+                    this.effectDescription += `Each object must be within range of this technique. `;
                 }
                 return;
             case "Dimensions":
-                this.effectDescription += `Each ${effect.effect} is ${count} spaces high`;
+                this.effectDescription += `${effect.effect} `;
                 return;
             case "HP":
-                this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("HP")}`;
+                this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("HP")}. `;
                 return;
             case "Armor":
-                this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("Cmb_Armor")}`;
+                this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("Cmb_Armor")}. `;
                 return;
             default:
                 this.effectDescription += effect.effect;

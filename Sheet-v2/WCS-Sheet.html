@@ -5274,14 +5274,6 @@
 										<span>Labourer</span>
 									</div>
 								</span>
-								<input type="hidden" class="wuxHiddenField-flag" name="attr_job-sentinel" value="0">
-								<span class="wuxHiddenInlineField">
-									<input type="hidden" class="wuxJobSelection-flag" name="attr_job-sentinel_learn" />
-									<div class="wuxButton ">
-										<input type="checkbox" name="attr_forme-selectjob" value="Sentinel">
-										<span>Sentinel</span>
-									</div>
-								</span>
 								<input type="hidden" class="wuxHiddenField-flag" name="attr_job-brawler" value="0">
 								<span class="wuxHiddenInlineField">
 									<input type="hidden" class="wuxJobSelection-flag" name="attr_job-brawler_learn" />
@@ -5296,6 +5288,14 @@
 									<div class="wuxButton ">
 										<input type="checkbox" name="attr_forme-selectjob" value="Warden">
 										<span>Warden</span>
+									</div>
+								</span>
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_job-sentinel" value="0">
+								<span class="wuxHiddenInlineField">
+									<input type="hidden" class="wuxJobSelection-flag" name="attr_job-sentinel_learn" />
+									<div class="wuxButton ">
+										<input type="checkbox" name="attr_forme-selectjob" value="Sentinel">
+										<span>Sentinel</span>
 									</div>
 								</span>
 								<input type="hidden" class="wuxHiddenField-flag" name="attr_job-sniper" value="0">
@@ -5426,20 +5426,20 @@
 										<span>Preacher</span>
 									</div>
 								</span>
-								<input type="hidden" class="wuxHiddenField-flag" name="attr_job-merchant" value="0">
-								<span class="wuxHiddenInlineField">
-									<input type="hidden" class="wuxJobSelection-flag" name="attr_job-merchant_learn" />
-									<div class="wuxButton ">
-										<input type="checkbox" name="attr_forme-selectjob" value="Merchant">
-										<span>Merchant</span>
-									</div>
-								</span>
 								<input type="hidden" class="wuxHiddenField-flag" name="attr_job-courtier" value="0">
 								<span class="wuxHiddenInlineField">
 									<input type="hidden" class="wuxJobSelection-flag" name="attr_job-courtier_learn" />
 									<div class="wuxButton ">
 										<input type="checkbox" name="attr_forme-selectjob" value="Courtier">
 										<span>Courtier</span>
+									</div>
+								</span>
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_job-merchant" value="0">
+								<span class="wuxHiddenInlineField">
+									<input type="hidden" class="wuxJobSelection-flag" name="attr_job-merchant_learn" />
+									<div class="wuxButton ">
+										<input type="checkbox" name="attr_forme-selectjob" value="Merchant">
+										<span>Merchant</span>
 									</div>
 								</span>
 								<input type="hidden" class="wuxHiddenField-flag" name="attr_job-diplomat" value="0">
@@ -12185,7 +12185,7 @@
 															<span class="wuxDescription">Energy Drink</span>
 														</div>
 														<div class="wuxEquipableButtonRow">
-															<button class="wuxRepeatingTechActionButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Energy Drink}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{FlavorText=One can and the fatigue lifts, replaced shortly after by a jittery hum.}}{{Core0Data=Target gains 2 EN}}{{Core0Tooltip=&#91;EN&#93;}}{{Core1Tooltip=EN is a resource that is spent when using more powerful techniques. Usually you will generate some at the start of every round in a combat. Some techniques can also generate EN.}}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Energy Drink&#37;&#37;,&#37;&#37;en&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;will&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;focus&#37;&#37;&&false,&#37;&#37;item&#37;&#37;&&&#37;&#37;Energy Drink&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Energy Drink-0$$&#64;{sheetname}}}{{targetData=!utech Energy Drink-0$$&#64;{sheetname}}}"><span style="color:#4caf50;">&#9654;</span><span> Use</span></button>
+															<button class="wuxRepeatingTechActionButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Energy Drink}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{FlavorText=One can and the fatigue lifts, replaced shortly after by a jittery hum.}}{{Core0Data=Target gains 2 EN}}{{Core1Data=Target takes 2d6 Will damage}}{{Core0Tooltip=&#91;EN&#93;}}{{Core1Tooltip=EN is a resource that is spent when using more powerful techniques. Usually you will generate some at the start of every round in a combat. Some techniques can also generate EN.}}{{Core2Tooltip=}}{{Core3Tooltip=&#91;Damage&#93;}}{{Core4Tooltip=This technique deals damage to the target&#39;s HP or Willpower, decreasing their current value.}}{{Willbreak0Data=Target gains the Flustered Status}}{{Willbreak0Tooltip=Will Break}}{{Willbreak1Tooltip=When a character&#39;s Willpower depletes to zero they can suffer from a technique&#39;s will break effects. You can choose to not trigger a technique&#39;s will break effects. When a will break is triggered, the effects listed occur to the target and then their Willpower restores to full.}}{{Willbreak2Tooltip=}}{{Willbreak3Tooltip=&#91;Flustered&#93;}}{{Willbreak4Tooltip=All skill checks against a flustered target receive +1 Advantage and request checks against the target increase by 5. }}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Energy Drink&#37;&#37;,&#37;&#37;en&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;will&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;focus&#37;&#37;&&false,&#37;&#37;item&#37;&#37;&&&#37;&#37;Energy Drink&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Energy Drink-0$$&#64;{sheetname}}}{{targetData=!utech Energy Drink-0$$&#64;{sheetname}}}"><span style="color:#4caf50;">&#9654;</span><span> Use</span></button>
 															<div class="wuxButton wuxRepeatingTechActionButton">
 																<input type="checkbox" name="attr_gear-unequipenergydrink">
 																<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
@@ -12539,7 +12539,7 @@
 									<div>
 										<div class="wuxNoRepControl">
 											<fieldset class="repeating_gear">
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemisvisible" value="0">
+												<input type="hidden" name="attr_gear-itemmaingroup" value="0"><input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemisvisible" value="0">
 												<div class="wuxHiddenField">
 													<div class="wuxMultiRow">
 														<div class="wuxEquipableRow">
@@ -12601,25 +12601,25 @@
 										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_geartype-food">
-													<span>Search Food</span>
+													<input type="checkbox" name="attr_goodstype-material">
+													<span>Search Material</span>
 												</div>
 											</div>
 											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_geartype-beverage">
-													<span>Search Beverage</span>
+													<input type="checkbox" name="attr_goodstype-goods">
+													<span>Search Goods</span>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 								<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
-									<div class="wuxHeader">Stored Goods</div>
+									<div class="wuxHeader">Stored Consumables</div>
 									<div>
 										<div class="wuxNoRepControl">
-											<fieldset class="repeating_goods">
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemisvisible" value="0">
+											<fieldset class="repeating_foods">
+												<input type="hidden" name="attr_gear-itemmaingroup" value="0"><input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemisvisible" value="0">
 												<div class="wuxHiddenField">
 													<div class="wuxMultiRow">
 														<div class="wuxEquipableRow">
@@ -12657,51 +12657,57 @@
 											</fieldset>
 										</div>
 										<div class="wuxRow">&nbsp;</div>
-										<div class="wuxHeader">Add Good</div>
+										<div class="wuxHeader">Add Consumable</div>
 										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_goodstype-material">
-													<span>Search Material</span>
+													<input type="checkbox" name="attr_foodtype-food">
+													<span>Search Food</span>
 												</div>
 											</div>
 											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_goodstype-compound">
+													<input type="checkbox" name="attr_foodtype-beverage">
+													<span>Search Beverage</span>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
+												<div class="wuxButton wuxWidth120">
+													<input type="checkbox" name="attr_ingtype-compound">
 													<span>Search Compound</span>
-												</div>
-											</div>
-											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
-												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_goodstype-supplement">
-													<span>Search Supplement</span>
 												</div>
 											</div>
 										</div>
 										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_goodstype-animal_good">
+													<input type="checkbox" name="attr_ingtype-supplement">
+													<span>Search Supplement</span>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
+												<div class="wuxButton wuxWidth120">
+													<input type="checkbox" name="attr_ingtype-animal_good">
 													<span>Search Animal Good</span>
 												</div>
 											</div>
 											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_goodstype-starch">
+													<input type="checkbox" name="attr_ingtype-starch">
 													<span>Search Starch</span>
-												</div>
-											</div>
-											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
-												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_goodstype-fruit">
-													<span>Search Fruit</span>
 												</div>
 											</div>
 										</div>
 										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_goodstype-vegetable">
+													<input type="checkbox" name="attr_ingtype-fruit">
+													<span>Search Fruit</span>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
+												<div class="wuxButton wuxWidth120">
+													<input type="checkbox" name="attr_ingtype-vegetable">
 													<span>Search Vegetable</span>
 												</div>
 											</div>
@@ -13697,14 +13703,6 @@
 															<span>Labourer</span>
 														</div>
 													</span>
-													<input type="hidden" class="wuxHiddenField-flag" name="attr_job-sentinel" value="0">
-													<span class="wuxHiddenInlineField">
-														<input type="hidden" class="wuxJobSelection-flag" name="attr_job-sentinel_learn" />
-														<div class="wuxButton ">
-															<input type="checkbox" name="attr_forme-selectjob" value="Sentinel">
-															<span>Sentinel</span>
-														</div>
-													</span>
 													<input type="hidden" class="wuxHiddenField-flag" name="attr_job-brawler" value="0">
 													<span class="wuxHiddenInlineField">
 														<input type="hidden" class="wuxJobSelection-flag" name="attr_job-brawler_learn" />
@@ -13719,6 +13717,14 @@
 														<div class="wuxButton ">
 															<input type="checkbox" name="attr_forme-selectjob" value="Warden">
 															<span>Warden</span>
+														</div>
+													</span>
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_job-sentinel" value="0">
+													<span class="wuxHiddenInlineField">
+														<input type="hidden" class="wuxJobSelection-flag" name="attr_job-sentinel_learn" />
+														<div class="wuxButton ">
+															<input type="checkbox" name="attr_forme-selectjob" value="Sentinel">
+															<span>Sentinel</span>
 														</div>
 													</span>
 													<input type="hidden" class="wuxHiddenField-flag" name="attr_job-sniper" value="0">
@@ -13849,20 +13855,20 @@
 															<span>Preacher</span>
 														</div>
 													</span>
-													<input type="hidden" class="wuxHiddenField-flag" name="attr_job-merchant" value="0">
-													<span class="wuxHiddenInlineField">
-														<input type="hidden" class="wuxJobSelection-flag" name="attr_job-merchant_learn" />
-														<div class="wuxButton ">
-															<input type="checkbox" name="attr_forme-selectjob" value="Merchant">
-															<span>Merchant</span>
-														</div>
-													</span>
 													<input type="hidden" class="wuxHiddenField-flag" name="attr_job-courtier" value="0">
 													<span class="wuxHiddenInlineField">
 														<input type="hidden" class="wuxJobSelection-flag" name="attr_job-courtier_learn" />
 														<div class="wuxButton ">
 															<input type="checkbox" name="attr_forme-selectjob" value="Courtier">
 															<span>Courtier</span>
+														</div>
+													</span>
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_job-merchant" value="0">
+													<span class="wuxHiddenInlineField">
+														<input type="hidden" class="wuxJobSelection-flag" name="attr_job-merchant_learn" />
+														<div class="wuxButton ">
+															<input type="checkbox" name="attr_forme-selectjob" value="Merchant">
+															<span>Merchant</span>
 														</div>
 													</span>
 													<input type="hidden" class="wuxHiddenField-flag" name="attr_job-diplomat" value="0">
@@ -14020,10 +14026,6 @@
 								<div class="wuxButton wuxWidth120">
 									<input type="checkbox" name="attr_techbasefilter-social">
 									<span>Social Techniques</span>
-								</div>
-								<div class="wuxButton wuxWidth120">
-									<input type="checkbox" name="attr_techbasefilter-support">
-									<span>Support Techniques</span>
 								</div>
 								<div class="wuxButton wuxWidth120">
 									<input type="checkbox" name="attr_techbasefilter-utility">
@@ -14357,7 +14359,7 @@
 										<div class="wuxFeatureHeader">
 											<div class="wuxFeatureHeaderDisplayBlock">
 												<div class="wuxFeatureHeaderDisplayTitleBlock">
-													<div class="wuxFeatureHeaderName"><span class="wuxFeatureHeaderNameCount" name="attr_itemcountenergydrink">0</span><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Energy Drink}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{FlavorText=One can and the fatigue lifts, replaced shortly after by a jittery hum.}}{{Core0Data=Target gains 2 EN}}{{Core0Tooltip=&#91;EN&#93;}}{{Core1Tooltip=EN is a resource that is spent when using more powerful techniques. Usually you will generate some at the start of every round in a combat. Some techniques can also generate EN.}}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Energy Drink&#37;&#37;,&#37;&#37;en&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;will&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;focus&#37;&#37;&&false,&#37;&#37;item&#37;&#37;&&&#37;&#37;Energy Drink&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Energy Drink-0$$&#64;{sheetname}}}{{targetData=!utech Energy Drink-0$$&#64;{sheetname}}}">
+													<div class="wuxFeatureHeaderName"><span class="wuxFeatureHeaderNameCount" name="attr_itemcountenergydrink">0</span><button class="wuxFeatureHeaderNameButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Energy Drink}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{FlavorText=One can and the fatigue lifts, replaced shortly after by a jittery hum.}}{{Core0Data=Target gains 2 EN}}{{Core1Data=Target takes 2d6 Will damage}}{{Core0Tooltip=&#91;EN&#93;}}{{Core1Tooltip=EN is a resource that is spent when using more powerful techniques. Usually you will generate some at the start of every round in a combat. Some techniques can also generate EN.}}{{Core2Tooltip=}}{{Core3Tooltip=&#91;Damage&#93;}}{{Core4Tooltip=This technique deals damage to the target&#39;s HP or Willpower, decreasing their current value.}}{{Willbreak0Data=Target gains the Flustered Status}}{{Willbreak0Tooltip=Will Break}}{{Willbreak1Tooltip=When a character&#39;s Willpower depletes to zero they can suffer from a technique&#39;s will break effects. You can choose to not trigger a technique&#39;s will break effects. When a will break is triggered, the effects listed occur to the target and then their Willpower restores to full.}}{{Willbreak2Tooltip=}}{{Willbreak3Tooltip=&#91;Flustered&#93;}}{{Willbreak4Tooltip=All skill checks against a flustered target receive +1 Advantage and request checks against the target increase by 5. }}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Energy Drink&#37;&#37;,&#37;&#37;en&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;will&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;focus&#37;&#37;&&false,&#37;&#37;item&#37;&#37;&&&#37;&#37;Energy Drink&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Energy Drink-0$$&#64;{sheetname}}}{{targetData=!utech Energy Drink-0$$&#64;{sheetname}}}">
 															<span>Energy Drink</span>
 														</button></div>
 													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
@@ -14389,15 +14391,26 @@
 															<span class="wuxTooltipText"><strong>Effects</strong></span>
 															<div class="wuxTooltipContent">
 																<div class="wuxHeader2">Core Effects</div>
-																<span class="wuxDescription">[EN]</span><br /><span class="wuxDescription">EN is a resource that is spent when using more powerful techniques. Usually you will generate some at the start of every round in a combat. Some techniques can also generate EN.</span>
+																<span class="wuxDescription">[EN]</span><br /><span class="wuxDescription">EN is a resource that is spent when using more powerful techniques. Usually you will generate some at the start of every round in a combat. Some techniques can also generate EN.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Damage]</span><br /><span class="wuxDescription">This technique deals damage to the target's HP or Willpower, decreasing their current value.</span>
 															</div>
 														</span></span></div>
-												<div class="wuxFeatureHeaderInfoContents"><span>Target gains 2 EN</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target gains 2 EN
+														Target takes 2d6 Will damage</span></div>
 											</div>
 
 
 
-
+											<div class="wuxFeatureHeaderInfoEffect-WillBreak">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="WillBreak">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span class="wuxTooltip">
+															<span class="wuxTooltipText"><strong>Will Break Effects</strong></span>
+															<div class="wuxTooltipContent">
+																<div class="wuxHeader2">Will Break Effects</div>
+																<span class="wuxDescription">Will Break</span><br /><span class="wuxDescription">When a character's Willpower depletes to zero they can suffer from a technique's will break effects. You can choose to not trigger a technique's will break effects. When a will break is triggered, the effects listed occur to the target and then their Willpower restores to full.</span><br /><span class="wuxDescription"></span><br /><span class="wuxDescription">[Flustered]</span><br /><span class="wuxDescription">All skill checks against a flustered target receive +1 Advantage and request checks against the target increase by 5. </span>
+															</div>
+														</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target gains the Flustered Status</span></div>
+											</div>
 
 										</div>
 									</div>
@@ -16510,21 +16523,6 @@
 												<span class="wuxInteractiveAuxIcon">&#9634;</span>
 												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-utility" />
 												Utility
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="wuxFilterPopupContentData">
-									<div class="wuxInteractiveBlock">
-										<div class="wuxInteractiveInnerBlock">
-											<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-support" />
-											<div class="wuxInteractiveContent">
-												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-support" />
-												<span class="wuxInteractiveIcon">&#9635;</span>
-												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-support" />
-												<span class="wuxInteractiveAuxIcon">&#9634;</span>
-												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-support" />
-												Support
 											</div>
 										</div>
 									</div>
@@ -18807,10 +18805,10 @@ WuxWorkerInspectPopup.OpenPerkFilterTechniqueInspection(eventinfo)
 on("change:ttl-isplayer", function (eventinfo) {
 WuxWorkerPerks.SetIsPlayer(eventinfo)
 });
-on("change:job-fighter change:job-labourer change:job-sentinel change:job-brawler change:job-warden change:job-sniper change:job-rogue change:job-exemplar change:job-hunter change:job-warmage change:job-geomancer change:job-kineticist change:job-trooper change:job-yaksa change:job-tactician change:job-bard change:job-spellwright change:job-shade change:job-medic change:job-alchemist change:job-preacher change:job-merchant change:job-courtier change:job-diplomat change:job-phantasm", function (eventinfo) {
+on("change:job-fighter change:job-labourer change:job-brawler change:job-warden change:job-sentinel change:job-sniper change:job-rogue change:job-exemplar change:job-hunter change:job-warmage change:job-geomancer change:job-kineticist change:job-trooper change:job-yaksa change:job-tactician change:job-bard change:job-spellwright change:job-shade change:job-medic change:job-alchemist change:job-preacher change:job-courtier change:job-merchant change:job-diplomat change:job-phantasm", function (eventinfo) {
 WuxWorkerJobs.UpdateBuildPoints(eventinfo)
 });
-on("change:job-fighter_info change:job-labourer_info change:job-sentinel_info change:job-brawler_info change:job-warden_info change:job-sniper_info change:job-rogue_info change:job-exemplar_info change:job-hunter_info change:job-warmage_info change:job-geomancer_info change:job-kineticist_info change:job-trooper_info change:job-yaksa_info change:job-tactician_info change:job-bard_info change:job-spellwright_info change:job-shade_info change:job-medic_info change:job-alchemist_info change:job-preacher_info change:job-merchant_info change:job-courtier_info change:job-diplomat_info change:job-phantasm_info", function (eventinfo) {
+on("change:job-fighter_info change:job-labourer_info change:job-brawler_info change:job-warden_info change:job-sentinel_info change:job-sniper_info change:job-rogue_info change:job-exemplar_info change:job-hunter_info change:job-warmage_info change:job-geomancer_info change:job-kineticist_info change:job-trooper_info change:job-yaksa_info change:job-tactician_info change:job-bard_info change:job-spellwright_info change:job-shade_info change:job-medic_info change:job-alchemist_info change:job-preacher_info change:job-courtier_info change:job-merchant_info change:job-diplomat_info change:job-phantasm_info", function (eventinfo) {
 WuxWorkerJobs.SeeTechniques(eventinfo)
 });
 on("change:skl-aesthetics_rank change:skl-agility_rank change:skl-aim_rank change:skl-alchemy_rank change:skl-analyze_rank change:skl-build_rank change:skl-charm_rank change:skl-cook_rank change:skl-demoralize_rank change:skl-energize_rank change:skl-empathy_rank change:skl-flux_rank change:skl-glyphwork_rank change:skl-inspire_rank change:skl-martial_rank change:skl-materialize_rank change:skl-medicine_rank change:skl-misdirect_rank change:skl-musicianship_rank change:skl-notice_rank change:skl-physio_rank change:skl-physique_rank change:skl-pilot_rank change:skl-rationalize_rank change:skl-resonance_rank change:skl-tinker_rank change:skl-transmute_rank change:skl-aesthetics_expertise change:skl-agility_expertise change:skl-aim_expertise change:skl-alchemy_expertise change:skl-analyze_expertise change:skl-build_expertise change:skl-charm_expertise change:skl-cook_expertise change:skl-demoralize_expertise change:skl-energize_expertise change:skl-empathy_expertise change:skl-flux_expertise change:skl-glyphwork_expertise change:skl-inspire_expertise change:skl-martial_expertise change:skl-materialize_expertise change:skl-medicine_expertise change:skl-misdirect_expertise change:skl-musicianship_expertise change:skl-notice_expertise change:skl-physio_expertise change:skl-physique_expertise change:skl-pilot_expertise change:skl-rationalize_expertise change:skl-resonance_expertise change:skl-tinker_expertise change:skl-transmute_expertise", function (eventinfo) {
@@ -18955,11 +18953,17 @@ WuxWorkerPerks.DeleteListPerk(eventinfo)
 on("change:equiptype-weapon change:equiptype-apparel change:equiptype-tool change:popup-finditemsbyfilter change:popup-finditemsbytechnique", function (eventinfo) {
 WuxWorkerGear.OpenFindItems(eventinfo)
 });
-on("change:geartype-supplies change:geartype-implements change:geartype-records change:geartype-food change:geartype-beverage", function (eventinfo) {
+on("change:geartype-supplies change:geartype-implements change:geartype-records", function (eventinfo) {
 WuxWorkerGear.OpenFindGear(eventinfo)
 });
-on("change:goodstype-material change:goodstype-compound change:goodstype-supplement change:goodstype-animal_good change:goodstype-starch change:goodstype-fruit change:goodstype-vegetable", function (eventinfo) {
-WuxWorkerGear.OpenFindGoods(eventinfo)
+on("change:goodstype-material change:goodstype-goods", function (eventinfo) {
+WuxWorkerGear.OpenFindGoodsForGear(eventinfo)
+});
+on("change:foodtype-food change:foodtype-beverage", function (eventinfo) {
+WuxWorkerGear.OpenFindFoodsItem(eventinfo)
+});
+on("change:ingtype-compound change:ingtype-supplement change:ingtype-animal_good change:ingtype-starch change:ingtype-fruit change:ingtype-vegetable", function (eventinfo) {
+WuxWorkerGear.OpenFindIngsItem(eventinfo)
 });
 on("change:repeating_gear:gear-buy", function (eventinfo) {
 WuxWorkerGear.BuyGearItem(eventinfo)
@@ -18973,17 +18977,17 @@ WuxWorkerGear.InspectGearItem(eventinfo)
 on("change:repeating_gear:gear-delete", function (eventinfo) {
 WuxWorkerGear.DeleteGearItem(eventinfo)
 });
-on("change:repeating_goods:gear-buy", function (eventinfo) {
-WuxWorkerGear.BuyGoodsItem(eventinfo)
+on("change:repeating_foods:gear-buy", function (eventinfo) {
+WuxWorkerGear.BuyFoodsItem(eventinfo)
 });
-on("change:repeating_goods:gear-buybulk", function (eventinfo) {
-WuxWorkerGear.BuyGoodsItemBulk(eventinfo)
+on("change:repeating_foods:gear-buybulk", function (eventinfo) {
+WuxWorkerGear.BuyFoodsItemBulk(eventinfo)
 });
-on("change:repeating_goods:gear-inspect", function (eventinfo) {
-WuxWorkerGear.InspectGoodsItem(eventinfo)
+on("change:repeating_foods:gear-inspect", function (eventinfo) {
+WuxWorkerGear.InspectFoodsItem(eventinfo)
 });
-on("change:repeating_goods:gear-delete", function (eventinfo) {
-WuxWorkerGear.DeleteGoodsItem(eventinfo)
+on("change:repeating_foods:gear-delete", function (eventinfo) {
+WuxWorkerGear.DeleteFoodsItem(eventinfo)
 });
 on("change:consutype-recovery change:consutype-tonic change:consutype-bomb", function (eventinfo) {
 WuxWorkerGear.OpenFindConsumables(eventinfo)
@@ -19234,13 +19238,13 @@ WuxWorkerInspectPopup.OpenRecommendedStylesInspection()
 on("change:autofilter-meleeweapons change:autofilter-lightblade change:autofilter-heavyblade change:autofilter-hammer change:autofilter-polearm change:autofilter-whip change:autofilter-rangedweapons change:autofilter-bow change:autofilter-handgun change:autofilter-longshot change:autofilter-thrownblade change:autofilter-athletics change:autofilter-forcefulfist change:autofilter-grappler change:autofilter-swiftform change:autofilter-mobility change:autofilter-acrobatics change:autofilter-stealth change:autofilter-social change:autofilter-favorbuilding change:autofilter-request change:autofilter-influence change:autofilter-emotion change:autofilter-woodmagic change:autofilter-plantmartial change:autofilter-plants change:autofilter-wood change:autofilter-wind change:autofilter-mana change:autofilter-woodsound change:autofilter-woodhealing change:autofilter-woodempowering change:autofilter-firemagic change:autofilter-flamemartial change:autofilter-flames change:autofilter-glass change:autofilter-smoke change:autofilter-firehealing change:autofilter-fireempowering change:autofilter-earthmagic change:autofilter-sandmartial change:autofilter-rock change:autofilter-terrain change:autofilter-gravity change:autofilter-earthempowering change:autofilter-metalmagic change:autofilter-lightningmartial change:autofilter-ironsand change:autofilter-metal change:autofilter-lightning change:autofilter-stasis change:autofilter-metalempowering change:autofilter-watermagic change:autofilter-icemartial change:autofilter-water change:autofilter-cold change:autofilter-ice change:autofilter-waterhealing change:autofilter-watersound change:autofilter-waterempowering change:autofilter-specialmagic change:autofilter-ether change:autofilter-corrosion change:autofilter-light change:autofilter-shadow change:autofilter-blood change:autofilter-time", function (eventinfo) {
 WuxWorkerInspectPopup.OpenStyleFilterTechniqueInspection(eventinfo)
 });
-on("change:techbasefilter-combat change:techbasefilter-social change:techbasefilter-support change:techbasefilter-utility", function (eventinfo) {
+on("change:techbasefilter-combat change:techbasefilter-social change:techbasefilter-utility", function (eventinfo) {
 WuxWorkerActions.QuickFilterFormeActions(eventinfo)
 });
 on("change:adv-ap_job change:perk-spirit_conduit", function (eventinfo) {
 WuxWorkerActions.UpdateTechniqueChangeVisibility()
 });
-on("change:note-opennotebookactions change:note-notebookactions0 change:note-notebookactions1 change:note-notebookactions2 change:note-notebookactions3 change:repeating_jobstyles:forme-actions change::forme-actions change:repeating_styles:forme-actions change:forme-jobslot1_submenu change:forme-advancedslot1_submenu change:forme-styleslot1_submenu change:forme-jobslot2_submenu change:forme-advancedslot2_submenu change:forme-styleslot2_submenu change:forme-jobslot3_submenu change:forme-advancedslot3_submenu change:forme-styleslot3_submenu change:forme-styleslot4_submenu change:forme-styleslot5_submenu change:forme-styleslot6_submenu change:repeating_equipment:gear-itemaction change:repeating_consumables:gear-itemaction change:repeating_goods:gear-itemaction change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change:repeating_consumables:act-actions change::act-actions change::act-actions change::act-actions change::act-actions change:repeating_customtech:act-actions change:job-fighter_expand change:job-labourer_expand change:job-sentinel_expand change:job-brawler_expand change:job-warden_expand change:job-sniper_expand change:job-rogue_expand change:job-exemplar_expand change:job-hunter_expand change:job-warmage_expand change:job-geomancer_expand change:job-kineticist_expand change:job-trooper_expand change:job-yaksa_expand change:job-tactician_expand change:job-bard_expand change:job-spellwright_expand change:job-shade_expand change:job-medic_expand change:job-alchemist_expand change:job-preacher_expand change:job-merchant_expand change:job-courtier_expand change:job-diplomat_expand change:job-phantasm_expand", function (eventinfo) {
+on("change:note-opennotebookactions change:note-notebookactions0 change:note-notebookactions1 change:note-notebookactions2 change:note-notebookactions3 change:repeating_jobstyles:forme-actions change::forme-actions change:repeating_styles:forme-actions change:forme-jobslot1_submenu change:forme-advancedslot1_submenu change:forme-styleslot1_submenu change:forme-jobslot2_submenu change:forme-advancedslot2_submenu change:forme-styleslot2_submenu change:forme-jobslot3_submenu change:forme-advancedslot3_submenu change:forme-styleslot3_submenu change:forme-styleslot4_submenu change:forme-styleslot5_submenu change:forme-styleslot6_submenu change:repeating_equipment:gear-itemaction change:repeating_consumables:gear-itemaction change:repeating_foods:gear-itemaction change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change:repeating_consumables:act-actions change::act-actions change::act-actions change::act-actions change::act-actions change:repeating_customtech:act-actions change:job-fighter_expand change:job-labourer_expand change:job-brawler_expand change:job-warden_expand change:job-sentinel_expand change:job-sniper_expand change:job-rogue_expand change:job-exemplar_expand change:job-hunter_expand change:job-warmage_expand change:job-geomancer_expand change:job-kineticist_expand change:job-trooper_expand change:job-yaksa_expand change:job-tactician_expand change:job-bard_expand change:job-spellwright_expand change:job-shade_expand change:job-medic_expand change:job-alchemist_expand change:job-preacher_expand change:job-courtier_expand change:job-merchant_expand change:job-diplomat_expand change:job-phantasm_expand", function (eventinfo) {
 WuxWorkerGeneral.OpenSubMenu(eventinfo)
 });
 on("change:popup-submenuactive", function (eventinfo) {

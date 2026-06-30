@@ -423,6 +423,11 @@ class TechniqueAssessment {
             output.points += Math.ceil(technique.willPower / 5);
             output.pointCalc.push("Magic");
         }
+        
+        if (technique.boon > 0) {
+            output.points += 5;
+            output.pointCalc.push("Magic");
+        }
 
         return output;
     }
@@ -499,6 +504,9 @@ class TechniqueAssessment {
                 break;
             case "BreakFocus":
                 this.getBreakFocusAssessment(effect, attributeHandler);
+                break;
+            case "CallAssist":
+                this.getCallAssistAssessment();
                 break;
             case "Terrain":
                 this.getTerrainAssessment(effect, attributeHandler);
@@ -707,7 +715,7 @@ class TechniqueAssessment {
                     this.addPointsRubric(output.value, message);
                 }
                 this.addTargetedPointsRubric(effect, output.value);
-                this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("TechFilterType_Utility");
                 this.addImpactTrait("Trait_Heal");
                 break;
             case "Surge":
@@ -722,7 +730,7 @@ class TechniqueAssessment {
                     this.addPointsRubric(output.value, message);
                 }
                 this.addTargetedPointsRubric(effect, output.value);
-                this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("TechFilterType_Utility");
                 this.addImpactTrait("Trait_Heal");
                 break;
             case "Special":
@@ -793,7 +801,7 @@ class TechniqueAssessment {
         let output = this.getDiceFormula(effect, attributeHandler);
         output.value *= 21;
         if (effect.subType == "Heal") {
-            this.addImpactTrait("TechFilterType_Support");
+            this.addImpactTrait("TechFilterType_Utility");
             this.addImpactTrait("Trait_Heal");
         }
         else {
@@ -1135,10 +1143,7 @@ class TechniqueAssessment {
                         }
                     }
                 }
-                if (state.isBeneficial) {
-                    this.addImpactTrait("TechFilterType_Support");
-                }
-                else if (!this.isCombat) {
+                if (state.isBeneficial || !this.isCombat) {
                     this.addImpactTrait("TechFilterType_Utility");
                 }
                 if (state.type == "Emotion") {
@@ -1165,7 +1170,7 @@ class TechniqueAssessment {
                     this.addImpactTrait(`Trait_Cleanse:${state.name}`);
                 }
                 this.addTargetedPointsRubric(effect, value);
-                this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("TechFilterType_Utility");
                 this.addImpactTrait("Trait_Cleanse");
 
                 if (effect.effect != "Stat_Engaged") {
@@ -1182,7 +1187,7 @@ class TechniqueAssessment {
 
                 if (effect.defense != "WillBreak") {
                     this.addPointsRubric(value, message);
-                    this.addImpactTrait("TechFilterType_Support");
+                    this.addImpactTrait("TechFilterType_Utility");
                 }
                 this.addTargetedPointsRubric(effect, value);
                 break;
@@ -1192,7 +1197,7 @@ class TechniqueAssessment {
 
                 this.addPointsRubric(value, message);
                 this.addTargetedPointsRubric(effect, value);
-                this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("TechFilterType_Utility");
                 this.addImpactTrait("Trait_Cleanse");
                 break;
             case "Remove All":
@@ -1201,7 +1206,7 @@ class TechniqueAssessment {
 
                 this.addPointsRubric(value, message);
                 this.addTargetedPointsRubric(effect, value);
-                this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("TechFilterType_Utility");
                 this.addImpactTrait("Trait_Cleanse");
                 break;
             case "Remove Will":
@@ -1210,7 +1215,7 @@ class TechniqueAssessment {
 
                 this.addPointsRubric(value, message);
                 this.addTargetedPointsRubric(effect, value);
-                this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("TechFilterType_Utility");
                 this.addImpactTrait("Trait_Cleanse");
                 break;
         }
@@ -1219,6 +1224,12 @@ class TechniqueAssessment {
     getBreakFocusAssessment() {
         let message = `(Break Focus)`;
         this.addPointsRubric(28, message);
+        this.addImpactTrait("TechFilterType_Utility");
+    }
+
+    getCallAssistAssessment() {
+        let message = `(Assist)`;
+        this.addPointsRubric(5, message);
         this.addImpactTrait("TechFilterType_Utility");
     }
 

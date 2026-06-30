@@ -2926,6 +2926,12 @@ class BaseTechniqueEffectDisplayData {
                 }
                 this.formatBreakFocusEffect(effect);
                 break;
+            case "CallAssist":
+                if (this.effectType != "CallAssist") {
+                    this.effectType = effect.type;
+                }
+                this.formatCallAssistEffect(effect);
+                break;
             case "Boost":
                 this.effectType = effect.type;
                 this.formatBoostEffect(effect);
@@ -3116,7 +3122,7 @@ class BaseTechniqueEffectDisplayData {
                 this.effectDescription += `Raise or lower the severity of an influence on your target`;
                 return;
             case "Reveal":
-                this.effectDescription += "A related influence to the statement is revealed to you. You learn whether the influence is supportive or oppositional";
+                this.effectDescription += "A related influence is revealed to you.";
                 return;
             case "RevealNeg":
                 this.effectDescription += "A related oppositional influence to the statement is revealed to you";
@@ -3208,6 +3214,10 @@ class BaseTechniqueEffectDisplayData {
         this.effectDescription += `A technique of your choice that is being focused on by the target ends`;
     }
 
+    formatCallAssistEffect() {
+        this.effectDescription += `${this.formatTarget(effect, "may", "may")} use an Assist action.`;
+    }
+
     formatResistanceEffect(effect) {
         let resistance = WuxDef.GetTitle("Resistance");
         let damageType = WuxDef.GetTitle(effect.effect);
@@ -3241,19 +3251,19 @@ class BaseTechniqueEffectDisplayData {
         let count = this.formatCalcBonus(effect);
         switch (effect.subType) {
             case "Count":
-                this.effectDescription += `You create ${count} ${effect.effect} at the targeted spaces.`;
+                this.effectDescription += `You create ${count} ${effect.effect} at the targeted space(s). `;
                 if (count > 1) {
-                    this.effectDescription += ` Each object must be within range of this technique.`;
+                    this.effectDescription += `Each object must be within range of this technique. `;
                 }
                 return;
             case "Dimensions":
-                this.effectDescription += `Each ${effect.effect} is ${count} spaces high`;
+                this.effectDescription += `${effect.effect} `;
                 return;
             case "HP":
-                this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("HP")}`;
+                this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("HP")}. `;
                 return;
             case "Armor":
-                this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("Cmb_Armor")}`;
+                this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("Cmb_Armor")}. `;
                 return;
             default:
                 this.effectDescription += effect.effect;
@@ -6841,7 +6851,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         return new WuxDataDatabase(arr, arr => {return new JobData(arr)}, ["group", "difficulty"]);
     };
     const createGoods = function (arr) {
-        return new Database(arr, ["group"], function (arr) {
+        return new Database(arr, ["group", "location", "rarity"], function (arr) {
             return new GoodsData(arr);
         });
     };
@@ -8738,6 +8748,11 @@ class TechniqueAssessment {
             output.points += Math.ceil(technique.willPower / 5);
             output.pointCalc.push("Magic");
         }
+        
+        if (technique.boon > 0) {
+            output.points += 5;
+            output.pointCalc.push("Magic");
+        }
 
         return output;
     }
@@ -8814,6 +8829,9 @@ class TechniqueAssessment {
                 break;
             case "BreakFocus":
                 this.getBreakFocusAssessment(effect, attributeHandler);
+                break;
+            case "CallAssist":
+                this.getCallAssistAssessment();
                 break;
             case "Terrain":
                 this.getTerrainAssessment(effect, attributeHandler);
@@ -9022,7 +9040,7 @@ class TechniqueAssessment {
                     this.addPointsRubric(output.value, message);
                 }
                 this.addTargetedPointsRubric(effect, output.value);
-                this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("TechFilterType_Utility");
                 this.addImpactTrait("Trait_Heal");
                 break;
             case "Surge":
@@ -9037,7 +9055,7 @@ class TechniqueAssessment {
                     this.addPointsRubric(output.value, message);
                 }
                 this.addTargetedPointsRubric(effect, output.value);
-                this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("TechFilterType_Utility");
                 this.addImpactTrait("Trait_Heal");
                 break;
             case "Special":
@@ -9108,7 +9126,7 @@ class TechniqueAssessment {
         let output = this.getDiceFormula(effect, attributeHandler);
         output.value *= 21;
         if (effect.subType == "Heal") {
-            this.addImpactTrait("TechFilterType_Support");
+            this.addImpactTrait("TechFilterType_Utility");
             this.addImpactTrait("Trait_Heal");
         }
         else {
@@ -9450,10 +9468,7 @@ class TechniqueAssessment {
                         }
                     }
                 }
-                if (state.isBeneficial) {
-                    this.addImpactTrait("TechFilterType_Support");
-                }
-                else if (!this.isCombat) {
+                if (state.isBeneficial || !this.isCombat) {
                     this.addImpactTrait("TechFilterType_Utility");
                 }
                 if (state.type == "Emotion") {
@@ -9480,7 +9495,7 @@ class TechniqueAssessment {
                     this.addImpactTrait(`Trait_Cleanse:${state.name}`);
                 }
                 this.addTargetedPointsRubric(effect, value);
-                this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("TechFilterType_Utility");
                 this.addImpactTrait("Trait_Cleanse");
 
                 if (effect.effect != "Stat_Engaged") {
@@ -9497,7 +9512,7 @@ class TechniqueAssessment {
 
                 if (effect.defense != "WillBreak") {
                     this.addPointsRubric(value, message);
-                    this.addImpactTrait("TechFilterType_Support");
+                    this.addImpactTrait("TechFilterType_Utility");
                 }
                 this.addTargetedPointsRubric(effect, value);
                 break;
@@ -9507,7 +9522,7 @@ class TechniqueAssessment {
 
                 this.addPointsRubric(value, message);
                 this.addTargetedPointsRubric(effect, value);
-                this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("TechFilterType_Utility");
                 this.addImpactTrait("Trait_Cleanse");
                 break;
             case "Remove All":
@@ -9516,7 +9531,7 @@ class TechniqueAssessment {
 
                 this.addPointsRubric(value, message);
                 this.addTargetedPointsRubric(effect, value);
-                this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("TechFilterType_Utility");
                 this.addImpactTrait("Trait_Cleanse");
                 break;
             case "Remove Will":
@@ -9525,7 +9540,7 @@ class TechniqueAssessment {
 
                 this.addPointsRubric(value, message);
                 this.addTargetedPointsRubric(effect, value);
-                this.addImpactTrait("TechFilterType_Support");
+                this.addImpactTrait("TechFilterType_Utility");
                 this.addImpactTrait("Trait_Cleanse");
                 break;
         }
@@ -9534,6 +9549,12 @@ class TechniqueAssessment {
     getBreakFocusAssessment() {
         let message = `(Break Focus)`;
         this.addPointsRubric(28, message);
+        this.addImpactTrait("TechFilterType_Utility");
+    }
+
+    getCallAssistAssessment() {
+        let message = `(Assist)`;
+        this.addPointsRubric(5, message);
         this.addImpactTrait("TechFilterType_Utility");
     }
 
@@ -11886,7 +11907,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 },
 
                 buildGearItems = function () {
-                    let contents = WuxSheetMain.MultiRowGroup([storedGear(), storedGoods()], WuxSheetMain.Table.FlexTable, 2);
+                    let contents = WuxSheetMain.MultiRowGroup([storedGear(), storedFoods()], WuxSheetMain.Table.FlexTable, 2);
                     contents = WuxSheetMain.TabBlock(contents);
                     let definition = WuxDef.Get("Page_GearItems");
                     return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
@@ -11919,6 +11940,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         </div>`);
 
                     let repeaterContent = buildRepeater("repeating_gear",
+                        `<input type="hidden" name="${getGearAttribute("ItemMainGroup")}" value="0">` +
                         WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents));
 
                     let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
@@ -11931,20 +11953,26 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 },
 
                 addGearFilterButtons = function () {
-                    let gearTypes = WuxDef.Filter([new DatabaseFilterData("group", "GearType")]);
                     let searchButtonDef = WuxDef.Get("Popup_SearchButton");
-                    let items = [];
+                    let gearTypes = WuxDef.Filter([new DatabaseFilterData("group", "GearType")]);
+                    let gearItems = [];
                     for (let i = 0; i < gearTypes.length; i++) {
-                        items.push(WuxSheetMain.Table.FlexTableGroup(
+                        gearItems.push(WuxSheetMain.Table.FlexTableGroup(
                             WuxSheetMain.Button(gearTypes[i].getAttribute(), searchButtonDef.getTitle(gearTypes[i].getTitle()), "wuxWidth120"),
                             "wuxMaxWidth220"));
                     }
+                    let goodsTypes = WuxDef.Filter([new DatabaseFilterData("group", "GoodsType")]);
+                    for (let i = 0; i < goodsTypes.length; i++) {
+                        gearItems.push(WuxSheetMain.Table.FlexTableGroup(
+                            WuxSheetMain.Button(goodsTypes[i].getAttribute(), searchButtonDef.getTitle(goodsTypes[i].getTitle()), "wuxWidth120"),
+                            "wuxMaxWidth220"));
+                    }
                     return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddGear"))}
-                        ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 3)}`;
+                        ${WuxSheetMain.MultiRowGroup(gearItems, WuxSheetMain.Table.FlexTable, 3)}`;
                 },
 
-                storedGoods = function () {
-                    let repeatingDef = WuxDef.Get("RepeatingGoods");
+                storedFoods = function () {
+                    let repeatingDef = WuxDef.Get("RepeatingFoods");
                     let buyDef = WuxDef.Get("Gear_Buy");
                     let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
                     let inspectDef = WuxDef.Get("Gear_Inspect");
@@ -11970,28 +11998,35 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         </div>`);
 
                     let repeaterContent = buildRepeater(repeatingDef.getVariable(),
+                        `<input type="hidden" name="${getGearAttribute("ItemMainGroup")}" value="0">` +
                         WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents));
 
                     let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
                         <div>
                             ${repeaterContent}
                             ${WuxSheetMain.Row("&nbsp;")}
-                            ${addGoodsFilterButtons()}
+                            ${addFoodsFilterButtons()}
                         </div>`;
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
 
-                addGoodsFilterButtons = function () {
-                    let goodsTypes = WuxDef.Filter([new DatabaseFilterData("group", "GoodsType")]);
+                addFoodsFilterButtons = function () {
                     let searchButtonDef = WuxDef.Get("Popup_SearchButton");
-                    let items = [];
-                    for (let i = 0; i < goodsTypes.length; i++) {
-                        items.push(WuxSheetMain.Table.FlexTableGroup(
-                            WuxSheetMain.Button(goodsTypes[i].getAttribute(), searchButtonDef.getTitle(goodsTypes[i].getTitle()), "wuxWidth120"),
+                    let foodTypes = WuxDef.Filter([new DatabaseFilterData("group", "FoodType")]);
+                    let foodItems = [];
+                    for (let i = 0; i < foodTypes.length; i++) {
+                        foodItems.push(WuxSheetMain.Table.FlexTableGroup(
+                            WuxSheetMain.Button(foodTypes[i].getAttribute(), searchButtonDef.getTitle(foodTypes[i].getTitle()), "wuxWidth120"),
                             "wuxMaxWidth220"));
                     }
-                    return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddGood"))}
-                        ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 3)}`;
+                    let ingTypes = WuxDef.Filter([new DatabaseFilterData("group", "IngType")]);
+                    for (let i = 0; i < ingTypes.length; i++) {
+                        foodItems.push(WuxSheetMain.Table.FlexTableGroup(
+                            WuxSheetMain.Button(ingTypes[i].getAttribute(), searchButtonDef.getTitle(ingTypes[i].getTitle()), "wuxWidth120"),
+                            "wuxMaxWidth220"));
+                    }
+                    return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddConsumable"))}
+                        ${WuxSheetMain.MultiRowGroup(foodItems, WuxSheetMain.Table.FlexTable, 3)}`;
                 },
 
                 buildEquipment = function () {
@@ -13255,14 +13290,16 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerFindItemsButtons();
             output += listenerFindGearButtons();
             output += listenerFindGoodsButtons();
+            output += listenerFindFoodButtons();
+            output += listenerFindIngButtons();
             output += listenerBuyGearItem();
             output += listenerBuyGearItemBulk();
             output += listenerInspectGearItem();
             output += listenerDeleteGearItem();
-            output += listenerBuyGoodsItem();
-            output += listenerBuyGoodsItemBulk();
-            output += listenerInspectGoodsItem();
-            output += listenerDeleteGoodsItem();
+            output += listenerBuyFoodsItem();
+            output += listenerBuyFoodsItemBulk();
+            output += listenerInspectFoodsItem();
+            output += listenerDeleteFoodsItem();
             output += listenerFindConsumablesButtons();
             output += listenerBuyConsumable();
             output += listenerBuyConsumableBulk();
@@ -13302,7 +13339,17 @@ var GearBuilder = GearBuilder || (function () {
         listenerFindGoodsButtons = function () {
             let goodsTypes = WuxDef.Filter([new DatabaseFilterData("group", "GoodsType")]);
             let variables = goodsTypes.map(def => def.getVariable());
-            return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindGoods(eventinfo)`, true);
+            return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindGoodsForGear(eventinfo)`, true);
+        },
+        listenerFindFoodButtons = function () {
+            let foodTypes = WuxDef.Filter([new DatabaseFilterData("group", "FoodType")]);
+            let variables = foodTypes.map(def => def.getVariable());
+            return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindFoodsItem(eventinfo)`, true);
+        },
+        listenerFindIngButtons = function () {
+            let ingTypes = WuxDef.Filter([new DatabaseFilterData("group", "IngType")]);
+            let variables = ingTypes.map(def => def.getVariable());
+            return WuxSheetBackend.OnChange(variables, `WuxWorkerGear.OpenFindIngsItem(eventinfo)`, true);
         },
         listenerBuyGearItem = function () {
             return WuxSheetBackend.OnChange(
@@ -13324,25 +13371,25 @@ var GearBuilder = GearBuilder || (function () {
                 [`repeating_gear:${WuxDef.GetVariable("Gear_Delete")}`],
                 `WuxWorkerGear.DeleteGearItem(eventinfo)`, true);
         },
-        listenerBuyGoodsItem = function () {
+        listenerBuyFoodsItem = function () {
             return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Buy")}`],
-                `WuxWorkerGear.BuyGoodsItem(eventinfo)`, true);
+                [`${WuxDef.GetVariable("RepeatingFoods")}:${WuxDef.GetVariable("Gear_Buy")}`],
+                `WuxWorkerGear.BuyFoodsItem(eventinfo)`, true);
         },
-        listenerBuyGoodsItemBulk = function () {
+        listenerBuyFoodsItemBulk = function () {
             return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_BuyBulk")}`],
-                `WuxWorkerGear.BuyGoodsItemBulk(eventinfo)`, true);
+                [`${WuxDef.GetVariable("RepeatingFoods")}:${WuxDef.GetVariable("Gear_BuyBulk")}`],
+                `WuxWorkerGear.BuyFoodsItemBulk(eventinfo)`, true);
         },
-        listenerInspectGoodsItem = function () {
+        listenerInspectFoodsItem = function () {
             return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectGoodsItem(eventinfo)`, true);
+                [`${WuxDef.GetVariable("RepeatingFoods")}:${WuxDef.GetVariable("Gear_Inspect")}`],
+                `WuxWorkerGear.InspectFoodsItem(eventinfo)`, true);
         },
-        listenerDeleteGoodsItem = function () {
+        listenerDeleteFoodsItem = function () {
             return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingGoods")}:${WuxDef.GetVariable("Gear_Delete")}`],
-                `WuxWorkerGear.DeleteGoodsItem(eventinfo)`, true);
+                [`${WuxDef.GetVariable("RepeatingFoods")}:${WuxDef.GetVariable("Gear_Delete")}`],
+                `WuxWorkerGear.DeleteFoodsItem(eventinfo)`, true);
         },
         listenerFindConsumablesButtons = function () {
             let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
@@ -13642,7 +13689,7 @@ var PopupBuilder = PopupBuilder || (function () {
             let actionFieldName = `${WuxDef.GetVariable("Gear")}-${WuxDef.GetVariable("ItemAction")}`;
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingEquipment")}:${actionFieldName}`]);
             groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingConsumables")}:${actionFieldName}`]);
-            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingGoods")}:${actionFieldName}`]);
+            groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingFoods")}:${actionFieldName}`]);
             
             for (let i = 1; i <= 3; i++) {
                 groupVariableNames = groupVariableNames.concat([`${WuxDef.GetVariable("RepeatingJobTech", i)}:${WuxDef.GetVariable("Action_Actions")}`]);
