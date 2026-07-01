@@ -3215,7 +3215,7 @@ class BaseTechniqueEffectDisplayData {
     }
 
     formatCallAssistEffect() {
-        this.effectDescription += `${this.formatTarget(effect, "may", "may")} use an Assist action.`;
+        this.effectDescription += `The target may use an Assist action`;
     }
 
     formatResistanceEffect(effect) {
@@ -5700,8 +5700,9 @@ class SandboxRepeatingSectionHandler extends RepeatingSectionHandler {
         let a = 0, b = [];
         return function () {
             let c = (new Date()).getTime() + 0, d = c === a;
+            let e, f;
             a = c;
-            for (let e = new Array(8), f = 7; 0 <= f; f--) {
+            for (e = new Array(8), f = 7; 0 <= f; f--) {
                 e[f] = "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".charAt(c % 64);
                 c = Math.floor(c / 64);
             }
@@ -5724,7 +5725,7 @@ class SandboxRepeatingSectionHandler extends RepeatingSectionHandler {
     }
 
     generateRowId() {
-        return this.generateUUID().replace(/_/g, "Z");
+        return this.generateUUID()().replace(/_/g, "Z");
     }
     
     findRepeatingRowIdAttribute(id) {

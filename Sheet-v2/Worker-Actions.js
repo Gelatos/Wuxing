@@ -967,7 +967,7 @@ class FormeTechniqueDatabase {
         let repeater = attrHandler.getRepeatingSection(this.formeActionsRepeaterId);
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");
         techniqueAttributeHandler.setRepeaterData(repeater);
-        let maxLoadCount = unsetBaseTechniqueData.length;
+        let maxLoadCount = 5;
         
         let i = 0;
         while(i < maxLoadCount) {

@@ -21,6 +21,7 @@ on("chat:message", function (msg) {
         WuxTechniqueResolver.HandleInput(msg, tag, content);
         WuxMessage.HandleMessageInput(msg, tag, content);
         TargetReference.HandleInput(msg, tag, content);
+        WuxAdventureManager.HandleInput(msg, tag, content);
     }
 });
 
