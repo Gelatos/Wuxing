@@ -1873,6 +1873,14 @@ var TargetReference = TargetReference || (function () {
             // output += tokenOptionButton("Add Surge", "phealsurge ?{Team index|0}@@@?{How much surge to add?|1}");
             // output += tokenOptionButton("Add Vitality", "phealvit ?{Team index|0}@@@?{How much vitality to add?|1}");
 
+            if (playerIsGM(msg.playerid)) {
+                const locationTypes = WuxDef.Filter(new DatabaseFilterData("group", "LocationType"));
+                const locationOptions = locationTypes.map(function (lt) { return lt.title; }).join("|");
+                output += tokenOptionSpacer();
+                output += tokenOptionTitle("Adventure Options");
+                output += tokenOptionButton("Adventure Options", `adventureoptions ?{Choose Location|${locationOptions}}`);
+            }
+
             let senderMessage = new SystemInfoMessage(output);
             senderMessage.setSender(sender);
             WuxMessage.Send(senderMessage, sender);
