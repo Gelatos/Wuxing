@@ -10978,10 +10978,16 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
 
         buildGearPageNavigation = function () {
             let definition = WuxDef.Get("Page_Gear");
-            let characterCreationContents = characterCreationNavigation(definition, definition.title);
+            let jinDisplay = `<div class="wuxSlotSection"><span class="wuxSlotLabel">${WuxDef.GetTitle("Title_YourJin")}</span><span class="wuxSlotData"><span name="${WuxDef.GetAttribute("Jin")}"></span><span> J</span></span></div>`;
+
+            let finishButton = buildTabButton("checkbox", `${WuxDef.GetAttribute("PageSet_Character Creator")}${WuxDef._finish}`, "Finish", "Finish", false, "") + "\n";
+            let gearCharacterCreationContents = buildCharacterCreationTabs(definition.title) +
+                buildStickySideTab(jinDisplay + buildTabButtonRow(finishButton)) +
+                buildHeader("Character Creation", definition.title, definition.getAttribute(WuxDef._info));
+
             let output = buildCharacterCreationSplit("Core",
-                mainPageNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), ""),
-                characterCreationContents);
+                mainPageNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), buildStickySideTab(jinDisplay)),
+                gearCharacterCreationContents);
             return buildSection(output, WuxSheetMain.Info.DefaultContents(definition));
         },
 
