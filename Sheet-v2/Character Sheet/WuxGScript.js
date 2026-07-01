@@ -623,6 +623,51 @@ class TechniqueEffectDatabase extends Database {
     }
 }
 
+class ExtendedGoodsDatabase extends Database {
+
+    constructor(data) {
+        let filters = ["group", "location", "rarity"];
+        let dataCreation = function (data) {
+            return new GoodsData(data);
+        };
+        super(data, filters, dataCreation);
+    }
+
+    performAddSortingGroups(value) {
+        for (let property in this.sortingGroups) {
+            if (property == "group") {
+                if (value.group.indexOf(";") >= 0) {
+                    let groups = value.group.split(";");
+                    for (let i = 0; i < groups.length; i++) {
+                        if (groups[i].trim() != "") {
+                            this.addSortingGroup("group", groups[i].trim(), value);
+                        }
+                    }
+                }
+                else {
+                    this.addSortingGroup("group", value.group, value);
+                }
+            }
+            else if (property == "location") {
+                if (value.location.indexOf(";") >= 0) {
+                    let groups = value.affinity.split(";");
+                    for (let i = 0; i < groups.length; i++) {
+                        if (groups[i].trim() != "") {
+                            this.addSortingGroup("location", groups[i].trim(), value);
+                        }
+                    }
+                }
+                else {
+                    this.addSortingGroup("location", value.location, value);
+                }
+            }
+            else if (value != undefined && value.hasOwnProperty(property)) {
+                this.addSortingGroup(property, value[property], value);
+            }
+        }
+    }
+}
+
 class dbObj {
     constructor(data) {
         this.createEmpty();
@@ -6852,9 +6897,7 @@ var SheetsDatabase = SheetsDatabase || (function () {
         return new WuxDataDatabase(arr, arr => {return new JobData(arr)}, ["group", "difficulty"]);
     };
     const createGoods = function (arr) {
-        return new Database(arr, ["group", "location", "rarity"], function (arr) {
-            return new GoodsData(arr);
-        });
+        return new ExtendedGoodsDatabase(arr);
     };
     const createGear = function (arr) {
         return new ExtendedUsableItemDatabase(arr, function (data) {

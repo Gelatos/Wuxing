@@ -13582,6 +13582,12 @@
 													<span>Search Goods</span>
 												</div>
 											</div>
+											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
+												<div class="wuxButton wuxWidth120">
+													<input type="checkbox" name="attr_goodstype-animal_good">
+													<span>Search Animal Good</span>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -13658,8 +13664,8 @@
 											</div>
 											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_ingtype-animal_good">
-													<span>Search Animal Good</span>
+													<input type="checkbox" name="attr_ingtype-protein">
+													<span>Search Protein</span>
 												</div>
 											</div>
 											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
@@ -13670,6 +13676,12 @@
 											</div>
 										</div>
 										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
+												<div class="wuxButton wuxWidth120">
+													<input type="checkbox" name="attr_ingtype-sugar">
+													<span>Search Sugar</span>
+												</div>
+											</div>
 											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
 													<input type="checkbox" name="attr_ingtype-fruit">
@@ -19511,6 +19523,21 @@
 								<div class="wuxFilterPopupContentData">
 									<div class="wuxInteractiveBlock">
 										<div class="wuxInteractiveInnerBlock">
+											<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_popup-finditemsbyfilter-trt-medkit" />
+											<div class="wuxInteractiveContent">
+												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-trt-medkit" />
+												<span class="wuxInteractiveIcon">&#9635;</span>
+												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-trt-medkit" />
+												<span class="wuxInteractiveAuxIcon">&#9634;</span>
+												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-trt-medkit" />
+												Medkit
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="wuxFilterPopupContentData">
+									<div class="wuxInteractiveBlock">
+										<div class="wuxInteractiveInnerBlock">
 											<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_popup-finditemsbyfilter-trt-dustcontainer" />
 											<div class="wuxInteractiveContent">
 												<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-trt-dustcontainer" />
@@ -19927,13 +19954,13 @@ WuxWorkerGear.OpenFindItems(eventinfo)
 on("change:geartype-supplies change:geartype-implements change:geartype-records", function (eventinfo) {
 WuxWorkerGear.OpenFindGear(eventinfo)
 });
-on("change:goodstype-material change:goodstype-goods", function (eventinfo) {
+on("change:goodstype-material change:goodstype-goods change:goodstype-animal_good", function (eventinfo) {
 WuxWorkerGear.OpenFindGoodsForGear(eventinfo)
 });
 on("change:foodtype-food change:foodtype-beverage", function (eventinfo) {
 WuxWorkerGear.OpenFindFoodsItem(eventinfo)
 });
-on("change:ingtype-compound change:ingtype-supplement change:ingtype-animal_good change:ingtype-starch change:ingtype-fruit change:ingtype-vegetable", function (eventinfo) {
+on("change:ingtype-compound change:ingtype-supplement change:ingtype-protein change:ingtype-starch change:ingtype-sugar change:ingtype-fruit change:ingtype-vegetable", function (eventinfo) {
 WuxWorkerGear.OpenFindIngsItem(eventinfo)
 });
 on("change:repeating_gear:gear-buy", function (eventinfo) {
