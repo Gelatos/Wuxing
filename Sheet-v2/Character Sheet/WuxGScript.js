@@ -10120,12 +10120,17 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 <span class="wuxTooltipText">\n${text}\n</span>
                 <div class="wuxTooltipContent">\n${contents}\n</div>
                 </span>`;
+                },
+
+                inline = function (text, contents) {
+                    return `<span class="wuxTooltip"><span class="wuxTooltipText">${text}</span><span class="wuxTooltipContent">${contents}</span></span>`;
                 }
 
             return {
                 Button: button,
                 Icon: icon,
-                Text: text
+                Text: text,
+                Inline: inline
             };
         }()),
 
@@ -14524,40 +14529,20 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let output = "";
                             let jobClasses = WuxDef.Filter([new DatabaseFilterData("group", "JobClass")]);
                             for (let i = 0; i < jobClasses.length; i++) {
-                                let jobclass = jobClasses[i];
-                                output += buildJobClass(
-                                    WuxDef.Filter(new DatabaseFilterData("subGroup", jobclass.name)),
-                                    jobclass, jobsDictionary);
+                                output += buildJobClass(jobClasses[i], jobsDictionary);
                             }
                             return output;
                         },
 
-                        buildJobClass = function (archetypes, jobclassDefinition, jobsDictionary) {
-                            let output = "";
-                            for (let i = 0; i < archetypes.length; i++) {
-                                let archetype = archetypes[i];
-                                let jobFilter = jobsDictionary.filter(new DatabaseFilterData("group", archetype.title));
-                                output += buildArchetype(jobFilter, archetype);
-                            }
-
-                            output = WuxSheetMain.TabBlock(output);
-                            return WuxSheetMain.CollapsibleTab(jobclassDefinition.getAttribute(WuxDef._tab, WuxDef._expand), jobclassDefinition.title, output);
-                        },
-
-                        buildArchetype = function (jobs, archetypeDefinition) {
+                        buildJobClass = function (jobclassDefinition, jobsDictionary) {
+                            let jobClassGroup = jobclassDefinition.name;
+                            let jobs = jobsDictionary.filter(new DatabaseFilterData("group", jobClassGroup));
                             let jobData = [];
                             for (let i = 0; i < jobs.length; i++) {
                                 jobData.push(buildJob(jobs[i]));
                             }
-
-                            let output = WuxSheetMain.Desc(archetypeDefinition.getDescription()) +
-                                WuxSheetMain.MultiRowGroup(jobData, WuxSheetMain.Table.FlexTable, 2);
-
-                            let hiddenField = archetypeDefinition.getAttribute(WuxDef._expand);
-                            let header = WuxSheetMain.Header(
-                                WuxSheetMain.CollapsibleHeader(
-                                    `<span>${(archetypeDefinition.getTitle())}</span>`, hiddenField));
-                            return header + WuxSheetMain.HiddenAuxField(hiddenField, output);
+                            let output = WuxSheetMain.TabBlock(WuxSheetMain.MultiRowGroup(jobData, WuxSheetMain.Table.FlexTable, 2));
+                            return WuxSheetMain.CollapsibleTab(jobclassDefinition.getAttribute(WuxDef._tab, WuxDef._expand), jobclassDefinition.title, output);
                         },
 
                         buildJob = function (job) {
@@ -14579,11 +14564,27 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         buildJobDescription = function (job) {
-                            return WuxSheetMain.Desc(`<span>Category: ${job.category}</span>
-                            <span>Difficulty: ${Format.PrintIcons(job.difficulty, 3, `★`, `☆`)}</span>
-                            <span>Main Skills: ${printTechniqueSkills(job.skills)}</span>
-                            <span>&nbsp;</span>
-                            <span>${job.getDescription("</span><span>")}</span>`);
+                            let roleGroupDef = WuxDef.Get(`JobGroup_${job.role}`);
+                            let roleDisplay = job.role
+                                ? WuxSheetMain.Tooltip.Inline(job.role, WuxDefinition.TooltipDescription(roleGroupDef))
+                                : "";
+                            let roleContent = `${WuxDef.GetTitle("Title_MainRole")}: ${roleDisplay}`;
+                            if (job.subRole) {
+                                let subRoleGroupDef = WuxDef.Get(`JobGroup_${job.subRole}`);
+                                let subRoleDisplay = WuxSheetMain.Tooltip.Inline(job.subRole, WuxDefinition.TooltipDescription(subRoleGroupDef));
+                                roleContent += ` | ${WuxDef.GetTitle("Title_SubRole")}: ${subRoleDisplay}`;
+                            }
+                            const difficultyClassKeys = ["", "JobClass_Simple", "JobClass_Intermediate", "JobClass_Advanced"];
+                            let difficultyIcons = Format.PrintIcons(job.difficulty, 3, `★`, `☆`);
+                            let difficultyClassDef = WuxDef.Get(difficultyClassKeys[job.difficulty] || "");
+                            let difficultyDisplay = difficultyClassDef && job.difficulty > 0
+                                ? WuxSheetMain.Tooltip.Inline(difficultyIcons, WuxDefinition.TooltipDescription(difficultyClassDef))
+                                : difficultyIcons;
+                            return WuxSheetMain.Desc(`<span>${roleContent}</span>
+<span>Difficulty: ${difficultyDisplay}</span>
+<span>Main Skills: ${printTechniqueSkills(job.skills)}</span>
+<span>&nbsp;</span>
+<span>${job.getDescription("</span><span>")}</span>`);
                         },
 
                         printTechniqueSkills = function (skills) {

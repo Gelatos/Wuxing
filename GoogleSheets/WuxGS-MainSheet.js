@@ -449,12 +449,17 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 <span class="wuxTooltipText">\n${text}\n</span>
                 <div class="wuxTooltipContent">\n${contents}\n</div>
                 </span>`;
+                },
+
+                inline = function (text, contents) {
+                    return `<span class="wuxTooltip"><span class="wuxTooltipText">${text}</span><span class="wuxTooltipContent">${contents}</span></span>`;
                 }
 
             return {
                 Button: button,
                 Icon: icon,
-                Text: text
+                Text: text,
+                Inline: inline
             };
         }()),
 
