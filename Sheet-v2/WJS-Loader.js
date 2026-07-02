@@ -1,9 +1,45 @@
-var wuxCurrentVersion = "1.0.12";
+var wuxCurrentVersion = "2.0.0";
 
-var upgrade_to_1_0_12 = function (currentVersion) {
+var upgrade_to_2_0_0 = function (currentVersion) {
+	// From 1.0.9: clear old popup values
+	let inspectPopupOldItemsRepeater = new WorkerRepeatingSectionHandler("ItemPopupValues");
+	inspectPopupOldItemsRepeater.getIds(function (itemPopupRepeater) {
+		itemPopupRepeater.removeAllIds();
+	});
+
 	let styleWorker = new WuxStyleWorkerBuild();
-	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.12");
+	let attributeHandler = loaderAttrubuteHandler(currentVersion, "2.0.0");
 
+	// From 1.0.7: Soc_Impatience, AffinityAspect
+	attributeHandler.addUpdate(WuxDef.GetVariable("Soc_Impatience"), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("Soc_Impatience", WuxDef._max), 16);
+	let affinityAspectVar = WuxDef.GetVariable("AffinityAspect");
+	attributeHandler.addUpdate(affinityAspectVar, 0);
+	let affinityVar = WuxDef.GetVariable("Affinity");
+	attributeHandler.addMod(affinityVar);
+
+	// From 1.0.11: Equipment, Consumables, Lore repeaters
+	attributeHandler.addRepeatingSection("RepeatingEquipment");
+	attributeHandler.addRepeatingSection("RepeatingConsumables");
+	let loreRepeaterIds = [
+		"RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
+		"RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+	];
+	let loreTierVar = WuxDef.GetVariable("Lore_Tier");
+	let loreSubTypeVar = WuxDef.GetVariable("Lore_SubType");
+	let loreNameVar = WuxDef.GetVariable("Lore_Name");
+	let loreCategoryDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "LoreCategory"));
+
+	for (let i = 0; i < loreCategoryDefinitions.length; i++) {
+		attributeHandler.addMod(loreCategoryDefinitions[i].getVariable(WuxDef._rank));
+	}
+	for (let i = 0; i < loreRepeaterIds.length; i++) {
+		attributeHandler.addRepeatingSection(loreRepeaterIds[i]);
+		let repeater = attributeHandler.getRepeatingSection(loreRepeaterIds[i]);
+		repeater.addFieldNames([loreTierVar, loreSubTypeVar, loreNameVar]);
+	}
+
+	// From 1.0.12: Styles repeater, StyleWorker, UpdatePerkMaxRanks, Advancement, Build managers
 	attributeHandler.addRepeatingSection("RepeatingStyles");
 	attributeHandler.addMod(styleWorker.attrBuildDraft);
 	attributeHandler.addMod(styleWorker.attrMax);
@@ -16,10 +52,60 @@ var upgrade_to_1_0_12 = function (currentVersion) {
 	let advancementWorker = new WuxAdvancementWorkerBuild();
 	advancementWorker.updateAdvancementPoints(attributeHandler);
 
+	let techniqueManager = new WuxWorkerBuildManager(["Technique"]);
+	techniqueManager.setupAttributeHandlerForPointUpdate(attributeHandler);
+
 	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Perk", "Style"]);
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
+		// From 1.0.7: Technique build stats
+		techniqueManager.iterate(function (worker) {
+			attrHandler.addUpdate(affinityAspectVar, attrHandler.parseString(affinityVar));
+			worker.setBuildStatsDraft(attrHandler);
+			attrHandler.addUpdate(worker.attrBuildDraft, JSON.stringify(worker.buildStats));
+			worker.setPointsMax(attributeHandler);
+			worker.updatePoints(attributeHandler);
+		});
+
+		// From 1.0.11: Lore migration and page reset
+		attributeHandler.getRepeatingSection("RepeatingEquipment").removeAllIds();
+		attributeHandler.getRepeatingSection("RepeatingConsumables").removeAllIds();
+		attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "0");
+		attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits"), "None");
+		attrHandler.addUpdate(WuxDef.GetVariable("Jin"), 1000);
+		attributeHandler.addUpdate(WuxDef.GetVariable("Loading"), "0");
+		attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Origin");
+		attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Builder");
+
+		let loreWorker = new WuxLoreWorkerBuild();
+		loreWorker.buildStats = new WorkerBuildStats();
+
+		for (let i = 0; i < loreCategoryDefinitions.length; i++) {
+			let rawRank = attrHandler.parseString(loreCategoryDefinitions[i].getVariable(WuxDef._rank));
+			if (rawRank === "on" || parseInt(rawRank) > 0) {
+				let key = `General ${loreCategoryDefinitions[i].title}`;
+				loreWorker.buildStats.add(key, new WorkerBuildStat([key, "on"]));
+			}
+		}
+		for (let i = 0; i < loreRepeaterIds.length; i++) {
+			let repeater = attrHandler.getRepeatingSection(loreRepeaterIds[i]);
+			repeater.iterate(function (id) {
+				let tier = attrHandler.parseInt(repeater.getFieldName(id, loreTierVar));
+				if (tier > 0) {
+					let subType = attrHandler.parseString(repeater.getFieldName(id, loreSubTypeVar));
+					let loreName = subType === "1"
+						? attrHandler.parseString(repeater.getFieldName(id, loreNameVar))
+						: subType;
+					if (loreName !== "" && loreName !== "0") {
+						loreWorker.buildStats.add(loreName, new WorkerBuildStat([loreName, tier.toString()]));
+					}
+				}
+			});
+		}
+		attrHandler.addUpdate(loreWorker.attrBuildDraft, JSON.stringify(loreWorker.buildStats));
+
+		// From 1.0.12: Styles and all build stats
 		attributeHandler.getRepeatingSection("RepeatingStyles").removeAllIds();
 		styleWorker.setBuildStatsDraft(attrHandler);
 		styleWorker.clearBuildStats();
@@ -62,130 +148,6 @@ var upgrade_to_1_0_12 = function (currentVersion) {
 	attributeHandler.run();
 };
 
-var upgrade_to_1_0_11 = function (currentVersion) {
-	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.11");
-
-	attributeHandler.addRepeatingSection("RepeatingEquipment");
-	attributeHandler.addRepeatingSection("RepeatingConsumables");
-
-	let loreRepeaterIds = [
-		"RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
-		"RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
-	];
-	let loreTierVar = WuxDef.GetVariable("Lore_Tier");
-	let loreSubTypeVar = WuxDef.GetVariable("Lore_SubType");
-	let loreNameVar = WuxDef.GetVariable("Lore_Name");
-	let loreCategoryDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "LoreCategory"));
-
-	for (let i = 0; i < loreCategoryDefinitions.length; i++) {
-		attributeHandler.addMod(loreCategoryDefinitions[i].getVariable(WuxDef._rank));
-	}
-	for (let i = 0; i < loreRepeaterIds.length; i++) {
-		attributeHandler.addRepeatingSection(loreRepeaterIds[i]);
-		let repeater = attributeHandler.getRepeatingSection(loreRepeaterIds[i]);
-		repeater.addFieldNames([loreTierVar, loreSubTypeVar, loreNameVar]);
-	}
-	
-	attributeHandler.addGetAttrCallback(function (attrHandler) {
-		attributeHandler.getRepeatingSection("RepeatingEquipment").removeAllIds();
-		attributeHandler.getRepeatingSection("RepeatingConsumables").removeAllIds();
-		attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "0");
-		attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits"), "None");
-		attrHandler.addUpdate(WuxDef.GetVariable("Jin"), 1000);
-		attributeHandler.addUpdate(WuxDef.GetVariable("Loading"), "0");
-		attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Origin");
-		attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Builder");
-
-		let loreWorker = new WuxLoreWorkerBuild();
-		loreWorker.buildStats = new WorkerBuildStats();
-
-		for (let i = 0; i < loreCategoryDefinitions.length; i++) {
-			let rawRank = attrHandler.parseString(loreCategoryDefinitions[i].getVariable(WuxDef._rank));
-			if (rawRank === "on" || parseInt(rawRank) > 0) {
-				let key = `General ${loreCategoryDefinitions[i].title}`;
-				loreWorker.buildStats.add(key, new WorkerBuildStat([key, "on"]));
-			}
-		}
-		for (let i = 0; i < loreRepeaterIds.length; i++) {
-			let repeater = attrHandler.getRepeatingSection(loreRepeaterIds[i]);
-			repeater.iterate(function (id) {
-				let tier = attrHandler.parseInt(repeater.getFieldName(id, loreTierVar));
-				if (tier > 0) {
-					let subType = attrHandler.parseString(repeater.getFieldName(id, loreSubTypeVar));
-					let loreName = subType === "1"
-						? attrHandler.parseString(repeater.getFieldName(id, loreNameVar))
-						: subType;
-					if (loreName !== "" && loreName !== "0") {
-						loreWorker.buildStats.add(loreName, new WorkerBuildStat([loreName, tier.toString()]));
-					}
-				}
-			});
-		}
-
-		attrHandler.addUpdate(loreWorker.attrBuildDraft, JSON.stringify(loreWorker.buildStats));
-	});
-
-	attributeHandler.run();
-};
-
-var upgrade_to_1_0_10 = function (currentVersion) {
-	let worker = new WuxStyleWorkerBuild();
-	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.10");
-	attributeHandler.addRepeatingSection("RepeatingStyles");
-	attributeHandler.addMod(worker.attrBuildDraft);
-	attributeHandler.addMod(worker.attrMax);
-	attributeHandler.addMod("CR");
-
-	WuxWorkerGeneral.UpdatePerkMaxRanks(attributeHandler);
-
-	attributeHandler.addGetAttrCallback(function (attrHandler) {
-		attributeHandler.getRepeatingSection("RepeatingStyles").removeAllIds();
-		worker.setBuildStatsDraft(attrHandler);
-		worker.clearBuildStats();
-		worker.updatePoints(attrHandler);
-		worker.revertBuildStatsDraft(attrHandler);
-	});
-
-	attributeHandler.run();
-};
-
-var upgrade_to_1_0_9 = function (currentVersion) {
-	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.9");
-	let inspectPopupOldItemsRepeater = new WorkerRepeatingSectionHandler("ItemPopupValues");
-	inspectPopupOldItemsRepeater.getIds(function (itemPopupRepeater) {
-		itemPopupRepeater.removeAllIds();
-	});
-	attributeHandler.run();
-}
-
-var upgrade_to_1_0_7 = function (currentVersion) {
-	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.7");
-	
-	attributeHandler.addUpdate(WuxDef.GetVariable("Soc_Impatience"), 0);
-	attributeHandler.addUpdate(WuxDef.GetVariable("Soc_Impatience", WuxDef._max), 16);
-
-	let affinityAspectVar = WuxDef.GetVariable("AffinityAspect");
-	attributeHandler.addUpdate(affinityAspectVar, 0);
-	let affinityVar = WuxDef.GetVariable("Affinity");
-	attributeHandler.addMod(affinityVar);
-	
-	let manager = new WuxWorkerBuildManager(["Technique"]);
-	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
-
-	attributeHandler.addGetAttrCallback(function (attrHandler) {
-		manager.iterate(function(worker) {
-			attrHandler.addUpdate(affinityAspectVar, attrHandler.parseString(affinityVar));
-			
-			worker.setBuildStatsDraft(attrHandler);
-			attrHandler.addUpdate(worker.attrBuildDraft, JSON.stringify(worker.buildStats));
-			worker.setPointsMax(attributeHandler);
-			worker.updatePoints(attributeHandler);
-		});
-	});
-
-	attributeHandler.run();
-};
-
 var upgrade_to_1_0_0 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.0");
 	attributeHandler.addUpdate(WuxDef.GetVariable("Loading"), "0");
@@ -218,9 +180,9 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 
 	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Perk"]);
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
-	
+
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
-			
+
 		// update all slots
 		let jobDef = WuxDef.Get("JobSlots");
 		attrHandler.addUpdate(jobDef.getVariable(), jobDef.formula.getValue(attrHandler));
@@ -232,7 +194,7 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 		attrHandler.addUpdate(weaponDef.getVariable(), weaponDef.formula.getValue(attrHandler));
 		let equipmentDef = WuxDef.Get("EquipmentSlots");
 		attrHandler.addUpdate(equipmentDef.getVariable(), equipmentDef.formula.getValue(attrHandler));
-		
+
 		manager.iterate(function(worker) {
 			worker.setBuildStatsDraft(attrHandler);
 			attrHandler.addUpdate(worker.attrBuildDraft, JSON.stringify(worker.buildStats));
@@ -271,18 +233,10 @@ var versioning = function () {
 				console.log(`Wuxing Sheet modified from 5th Edition OGL by Roll20 v${wuxCurrentVersion}`);
 				break;
 			case "1.0.11":
-				upgrade_to_1_0_12(v["version"]);
-				break;
 			case "1.0.10":
-				upgrade_to_1_0_11(v["version"]);
-				break;
 			case "1.0.9":
-				upgrade_to_1_0_10(v["version"]);
-				break;
 			case "1.0.8":
 			case "1.0.7":
-				upgrade_to_1_0_9(v["version"]);
-				break;
 			case "1.0.6":
 			case "1.0.5":
 			case "1.0.4":
@@ -290,7 +244,7 @@ var versioning = function () {
 			case "1.0.2":
 			case "1.0.1":
 			case "1.0.0":
-				upgrade_to_1_0_7(v["version"]);
+				upgrade_to_2_0_0(v["version"]);
 				break;
 			default:
 				upgrade_to_1_0_0(v["version"]);
