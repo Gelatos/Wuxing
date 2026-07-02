@@ -503,11 +503,11 @@ class BaseItemDisplayBuilder extends BaseFeatureDisplayBuilder {
 
     printBulk() {}
     printBulkField (contents) {
-        return `<div class="wuxFeatureHeaderDisplayInfoBulk">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> Bulk</span></div>`;
+        return `<div class="wuxFeatureHeaderDisplayInfoBulk">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> Bulk</span>${WuxSheetMain.HiddenSpanField(this.getActionTypeAttribute("ItemPerFive"), `<sub class="wuxFeatureHeaderDisplayInfoSubtitle">${WuxDef.GetTitle("ItemPerFive")}</sub>`)}</div>`;
     }
     printBaseValue() {}
     printBaseValueField (contents) {
-        return `<div class="wuxFeatureHeaderDisplayInfoCoin">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> J</span></div>`;
+        return `<div class="wuxFeatureHeaderDisplayInfoCoin">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> J</span>${WuxSheetMain.HiddenSpanField(this.getActionTypeAttribute("ItemPerFive"), `<sub class="wuxFeatureHeaderDisplayInfoSubtitle">${WuxDef.GetTitle("ItemPerFive")}</sub>`)}</div>`;
     }
 
     printFlavorText() {}

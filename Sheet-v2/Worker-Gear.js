@@ -1039,7 +1039,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             WuxWorkerInspectPopup.OpenGoodsFilterInspection(filters, matchedDef.title, ["Add Good", "Purchase Good"]);
         },
 
-        buyGearItemWithCount = function (eventinfo, quantity) {
+        buyGearItemWithCount = function (eventinfo, isBulk) {
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addRepeatingSection("RepeatingGear");
             let repeater = attributeHandler.getRepeatingSection("RepeatingGear");
@@ -1054,10 +1054,13 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let itemName = attrHandler.parseString(repeater.getFieldName(selectedId, itemNameVar));
                 let mainGroup = attrHandler.parseString(repeater.getFieldName(selectedId, itemMainGroupVar));
-                let item = mainGroup === "Goods" ? WuxGoods.Get(itemName) : WuxItems.Get(itemName);
+                let isGoods = mainGroup === "Goods";
+                let item = isGoods ? WuxGoods.Get(itemName) : WuxItems.Get(itemName);
                 if (item == undefined) return;
                 let cost = parseInt(item.value) || 0;
-                attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost * quantity).toString());
+                let quantity = isGoods ? (isBulk ? 50 : 5) : (isBulk ? 10 : 1);
+                let costMultiplier = isBulk ? 10 : 1;
+                attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost * costMultiplier).toString());
                 let currentCount = attrHandler.parseInt(repeater.getFieldName(selectedId, itemCountVar)) || 0;
                 attrHandler.addUpdate(repeater.getFieldName(selectedId, itemCountVar), currentCount + quantity);
                 attrHandler.addUpdate(repeater.getFieldName(selectedId, itemIsVisibleVar), "on");
@@ -1066,14 +1069,14 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         },
 
         buyGearItem = function (eventinfo) {
-            buyGearItemWithCount(eventinfo, 1);
+            buyGearItemWithCount(eventinfo, false);
         },
 
         buyGearItemBulk = function (eventinfo) {
-            buyGearItemWithCount(eventinfo, 10);
+            buyGearItemWithCount(eventinfo, true);
         },
 
-        buyGoodsItemWithCount = function (eventinfo, quantity) {
+        buyGoodsItemWithCount = function (eventinfo, quantity, costMultiplier) {
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addRepeatingSection("RepeatingGoods");
             let repeater = attributeHandler.getRepeatingSection("RepeatingGoods");
@@ -1089,7 +1092,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 let item = WuxGoods.Get(itemName);
                 if (item == undefined) return;
                 let cost = parseInt(item.value) || 0;
-                attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost * quantity).toString());
+                attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost * costMultiplier).toString());
                 let currentCount = attrHandler.parseInt(repeater.getFieldName(selectedId, itemCountVar)) || 0;
                 attrHandler.addUpdate(repeater.getFieldName(selectedId, itemCountVar), currentCount + quantity);
                 attrHandler.addUpdate(repeater.getFieldName(selectedId, itemIsVisibleVar), "on");
@@ -1098,11 +1101,11 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         },
 
         buyGoodsItem = function (eventinfo) {
-            buyGoodsItemWithCount(eventinfo, 1);
+            buyGoodsItemWithCount(eventinfo, 5, 1);
         },
 
         buyGoodsItemBulk = function (eventinfo) {
-            buyGoodsItemWithCount(eventinfo, 10);
+            buyGoodsItemWithCount(eventinfo, 50, 10);
         },
 
         inspectGearItem = function (eventinfo) {
@@ -1288,7 +1291,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             WuxWorkerInspectPopup.OpenIngsFilterInspection(filters, matchedDef.title, ["Add Ingredient", "Purchase Ingredient"]);
         },
 
-        buyFoodsItemWithCount = function (eventinfo, quantity) {
+        buyFoodsItemWithCount = function (eventinfo, isBulk) {
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addRepeatingSection("RepeatingFoods");
             let repeater = attributeHandler.getRepeatingSection("RepeatingFoods");
@@ -1303,10 +1306,13 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let itemName = attrHandler.parseString(repeater.getFieldName(selectedId, itemNameVar));
                 let mainGroup = attrHandler.parseString(repeater.getFieldName(selectedId, itemMainGroupVar));
-                let item = mainGroup === "Goods" ? WuxGoods.Get(itemName) : WuxItems.Get(itemName);
+                let isGoods = mainGroup === "Goods";
+                let item = isGoods ? WuxGoods.Get(itemName) : WuxItems.Get(itemName);
                 if (item == undefined) return;
                 let cost = parseInt(item.value) || 0;
-                attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost * quantity).toString());
+                let quantity = isGoods ? (isBulk ? 50 : 5) : (isBulk ? 10 : 1);
+                let costMultiplier = isBulk ? 10 : 1;
+                attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost * costMultiplier).toString());
                 let currentCount = attrHandler.parseInt(repeater.getFieldName(selectedId, itemCountVar)) || 0;
                 attrHandler.addUpdate(repeater.getFieldName(selectedId, itemCountVar), currentCount + quantity);
                 attrHandler.addUpdate(repeater.getFieldName(selectedId, itemIsVisibleVar), "on");
@@ -1315,11 +1321,11 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         },
 
         buyFoodsItem = function (eventinfo) {
-            buyFoodsItemWithCount(eventinfo, 1);
+            buyFoodsItemWithCount(eventinfo, false);
         },
 
         buyFoodsItemBulk = function (eventinfo) {
-            buyFoodsItemWithCount(eventinfo, 10);
+            buyFoodsItemWithCount(eventinfo, true);
         },
 
         inspectFoodsItem = function (eventinfo) {

@@ -1285,6 +1285,7 @@ class ItemDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.setSharedItemInfo(item);
 		let techData = new TechniqueDataAttributeHandler(this.attrHandler);
 		techData.clearTechniqueInfo();
+		this.attrHandler.addUpdate(this.getVariable("ItemPerFive"), "on");
 	}
 	setSharedItemInfo (item) {
 		let displayData = new ItemDisplayData(item);
@@ -1317,6 +1318,7 @@ class ItemDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addUpdate(this.getVariable("ItemTrait", WuxDef._info), 0);
 		this.attrHandler.addUpdate(this.getVariable("ItemCraft"), 0);
 		this.attrHandler.addUpdate(this.getVariable("ItemCraft", WuxDef._info), 0);
+		this.attrHandler.addUpdate(this.getVariable("ItemPerFive"), "0");
 	}
 }
 

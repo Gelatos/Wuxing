@@ -1007,7 +1007,7 @@ class GoodsInspectPopupAttributeHandler extends ItemInspectPopupAttributeHandler
             (!isNaN(cost) && jin >= cost) ? "on" : "0");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Title_InspectionItemCost"), !isNaN(cost) ? `${cost} J` : "");
 
-        this.itemDataAttributeHandler.setItemInfo(item);
+        this.itemDataAttributeHandler.setGoodsInfo(item);
 
         for (let i = 0; i <= 3; i++) {
             this.hideTechnique(i);
@@ -1074,27 +1074,48 @@ class GearInspectionPopup extends InspectionPopup {
         let actualName = isGoods ? itemName.slice(6) : itemName;
         let item = isGoods ? WuxGoods.Get(actualName) : WuxItems.Get(actualName);
         if (item == undefined) return;
-        this._addGearItem(attrHandler, itemName);
+        this._addGearItem(attrHandler, itemName, isGoods ? 5 : 1);
         let cost = parseInt(item.value) || 0;
         let jinVar = WuxDef.GetVariable("Jin");
         attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost).toString());
     }
 
-    _addGearItem(attrHandler, itemName) {
+    _addGearItem(attrHandler, itemName, count) {
         let isGoods = itemName.startsWith("Goods:");
         let actualName = isGoods ? itemName.slice(6) : itemName;
         let item = isGoods ? WuxGoods.Get(actualName) : WuxItems.Get(actualName);
         if (item == undefined) return;
+        let effectiveCount = count != undefined ? count : 1;
         let repeater = new WorkerRepeatingSectionHandler("RepeatingGear");
-        let newRowId = repeater.generateRowId();
-        this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
-        let itemValue = parseInt(item.value) || 0;
-        let buyDef = WuxDef.Get("Gear_Buy");
-        let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_Buy", WuxDef._info)), buyDef.getTitle(`1 (${itemValue}J)`));
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info)), buyBulkDef.getTitle(`10 (${itemValue * 10}J)`));
-        if (isGoods) {
-            attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemMainGroup")), "Goods");
+        let itemNameVar = this.getGearVariable("ItemName");
+        let itemCountVar = this.getGearVariable("ItemCount");
+        let existingRepeater = this.attributeHandler.getRepeatingSection("RepeatingGear");
+        let existingRowId = null;
+        if (existingRepeater) {
+            for (let id of existingRepeater.ids) {
+                if (attrHandler.parseString(repeater.getFieldName(id, itemNameVar)) === actualName) {
+                    existingRowId = id;
+                    break;
+                }
+            }
+        }
+        if (existingRowId != null) {
+            let countFieldName = repeater.getFieldName(existingRowId, itemCountVar);
+            attrHandler.addUpdate(countFieldName, attrHandler.parseInt(countFieldName) + effectiveCount);
+        } else {
+            let newRowId = repeater.generateRowId();
+            this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
+            let countFieldName = repeater.getFieldName(newRowId, itemCountVar);
+            attrHandler.addUpdate(countFieldName, effectiveCount);
+            attrHandler.addRepeatingSectionRowUpdate(newRowId, countFieldName, effectiveCount);
+            let itemValue = parseInt(item.value) || 0;
+            let buyDef = WuxDef.Get("Gear_Buy");
+            let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_Buy", WuxDef._info)), buyDef.getTitle(isGoods ? `5 (${itemValue}J)` : `1 (${itemValue}J)`));
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info)), buyBulkDef.getTitle(isGoods ? `50 (${itemValue * 10}J)` : `10 (${itemValue * 10}J)`));
+            if (isGoods) {
+                attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemMainGroup")), "Goods");
+            }
         }
     }
 
@@ -1146,23 +1167,44 @@ class GoodsInspectionPopup extends InspectionPopup {
         if (attrHandler.parseString(WuxDef.GetVariable("Popup_InspectAddType", "2")) !== "Purchase Good") return;
         let item = WuxGoods.Get(itemName);
         if (item == undefined) return;
-        this._addGoodsItem(attrHandler, itemName);
+        this._addGoodsItem(attrHandler, itemName, 5);
         let cost = parseInt(item.value) || 0;
         let jinVar = WuxDef.GetVariable("Jin");
         attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost).toString());
     }
 
-    _addGoodsItem(attrHandler, itemName) {
+    _addGoodsItem(attrHandler, itemName, count) {
         let item = WuxGoods.Get(itemName);
         if (item == undefined) return;
+        let effectiveCount = count != undefined ? count : 1;
         let repeater = new WorkerRepeatingSectionHandler("RepeatingGoods");
-        let newRowId = repeater.generateRowId();
-        this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
-        let itemValue = parseInt(item.value) || 0;
-        let buyDef = WuxDef.Get("Gear_Buy");
-        let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_Buy", WuxDef._info)), buyDef.getTitle(`1 (${itemValue}J)`));
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info)), buyBulkDef.getTitle(`10 (${itemValue * 10}J)`));
+        let itemNameVar = this.getGearVariable("ItemName");
+        let itemCountVar = this.getGearVariable("ItemCount");
+        let existingRepeater = this.attributeHandler.getRepeatingSection("RepeatingGoods");
+        let existingRowId = null;
+        if (existingRepeater) {
+            for (let id of existingRepeater.ids) {
+                if (attrHandler.parseString(repeater.getFieldName(id, itemNameVar)) === itemName) {
+                    existingRowId = id;
+                    break;
+                }
+            }
+        }
+        if (existingRowId != null) {
+            let countFieldName = repeater.getFieldName(existingRowId, itemCountVar);
+            attrHandler.addUpdate(countFieldName, attrHandler.parseInt(countFieldName) + effectiveCount);
+        } else {
+            let newRowId = repeater.generateRowId();
+            this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
+            let countFieldName = repeater.getFieldName(newRowId, itemCountVar);
+            attrHandler.addUpdate(countFieldName, effectiveCount);
+            attrHandler.addRepeatingSectionRowUpdate(newRowId, countFieldName, effectiveCount);
+            let itemValue = parseInt(item.value) || 0;
+            let buyDef = WuxDef.Get("Gear_Buy");
+            let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_Buy", WuxDef._info)), buyDef.getTitle(`5 (${itemValue}J)`));
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info)), buyBulkDef.getTitle(`50 (${itemValue * 10}J)`));
+        }
     }
 
     getGearVariable(variable, suffix) {
@@ -1213,24 +1255,45 @@ class GoodsForGearInspectionPopup extends InspectionPopup {
         if (attrHandler.parseString(WuxDef.GetVariable("Popup_InspectAddType", "2")) !== "Purchase Gear") return;
         let item = WuxGoods.Get(itemName);
         if (item == undefined) return;
-        this._addGoodsForGearItem(attrHandler, itemName);
+        this._addGoodsForGearItem(attrHandler, itemName, 5);
         let cost = parseInt(item.value) || 0;
         let jinVar = WuxDef.GetVariable("Jin");
         attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost).toString());
     }
 
-    _addGoodsForGearItem(attrHandler, itemName) {
+    _addGoodsForGearItem(attrHandler, itemName, count) {
         let item = WuxGoods.Get(itemName);
         if (item == undefined) return;
+        let effectiveCount = count != undefined ? count : 1;
         let repeater = new WorkerRepeatingSectionHandler("RepeatingGear");
-        let newRowId = repeater.generateRowId();
-        this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
-        let itemValue = parseInt(item.value) || 0;
-        let buyDef = WuxDef.Get("Gear_Buy");
-        let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_Buy", WuxDef._info)), buyDef.getTitle(`1 (${itemValue}J)`));
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info)), buyBulkDef.getTitle(`10 (${itemValue * 10}J)`));
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemMainGroup")), "Goods");
+        let itemNameVar = this.getGearVariable("ItemName");
+        let itemCountVar = this.getGearVariable("ItemCount");
+        let existingRepeater = this.attributeHandler.getRepeatingSection("RepeatingGear");
+        let existingRowId = null;
+        if (existingRepeater) {
+            for (let id of existingRepeater.ids) {
+                if (attrHandler.parseString(repeater.getFieldName(id, itemNameVar)) === itemName) {
+                    existingRowId = id;
+                    break;
+                }
+            }
+        }
+        if (existingRowId != null) {
+            let countFieldName = repeater.getFieldName(existingRowId, itemCountVar);
+            attrHandler.addUpdate(countFieldName, attrHandler.parseInt(countFieldName) + effectiveCount);
+        } else {
+            let newRowId = repeater.generateRowId();
+            this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
+            let countFieldName = repeater.getFieldName(newRowId, itemCountVar);
+            attrHandler.addUpdate(countFieldName, effectiveCount);
+            attrHandler.addRepeatingSectionRowUpdate(newRowId, countFieldName, effectiveCount);
+            let itemValue = parseInt(item.value) || 0;
+            let buyDef = WuxDef.Get("Gear_Buy");
+            let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_Buy", WuxDef._info)), buyDef.getTitle(`5 (${itemValue}J)`));
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info)), buyBulkDef.getTitle(`50 (${itemValue * 10}J)`));
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemMainGroup")), "Goods");
+        }
     }
 
     getGearVariable(variable, suffix) {
@@ -1283,26 +1346,47 @@ class FoodsInspectionPopup extends InspectionPopup {
         let actualName = isGoods ? itemName.slice(6) : itemName;
         let item = isGoods ? WuxGoods.Get(actualName) : WuxItems.Get(actualName);
         if (item == undefined) return;
-        this._addFoodsItem(attrHandler, itemName);
+        this._addFoodsItem(attrHandler, itemName, isGoods ? 5 : 1);
         let cost = parseInt(item.value) || 0;
         let jinVar = WuxDef.GetVariable("Jin");
         attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost).toString());
     }
 
-    _addFoodsItem(attrHandler, itemName) {
+    _addFoodsItem(attrHandler, itemName, count) {
         let isGoods = itemName.startsWith("Goods:");
         let actualName = isGoods ? itemName.slice(6) : itemName;
         let item = isGoods ? WuxGoods.Get(actualName) : WuxItems.Get(actualName);
         if (item == undefined) return;
+        let effectiveCount = count != undefined ? count : 1;
         let repeater = new WorkerRepeatingSectionHandler("RepeatingFoods");
-        let newRowId = repeater.generateRowId();
-        this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
-        let itemValue = parseInt(item.value) || 0;
-        let buyDef = WuxDef.Get("Gear_Buy");
-        let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_Buy", WuxDef._info)), buyDef.getTitle(`1 (${itemValue}J)`));
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info)), buyBulkDef.getTitle(`10 (${itemValue * 10}J)`));
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemMainGroup")), isGoods ? "Goods" : "Item");
+        let itemNameVar = this.getGearVariable("ItemName");
+        let itemCountVar = this.getGearVariable("ItemCount");
+        let existingRepeater = this.attributeHandler.getRepeatingSection("RepeatingFoods");
+        let existingRowId = null;
+        if (existingRepeater) {
+            for (let id of existingRepeater.ids) {
+                if (attrHandler.parseString(repeater.getFieldName(id, itemNameVar)) === actualName) {
+                    existingRowId = id;
+                    break;
+                }
+            }
+        }
+        if (existingRowId != null) {
+            let countFieldName = repeater.getFieldName(existingRowId, itemCountVar);
+            attrHandler.addUpdate(countFieldName, attrHandler.parseInt(countFieldName) + effectiveCount);
+        } else {
+            let newRowId = repeater.generateRowId();
+            this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
+            let countFieldName = repeater.getFieldName(newRowId, itemCountVar);
+            attrHandler.addUpdate(countFieldName, effectiveCount);
+            attrHandler.addRepeatingSectionRowUpdate(newRowId, countFieldName, effectiveCount);
+            let itemValue = parseInt(item.value) || 0;
+            let buyDef = WuxDef.Get("Gear_Buy");
+            let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_Buy", WuxDef._info)), buyDef.getTitle(isGoods ? `5 (${itemValue}J)` : `1 (${itemValue}J)`));
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info)), buyBulkDef.getTitle(isGoods ? `50 (${itemValue * 10}J)` : `10 (${itemValue * 10}J)`));
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemMainGroup")), isGoods ? "Goods" : "Item");
+        }
     }
 
     getGearVariable(variable, suffix) {
@@ -1353,24 +1437,45 @@ class IngsInspectionPopup extends InspectionPopup {
         if (attrHandler.parseString(WuxDef.GetVariable("Popup_InspectAddType", "2")) !== "Purchase Ingredient") return;
         let item = WuxGoods.Get(itemName);
         if (item == undefined) return;
-        this._addIngsItem(attrHandler, itemName);
+        this._addIngsItem(attrHandler, itemName, 5);
         let cost = parseInt(item.value) || 0;
         let jinVar = WuxDef.GetVariable("Jin");
         attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost).toString());
     }
 
-    _addIngsItem(attrHandler, itemName) {
+    _addIngsItem(attrHandler, itemName, count) {
         let item = WuxGoods.Get(itemName);
         if (item == undefined) return;
+        let effectiveCount = count != undefined ? count : 1;
         let repeater = new WorkerRepeatingSectionHandler("RepeatingFoods");
-        let newRowId = repeater.generateRowId();
-        this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
-        let itemValue = parseInt(item.value) || 0;
-        let buyDef = WuxDef.Get("Gear_Buy");
-        let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_Buy", WuxDef._info)), buyDef.getTitle(`1 (${itemValue}J)`));
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info)), buyBulkDef.getTitle(`10 (${itemValue * 10}J)`));
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemMainGroup")), "Goods");
+        let itemNameVar = this.getGearVariable("ItemName");
+        let itemCountVar = this.getGearVariable("ItemCount");
+        let existingRepeater = this.attributeHandler.getRepeatingSection("RepeatingFoods");
+        let existingRowId = null;
+        if (existingRepeater) {
+            for (let id of existingRepeater.ids) {
+                if (attrHandler.parseString(repeater.getFieldName(id, itemNameVar)) === itemName) {
+                    existingRowId = id;
+                    break;
+                }
+            }
+        }
+        if (existingRowId != null) {
+            let countFieldName = repeater.getFieldName(existingRowId, itemCountVar);
+            attrHandler.addUpdate(countFieldName, attrHandler.parseInt(countFieldName) + effectiveCount);
+        } else {
+            let newRowId = repeater.generateRowId();
+            this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
+            let countFieldName = repeater.getFieldName(newRowId, itemCountVar);
+            attrHandler.addUpdate(countFieldName, effectiveCount);
+            attrHandler.addRepeatingSectionRowUpdate(newRowId, countFieldName, effectiveCount);
+            let itemValue = parseInt(item.value) || 0;
+            let buyDef = WuxDef.Get("Gear_Buy");
+            let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_Buy", WuxDef._info)), buyDef.getTitle(`5 (${itemValue}J)`));
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info)), buyBulkDef.getTitle(`50 (${itemValue * 10}J)`));
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemMainGroup")), "Goods");
+        }
     }
 
     getGearVariable(variable, suffix) {

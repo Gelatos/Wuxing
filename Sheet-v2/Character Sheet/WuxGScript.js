@@ -7758,6 +7758,9 @@ class GearValueAssessment {
 
             if (component != undefined && component.group != "") {
                 let val = count * component.value;
+                if (componentType == "Goods" || componentType == "GoodsCat") {
+                    val = Math.ceil(val / 5);
+                }
                 this.componentCostCalc += `\n${count}[${component.name}] * ${component.value}[${component.name}] = ${val}`;
                 this.componentCost += val;
             }
@@ -15967,11 +15970,11 @@ class BaseItemDisplayBuilder extends BaseFeatureDisplayBuilder {
 
     printBulk() {}
     printBulkField (contents) {
-        return `<div class="wuxFeatureHeaderDisplayInfoBulk">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> Bulk</span></div>`;
+        return `<div class="wuxFeatureHeaderDisplayInfoBulk">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> Bulk</span>${WuxSheetMain.HiddenSpanField(this.getActionTypeAttribute("ItemPerFive"), `<sub class="wuxFeatureHeaderDisplayInfoSubtitle">${WuxDef.GetTitle("ItemPerFive")}</sub>`)}</div>`;
     }
     printBaseValue() {}
     printBaseValueField (contents) {
-        return `<div class="wuxFeatureHeaderDisplayInfoCoin">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> J</span></div>`;
+        return `<div class="wuxFeatureHeaderDisplayInfoCoin">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> J</span>${WuxSheetMain.HiddenSpanField(this.getActionTypeAttribute("ItemPerFive"), `<sub class="wuxFeatureHeaderDisplayInfoSubtitle">${WuxDef.GetTitle("ItemPerFive")}</sub>`)}</div>`;
     }
 
     printFlavorText() {}

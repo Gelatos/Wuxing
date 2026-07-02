@@ -140,8 +140,8 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             const count = itemCounts[itemName];
             const item  = WuxGoods.Get(itemName);
             const itemValue = item != undefined ? (parseInt(item.value) || 0) : 0;
-            const buyLabel     = WuxDef.Get("Gear_Buy").getTitle(`1 (${itemValue}J)`);
-            const buyBulkLabel = WuxDef.Get("Gear_BuyBulk").getTitle(`10 (${itemValue * 10}J)`);
+            const buyLabel     = WuxDef.Get("Gear_Buy").getTitle(`5 (${itemValue}J)`);
+            const buyBulkLabel = WuxDef.Get("Gear_BuyBulk").getTitle(`50 (${itemValue * 10}J)`);
 
             if (existingRowIds[itemName] !== undefined) {
                 const rowId       = existingRowIds[itemName];

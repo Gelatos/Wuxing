@@ -1149,6 +1149,9 @@ class GearValueAssessment {
 
             if (component != undefined && component.group != "") {
                 let val = count * component.value;
+                if (componentType == "Goods" || componentType == "GoodsCat") {
+                    val = Math.ceil(val / 5);
+                }
                 this.componentCostCalc += `\n${count}[${component.name}] * ${component.value}[${component.name}] = ${val}`;
                 this.componentCost += val;
             }
