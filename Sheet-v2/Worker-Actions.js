@@ -76,6 +76,26 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             formeTech.setSortOrder();
         });
     }
+
+    const updateBuilderActions = function (attributeHandler, filters) {
+        let pageSetVariable = WuxDef.GetVariable("PageSet");
+        attributeHandler.addMod(pageSetVariable);
+        let formeTech = new FormeTechniqueDatabase(attributeHandler, filters);
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            if (attrHandler.parseString(pageSetVariable) === "Builder") {
+                formeTech.setupPostGetAttr(attrHandler);
+                formeTech.registerTechDictionary(attrHandler);
+                formeTech.updateDataAndVisibilityOfRepeaterTechniques(attrHandler);
+                formeTech.addMissingTechniques(attrHandler, 1);
+            }
+        });
+    }
+
+    const triggerBuilderActionUpdate = function () {
+        let attributeHandler = new WorkerAttributeHandler();
+        updateBuilderActions(attributeHandler);
+        attributeHandler.run();
+    }
     const updateVisibilityAllActions = function (attributeHandler, filters) {
         let formeTech = new FormeTechniqueDatabase(attributeHandler, filters);
         attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -91,14 +111,24 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
     'use strict';
 
     const
-        updateAllActionsFromMenu = function (attributeHandler)  {
-            let pageSetVariable = WuxDef.GetVariable("PageSet");
+        updateAllActionsFromMenuSilent = function (attributeHandler, runFn) {
             let formeTechniqueFilterVariable = WuxDef.GetVariable("Action_FormeTechniques", WuxDef._filter);
-            attributeHandler.addMod(pageSetVariable, formeTechniqueFilterVariable);
+            attributeHandler.addMod(formeTechniqueFilterVariable);
             attributeHandler.addFinishCallback(function (attrHandler) {
                 let attributeHandler2 = new WorkerAttributeHandler();
                 let filter = attrHandler.parseJSON(formeTechniqueFilterVariable);
                 updateAllActions(attributeHandler2, filter);
+                if (runFn) {
+                    runFn(attributeHandler2);
+                } else {
+                    attributeHandler2.run();
+                }
+            });
+        },
+        updateAllActionsFromMenu = function (attributeHandler) {
+            let pageSetVariable = WuxDef.GetVariable("PageSet");
+            attributeHandler.addMod(pageSetVariable);
+            updateAllActionsFromMenuSilent(attributeHandler, function (attributeHandler2) {
                 let loader = new LoadingScreenHandler(attributeHandler2);
                 loader.run();
             });
@@ -265,6 +295,20 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         }
     ;
 
+    const onEnterActionsPage = function (eventinfo) {
+        if (eventinfo.newValue !== "Styles") return;
+        let attributeHandler = new WorkerAttributeHandler();
+        let pageSetVariable = WuxDef.GetVariable("PageSet");
+        attributeHandler.addMod(pageSetVariable);
+        attributeHandler.addFinishCallback(function (attrHandler) {
+            if (attrHandler.parseString(pageSetVariable) !== "Builder") return;
+            let attributeHandler2 = new WorkerAttributeHandler();
+            updateAllActionsFromMenuSilent(attributeHandler2);
+            attributeHandler2.run();
+        });
+        attributeHandler.run();
+    }
+
     return {
         UpdateAllActionsFromMenu: updateAllActionsFromMenu,
         UpdateAllFormeActions: updateAllFormeActions,
@@ -277,6 +321,8 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         SetCustomTechnique: setCustomTechnique,
         QuickFilterFormeActions: quickFilterFormeActions,
         UpdateTechniqueChangeVisibility: updateTechniqueChangeVisibility,
+        TriggerBuilderActionUpdate: triggerBuilderActionUpdate,
+        OnEnterActionsPage: onEnterActionsPage,
     };
 }());
 
@@ -962,12 +1008,14 @@ class FormeTechniqueDatabase {
         let unsetBaseTechniqueData = this.getUnsetTechniqueData();
         attrHandler.addUpdate(WuxDef.GetVariable("Action_FormeLoadCount"), unsetBaseTechniqueData.length);
     }
-    addMissingTechniques(attrHandler) {
+    addMissingTechniques(attrHandler, maxLoadCount) {
         let unsetBaseTechniqueData = this.getUnsetTechniqueData();
         let repeater = attrHandler.getRepeatingSection(this.formeActionsRepeaterId);
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");
         techniqueAttributeHandler.setRepeaterData(repeater);
-        let maxLoadCount = unsetBaseTechniqueData.length;
+        if (maxLoadCount == undefined) {
+            maxLoadCount = unsetBaseTechniqueData.length;
+        }
         
         let i = 0;
         while(i < maxLoadCount) {

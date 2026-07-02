@@ -29,7 +29,7 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
                 let style = WuxStyles.GetByVariableName(eventinfo.sourceAttribute);
                 equipJob(attributeHandler, style.name);
             }
-            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+            WuxWorkerActions.TriggerBuilderActionUpdate();
             attributeHandler.run();
         },
 
@@ -101,7 +101,7 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             let jobName = eventinfo.newValue;
             let attributeHandler = new WorkerAttributeHandler();
             equipJob(attributeHandler, jobName);
-            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+            WuxWorkerActions.TriggerBuilderActionUpdate();
             attributeHandler.run();
         };
 

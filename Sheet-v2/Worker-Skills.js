@@ -9,6 +9,7 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
             attributeHandler.addMod([WuxDef.GetVariable("CR")]);
             worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
             updateStats(attributeHandler);
+            WuxWorkerActions.TriggerBuilderActionUpdate();
             attributeHandler.run();
 
         },

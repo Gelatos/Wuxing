@@ -55,7 +55,9 @@ var upgrade_to_1_0_12 = function (currentVersion) {
 
 	WuxWorkerJobs.RefreshStats(attributeHandler);
 	WuxWorkerSkills.RefreshStats(attributeHandler);
-	WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+	attributeHandler.addFinishCallback(function () {
+		WuxWorkerActions.TriggerBuilderActionUpdate();
+	});
 
 	attributeHandler.run();
 };
@@ -243,8 +245,10 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 		}
 	});
 
-	WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
-	
+	attributeHandler.addFinishCallback(function () {
+		WuxWorkerActions.TriggerBuilderActionUpdate();
+	});
+
 	attributeHandler.run();
 };
 
