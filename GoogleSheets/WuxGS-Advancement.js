@@ -110,10 +110,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
             var
                 print = function () {
-                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Advancement"), "Adv. Pts")
-                        + buildTechPointsSection(WuxDef.GetAttribute("Training"), "Trn. Pts")
-                        + buildTechPointsSection(WuxDef.GetAttribute("Perk"), "Perk Pts")
-                    );
+                    return WuxSheetSidebar.Build("", "");
                 },
 
                 buildTechPointsSection = function (fieldName, headerText) {

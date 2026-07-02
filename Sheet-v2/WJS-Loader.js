@@ -1,4 +1,64 @@
-var wuxCurrentVersion = "1.0.11";
+var wuxCurrentVersion = "1.0.12";
+
+var upgrade_to_1_0_12 = function (currentVersion) {
+	let styleWorker = new WuxStyleWorkerBuild();
+	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.12");
+
+	attributeHandler.addRepeatingSection("RepeatingStyles");
+	attributeHandler.addMod(styleWorker.attrBuildDraft);
+	attributeHandler.addMod(styleWorker.attrMax);
+
+	WuxWorkerGeneral.UpdatePerkMaxRanks(attributeHandler);
+
+	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementJob"), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementSkill"), 0);
+
+	let advancementWorker = new WuxAdvancementWorkerBuild();
+	advancementWorker.updateAdvancementPoints(attributeHandler);
+
+	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Perk", "Style"]);
+	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
+
+	attributeHandler.addGetAttrCallback(function (attrHandler) {
+		attributeHandler.getRepeatingSection("RepeatingStyles").removeAllIds();
+		styleWorker.setBuildStatsDraft(attrHandler);
+		styleWorker.clearBuildStats();
+		styleWorker.updatePoints(attrHandler);
+		styleWorker.revertBuildStatsDraft(attrHandler);
+
+		manager.iterate(function (worker) {
+			worker.setBuildStatsDraft(attrHandler);
+
+			if (worker.definition.name === "Job") {
+				worker.buildStats.iterate(function (buildStat) {
+					buildStat.value = "on";
+					attrHandler.addUpdate(buildStat.name, "on");
+				});
+			}
+
+			attrHandler.addUpdate(worker.attrBuildDraft, JSON.stringify(worker.buildStats));
+			worker.setPointsMax(attributeHandler);
+			worker.updatePoints(attributeHandler);
+		});
+
+		// Re-run the advancement worker with TrainingKnowledge explicitly in the build stats,
+		// since the old draft may not have included it.
+		let advWorkerFix = new WuxAdvancementWorkerBuild();
+		advWorkerFix.setBuildStatsDraft(attrHandler);
+		let knowledgeVar = WuxDef.GetVariable("TrainingKnowledge");
+		let knowledgeCount = attrHandler.parseInt(knowledgeVar);
+		advWorkerFix.buildStats.add(knowledgeVar, new WorkerBuildStat([knowledgeVar, knowledgeCount.toString()]));
+		attrHandler.addUpdate(advWorkerFix.attrBuildDraft, JSON.stringify(advWorkerFix.buildStats));
+		advWorkerFix.setPointsMax(attributeHandler);
+		advWorkerFix.updatePoints(attrHandler);
+	});
+
+	WuxWorkerJobs.RefreshStats(attributeHandler);
+	WuxWorkerSkills.RefreshStats(attributeHandler);
+	WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+
+	attributeHandler.run();
+};
 
 var upgrade_to_1_0_11 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "1.0.11");
@@ -23,7 +83,6 @@ var upgrade_to_1_0_11 = function (currentVersion) {
 		let repeater = attributeHandler.getRepeatingSection(loreRepeaterIds[i]);
 		repeater.addFieldNames([loreTierVar, loreSubTypeVar, loreNameVar]);
 	}
-
 	
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
 		attributeHandler.getRepeatingSection("RepeatingEquipment").removeAllIds();
@@ -31,6 +90,9 @@ var upgrade_to_1_0_11 = function (currentVersion) {
 		attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "0");
 		attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits"), "None");
 		attrHandler.addUpdate(WuxDef.GetVariable("Jin"), 1000);
+		attributeHandler.addUpdate(WuxDef.GetVariable("Loading"), "0");
+		attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Origin");
+		attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Builder");
 
 		let loreWorker = new WuxLoreWorkerBuild();
 		loreWorker.buildStats = new WorkerBuildStats();
@@ -203,6 +265,9 @@ var versioning = function () {
 		switch(v["version"]) {
 			case wuxCurrentVersion:
 				console.log(`Wuxing Sheet modified from 5th Edition OGL by Roll20 v${wuxCurrentVersion}`);
+				break;
+			case "1.0.11":
+				upgrade_to_1_0_12(v["version"]);
 				break;
 			case "1.0.10":
 				upgrade_to_1_0_11(v["version"]);

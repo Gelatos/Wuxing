@@ -878,7 +878,7 @@ class ItemInspectionPopup extends InspectionPopup {
         attrHandler.addUpdate(field("ItemBulk"),      displayData.bulk);
         attrHandler.addUpdate(
             repeater.getFieldName(newRowId, this.getGearVariable("ItemSubGroup")),
-            item.category || ""
+            item.group === "Apparel" ? (item.category || "") : ""
         );
     };
     performAddSelectedInspectElementTechnique(attrHandler, repeater, newRowId, technique) {

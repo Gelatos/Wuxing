@@ -12705,16 +12705,17 @@ var DisplayPopups = DisplayPopups || (function () {
                         `<div class="wuxSlotSection"><span class="wuxSlotLabel">${costDef.getTitle()}</span><span class="wuxSlotData"><span name="${costDef.getAttribute()}"></span></span></div>` +
                         `</div>`;
                     let buttons = `<div style="display:flex;flex-direction:column;gap:4px;">` +
-                        WuxSheetMain.HiddenFieldToggle(WuxDef.GetAttribute("Popup_InspectPurchaseAffordable"),
-                            WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick", "2"),
-                                `<span name="${addType2Attr}"></span>`),
-                            disabledPurchaseButton) +
+                        WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd", "2"),
+                            WuxSheetMain.HiddenFieldToggle(WuxDef.GetAttribute("Popup_InspectPurchaseAffordable"),
+                                WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick", "2"),
+                                    `<span name="${addType2Attr}"></span>`),
+                                disabledPurchaseButton)) +
                         WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd"),
                             WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick"),
                                 `<span name="${WuxDef.GetAttribute("Popup_InspectAddType")}">Add</span>`)) +
                         `</div>`;
                     return WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd", "2"),
-                        jinAndCost + buttons);
+                        jinAndCost) + buttons;
                 },
 
                 buildItemRepeater = function () {
@@ -14083,10 +14084,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
             var
                 print = function () {
-                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Advancement"), "Adv. Pts")
-                        + buildTechPointsSection(WuxDef.GetAttribute("Training"), "Trn. Pts")
-                        + buildTechPointsSection(WuxDef.GetAttribute("Perk"), "Perk Pts")
-                    );
+                    return WuxSheetSidebar.Build("", "");
                 },
 
                 buildTechPointsSection = function (fieldName, headerText) {

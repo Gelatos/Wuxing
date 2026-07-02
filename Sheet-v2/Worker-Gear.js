@@ -454,9 +454,11 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                         if (!foundInBase) {
                             let swapRepeater = new WorkerRepeatingSectionHandler("RepeatingEquipment");
                             let swapRowId = swapRepeater.generateRowId();
+                            let oldItem = WuxItems.Get(oldItemName);
                             attrHandler.addUpdate(swapRepeater.getFieldName(swapRowId, itemNameVar), oldItemName);
                             attrHandler.addUpdate(swapRepeater.getFieldName(swapRowId, itemIsVisibleVar), "on");
                             attrHandler.addUpdate(swapRepeater.getFieldName(swapRowId, itemCountVar), 1);
+                            attrHandler.addUpdate(swapRepeater.getFieldName(swapRowId, getGearVariable("ItemSubGroup")), oldItem != undefined && oldItem.group === "Apparel" ? (oldItem.category || "") : "");
                         }
                     }
                     slotJson[slot] = itemName;
@@ -567,6 +569,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                     attrHandler.addUpdate(newRepeater.getFieldName(newRowId, itemNameVar), itemName);
                     attrHandler.addUpdate(newRepeater.getFieldName(newRowId, itemIsVisibleVar), "on");
                     attrHandler.addUpdate(newRepeater.getFieldName(newRowId, itemCountVar), 1);
+                    attrHandler.addUpdate(newRepeater.getFieldName(newRowId, getGearVariable("ItemSubGroup")), item != undefined && item.group === "Apparel" ? (item.category || "") : "");
                 }
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "on");
             });
