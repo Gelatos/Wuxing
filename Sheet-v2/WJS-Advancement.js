@@ -858,7 +858,6 @@ var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
 			worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
 			updateStats(attributeHandler);
 			WuxWorkerSkills.UpdateStats(attributeHandler);
-			WuxWorkerActions.TriggerBuilderActionUpdate();
 			attributeHandler.run();
 		},
 
@@ -937,7 +936,6 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 			Debug.Log("Update Knowledge");
 			let attributeHandler = new WorkerAttributeHandler();
 			updateStats(attributeHandler);
-			WuxWorkerActions.TriggerBuilderActionUpdate();
 			attributeHandler.run();
 		},
 

@@ -60,7 +60,7 @@ var BuilderBackend = BuilderBackend || (function () {
             let groupVariableNames = [
                 WuxDef.GetVariable("AffinityAspect"),
                 WuxDef.GetVariable("AdvancedAffinity")];
-            let output = `WuxWorkerCharacterCreation.SetAffinityValue(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+            let output = `WuxWorkerCharacterCreation.SetAffinityValue(eventinfo);\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
@@ -256,7 +256,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
         },
         listenerSetLevel = function () {
             let groupVariableNames = [WuxDef.GetVariable("Level")];
-            let output = `WuxWorkerAdvancement.SetLevel(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+            let output = `WuxWorkerAdvancement.SetLevel(eventinfo);\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
@@ -302,7 +302,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
             return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerInspectPopup.OpenPerkFilterTechniqueInspection(eventinfo)`, true);
         },
         listenerSetIsPlayer = function () {
-            return WuxSheetBackend.OnChange([WuxDef.GetVariable("Title_IsPlayer")], `WuxWorkerPerks.SetIsPlayer(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`, true);
+            return WuxSheetBackend.OnChange([WuxDef.GetVariable("Title_IsPlayer")], `WuxWorkerPerks.SetIsPlayer(eventinfo)`, true);
         },
         listenerUpdateJobBuildPoints = function () {
             let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Job"));
@@ -350,7 +350,6 @@ var OverviewBuilder = OverviewBuilder || (function () {
             output += listenerUpdateCR();
             output += listenerUpdateSurge();
             output += listenerUpdateVitality();
-            output += listenerOriginBuilderFieldsUpdate();
             return output;
         },
         listenerUpdateDisplayName = function () {
@@ -361,13 +360,13 @@ var OverviewBuilder = OverviewBuilder || (function () {
         },
         listenerUpdateCharacterSheetName = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("CharSheetName")}`];
-            let output = `WuxWorkerGeneral.UpdateCharacterSheetName(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+            let output = `WuxWorkerGeneral.UpdateCharacterSheetName(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerUpdateSheetName = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("SheetName")}`];
-            let output = `WuxWorkerGeneral.UpdateSheetName(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+            let output = `WuxWorkerGeneral.UpdateSheetName(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
@@ -379,25 +378,25 @@ var OverviewBuilder = OverviewBuilder || (function () {
         },
         listenerGenerateCharacter = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Note_GenerateCharacter")}`];
-            let output = `WuxWorkerGeneral.GenerateCharacter();\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+            let output = `WuxWorkerGeneral.GenerateCharacter()`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
         listenerUseGeneration = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Note_UseGeneration")}`];
-            let output = `WuxWorkerGeneral.UseGeneration();\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+            let output = `WuxWorkerGeneral.UseGeneration()`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
         listenerClearBackground = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Note_ClearBackground")}`];
-            let output = `WuxWorkerGeneral.ClearBackground();\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+            let output = `WuxWorkerGeneral.ClearBackground()`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
         listenerUpdateCR = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("CR")}`];
-            let output = `WuxWorkerGeneral.UpdateCR(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+            let output = `WuxWorkerGeneral.UpdateCR(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
@@ -413,31 +412,6 @@ var OverviewBuilder = OverviewBuilder || (function () {
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
-        listenerOriginBuilderFieldsUpdate = function () {
-            let groupVariableNames = [
-                WuxDef.GetVariable("FullName"),
-                WuxDef.GetVariable("Ancestry"),
-                WuxDef.GetVariable("Ethnicity"),
-                WuxDef.GetVariable("QuickDescription"),
-                WuxDef.GetVariable("Jin"),
-                WuxDef.GetVariable("Title"),
-                WuxDef.GetVariable("Age"),
-                WuxDef.GetVariable("Gender"),
-                WuxDef.GetVariable("HomeRegion"),
-                WuxDef.GetVariable("Backstory"),
-                WuxDef.GetVariable("Note_GenName"),
-                WuxDef.GetVariable("Note_GenFullName"),
-                WuxDef.GetVariable("Note_GenGender"),
-                WuxDef.GetVariable("Note_GenHomeRegion"),
-                WuxDef.GetVariable("Note_GenRace"),
-                WuxDef.GetVariable("Note_GenPersonality"),
-                WuxDef.GetVariable("Note_GenMotivation")
-            ];
-            let output = `WuxWorkerActions.TriggerBuilderActionUpdate();\n`;
-
-            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
-        }
-
     return {
         Print: print
     }
@@ -800,7 +774,6 @@ var ActionBuilder = ActionBuilder || (function () {
     var
         print = function () {
             let output = "";
-            output += listenerEnterActionsPage();
             output += listenerRankRepeatingStyles();
             output += listenerSetDataRepeatingStyles();
             output += listenerFormeButtonActions();
@@ -810,9 +783,6 @@ var ActionBuilder = ActionBuilder || (function () {
             output += listenerBaseFilterButtons();
             output += listenerUpdateTechniqueChangeVisibility();
             return output;
-        },
-        listenerEnterActionsPage = function () {
-            return WuxSheetBackend.OnChange([WuxDef.GetVariable("Page")], `WuxWorkerActions.OnEnterActionsPage(eventinfo);\n`, true);
         },
         listenerRankRepeatingStyles = function () {
             let repeaters = ["RepeatingFormeTech"];
@@ -1037,35 +1007,35 @@ var ChatBuilder = ChatBuilder || (function () {
 
         listenerUpdateLanguage = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Chat_Language")}`];
-            let output = `WuxWorkerChat.UpdateSelectedLanguage(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+            let output = `WuxWorkerChat.UpdateSelectedLanguage(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerUpdateRepeatingChatSelection = function () {
             let repeatingSection = WuxDef.GetVariable("RepeatingOutfits");
             let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Chat_OutfitName", WuxDef._learn)}`];
-            let output = `WuxWorkerChat.SelectOutfit(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+            let output = `WuxWorkerChat.SelectOutfit(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerUpdateRepeatingChatEmoteSetName = function () {
             let repeatingSection = WuxDef.GetVariable("RepeatingOutfits");
             let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Chat_OutfitName")}`];
-            let output = `WuxWorkerChat.UpdateNameOutfit(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+            let output = `WuxWorkerChat.UpdateNameOutfit(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerUpdateRepeatingChatEmoteSetInput = function () {
             let repeatingSection = WuxDef.GetVariable("RepeatingOutfits");
             let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Chat_OutfitEmotes")}`];
-            let output = `WuxWorkerChat.UpdateOutfitEmotesGroup(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+            let output = `WuxWorkerChat.UpdateOutfitEmotesGroup(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerUpdateRepeatingChatEmoteDefaultUrlUpdate = function () {
             let repeatingSection = WuxDef.GetVariable("RepeatingOutfits");
             let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Chat_OutfitDefaultURL")}`];
-            let output = `WuxWorkerChat.UpdateOutfitEmotesDefaultUrl(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+            let output = `WuxWorkerChat.UpdateOutfitEmotesDefaultUrl(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
@@ -1075,7 +1045,7 @@ var ChatBuilder = ChatBuilder || (function () {
             for (let i = 2; i <= 30; i++) {
                 groupVariableNames.push(`${repeatingSection}:${WuxDef.GetVariable("Chat_EmoteName")}${i}`);
             }
-            let output = `WuxWorkerChat.UpdateOutfitEmotesName(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+            let output = `WuxWorkerChat.UpdateOutfitEmotesName(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
@@ -1085,7 +1055,7 @@ var ChatBuilder = ChatBuilder || (function () {
             for (let i = 2; i <= 30; i++) {
                 groupVariableNames.push(`${repeatingSection}:${WuxDef.GetVariable("Chat_EmoteURL")}${i}`);
             }
-            let output = `WuxWorkerChat.UpdateOutfitEmotesUrl(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+            let output = `WuxWorkerChat.UpdateOutfitEmotesUrl(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
