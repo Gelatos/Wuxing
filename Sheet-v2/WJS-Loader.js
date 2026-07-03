@@ -1,7 +1,7 @@
 var wuxCurrentVersion = "2.0.0";
 
 var upgrade_to_2_0_0 = function (currentVersion) {
-	// From 1.0.9: clear old popup values
+	// Runs separately — clears old popup repeating section outside the main handler
 	let inspectPopupOldItemsRepeater = new WorkerRepeatingSectionHandler("ItemPopupValues");
 	inspectPopupOldItemsRepeater.getIds(function (itemPopupRepeater) {
 		itemPopupRepeater.removeAllIds();
@@ -10,108 +10,67 @@ var upgrade_to_2_0_0 = function (currentVersion) {
 	let styleWorker = new WuxStyleWorkerBuild();
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "2.0.0");
 
-	// From 1.0.7: Soc_Impatience, AffinityAspect
+	// Fixed-value updates — none of these depend on read attributes
 	attributeHandler.addUpdate(WuxDef.GetVariable("Soc_Impatience"), 0);
 	attributeHandler.addUpdate(WuxDef.GetVariable("Soc_Impatience", WuxDef._max), 16);
-	let affinityAspectVar = WuxDef.GetVariable("AffinityAspect");
-	attributeHandler.addUpdate(affinityAspectVar, 0);
-	let affinityVar = WuxDef.GetVariable("Affinity");
+	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementJob"), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementSkill"), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "0");
+	attributeHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits"), "None");
+	attributeHandler.addUpdate(WuxDef.GetVariable("Jin"), 1000);
+	attributeHandler.addUpdate(WuxDef.GetVariable("Loading"), "0");
+	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Origin");
+	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Builder");
+
+	// Variables needed inside the callback — computed once here
+	const affinityAspectVar = WuxDef.GetVariable("AffinityAspect");
+	const affinityVar = WuxDef.GetVariable("Affinity");
+	const knowledgeVar = WuxDef.GetVariable("TrainingKnowledge");
+	const loreCategoryDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "LoreCategory"));
+
+	// Attributes to read
 	attributeHandler.addMod(affinityVar);
-
-	// From 1.0.11: Equipment, Consumables, Lore repeaters
-	attributeHandler.addRepeatingSection("RepeatingEquipment");
-	attributeHandler.addRepeatingSection("RepeatingConsumables");
-	let loreRepeaterIds = [
-		"RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
-		"RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
-	];
-	let loreTierVar = WuxDef.GetVariable("Lore_Tier");
-	let loreSubTypeVar = WuxDef.GetVariable("Lore_SubType");
-	let loreNameVar = WuxDef.GetVariable("Lore_Name");
-	let loreCategoryDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "LoreCategory"));
-
-	for (let i = 0; i < loreCategoryDefinitions.length; i++) {
-		attributeHandler.addMod(loreCategoryDefinitions[i].getVariable(WuxDef._rank));
-	}
-	for (let i = 0; i < loreRepeaterIds.length; i++) {
-		attributeHandler.addRepeatingSection(loreRepeaterIds[i]);
-		let repeater = attributeHandler.getRepeatingSection(loreRepeaterIds[i]);
-		repeater.addFieldNames([loreTierVar, loreSubTypeVar, loreNameVar]);
-	}
-
-	// From 1.0.12: Styles repeater, StyleWorker, UpdatePerkMaxRanks, Advancement, Build managers
-	attributeHandler.addRepeatingSection("RepeatingStyles");
+	attributeHandler.addFormulaMods(styleWorker.definition);
 	attributeHandler.addMod(styleWorker.attrBuildDraft);
 	attributeHandler.addMod(styleWorker.attrMax);
 
-	WuxWorkerGeneral.UpdatePerkMaxRanks(attributeHandler);
+	for (const loreCategoryDefinition of loreCategoryDefinitions) {
+		attributeHandler.addMod(loreCategoryDefinition.getVariable(WuxDef._rank));
+	}
 
-	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementJob"), 0);
-	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementSkill"), 0);
+	WuxWorkerGeneral.UpdatePerkMaxRanks(attributeHandler);
 
 	let advancementWorker = new WuxAdvancementWorkerBuild();
 	advancementWorker.updateAdvancementPoints(attributeHandler);
-
-	let techniqueManager = new WuxWorkerBuildManager(["Technique"]);
-	techniqueManager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 	let manager = new WuxWorkerBuildManager(["Skill", "Job", "Knowledge", "Attribute", "Perk", "Style"]);
 	manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 	attributeHandler.addGetAttrCallback(function (attrHandler) {
-		// From 1.0.7: Technique build stats
-		techniqueManager.iterate(function (worker) {
-			attrHandler.addUpdate(affinityAspectVar, attrHandler.parseString(affinityVar));
-			worker.setBuildStatsDraft(attrHandler);
-			attrHandler.addUpdate(worker.attrBuildDraft, JSON.stringify(worker.buildStats));
-			worker.setPointsMax(attributeHandler);
-			worker.updatePoints(attributeHandler);
-		});
+		// Set affinity aspect from the current affinity value
+		attrHandler.addUpdate(affinityAspectVar, attrHandler.parseString(affinityVar));
 
-		// From 1.0.11: Lore migration and page reset
-		attributeHandler.getRepeatingSection("RepeatingEquipment").removeAllIds();
-		attributeHandler.getRepeatingSection("RepeatingConsumables").removeAllIds();
-		attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "0");
-		attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits"), "None");
-		attrHandler.addUpdate(WuxDef.GetVariable("Jin"), 1000);
-		attributeHandler.addUpdate(WuxDef.GetVariable("Loading"), "0");
-		attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Origin");
-		attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Builder");
-
+		// Migrate lore data to the new build stats format
 		let loreWorker = new WuxLoreWorkerBuild();
 		loreWorker.buildStats = new WorkerBuildStats();
 
-		for (let i = 0; i < loreCategoryDefinitions.length; i++) {
-			let rawRank = attrHandler.parseString(loreCategoryDefinitions[i].getVariable(WuxDef._rank));
+		for (const loreCategoryDefinition of loreCategoryDefinitions) {
+			let rawRank = attrHandler.parseString(loreCategoryDefinition.getVariable(WuxDef._rank));
 			if (rawRank === "on" || parseInt(rawRank) > 0) {
-				let key = `General ${loreCategoryDefinitions[i].title}`;
+				let key = `General ${loreCategoryDefinition.title}`;
 				loreWorker.buildStats.add(key, new WorkerBuildStat([key, "on"]));
 			}
 		}
-		for (let i = 0; i < loreRepeaterIds.length; i++) {
-			let repeater = attrHandler.getRepeatingSection(loreRepeaterIds[i]);
-			repeater.iterate(function (id) {
-				let tier = attrHandler.parseInt(repeater.getFieldName(id, loreTierVar));
-				if (tier > 0) {
-					let subType = attrHandler.parseString(repeater.getFieldName(id, loreSubTypeVar));
-					let loreName = subType === "1"
-						? attrHandler.parseString(repeater.getFieldName(id, loreNameVar))
-						: subType;
-					if (loreName !== "" && loreName !== "0") {
-						loreWorker.buildStats.add(loreName, new WorkerBuildStat([loreName, tier.toString()]));
-					}
-				}
-			});
-		}
 		attrHandler.addUpdate(loreWorker.attrBuildDraft, JSON.stringify(loreWorker.buildStats));
 
-		// From 1.0.12: Styles and all build stats
-		attributeHandler.getRepeatingSection("RepeatingStyles").removeAllIds();
+		// Reset style worker build stats (clears stale technique data)
 		styleWorker.setBuildStatsDraft(attrHandler);
 		styleWorker.clearBuildStats();
+		styleWorker.setPointsMax(attrHandler);
 		styleWorker.updatePoints(attrHandler);
 		styleWorker.revertBuildStatsDraft(attrHandler);
 
+		// Rebuild all build point stats from current sheet state
 		manager.iterate(function (worker) {
 			worker.setBuildStatsDraft(attrHandler);
 
@@ -123,19 +82,18 @@ var upgrade_to_2_0_0 = function (currentVersion) {
 			}
 
 			attrHandler.addUpdate(worker.attrBuildDraft, JSON.stringify(worker.buildStats));
-			worker.setPointsMax(attributeHandler);
-			worker.updatePoints(attributeHandler);
+			worker.setPointsMax(attrHandler);
+			worker.updatePoints(attrHandler);
 		});
 
 		// Re-run the advancement worker with TrainingKnowledge explicitly in the build stats,
 		// since the old draft may not have included it.
 		let advWorkerFix = new WuxAdvancementWorkerBuild();
 		advWorkerFix.setBuildStatsDraft(attrHandler);
-		let knowledgeVar = WuxDef.GetVariable("TrainingKnowledge");
 		let knowledgeCount = attrHandler.parseInt(knowledgeVar);
 		advWorkerFix.buildStats.add(knowledgeVar, new WorkerBuildStat([knowledgeVar, knowledgeCount.toString()]));
 		attrHandler.addUpdate(advWorkerFix.attrBuildDraft, JSON.stringify(advWorkerFix.buildStats));
-		advWorkerFix.setPointsMax(attributeHandler);
+		advWorkerFix.setPointsMax(attrHandler);
 		advWorkerFix.updatePoints(attrHandler);
 	});
 
