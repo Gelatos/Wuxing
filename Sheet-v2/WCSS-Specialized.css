@@ -374,7 +374,6 @@ input[type=hidden].wuxAncestrySelection-flag[value="Human"] + .wuxAncestrySelect
 
 .wuxCharacterStatistics .wuxCharacterStatisticsStat
 {
-    display: inline-block;
     float: right;
     margin-right: 2px;
 }
