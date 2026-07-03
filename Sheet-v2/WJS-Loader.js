@@ -26,6 +26,13 @@ var upgrade_to_2_0_0 = function (currentVersion) {
 	const affinityAspectVar = WuxDef.GetVariable("AffinityAspect");
 	const affinityVar = WuxDef.GetVariable("Affinity");
 	const knowledgeVar = WuxDef.GetVariable("TrainingKnowledge");
+	const loreTierVar = WuxDef.GetVariable("Lore_Tier");
+	const loreSubTypeVar = WuxDef.GetVariable("Lore_SubType");
+	const loreNameVar = WuxDef.GetVariable("Lore_Name");
+	const loreRepeaterIds = [
+		"RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
+		"RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+	];
 	const loreCategoryDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "LoreCategory"));
 
 	// Attributes to read
@@ -34,6 +41,14 @@ var upgrade_to_2_0_0 = function (currentVersion) {
 	attributeHandler.addMod(styleWorker.attrBuildDraft);
 	attributeHandler.addMod(styleWorker.attrMax);
 
+	// Repeating sections (IDs fetched during run before the callback fires)
+	attributeHandler.addRepeatingSection("RepeatingEquipment");
+	attributeHandler.addRepeatingSection("RepeatingConsumables");
+	attributeHandler.addRepeatingSection("RepeatingStyles");
+	for (const loreRepeaterId of loreRepeaterIds) {
+		attributeHandler.addRepeatingSection(loreRepeaterId);
+		attributeHandler.getRepeatingSection(loreRepeaterId).addFieldNames([loreTierVar, loreSubTypeVar, loreNameVar]);
+	}
 	for (const loreCategoryDefinition of loreCategoryDefinitions) {
 		attributeHandler.addMod(loreCategoryDefinition.getVariable(WuxDef._rank));
 	}
@@ -50,6 +65,10 @@ var upgrade_to_2_0_0 = function (currentVersion) {
 		// Set affinity aspect from the current affinity value
 		attrHandler.addUpdate(affinityAspectVar, attrHandler.parseString(affinityVar));
 
+		// Clear old equipment and consumable rows
+		attrHandler.getRepeatingSection("RepeatingEquipment").removeAllIds();
+		attrHandler.getRepeatingSection("RepeatingConsumables").removeAllIds();
+
 		// Migrate lore data to the new build stats format
 		let loreWorker = new WuxLoreWorkerBuild();
 		loreWorker.buildStats = new WorkerBuildStats();
@@ -61,9 +80,25 @@ var upgrade_to_2_0_0 = function (currentVersion) {
 				loreWorker.buildStats.add(key, new WorkerBuildStat([key, "on"]));
 			}
 		}
+		for (const loreRepeaterId of loreRepeaterIds) {
+			let repeater = attrHandler.getRepeatingSection(loreRepeaterId);
+			repeater.iterate(function (id) {
+				let tier = attrHandler.parseInt(repeater.getFieldName(id, loreTierVar));
+				if (tier > 0) {
+					let subType = attrHandler.parseString(repeater.getFieldName(id, loreSubTypeVar));
+					let loreName = subType === "1"
+						? attrHandler.parseString(repeater.getFieldName(id, loreNameVar))
+						: subType;
+					if (loreName !== "" && loreName !== "0") {
+						loreWorker.buildStats.add(loreName, new WorkerBuildStat([loreName, tier.toString()]));
+					}
+				}
+			});
+		}
 		attrHandler.addUpdate(loreWorker.attrBuildDraft, JSON.stringify(loreWorker.buildStats));
 
 		// Reset style worker build stats (clears stale technique data)
+		attrHandler.getRepeatingSection("RepeatingStyles").removeAllIds();
 		styleWorker.setBuildStatsDraft(attrHandler);
 		styleWorker.clearBuildStats();
 		styleWorker.setPointsMax(attrHandler);
