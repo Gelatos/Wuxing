@@ -349,8 +349,13 @@ class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
 }
 
 class ChatDisplayBuilder {
+    constructor(showLanguageSelect = true) {
+        this.showLanguageSelect = showLanguageSelect;
+    }
     print() {
-        let contents = WuxSheetMain.MultiRowGroup([this.outfitCollection(), this.languageSelect()], WuxSheetMain.Table.FlexTable, 2);
+        let sections = [this.outfitCollection()];
+        if (this.showLanguageSelect) sections.push(this.languageSelect());
+        let contents = WuxSheetMain.MultiRowGroup(sections, WuxSheetMain.Table.FlexTable, 2);
         contents = WuxSheetMain.TabBlock(contents);
 
         let definition = WuxDef.Get("Title_Emotes");

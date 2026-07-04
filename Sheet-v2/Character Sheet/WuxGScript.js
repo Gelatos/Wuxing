@@ -14156,7 +14156,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             let backgroundBuilder = new CharacterBackgroundBuilder();
                             contents += `${WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title,
                                 WuxSheetMain.TabBlock(backgroundBuilder.print()))}`;
-                            contents += new ChatDisplayBuilder().print();
+                            contents += new ChatDisplayBuilder(false).print();
                             return contents;
                         }
 
@@ -14832,10 +14832,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let expertiseDef = WuxDef.Get("SkillExpertise");
                             let interactHeader = `<span class="wuxHeader">${expertiseDef.getTitle()}</span>`;
 
-                            return WuxSheetMain.InteractionElement.Build(false,
-                                WuxSheetMain.InteractionElement.CheckboxBlockIcon(
-                                    skillDefinition.getAttribute(WuxDef._expertise),
-                                    interactHeader)
+                            return WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                skillDefinition.getAttribute(WuxDef._expertise),
+                                skillDefinition.getAttribute(WuxDef._info),
+                                interactHeader,
+                                WuxDefinition.TooltipDescription(expertiseDef)
                             );
                         },
 
@@ -16446,8 +16447,13 @@ class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
 }
 
 class ChatDisplayBuilder {
+    constructor(showLanguageSelect = true) {
+        this.showLanguageSelect = showLanguageSelect;
+    }
     print() {
-        let contents = WuxSheetMain.MultiRowGroup([this.outfitCollection(), this.languageSelect()], WuxSheetMain.Table.FlexTable, 2);
+        let sections = [this.outfitCollection()];
+        if (this.showLanguageSelect) sections.push(this.languageSelect());
+        let contents = WuxSheetMain.MultiRowGroup(sections, WuxSheetMain.Table.FlexTable, 2);
         contents = WuxSheetMain.TabBlock(contents);
 
         let definition = WuxDef.Get("Title_Emotes");

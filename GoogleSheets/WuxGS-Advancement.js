@@ -150,7 +150,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             let backgroundBuilder = new CharacterBackgroundBuilder();
                             contents += `${WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title,
                                 WuxSheetMain.TabBlock(backgroundBuilder.print()))}`;
-                            contents += new ChatDisplayBuilder().print();
+                            contents += new ChatDisplayBuilder(false).print();
                             return contents;
                         }
 
@@ -826,10 +826,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let expertiseDef = WuxDef.Get("SkillExpertise");
                             let interactHeader = `<span class="wuxHeader">${expertiseDef.getTitle()}</span>`;
 
-                            return WuxSheetMain.InteractionElement.Build(false,
-                                WuxSheetMain.InteractionElement.CheckboxBlockIcon(
-                                    skillDefinition.getAttribute(WuxDef._expertise),
-                                    interactHeader)
+                            return WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                skillDefinition.getAttribute(WuxDef._expertise),
+                                skillDefinition.getAttribute(WuxDef._info),
+                                interactHeader,
+                                WuxDefinition.TooltipDescription(expertiseDef)
                             );
                         },
 
