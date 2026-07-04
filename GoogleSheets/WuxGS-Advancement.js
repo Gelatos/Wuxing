@@ -383,11 +383,12 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             contents += WuxSheetMain.Header(titleDefinition.getTitle());
 
                             let xpDefinition = WuxDef.Get("XP");
+                            let conversionDef = WuxDef.Get("Title_AdvancementConversion");
                             contents += WuxSheetMain.MultiRowGroup([
                                     WuxSheetMain.Table.FlexTableGroup(
                                         `${WuxDefinition.BuildNumberLabelInput(xpDefinition, xpDefinition.getAttribute(),
                                             `To Level: ${xpDefinition.formula.getValue()}`)}
-                                        ${WuxSheetMain.MultiRow(WuxSheetMain.Button(titleDefinition.getAttribute(),
+                                        ${WuxSheetMain.MultiRow(WuxSheetMain.Button(conversionDef.getAttribute(),
                                             `Convert To Levels`))}`),
                                     WuxSheetMain.Table.FlexTableGroup(
                                         WuxDefinition.BuildTextInput(WuxDef.Get("Level"), WuxDef.GetAttribute("Level")))

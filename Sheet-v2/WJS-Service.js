@@ -437,13 +437,20 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 	convertXp(attributeHandler) {
 		let worker = this;
 		let xpDefinition = WuxDef.Get("XP");
+		let crDefinition = WuxDef.Get("CR");
 		attributeHandler.addMod(xpDefinition.getVariable());
+		attributeHandler.addMod(WuxDef.GetVariable("Level"));
 		attributeHandler.addMod(worker.attrBuildDraft);
 		attributeHandler.addMod(worker.attrBuildFinal);
+		attributeHandler.addMod(crDefinition.getVariable());
+		attributeHandler.addMod(crDefinition.getVariable(WuxDef._max));
+
+		let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
+		let manager = new WuxWorkerBuildManager(["Skill", "Job", "Technique", "Attribute", "Perk"]);
+		manager.setupAttributeHandlerForPointUpdate(attributeHandler);
 
 		attributeHandler.addGetAttrCallback(function (attrHandler) {
-			worker.setBuildStatsFinal(attrHandler);
-			let level = worker.buildStats.get(WuxDef.GetVariable("Level")).value;
+			let level = attrHandler.parseInt(WuxDef.GetVariable("Level"));
 			let xp = attrHandler.parseInt(xpDefinition.getVariable());
 			let xpNeeded = xpDefinition.formula.getValue(attrHandler);
 
@@ -454,12 +461,24 @@ class WuxAdvancementWorkerBuild extends WuxWorkerBuild {
 				xp -= xpNeeded;
 			}
 			attrHandler.addUpdate(xpDefinition.getVariable(), xp);
+			attrHandler.addUpdate(WuxDef.GetVariable("Level"), level);
 
-			let attributeHandler2 = new WorkerAttributeHandler();
-			worker.updateBuildStats(attributeHandler2, xpDefinition.getVariable(), xp);
-			worker.updateLevel(attributeHandler2, WuxDef.GetVariable("Level"), level);
-			attributeHandler2.run();
+			let cr = worker.getCharacterRank(level);
+			if (cr != attrHandler.parseInt(crDefinition.getVariable(WuxDef._max))) {
+				if (attrHandler.parseInt(crDefinition.getVariable()) == attrHandler.parseInt(crDefinition.getVariable(WuxDef._max))) {
+					attrHandler.addUpdate(crDefinition.getVariable(), cr);
+					combatDetailsHandler.onUpdateCR(attrHandler, cr);
+				}
+				attrHandler.addUpdate(crDefinition.getVariable(WuxDef._max), cr);
+			}
+
+			worker.updateBuildStats(attrHandler, xpDefinition.getVariable(), xp);
+			worker.updateBuildStats(attrHandler, WuxDef.GetVariable("Level"), level);
+			worker.setPointsMax(attrHandler);
+			worker.updatePoints(attrHandler);
+			manager.setAttributeHandlerPoints(attrHandler);
 		});
+		WuxWorkerGeneral.UpdatePerkMaxRanks(attributeHandler);
 	}
 
 	getCharacterRank(level) {
