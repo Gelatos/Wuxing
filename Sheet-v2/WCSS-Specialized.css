@@ -2623,6 +2623,15 @@ input[type=hidden].wuxDisplayStyleField-flag[value="BattleLog"] + .wuxDisplaySty
 }
 
 /*========================================
+    Flex Table Variants
+========================================*/
+
+.wuxFlexTableReverse
+{
+    flex-flow: row-reverse wrap;
+}
+
+/*========================================
     Notebook
 ========================================*/
 

@@ -31,7 +31,6 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
             output += DisplayAdvancementSheet.Print(sheetsDb);
             output += DisplayStylesSheet.Print(sheetsDb);
             output += DisplayCoreCharacterSheet.Print(sheetsDb);
-            output += DisplayFormeSheet.Print(sheetsDb);
             output += DisplayGearSheet.Print(sheetsDb);
             output += DisplayActionSheet.Print(sheetsDb);
             output += DisplayPopups.Print();
@@ -578,7 +577,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 </div>`);
 
                             let sectionDef = WuxDef.Get("Title_PerkTechniques");
-                            let contents = WuxSheetMain.MultiRowGroup([filterPanel, repeaterSection], WuxSheetMain.Table.FlexTable, 2);
+                            let contents = WuxSheetMain.MultiRowGroup([repeaterSection, filterPanel], WuxSheetMain.Table.FlexTableReverse, 2);
                             contents = WuxSheetMain.TabBlock(contents);
                             return WuxSheetMain.CollapsibleTab(
                                 sectionDef.getAttribute(WuxDef._expand),

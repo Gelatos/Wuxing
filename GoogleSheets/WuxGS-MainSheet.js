@@ -479,6 +479,10 @@ var WuxSheetMain = WuxSheetMain || (function () {
                     return `<div class="wuxFlexTable">\n${contents}\n</div>`;
                 },
 
+                flexTableReverse = function (contents) {
+                    return `<div class="wuxFlexTable wuxFlexTableReverse">\n${contents}\n</div>`;
+                },
+
                 flexTableGroup = function (contents, className) {
                     return `<div class="wuxFlexTableItemGroup${className != undefined ? `${className}` : ""}">\n${contents}\n</div>`;
                 },
@@ -502,6 +506,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return {
                 Build: build,
                 FlexTable: flexTable,
+                FlexTableReverse: flexTableReverse,
                 FlexTableGroup: flexTableGroup,
                 FlexTableHeader: flexTableHeader,
                 FlexTableSubheader: flexTableSubheader,
@@ -1299,11 +1304,6 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
                 overviewInfoContents(definition.getAttribute(WuxDef._info), tabFieldName));
         },
 
-        buildFormePageNavigation = function () {
-            let definition = WuxDef.Get("Page_Forme");
-            return buildSection(mainPageNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), ""), WuxSheetMain.Info.DefaultContents(definition));
-        },
-
         buildGearPageNavigation = function () {
             let definition = WuxDef.Get("Page_Gear");
             let jinDisplay = `<div class="wuxSlotSection"><span class="wuxSlotLabel">${WuxDef.GetTitle("Title_YourJin")}</span><span class="wuxSlotData"><span name="${WuxDef.GetAttribute("Jin")}"></span><span> J</span></span></div>`;
@@ -1386,7 +1386,6 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         };
     return {
         BuildOverviewPageNavigation: buildOverviewPageNavigation,
-        BuildFormePageNavigation: buildFormePageNavigation,
         BuildGearPageNavigation: buildGearPageNavigation,
         BuildActionsPageNavigation: buildActionsPageNavigation,
         BuildOriginPageNavigation: buildOriginPageNavigation,

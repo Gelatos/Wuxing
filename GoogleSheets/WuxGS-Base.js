@@ -383,163 +383,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
     };
 }());
 
-var DisplayFormeSheet = DisplayFormeSheet || (function () {
-    'use strict';
 
-    var
-        print = function () {
-            let output = WuxSheetNavigation.BuildFormePageNavigation("Forme") +
-                SideBarData.PrintForme() +
-                MainContentData.Print();
-            return WuxSheet.PageDisplay("Forme", output);
-        },
-
-        SideBarData = SideBarData || (function () {
-            'use strict';
-
-            var
-                printForme = function () {
-                    let contents = "";
-                    contents += WuxSheetSidebar.BuildChatSection();
-                    contents += WuxSheetSidebar.BuildChecksSection();
-                    contents += WuxSheetSidebar.BuildBoonSection();
-                    // contents += WuxSheetSidebar.BuildLanguageSection();
-                    return WuxSheetSidebar.Build("", contents);
-                }
-
-            return {
-                PrintForme: printForme
-            };
-
-        }()),
-
-        MainContentData = MainContentData || (function () {
-            'use strict';
-
-            var
-                print = function () {
-                    let contents = "";
-                    contents += buildStyleSection("RepeatingJobStyles", "Page_JobStyles",
-                        [{def: "Forme_JobSlot", countAttr: WuxDef.GetAttribute("JobSlots"), max: 3}], true);
-                    contents += buildStyleSection("RepeatingStyles", "Page_Styles",
-                        [{def: "Forme_AdvancedSlot", countAttr: WuxDef.GetAttribute("AdvancedSlots"), max: 3},
-                            {def: "Forme_StyleSlot", countAttr: WuxDef.GetAttribute("StyleSlots"), max: 6}], false);
-                    return WuxSheetMain.Build(contents);
-                },
-
-                buildStyleSection = function (repeatingSectionName, sectionDefName, slotDefNames, displayTierData) {
-                    let contents = "";
-
-                    contents += WuxSheetMain.MultiRowGroup([learnedStyles(repeatingSectionName, displayTierData),
-                        addEquippedSection(slotDefNames)], WuxSheetMain.Table.FlexTable, 2);
-
-                    contents = WuxSheetMain.TabBlock(contents);
-
-                    let sectionDefinition = WuxDef.Get(sectionDefName);
-                    return WuxSheetMain.CollapsibleTab(sectionDefinition.getAttribute(WuxDef._tab, WuxDef._expand), sectionDefinition.getTitle(), contents);
-                },
-
-                learnedStyles = function (repeatingSectionName, displayTierData) {
-                    let repeatingDef = WuxDef.Get(repeatingSectionName);
-
-                    let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
-                        <div>
-                        ${buildRepeater(repeatingDef.getVariable(), addRepeaterContentsStyles(displayTierData))}
-                        ${WuxSheetMain.Row("&nbsp;")}
-                    </div>`;
-                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
-                },
-
-                addRepeaterContentsStyles = function (displayTierData) {
-                    let tierOutput = "";
-                    let nameDef = WuxDef.Get("Forme_Name");
-                    let actionDef = WuxDef.Get("Forme_Actions");
-                    
-                    if (displayTierData) {
-                        let tierDef = WuxDef.Get("Forme_Tier");
-                        let isAdvancedAttr = WuxDef.GetAttribute("Forme_IsAdvanced");
-
-                        let tierData = `<span>Tier </span><span name="${tierDef.getAttribute()}"></span>`;
-                        tierOutput = WuxSheetMain.HiddenSpanField(isAdvancedAttr, `${tierData}<span>A</span>`);
-                        tierOutput += WuxSheetMain.HiddenAuxSpanField(isAdvancedAttr, tierData);
-                        tierOutput = `
-                        <div class="wuxEquipableType wuxDescription">${tierOutput}</div>`;
-                    }
-
-                    return WuxSheetMain.MultiRow(`
-                        ${WuxSheetMain.SubMenuButton(actionDef.getAttribute(), addSubmenuContentsStyles())}${tierOutput}
-                        <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>`
-                    );
-                },
-
-                addSubmenuContentsStyles = function () {
-                    let typeDef = WuxDef.Get("Forme_IsAdvanced");
-                    let equippedDef = WuxDef.Get("Forme_IsEquipped");
-                    let seeTechniquesDef = WuxDef.Get("Forme_SeeTechniques");
-
-                    return `${WuxSheetMain.HiddenField(equippedDef.getAttribute(),
-                        `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), `<span>${WuxDef.GetTitle("Forme_Unequip")}</span>`)}`)}
-                        ${WuxSheetMain.HiddenAuxField(equippedDef.getAttribute(),
-                        `${WuxSheetMain.HiddenField(typeDef.getAttribute(),
-                            `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), `<span>${WuxDef.GetTitle("Forme_EquipAdvanced")}</span>`)}`)}
-                        ${WuxSheetMain.HiddenAuxField(typeDef.getAttribute(),
-                            `${WuxSheetMain.SubMenuOptionButton(equippedDef.getAttribute(), `<span>${WuxDef.GetTitle("Forme_Equip")}</span>`)}`)}`)}
-                        ${WuxSheetMain.SubMenuOptionButton(seeTechniquesDef.getAttribute(), `<span>${seeTechniquesDef.getTitle()}</span>`)}
-                    `;
-                },
-
-                addEquippedSection = function (slotDefNames) {
-                    let contents = "";
-                    contents += `${WuxSheetMain.Header(`${WuxDef.GetTitle("Page_Equipped")}`)}`;
-                    let emptyName = WuxDef.GetTitle("Page_SlotEmpty");
-                    if (!Array.isArray(slotDefNames)) {
-                        slotDefNames = [slotDefNames];
-                    }
-                    slotDefNames.forEach((slotInfo) => {
-                        let slotDef = WuxDef.Get(slotInfo.def);
-                        for (let i = 1; i <= slotInfo.max; i++) {
-                            contents += WuxSheetMain.HiddenIndexField(slotInfo.countAttr, i, buildEquipSlot(slotDef, i, emptyName));
-                        }
-                    })
-                    return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
-                },
-
-                buildEquipSlot = function (definition, index, emptyName) {
-                    return `${WuxSheetMain.Header2(`${definition.title} ${index}`)}
-                    ${WuxSheetMain.Input("hidden", definition.getAttribute(index + WuxDef._submenu), "0")}
-                    ${WuxSheetMain.HiddenField(definition.getAttribute(index), `<div class="wuxDescription">
-                        ${WuxSheetMain.SubMenuButton(definition.getAttribute(index + WuxDef._submenu),
-                        addSubmenuContentsEquippedSlots(definition, index))}
-                        ${WuxSheetMain.Span(definition.getAttribute(index))}
-                    </div>`)}
-                    ${WuxSheetMain.HiddenAuxField(definition.getAttribute(index), WuxSheetMain.Desc(`<span>${emptyName}</span>`))}`;
-                },
-
-                addSubmenuContentsEquippedSlots = function (definition, index) {
-                    return `${WuxSheetMain.SubMenuOptionButton(definition.getAttribute(index + WuxDef._build),
-                        `<span>${WuxDef.GetTitle("Forme_Unequip")}</span>`)}
-                        ${WuxSheetMain.SubMenuOptionButton(definition.getAttribute(index + WuxDef._info),
-                        `<span>${WuxDef.GetTitle("Forme_SeeTechniques")}</span>`)}
-                    `;
-                },
-
-                buildRepeater = function (repeaterName, repeaterData) {
-                    return `<div class="wuxNoRepControl">
-                        <fieldset class="${repeaterName}">
-                            ${repeaterData}
-                        </fieldset>
-                    </div>`;
-                }
-
-            return {
-                Print: print
-            }
-        }());
-
-    return {
-        Print: print
-    };
-}());
 
 var DisplayGearSheet = DisplayGearSheet || (function () {
     'use strict';
@@ -589,7 +433,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 buildConsumables = function () {
                     let contents = "";
 
-                    contents += WuxSheetMain.MultiRowGroup([ownedConsumables(), slottedConsumables()], WuxSheetMain.Table.FlexTable, 2);
+                    contents += WuxSheetMain.MultiRowGroup([slottedConsumables(), ownedConsumables()], WuxSheetMain.Table.FlexTableReverse, 2);
 
                     contents = WuxSheetMain.TabBlock(contents);
 
@@ -829,7 +673,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 buildEquipment = function () {
                     let contents = "";
 
-                    contents += WuxSheetMain.MultiRowGroup([ownedEquipment(), equippedEquipment()], WuxSheetMain.Table.FlexTable, 2);
+                    contents += WuxSheetMain.MultiRowGroup([equippedEquipment(), ownedEquipment()], WuxSheetMain.Table.FlexTableReverse, 2);
 
                     contents = WuxSheetMain.TabBlock(contents);
 
@@ -842,9 +686,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let eqipmentIsVisibleAttr = WuxDef.GetAttribute("Gear_EqipmentIsVisible");
                     let repeaterContent = buildRepeater(repeatingDef.getVariable(), addRepeaterContentsEquipment());
 
-                    let contents = `${buildCurrency()}
-                        ${WuxSheetMain.Row("&nbsp;")}
-                        ${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                    let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
                     <div>
                         ${WuxSheetMain.HiddenFieldToggle(eqipmentIsVisibleAttr, repeaterContent, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}
                         ${WuxSheetMain.Row("&nbsp;")}
@@ -940,7 +782,9 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         `<span name="${WuxDef.GetAttribute("Gear_EquippedItemTraits")}"></span>`);
 
                     let unequipAllDef = WuxDef.Get("Gear_UnequipAll");
-                    let contents = `${slotDisplay}
+                    let contents = `${buildCurrency()}
+                        ${WuxSheetMain.Row("&nbsp;")}
+                        ${slotDisplay}
                         ${traitsDisplay}
                         ${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
                         ${WuxSheetMain.HiddenField(WuxDef.GetAttribute("Equipment"), `<div style="float:right;">${WuxSheetMain.Button(unequipAllDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${unequipAllDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>`)}
@@ -1201,8 +1045,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 buildStylesList = function () {
                     let contents = "";
                     contents += WuxSheetMain.MultiRowGroup([
-                        buildStyleFilter(),  styleListSection("RepeatingStyles")], 
-                        WuxSheetMain.Table.FlexTable, 2);
+                        styleListSection("RepeatingStyles"), buildStyleFilter()],
+                        WuxSheetMain.Table.FlexTableReverse, 2);
                     contents = WuxSheetMain.TabBlock(contents);
 
                     let sectionDef = WuxDef.Get("Page_Styles");
