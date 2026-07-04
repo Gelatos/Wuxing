@@ -22,6 +22,8 @@ var upgrade_to_2_0_0 = function (currentVersion) {
 	attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Origin");
 	attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Builder");
 
+	attributeHandler.addUpdate(WuxDef.GetVariable("Forme_JobSlot"), "");
+
 	// Variables needed inside the callback — computed once here
 	const affinityAspectVar = WuxDef.GetVariable("AffinityAspect");
 	const affinityVar = WuxDef.GetVariable("Affinity");
@@ -105,15 +107,15 @@ var upgrade_to_2_0_0 = function (currentVersion) {
 		styleWorker.updatePoints(attrHandler);
 		styleWorker.revertBuildStatsDraft(attrHandler);
 
-		// Rebuild all build point stats from current sheet state
+		// Rebuild all build point stats from current sheet state; Job and Perk are fully reset
 		manager.iterate(function (worker) {
-			worker.setBuildStatsDraft(attrHandler);
-
-			if (worker.definition.name === "Job") {
-				worker.buildStats.iterate(function (buildStat) {
-					buildStat.value = "on";
-					attrHandler.addUpdate(buildStat.name, "on");
-				});
+			if (worker.definition.name === "Job" || worker.definition.name === "Perk") {
+				worker.buildStats = new WorkerBuildStats();
+				for (const variable of worker.getBuildVariables()) {
+					attrHandler.addUpdate(variable, "0");
+				}
+			} else {
+				worker.setBuildStatsDraft(attrHandler);
 			}
 
 			attrHandler.addUpdate(worker.attrBuildDraft, JSON.stringify(worker.buildStats));
