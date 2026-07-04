@@ -603,7 +603,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             for (let i = 0; i < jobClasses.length; i++) {
                                 output += buildJobClass(jobClasses[i], jobsDictionary);
                             }
-                            return output;
+                            let sectionDef = WuxDef.Get("Title_JobsByDifficulty");
+                            return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand), sectionDef.getTitle(), WuxSheetMain.TabBlock(output));
                         },
 
                         buildJobClass = function (jobclassDefinition, jobsDictionary) {
@@ -613,8 +614,10 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             for (let i = 0; i < jobs.length; i++) {
                                 jobData.push(buildJob(jobs[i]));
                             }
-                            let output = WuxSheetMain.TabBlock(WuxSheetMain.MultiRowGroup(jobData, WuxSheetMain.Table.FlexTable, 2));
-                            return WuxSheetMain.CollapsibleTab(jobclassDefinition.getAttribute(WuxDef._tab, WuxDef._expand), jobclassDefinition.title, output);
+                            let hiddenField = jobclassDefinition.getAttribute(WuxDef._expand);
+                            let headerContents = WuxSheetMain.CollapsibleHeader(`<span>${jobclassDefinition.getTitle()}</span>`, hiddenField);
+                            let contents = WuxSheetMain.MultiRowGroup(jobData, WuxSheetMain.Table.FlexTable, 2);
+                            return WuxSheetMain.Header(headerContents) + WuxSheetMain.HiddenAuxField(hiddenField, contents);
                         },
 
                         buildJob = function (job) {
