@@ -1545,10 +1545,10 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             inspectPopup.open(inventoryTitle, inventoryItems, addType);
         },
 
-        openPerkTechniqueInspection = function (attributeHandler, inventoryTitle, inventoryItems) {
+        openPerkTechniqueInspection = function (attributeHandler, inventoryTitle, inventoryItems, addType) {
             Debug.Log("Open Perk Technique Popup");
             let inspectPopup = new PerkTechniqueInspectionPopup(attributeHandler);
-            inspectPopup.open(inventoryTitle, inventoryItems);
+            inspectPopup.open(inventoryTitle, inventoryItems, addType);
         },
         
         close = function () {
@@ -2087,7 +2087,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
 
             let attributeHandler2 = new WorkerAttributeHandler();
             let inspectPopup = new PerkTechniqueInspectionPopup(attributeHandler2);
-            inspectPopup.open(title, sortedItems, "Add Perk Technique");
+            inspectPopup.open(title, sortedItems, ["Add Perk Technique"]);
             attributeHandler2.run();
         });
 

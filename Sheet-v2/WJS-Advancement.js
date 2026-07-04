@@ -785,7 +785,7 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 				}
 
 				let attributeHandler2 = new WorkerAttributeHandler();
-				WuxWorkerInspectPopup.OpenPerkTechniqueInspection(attributeHandler2, "Perk Techniques", inventoryItems);
+				WuxWorkerInspectPopup.OpenPerkTechniqueInspection(attributeHandler2, "Perk Techniques", inventoryItems, ["Add Perk Technique"]);
 				attributeHandler2.run();
 			});
 
