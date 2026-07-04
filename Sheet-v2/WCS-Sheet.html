@@ -1579,30 +1579,39 @@
 							<div class="wuxFlexTable wuxFlexTableReverse">
 								<div class="wuxFlexTableItemGroup">
 									<div class="wuxHeader">Learned Perks</div>
-									<div>
-										<div class="wuxNoRepControl wuxRepeatingFlexSection">
-											<fieldset class="repeating_perks">
-												<div class="wuxMultiRow" style="min-width: 300px;">
-													<div class="wuxEquipableRow">
-														<div class="wuxEquipableBody">
-															<div class="wuxEquipableName"><span class="wuxDescription" name="attr_forme-name"></span></div>
-															<div class="wuxEquipableButtonRow">
-																<div class="wuxButton wuxRepeatingTechActionButton">
-																	<input type="checkbox" name="attr_forme-inspect">
-																	<span>&#9673; Inspect</span>
-																</div>
-																<div class="wuxButton wuxRepeatingTechActionButton">
-																	<input type="checkbox" name="attr_forme-delete">
-																	<span><span style="color:#cc3333;">&#10008;</span> Delete</span>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_act-perkisvisible" value="0">
+									<div class="wuxHiddenField">
+										<div>
+											<div class="wuxNoRepControl wuxRepeatingFlexSection">
+												<fieldset class="repeating_perks">
+													<div class="wuxMultiRow" style="min-width: 300px;">
+														<div class="wuxEquipableRow">
+															<div class="wuxEquipableBody">
+																<div class="wuxEquipableName"><span class="wuxDescription" name="attr_forme-name"></span></div>
+																<div class="wuxEquipableButtonRow">
+																	<div class="wuxButton wuxRepeatingTechActionButton">
+																		<input type="checkbox" name="attr_forme-inspect">
+																		<span>&#9673; Inspect</span>
+																	</div>
+																	<div class="wuxButton wuxRepeatingTechActionButton">
+																		<input type="checkbox" name="attr_forme-delete">
+																		<span><span style="color:#cc3333;">&#10008;</span> Delete</span>
+																	</div>
 																</div>
 															</div>
 														</div>
 													</div>
-												</div>
-											</fieldset>
+												</fieldset>
+											</div>
+											<div class="wuxRow">&nbsp;</div>
 										</div>
-										<div class="wuxRow">&nbsp;</div>
 									</div>
+
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_act-perkisvisible" value="0">
+									<div class="wuxHiddenAuxField">
+										<div class="wuxRow"><span class="wuxDescription">None</span></div>
+									</div>
+
 								</div>
 								<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
 									<div class="wuxHeader2">Filter Options</div>
@@ -11831,41 +11840,50 @@
 										</div>
 									</div>
 
-									<div>
-										<div class="wuxNoRepControl">
-											<fieldset class="repeating_syncequipment">
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemisvisible" value="0">
-												<div class="wuxHiddenField">
-													<div class="wuxMultiRow">
-														<div class="wuxEquipableRow">
-															<div class="wuxEquipableBody">
-																<div class="wuxEquipableName">
-																	<span class="wuxDescription" name="attr_gear-itemname"></span>
-																	<span class="wuxSubHeader" name="attr_gear-itemgroup"></span>
-																</div>
-																<div class="wuxEquipableButtonRow">
-																	<div class="wuxButton wuxRepeatingTechActionButton">
-																		<input type="checkbox" name="attr_gear-unequip">
-																		<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-equipmentisvisible_gear" value="0">
+									<div class="wuxHiddenField">
+										<div>
+											<div class="wuxNoRepControl">
+												<fieldset class="repeating_syncequipment">
+													<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemisvisible" value="0">
+													<div class="wuxHiddenField">
+														<div class="wuxMultiRow">
+															<div class="wuxEquipableRow">
+																<div class="wuxEquipableBody">
+																	<div class="wuxEquipableName">
+																		<span class="wuxDescription" name="attr_gear-itemname"></span>
+																		<span class="wuxSubHeader" name="attr_gear-itemgroup"></span>
 																	</div>
-																	<div class="wuxButton wuxRepeatingTechActionButton">
-																		<input type="checkbox" name="attr_gear-inspect">
-																		<span>&#9673; Inspect</span>
+																	<div class="wuxEquipableButtonRow">
+																		<div class="wuxButton wuxRepeatingTechActionButton">
+																			<input type="checkbox" name="attr_gear-unequip">
+																			<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+																		</div>
+																		<div class="wuxButton wuxRepeatingTechActionButton">
+																			<input type="checkbox" name="attr_gear-inspect">
+																			<span>&#9673; Inspect</span>
+																		</div>
 																	</div>
 																</div>
 															</div>
 														</div>
 													</div>
-												</div>
 
-											</fieldset>
+												</fieldset>
+											</div>
 										</div>
 									</div>
+
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-equipmentisvisible_gear" value="0">
+									<div class="wuxHiddenAuxField">
+										<div class="wuxRow"><span class="wuxDescription">None</span></div>
+									</div>
+
 								</div>
 								<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
 									<div class="wuxHeader">Stored Equipment</div>
 									<div>
-										<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-eqipmentisvisible" value="0">
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-equipmentisvisible" value="0">
 										<div class="wuxHiddenField">
 											<div class="wuxNoRepControl">
 												<fieldset class="repeating_equipment">
@@ -11904,7 +11922,7 @@
 											</div>
 										</div>
 
-										<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-eqipmentisvisible" value="0">
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-equipmentisvisible" value="0">
 										<div class="wuxHiddenAuxField">
 											<div class="wuxRow"><span class="wuxDescription">None</span></div>
 										</div>
@@ -11980,134 +11998,141 @@
 										</div>
 									</div>
 
-									<div>
-										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcounthealgel" value="0">
-										<div class="wuxHiddenField">
-											<div class="wuxMultiRow">
-												<div class="wuxEquipableRow">
-													<div class="wuxEquipableBody">
-														<div class="wuxEquipableName">
-															<span class="wuxDescription" name="attr_itemcounthealgel" value="0">Heal Gel</span>
-															<span class="wuxDescription">Heal Gel</span>
-														</div>
-														<div class="wuxEquipableButtonRow">
-															<button class="wuxRepeatingTechActionButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Heal Gel}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{FlavorText=The gel sinks in fast, and the pain goes with it.}}{{Core0Data=If Target has a surge, they must spend one and heal &#91;Regen Value&#93; Hit Points}}{{Core1Data=Target loses any condition of your choice}}{{Core0Tooltip=&#91;&#93;}}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Heal Gel&#37;&#37;,&#37;&#37;en&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;will&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;focus&#37;&#37;&&false,&#37;&#37;item&#37;&#37;&&&#37;&#37;Heal Gel&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Heal Gel-0$$&#64;{sheetname}}}{{targetData=!utech Heal Gel-0$$&#64;{sheetname}}}"><span style="color:#4caf50;">&#9654;</span><span> Use</span></button>
-															<div class="wuxButton wuxRepeatingTechActionButton">
-																<input type="checkbox" name="attr_gear-unequiphealgel">
-																<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-consumableisvisible_gear" value="0">
+									<div class="wuxHiddenField">
+										<div><input type="hidden" class="wuxHiddenField-flag" name="attr_itemcounthealgel" value="0">
+											<div class="wuxHiddenField">
+												<div class="wuxMultiRow">
+													<div class="wuxEquipableRow">
+														<div class="wuxEquipableBody">
+															<div class="wuxEquipableName">
+																<span class="wuxDescription" name="attr_itemcounthealgel" value="0">Heal Gel</span>
+																<span class="wuxDescription">Heal Gel</span>
 															</div>
-															<div class="wuxButton wuxRepeatingTechActionButton">
-																<input type="checkbox" name="attr_gear-inspecthealgel">
-																<span>&#9673; Inspect</span>
+															<div class="wuxEquipableButtonRow">
+																<button class="wuxRepeatingTechActionButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Heal Gel}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{FlavorText=The gel sinks in fast, and the pain goes with it.}}{{Core0Data=If Target has a surge, they must spend one and heal &#91;Regen Value&#93; Hit Points}}{{Core1Data=Target loses any condition of your choice}}{{Core0Tooltip=&#91;&#93;}}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Heal Gel&#37;&#37;,&#37;&#37;en&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;will&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;focus&#37;&#37;&&false,&#37;&#37;item&#37;&#37;&&&#37;&#37;Heal Gel&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Heal Gel-0$$&#64;{sheetname}}}{{targetData=!utech Heal Gel-0$$&#64;{sheetname}}}"><span style="color:#4caf50;">&#9654;</span><span> Use</span></button>
+																<div class="wuxButton wuxRepeatingTechActionButton">
+																	<input type="checkbox" name="attr_gear-unequiphealgel">
+																	<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+																</div>
+																<div class="wuxButton wuxRepeatingTechActionButton">
+																	<input type="checkbox" name="attr_gear-inspecthealgel">
+																	<span>&#9673; Inspect</span>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountenergydrink" value="0">
+											<div class="wuxHiddenField">
+												<div class="wuxMultiRow">
+													<div class="wuxEquipableRow">
+														<div class="wuxEquipableBody">
+															<div class="wuxEquipableName">
+																<span class="wuxDescription" name="attr_itemcountenergydrink" value="0">Energy Drink</span>
+																<span class="wuxDescription">Energy Drink</span>
+															</div>
+															<div class="wuxEquipableButtonRow">
+																<button class="wuxRepeatingTechActionButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Energy Drink}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{FlavorText=One can and the fatigue lifts, replaced shortly after by a jittery hum.}}{{Core0Data=Target gains 2 EN}}{{Core1Data=Target takes 2d6 Will damage}}{{Core0Tooltip=&#91;EN&#93;}}{{Core1Tooltip=EN is a resource that is spent when using more powerful techniques. Usually you will generate some at the start of every round in a combat. Some techniques can also generate EN.}}{{Core2Tooltip=}}{{Core3Tooltip=&#91;Damage&#93;}}{{Core4Tooltip=This technique deals damage to the target&#39;s HP or Willpower, decreasing their current value.}}{{Willbreak0Data=Target gains the Flustered Status}}{{Willbreak0Tooltip=Will Break}}{{Willbreak1Tooltip=When a character&#39;s Willpower depletes to zero they can suffer from a technique&#39;s will break effects. You can choose to not trigger a technique&#39;s will break effects. When a will break is triggered, the effects listed occur to the target and then their Willpower restores to full.}}{{Willbreak2Tooltip=}}{{Willbreak3Tooltip=&#91;Flustered&#93;}}{{Willbreak4Tooltip=All skill checks against a flustered target receive +1 Advantage and request checks against the target increase by 5. }}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Energy Drink&#37;&#37;,&#37;&#37;en&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;will&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;focus&#37;&#37;&&false,&#37;&#37;item&#37;&#37;&&&#37;&#37;Energy Drink&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Energy Drink-0$$&#64;{sheetname}}}{{targetData=!utech Energy Drink-0$$&#64;{sheetname}}}"><span style="color:#4caf50;">&#9654;</span><span> Use</span></button>
+																<div class="wuxButton wuxRepeatingTechActionButton">
+																	<input type="checkbox" name="attr_gear-unequipenergydrink">
+																	<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+																</div>
+																<div class="wuxButton wuxRepeatingTechActionButton">
+																	<input type="checkbox" name="attr_gear-inspectenergydrink">
+																	<span>&#9673; Inspect</span>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountcleansingliquid" value="0">
+											<div class="wuxHiddenField">
+												<div class="wuxMultiRow">
+													<div class="wuxEquipableRow">
+														<div class="wuxEquipableBody">
+															<div class="wuxEquipableName">
+																<span class="wuxDescription" name="attr_itemcountcleansingliquid" value="0">Cleansing Liquid</span>
+																<span class="wuxDescription">Cleansing Liquid</span>
+															</div>
+															<div class="wuxEquipableButtonRow">
+																<button class="wuxRepeatingTechActionButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Cleansing Liquid}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{FlavorText=A splash, and the flames die, the vines wither, the grip lets go.}}{{Core0Data=Target loses the Aflame Status. Target loses the Earthblight Status}}{{Core0Tooltip=&#91;Aflame&#93;}}{{Core1Tooltip=You are on fire. At the start of each round you take 1d6 fire damage per rank of the Aflame condition. This condition ends when you are doused by water.}}{{Core2Tooltip=}}{{Core3Tooltip=&#91;Earthblight&#93;}}{{Core4Tooltip=Earth clings to you, reducing your abiility to defend yourself. You gain weakness to force and piercing damage equal to your Earthblight rank x 2. Your Dash Speed is reduced by your Earthblight rank. If you are Soaked this condition ends.}}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Cleansing Liquid&#37;&#37;,&#37;&#37;en&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;will&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;focus&#37;&#37;&&false,&#37;&#37;item&#37;&#37;&&&#37;&#37;Cleansing Liquid&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Cleansing Liquid-0$$&#64;{sheetname}}}{{targetData=!utech Cleansing Liquid-0$$&#64;{sheetname}}}"><span style="color:#4caf50;">&#9654;</span><span> Use</span></button>
+																<div class="wuxButton wuxRepeatingTechActionButton">
+																	<input type="checkbox" name="attr_gear-unequipcleansingliquid">
+																	<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+																</div>
+																<div class="wuxButton wuxRepeatingTechActionButton">
+																	<input type="checkbox" name="attr_gear-inspectcleansingliquid">
+																	<span>&#9673; Inspect</span>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountinstantheat" value="0">
+											<div class="wuxHiddenField">
+												<div class="wuxMultiRow">
+													<div class="wuxEquipableRow">
+														<div class="wuxEquipableBody">
+															<div class="wuxEquipableName">
+																<span class="wuxDescription" name="attr_itemcountinstantheat" value="0">Instant Heat</span>
+																<span class="wuxDescription">Instant Heat</span>
+															</div>
+															<div class="wuxEquipableButtonRow">
+																<button class="wuxRepeatingTechActionButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Instant Heat}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{FlavorText=Warmth floods back into numb limbs as the pad burns away the last of the vines.}}{{Core0Data=Target loses the Chilled Status. Target loses the Vined Status}}{{Core0Tooltip=&#91;Chilled&#93;}}{{Core1Tooltip=You gain weakness to cold damage equal to your Chilled rank x 2. Your Base Speed is reduced by your chilled rank. This condition ends when you are warmed or are set on fire.}}{{Core2Tooltip=}}{{Core3Tooltip=&#91;Vined&#93;}}{{Core4Tooltip=Your Base Speed is reduced by your vined rank. When you have the Aflame condition, all ranks of vined are added to the Aflame condition and you immediately take the aflame damage; the vined condition then ends.}}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Instant Heat&#37;&#37;,&#37;&#37;en&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;will&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;focus&#37;&#37;&&false,&#37;&#37;item&#37;&#37;&&&#37;&#37;Instant Heat&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Instant Heat-0$$&#64;{sheetname}}}{{targetData=!utech Instant Heat-0$$&#64;{sheetname}}}"><span style="color:#4caf50;">&#9654;</span><span> Use</span></button>
+																<div class="wuxButton wuxRepeatingTechActionButton">
+																	<input type="checkbox" name="attr_gear-unequipinstantheat">
+																	<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+																</div>
+																<div class="wuxButton wuxRepeatingTechActionButton">
+																	<input type="checkbox" name="attr_gear-inspectinstantheat">
+																	<span>&#9673; Inspect</span>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountstaticremover" value="0">
+											<div class="wuxHiddenField">
+												<div class="wuxMultiRow">
+													<div class="wuxEquipableRow">
+														<div class="wuxEquipableBody">
+															<div class="wuxEquipableName">
+																<span class="wuxDescription" name="attr_itemcountstaticremover" value="0">Static Remover</span>
+																<span class="wuxDescription">Static Remover</span>
+															</div>
+															<div class="wuxEquipableButtonRow">
+																<button class="wuxRepeatingTechActionButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Static Remover}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{FlavorText=The sharp steam clears your head and grounds out the last crackle of current.}}{{Core0Data=Target loses the Static Status. Target loses the Jolted Status}}{{Core0Tooltip=&#91;Static&#93;}}{{Core1Tooltip=You gain weakness to energy damage equal to your Shocked rank x 2. Your Armor is reduced by your shocked rank. }}{{Core2Tooltip=}}{{Core3Tooltip=&#91;Jolted&#93;}}{{Core4Tooltip=You can only perform one quick action on your turn. You cannot perform full actions.}}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Static Remover&#37;&#37;,&#37;&#37;en&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;will&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;focus&#37;&#37;&&false,&#37;&#37;item&#37;&#37;&&&#37;&#37;Static Remover&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Static Remover-0$$&#64;{sheetname}}}{{targetData=!utech Static Remover-0$$&#64;{sheetname}}}"><span style="color:#4caf50;">&#9654;</span><span> Use</span></button>
+																<div class="wuxButton wuxRepeatingTechActionButton">
+																	<input type="checkbox" name="attr_gear-unequipstaticremover">
+																	<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
+																</div>
+																<div class="wuxButton wuxRepeatingTechActionButton">
+																	<input type="checkbox" name="attr_gear-inspectstaticremover">
+																	<span>&#9673; Inspect</span>
+																</div>
 															</div>
 														</div>
 													</div>
 												</div>
 											</div>
 										</div>
-										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountenergydrink" value="0">
-										<div class="wuxHiddenField">
-											<div class="wuxMultiRow">
-												<div class="wuxEquipableRow">
-													<div class="wuxEquipableBody">
-														<div class="wuxEquipableName">
-															<span class="wuxDescription" name="attr_itemcountenergydrink" value="0">Energy Drink</span>
-															<span class="wuxDescription">Energy Drink</span>
-														</div>
-														<div class="wuxEquipableButtonRow">
-															<button class="wuxRepeatingTechActionButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Energy Drink}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{FlavorText=One can and the fatigue lifts, replaced shortly after by a jittery hum.}}{{Core0Data=Target gains 2 EN}}{{Core1Data=Target takes 2d6 Will damage}}{{Core0Tooltip=&#91;EN&#93;}}{{Core1Tooltip=EN is a resource that is spent when using more powerful techniques. Usually you will generate some at the start of every round in a combat. Some techniques can also generate EN.}}{{Core2Tooltip=}}{{Core3Tooltip=&#91;Damage&#93;}}{{Core4Tooltip=This technique deals damage to the target&#39;s HP or Willpower, decreasing their current value.}}{{Willbreak0Data=Target gains the Flustered Status}}{{Willbreak0Tooltip=Will Break}}{{Willbreak1Tooltip=When a character&#39;s Willpower depletes to zero they can suffer from a technique&#39;s will break effects. You can choose to not trigger a technique&#39;s will break effects. When a will break is triggered, the effects listed occur to the target and then their Willpower restores to full.}}{{Willbreak2Tooltip=}}{{Willbreak3Tooltip=&#91;Flustered&#93;}}{{Willbreak4Tooltip=All skill checks against a flustered target receive +1 Advantage and request checks against the target increase by 5. }}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Energy Drink&#37;&#37;,&#37;&#37;en&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;will&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;focus&#37;&#37;&&false,&#37;&#37;item&#37;&#37;&&&#37;&#37;Energy Drink&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Energy Drink-0$$&#64;{sheetname}}}{{targetData=!utech Energy Drink-0$$&#64;{sheetname}}}"><span style="color:#4caf50;">&#9654;</span><span> Use</span></button>
-															<div class="wuxButton wuxRepeatingTechActionButton">
-																<input type="checkbox" name="attr_gear-unequipenergydrink">
-																<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
-															</div>
-															<div class="wuxButton wuxRepeatingTechActionButton">
-																<input type="checkbox" name="attr_gear-inspectenergydrink">
-																<span>&#9673; Inspect</span>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountcleansingliquid" value="0">
-										<div class="wuxHiddenField">
-											<div class="wuxMultiRow">
-												<div class="wuxEquipableRow">
-													<div class="wuxEquipableBody">
-														<div class="wuxEquipableName">
-															<span class="wuxDescription" name="attr_itemcountcleansingliquid" value="0">Cleansing Liquid</span>
-															<span class="wuxDescription">Cleansing Liquid</span>
-														</div>
-														<div class="wuxEquipableButtonRow">
-															<button class="wuxRepeatingTechActionButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Cleansing Liquid}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{FlavorText=A splash, and the flames die, the vines wither, the grip lets go.}}{{Core0Data=Target loses the Aflame Status. Target loses the Earthblight Status}}{{Core0Tooltip=&#91;Aflame&#93;}}{{Core1Tooltip=You are on fire. At the start of each round you take 1d6 fire damage per rank of the Aflame condition. This condition ends when you are doused by water.}}{{Core2Tooltip=}}{{Core3Tooltip=&#91;Earthblight&#93;}}{{Core4Tooltip=Earth clings to you, reducing your abiility to defend yourself. You gain weakness to force and piercing damage equal to your Earthblight rank x 2. Your Dash Speed is reduced by your Earthblight rank. If you are Soaked this condition ends.}}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Cleansing Liquid&#37;&#37;,&#37;&#37;en&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;will&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;focus&#37;&#37;&&false,&#37;&#37;item&#37;&#37;&&&#37;&#37;Cleansing Liquid&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Cleansing Liquid-0$$&#64;{sheetname}}}{{targetData=!utech Cleansing Liquid-0$$&#64;{sheetname}}}"><span style="color:#4caf50;">&#9654;</span><span> Use</span></button>
-															<div class="wuxButton wuxRepeatingTechActionButton">
-																<input type="checkbox" name="attr_gear-unequipcleansingliquid">
-																<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
-															</div>
-															<div class="wuxButton wuxRepeatingTechActionButton">
-																<input type="checkbox" name="attr_gear-inspectcleansingliquid">
-																<span>&#9673; Inspect</span>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountinstantheat" value="0">
-										<div class="wuxHiddenField">
-											<div class="wuxMultiRow">
-												<div class="wuxEquipableRow">
-													<div class="wuxEquipableBody">
-														<div class="wuxEquipableName">
-															<span class="wuxDescription" name="attr_itemcountinstantheat" value="0">Instant Heat</span>
-															<span class="wuxDescription">Instant Heat</span>
-														</div>
-														<div class="wuxEquipableButtonRow">
-															<button class="wuxRepeatingTechActionButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Instant Heat}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{FlavorText=Warmth floods back into numb limbs as the pad burns away the last of the vines.}}{{Core0Data=Target loses the Chilled Status. Target loses the Vined Status}}{{Core0Tooltip=&#91;Chilled&#93;}}{{Core1Tooltip=You gain weakness to cold damage equal to your Chilled rank x 2. Your Base Speed is reduced by your chilled rank. This condition ends when you are warmed or are set on fire.}}{{Core2Tooltip=}}{{Core3Tooltip=&#91;Vined&#93;}}{{Core4Tooltip=Your Base Speed is reduced by your vined rank. When you have the Aflame condition, all ranks of vined are added to the Aflame condition and you immediately take the aflame damage; the vined condition then ends.}}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Instant Heat&#37;&#37;,&#37;&#37;en&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;will&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;focus&#37;&#37;&&false,&#37;&#37;item&#37;&#37;&&&#37;&#37;Instant Heat&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Instant Heat-0$$&#64;{sheetname}}}{{targetData=!utech Instant Heat-0$$&#64;{sheetname}}}"><span style="color:#4caf50;">&#9654;</span><span> Use</span></button>
-															<div class="wuxButton wuxRepeatingTechActionButton">
-																<input type="checkbox" name="attr_gear-unequipinstantheat">
-																<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
-															</div>
-															<div class="wuxButton wuxRepeatingTechActionButton">
-																<input type="checkbox" name="attr_gear-inspectinstantheat">
-																<span>&#9673; Inspect</span>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<input type="hidden" class="wuxHiddenField-flag" name="attr_itemcountstaticremover" value="0">
-										<div class="wuxHiddenField">
-											<div class="wuxMultiRow">
-												<div class="wuxEquipableRow">
-													<div class="wuxEquipableBody">
-														<div class="wuxEquipableName">
-															<span class="wuxDescription" name="attr_itemcountstaticremover" value="0">Static Remover</span>
-															<span class="wuxDescription">Static Remover</span>
-														</div>
-														<div class="wuxEquipableButtonRow">
-															<button class="wuxRepeatingTechActionButton" type="roll" value="&{template:technique} {{Displayname=@{display_name}}}{{Name=Static Remover}}{{type-Quick=1}}{{action=Quick}}{{Range=1}}{{Target=One Target or Self}}{{Traits=The target must be willing to consume this item.}}{{FlavorText=The sharp steam clears your head and grounds out the last crackle of current.}}{{Core0Data=Target loses the Static Status. Target loses the Jolted Status}}{{Core0Tooltip=&#91;Static&#93;}}{{Core1Tooltip=You gain weakness to energy damage equal to your Shocked rank x 2. Your Armor is reduced by your shocked rank. }}{{Core2Tooltip=}}{{Core3Tooltip=&#91;Jolted&#93;}}{{Core4Tooltip=You can only perform one quick action on your turn. You cannot perform full actions.}}{{consumeData=!ctech {&#37;&#37;name&#37;&#37;&&&#37;&#37;Static Remover&#37;&#37;,&#37;&#37;en&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;will&#37;&#37;&&&#37;&#37;0&#37;&#37;,&#37;&#37;focus&#37;&#37;&&false,&#37;&#37;item&#37;&#37;&&&#37;&#37;Static Remover&#37;&#37;}$$&#64;{sheetname}}}{{checkData=!chtech Static Remover-0$$&#64;{sheetname}}}{{targetData=!utech Static Remover-0$$&#64;{sheetname}}}"><span style="color:#4caf50;">&#9654;</span><span> Use</span></button>
-															<div class="wuxButton wuxRepeatingTechActionButton">
-																<input type="checkbox" name="attr_gear-unequipstaticremover">
-																<span><span style="color:#c8a020;">&#9881;</span> Unequip</span>
-															</div>
-															<div class="wuxButton wuxRepeatingTechActionButton">
-																<input type="checkbox" name="attr_gear-inspectstaticremover">
-																<span>&#9673; Inspect</span>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-
 									</div>
+
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-consumableisvisible_gear" value="0">
+									<div class="wuxHiddenAuxField">
+										<div class="wuxRow"><span class="wuxDescription">None</span></div>
+									</div>
+
 								</div>
 								<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
 									<div class="wuxHeader">Stored Instant Consumables</div>
 									<div>
-										<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-eqipmentisvisible" value="0">
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-consumableisvisible" value="0">
 										<div class="wuxHiddenField">
 											<div class="wuxNoRepControl">
 												<fieldset class="repeating_consumables">
@@ -12154,7 +12179,7 @@
 											</div>
 										</div>
 
-										<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-eqipmentisvisible" value="0">
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-consumableisvisible" value="0">
 										<div class="wuxHiddenAuxField">
 											<div class="wuxRow"><span class="wuxDescription">None</span></div>
 										</div>
@@ -12206,45 +12231,54 @@
 								<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
 									<div class="wuxHeader">Stored Gear</div>
 									<div>
-										<div class="wuxNoRepControl">
-											<fieldset class="repeating_gear">
-												<input type="hidden" name="attr_gear-itemmaingroup" value="0"><input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemisvisible" value="0">
-												<div class="wuxHiddenField">
-													<div class="wuxMultiRow">
-														<div class="wuxEquipableRow">
-															<div class="wuxEquipableCountCol">
-																<input type="number" name="attr_gear-itemcount" value="1" min="0">
-															</div>
-															<div class="wuxEquipableBody">
-																<div class="wuxEquipableName">
-																	<span class="wuxDescription" name="attr_gear-itemname"></span>
-																	<span class="wuxSubHeader" name="attr_gear-itemgroup"></span>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-gearisvisible" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxNoRepControl">
+												<fieldset class="repeating_gear">
+													<input type="hidden" name="attr_gear-itemmaingroup" value="0"><input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemisvisible" value="0">
+													<div class="wuxHiddenField">
+														<div class="wuxMultiRow">
+															<div class="wuxEquipableRow">
+																<div class="wuxEquipableCountCol">
+																	<input type="number" name="attr_gear-itemcount" value="1" min="0">
 																</div>
-																<div class="wuxEquipableButtonRow">
-																	<div class="wuxButton wuxRepeatingTechActionButton">
-																		<input type="checkbox" name="attr_gear-buy">
-																		<span><span style="color:#5bc0de;">&#9670;</span> <span name="attr_gear-buy_info"></span></span>
+																<div class="wuxEquipableBody">
+																	<div class="wuxEquipableName">
+																		<span class="wuxDescription" name="attr_gear-itemname"></span>
+																		<span class="wuxSubHeader" name="attr_gear-itemgroup"></span>
 																	</div>
-																	<div class="wuxButton wuxRepeatingTechActionButton">
-																		<input type="checkbox" name="attr_gear-buybulk">
-																		<span><span style="color:#5bc0de;">&#9670;</span> <span name="attr_gear-buybulk_info"></span></span>
-																	</div>
-																	<div class="wuxButton wuxRepeatingTechActionButton">
-																		<input type="checkbox" name="attr_gear-inspect">
-																		<span>&#9673; Inspect</span>
-																	</div>
-																	<div class="wuxButton wuxRepeatingTechActionButton">
-																		<input type="checkbox" name="attr_gear-delete">
-																		<span><span style="color:#cc3333;">&#10008;</span> Delete</span>
+																	<div class="wuxEquipableButtonRow">
+																		<div class="wuxButton wuxRepeatingTechActionButton">
+																			<input type="checkbox" name="attr_gear-buy">
+																			<span><span style="color:#5bc0de;">&#9670;</span> <span name="attr_gear-buy_info"></span></span>
+																		</div>
+																		<div class="wuxButton wuxRepeatingTechActionButton">
+																			<input type="checkbox" name="attr_gear-buybulk">
+																			<span><span style="color:#5bc0de;">&#9670;</span> <span name="attr_gear-buybulk_info"></span></span>
+																		</div>
+																		<div class="wuxButton wuxRepeatingTechActionButton">
+																			<input type="checkbox" name="attr_gear-inspect">
+																			<span>&#9673; Inspect</span>
+																		</div>
+																		<div class="wuxButton wuxRepeatingTechActionButton">
+																			<input type="checkbox" name="attr_gear-delete">
+																			<span><span style="color:#cc3333;">&#10008;</span> Delete</span>
+																		</div>
 																	</div>
 																</div>
 															</div>
 														</div>
 													</div>
-												</div>
 
-											</fieldset>
+												</fieldset>
+											</div>
 										</div>
+
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-gearisvisible" value="0">
+										<div class="wuxHiddenAuxField">
+											<div class="wuxRow"><span class="wuxDescription">None</span></div>
+										</div>
+
 										<div class="wuxRow">&nbsp;</div>
 										<div class="wuxHeader">Add Gear</div>
 										<div class="wuxFlexTable">
@@ -12292,45 +12326,54 @@
 								<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
 									<div class="wuxHeader">Stored Consumables</div>
 									<div>
-										<div class="wuxNoRepControl">
-											<fieldset class="repeating_foods">
-												<input type="hidden" name="attr_gear-itemmaingroup" value="0"><input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemisvisible" value="0">
-												<div class="wuxHiddenField">
-													<div class="wuxMultiRow">
-														<div class="wuxEquipableRow">
-															<div class="wuxEquipableCountCol">
-																<input type="number" name="attr_gear-itemcount" value="1" min="0">
-															</div>
-															<div class="wuxEquipableBody">
-																<div class="wuxEquipableName">
-																	<span class="wuxDescription" name="attr_gear-itemname"></span>
-																	<span class="wuxSubHeader" name="attr_gear-itemgroup"></span>
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-foodisvisible" value="0">
+										<div class="wuxHiddenField">
+											<div class="wuxNoRepControl">
+												<fieldset class="repeating_foods">
+													<input type="hidden" name="attr_gear-itemmaingroup" value="0"><input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemisvisible" value="0">
+													<div class="wuxHiddenField">
+														<div class="wuxMultiRow">
+															<div class="wuxEquipableRow">
+																<div class="wuxEquipableCountCol">
+																	<input type="number" name="attr_gear-itemcount" value="1" min="0">
 																</div>
-																<div class="wuxEquipableButtonRow">
-																	<div class="wuxButton wuxRepeatingTechActionButton">
-																		<input type="checkbox" name="attr_gear-buy">
-																		<span><span style="color:#5bc0de;">&#9670;</span> <span name="attr_gear-buy_info"></span></span>
+																<div class="wuxEquipableBody">
+																	<div class="wuxEquipableName">
+																		<span class="wuxDescription" name="attr_gear-itemname"></span>
+																		<span class="wuxSubHeader" name="attr_gear-itemgroup"></span>
 																	</div>
-																	<div class="wuxButton wuxRepeatingTechActionButton">
-																		<input type="checkbox" name="attr_gear-buybulk">
-																		<span><span style="color:#5bc0de;">&#9670;</span> <span name="attr_gear-buybulk_info"></span></span>
-																	</div>
-																	<div class="wuxButton wuxRepeatingTechActionButton">
-																		<input type="checkbox" name="attr_gear-inspect">
-																		<span>&#9673; Inspect</span>
-																	</div>
-																	<div class="wuxButton wuxRepeatingTechActionButton">
-																		<input type="checkbox" name="attr_gear-delete">
-																		<span><span style="color:#cc3333;">&#10008;</span> Delete</span>
+																	<div class="wuxEquipableButtonRow">
+																		<div class="wuxButton wuxRepeatingTechActionButton">
+																			<input type="checkbox" name="attr_gear-buy">
+																			<span><span style="color:#5bc0de;">&#9670;</span> <span name="attr_gear-buy_info"></span></span>
+																		</div>
+																		<div class="wuxButton wuxRepeatingTechActionButton">
+																			<input type="checkbox" name="attr_gear-buybulk">
+																			<span><span style="color:#5bc0de;">&#9670;</span> <span name="attr_gear-buybulk_info"></span></span>
+																		</div>
+																		<div class="wuxButton wuxRepeatingTechActionButton">
+																			<input type="checkbox" name="attr_gear-inspect">
+																			<span>&#9673; Inspect</span>
+																		</div>
+																		<div class="wuxButton wuxRepeatingTechActionButton">
+																			<input type="checkbox" name="attr_gear-delete">
+																			<span><span style="color:#cc3333;">&#10008;</span> Delete</span>
+																		</div>
 																	</div>
 																</div>
 															</div>
 														</div>
 													</div>
-												</div>
 
-											</fieldset>
+												</fieldset>
+											</div>
 										</div>
+
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-foodisvisible" value="0">
+										<div class="wuxHiddenAuxField">
+											<div class="wuxRow"><span class="wuxDescription">None</span></div>
+										</div>
+
 										<div class="wuxRow">&nbsp;</div>
 										<div class="wuxHeader">Add Consumable</div>
 										<div class="wuxFlexTable">
@@ -12726,31 +12769,40 @@
 								<div class="wuxFlexTable wuxFlexTableReverse">
 									<div class="wuxFlexTableItemGroup">
 										<div class="wuxHeader">Learned Styles</div>
-										<div>
-											<div class="wuxNoRepControl wuxRepeatingFlexSection">
-												<fieldset class="repeating_styles">
-													<div class="wuxMultiRow" style="min-width: 300px;">
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_act-styleisvisible" value="0">
+										<div class="wuxHiddenField">
+											<div>
+												<div class="wuxNoRepControl wuxRepeatingFlexSection">
+													<fieldset class="repeating_styles">
+														<div class="wuxMultiRow" style="min-width: 300px;">
 
-														<div class="wuxEquipableRow">
-															<div class="wuxEquipableBody">
-																<div class="wuxEquipableName"><span class="wuxDescription" name="attr_forme-name"></span></div>
-																<div class="wuxEquipableButtonRow">
-																	<div class="wuxButton wuxRepeatingTechActionButton">
-																		<input type="checkbox" name="attr_forme-inspect">
-																		<span>&#9673; Inspect</span>
-																	</div>
-																	<div class="wuxButton wuxRepeatingTechActionButton">
-																		<input type="checkbox" name="attr_forme-delete">
-																		<span><span style="color:#cc3333;">&#10008;</span> Delete</span>
+															<div class="wuxEquipableRow">
+																<div class="wuxEquipableBody">
+																	<div class="wuxEquipableName"><span class="wuxDescription" name="attr_forme-name"></span></div>
+																	<div class="wuxEquipableButtonRow">
+																		<div class="wuxButton wuxRepeatingTechActionButton">
+																			<input type="checkbox" name="attr_forme-inspect">
+																			<span>&#9673; Inspect</span>
+																		</div>
+																		<div class="wuxButton wuxRepeatingTechActionButton">
+																			<input type="checkbox" name="attr_forme-delete">
+																			<span><span style="color:#cc3333;">&#10008;</span> Delete</span>
+																		</div>
 																	</div>
 																</div>
 															</div>
 														</div>
-													</div>
-												</fieldset>
+													</fieldset>
+												</div>
+												<div class="wuxRow">&nbsp;</div>
 											</div>
-											<div class="wuxRow">&nbsp;</div>
 										</div>
+
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_act-styleisvisible" value="0">
+										<div class="wuxHiddenAuxField">
+											<div class="wuxRow"><span class="wuxDescription">None</span></div>
+										</div>
+
 									</div>
 									<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
 										<div class="wuxHeader">Learn New Styles</div>

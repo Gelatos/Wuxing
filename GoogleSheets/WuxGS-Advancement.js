@@ -565,16 +565,15 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                     </div>
                                 </div>
                             </div>`;
-                            let repeaterSection = WuxSheetMain.Table.FlexTableGroup(
-                                `${WuxSheetMain.Header(repeatingDef.getTitle())}
-                                <div>
-                                    <div class="wuxNoRepControl wuxRepeatingFlexSection">
+                            let perkIsVisibleAttr = WuxDef.GetAttribute("Action_PerkIsVisible");
+                            let repeaterContent = `<div class="wuxNoRepControl wuxRepeatingFlexSection">
                                         <fieldset class="${repeatingDef.getVariable()}">
                                             ${rowContents}
                                         </fieldset>
-                                    </div>
-                                    ${WuxSheetMain.Row("&nbsp;")}
-                                </div>`);
+                                    </div>`;
+                            let repeaterSection = WuxSheetMain.Table.FlexTableGroup(
+                                `${WuxSheetMain.Header(repeatingDef.getTitle())}
+                                ${WuxSheetMain.HiddenFieldToggle(perkIsVisibleAttr, `<div>${repeaterContent}${WuxSheetMain.Row("&nbsp;")}</div>`, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}`);
 
                             let sectionDef = WuxDef.Get("Title_PerkTechniques");
                             let contents = WuxSheetMain.MultiRowGroup([repeaterSection, filterPanel], WuxSheetMain.Table.FlexTableReverse, 2);

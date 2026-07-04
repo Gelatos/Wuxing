@@ -11703,7 +11703,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
                 ownedConsumables = function () {
                     let repeatingDef = WuxDef.Get("RepeatingConsumables");
-                    let eqipmentIsVisibleAttr = WuxDef.GetAttribute("Gear_EqipmentIsVisible");
+                    let eqipmentIsVisibleAttr = WuxDef.GetAttribute("Gear_ConsumableIsVisible");
                     let repeaterContent = buildRepeater(repeatingDef.getVariable(), addRepeaterContentsConsumables());
 
                     let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
@@ -11762,6 +11762,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let syncedDef = WuxDef.Get("Title_EquippedInstantConsumables");
                     let unequipDef = WuxDef.Get("Gear_Unequip");
                     let inspectDef = WuxDef.Get("Gear_Inspect");
+                    let equippedIsVisibleAttr = WuxDef.GetAttribute("Gear_ConsumableIsVisible", WuxDef._gear);
 
                     let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
                     let rows = "";
@@ -11801,9 +11802,8 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let contents = `${slotDisplay}
                         ${WuxSheetMain.Header(`${syncedDef.getTitle()}`)}
                         ${WuxSheetMain.HiddenField(WuxDef.GetAttribute("Gear_ConsumableSlot"), `<div style="float:right;">${WuxSheetMain.Button(unequipAllDef.getAttribute("consumable"), `<span style="color:#c8a020;">&#9881;</span> ${unequipAllDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>`)}
-                        <div>
-                            ${rows}
-                        </div>`;
+                        ${WuxSheetMain.HiddenFieldToggle(equippedIsVisibleAttr, `<div>${rows}</div>`, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}`;
+
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                 },
 
@@ -11846,7 +11846,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
                     let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
                         <div>
-                            ${repeaterContent}
+                            ${WuxSheetMain.HiddenFieldToggle(WuxDef.GetAttribute("Gear_GearIsVisible"), repeaterContent, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}
                             ${WuxSheetMain.Row("&nbsp;")}
                             ${addGearFilterButtons()}
                         </div>`;
@@ -11904,7 +11904,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
                     let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
                         <div>
-                            ${repeaterContent}
+                            ${WuxSheetMain.HiddenFieldToggle(WuxDef.GetAttribute("Gear_FoodIsVisible"), repeaterContent, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}
                             ${WuxSheetMain.Row("&nbsp;")}
                             ${addFoodsFilterButtons()}
                         </div>`;
@@ -11943,7 +11943,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
                 ownedEquipment = function () {
                     let repeatingDef = WuxDef.Get("RepeatingEquipment");
-                    let eqipmentIsVisibleAttr = WuxDef.GetAttribute("Gear_EqipmentIsVisible");
+                    let eqipmentIsVisibleAttr = WuxDef.GetAttribute("Gear_EquipmentIsVisible");
                     let repeaterContent = buildRepeater(repeatingDef.getVariable(), addRepeaterContentsEquipment());
 
                     let contents = `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
@@ -12017,6 +12017,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let repeatingDef = WuxDef.Get("RepeatingSyncedEquipment");
                     let unequipDef = WuxDef.Get("Gear_Unequip");
                     let inspectDef = WuxDef.Get("Gear_Inspect");
+                    let equippedIsVisibleAttr = WuxDef.GetAttribute("Gear_EquipmentIsVisible", WuxDef._gear);
 
                     let rowContents = WuxSheetMain.MultiRow(`
                     <div class="wuxEquipableRow">
@@ -12048,9 +12049,8 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         ${traitsDisplay}
                         ${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
                         ${WuxSheetMain.HiddenField(WuxDef.GetAttribute("Equipment"), `<div style="float:right;">${WuxSheetMain.Button(unequipAllDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${unequipAllDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>`)}
-                        <div>
-                            ${repeaterContent}
-                        </div>`;
+                        ${WuxSheetMain.HiddenFieldToggle(equippedIsVisibleAttr, `<div>${repeaterContent}</div>`, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}`;
+
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                 },
 
@@ -12319,11 +12319,10 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 styleListSection = function (repeatingSectionName) {
                     let repeatingDef = WuxDef.Get(repeatingSectionName);
+                    let styleIsVisibleAttr = WuxDef.GetAttribute("Action_StyleIsVisible");
+                    let repeaterContent = buildRepeater(repeatingDef.getVariable(), addStyleListRepeaterContents());
                     let contents = `${WuxSheetMain.Header(repeatingDef.getTitle())}
-                        <div>
-                        ${buildRepeater(repeatingDef.getVariable(), addStyleListRepeaterContents())}
-                        ${WuxSheetMain.Row("&nbsp;")}
-                    </div>`;
+                        ${WuxSheetMain.HiddenFieldToggle(styleIsVisibleAttr, `<div>${repeaterContent}${WuxSheetMain.Row("&nbsp;")}</div>`, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}`;
                     return WuxSheetMain.Table.FlexTableGroup(contents);
                 },
 
@@ -14414,16 +14413,15 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                     </div>
                                 </div>
                             </div>`;
-                            let repeaterSection = WuxSheetMain.Table.FlexTableGroup(
-                                `${WuxSheetMain.Header(repeatingDef.getTitle())}
-                                <div>
-                                    <div class="wuxNoRepControl wuxRepeatingFlexSection">
+                            let perkIsVisibleAttr = WuxDef.GetAttribute("Action_PerkIsVisible");
+                            let repeaterContent = `<div class="wuxNoRepControl wuxRepeatingFlexSection">
                                         <fieldset class="${repeatingDef.getVariable()}">
                                             ${rowContents}
                                         </fieldset>
-                                    </div>
-                                    ${WuxSheetMain.Row("&nbsp;")}
-                                </div>`);
+                                    </div>`;
+                            let repeaterSection = WuxSheetMain.Table.FlexTableGroup(
+                                `${WuxSheetMain.Header(repeatingDef.getTitle())}
+                                ${WuxSheetMain.HiddenFieldToggle(perkIsVisibleAttr, `<div>${repeaterContent}${WuxSheetMain.Row("&nbsp;")}</div>`, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}`);
 
                             let sectionDef = WuxDef.Get("Title_PerkTechniques");
                             let contents = WuxSheetMain.MultiRowGroup([repeaterSection, filterPanel], WuxSheetMain.Table.FlexTableReverse, 2);

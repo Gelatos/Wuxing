@@ -602,6 +602,7 @@ class PerkTechniqueInspectionPopup extends InspectionPopup {
         worker.setBuildStatsDraft(attrHandler);
         worker.updateBuildStats(attrHandler, perkAttr, perk.cost);
         worker.updatePoints(attrHandler);
+        attrHandler.addUpdate(WuxDef.GetVariable("Action_PerkIsVisible"), "on");
     }
 }
 
@@ -640,12 +641,13 @@ class TechniqueInspectionPopup extends InspectionPopup {
         // add all the techniques to the style worker as this is how we track styles tracked and their level
         worker.setBuildStatsDraft(attrHandler);
         worker.updateBuildStats(attrHandler, baseTechnique.name, {value: 1, group: "Style"});
-        
+
         let variantTechniques = WuxTechs.Filter(new DatabaseFilterData("style", itemName));
         variantTechniques.forEach(function (technique) {
             worker.updateBuildStats(attrHandler, technique.name, {value: 1, group: technique.techSet});
         });
         worker.updatePoints(attrHandler);
+        attrHandler.addUpdate(WuxDef.GetVariable("Action_StyleIsVisible"), "on");
     }
 }
 class ItemInspectionPopup extends InspectionPopup {
@@ -748,7 +750,7 @@ class ItemInspectionPopup extends InspectionPopup {
             attrHandler.addUpdate(countField, currentCount + 1);
             if (attrHandler.parseString(existingRepeater.getFieldName(duplicateId, this.getGearVariable("ItemIsVisible"))) !== "on") {
                 attrHandler.addUpdate(existingRepeater.getFieldName(duplicateId, this.getGearVariable("ItemIsVisible")), "on");
-                attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "on");
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquipmentIsVisible"), "on");
             }
             return;
         }
@@ -773,7 +775,7 @@ class ItemInspectionPopup extends InspectionPopup {
             attrHandler.addUpdate(syncedRepeater.getFieldName(syncedRowId, this.getGearVariable("ItemIsVisible")), "0");
         }
 
-        attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "on");
+        attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquipmentIsVisible"), "on");
 
         let equipBuildVar = WuxDef.GetVariable("Equipment", WuxDef._build);
         let equipBuildRaw = attrHandler.parseString(equipBuildVar);
@@ -823,7 +825,7 @@ class ItemInspectionPopup extends InspectionPopup {
             attrHandler.addUpdate(existingRepeater.getFieldName(duplicateId, buyMaxInfoVar), buyBulkDef.getTitle(`10 (${itemValue * 10}J)`));
             if (attrHandler.parseString(existingRepeater.getFieldName(duplicateId, this.getGearVariable("ItemIsVisible"))) !== "on") {
                 attrHandler.addUpdate(existingRepeater.getFieldName(duplicateId, this.getGearVariable("ItemIsVisible")), "on");
-                attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "on");
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableIsVisible"), "on");
             }
             return;
         }
@@ -836,7 +838,7 @@ class ItemInspectionPopup extends InspectionPopup {
         attrHandler.addUpdate(repeater.getFieldName(newRowId, buyInfoVar), buyDef.getTitle(`1 (${itemValue}J)`));
         attrHandler.addUpdate(repeater.getFieldName(newRowId, buyMaxInfoVar), buyBulkDef.getTitle(`10 (${itemValue * 10}J)`));
 
-        attrHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "on");
+        attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableIsVisible"), "on");
 
         let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
         let consuBuildRaw = attrHandler.parseString(consuBuildVar);
@@ -1117,6 +1119,7 @@ class GearInspectionPopup extends InspectionPopup {
                 attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemMainGroup")), "Goods");
             }
         }
+        attrHandler.addUpdate(WuxDef.GetVariable("Gear_GearIsVisible"), "on");
     }
 
     getGearVariable(variable, suffix) {
@@ -1294,6 +1297,7 @@ class GoodsForGearInspectionPopup extends InspectionPopup {
             attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info)), buyBulkDef.getTitle(`50 (${itemValue * 10}J)`));
             attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemMainGroup")), "Goods");
         }
+        attrHandler.addUpdate(WuxDef.GetVariable("Gear_GearIsVisible"), "on");
     }
 
     getGearVariable(variable, suffix) {
@@ -1387,6 +1391,7 @@ class FoodsInspectionPopup extends InspectionPopup {
             attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info)), buyBulkDef.getTitle(isGoods ? `50 (${itemValue * 10}J)` : `10 (${itemValue * 10}J)`));
             attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemMainGroup")), isGoods ? "Goods" : "Item");
         }
+        attrHandler.addUpdate(WuxDef.GetVariable("Gear_FoodIsVisible"), "on");
     }
 
     getGearVariable(variable, suffix) {
@@ -1476,6 +1481,7 @@ class IngsInspectionPopup extends InspectionPopup {
             attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info)), buyBulkDef.getTitle(`50 (${itemValue * 10}J)`));
             attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemMainGroup")), "Goods");
         }
+        attrHandler.addUpdate(WuxDef.GetVariable("Gear_FoodIsVisible"), "on");
     }
 
     getGearVariable(variable, suffix) {

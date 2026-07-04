@@ -679,6 +679,11 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                 worker.updatePoints(attrHandler);
                 worker.revertBuildStatsDraft(attrHandler);
                 repeater.removeId(selectedId);
+                let anyRemaining = false;
+                repeater.iterate(function (id) {
+                    if (id !== selectedId) anyRemaining = true;
+                });
+                attrHandler.addUpdate(WuxDef.GetVariable("Action_StyleIsVisible"), anyRemaining ? "on" : "0");
             });
             WuxWorkerSkills.UpdateKeySkills(attributeHandler);
             WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);

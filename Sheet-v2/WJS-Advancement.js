@@ -814,6 +814,11 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 					worker.revertBuildStatsDraft(attrHandler);
 				}
 				repeater.removeId(selectedId);
+				let anyRemaining = false;
+				repeater.iterate(function (id) {
+					if (id !== selectedId) anyRemaining = true;
+				});
+				attrHandler.addUpdate(WuxDef.GetVariable("Action_PerkIsVisible"), anyRemaining ? "on" : "0");
 			});
 			WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
 			attributeHandler.run();

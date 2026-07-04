@@ -15,7 +15,12 @@ var upgrade_to_2_0_0 = function (currentVersion) {
 	attributeHandler.addUpdate(WuxDef.GetVariable("Soc_Impatience", WuxDef._max), 16);
 	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementJob"), 0);
 	attributeHandler.addUpdate(WuxDef.GetVariable("AdvancementSkill"), 0);
-	attributeHandler.addUpdate(WuxDef.GetVariable("Gear_EqipmentIsVisible"), "0");
+	attributeHandler.addUpdate(WuxDef.GetVariable("Gear_EquipmentIsVisible"), "0");
+	attributeHandler.addUpdate(WuxDef.GetVariable("Gear_EquipmentIsVisible", WuxDef._gear), "0");
+	attributeHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableIsVisible"), "0");
+	attributeHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableIsVisible", WuxDef._gear), "0");
+	attributeHandler.addUpdate(WuxDef.GetVariable("Action_StyleIsVisible"), "0");
+	attributeHandler.addUpdate(WuxDef.GetVariable("Action_PerkIsVisible"), "0");
 	attributeHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits"), "None");
 	attributeHandler.addUpdate(WuxDef.GetVariable("Jin"), 1000);
 	attributeHandler.addUpdate(WuxDef.GetVariable("Loading"), "0");
@@ -101,6 +106,7 @@ var upgrade_to_2_0_0 = function (currentVersion) {
 
 		// Reset style worker build stats (clears stale technique data)
 		attrHandler.getRepeatingSection("RepeatingStyles").removeAllIds();
+		attrHandler.addUpdate(WuxDef.GetVariable("Action_StyleIsVisible"), "0");
 		styleWorker.setBuildStatsDraft(attrHandler);
 		styleWorker.clearBuildStats();
 		styleWorker.setPointsMax(attrHandler);
