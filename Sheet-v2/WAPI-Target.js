@@ -1879,10 +1879,12 @@ var TargetReference = TargetReference || (function () {
                 output += tokenOptionSpacer();
                 output += tokenOptionTitle("Adventure Options");
                 output += tokenOptionButton("Adventure Options", `adventureoptions ?{Choose Location|${locationOptions}}`);
+                output += tokenOptionButton("Cook", "cook");
+                output += tokenOptionButton("End Cooking", "endcooking");
                 const meals = WuxItems.Filter([new DatabaseFilterData("group", "Meal")]);
                 if (meals.length > 0) {
                     const mealOptions = meals.map(function (m) { return m.name; }).join("|");
-                    output += tokenOptionButton("Give a Meal", `givemeal ?{Choose Meal|${mealOptions}}`);
+                    output += tokenOptionButton("Give a Meal", `givemeal ?{Choose Meal|${mealOptions}}|||?{Savoury?|No|Yes,savoury}`);
                 }
             }
 
@@ -2880,6 +2882,7 @@ on("ready", function () {
 
     TargetReference.CheckInstall();
     TokenReference.CheckInstall();
+    WuxAdventureManager.CheckInstall();
 });
 
 

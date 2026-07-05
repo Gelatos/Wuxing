@@ -171,6 +171,24 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                                 contents += WuxSheetMain.MultiRowGroup(statusItems, WuxSheetMain.Table.FlexTable, 2);
                             }
 
+                            let boonDefs = WuxDef.Filter([new DatabaseFilterData("group", "Boon")]);
+                            if (boonDefs.length > 0) {
+                                let boonSectionDef = WuxDef.Get("Title_Boon");
+                                contents += WuxSheetMain.Header(boonSectionDef.getTitle());
+                                let buildBoonTooltip = function (def) {
+                                    return `${WuxSheetMain.Header2(def.getTitle())}
+                                        <span class="wuxDescription">${def.getDescription('</span><span class="wuxDescription">')}</span>`;
+                                };
+                                let boonItems = boonDefs.map(def =>
+                                    WuxSheetMain.Table.FlexTableGroup(
+                                        WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                            def.getAttribute(),
+                                            def.getAttribute(WuxDef._info),
+                                            WuxSheetMain.Header2(def.getTitle()),
+                                            buildBoonTooltip(def))));
+                                contents += WuxSheetMain.MultiRowGroup(boonItems, WuxSheetMain.Table.FlexTable, 2);
+                            }
+
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         }
 
@@ -641,9 +659,16 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
                     let inspectDef = WuxDef.Get("Gear_Inspect");
                     let deleteDef = WuxDef.Get("Gear_Delete");
+                    let cookDef = WuxDef.Get("Gear_Cook");
+
+                    let gearDef = WuxDef.Get("Gear");
+                    let itemNameVar  = gearDef.getVariable(`-${WuxDef.GetVariable("ItemName")}`);
+                    let itemCountVar = gearDef.getVariable(`-${WuxDef.GetVariable("ItemCount")}`);
+                    let cookButtonValue = `!addingredient @{${itemNameVar}}|||@{${itemCountVar}}|||@{character_name}`;
 
                     let rowContents = WuxSheetMain.MultiRow(`
                         <div class="wuxEquipableRow">
+                            <input type="hidden" name="${getGearAttribute("ItemName")}">
                             <div class="wuxEquipableCountCol">
                                 <input type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
                             </div>
@@ -657,6 +682,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                     ${WuxSheetMain.Button(buyBulkDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyBulkDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
                                     ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                     ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                                    <button class="wuxRepeatingTechActionButton" type="roll" value="${cookButtonValue}"><span style="color:#4caf50;">&#9874;</span> ${cookDef.getTitle("")}</button>
                                 </div>
                             </div>
                         </div>`);

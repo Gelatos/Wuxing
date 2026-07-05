@@ -8330,6 +8330,74 @@
 												</div>
 											</div>
 										</div>
+										<div class="wuxHeader">Boons</div>
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxInteractiveBlock wuxTooltip">
+													<span class="wuxTooltipText">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_boon-rest" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-rest" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-rest" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-rest" />
+																<div class="wuxHeader2">Rest</div>
+															</div>
+														</div>
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Rest</div>
+														<span class="wuxDescription">A boon representing restfulness. This boon is usually gained after finishing a night's rest with at least 6 hours of sleep. This boon can only be gained once every 24 hours. This boon is lost after 24 hours without sleep.</span>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxInteractiveBlock wuxTooltip">
+													<span class="wuxTooltipText">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_boon-savor" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-savor" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-savor" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-savor" />
+																<div class="wuxHeader2">Savor</div>
+															</div>
+														</div>
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Savor</div>
+														<span class="wuxDescription">A boon for being well fed. This boon is usually gained not just by eating but rather after enjoying a satisfying, well-cooked meal. See the rules of cooking for more information. This boon can only be gained once every 6 hours. This boon is lost after 24 hours of not eating.</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxInteractiveBlock wuxTooltip">
+													<span class="wuxTooltipText">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_boon-truth" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-truth" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-truth" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_boon-truth" />
+																<div class="wuxHeader2">Truth</div>
+															</div>
+														</div>
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Truth</div>
+														<span class="wuxDescription">A boon for feelings true to oneself. This boon is usually gained after performing dramatic actions related to your influences. This boon can only be gained as per your GM, but generally can only be gained once per 24 hours. A boon of truth is lost in times of extreme duress as determined by your GM.</span>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -12454,6 +12522,7 @@
 													<div class="wuxHiddenField">
 														<div class="wuxMultiRow">
 															<div class="wuxEquipableRow">
+																<input type="hidden" name="attr_gear-itemname">
 																<div class="wuxEquipableCountCol">
 																	<input type="number" name="attr_gear-itemcount" value="1" min="0">
 																</div>
@@ -12479,6 +12548,7 @@
 																			<input type="checkbox" name="attr_gear-delete">
 																			<span><span style="color:#cc3333;">&#10008;</span> Delete</span>
 																		</div>
+																		<button class="wuxRepeatingTechActionButton" type="roll" value="!addingredient @{gear-itemname}|||@{gear-itemcount}|||@{character_name}"><span style="color:#4caf50;">&#9874;</span> Cook</button>
 																	</div>
 																</div>
 															</div>

@@ -11,6 +11,11 @@ var upgrade_to_2_1_0 = function (currentVersion) {
 		attributeHandler.addUpdate(def.getVariable(), def.hasRanks ? 0 : "");
 	}
 
+	const boonDefs = WuxDef.Filter([new DatabaseFilterData("group", "Boon")]);
+	for (const def of boonDefs) {
+		attributeHandler.addUpdate(def.getVariable(), "");
+	}
+
 	attributeHandler.run();
 };
 
