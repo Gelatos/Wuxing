@@ -256,6 +256,9 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
 
             outputLines.push(`[See All Materials](!seematerials)`);
             outputLines.push(`[Hunt](!hunt)`);
+            if (waterSource && waterSource !== "No Water") {
+                outputLines.push(`[Fish](!fish)`);
+            }
             outputLines.push(`<div>&nbsp</div><div style='font-weight: bold'>Cooking</div>`);
             outputLines.push(`[Start Cooking](!startcooking)`);
             outputLines.push(`[View Cooking](!viewcooking)`);
@@ -792,6 +795,115 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             });
         },
 
+        // !fish — GM only. Rolls the best Athletic skill (DC 8) for each selected token and
+        // grants loot from items matching the current water source location. Requires a water
+        // source to be set in state. The [Fish] button in Adventure Options is hidden when none
+        // is set.
+        commandFish = function (msg) {
+            if (!playerIsGM(msg.playerid)) {
+                sendChat("System", `/w "${msg.who}" Only GMs can initiate fishing.`, null, { noarchive: true });
+                return;
+            }
+            const targets = TokenReference.GetTokenTargetDataArray(msg);
+            if (targets.length === 0) {
+                sendChat("System", `/w GM No tokens selected.`, null, { noarchive: true });
+                return;
+            }
+
+            const waterSource = (state.WuxAdventureState || {}).waterSource || "";
+            if (!waterSource || waterSource === "No Water") {
+                sendChat("System", `/w GM No water source is set.`, null, { noarchive: true });
+                return;
+            }
+
+            const fishItems = WuxGoods.Filter([new DatabaseFilterData("location", [waterSource])]);
+            if (fishItems.length === 0) {
+                sendChat("System", `/w GM No items found for water source: ${waterSource}.`, null, { noarchive: true });
+                return;
+            }
+
+            const tables        = buildLootTables(fishItems);
+            const athleticDefs  = WuxDef.Filter([new DatabaseFilterData("subGroup", "Athletics")]);
+
+            _.each(targets, function (tokenTargetData) {
+                const advantage   = tokenTargetData.getAdvantage();
+                const athleticDie = new DieRoll();
+                athleticDie.rollCheck(advantage);
+
+                const attrHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                athleticDefs.forEach(function (skillDef) {
+                    attrHandler.addMod(WuxDef.GetVariable(skillDef.name));
+                });
+
+                attrHandler.addFinishCallback(function (handler) {
+                    let bestMod = -Infinity;
+                    let bestDef = null;
+                    athleticDefs.forEach(function (skillDef) {
+                        const mod = handler.parseInt(WuxDef.GetVariable(skillDef.name), 0, false);
+                        if (mod > bestMod) { bestMod = mod; bestDef = skillDef; }
+                    });
+
+                    athleticDie.addModToRoll(bestMod);
+                    const athleticTotal = athleticDie.total;
+                    const skillName     = bestDef ? bestDef.title : "Athletics";
+                    const athleticDisp  = Format.ShowTooltip(athleticTotal.toString(), athleticDie.message);
+
+                    if (athleticTotal < 8) {
+                        const out = new SystemInfoMessage([
+                            `${tokenTargetData.displayName} — Fishing: ${waterSource}`,
+                            `${skillName} Check: ${athleticDisp}`,
+                            `No catch.`
+                        ]);
+                        out.setSender(tokenTargetData.displayName || "Wuxing");
+                        WuxMessage.SendToSenderAndGM(out, msg);
+                        return;
+                    }
+
+                    const rolls = [];
+                    addRoll(rolls, athleticTotal, tables.allRarities, 8,  1, 3);
+                    addRoll(rolls, athleticTotal, tables.allRarities, 10, 1, 2);
+                    addRoll(rolls, athleticTotal, tables.allRarities, 12, 1, 2);
+                    addRoll(rolls, athleticTotal, tables.allRarities, 14, 1, 2);
+
+                    const itemCounts = {};
+                    rolls.forEach(function (loot) {
+                        itemCounts[loot.item.name] = (itemCounts[loot.item.name] || 0) + loot.count;
+                    });
+
+                    const foodItems = {};
+                    const gearItems = {};
+                    Object.keys(itemCounts).forEach(function (itemName) {
+                        const item  = WuxGoods.Get(itemName);
+                        const group = item ? item.group : "";
+                        if (group === "Protein" || group === "Seafood") {
+                            foodItems[itemName] = itemCounts[itemName];
+                        } else if (group === "Animal Good") {
+                            gearItems[itemName] = itemCounts[itemName];
+                        }
+                    });
+                    if (Object.keys(foodItems).length > 0) addGoodsToCharacter(tokenTargetData.charId, foodItems);
+                    if (Object.keys(gearItems).length > 0) addAnimalGoodToCharacter(tokenTargetData.charId, gearItems);
+
+                    const outputLines = [
+                        `${tokenTargetData.displayName} — Fishing: ${waterSource}`,
+                        `${skillName} Check: ${athleticDisp}`,
+                        `Items caught:`
+                    ];
+                    Object.keys(itemCounts).sort().forEach(function (itemName) {
+                        const item    = WuxGoods.Get(itemName);
+                        const display = item ? (item.title || item.name) : itemName;
+                        outputLines.push(`  ${display} x${itemCounts[itemName]}`);
+                    });
+
+                    const out = new SystemInfoMessage(outputLines);
+                    out.setSender(tokenTargetData.displayName || "Wuxing");
+                    WuxMessage.SendToSenderAndGM(out, msg);
+                });
+
+                attrHandler.run();
+            });
+        },
+
         commandRest = function (msg) {
             if (!playerIsGM(msg.playerid)) {
                 sendChat("System", `/w "${msg.who}" Only GMs can call a rest.`, null, { noarchive: true });
@@ -1122,6 +1234,9 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                     break;
                 case "!hunt":
                     commandHunt(msg);
+                    break;
+                case "!fish":
+                    commandFish(msg);
                     break;
             }
         };
