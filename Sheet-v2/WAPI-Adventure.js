@@ -71,11 +71,11 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
     // Returns [{item, count}] for rolls 2-6 only (random items from the table).
     const resolveExtraLoot = function (result, tables) {
         const rolls = [];
-        addRoll(rolls, result, tables.allRarities, 8,  2, 5);
-        addRoll(rolls, result, tables.allRarities, 10, 1, 5);
-        addRoll(rolls, result, tables.allRarities, 12, 1, 3);
-        addRoll(rolls, result, tables.rarity2Plus, 15, 1, 3);
-        addRoll(rolls, result, tables.rarity2Plus, 18, 1, 3);
+        addRoll(rolls, result, tables.allRarities, 8,  1, 5);
+        addRoll(rolls, result, tables.allRarities, 11, 1, 5);
+        addRoll(rolls, result, tables.allRarities, 13, 1, 3);
+        addRoll(rolls, result, tables.rarity2Plus, 16, 1, 3);
+        addRoll(rolls, result, tables.rarity2Plus, 19, 1, 3);
         return rolls;
     };
 
@@ -105,14 +105,14 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
         return { locationDef: locationDef, items: items };
     };
 
-    // ─── RepeatingFoods (Goods) ─────────────────────────────────────────────────
+    // ─── Repeating Section Goods ─────────────────────────────────────────────────
 
     const getGearField = function (attributeKey) {
         return WuxDef.Get("Gear").getVariable("-" + WuxDef.GetVariable(attributeKey));
     };
 
-    const addGoodsToCharacter = function (charId, itemCounts) {
-        const repeater      = new SandboxRepeatingSectionHandler("RepeatingFoods", charId);
+    const addItemsToSection = function (charId, itemCounts, sectionName, mainGroup) {
+        const repeater      = new SandboxRepeatingSectionHandler(sectionName, charId);
         const nameField     = getGearField("ItemName");
         const countField    = getGearField("ItemCount");
         const visibleField  = getGearField("ItemIsVisible");
@@ -159,7 +159,7 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 createObj("attribute", { _characterid: charId, name: `${prefix}${rowId}_${nameField}`,        current: itemName });
                 createObj("attribute", { _characterid: charId, name: `${prefix}${rowId}_${countField}`,       current: count });
                 createObj("attribute", { _characterid: charId, name: `${prefix}${rowId}_${visibleField}`,     current: "on" });
-                createObj("attribute", { _characterid: charId, name: `${prefix}${rowId}_${groupField}`,       current: "Goods" });
+                createObj("attribute", { _characterid: charId, name: `${prefix}${rowId}_${groupField}`,       current: mainGroup });
                 createObj("attribute", { _characterid: charId, name: `${prefix}${rowId}_${itemGroupField}`,   current: itemGroup });
                 createObj("attribute", { _characterid: charId, name: `${prefix}${rowId}_${bulkField}`,        current: itemBulk });
                 createObj("attribute", { _characterid: charId, name: `${prefix}${rowId}_${subGroupField}`,    current: itemCategory });
@@ -167,6 +167,24 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 createObj("attribute", { _characterid: charId, name: `${prefix}${rowId}_${buyBulkInfoField}`, current: buyBulkLabel });
             }
         });
+
+        // Flip the section's none-check so the sheet stops showing "empty".
+        const noneCheckDef = sectionName === "RepeatingFoods" ? "Gear_FoodIsVisible" : "Gear_GearIsVisible";
+        const noneCheckVar = WuxDef.GetVariable(noneCheckDef);
+        const noneAttr = findObjs({ _characterid: charId, _type: "attribute", name: noneCheckVar })[0];
+        if (noneAttr) {
+            noneAttr.set("current", "on");
+        } else {
+            createObj("attribute", { _characterid: charId, name: noneCheckVar, current: "on" });
+        }
+    };
+
+    const addGoodsToCharacter = function (charId, itemCounts) {
+        addItemsToSection(charId, itemCounts, "RepeatingFoods", "Goods");
+    };
+
+    const addAnimalGoodToCharacter = function (charId, itemCounts) {
+        addItemsToSection(charId, itemCounts, "RepeatingGear", "Animal Good");
     };
 
     // ─── Notice Roll Runner ─────────────────────────────────────────────────────
@@ -237,6 +255,8 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             }
 
             outputLines.push(`[See All Materials](!seematerials)`);
+            outputLines.push(`[Hunt](!hunt)`);
+            outputLines.push(`<div>&nbsp</div><div style='font-weight: bold'>Cooking</div>`);
             outputLines.push(`[Start Cooking](!startcooking)`);
             outputLines.push(`[View Cooking](!viewcooking)`);
 
@@ -616,6 +636,162 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             WuxMessage.SendToSender(messageObject, msg);
         },
 
+        // !hunt — GM only. Rolls Notice (DC 7) then the best Athletic skill (DC 10) for each
+        // selected token. On success picks a random AnimalType, rolls a loot table 3+2+1 times
+        // (plus 1 per point over 10), and adds Protein items to RepeatingFoods and Animal Good
+        // items to RepeatingGear.
+        commandHunt = function (msg) {
+            if (!playerIsGM(msg.playerid)) {
+                sendChat("System", `/w "${msg.who}" Only GMs can initiate a hunt.`, null, { noarchive: true });
+                return;
+            }
+            const targets = TokenReference.GetTokenTargetDataArray(msg);
+            if (targets.length === 0) {
+                sendChat("System", `/w GM No tokens selected.`, null, { noarchive: true });
+                return;
+            }
+
+            const animalTypes = WuxDef.Filter([new DatabaseFilterData("group", "AnimalType")]);
+            if (animalTypes.length === 0) {
+                sendChat("System", `/w GM No AnimalType definitions found.`, null, { noarchive: true });
+                return;
+            }
+
+            const noticeVar    = WuxDef.GetVariable("Skill_Notice");
+            const athleticDefs = WuxDef.Filter([new DatabaseFilterData("subGroup", "Athletics")]);
+
+            _.each(targets, function (tokenTargetData) {
+                const advantage = tokenTargetData.getAdvantage();
+
+                const noticeDie   = new DieRoll();
+                noticeDie.rollCheck(advantage);
+                const athleticDie = new DieRoll();
+                athleticDie.rollCheck(advantage);
+
+                const attrHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                attrHandler.addMod(noticeVar);
+                athleticDefs.forEach(function (skillDef) {
+                    attrHandler.addMod(WuxDef.GetVariable(skillDef.name));
+                });
+
+                attrHandler.addFinishCallback(function (handler) {
+                    const noticeMod   = handler.parseInt(noticeVar, 0, false);
+                    noticeDie.addModToRoll(noticeMod);
+                    const noticeTotal = noticeDie.total;
+                    const noticeDisp  = Format.ShowTooltip(noticeTotal.toString(), noticeDie.message);
+
+                    if (noticeTotal < 7) {
+                        const out = new SystemInfoMessage([
+                            `${tokenTargetData.displayName} — Hunting`,
+                            `Notice Check: ${noticeDisp}`,
+                            `No creatures found.`
+                        ]);
+                        out.setSender(tokenTargetData.displayName || "Wuxing");
+                        WuxMessage.SendToSenderAndGM(out, msg);
+                        return;
+                    }
+
+                    // Pick the athletic skill with the highest modifier.
+                    let bestMod  = -Infinity;
+                    let bestDef  = null;
+                    athleticDefs.forEach(function (skillDef) {
+                        const mod = handler.parseInt(WuxDef.GetVariable(skillDef.name), 0, false);
+                        if (mod > bestMod) { bestMod = mod; bestDef = skillDef; }
+                    });
+
+                    athleticDie.addModToRoll(bestMod);
+                    const athleticTotal = athleticDie.total;
+                    const skillName     = bestDef ? bestDef.title : "Athletics";
+                    const athleticDisp  = Format.ShowTooltip(athleticTotal.toString(), athleticDie.message);
+
+                    if (athleticTotal < 10) {
+                        const out = new SystemInfoMessage([
+                            `${tokenTargetData.displayName} — Hunting`,
+                            `Notice Check: ${noticeDisp}`,
+                            `${skillName} Check: ${athleticDisp}`,
+                            `Failed Hunt.`
+                        ]);
+                        out.setSender(tokenTargetData.displayName || "Wuxing");
+                        WuxMessage.SendToSenderAndGM(out, msg);
+                        return;
+                    }
+
+                    // Pick a random animal type and get its goods.
+                    const animalDef    = animalTypes[Math.floor(Math.random() * animalTypes.length)];
+                    const desc         = animalDef.getDescription("");
+                    const locMatch     = desc.match(/location:([^|;]+)/);
+                    const filterValues = locMatch
+                        ? locMatch[1].split(",").map(function (s) { return s.trim(); }).filter(Boolean)
+                        : [];
+                    const animalGoods  = filterValues.length > 0
+                        ? WuxGoods.Filter([new DatabaseFilterData("location", filterValues)])
+                        : [];
+
+                    if (animalGoods.length === 0) {
+                        const out = new SystemInfoMessage([
+                            `${tokenTargetData.displayName} — Hunting`,
+                            `Notice Check: ${noticeDisp}`,
+                            `${skillName} Check: ${athleticDisp}`,
+                            `No loot items defined for ${animalDef.title}.`
+                        ]);
+                        out.setSender(tokenTargetData.displayName || "Wuxing");
+                        WuxMessage.SendToSenderAndGM(out, msg);
+                        return;
+                    }
+
+                    const pickItem = function () {
+                        return animalGoods[Math.floor(Math.random() * animalGoods.length)];
+                    };
+
+                    // Roll 3 times granting 3, 2, 1. Each point over 10 = 1 bonus roll.
+                    const itemCounts = {};
+                    const addLoot = function (item, count) {
+                        itemCounts[item.name] = (itemCounts[item.name] || 0) + count;
+                    };
+                    addLoot(pickItem(), 3);
+                    addLoot(pickItem(), 2);
+                    addLoot(pickItem(), 1);
+                    const bonusRolls = athleticTotal - 10;
+                    for (let i = 0; i < bonusRolls; i++) {
+                        addLoot(pickItem(), 1);
+                    }
+
+                    // Route items by group to the correct repeating section.
+                    const foodItems = {};
+                    const gearItems = {};
+                    Object.keys(itemCounts).forEach(function (itemName) {
+                        const item  = WuxGoods.Get(itemName);
+                        const group = item ? item.group : "";
+                        if (group === "Protein") {
+                            foodItems[itemName] = itemCounts[itemName];
+                        } else if (group === "Animal Good") {
+                            gearItems[itemName] = itemCounts[itemName];
+                        }
+                    });
+                    if (Object.keys(foodItems).length > 0) addGoodsToCharacter(tokenTargetData.charId, foodItems);
+                    if (Object.keys(gearItems).length > 0) addAnimalGoodToCharacter(tokenTargetData.charId, gearItems);
+
+                    const outputLines = [
+                        `${tokenTargetData.displayName} — Hunting: ${animalDef.title}`,
+                        `Notice Check: ${noticeDisp}`,
+                        `${skillName} Check: ${athleticDisp}`,
+                        `Items obtained:`
+                    ];
+                    Object.keys(itemCounts).sort().forEach(function (itemName) {
+                        const item    = WuxGoods.Get(itemName);
+                        const display = item ? (item.title || item.name) : itemName;
+                        outputLines.push(`  ${display} x${itemCounts[itemName]}`);
+                    });
+
+                    const out = new SystemInfoMessage(outputLines);
+                    out.setSender(tokenTargetData.displayName || "Wuxing");
+                    WuxMessage.SendToSenderAndGM(out, msg);
+                });
+
+                attrHandler.run();
+            });
+        },
+
         commandRest = function (msg) {
             if (!playerIsGM(msg.playerid)) {
                 sendChat("System", `/w "${msg.who}" Only GMs can call a rest.`, null, { noarchive: true });
@@ -943,6 +1119,9 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                     break;
                 case "!seematerials":
                     commandSeeMaterials(msg);
+                    break;
+                case "!hunt":
+                    commandHunt(msg);
                     break;
             }
         };
