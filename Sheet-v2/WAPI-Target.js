@@ -2786,7 +2786,27 @@ var TokenReference = TokenReference || (function () {
 
                 tokenTargetData.setEnergyIcon(attrHandler.parseInt(enVar, 0, false));
                 tokenTargetData.combatDetails.onUpdateDisplayStyle(attrHandler, "Battle");
-                tokenTargetData.setCombatDetails(attrHandler);
+
+                let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
+                let presetStatusDefs = WuxDef.Filter([new DatabaseFilterData("group", "Status")]).filter(def => def.presetStatus);
+                for (let def of presetStatusDefs) {
+                    if (def.hasRanks) {
+                        let rank = attrHandler.parseInt(def.getVariable(), 0, false);
+                        if (rank > 0) {
+                            tokenNoteReference.statusHandler.setStatus(def.name, rank);
+                        }
+                    } else {
+                        if (attrHandler.parseString(def.getVariable(), "", false) === "on") {
+                            tokenNoteReference.statusHandler.setStatus(def.name, 1);
+                            if (def.name !== "Stat_Exhausted") {
+                                attrHandler.addUpdate(def.getVariable(), "");
+                            }
+                        }
+                    }
+                }
+                tokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
+
+                tokenTargetData.setCombatDetails(attrHandler, tokenNoteReference);
             });
         },
         setTokenForSocialBattle = function (tokenTargetData, attributeHandler) {

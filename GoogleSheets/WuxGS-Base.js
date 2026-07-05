@@ -146,6 +146,31 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                                         `Max: <span name="${surgeDef.getAttribute(WuxDef._max)}"></span>`))],
                                 WuxSheetMain.Table.FlexTable, 2);
 
+                            let presetStatusDefs = WuxDef.Filter([new DatabaseFilterData("group", "Status")]).filter(def => def.presetStatus);
+                            if (presetStatusDefs.length > 0) {
+                                let statusSectionDef = WuxDef.Get("Page_OverviewStatus");
+                                contents += WuxSheetMain.Header(statusSectionDef.getTitle());
+                                let buildStatusTooltip = function (def) {
+                                    let tip = `${WuxSheetMain.Header2(def.getTitle())}
+                                        <span class="wuxDescription">${def.getDescription('</span><span class="wuxDescription">')}</span>`;
+                                    let notes = [];
+                                    if (def.endsOnRoundStart) notes.push("Ends on round start");
+                                    if (def.endsOnTrigger) notes.push("Ends when triggered");
+                                    if (notes.length > 0) tip += WuxSheetMain.Desc(notes.join(" · "));
+                                    return tip;
+                                };
+                                let statusItems = presetStatusDefs.map(def =>
+                                    WuxSheetMain.Table.FlexTableGroup(
+                                        def.hasRanks
+                                            ? WuxDefinition.BuildNumberLabelInput(def, def.getAttribute(), def.shortDescription)
+                                            : WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                                def.getAttribute(),
+                                                def.getAttribute(WuxDef._info),
+                                                WuxSheetMain.Header2(def.getTitle()),
+                                                buildStatusTooltip(def))));
+                                contents += WuxSheetMain.MultiRowGroup(statusItems, WuxSheetMain.Table.FlexTable, 2);
+                            }
+
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         }
 
@@ -382,8 +407,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         Print: print
     };
 }());
-
-
 
 var DisplayGearSheet = DisplayGearSheet || (function () {
     'use strict';

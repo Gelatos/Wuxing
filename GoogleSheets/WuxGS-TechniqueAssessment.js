@@ -487,6 +487,9 @@ class TechniqueAssessment {
             case "Vitality":
                 this.getVitalityAssessment(effect, attributeHandler);
                 break;
+            case "Surge":
+                this.getSurgeAssessment(effect, attributeHandler);
+                break;
             case "Impatience":
                 this.getImpatienceAssessment(effect, attributeHandler);
                 break;
@@ -812,6 +815,28 @@ class TechniqueAssessment {
 
         if (effect.defense == "WillBreak") {
             this.addImpactTrait(`Trait_Will:Trait_Atk-Vitality`);
+        }
+        else {
+            this.addPointsRubric(output.value, message);
+        }
+        this.addTargetedPointsRubric(effect, output.value);
+    }
+
+    getSurgeAssessment(effect, attributeHandler) {
+        let output = this.getDiceFormula(effect, attributeHandler);
+        output.value *= 10;
+        if (effect.subType == "Heal") {
+            this.addImpactTrait("TechFilterType_Utility");
+            this.addImpactTrait("Trait_Heal");
+        }
+        else {
+            output.value = Math.floor(output.value * 1.5);
+            this.isCombat = true;
+        }
+        let message = `(${effect.subType != "" ? `${effect.subType} ` : ""}Surge)`;
+
+        if (effect.defense == "WillBreak") {
+            this.addImpactTrait(`Trait_Will:Trait_Atk-Surge`);
         }
         else {
             this.addPointsRubric(output.value, message);

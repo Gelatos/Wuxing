@@ -1764,6 +1764,7 @@ class StatusData extends WuxDatabaseData {
         this.hasRanks = json.hasRanks;
         this.isBeneficial = json.isBeneficial;
         this.canBeFiltered = json.canBeFiltered;
+        this.presetStatus = json.presetStatus;
     }
 
     importSheets(dataArray) {
@@ -1790,6 +1791,8 @@ class StatusData extends WuxDatabaseData {
         i++;
         this.canBeFiltered = ("" + dataArray[i]) != "";
         i++;
+        this.presetStatus = ("" + dataArray[i]) != "";
+        i++;
     }
 
     createEmpty() {
@@ -1804,6 +1807,7 @@ class StatusData extends WuxDatabaseData {
         this.hasRanks = false;
         this.isBeneficial = false;
         this.canBeFiltered = false;
+        this.presetStatus = false;
     }
 
     createDefinition(baseDefinition) {
@@ -1817,6 +1821,7 @@ class StatusData extends WuxDatabaseData {
         definition.hasRanks = this.hasRanks;
         definition.isBeneficial = this.isBeneficial;
         definition.canBeFiltered = this.canBeFiltered;
+        definition.presetStatus = this.presetStatus;
         return definition;
     }
     
@@ -2360,6 +2365,7 @@ class StatusDefinitionData extends DefinitionData {
         this.hasRanks = json.hasRanks;
         this.isBeneficial = json.isBeneficial;
         this.canBeFiltered = json.canBeFiltered;
+        this.presetStatus = json.presetStatus;
     }
 
     setImportSheetExtraData(property, value) {
@@ -2382,6 +2388,9 @@ class StatusDefinitionData extends DefinitionData {
             case "canBeFiltered":
                 this.canBeFiltered = value.toLowerCase() == "true";
                 break;
+            case "presetStatus":
+                this.presetStatus = value.toLowerCase() == "true";
+                break;
         }
     }
 
@@ -2394,6 +2403,7 @@ class StatusDefinitionData extends DefinitionData {
         this.hasRanks = false;
         this.isBeneficial = false;
         this.canBeFiltered = false;
+        this.presetStatus = false;
     }
 }
 
@@ -2923,6 +2933,13 @@ class BaseTechniqueEffectDisplayData {
                 }
                 this.formatVitalityEffect(effect);
                 break;
+            case "Surge":
+                if (this.effectType != "Surge") {
+                    this.effectType = effect.type;
+                    this.addDefintionToEffectDescription(WuxDef.Get("Surge"));
+                }
+                this.formatSurgeEffect(effect);
+                break;
             case "Impatience":
                 if (this.effectType != "Impatience") {
                     this.effectType = effect.type;
@@ -3140,6 +3157,17 @@ class BaseTechniqueEffectDisplayData {
                 return;
             default:
                 this.effectDescription += `${this.formatTargetLose(effect)} ${this.formatCalcBonus(effect)} ${vitality}`;
+        }
+    }
+
+    formatSurgeEffect(effect) {
+        let surge = WuxDef.GetTitle("Surge");
+        switch (effect.subType) {
+            case "Heal":
+                this.effectDescription += `${this.formatTargetGain(effect)} ${this.formatCalcBonus(effect)} ${surge}`;
+                return;
+            default:
+                this.effectDescription += `${this.formatTargetLose(effect)} ${this.formatCalcBonus(effect)} ${surge}`;
         }
     }
 
@@ -3668,6 +3696,9 @@ class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
                 return;
             case "Vitality":
                 this.formatVitalityEffect(effect);
+                break;
+            case "Surge":
+                this.formatSurgeEffect(effect);
                 break;
             case "Impatience":
                 this.formatImpatienceMeterEffect(effect);
@@ -8859,6 +8890,9 @@ class TechniqueAssessment {
             case "Vitality":
                 this.getVitalityAssessment(effect, attributeHandler);
                 break;
+            case "Surge":
+                this.getSurgeAssessment(effect, attributeHandler);
+                break;
             case "Impatience":
                 this.getImpatienceAssessment(effect, attributeHandler);
                 break;
@@ -9184,6 +9218,28 @@ class TechniqueAssessment {
 
         if (effect.defense == "WillBreak") {
             this.addImpactTrait(`Trait_Will:Trait_Atk-Vitality`);
+        }
+        else {
+            this.addPointsRubric(output.value, message);
+        }
+        this.addTargetedPointsRubric(effect, output.value);
+    }
+
+    getSurgeAssessment(effect, attributeHandler) {
+        let output = this.getDiceFormula(effect, attributeHandler);
+        output.value *= 10;
+        if (effect.subType == "Heal") {
+            this.addImpactTrait("TechFilterType_Utility");
+            this.addImpactTrait("Trait_Heal");
+        }
+        else {
+            output.value = Math.floor(output.value * 1.5);
+            this.isCombat = true;
+        }
+        let message = `(${effect.subType != "" ? `${effect.subType} ` : ""}Surge)`;
+
+        if (effect.defense == "WillBreak") {
+            this.addImpactTrait(`Trait_Will:Trait_Atk-Surge`);
         }
         else {
             this.addPointsRubric(output.value, message);
@@ -11406,6 +11462,31 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                                         `Max: <span name="${surgeDef.getAttribute(WuxDef._max)}"></span>`))],
                                 WuxSheetMain.Table.FlexTable, 2);
 
+                            let presetStatusDefs = WuxDef.Filter([new DatabaseFilterData("group", "Status")]).filter(def => def.presetStatus);
+                            if (presetStatusDefs.length > 0) {
+                                let statusSectionDef = WuxDef.Get("Page_OverviewStatus");
+                                contents += WuxSheetMain.Header(statusSectionDef.getTitle());
+                                let buildStatusTooltip = function (def) {
+                                    let tip = `${WuxSheetMain.Header2(def.getTitle())}
+                                        <span class="wuxDescription">${def.getDescription('</span><span class="wuxDescription">')}</span>`;
+                                    let notes = [];
+                                    if (def.endsOnRoundStart) notes.push("Ends on round start");
+                                    if (def.endsOnTrigger) notes.push("Ends when triggered");
+                                    if (notes.length > 0) tip += WuxSheetMain.Desc(notes.join(" · "));
+                                    return tip;
+                                };
+                                let statusItems = presetStatusDefs.map(def =>
+                                    WuxSheetMain.Table.FlexTableGroup(
+                                        def.hasRanks
+                                            ? WuxDefinition.BuildNumberLabelInput(def, def.getAttribute(), def.shortDescription)
+                                            : WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                                def.getAttribute(),
+                                                def.getAttribute(WuxDef._info),
+                                                WuxSheetMain.Header2(def.getTitle()),
+                                                buildStatusTooltip(def))));
+                                contents += WuxSheetMain.MultiRowGroup(statusItems, WuxSheetMain.Table.FlexTable, 2);
+                            }
+
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         }
 
@@ -11642,8 +11723,6 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         Print: print
     };
 }());
-
-
 
 var DisplayGearSheet = DisplayGearSheet || (function () {
     'use strict';
