@@ -8244,18 +8244,24 @@
 										<div class="wuxHeader">Status</div>
 										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroup">
-												<div class="wuxHeader2"><span class="wuxTooltip">
-														<span class="wuxTooltipText">
-															Exhausted
-														</span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Exhausted</div>
-															<span class="wuxDescription"><em>Status</em></span>
-															<span class="wuxDescription">You gain +1 disadvantage per rank of Exhausted. Skill checks against you gain +1 Advantage per rank of Exhausted.</span>
+												<div class="wuxInteractiveBlock wuxTooltip">
+													<span class="wuxTooltipText">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_sts-exhausted" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-exhausted" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-exhausted" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_sts-exhausted" />
+																<div class="wuxHeader2">Exhausted</div>
+															</div>
 														</div>
-													</span></div>
-												<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_sts-exhausted" value="" placeholder="0" />
-													<div class="wuxInputLabel"></div>
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Exhausted</div>
+														<span class="wuxDescription">You gain +2 disadvantage on all skill checks. Skill checks against you gain +1 Advantage.</span>
+													</div>
 												</div>
 											</div>
 											<div class="wuxFlexTableItemGroup">

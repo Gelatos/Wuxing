@@ -1401,6 +1401,9 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
             case "Vitality":
                 this.addVitalityEffect(techniqueEffect, attrGetters, attrSetters);
                 break;
+            case "Surge":
+                this.addSurgeEffect(techniqueEffect, attrGetters, attrSetters);
+                break;
             case "Impatience":
                 this.addImpatienceEffect(techniqueEffect, attrGetters, attrSetters);
                 break;
@@ -1654,6 +1657,22 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
             default:
                 tokenEffect.tokenTargetData.addVitality(attrSetters.getObjByTarget(techniqueEffect), roll.total * -1);
                 this.addMessage(`${tokenEffect.tokenTargetData.displayName} loses ${Format.ShowTooltip(roll.total, roll.message)} Vitality`);
+                break;
+        }
+    }
+    
+    addSurgeEffect(techniqueEffect, attrGetters, attrSetters) {
+        let roll = this.calculateFormula(techniqueEffect, attrGetters.sender);
+        let tokenEffect = this.getTargetTokenEffect(techniqueEffect, this);
+
+        switch (techniqueEffect.subType) {
+            case "Heal":
+                tokenEffect.tokenTargetData.addSurge(attrSetters.getObjByTarget(techniqueEffect), roll.total);
+                this.addMessage(`${tokenEffect.tokenTargetData.displayName} gains ${Format.ShowTooltip(roll.total, roll.message)} Surge`);
+                break;
+            default:
+                tokenEffect.tokenTargetData.addSurge(attrSetters.getObjByTarget(techniqueEffect), roll.total * -1);
+                this.addMessage(`${tokenEffect.tokenTargetData.displayName} loses ${Format.ShowTooltip(roll.total, roll.message)} Surge`);
                 break;
         }
     }

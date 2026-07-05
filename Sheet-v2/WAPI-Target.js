@@ -1879,6 +1879,11 @@ var TargetReference = TargetReference || (function () {
                 output += tokenOptionSpacer();
                 output += tokenOptionTitle("Adventure Options");
                 output += tokenOptionButton("Adventure Options", `adventureoptions ?{Choose Location|${locationOptions}}`);
+                const meals = WuxItems.Filter([new DatabaseFilterData("group", "Meal")]);
+                if (meals.length > 0) {
+                    const mealOptions = meals.map(function (m) { return m.name; }).join("|");
+                    output += tokenOptionButton("Give a Meal", `givemeal ?{Choose Meal|${mealOptions}}`);
+                }
             }
 
             let senderMessage = new SystemInfoMessage(output);

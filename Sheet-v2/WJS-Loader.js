@@ -1,4 +1,18 @@
-var wuxCurrentVersion = "2.0.0";
+var wuxCurrentVersion = "2.0.1";
+
+var upgrade_to_2_1_0 = function (currentVersion) {
+	let attributeHandler = loaderAttrubuteHandler(currentVersion, "2.0.1");
+
+	const presetStatusDefs = WuxDef.Filter([new DatabaseFilterData("group", "Status")]).filter(function (def) {
+		return def.presetStatus;
+	});
+
+	for (const def of presetStatusDefs) {
+		attributeHandler.addUpdate(def.getVariable(), def.hasRanks ? 0 : "");
+	}
+
+	attributeHandler.run();
+};
 
 var upgrade_to_2_0_0 = function (currentVersion) {
 	// Runs separately — clears old popup repeating section outside the main handler
@@ -232,6 +246,9 @@ var versioning = function () {
 		switch(v["version"]) {
 			case wuxCurrentVersion:
 				console.log(`Wuxing Sheet modified from 5th Edition OGL by Roll20 v${wuxCurrentVersion}`);
+				break;
+			case "2.0.0":
+				upgrade_to_2_1_0(v["version"]);
 				break;
 			case "1.0.11":
 			case "1.0.10":

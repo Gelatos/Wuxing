@@ -191,6 +191,12 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
         });
     };
 
+    // ─── Meal Helpers ───────────────────────────────────────────────────────────
+
+    const getMeals = function () {
+        return WuxItems.Filter([new DatabaseFilterData("group", "Meal")]);
+    };
+
     // ─── Commands ───────────────────────────────────────────────────────────────
 
     var
@@ -322,6 +328,78 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             });
         },
 
+        // Applies a single meal's technique effects to one token's character sheet.
+        applyMealToToken = function (msg, tokenTargetData, meal, technique) {
+            const surgeVar = WuxDef.GetVariable("Surge");
+            const attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+            const outputLines = [`${tokenTargetData.displayName} enjoys a ${meal.name}`];
+
+            attributeHandler.addFinishCallback(function (attrHandler) {
+                technique.effects.iterate(function (effect) {
+                    if (effect.target === "Surge" && effect.type === "Heal") {
+                        const base = parseInt(effect.dVal) || 0;
+                        const bonus = effect.formula.getValue(attrHandler);
+                        const healAmount = base + bonus;
+                        if (healAmount > 0) {
+                            const current = attrHandler.parseInt(surgeVar, 0, false);
+                            const max = attrHandler.parseInt(surgeVar, 0, true);
+                            const newValue = Math.min(current + healAmount, max);
+                            attrHandler.addUpdate(surgeVar, newValue);
+                            const breakdown = bonus > 0 ? `${base} + ${bonus}` : `${base}`;
+                            outputLines.push(`${tokenTargetData.displayName} gains ${Format.ShowTooltip(healAmount, breakdown)} Surge`);
+                        }
+                    } else if (effect.target === "Status" && effect.type === "Add") {
+                        const defName = Format.GetDefinitionName("Status", effect.effect);
+                        const statusDef = WuxDef.Get(defName);
+                        if (statusDef && statusDef.presetStatus) {
+                            if (statusDef.hasRanks) {
+                                const rank = parseInt(effect.dVal) || 1;
+                                attrHandler.addUpdate(statusDef.getVariable(), rank);
+                                outputLines.push(`${tokenTargetData.displayName} gains ${statusDef.getTitle()} ${rank}`);
+                            } else {
+                                attrHandler.addUpdate(statusDef.getVariable(), "on");
+                                outputLines.push(`${tokenTargetData.displayName} gains ${statusDef.getTitle()}`);
+                            }
+                        }
+                    } else if (effect.target === "Status" && effect.type === "Remove") {
+                        const defName = Format.GetDefinitionName("Status", effect.effect);
+                        const statusDef = WuxDef.Get(defName);
+                        if (statusDef && statusDef.presetStatus) {
+                            attrHandler.addUpdate(statusDef.getVariable(), statusDef.hasRanks ? 0 : "");
+                            outputLines.push(`${tokenTargetData.displayName} loses ${statusDef.getTitle()}`);
+                        }
+                    }
+                });
+
+                const messageObject = new SystemInfoMessage(outputLines);
+                messageObject.setSender(tokenTargetData.displayName || "Wuxing");
+                WuxMessage.SendToSenderAndGM(messageObject, msg);
+            });
+
+            attributeHandler.run();
+        },
+
+        // !givemeal <mealName> — feeds a meal to each selected token.
+        commandGiveMeal = function (msg, targets, mealName) {
+            if (targets.length === 0) {
+                sendChat("System", `/w GM No tokens selected.`, null, { noarchive: true });
+                return;
+            }
+            const meal = WuxItems.Get(mealName);
+            if (meal == undefined) {
+                sendChat("System", `/w GM Unknown meal: "${mealName}".`, null, { noarchive: true });
+                return;
+            }
+            const technique = WuxTechs.Get(mealName);
+            if (technique == undefined) {
+                sendChat("System", `/w GM No technique found for meal: "${mealName}".`, null, { noarchive: true });
+                return;
+            }
+            targets.forEach(function (tokenTargetData) {
+                applyMealToToken(msg, tokenTargetData, meal, technique);
+            });
+        },
+
         handleInput = function (msg, tag, content) {
             switch (tag) {
                 case "!adventureoptions":
@@ -337,6 +415,9 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                     commandGatherSpecific(msg, TokenReference.GetTokenTargetDataArray(msg), location, itemName);
                     break;
                 }
+                case "!givemeal":
+                    commandGiveMeal(msg, TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
             }
         };
 
