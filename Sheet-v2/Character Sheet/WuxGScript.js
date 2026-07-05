@@ -449,7 +449,7 @@ class ExtendedTechniqueStyleDatabase extends Database {
 class ExtendedUsableItemDatabase extends Database {
 
     constructor(data, dataCreationCallback) {
-        let filters = ["group", "category", "bulk", "traits", "commonTechniques"];
+        let filters = ["group", "category", "bulk", "traits", "commonTechniques", "goodsComponents"];
         super(data, filters, dataCreationCallback);
     }
 
@@ -495,6 +495,12 @@ class ExtendedUsableItemDatabase extends Database {
                 }
                 else {
                     this.addSortingGroup("traits", value.traits, value);
+                }
+            }
+            else if (property == "goodsComponents") {
+                const goodsTypes = value.getGoodsTypes ? value.getGoodsTypes(false) : [];
+                for (let i = 0; i < goodsTypes.length; i++) {
+                    this.addSortingGroup("goodsComponents", goodsTypes[i], value);
                 }
             }
             else if (value != undefined && value.hasOwnProperty(property)) {
@@ -1974,6 +1980,29 @@ class UsableItemData extends ItemData {
         let definition = new ItemDefinitionData(super.createDefinition(baseDefinition));
         definition.techInfo = this.technique;
         return definition;
+    }
+
+    getGoodsTypes(includeGoodsCat = true) {
+        if (!this.components) return [];
+        const types = [];
+        this.components.split(";").forEach(function (part) {
+            part = part.trim();
+            if (!part) return;
+            const spaceIdx = part.indexOf(" ");
+            if (spaceIdx === -1) return;
+            const typeAndName = part.substring(spaceIdx + 1).split("_");
+            const type = typeAndName[0];
+            const name = typeAndName[1];
+            if (type === "Goods" || (includeGoodsCat && type === "GoodsCat")) {
+                if (name) {
+                    const goods = WuxGoods.Get(name);
+                    if (goods && types.indexOf(goods.name) === -1) {
+                        types.push(goods.name);
+                    }
+                }
+            }
+        });
+        return types;
     }
 
     getCommonTechniques() {

@@ -12569,12 +12569,6 @@
 										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_foodtype-food">
-													<span>Search Food</span>
-												</div>
-											</div>
-											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
-												<div class="wuxButton wuxWidth120">
 													<input type="checkbox" name="attr_foodtype-beverage">
 													<span>Search Beverages</span>
 												</div>
@@ -12585,14 +12579,14 @@
 													<span>Search Compounds</span>
 												</div>
 											</div>
-										</div>
-										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
 													<input type="checkbox" name="attr_ingtype-supplement">
 													<span>Search Supplements</span>
 												</div>
 											</div>
+										</div>
+										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
 													<input type="checkbox" name="attr_ingtype-protein">
@@ -12605,14 +12599,14 @@
 													<span>Search Starches</span>
 												</div>
 											</div>
-										</div>
-										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
 													<input type="checkbox" name="attr_ingtype-sugar">
 													<span>Search Sugars</span>
 												</div>
 											</div>
+										</div>
+										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
 													<input type="checkbox" name="attr_ingtype-fruit">
@@ -18332,7 +18326,7 @@ WuxWorkerGear.OpenFindGear(eventinfo)
 on("change:goodstype-material change:goodstype-goods change:goodstype-animal_good", function (eventinfo) {
 WuxWorkerGear.OpenFindGoodsForGear(eventinfo)
 });
-on("change:foodtype-food change:foodtype-beverage", function (eventinfo) {
+on("change:foodtype-beverage", function (eventinfo) {
 WuxWorkerGear.OpenFindFoodsItem(eventinfo)
 });
 on("change:ingtype-compound change:ingtype-supplement change:ingtype-protein change:ingtype-starch change:ingtype-sugar change:ingtype-fruit change:ingtype-vegetable", function (eventinfo) {

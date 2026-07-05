@@ -200,28 +200,34 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
     // ─── Commands ───────────────────────────────────────────────────────────────
 
     var
-        // !adventureoptions [location] — whispers the Adventure Options window.
-        // If location is provided, saves it to state. If omitted, reads from state.
-        commandAdventureOptions = function (msg, locationTitle) {
-            const resolved = (locationTitle && locationTitle.trim())
-                ? locationTitle.trim()
-                : (state.WuxAdventureState || {}).currentLocation || "";
+        // !adventureoptions [location|||waterSource] — shows the Adventure Options window.
+        // If location is provided, saves both values to state. If omitted, reads from state.
+        commandAdventureOptions = function (msg, content) {
+            const parts       = content ? content.split("|||") : [];
+            const locationArg = parts[0] ? parts[0].trim() : "";
+            const waterArg    = parts[1] ? parts[1].trim() : null;
+            const isExplicit  = !!locationArg;
+
+            const resolved     = isExplicit ? locationArg : (state.WuxAdventureState || {}).currentLocation || "";
+            const waterSource  = waterArg !== null ? waterArg : (state.WuxAdventureState || {}).waterSource || "";
 
             if (!resolved) {
                 sendChat("System", `/w "${msg.who}" No location is set. Use the location picker to set one first.`, null, { noarchive: true });
                 return;
             }
 
-            if (locationTitle && locationTitle.trim()) {
+            if (isExplicit) {
                 state.WuxAdventureState.currentLocation = resolved;
+                state.WuxAdventureState.waterSource     = waterSource;
             }
 
             const locationData = getLocationData(resolved);
             const outputLines  = [
                 `Adventure Options`,
                 `Current Environment: ${resolved}`,
+                waterSource && waterSource !== "No Water" ? `Water Source: ${waterSource}` : "",
                 `[Gather Materials (Any)](!gather ${resolved})`
-            ];
+            ].filter(function (l) { return l !== ""; });
 
             if (locationData != null && locationData.items.length > 0) {
                 const itemOptions = locationData.items
@@ -230,12 +236,17 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 outputLines.push(`[Gather Material](!gathermaterial ${resolved}@@@?{Choose Item|${itemOptions}})`);
             }
 
+            outputLines.push(`[See All Materials](!seematerials)`);
             outputLines.push(`[Start Cooking](!startcooking)`);
             outputLines.push(`[View Cooking](!viewcooking)`);
 
             const messageObject = new SystemInfoMessage(outputLines);
             messageObject.setSender("Wuxing");
-            WuxMessage.SendToSender(messageObject, msg);
+            if (isExplicit) {
+                WuxMessage.Send(messageObject);
+            } else {
+                WuxMessage.SendToSender(messageObject, msg);
+            }
         },
 
         // !gather <LocationTitle> — rolls Notice for each selected token and grants random loot.
@@ -433,7 +444,7 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
         // ─── Cooking Event ───────────────────────────────────────────────────────────
 
         cookingSchemaVersion = "0.1.0",
-        adventureSchemaVersion = "0.1.0",
+        adventureSchemaVersion = "0.2.0",
 
         checkInstall = function () {
             if (!state.hasOwnProperty("WuxCookingEvent") || state.WuxCookingEvent.version !== cookingSchemaVersion) {
@@ -447,7 +458,8 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             if (!state.hasOwnProperty("WuxAdventureState") || state.WuxAdventureState.version !== adventureSchemaVersion) {
                 state.WuxAdventureState = {
                     version: adventureSchemaVersion,
-                    currentLocation: ""
+                    currentLocation: "",
+                    waterSource: ""
                 };
             }
         },
@@ -519,24 +531,23 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 return;
             }
             const ingredients   = state.WuxCookingEvent.ingredients;
-            if (Object.keys(ingredients).length === 0) {
-                sendChat("System", `/w "${msg.who}" No ingredients have been contributed yet.`, null, { noarchive: true });
-                return;
-            }
-            const totalQuantity = Object.values(ingredients).reduce(function (sum, ing) { return sum + ing.quantity; }, 0);
+            const hasIngredients = Object.keys(ingredients).length > 0;
+            const totalQuantity = hasIngredients
+                ? Object.values(ingredients).reduce(function (sum, ing) { return sum + ing.quantity; }, 0)
+                : 0;
             const feeds         = Math.floor(totalQuantity / 5);
-            const predicted     = predictMeal(ingredients);
-            const predictedItem = WuxItems.Get(predicted);
+            const predicted     = hasIngredients ? predictMeal(ingredients) : null;
+            const predictedItem = predicted ? WuxItems.Get(predicted) : null;
             const outputLines   = [
-                `Recipe: ${predicted}`,
+                predicted ? `Recipe: ${predicted}` : "",
                 predictedItem && predictedItem.description ? predictedItem.description : "",
                 `-------------------`,
                 `Cooking contributions:`,
-                formatIngredientList(),
+                hasIngredients ? formatIngredientList() : "No ingredients contributed yet.",
                 `-------------------`,
                 totalQuantity >= 5
                     ? `Feeds: ${feeds} (${totalQuantity} ingredient${totalQuantity !== 1 ? "s" : ""})`
-                    : `Feeds: — (min 5 ingredients to cook)`,
+                    : `Feeds: None (min 5 ingredients to cook)`,
                 `[View Recipes](!viewrecipes)`,
                 totalQuantity >= 5 ? `[Cook](!cook)` : ""
             ].filter(function (l) { return l !== ""; });
@@ -558,6 +569,103 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             state.WuxCookingEvent.initiatorName = "";
             state.WuxCookingEvent.ingredients = {};
             sendChat("System", `/w GM Cooking event ended. Ingredients cleared.`, null, { noarchive: true });
+        },
+
+        formatNameList = function (names) {
+            if (names.length === 1) return names[0];
+            if (names.length === 2) return `${names[0]} and ${names[1]}`;
+            return `${names.slice(0, -1).join(", ")}, and ${names[names.length - 1]}`;
+        },
+
+        commandSeeMaterials = function (msg) {
+            const foodGroups    = ["Compound", "Fruit", "Protein", "Starch", "Sugar", "Supplement", "Vegetable"];
+            const currentLocation = (state.WuxAdventureState || {}).currentLocation || "";
+            const locationData    = currentLocation ? getLocationData(currentLocation) : null;
+            const items           = locationData ? locationData.items.filter(function (item) {
+                return foodGroups.indexOf(item.group) !== -1;
+            }) : WuxGoods.Filter([new DatabaseFilterData("group", foodGroups)]);
+
+            const grouped = {};
+            foodGroups.forEach(function (g) { grouped[g] = []; });
+            items.forEach(function (item) {
+                if (grouped[item.group]) grouped[item.group].push(item);
+            });
+
+            const sections = foodGroups
+                .filter(function (g) { return grouped[g].length > 0; })
+                .map(function (g) {
+                    const sorted  = grouped[g].sort(function (a, b) { return a.name.localeCompare(b.name); });
+                    const recipes = WuxItems.Filter([new DatabaseFilterData("goodsComponents", g)]);
+                    const recipeList = recipes.length > 0
+                        ? `Used in Recipes: ${formatNameList(recipes.map(function (r) { return r.name; }))}`
+                        : "";
+                    const lines   = [`[${g}]`];
+                    sorted.forEach(function (item) {
+                        const suffix = recipeList ? ` — ${recipeList}` : "";
+                        lines.push(`  ${item.name}${suffix}`);
+                    });
+                    return lines.join("\n");
+                });
+
+            const outputLines = [
+                "Available Materials",
+                sections.join("\n\n")
+            ];
+            const messageObject = new SystemInfoMessage(outputLines);
+            messageObject.setSender("Wuxing");
+            WuxMessage.SendToSender(messageObject, msg);
+        },
+
+        commandRest = function (msg) {
+            if (!playerIsGM(msg.playerid)) {
+                sendChat("System", `/w "${msg.who}" Only GMs can call a rest.`, null, { noarchive: true });
+                return;
+            }
+            const targets = TokenReference.GetTokenTargetDataArray(msg);
+            if (targets.length === 0) {
+                sendChat("System", `/w GM No tokens selected.`, null, { noarchive: true });
+                return;
+            }
+
+            const surgeVar     = WuxDef.GetVariable("Surge");
+            const exhaustedDef = WuxDef.Get("Stat_Exhausted");
+            const restBoonVar  = WuxDef.GetVariable("Boon_Rest");
+
+            const results = new Array(targets.length);
+            let pending   = targets.length;
+
+            targets.forEach(function (tokenTargetData, index) {
+                const attrHandler = new SandboxAttributeHandler(tokenTargetData.charId);
+                attrHandler.addFinishCallback(function (handler) {
+                    const surgeMax = handler.parseInt(surgeVar, 0, true);
+                    handler.addUpdate(surgeVar, surgeMax);
+                    if (exhaustedDef && exhaustedDef.presetStatus) {
+                        handler.addUpdate(exhaustedDef.getVariable(), exhaustedDef.hasRanks ? 0 : "");
+                    }
+                    handler.addUpdate(restBoonVar, "on");
+
+                    results[index] = { name: tokenTargetData.displayName, surgeMax: surgeMax };
+                    pending--;
+
+                    if (pending === 0) {
+                        const nameList   = formatNameList(results.map(function (r) { return r.name; }));
+                        const isSingle   = results.length === 1;
+                        const outputLines = [
+                            `${nameList} take${isSingle ? "s" : ""} a rest`
+                        ];
+                        results.forEach(function (r) {
+                            outputLines.push(`${isSingle ? "" : `${r.name}: `}Surge restored to ${r.surgeMax}`);
+                        });
+                        outputLines.push("Exhaustion removed");
+                        outputLines.push("Rest Boon granted");
+
+                        const messageObject = new SystemInfoMessage(outputLines);
+                        messageObject.setSender("Wuxing");
+                        WuxMessage.SendToSenderAndGM(messageObject, msg);
+                    }
+                });
+                attrHandler.run();
+            });
         },
 
         formatComponentsForDisplay = function (componentsStr) {
@@ -738,7 +846,7 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 const roll = new DieRoll();
                 roll.rollSkillCheck(0, cookMod);
 
-                const isBland  = roll.total < 8;
+                const isBland  = roll.total < 9;
                 const hasSavor = roll.total >= 12;
 
                 const totalQuantity = Object.values(ingredients).reduce(function (sum, ing) { return sum + ing.quantity; }, 0);
@@ -829,6 +937,12 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                     break;
                 case "!viewrecipes":
                     commandViewRecipes(msg);
+                    break;
+                case "!rest":
+                    commandRest(msg);
+                    break;
+                case "!seematerials":
+                    commandSeeMaterials(msg);
                     break;
             }
         };
