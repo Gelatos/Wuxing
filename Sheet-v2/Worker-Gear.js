@@ -1736,6 +1736,111 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             attributeHandler.run();
         }
 
+    const buildConsuItemCountMap = function (attributeHandler) {
+        let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
+        let itemCountAttrMap = {};
+        for (let i = 0; i < consuTypes.length; i++) {
+            let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].getTitle()));
+            for (let j = 0; j < itemKeys.length; j++) {
+                let item = itemKeys[j];
+                if (item == undefined) continue;
+                let countMod = item.technique.fieldName.replace(/_/g, "");
+                let countAttr = WuxDef.GetVariable("ItemCount", countMod);
+                itemCountAttrMap[item.name] = countAttr;
+                attributeHandler.addMod(countAttr);
+            }
+        }
+        return itemCountAttrMap;
+    };
+
+    const canAutoEquipGear = function (attrHandler, item) {
+        if (attrHandler.parseString(WuxDef.GetVariable("Gear_AutoEquipItems")) !== "on") return false;
+        const equipBuildVar = WuxDef.GetVariable("Equipment", WuxDef._build);
+        let equipBuild = [];
+        try { equipBuild = JSON.parse(attrHandler.parseString(equipBuildVar)); } catch (e) {}
+        if (!Array.isArray(equipBuild)) equipBuild = [];
+        if (equipBuild.length >= attrHandler.parseInt(WuxDef.GetVariable("EquipmentSlots"))) return false;
+        if (item.group === "Apparel" && item.category !== "") {
+            let slotJson = {};
+            try { slotJson = JSON.parse(attrHandler.parseString(apparelSlotVar) || "{}"); } catch (e) {}
+            if (typeof slotJson !== "object" || slotJson === null) slotJson = {};
+            if (slotJson[item.category] != undefined) return false;
+        }
+        return true;
+    };
+
+    const canAutoEquipConsumable = function (attrHandler) {
+        if (attrHandler.parseString(WuxDef.GetVariable("Gear_AutoEquipItems")) !== "on") return false;
+        const consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
+        let consuBuild = [];
+        try { consuBuild = JSON.parse(attrHandler.parseString(consuBuildVar)); } catch (e) {}
+        if (!Array.isArray(consuBuild)) consuBuild = [];
+        return consuBuild.length < attrHandler.parseInt(WuxDef.GetVariable("ConsumableSlots"));
+    };
+
+    // Called after eligibility is confirmed. Updates build state only — base/synced repeater
+    // rows are handled by the caller before this is invoked.
+    const autoEquipGear = function (attrHandler, item, existingRepeater) {
+        const equipBuildVar = WuxDef.GetVariable("Equipment", WuxDef._build);
+        let equipBuild = [];
+        try { equipBuild = JSON.parse(attrHandler.parseString(equipBuildVar)); } catch (e) {}
+        if (!Array.isArray(equipBuild)) equipBuild = [];
+        const slotsMax = attrHandler.parseInt(WuxDef.GetVariable("EquipmentSlots"));
+
+        let slotJson = {};
+        try { slotJson = JSON.parse(attrHandler.parseString(apparelSlotVar) || "{}"); } catch (e) {}
+        if (typeof slotJson !== "object" || slotJson === null) slotJson = {};
+        if (item.group === "Apparel" && item.category !== "") {
+            slotJson[item.category] = item.name;
+            attrHandler.addUpdate(apparelSlotVar, JSON.stringify(slotJson));
+        }
+
+        equipBuild.push(item.name);
+        attrHandler.addUpdate(equipBuildVar, JSON.stringify(equipBuild));
+        attrHandler.addUpdate(WuxDef.GetVariable("Equipment"), equipBuild.length.toString());
+        attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquipmentIsVisible", WuxDef._gear), "on");
+        attrHandler.addUpdate(equipSlotStateAttr, getSlotState(equipBuild.length, slotsMax));
+
+        const equippedTraits = collectEquippedTraits(equipBuild);
+        attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits", WuxDef._max), JSON.stringify(equippedTraits.jsonArray));
+        attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquippedItemTraits"), equippedTraits.display);
+
+        // Update ItemSlotOpen on existing base inventory items
+        const newSlotOpenState = equipBuild.length >= slotsMax ? "on" : "0";
+        const slotOpenVar = getGearVariable("ItemSlotOpen");
+        existingRepeater.iterate(function (id) {
+            attrHandler.addUpdate(existingRepeater.getFieldName(id, slotOpenVar), newSlotOpenState);
+        });
+    };
+
+    const autoEquipConsumable = function (attrHandler, item, existingRepeater, itemCountAttrMap) {
+        const consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
+        let consuBuild = [];
+        try { consuBuild = JSON.parse(attrHandler.parseString(consuBuildVar)); } catch (e) {}
+        if (!Array.isArray(consuBuild)) consuBuild = [];
+        const slotsMax = attrHandler.parseInt(WuxDef.GetVariable("ConsumableSlots"));
+
+        consuBuild.push(item.name);
+        attrHandler.addUpdate(consuBuildVar, JSON.stringify(consuBuild));
+        attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableSlot"), consuBuild.length.toString());
+        attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableIsVisible", WuxDef._gear), "on");
+        attrHandler.addUpdate(consuSlotStateAttr, getSlotState(consuBuild.length, slotsMax));
+
+        // Update ItemSlotOpen on existing inventory items
+        const newSlotOpenState = consuBuild.length >= slotsMax ? "on" : "0";
+        const slotOpenVar = getGearVariable("ItemSlotOpen");
+        existingRepeater.iterate(function (id) {
+            attrHandler.addUpdate(existingRepeater.getFieldName(id, slotOpenVar), newSlotOpenState);
+        });
+
+        if (itemCountAttrMap) {
+            const countAttr = itemCountAttrMap[item.name];
+            if (countAttr != undefined) {
+                attrHandler.addUpdate(countAttr, (attrHandler.parseInt(countAttr) || 0) + 1);
+            }
+        }
+    };
+
     return {
         ToggleEquipItem: toggleEquipItem,
         EquipWeapon: equipWeapon,
@@ -1778,7 +1883,12 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         UpdateConsumables: updateConsumables,
         RemoveAllConsumables: removeAllConsumables,
         UnequipAllGear: unequipAllGear,
-        UnequipAllConsumables: unequipAllConsumables
+        UnequipAllConsumables: unequipAllConsumables,
+        BuildConsuItemCountMap: buildConsuItemCountMap,
+        CanAutoEquipGear: canAutoEquipGear,
+        CanAutoEquipConsumable: canAutoEquipConsumable,
+        AutoEquipGear: autoEquipGear,
+        AutoEquipConsumable: autoEquipConsumable
     };
 }());
 

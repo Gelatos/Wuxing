@@ -670,10 +670,12 @@ class ItemInspectionPopup extends InspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("EquipmentSlots"));
         this.attributeHandler.addMod(WuxDef.GetVariable("Equipment", WuxDef._build));
         this.attributeHandler.addMod(WuxDef.GetVariable("Equipment", WuxDef._build + WuxDef._max));
+        this.attributeHandler.addMod(WuxDef.GetVariable("Gear_AutoEquipItems"));
+        this.attributeHandler.addMod(WuxDef.GetVariable("Gear_EquipmentSlot", WuxDef._gear));
         this.attributeHandler.addRepeatingSection("RepeatingEquipment");
         this.attributeHandler.getRepeatingSection("RepeatingEquipment").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
         this.attributeHandler.addRepeatingSection("RepeatingSyncedEquipment");
-        this.attributeHandler.getRepeatingSection("RepeatingSyncedEquipment").addFieldNames([this.getGearVariable("ItemName")]);
+        this.attributeHandler.getRepeatingSection("RepeatingSyncedEquipment").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible")]);
         WuxWorkerActions.UpdateAllActionsFromMenu(this.attributeHandler);
         super.addItem();
     }
@@ -684,10 +686,12 @@ class ItemInspectionPopup extends InspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("EquipmentSlots"));
         this.attributeHandler.addMod(WuxDef.GetVariable("Equipment", WuxDef._build));
         this.attributeHandler.addMod(WuxDef.GetVariable("Equipment", WuxDef._build + WuxDef._max));
+        this.attributeHandler.addMod(WuxDef.GetVariable("Gear_AutoEquipItems"));
+        this.attributeHandler.addMod(WuxDef.GetVariable("Gear_EquipmentSlot", WuxDef._gear));
         this.attributeHandler.addRepeatingSection("RepeatingEquipment");
         this.attributeHandler.getRepeatingSection("RepeatingEquipment").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
         this.attributeHandler.addRepeatingSection("RepeatingSyncedEquipment");
-        this.attributeHandler.getRepeatingSection("RepeatingSyncedEquipment").addFieldNames([this.getGearVariable("ItemName")]);
+        this.attributeHandler.getRepeatingSection("RepeatingSyncedEquipment").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible")]);
         WuxWorkerActions.UpdateAllActionsFromMenu(this.attributeHandler);
         super.addItem2();
     }
@@ -755,47 +759,55 @@ class ItemInspectionPopup extends InspectionPopup {
             return;
         }
 
-        Debug.Log(`Adding Equipment ${item.name}`);
-        let repeater = new WorkerRepeatingSectionHandler("RepeatingEquipment");
-        let newRowId = repeater.generateRowId();
-        this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
+        const willAutoEquip = WuxWorkerGear.CanAutoEquipGear(attrHandler, item);
+        Debug.Log(`Adding Equipment ${item.name} (autoEquip: ${willAutoEquip})`);
 
+        if (!willAutoEquip) {
+            let repeater = new WorkerRepeatingSectionHandler("RepeatingEquipment");
+            let newRowId = repeater.generateRowId();
+            this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
+            attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquipmentIsVisible"), "on");
+
+            let equipBuildVar = WuxDef.GetVariable("Equipment", WuxDef._build);
+            let equipBuild = [];
+            try { equipBuild = JSON.parse(attrHandler.parseString(equipBuildVar)); } catch (e) {}
+            if (!Array.isArray(equipBuild)) equipBuild = [];
+            let slotOpenState = equipBuild.length >= attrHandler.parseInt(WuxDef.GetVariable("EquipmentSlots")) ? "on" : "0";
+            let slotOpenVar = this.getGearVariable("ItemSlotOpen");
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, slotOpenVar), slotOpenState);
+            existingRepeater.iterate(function (id) {
+                attrHandler.addUpdate(existingRepeater.getFieldName(id, slotOpenVar), slotOpenState);
+            });
+        }
+
+        // Add to synced repeater. If auto-equipping, make it visible immediately.
         let existingSyncedRepeater = attrHandler.getRepeatingSection("RepeatingSyncedEquipment");
-        let syncedAlreadyExists = false;
+        let syncedAlreadyExistsId = null;
         existingSyncedRepeater.iterate(function (id) {
             if (attrHandler.parseString(existingSyncedRepeater.getFieldName(id, itemNameVar)) === item.name) {
-                syncedAlreadyExists = true;
+                syncedAlreadyExistsId = id;
                 return true;
             }
         });
-        if (!syncedAlreadyExists) {
+        if (syncedAlreadyExistsId == null) {
             let syncedRepeater = new WorkerRepeatingSectionHandler("RepeatingSyncedEquipment");
             let syncedRowId = syncedRepeater.generateRowId();
             this.performAddSelectedInspectElementItem(attrHandler, syncedRepeater, syncedRowId, item);
-            attrHandler.addUpdate(syncedRepeater.getFieldName(syncedRowId, this.getGearVariable("ItemIsVisible")), "0");
+            attrHandler.addUpdate(syncedRepeater.getFieldName(syncedRowId, this.getGearVariable("ItemIsVisible")), willAutoEquip ? "on" : "0");
+        } else if (willAutoEquip) {
+            attrHandler.addUpdate(existingSyncedRepeater.getFieldName(syncedAlreadyExistsId, this.getGearVariable("ItemIsVisible")), "on");
         }
 
-        attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquipmentIsVisible"), "on");
-
-        let equipBuildVar = WuxDef.GetVariable("Equipment", WuxDef._build);
-        let equipBuildRaw = attrHandler.parseString(equipBuildVar);
-        let equipBuild = [];
-        try { equipBuild = JSON.parse(equipBuildRaw); } catch (e) {}
-        if (!Array.isArray(equipBuild)) equipBuild = [];
-        let slotOpenState = equipBuild.length >= attrHandler.parseInt(WuxDef.GetVariable("EquipmentSlots")) ? "on" : "0";
-        let slotOpenVar = this.getGearVariable("ItemSlotOpen");
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, slotOpenVar), slotOpenState);
-        existingRepeater.iterate(function (id) {
-            attrHandler.addUpdate(existingRepeater.getFieldName(id, slotOpenVar), slotOpenState);
-        });
-
         let equipBuildMaxVar = WuxDef.GetVariable("Equipment", WuxDef._build + WuxDef._max);
-        let equipBuildMaxRaw = attrHandler.parseString(equipBuildMaxVar);
         let equipBuildMax = [];
-        try { equipBuildMax = JSON.parse(equipBuildMaxRaw); } catch (e) {}
+        try { equipBuildMax = JSON.parse(attrHandler.parseString(equipBuildMaxVar)); } catch (e) {}
         if (!Array.isArray(equipBuildMax)) equipBuildMax = [];
         equipBuildMax.push(item.name);
         attrHandler.addUpdate(equipBuildMaxVar, JSON.stringify(equipBuildMax));
+
+        if (willAutoEquip) {
+            WuxWorkerGear.AutoEquipGear(attrHandler, item, existingRepeater);
+        }
     };
     performAddSelectedInspectElementConsumable(attrHandler, item) {
         Debug.Log(`Adding Consumable ${item.name}`);
@@ -830,35 +842,40 @@ class ItemInspectionPopup extends InspectionPopup {
             return;
         }
 
-        let repeater = new WorkerRepeatingSectionHandler("RepeatingConsumables");
-        let newRowId = repeater.generateRowId();
-        this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
-        this.performAddSelectedInspectElementTechnique(attrHandler, repeater, newRowId, item.technique);
+        const willAutoEquip = WuxWorkerGear.CanAutoEquipConsumable(attrHandler);
+        Debug.Log(`Adding Consumable ${item.name} (autoEquip: ${willAutoEquip})`);
 
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, buyInfoVar), buyDef.getTitle(`1 (${itemValue}J)`));
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, buyMaxInfoVar), buyBulkDef.getTitle(`10 (${itemValue * 10}J)`));
+        if (!willAutoEquip) {
+            let repeater = new WorkerRepeatingSectionHandler("RepeatingConsumables");
+            let newRowId = repeater.generateRowId();
+            this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
+            this.performAddSelectedInspectElementTechnique(attrHandler, repeater, newRowId, item.technique);
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, buyInfoVar), buyDef.getTitle(`1 (${itemValue}J)`));
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, buyMaxInfoVar), buyBulkDef.getTitle(`10 (${itemValue * 10}J)`));
+            attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableIsVisible"), "on");
 
-        attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableIsVisible"), "on");
-
-        let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
-        let consuBuildRaw = attrHandler.parseString(consuBuildVar);
-        let consuBuild = [];
-        try { consuBuild = JSON.parse(consuBuildRaw); } catch (e) {}
-        if (!Array.isArray(consuBuild)) consuBuild = [];
-        let slotOpenState = consuBuild.length >= attrHandler.parseInt(WuxDef.GetVariable("ConsumableSlots")) ? "on" : "0";
-        let slotOpenVar = this.getGearVariable("ItemSlotOpen");
-        attrHandler.addUpdate(repeater.getFieldName(newRowId, slotOpenVar), slotOpenState);
-        existingRepeater.iterate(function (id) {
-            attrHandler.addUpdate(existingRepeater.getFieldName(id, slotOpenVar), slotOpenState);
-        });
+            let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
+            let consuBuild = [];
+            try { consuBuild = JSON.parse(attrHandler.parseString(consuBuildVar)); } catch (e) {}
+            if (!Array.isArray(consuBuild)) consuBuild = [];
+            let slotOpenState = consuBuild.length >= attrHandler.parseInt(WuxDef.GetVariable("ConsumableSlots")) ? "on" : "0";
+            let slotOpenVar = this.getGearVariable("ItemSlotOpen");
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, slotOpenVar), slotOpenState);
+            existingRepeater.iterate(function (id) {
+                attrHandler.addUpdate(existingRepeater.getFieldName(id, slotOpenVar), slotOpenState);
+            });
+        }
 
         let consuBuildMaxVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build + WuxDef._max);
-        let consuBuildMaxRaw = attrHandler.parseString(consuBuildMaxVar);
         let consuBuildMax = [];
-        try { consuBuildMax = JSON.parse(consuBuildMaxRaw); } catch (e) {}
+        try { consuBuildMax = JSON.parse(attrHandler.parseString(consuBuildMaxVar)); } catch (e) {}
         if (!Array.isArray(consuBuildMax)) consuBuildMax = [];
         consuBuildMax.push(item.name);
         attrHandler.addUpdate(consuBuildMaxVar, JSON.stringify(consuBuildMax));
+
+        if (willAutoEquip) {
+            WuxWorkerGear.AutoEquipConsumable(attrHandler, item, existingRepeater, this.consuItemCountAttrMap);
+        }
     };
     performAddSelectedInspectElementGoods(attrHandler, item) {
         Debug.Log(`Adding Goods ${item.name}`);
@@ -927,6 +944,8 @@ class ConsumablesInspectionPopup extends ItemInspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("ConsumableSlots"));
         this.attributeHandler.addMod(WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build));
         this.attributeHandler.addMod(WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build + WuxDef._max));
+        this.attributeHandler.addMod(WuxDef.GetVariable("Gear_AutoEquipItems"));
+        this.consuItemCountAttrMap = WuxWorkerGear.BuildConsuItemCountMap(this.attributeHandler);
         this.attributeHandler.addRepeatingSection("RepeatingConsumables");
         this.attributeHandler.getRepeatingSection("RepeatingConsumables").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
         InspectionPopup.prototype.addItem.call(this);
@@ -938,6 +957,8 @@ class ConsumablesInspectionPopup extends ItemInspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("ConsumableSlots"));
         this.attributeHandler.addMod(WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build));
         this.attributeHandler.addMod(WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build + WuxDef._max));
+        this.attributeHandler.addMod(WuxDef.GetVariable("Gear_AutoEquipItems"));
+        this.consuItemCountAttrMap = WuxWorkerGear.BuildConsuItemCountMap(this.attributeHandler);
         this.attributeHandler.addRepeatingSection("RepeatingConsumables");
         this.attributeHandler.getRepeatingSection("RepeatingConsumables").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
         InspectionPopup.prototype.addItem2.call(this);

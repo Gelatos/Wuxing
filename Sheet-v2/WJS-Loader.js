@@ -1,8 +1,9 @@
-var wuxCurrentVersion = "2.0.1";
+var wuxCurrentVersion = "2.0.2";
 
-var upgrade_to_2_1_0 = function (currentVersion) {
-	let attributeHandler = loaderAttrubuteHandler(currentVersion, "2.0.1");
-
+var upgrade_to_2_0_2 = function (currentVersion) {
+	let attributeHandler = loaderAttrubuteHandler(currentVersion, "2.0.2");
+	attributeHandler.addUpdate(WuxDef.GetVariable("Gear_AutoEquipItems"), "on");
+	
 	const presetStatusDefs = WuxDef.Filter([new DatabaseFilterData("group", "Status")]).filter(function (def) {
 		return def.presetStatus;
 	});
@@ -252,8 +253,9 @@ var versioning = function () {
 			case wuxCurrentVersion:
 				console.log(`Wuxing Sheet modified from 5th Edition OGL by Roll20 v${wuxCurrentVersion}`);
 				break;
+			case "2.0.1":
 			case "2.0.0":
-				upgrade_to_2_1_0(v["version"]);
+				upgrade_to_2_0_2(v["version"]);
 				break;
 			case "1.0.11":
 			case "1.0.10":

@@ -656,7 +656,7 @@ class ExtendedGoodsDatabase extends Database {
             }
             else if (property == "location") {
                 if (value.location.indexOf(";") >= 0) {
-                    let groups = value.affinity.split(";");
+                    let groups = value.location.split(";");
                     for (let i = 0; i < groups.length; i++) {
                         if (groups[i].trim() != "") {
                             this.addSortingGroup("location", groups[i].trim(), value);
@@ -991,7 +991,7 @@ class TechniqueData extends WuxDatabaseData {
         this.rangeType = "FilterType_RangeSpecial";
     }
     getTargetingStyle() {
-        let singleTargetTypes = ["Targets", "Objects", "Targets/Self", "Target", "Object", "Space", "Self", "Target/Self"];
+        let singleTargetTypes = ["Targets", "Objects", "Targets or Self", "Target", "Object", "Space", "Self", "Target or Self"];
         if (singleTargetTypes.includes(this.target)) {
             return "";
         }

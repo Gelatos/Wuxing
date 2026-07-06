@@ -656,7 +656,7 @@ class ExtendedGoodsDatabase extends Database {
             }
             else if (property == "location") {
                 if (value.location.indexOf(";") >= 0) {
-                    let groups = value.affinity.split(";");
+                    let groups = value.location.split(";");
                     for (let i = 0; i < groups.length; i++) {
                         if (groups[i].trim() != "") {
                             this.addSortingGroup("location", groups[i].trim(), value);
@@ -991,7 +991,7 @@ class TechniqueData extends WuxDatabaseData {
         this.rangeType = "FilterType_RangeSpecial";
     }
     getTargetingStyle() {
-        let singleTargetTypes = ["Targets", "Objects", "Targets/Self", "Target", "Object", "Space", "Self", "Target/Self"];
+        let singleTargetTypes = ["Targets", "Objects", "Targets or Self", "Target", "Object", "Space", "Self", "Target or Self"];
         if (singleTargetTypes.includes(this.target)) {
             return "";
         }
@@ -11844,6 +11844,14 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 addConsumableFilterButtons = function () {
                     let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
                     let searchButtonDef = WuxDef.Get("Popup_SearchButton");
+                    let autoEquipDef = WuxDef.Get("Gear_AutoEquipItems");
+                    let autoEquip = [WuxSheetMain.Table.FlexTableGroup(
+                        WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                            autoEquipDef.getAttribute(),
+                            autoEquipDef.getAttribute(WuxDef._info),
+                            WuxSheetMain.Header(autoEquipDef.getTitle()),
+                            WuxDefinition.TooltipDescription(autoEquipDef)))];
+                        
                     let items = [];
                     for (let i = 0; i < consuTypes.length; i++) {
                         items.push(WuxSheetMain.Table.FlexTableGroup(
@@ -11851,6 +11859,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             "wuxMaxWidth220"));
                     }
                     return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddConsumable"))}
+                        ${WuxSheetMain.MultiRowGroup(autoEquip, WuxSheetMain.Table.FlexTable, 1)}
                         ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 3)}`;
                 },
 
@@ -12103,19 +12112,27 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let findByFilterDef = WuxDef.Get("Popup_FindItemsByFilter");
                     let findByTechniqueDef = WuxDef.Get("Popup_FindItemsByTechnique");
                     let searchButtonDef = WuxDef.Get("Popup_SearchButton");
+                    let autoEquipDef = WuxDef.Get("Gear_AutoEquipItems");
+                    let autoEquip = [WuxSheetMain.Table.FlexTableGroup(
+                        WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                            autoEquipDef.getAttribute(),
+                            autoEquipDef.getAttribute(WuxDef._info),
+                            WuxSheetMain.Header(autoEquipDef.getTitle()),
+                            WuxDefinition.TooltipDescription(autoEquipDef)))];
                     let items = [];
                     for (let i = 0; i < equipmentTypes.length; i++) {
                         items.push(WuxSheetMain.Table.FlexTableGroup(
-                            WuxSheetMain.Button(equipmentTypes[i].getAttribute(), searchButtonDef.getTitle(equipmentTypes[i].getTitle()), "wuxWidth120"), 
+                            WuxSheetMain.Button(equipmentTypes[i].getAttribute(), searchButtonDef.getTitle(equipmentTypes[i].getTitle()), "wuxWidth120"),
                             "wuxMaxWidth220"));
                     }
                     items.push(WuxSheetMain.Table.FlexTableGroup(
-                        WuxSheetMain.Button(findByFilterDef.getAttribute(), findByFilterDef.getTitle(), "wuxWidth120"), 
+                        WuxSheetMain.Button(findByFilterDef.getAttribute(), findByFilterDef.getTitle(), "wuxWidth120"),
                         "wuxMaxWidth220"));
                     items.push(WuxSheetMain.Table.FlexTableGroup(
-                        WuxSheetMain.Button(findByTechniqueDef.getAttribute(), findByTechniqueDef.getTitle(), "wuxWidth120"), 
+                        WuxSheetMain.Button(findByTechniqueDef.getAttribute(), findByTechniqueDef.getTitle(), "wuxWidth120"),
                         "wuxMaxWidth220"));
                     return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddEquipment"))}
+                        ${WuxSheetMain.MultiRowGroup(autoEquip, WuxSheetMain.Table.FlexTable, 1)}
                         ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 3)}`;
                 },
 
