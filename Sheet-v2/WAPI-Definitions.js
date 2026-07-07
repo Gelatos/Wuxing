@@ -6767,6 +6767,12 @@ var WuxDef = WuxDef || (function() {
             }
             return sortingGroups[property][propertyValue].slice();
         },
+        getSortedGroupKeys = function (property) {
+            if (sortingGroups == undefined || !sortingGroups.hasOwnProperty(property)) {
+                return [];
+            }
+            return Object.keys(sortingGroups[property]);
+        },
         getGroupData = function (group) {
             let output = [];
             for (let i = 0; i < group.length; i++) {
@@ -6834,6 +6840,7 @@ var WuxDef = WuxDef || (function() {
         Iterate: iterate,
         Filter: filter,
         GetSortedGroup: getSortedGroup,
+        GetSortedGroupKeys: getSortedGroupKeys,
         GetAttribute: getAttribute,
         GetVariable: getVariable,
         GetUntypedAttribute: getUntypedAttribute,

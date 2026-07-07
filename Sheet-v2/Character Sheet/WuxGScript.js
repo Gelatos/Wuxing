@@ -6631,22 +6631,26 @@ class TechniqueFilterDefinitions extends BaseFilteredDefinitions{
             new DatabaseFilterData("group", "Trait"),
             new DatabaseFilterData("subGroup", ["Martial Trait", "Aim Trait"])
         ]);
+        // Only offer skills that at least one technique actually uses as its skill field -
+        // any other Skill definition can never match a WuxTechs filter, so it's a dead checkbox.
+        let filterableSkillTitles = WuxTechs.GetSortedGroupKeys("skill");
+        let isFilterableSkill = skill => filterableSkillTitles.includes(skill.title);
         this.definitionDatabase["TechFilterType_AthleticSkills"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Skill"),
             new DatabaseFilterData("subGroup", ["Athletics"])
-        ]);
+        ]).filter(isFilterableSkill);
         this.definitionDatabase["TechFilterType_MagicSkills"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Skill"),
             new DatabaseFilterData("subGroup", ["Magic"])
-        ]);
+        ]).filter(isFilterableSkill);
         this.definitionDatabase["TechFilterType_SocialSkills"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Skill"),
             new DatabaseFilterData("subGroup", ["Persuade", "Cunning"])
-        ]);
+        ]).filter(isFilterableSkill);
         this.definitionDatabase["TechFilterType_WorldSkills"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Skill"),
             new DatabaseFilterData("subGroup", ["Perception", "Device", "Craft"])
-        ]);
+        ]).filter(isFilterableSkill);
         
     }
 }
@@ -7324,6 +7328,12 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
         }
         return sortingGroups[property][propertyValue].slice();
     };
+    const getSortedGroupKeys = function (property) {
+        if (sortingGroups == undefined || !sortingGroups.hasOwnProperty(property)) {
+            return [];
+        }
+        return Object.keys(sortingGroups[property]);
+    };
     const getGroupData = function (group) {
         let output = [];
         for (let i = 0; i < group.length; i++) {
@@ -7346,6 +7356,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
         jsClassData.addFunction("filter", filter);
         jsClassData.addFunction("getSortedData", getSortedData);
         jsClassData.addFunction("getSortedGroup", getSortedGroup);
+        jsClassData.addFunction("getSortedGroupKeys", getSortedGroupKeys);
         jsClassData.addFunction("getGroupData", getGroupData);
         jsClassData.addPublicData("get");
         jsClassData.addPublicData("getValues");
@@ -7354,6 +7365,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
         jsClassData.addPublicData("iterate");
         jsClassData.addPublicData("filter");
         jsClassData.addPublicData("getSortedGroup");
+        jsClassData.addPublicData("getSortedGroupKeys");
         return jsClassData;
     };
     return {

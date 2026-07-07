@@ -644,6 +644,12 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
         }
         return sortingGroups[property][propertyValue].slice();
     };
+    const getSortedGroupKeys = function (property) {
+        if (sortingGroups == undefined || !sortingGroups.hasOwnProperty(property)) {
+            return [];
+        }
+        return Object.keys(sortingGroups[property]);
+    };
     const getGroupData = function (group) {
         let output = [];
         for (let i = 0; i < group.length; i++) {
@@ -666,6 +672,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
         jsClassData.addFunction("filter", filter);
         jsClassData.addFunction("getSortedData", getSortedData);
         jsClassData.addFunction("getSortedGroup", getSortedGroup);
+        jsClassData.addFunction("getSortedGroupKeys", getSortedGroupKeys);
         jsClassData.addFunction("getGroupData", getGroupData);
         jsClassData.addPublicData("get");
         jsClassData.addPublicData("getValues");
@@ -674,6 +681,7 @@ var JavascriptDatabase = JavascriptDatabase || (function () {
         jsClassData.addPublicData("iterate");
         jsClassData.addPublicData("filter");
         jsClassData.addPublicData("getSortedGroup");
+        jsClassData.addPublicData("getSortedGroupKeys");
         return jsClassData;
     };
     return {

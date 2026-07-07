@@ -18120,6 +18120,12 @@ var WuxTechs = WuxTechs || (function() {
             }
             return sortingGroups[property][propertyValue].slice();
         },
+        getSortedGroupKeys = function (property) {
+            if (sortingGroups == undefined || !sortingGroups.hasOwnProperty(property)) {
+                return [];
+            }
+            return Object.keys(sortingGroups[property]);
+        },
         getGroupData = function (group) {
             let output = [];
             for (let i = 0; i < group.length; i++) {
@@ -18169,6 +18175,7 @@ var WuxTechs = WuxTechs || (function() {
         Iterate: iterate,
         Filter: filter,
         GetSortedGroup: getSortedGroup,
+        GetSortedGroupKeys: getSortedGroupKeys,
         GetByVariableName: getByVariableName,
         SortFilteredTechniquesByRequirement: sortFilteredTechniquesByRequirement,
         GetGroupVariables: getGroupVariables
@@ -18343,6 +18350,12 @@ var WuxTechs = WuxTechs || (function() {
                 }
                 return sortingGroups[property][propertyValue].slice();
             },
+            getSortedGroupKeys = function (property) {
+                if (sortingGroups == undefined || !sortingGroups.hasOwnProperty(property)) {
+                    return [];
+                }
+                return Object.keys(sortingGroups[property]);
+            },
             getGroupData = function (group) {
                 let output = [];
                 for (let i = 0; i < group.length; i++) {
@@ -18372,6 +18385,7 @@ var WuxTechs = WuxTechs || (function() {
             Iterate: iterate,
             Filter: filter,
             GetSortedGroup: getSortedGroup,
+            GetSortedGroupKeys: getSortedGroupKeys,
             GetByVariableName: getByVariableName,
             GetGroupVariables: getGroupVariables
         };
@@ -18659,6 +18673,12 @@ var WuxTechs = WuxTechs || (function() {
                 }
                 return sortingGroups[property][propertyValue].slice();
             },
+            getSortedGroupKeys = function (property) {
+                if (sortingGroups == undefined || !sortingGroups.hasOwnProperty(property)) {
+                    return [];
+                }
+                return Object.keys(sortingGroups[property]);
+            },
             getGroupData = function (group) {
                 let output = [];
                 for (let i = 0; i < group.length; i++) {
@@ -18688,6 +18708,7 @@ var WuxTechs = WuxTechs || (function() {
             Iterate: iterate,
             Filter: filter,
             GetSortedGroup: getSortedGroup,
+            GetSortedGroupKeys: getSortedGroupKeys,
             GetByVariableName: getByVariableName,
             GetGroupVariables: getGroupVariables
         };
@@ -18737,14 +18758,14 @@ var WuxTechs = WuxTechs || (function() {
                 "Rubrumium":{"name":"Rubrumium","fieldName":"","group":"Material","descriptions":[],
                     "variable":"","category":"","itemType":"Goods","bulk":1,"value":210,"traits":"Sharp; Transparent","description":"This magically created glass has a light red tint like fireglass. It is stronger than its natural brother and likewise leaves burns when swung.","affinity":"Fire; Earth","location":"","rarity":3},
                 "Platinum":{"name":"Platinum","fieldName":"","group":"Material","descriptions":[],
-                    "variable":"","category":"","itemType":"Goods","bulk":1,"value":150,"traits":"Sharp; Sturdy","description":"Platinum is one of the strongest metals in existance. It is sought for its incredible durability.","affinity":"Metal","location":"","rarity":3},
+                    "variable":"","category":"","itemType":"Goods","bulk":1,"value":150,"traits":"Sharp; Sturdy","description":"Platinum is one of the strongest metals in existance. It is sought for its incredible durability.","affinity":"Metal","location":"","rarity":3}
+                ,
                 "Adamantine":{"name":"Adamantine","fieldName":"","group":"Material","descriptions":[],
                     "variable":"","category":"","itemType":"Goods","bulk":1,"value":150,"traits":"Sturdy","description":"A magically created material that is an earthy red in color. It's well known for its incredible durability.\n\nThis material is aspected to Fire but is also resistant to Metal.","affinity":"Fire; Earth","location":"","rarity":3},
                 "Obsidian":{"name":"Obsidian","fieldName":"","group":"Material","descriptions":[],
                     "variable":"","category":"","itemType":"Goods","bulk":1,"value":300,"traits":"Sharp; Sturdy","description":"This black stone is the strongest, naturally occuring, material that is known to man. Incredibly rare, it is sought for its strength.","affinity":"Metal; Earth","location":"","rarity":4},
                 "Mithral":{"name":"Mithral","fieldName":"","group":"Material","descriptions":[],
-                    "variable":"","category":"","itemType":"Goods","bulk":1,"value":240,"traits":"Sharp; Sturdy","description":"A magically created metal made with water to create a remarkably light material with incredible strength.","affinity":"Metal; Water","location":"","rarity":4}
-                ,
+                    "variable":"","category":"","itemType":"Goods","bulk":1,"value":240,"traits":"Sharp; Sturdy","description":"A magically created metal made with water to create a remarkably light material with incredible strength.","affinity":"Metal; Water","location":"","rarity":4},
                 "White Obsidian":{"name":"White Obsidian","fieldName":"","group":"Material","descriptions":[],
                     "variable":"","category":"","itemType":"Goods","bulk":1,"value":360,"traits":"Sharp; Sturdy","description":"This obsidian has a white, metallic sheen. It has been created magically and only by the most powerful of mages.","affinity":"Metal; Earth","location":"","rarity":4},
                 "Albryst":{"name":"Albryst","fieldName":"","group":"Material","descriptions":[],
@@ -19040,7 +19061,8 @@ var WuxTechs = WuxTechs || (function() {
                 "Ignarock":{"name":"Ignarock","fieldName":"","group":"Compound","descriptions":[],
                     "variable":"","category":"","itemType":"Goods","bulk":1,"value":35,"traits":"","description":"Ignarock is a dense, dark red-brown stone veined with glowing orange fissures that pulse faintly with inner heat. When exposed to friction, pressure, or ki, Ignarock rapidly generates intense warmth, making it highly prized for heating devices and forging tools.","affinity":"Fire","location":"Mountain; Volcanic","rarity":2},
                 "Tropical":{"name":"Tropical","fieldName":"","group":"","descriptions":[],
-                    "variable":"","category":"","itemType":"Goods","bulk":null,"value":null,"traits":"","description":"","affinity":"","location":"","rarity":null},
+                    "variable":"","category":"","itemType":"Goods","bulk":null,"value":null,"traits":"","description":"","affinity":"","location":"","rarity":null}
+                ,
                 "Wingbean":{"name":"Wingbean","fieldName":"","group":"Protein","descriptions":[],
                     "variable":"","category":"Beans","itemType":"Goods","bulk":1,"value":3,"traits":"Edible","description":"A climbing vine bearing ridged, four-cornered pods that seem almost too strange to be food.","affinity":"Wood","location":"Tropical; Jungle","rarity":1},
                 "Pineapple":{"name":"Pineapple","fieldName":"","group":"Fruit","descriptions":[],
@@ -19048,8 +19070,7 @@ var WuxTechs = WuxTechs || (function() {
                 "Victoria Lily":{"name":"Victoria Lily","fieldName":"","group":"Supplement","descriptions":[],
                     "variable":"","category":"Energy","itemType":"Goods","bulk":1,"value":5,"traits":"Edible","description":"This water growing plant is common in tropical climates and Juno. It has soothing effects for individuals in emotional distress.","affinity":"Wood","location":"Tropical; Swamp","rarity":1},
                 "Coconut":{"name":"Coconut","fieldName":"","group":"Fruit","descriptions":[],
-                    "variable":"","category":"","itemType":"Goods","bulk":2,"value":3,"traits":"Edible","description":"A large, round, hard fruit known for its sweet flavor","affinity":"Wood","location":"Tropical; Jungle","rarity":1}
-                ,
+                    "variable":"","category":"","itemType":"Goods","bulk":2,"value":3,"traits":"Edible","description":"A large, round, hard fruit known for its sweet flavor","affinity":"Wood","location":"Tropical; Jungle","rarity":1},
                 "Forest":{"name":"Forest","fieldName":"","group":"","descriptions":[],
                     "variable":"","category":"","itemType":"Goods","bulk":null,"value":null,"traits":"","description":"","affinity":"","location":"","rarity":null},
                 "Woodland Apple":{"name":"Woodland Apple","fieldName":"","group":"Fruit","descriptions":[],
@@ -19328,6 +19349,12 @@ var WuxTechs = WuxTechs || (function() {
                 }
                 return sortingGroups[property][propertyValue].slice();
             },
+            getSortedGroupKeys = function (property) {
+                if (sortingGroups == undefined || !sortingGroups.hasOwnProperty(property)) {
+                    return [];
+                }
+                return Object.keys(sortingGroups[property]);
+            },
             getGroupData = function (group) {
                 let output = [];
                 for (let i = 0; i < group.length; i++) {
@@ -19343,7 +19370,8 @@ var WuxTechs = WuxTechs || (function() {
             Has: has,
             Iterate: iterate,
             Filter: filter,
-            GetSortedGroup: getSortedGroup
+            GetSortedGroup: getSortedGroup,
+            GetSortedGroupKeys: getSortedGroupKeys
         };
     }());
 
@@ -19393,7 +19421,8 @@ var WuxTechs = WuxTechs || (function() {
                         "endEffectConditionName":"","endEffectConditionEffect":"","techniqueEffect":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                             "effect":"","traits":""},
                         "isCustom":false,"rank":0},
-                    "hasTechnique":false},
+                    "hasTechnique":false}
+                ,
                 "Handaxe":{"name":"Handaxe","fieldName":"","group":"Weapon","descriptions":[],
                     "variable":"","category":"Light Blade","itemType":"UsableItem","bulk":5,"value":150,"traits":"LightBlade; MeleeWeapon","description":"A compact axe light enough to swing rapidly or throw with one hand.","valMod":2,"skill":"Build","dc":0,"time":1,"components":"","commonTechniques":"Dashing Blade","technique":{"name":"Handaxe","fieldName":"handaxe","group":"","descriptions":[],
                         "variable":"","techSet":"Gear","version":"3.0","affinity":"","tier":2,"action":"","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"TechFilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],
@@ -19413,8 +19442,7 @@ var WuxTechs = WuxTechs || (function() {
                         "variable":"","techSet":"Gear","version":"3.0","affinity":"","tier":2,"action":"","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"TechFilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],
                         "effects":{"keys":["T0"],
                             "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
-                                    "effect":"","traits":""}}
-                            ,
+                                    "effect":"","traits":""}},
                             "sortingGroups":{"type":{"":["T0"]}},
                             "useDefaultWillBreak":false},
                         "enhancementEffects":{},
@@ -19869,7 +19897,8 @@ var WuxTechs = WuxTechs || (function() {
                             "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                                     "effect":"","traits":""}},
                             "sortingGroups":{"type":{"":["T0"]}},
-                            "useDefaultWillBreak":false},
+                            "useDefaultWillBreak":false}
+                        ,
                         "enhancementEffects":{},
                         "damageTypes":[],
                         "endEffectConditionName":"","endEffectConditionEffect":"","techniqueEffect":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
@@ -19889,8 +19918,7 @@ var WuxTechs = WuxTechs || (function() {
                         "endEffectConditionName":"","endEffectConditionEffect":"","techniqueEffect":{"name":"T0","defense":"","target":"","type":"Terrain","subType":"Add","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                             "effect":"Ter_Light","traits":""},
                         "isCustom":false,"rank":0},
-                    "hasTechnique":true}
-                ,
+                    "hasTechnique":true},
                 "Lanturn":{"name":"Lanturn","fieldName":"","group":"Tool","descriptions":[],
                     "variable":"","category":"Light","itemType":"UsableItem","bulk":3,"value":140,"traits":"","description":"A lanturn burns for 6 hours on 1 pint of oil. You can carry a lanturn in one hand.","valMod":3,"skill":"Build","dc":12,"time":2,"components":"","commonTechniques":"","technique":{"name":"Lanturn","fieldName":"lanturn","group":"","descriptions":[],
                         "variable":"","techSet":"Gear","version":"3.0","affinity":"","tier":2,"action":"Swift","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"TechFilterType_RangeSelf","target":"Blast","size":2,"requirement":"The area created is always focused on this item.","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],
@@ -20387,7 +20415,8 @@ var WuxTechs = WuxTechs || (function() {
                             "values":{"T0":{"name":"T0","defense":"","target":"","type":"Boost","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"15","workers":[{"variableName":[],
                                             "definitionName":[],
                                             "value":15,"multiplier":1,"max":0}]},
-                                    "effect":"HP","traits":""},
+                                    "effect":"HP","traits":""}
+                                ,
                                 "T1":{"name":"T1","defense":"","target":"","type":"Boost","subType":"Penalty","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"-1","workers":[{"variableName":[],
                                             "definitionName":[],
                                             "value":-1,"multiplier":1,"max":0}]},
@@ -20410,8 +20439,7 @@ var WuxTechs = WuxTechs || (function() {
                                     "effect":"","traits":""}},
                             "sortingGroups":{"type":{"":["T0"]}},
                             "useDefaultWillBreak":false},
-                        "enhancementEffects":{}
-                        ,
+                        "enhancementEffects":{},
                         "damageTypes":[],
                         "endEffectConditionName":"","endEffectConditionEffect":"","techniqueEffect":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                             "effect":"","traits":""},
@@ -20876,7 +20904,8 @@ var WuxTechs = WuxTechs || (function() {
                         "endEffectConditionName":"","endEffectConditionEffect":"","techniqueEffect":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                             "effect":"","traits":""},
                         "isCustom":false,"rank":0},
-                    "hasTechnique":false},
+                    "hasTechnique":false}
+                ,
                 "Canvas (1 sq. yd)":{"name":"Canvas (1 sq. yd)","fieldName":"","group":"Records","descriptions":[],
                     "variable":"","category":"Writing","itemType":"UsableItem","bulk":1,"value":15,"traits":"","description":"A square yard of heavy cloth, useful for painting, covering goods in a storm, or rigging a sail. Treat with oil or wax to make it water-resistant.","valMod":1,"skill":"Build","dc":0,"time":1,"components":"","commonTechniques":"","technique":{"name":"Canvas (1 sq. yd)","fieldName":"canvas_(1_sq._yd)","group":"","descriptions":[],
                         "variable":"","techSet":"Gear","version":"3.0","affinity":"","tier":2,"action":"","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"TechFilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],
@@ -20899,8 +20928,7 @@ var WuxTechs = WuxTechs || (function() {
                                     "effect":"","traits":""}},
                             "sortingGroups":{"type":{"":["T0"]}},
                             "useDefaultWillBreak":false},
-                        "enhancementEffects":{}
-                        ,
+                        "enhancementEffects":{},
                         "damageTypes":[],
                         "endEffectConditionName":"","endEffectConditionEffect":"","techniqueEffect":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                             "effect":"","traits":""},
@@ -21338,7 +21366,8 @@ var WuxTechs = WuxTechs || (function() {
                         "endEffectConditionName":"","endEffectConditionEffect":"","techniqueEffect":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                             "effect":"You stave off the effects of exhausted for 1 hour.","traits":""},
                         "isCustom":false,"rank":0},
-                    "hasTechnique":true},
+                    "hasTechnique":true}
+                ,
                 "Victoria Tea":{"name":"Victoria Tea","fieldName":"","group":"Beverage","descriptions":[],
                     "variable":"","category":"Caffeine","itemType":"UsableItem","bulk":1,"value":35,"traits":"Ingested","description":"A calming tea popular in Juno and spread by the Guidance as a tool for meditation. This drink tends to calm emotions when consumed.","valMod":2,"skill":"Cook","dc":0,"time":1,"components":"2 Goods_Water; 1 Goods_Victoria Lily","commonTechniques":"","technique":{"name":"Victoria Tea","fieldName":"victoria_tea","group":"TechFilterType_Utility; Trait_Cleanse","descriptions":[],
                         "variable":"","techSet":"Gear","version":"3.0","affinity":"","tier":2,"action":"Swift","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"1/Short Rest","skill":"","hasAdv":"","range":"","rangeType":"TechFilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"Each sip loosens a knot of worry you didn't know you were carrying.","coreDefense":"","definitions":[],
@@ -21366,8 +21395,7 @@ var WuxTechs = WuxTechs || (function() {
                         "endEffectConditionName":"","endEffectConditionEffect":"","techniqueEffect":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},
                             "effect":"","traits":""},
                         "isCustom":false,"rank":0},
-                    "hasTechnique":false}
-                ,
+                    "hasTechnique":false},
                 "Greenwood Ale":{"name":"Greenwood Ale","fieldName":"","group":"Beverage","descriptions":[],
                     "variable":"","category":"Alcohol","itemType":"UsableItem","bulk":1,"value":25,"traits":"Ingested","description":"A flavorful ale from Arachos that is common in Minerva and the surrounding area. Named for the motes of bark the ale is brewed with.","valMod":1,"skill":"Cook","dc":12,"time":24,"components":"3 Goods_Maidenhair; 1 Goods_Yeast","commonTechniques":"","technique":{"name":"Greenwood Ale","fieldName":"greenwood_ale","group":"","descriptions":[],
                         "variable":"","techSet":"Gear","version":"3.0","affinity":"","tier":2,"action":"","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"TechFilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],
@@ -21700,7 +21728,8 @@ var WuxTechs = WuxTechs || (function() {
                             "effect":"Calmed","traits":""},
                         "isCustom":false,"rank":0},
                     "hasTechnique":true}},
-            sortingGroups = {"group":{"":["Weapons","Tool","Apparel","Gear","Recovery","Tonics","Bombs","Beverages","Drugs","Meals"],"Weapon":["Rapier","Shortsword","Handaxe","Longsword","Battleaxe","Bastard Sword","Great Sword","Great Axe","Dagger","Throwing Knife","Club","Warhammer","Great Mace","Maul","Full-Staff","Spear","Lance","Whip","Shortbow","Longbow","Pistol","Revolver","Sniper Rifle","Scattergun","Flamethrower"],"Tool":["Shield","Medkit","Dust Container","Fishing Tools","Item Pouch","Etherlink","Soundnest","Echonode","Camera","Torch","Lanturn","Flashlight","Rope","Manacles","Magic Restraints"],"Apparel":["Light Breastplate","Heavy Breastplate","Light Helmet","Heavy Helmet","Etherlink Headset","Echonode Headset","Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers","Wayfarer Backpack","Outrider Pack","Beltpack","Light Vambraces","Heavy Vambraces","Light Greaves","Heavy Greaves","Armored Boots","Running Shoes","Hover Boots","Jump Boots","Dash Boots"],"Supplies":["Bedroll","Blanket","Cot","Hammock","Tent","Pavillion Tent","Sack","Barrel","Bucket","Chest","Cooler","Pot","Bottle","Canteen","Jug","Pitcher","Vial"],"Implements":["Lightbulb","Mirror","Compass","Spyglass","Umbrella","Kitchen's Tools","Ladder","Shovel","Lock, average","Lock, good","Lock, superior"],"Records":["Canvas (1 sq. yd)","Inkpen","Paper (30 sheets)","Echotape","Camera Film"],"Recovery":["Heal Gel","Energy Drink","Cleansing Liquid","Instant Heat","Static Remover"],"Tonic":["Healing Stimulant","Dash Drug","Power Tonic","Instant Calm","Thermal Stabilizer","Quicksilver","Steel Nerve"],"Bomb":["Impact Bomb","Blast Bomb","Dynamite"],"Beverage":["Cacao Drink","Coffee","Jade Tea","Victoria Tea","Common Beer","Greenwood Ale","Aelton Honey Ale","Aelight Bourbon","Vulcan Whiskey","Seaman's Vodka","White Water Wine","Scarlet Wine","Rose Water Wine","Red Rum","Apollen Gold Rum","Libran Ice Wine"],"Drug":["Jazz","Swing","Rhythm","Dixie"],"Basic Meal":["Bland Meal","Tasty Meal"],"Meal":["Comforting Meal","Hearty Meal","Energizing Meal","Calming Meal"]},"category":{"":["Weapons","Tool","Shield","Medkit","Dust Container","Fishing Tools","Item Pouch","Apparel","Gear","Recovery","Heal Gel","Energy Drink","Cleansing Liquid","Instant Heat","Static Remover","Tonics","Healing Stimulant","Dash Drug","Power Tonic","Instant Calm","Thermal Stabilizer","Quicksilver","Steel Nerve","Bombs","Impact Bomb","Blast Bomb","Dynamite","Beverages","Drugs","Meals","Bland Meal","Tasty Meal","Comforting Meal","Hearty Meal","Energizing Meal","Calming Meal"],"Light Blade":["Rapier","Shortsword","Handaxe"],"Versatile Blade":["Longsword","Battleaxe"],"Heavy Blade":["Bastard Sword","Great Sword","Great Axe"],"Thrown Blade":["Dagger","Throwing Knife"],"Hammer":["Club","Warhammer","Great Mace","Maul"],"Polearm":["Full-Staff","Spear","Lance"],"Whip":["Whip"],"Bow":["Shortbow","Longbow"],"Handgun":["Pistol","Revolver"],"Longshot":["Sniper Rifle"],"Scattershot":["Scattergun","Flamethrower"],"Comms":["Etherlink","Soundnest","Echonode","Camera"],"Light":["Torch","Lanturn","Flashlight"],"Bindings":["Rope","Manacles","Magic Restraints"],"Chest":["Light Breastplate","Heavy Breastplate"],"Head":["Light Helmet","Heavy Helmet","Etherlink Headset","Echonode Headset"],"Eyes":["Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers"],"Back":["Wayfarer Backpack","Outrider Pack","Beltpack"],"Arms":["Light Vambraces","Heavy Vambraces"],"Legs":["Light Greaves","Heavy Greaves"],"Feet":["Armored Boots","Running Shoes","Hover Boots","Jump Boots","Dash Boots"],"Rest":["Bedroll","Blanket","Cot","Hammock","Tent","Pavillion Tent"],"Container":["Sack","Barrel","Bucket","Chest","Cooler","Pot","Bottle","Canteen","Jug","Pitcher","Vial"],"Sundries":["Lightbulb","Mirror","Compass","Spyglass","Umbrella","Kitchen's Tools","Ladder","Shovel"],"Lock":["Lock, average","Lock, good","Lock, superior"],"Writing":["Canvas (1 sq. yd)","Inkpen","Paper (30 sheets)"],"Information":["Echotape","Camera Film"],"Caffeine":["Cacao Drink","Coffee","Jade Tea","Victoria Tea"],"Alcohol":["Common Beer","Greenwood Ale","Aelton Honey Ale","Aelight Bourbon","Vulcan Whiskey","Seaman's Vodka","White Water Wine","Scarlet Wine","Rose Water Wine","Red Rum","Apollen Gold Rum","Libran Ice Wine"],"Stimulant":["Jazz","Swing","Rhythm","Dixie"]},"bulk":{"0":["Jazz","Swing","Rhythm","Dixie"],"1":["Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers","Bucket","Bottle","Canteen","Jug","Vial","Lightbulb","Mirror","Compass","Spyglass","Lock, average","Lock, good","Lock, superior","Canvas (1 sq. yd)","Inkpen","Paper (30 sheets)","Echotape","Camera Film","Cacao Drink","Coffee","Jade Tea","Victoria Tea","Common Beer","Greenwood Ale","Aelton Honey Ale","Aelight Bourbon","Vulcan Whiskey","Seaman's Vodka","White Water Wine","Scarlet Wine","Rose Water Wine","Red Rum","Apollen Gold Rum","Libran Ice Wine"],"2":["Throwing Knife","Etherlink","Soundnest","Echonode","Camera","Flashlight","Manacles","Magic Restraints","Etherlink Headset","Echonode Headset","Pot","Heal Gel","Energy Drink","Cleansing Liquid","Instant Heat","Static Remover","Healing Stimulant","Dash Drug","Power Tonic","Instant Calm","Thermal Stabilizer","Quicksilver","Steel Nerve","Impact Bomb","Blast Bomb","Dynamite"],"3":["Dagger","Whip","Pistol","Medkit","Item Pouch","Torch","Lanturn","Pitcher","Bland Meal","Tasty Meal","Comforting Meal","Hearty Meal","Energizing Meal","Calming Meal"],"4":["Shortsword","Club","Revolver","Rope","Light Helmet","Light Vambraces","Sack"],"5":["Rapier","Handaxe","Shortbow","Shield","Fishing Tools","Armored Boots","Running Shoes","Hover Boots","Jump Boots","Dash Boots","Umbrella","Shovel"],"7":["Longsword","Heavy Helmet","Heavy Vambraces","Blanket"],"8":["Battleaxe","Warhammer","Full-Staff","Spear","Longbow","Beltpack","Bedroll","Kitchen's Tools"],"10":["Bastard Sword","Scattergun","Flamethrower","Wayfarer Backpack","Light Greaves","Hammock"],"12":["Great Mace","Sniper Rifle","Outrider Pack"],"15":["Great Sword","Great Axe","Maul","Lance","Dust Container","Light Breastplate","Heavy Greaves","Cot","Ladder"],"25":["Heavy Breastplate","Tent","Barrel","Chest","Cooler"],"40":["Pavillion Tent"],"NaN":["Weapons","Tool","Apparel","Gear","Recovery","Tonics","Bombs","Beverages","Drugs","Meals"]},"traits":{"":["Weapons","Tool","Shield","Item Pouch","Camera","Torch","Lanturn","Rope","Manacles","Magic Restraints","Apparel","Light Breastplate","Heavy Breastplate","Light Helmet","Heavy Helmet","Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers","Wayfarer Backpack","Outrider Pack","Beltpack","Light Vambraces","Heavy Vambraces","Light Greaves","Heavy Greaves","Armored Boots","Running Shoes","Hover Boots","Jump Boots","Dash Boots","Gear","Bedroll","Blanket","Cot","Hammock","Tent","Pavillion Tent","Sack","Barrel","Bucket","Chest","Cooler","Pot","Bottle","Canteen","Jug","Pitcher","Vial","Mirror","Compass","Spyglass","Umbrella","Kitchen's Tools","Ladder","Shovel","Lock, average","Lock, good","Lock, superior","Canvas (1 sq. yd)","Inkpen","Paper (30 sheets)","Echotape","Camera Film","Recovery","Cleansing Liquid","Instant Heat","Static Remover","Tonics","Healing Stimulant","Dash Drug","Power Tonic","Instant Calm","Thermal Stabilizer","Quicksilver","Steel Nerve","Bombs","Beverages","Drugs","Meals","Bland Meal","Tasty Meal","Comforting Meal","Hearty Meal","Energizing Meal","Calming Meal"],"LightBlade":["Rapier","Shortsword","Handaxe","Longsword","Battleaxe","Dagger"],"MeleeWeapon":["Rapier","Shortsword","Handaxe","Longsword","Battleaxe","Bastard Sword","Great Sword","Great Axe","Dagger"],"HeavyBlade":["Longsword","Battleaxe","Bastard Sword","Great Sword","Great Axe"],"ThrownBlade":["Dagger","Throwing Knife"],"RangedWeapon":["Dagger","Throwing Knife","Shortbow","Longbow","Pistol","Revolver","Sniper Rifle"],"Hammer":["Club","Warhammer","Great Mace","Maul"],"Polearm":["Full-Staff","Spear","Lance"],"Whip":["Whip"],"Bow":["Shortbow","Longbow"],"Handgun":["Pistol","Revolver"],"Longshot":["Sniper Rifle"],"Scattershot":["Scattergun","Flamethrower"],"Medkit":["Medkit"],"DustContainer":["Dust Container"],"FishingTool":["Fishing Tools"],"Magitech":["Etherlink","Soundnest","Echonode","Flashlight","Etherlink Headset","Echonode Headset","Lightbulb"],"Ingested":["Heal Gel","Energy Drink","Cacao Drink","Coffee","Jade Tea","Victoria Tea","Common Beer","Greenwood Ale","Aelton Honey Ale","Aelight Bourbon","Vulcan Whiskey","Seaman's Vodka","White Water Wine","Scarlet Wine","Rose Water Wine","Red Rum","Apollen Gold Rum","Libran Ice Wine","Jazz","Swing","Rhythm","Dixie"],"Bomb":["Impact Bomb","Blast Bomb","Dynamite"]},"commonTechniques":{"":["Weapons","Scattergun","Flamethrower","Tool","Dust Container","Fishing Tools","Item Pouch","Etherlink","Soundnest","Echonode","Camera","Torch","Lanturn","Flashlight","Rope","Manacles","Magic Restraints","Apparel","Light Breastplate","Heavy Breastplate","Light Helmet","Heavy Helmet","Etherlink Headset","Echonode Headset","Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers","Wayfarer Backpack","Outrider Pack","Beltpack","Light Vambraces","Heavy Vambraces","Light Greaves","Heavy Greaves","Armored Boots","Hover Boots","Jump Boots","Dash Boots","Gear","Bedroll","Blanket","Cot","Hammock","Tent","Pavillion Tent","Sack","Barrel","Bucket","Chest","Cooler","Pot","Bottle","Canteen","Jug","Pitcher","Vial","Lightbulb","Mirror","Compass","Spyglass","Umbrella","Kitchen's Tools","Ladder","Shovel","Lock, average","Lock, good","Lock, superior","Canvas (1 sq. yd)","Inkpen","Paper (30 sheets)","Echotape","Camera Film","Recovery","Heal Gel","Energy Drink","Cleansing Liquid","Instant Heat","Static Remover","Tonics","Healing Stimulant","Dash Drug","Power Tonic","Instant Calm","Thermal Stabilizer","Quicksilver","Steel Nerve","Bombs","Impact Bomb","Blast Bomb","Dynamite","Beverages","Cacao Drink","Coffee","Jade Tea","Victoria Tea","Common Beer","Greenwood Ale","Aelton Honey Ale","Aelight Bourbon","Vulcan Whiskey","Seaman's Vodka","White Water Wine","Scarlet Wine","Rose Water Wine","Red Rum","Apollen Gold Rum","Libran Ice Wine","Drugs","Jazz","Swing","Rhythm","Dixie","Meals","Bland Meal","Tasty Meal","Comforting Meal","Hearty Meal","Energizing Meal","Calming Meal"],"Hindering Point":["Rapier"],"Step Slash":["Shortsword"],"Dashing Blade":["Handaxe"],"Twin Strike":["Longsword"],"Fast Chop":["Battleaxe"],"Fast Cleave":["Bastard Sword"],"Cleaving Slash":["Great Sword"],"Heavy Slash":["Great Axe"],"Pointblank Bladecast":["Dagger"],"Quickdraw Bladecast":["Throwing Knife"],"Clubstrike":["Club"],"Quick Armorsmash":["Warhammer"],"Knockback Hammer":["Great Mace"],"Hammer Blow":["Maul"],"Fast Drive":["Full-Staff"],"Far Lunge":["Spear"],"Piercing Thrust":["Lance"],"Whip Lash":["Whip"],"Quiverdraw Shot":["Shortbow"],"Fulldraw Arrow":["Longbow"],"Quickdraw Gunshot":["Pistol"],"Quick Gunshot":["Revolver"],"Quick Longshot":["Sniper Rifle"],"Guard Up":["Shield"],"Quick Aid":["Medkit"],"Stride":["Running Shoes"]},"goodsComponents":{"Component":["Pistol","Revolver","Sniper Rifle","Scattergun","Flamethrower","Etherlink","Soundnest","Echonode","Camera","Etherlink Headset","Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers","Hover Boots","Jump Boots","Dash Boots"],"Pnevmarite":["Flamethrower","Etherlink","Soundnest","Echonode","Flashlight","Etherlink Headset","Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers","Hover Boots","Jump Boots","Dash Boots","Lightbulb"],"Cotton":["Medkit","Instant Heat"],"Water":["Medkit","Energy Drink","Cleansing Liquid","Dash Drug","Power Tonic","Instant Calm","Thermal Stabilizer","Quicksilver","Steel Nerve","Cacao Drink","Coffee","Jade Tea","Victoria Tea"],"Alcohol":["Medkit"],"Nickel":["Etherlink","Soundnest","Echonode","Flashlight","Etherlink Headset","Echonode Headset","Hover Boots","Jump Boots","Dash Boots","Lightbulb"],"Morillite":["Etherlink","Soundnest","Echonode","Flashlight","Etherlink Headset","Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers","Hover Boots","Jump Boots","Dash Boots","Lightbulb"],"Ventu Stone":["Etherlink","Etherlink Headset"],"Magnet":["Echonode","Echonode Headset","Compass","Echotape"],"Sigilite":["Magic Restraints"],"Glass":["Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers","Mirror","Spyglass"],"Bee's wax":["Umbrella","Healing Stimulant"],"Silver":["Camera Film"],"Schizandra":["Heal Gel","Cleansing Liquid","Healing Stimulant"],"Brahmi":["Heal Gel","Power Tonic"],"Astragalus":["Energy Drink","Cleansing Liquid","Dash Drug","Instant Calm","Thermal Stabilizer","Quicksilver","Steel Nerve","Jazz","Dixie"],"Ignarock":["Instant Heat"],"Caswinnis":["Static Remover","Swing"],"Jitterbark":["Static Remover"],"Shepherd's Purse":["Healing Stimulant","Rhythm"],"Yidash":["Dash Drug"],"Rage Fruit":["Power Tonic"],"Victoria Lily":["Instant Calm","Victoria Tea"],"Scorcher Pepper":["Thermal Stabilizer"],"Ice Grapes":["Thermal Stabilizer","Libran Ice Wine"],"Rhynoseed":["Quicksilver","Rhythm"],"Ginseng":["Steel Nerve"],"Black Powder":["Impact Bomb","Blast Bomb","Dynamite"],"Cacaold Beans":["Cacao Drink"],"Coffee Beans":["Coffee"],"Camellia Leaves":["Jade Tea"],"Coastal Wheat":["Common Beer"],"Yeast":["Common Beer","Greenwood Ale","Aelton Honey Ale","Aelight Bourbon","Vulcan Whiskey","Seaman's Vodka","White Water Wine","Scarlet Wine","Rose Water Wine","Red Rum","Apollen Gold Rum","Libran Ice Wine"],"Maidenhair":["Greenwood Ale"],"Thousandcorn":["Aelton Honey Ale","Aelight Bourbon"],"Honey":["Aelton Honey Ale","Apollen Gold Rum"],"Barley":["Vulcan Whiskey"],"Blue Popato":["Seaman's Vodka"],"Clear Grapes":["White Water Wine"],"Highland Grapes":["Scarlet Wine","Rose Water Wine"],"White Grapes Not Found":["Rose Water Wine"],"Syrup Sugarcane":["Red Rum"],"Joza Leaf":["Jazz"],"Stimulant":["Jazz","Dixie"],"Doxyl Leaf":["Dixie"]}},
+            sortingGroups = {"group":{"":["Weapons","Tool","Apparel","Gear","Recovery","Tonics","Bombs","Beverages","Drugs","Meals"],"Weapon":["Rapier","Shortsword","Handaxe","Longsword","Battleaxe","Bastard Sword","Great Sword","Great Axe","Dagger","Throwing Knife","Club","Warhammer","Great Mace","Maul","Full-Staff","Spear","Lance","Whip","Shortbow","Longbow","Pistol","Revolver","Sniper Rifle","Scattergun","Flamethrower"],"Tool":["Shield","Medkit","Dust Container","Fishing Tools","Item Pouch","Etherlink","Soundnest","Echonode","Camera","Torch","Lanturn","Flashlight","Rope","Manacles","Magic Restraints"],"Apparel":["Light Breastplate","Heavy Breastplate","Light Helmet","Heavy Helmet","Etherlink Headset","Echonode Headset","Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers","Wayfarer Backpack","Outrider Pack","Beltpack","Light Vambraces","Heavy Vambraces","Light Greaves","Heavy Greaves","Armored Boots","Running Shoes","Hover Boots","Jump Boots","Dash Boots"],"Supplies":["Bedroll","Blanket","Cot","Hammock","Tent","Pavillion Tent","Sack","Barrel","Bucket","Chest","Cooler","Pot","Bottle","Canteen","Jug","Pitcher","Vial"],"Implements":["Lightbulb","Mirror","Compass","Spyglass","Umbrella","Kitchen's Tools","Ladder","Shovel","Lock, average","Lock, good","Lock, superior"],"Records":["Canvas (1 sq. yd)","Inkpen","Paper (30 sheets)","Echotape","Camera Film"],"Recovery":["Heal Gel","Energy Drink","Cleansing Liquid","Instant Heat","Static Remover"],"Tonic":["Healing Stimulant","Dash Drug","Power Tonic","Instant Calm","Thermal Stabilizer","Quicksilver","Steel Nerve"],"Bomb":["Impact Bomb","Blast Bomb","Dynamite"],"Beverage":["Cacao Drink","Coffee","Jade Tea","Victoria Tea","Common Beer","Greenwood Ale","Aelton Honey Ale","Aelight Bourbon","Vulcan Whiskey","Seaman's Vodka","White Water Wine","Scarlet Wine","Rose Water Wine","Red Rum","Apollen Gold Rum","Libran Ice Wine"],"Drug":["Jazz","Swing","Rhythm","Dixie"],"Basic Meal":["Bland Meal","Tasty Meal"],"Meal":["Comforting Meal","Hearty Meal","Energizing Meal","Calming Meal"]},"category":{"":["Weapons","Tool","Shield","Medkit","Dust Container","Fishing Tools","Item Pouch","Apparel","Gear","Recovery","Heal Gel","Energy Drink","Cleansing Liquid","Instant Heat","Static Remover","Tonics","Healing Stimulant","Dash Drug","Power Tonic","Instant Calm","Thermal Stabilizer","Quicksilver","Steel Nerve","Bombs","Impact Bomb","Blast Bomb","Dynamite","Beverages","Drugs","Meals","Bland Meal","Tasty Meal","Comforting Meal","Hearty Meal","Energizing Meal","Calming Meal"],"Light Blade":["Rapier","Shortsword","Handaxe"],"Versatile Blade":["Longsword","Battleaxe"],"Heavy Blade":["Bastard Sword","Great Sword","Great Axe"],"Thrown Blade":["Dagger","Throwing Knife"],"Hammer":["Club","Warhammer","Great Mace","Maul"],"Polearm":["Full-Staff","Spear","Lance"],"Whip":["Whip"],"Bow":["Shortbow","Longbow"],"Handgun":["Pistol","Revolver"],"Longshot":["Sniper Rifle"],"Scattershot":["Scattergun","Flamethrower"],"Comms":["Etherlink","Soundnest","Echonode","Camera"],"Light":["Torch","Lanturn","Flashlight"],"Bindings":["Rope","Manacles","Magic Restraints"],"Chest":["Light Breastplate","Heavy Breastplate"],"Head":["Light Helmet","Heavy Helmet","Etherlink Headset","Echonode Headset"],"Eyes":["Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers"],"Back":["Wayfarer Backpack","Outrider Pack","Beltpack"],"Arms":["Light Vambraces","Heavy Vambraces"],"Legs":["Light Greaves","Heavy Greaves"],"Feet":["Armored Boots","Running Shoes","Hover Boots","Jump Boots","Dash Boots"],"Rest":["Bedroll","Blanket","Cot","Hammock","Tent","Pavillion Tent"],"Container":["Sack","Barrel","Bucket","Chest","Cooler","Pot","Bottle","Canteen","Jug","Pitcher","Vial"],"Sundries":["Lightbulb","Mirror","Compass","Spyglass","Umbrella","Kitchen's Tools","Ladder","Shovel"],"Lock":["Lock, average","Lock, good","Lock, superior"],"Writing":["Canvas (1 sq. yd)","Inkpen","Paper (30 sheets)"],"Information":["Echotape","Camera Film"],"Caffeine":["Cacao Drink","Coffee","Jade Tea","Victoria Tea"],"Alcohol":["Common Beer","Greenwood Ale","Aelton Honey Ale","Aelight Bourbon","Vulcan Whiskey","Seaman's Vodka","White Water Wine","Scarlet Wine","Rose Water Wine","Red Rum","Apollen Gold Rum","Libran Ice Wine"],"Stimulant":["Jazz","Swing","Rhythm","Dixie"]},"bulk":{"0":["Jazz","Swing","Rhythm","Dixie"],"1":["Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers","Bucket","Bottle","Canteen","Jug","Vial","Lightbulb","Mirror","Compass","Spyglass","Lock, average","Lock, good","Lock, superior","Canvas (1 sq. yd)","Inkpen","Paper (30 sheets)","Echotape","Camera Film","Cacao Drink","Coffee","Jade Tea","Victoria Tea","Common Beer","Greenwood Ale","Aelton Honey Ale","Aelight Bourbon","Vulcan Whiskey","Seaman's Vodka","White Water Wine","Scarlet Wine","Rose Water Wine","Red Rum","Apollen Gold Rum","Libran Ice Wine"],"2":["Throwing Knife","Etherlink","Soundnest","Echonode","Camera","Flashlight","Manacles","Magic Restraints","Etherlink Headset","Echonode Headset","Pot","Heal Gel","Energy Drink","Cleansing Liquid","Instant Heat","Static Remover","Healing Stimulant","Dash Drug","Power Tonic","Instant Calm","Thermal Stabilizer","Quicksilver","Steel Nerve","Impact Bomb","Blast Bomb","Dynamite"],"3":["Dagger","Whip","Pistol","Medkit","Item Pouch","Torch","Lanturn","Pitcher","Bland Meal","Tasty Meal","Comforting Meal","Hearty Meal","Energizing Meal","Calming Meal"],"4":["Shortsword","Club","Revolver","Rope","Light Helmet","Light Vambraces","Sack"],"5":["Rapier","Handaxe","Shortbow","Shield","Fishing Tools","Armored Boots","Running Shoes","Hover Boots","Jump Boots","Dash Boots","Umbrella","Shovel"],"7":["Longsword","Heavy Helmet","Heavy Vambraces","Blanket"],"8":["Battleaxe","Warhammer","Full-Staff","Spear","Longbow","Beltpack","Bedroll","Kitchen's Tools"],"10":["Bastard Sword","Scattergun","Flamethrower","Wayfarer Backpack","Light Greaves","Hammock"],"12":["Great Mace","Sniper Rifle","Outrider Pack"],"15":["Great Sword","Great Axe","Maul","Lance","Dust Container","Light Breastplate","Heavy Greaves","Cot","Ladder"],"25":["Heavy Breastplate","Tent","Barrel","Chest","Cooler"],"40":["Pavillion Tent"],"NaN":["Weapons","Tool","Apparel","Gear","Recovery","Tonics","Bombs","Beverages","Drugs","Meals"]},"traits":{"":["Weapons","Tool","Shield","Item Pouch","Camera","Torch","Lanturn","Rope","Manacles","Magic Restraints","Apparel","Light Breastplate","Heavy Breastplate","Light Helmet","Heavy Helmet","Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers","Wayfarer Backpack","Outrider Pack","Beltpack","Light Vambraces","Heavy Vambraces","Light Greaves","Heavy Greaves","Armored Boots","Running Shoes","Hover Boots","Jump Boots","Dash Boots","Gear","Bedroll","Blanket","Cot","Hammock","Tent","Pavillion Tent","Sack","Barrel","Bucket","Chest","Cooler","Pot","Bottle","Canteen","Jug","Pitcher","Vial","Mirror","Compass","Spyglass","Umbrella","Kitchen's Tools","Ladder","Shovel","Lock, average","Lock, good","Lock, superior","Canvas (1 sq. yd)","Inkpen","Paper (30 sheets)","Echotape","Camera Film","Recovery","Cleansing Liquid","Instant Heat","Static Remover","Tonics","Healing Stimulant","Dash Drug","Power Tonic","Instant Calm","Thermal Stabilizer","Quicksilver","Steel Nerve","Bombs","Beverages","Drugs","Meals","Bland Meal","Tasty Meal","Comforting Meal","Hearty Meal","Energizing Meal","Calming Meal"],"LightBlade":["Rapier","Shortsword","Handaxe","Longsword","Battleaxe","Dagger"],"MeleeWeapon":["Rapier","Shortsword","Handaxe","Longsword","Battleaxe","Bastard Sword","Great Sword","Great Axe","Dagger"],"HeavyBlade":["Longsword","Battleaxe","Bastard Sword","Great Sword","Great Axe"],"ThrownBlade":["Dagger","Throwing Knife"],"RangedWeapon":["Dagger","Throwing Knife","Shortbow","Longbow","Pistol","Revolver","Sniper Rifle"],"Hammer":["Club","Warhammer","Great Mace","Maul"],"Polearm":["Full-Staff","Spear","Lance"],"Whip":["Whip"],"Bow":["Shortbow","Longbow"],"Handgun":["Pistol","Revolver"],"Longshot":["Sniper Rifle"],"Scattershot":["Scattergun","Flamethrower"],"Medkit":["Medkit"],"DustContainer":["Dust Container"],"FishingTool":["Fishing Tools"],"Magitech":["Etherlink","Soundnest","Echonode","Flashlight","Etherlink Headset","Echonode Headset","Lightbulb"],"Ingested":["Heal Gel","Energy Drink","Cacao Drink","Coffee","Jade Tea","Victoria Tea","Common Beer","Greenwood Ale","Aelton Honey Ale","Aelight Bourbon","Vulcan Whiskey","Seaman's Vodka","White Water Wine","Scarlet Wine","Rose Water Wine","Red Rum","Apollen Gold Rum","Libran Ice Wine","Jazz","Swing","Rhythm","Dixie"],"Bomb":["Impact Bomb","Blast Bomb","Dynamite"]},"commonTechniques":{"":["Weapons","Scattergun","Flamethrower","Tool","Dust Container","Fishing Tools","Item Pouch","Etherlink","Soundnest","Echonode","Camera","Torch","Lanturn","Flashlight","Rope","Manacles","Magic Restraints","Apparel","Light Breastplate","Heavy Breastplate","Light Helmet","Heavy Helmet","Etherlink Headset","Echonode Headset","Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers","Wayfarer Backpack","Outrider Pack","Beltpack","Light Vambraces","Heavy Vambraces","Light Greaves","Heavy Greaves","Armored Boots","Hover Boots","Jump Boots","Dash Boots","Gear","Bedroll","Blanket","Cot","Hammock","Tent","Pavillion Tent","Sack","Barrel","Bucket","Chest","Cooler","Pot","Bottle","Canteen","Jug","Pitcher","Vial","Lightbulb","Mirror","Compass","Spyglass","Umbrella","Kitchen's Tools","Ladder","Shovel","Lock, average","Lock, good","Lock, superior","Canvas (1 sq. yd)","Inkpen","Paper (30 sheets)","Echotape","Camera Film","Recovery","Heal Gel","Energy Drink","Cleansing Liquid","Instant Heat","Static Remover","Tonics","Healing Stimulant","Dash Drug","Power Tonic","Instant Calm","Thermal Stabilizer","Quicksilver","Steel Nerve","Bombs","Impact Bomb","Blast Bomb","Dynamite","Beverages","Cacao Drink","Coffee","Jade Tea","Victoria Tea","Common Beer","Greenwood Ale","Aelton Honey Ale","Aelight Bourbon","Vulcan Whiskey","Seaman's Vodka","White Water Wine","Scarlet Wine","Rose Water Wine","Red Rum","Apollen Gold Rum","Libran Ice Wine","Drugs","Jazz","Swing","Rhythm","Dixie","Meals","Bland Meal","Tasty Meal","Comforting Meal","Hearty Meal","Energizing Meal","Calming Meal"],"Hindering Point":["Rapier"],"Step Slash":["Shortsword"],"Dashing Blade":["Handaxe"],"Twin Strike":["Longsword"],"Fast Chop":["Battleaxe"],"Fast Cleave":["Bastard Sword"],"Cleaving Slash":["Great Sword"],"Heavy Slash":["Great Axe"],"Pointblank Bladecast":["Dagger"],"Quickdraw Bladecast":["Throwing Knife"],"Clubstrike":["Club"],"Quick Armorsmash":["Warhammer"],"Knockback Hammer":["Great Mace"],"Hammer Blow":["Maul"],"Fast Drive":["Full-Staff"],"Far Lunge":["Spear"],"Piercing Thrust":["Lance"],"Whip Lash":["Whip"],"Quiverdraw Shot":["Shortbow"],"Fulldraw Arrow":["Longbow"],"Quickdraw Gunshot":["Pistol"],"Quick Gunshot":["Revolver"],"Quick Longshot":["Sniper Rifle"],"Guard Up":["Shield"],"Quick Aid":["Medkit"],"Stride":["Running Shoes"]}
+                ,"goodsComponents":{"Component":["Pistol","Revolver","Sniper Rifle","Scattergun","Flamethrower","Etherlink","Soundnest","Echonode","Camera","Etherlink Headset","Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers","Hover Boots","Jump Boots","Dash Boots"],"Pnevmarite":["Flamethrower","Etherlink","Soundnest","Echonode","Flashlight","Etherlink Headset","Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers","Hover Boots","Jump Boots","Dash Boots","Lightbulb"],"Cotton":["Medkit","Instant Heat"],"Water":["Medkit","Energy Drink","Cleansing Liquid","Dash Drug","Power Tonic","Instant Calm","Thermal Stabilizer","Quicksilver","Steel Nerve","Cacao Drink","Coffee","Jade Tea","Victoria Tea"],"Alcohol":["Medkit"],"Nickel":["Etherlink","Soundnest","Echonode","Flashlight","Etherlink Headset","Echonode Headset","Hover Boots","Jump Boots","Dash Boots","Lightbulb"],"Morillite":["Etherlink","Soundnest","Echonode","Flashlight","Etherlink Headset","Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers","Hover Boots","Jump Boots","Dash Boots","Lightbulb"],"Ventu Stone":["Etherlink","Etherlink Headset"],"Magnet":["Echonode","Echonode Headset","Compass","Echotape"],"Sigilite":["Magic Restraints"],"Glass":["Darkvision Goggles","Flare Comp Lenses","Vision Enhancers","Magnifiers","Mirror","Spyglass"],"Bee's wax":["Umbrella","Healing Stimulant"],"Silver":["Camera Film"],"Schizandra":["Heal Gel","Cleansing Liquid","Healing Stimulant"],"Brahmi":["Heal Gel","Power Tonic"],"Astragalus":["Energy Drink","Cleansing Liquid","Dash Drug","Instant Calm","Thermal Stabilizer","Quicksilver","Steel Nerve","Jazz","Dixie"],"Ignarock":["Instant Heat"],"Caswinnis":["Static Remover","Swing"],"Jitterbark":["Static Remover"],"Shepherd's Purse":["Healing Stimulant","Rhythm"],"Yidash":["Dash Drug"],"Rage Fruit":["Power Tonic"],"Victoria Lily":["Instant Calm","Victoria Tea"],"Scorcher Pepper":["Thermal Stabilizer"],"Ice Grapes":["Thermal Stabilizer","Libran Ice Wine"],"Rhynoseed":["Quicksilver","Rhythm"],"Ginseng":["Steel Nerve"],"Black Powder":["Impact Bomb","Blast Bomb","Dynamite"],"Cacaold Beans":["Cacao Drink"],"Coffee Beans":["Coffee"],"Camellia Leaves":["Jade Tea"],"Coastal Wheat":["Common Beer"],"Yeast":["Common Beer","Greenwood Ale","Aelton Honey Ale","Aelight Bourbon","Vulcan Whiskey","Seaman's Vodka","White Water Wine","Scarlet Wine","Rose Water Wine","Red Rum","Apollen Gold Rum","Libran Ice Wine"],"Maidenhair":["Greenwood Ale"],"Thousandcorn":["Aelton Honey Ale","Aelight Bourbon"],"Honey":["Aelton Honey Ale","Apollen Gold Rum"],"Barley":["Vulcan Whiskey"],"Blue Popato":["Seaman's Vodka"],"Clear Grapes":["White Water Wine"],"Highland Grapes":["Scarlet Wine","Rose Water Wine"],"White Grapes Not Found":["Rose Water Wine"],"Syrup Sugarcane":["Red Rum"],"Joza Leaf":["Jazz"],"Stimulant":["Jazz","Dixie"],"Doxyl Leaf":["Dixie"]}},
 
             get = function (key) {
                 if (values[key] == undefined) {
@@ -21738,7 +21767,6 @@ var WuxTechs = WuxTechs || (function() {
                                 definitionOutput.addSubDefinition(subDefinition);
                             }
                         }
-
                         output.push(definitionOutput);
                     }
                 }
@@ -21815,6 +21843,12 @@ var WuxTechs = WuxTechs || (function() {
                 }
                 return sortingGroups[property][propertyValue].slice();
             },
+            getSortedGroupKeys = function (property) {
+                if (sortingGroups == undefined || !sortingGroups.hasOwnProperty(property)) {
+                    return [];
+                }
+                return Object.keys(sortingGroups[property]);
+            },
             getGroupData = function (group) {
                 let output = [];
                 for (let i = 0; i < group.length; i++) {
@@ -21830,7 +21864,8 @@ var WuxTechs = WuxTechs || (function() {
             Has: has,
             Iterate: iterate,
             Filter: filter,
-            GetSortedGroup: getSortedGroup
+            GetSortedGroup: getSortedGroup,
+            GetSortedGroupKeys: getSortedGroupKeys
         };
     }());
 
