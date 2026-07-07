@@ -7337,7 +7337,7 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     margin-right: 20px;
 }
 
-.wuxPopup .wuxButton
+.wuxPopup .wuxPopupActionButton
 {
     min-width: 20px;
     width: auto;
@@ -7349,7 +7349,7 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     cursor: pointer;
 }
 
-.wuxPopupHeader .wuxButton
+.wuxPopupHeader .wuxPopupActionButton
 {
     flex: 1;
     margin-right: 20px;
@@ -7376,7 +7376,12 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     font-weight: bold;
 }
 
-.wuxPopup .wuxButton:hover {
+.wuxPopup .wuxButton:hover span {
+    color: #DE9B72;
+    font-weight: bold;
+}
+
+.wuxPopup .wuxPopupActionButton:hover {
     background: #0056b3;
 }
 

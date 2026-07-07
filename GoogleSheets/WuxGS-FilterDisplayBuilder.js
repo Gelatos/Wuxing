@@ -29,20 +29,20 @@ class FilterDisplayBuilder {
             optionsOutput += this.printFilterOption(options[i]);
         }
 
-        return `${this.printFilterRow(WuxSheetMain.Header(`<span>${baseDefinition.getTitle()}</span>`))}
-        ${optionsOutput}
-        ${WuxSheetMain.Row("&nbsp;")}`;
+        let expandField = baseDefinition.getAttribute(WuxDef._expand);
+        let header = WuxSheetMain.Header(
+            WuxSheetMain.CollapsibleHeader(`<span>${baseDefinition.getTitle()}</span>`, expandField));
+        let content = WuxSheetMain.HiddenAuxField(expandField,
+            `${optionsOutput}
+            ${WuxSheetMain.Row("&nbsp;")}`);
+        return header + content;
     }
     printFilterOption(optionDefinition) {
         return this.printFilterData(WuxSheetMain.InteractionElement.BuildCheckboxInput(
-            this.filterDefinitions.getCompoundAttribute(optionDefinition), 
+            this.filterDefinitions.getCompoundAttribute(optionDefinition),
             optionDefinition.getTitle()));
     }
 
-    printFilterRow(contents) {
-        return `<div class="wuxFilterPopupContentRow">${contents}</div>
-        `;
-    }
     printFilterData(contents) {
         return `<div class="wuxFilterPopupContentData">${contents}</div>
         `;

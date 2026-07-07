@@ -1361,11 +1361,11 @@ var DisplayPopups = DisplayPopups || (function () {
                         WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd", "2"),
                             WuxSheetMain.HiddenFieldToggle(WuxDef.GetAttribute("Popup_InspectPurchaseAffordable"),
                                 WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick", "2"),
-                                    `<span name="${addType2Attr}"></span>`),
+                                    `<span name="${addType2Attr}"></span>`, "wuxPopupActionButton"),
                                 disabledPurchaseButton)) +
                         WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd"),
                             WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick"),
-                                `<span name="${WuxDef.GetAttribute("Popup_InspectAddType")}">Add</span>`)) +
+                                `<span name="${WuxDef.GetAttribute("Popup_InspectAddType")}">Add</span>`, "wuxPopupActionButton")) +
                         `</div>`;
                     return WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd", "2"),
                         jinAndCost) + buttons;
@@ -1443,12 +1443,12 @@ var DisplayPopups = DisplayPopups || (function () {
 
                 printApplyFilterButton = function () {
                     let applyFilterDef = WuxDef.Get("Popup_ApplyFilter");
-                    return WuxSheetMain.Button(applyFilterDef.getAttribute(), `<span">${applyFilterDef.getTitle()}</span>`);
+                    return WuxSheetMain.Button(applyFilterDef.getAttribute(), `<span">${applyFilterDef.getTitle()}</span>`, "wuxPopupActionButton");
                 },
 
                 printClearFilterButton = function () {
                     let clearFilterDef = WuxDef.Get("Popup_ClearFilter");
-                    return WuxSheetMain.Button(clearFilterDef.getAttribute(), `<span">${clearFilterDef.getTitle()}</span>`);
+                    return WuxSheetMain.Button(clearFilterDef.getAttribute(), `<span">${clearFilterDef.getTitle()}</span>`, "wuxPopupActionButton");
                 }
     
             return {
