@@ -77,50 +77,50 @@ class TechniqueFilterDefinitions extends BaseFilteredDefinitions{
                 new DatabaseFilterData("group", "TechFilterType"),
                 new DatabaseFilterData("subGroup", baseGroupFilters[i].getTitle())]);
         }
-        this.definitionDatabase["FilterType_CombatKeywords"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_CombatKeywords"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Trait"),
             new DatabaseFilterData("subGroup", "Combat Keyword")
         ]);
-        this.definitionDatabase["FilterType_SocialKeywords"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_SocialKeywords"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Trait"),
             new DatabaseFilterData("subGroup", "Social Keyword")
         ]);
-        this.definitionDatabase["FilterType_SupportKeywords"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_SupportKeywords"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Trait"),
             new DatabaseFilterData("subGroup", "Support Keyword")
         ]);
-        this.definitionDatabase["FilterType_UtilityKeywords"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_UtilityKeywords"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Trait"),
             new DatabaseFilterData("subGroup", "Utility Keyword")
         ]);
-        this.definitionDatabase["FilterType_Defense"] = WuxDef.Filter(
+        this.definitionDatabase["TechFilterType_Defense"] = WuxDef.Filter(
             new DatabaseFilterData("group", ["Defense", "Sense"]));
-        this.definitionDatabase["FilterType_DamageType"] = WuxDef.Filter(
+        this.definitionDatabase["TechFilterType_DamageType"] = WuxDef.Filter(
             new DatabaseFilterData("group", "DamageType"));
 
         let statusDefinitions = WuxDef.Filter(
             new DatabaseFilterData("group", "Status"));
         statusDefinitions = statusDefinitions.filter(item => item.canBeFiltered);
-        this.definitionDatabase["FilterType_StatusGood"] = statusDefinitions.filter(item => item.isBeneficial);
-        this.definitionDatabase["FilterType_StatusBad"] = statusDefinitions.filter(item => !item.isBeneficial);
-        
-        this.definitionDatabase["FilterType_WeaponKeywords"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_StatusGood"] = statusDefinitions.filter(item => item.isBeneficial);
+        this.definitionDatabase["TechFilterType_StatusBad"] = statusDefinitions.filter(item => !item.isBeneficial);
+
+        this.definitionDatabase["TechFilterType_WeaponKeywords"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Trait"),
             new DatabaseFilterData("subGroup", ["Martial Trait", "Aim Trait"])
         ]);
-        this.definitionDatabase["FilterType_AthleticSkills"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_AthleticSkills"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Skill"),
             new DatabaseFilterData("subGroup", ["Athletics"])
         ]);
-        this.definitionDatabase["FilterType_MagicSkills"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_MagicSkills"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Skill"),
             new DatabaseFilterData("subGroup", ["Magic"])
         ]);
-        this.definitionDatabase["FilterType_SocialSkills"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_SocialSkills"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Skill"),
             new DatabaseFilterData("subGroup", ["Persuade", "Cunning"])
         ]);
-        this.definitionDatabase["FilterType_WorldSkills"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_WorldSkills"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Skill"),
             new DatabaseFilterData("subGroup", ["Perception", "Device", "Craft"])
         ]);

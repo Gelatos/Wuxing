@@ -47,7 +47,17 @@ class FilterPopupAttributeHandler extends BasePopupAttributeHandler {
                 let activeValues = [];
                 definitions.forEach((definition) => {
                     if (this.attrHandler.parseString(this.filterDefinitions.getCompoundVariable(definition)) == "on") {
-                        activeValues.push(definition.abbreviation != "" ? definition.abbreviation : definition.name);
+                        // Technique fields store these tags inconsistently: some (e.g. group, itemTraits)
+                        // use the full definition name ("Trait_Accurate"), others (e.g. skill, coreDefense,
+                        // impacts, forms) use the bare title ("Accurate"). Include every representation so
+                        // the OR-matching in Database.getSortedData() catches whichever format was used.
+                        if (definition.abbreviation != "") {
+                            activeValues.push(definition.abbreviation);
+                        }
+                        activeValues.push(definition.name);
+                        if (definition.title != "" && definition.title != definition.name) {
+                            activeValues.push(definition.title);
+                        }
                     }
                 })
                 if (activeValues.length > 0) {

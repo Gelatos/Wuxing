@@ -310,7 +310,7 @@ class WuxDataDatabase extends Database {
 class ExtendedTechniqueDatabase extends Database {
 
     constructor(data) {
-        let filters = ["style", "group", "affinity", "tier", "action", "skill", "keywords", "rangeType", "damageType", "coreDefense"];
+        let filters = ["style", "group", "affinity", "tier", "action", "skill", "keywords", "rangeType", "damageTypes", "coreDefense"];
         let dataCreation = function (data) {
             return new TechniqueData(data);
         };
@@ -345,13 +345,24 @@ class ExtendedTechniqueDatabase extends Database {
                 if (value.group.indexOf(";") >= 0) {
                     let groups = value.group.split(";");
                     for (let i = 0; i < groups.length; i++) {
-                        if (groups[i].trim() != "") {
-                            this.addSortingGroup("group", groups[i].trim(), value);
+                        let tag = groups[i].trim();
+                        if (tag != "") {
+                            this.addSortingGroup("group", tag, value);
+                            // Trait_* tags embedded in the group field (e.g. Social/Support/Utility
+                            // keyword traits) are the same concept as forms/impacts/itemTraits keywords
+                            // below, just carried on a different field. Index them alongside those so
+                            // keyword filters find techniques regardless of which field tagged them.
+                            if (tag.indexOf("Trait_") == 0) {
+                                this.addSortingGroup("keywords", tag, value);
+                            }
                         }
                     }
                 }
                 else {
                     this.addSortingGroup("group", value.group, value);
+                    if (value.group.indexOf("Trait_") == 0) {
+                        this.addSortingGroup("keywords", value.group, value);
+                    }
                 }
             }
             else if (property == "affinity") {
@@ -388,7 +399,7 @@ class ExtendedTechniqueDatabase extends Database {
             this.addSortingGroup("keywords", itemTraits[i].trim(), value);
         }
         for (let i = 0; i < value.damageTypes.length; i++) {
-            this.addSortingGroup("damageType", value.damageTypes[i].trim(), value);
+            this.addSortingGroup("damageTypes", value.damageTypes[i].trim(), value);
         }
     }
 }
@@ -909,7 +920,7 @@ class TechniqueData extends WuxDatabaseData {
     
     updateVersion(newVersion) {
         let version = this.getVersionParts(newVersion);
-        let baseVersionValue = 2;
+        let baseVersionValue = 3;
         
         if (parseInt(version[0]) != baseVersionValue) {
             version[0] = baseVersionValue;
@@ -967,28 +978,28 @@ class TechniqueData extends WuxDatabaseData {
 
         if (longRange >= 7) {
             if (this.target == "Target") {
-                this.rangeType = `FilterType_RangeLong${targetingStyle}`;
+                this.rangeType = `TechFilterType_RangeLong${targetingStyle}`;
             }
             return;
         }
         if (rangeParts[0] == "" || rangeParts[0] == "Self" || this.target == "Self") {
-            this.rangeType = "FilterType_RangeSelf";
+            this.rangeType = "TechFilterType_RangeSelf";
             return;
         }
         if (shortRange == 1) {
             if (longRange >= 2) {
-                this.rangeType = `FilterType_RangeClose${targetingStyle}`;
+                this.rangeType = `TechFilterType_RangeClose${targetingStyle}`;
                 return;
             }
-            this.rangeType = "FilterType_RangeMelee";
+            this.rangeType = "TechFilterType_RangeMelee";
             return;
         }
         if (longRange > 2) {
-            this.rangeType = `FilterType_RangeShort${targetingStyle}`;
+            this.rangeType = `TechFilterType_RangeShort${targetingStyle}`;
             return;
         }
-        
-        this.rangeType = "FilterType_RangeSpecial";
+
+        this.rangeType = "TechFilterType_RangeSpecial";
     }
     getTargetingStyle() {
         let singleTargetTypes = ["Targets", "Objects", "Targets or Self", "Target", "Object", "Space", "Self", "Target or Self"];

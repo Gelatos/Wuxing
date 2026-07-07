@@ -310,7 +310,7 @@ class WuxDataDatabase extends Database {
 class ExtendedTechniqueDatabase extends Database {
 
     constructor(data) {
-        let filters = ["style", "group", "affinity", "tier", "action", "skill", "keywords", "rangeType", "damageType", "coreDefense"];
+        let filters = ["style", "group", "affinity", "tier", "action", "skill", "keywords", "rangeType", "damageTypes", "coreDefense"];
         let dataCreation = function (data) {
             return new TechniqueData(data);
         };
@@ -345,13 +345,24 @@ class ExtendedTechniqueDatabase extends Database {
                 if (value.group.indexOf(";") >= 0) {
                     let groups = value.group.split(";");
                     for (let i = 0; i < groups.length; i++) {
-                        if (groups[i].trim() != "") {
-                            this.addSortingGroup("group", groups[i].trim(), value);
+                        let tag = groups[i].trim();
+                        if (tag != "") {
+                            this.addSortingGroup("group", tag, value);
+                            // Trait_* tags embedded in the group field (e.g. Social/Support/Utility
+                            // keyword traits) are the same concept as forms/impacts/itemTraits keywords
+                            // below, just carried on a different field. Index them alongside those so
+                            // keyword filters find techniques regardless of which field tagged them.
+                            if (tag.indexOf("Trait_") == 0) {
+                                this.addSortingGroup("keywords", tag, value);
+                            }
                         }
                     }
                 }
                 else {
                     this.addSortingGroup("group", value.group, value);
+                    if (value.group.indexOf("Trait_") == 0) {
+                        this.addSortingGroup("keywords", value.group, value);
+                    }
                 }
             }
             else if (property == "affinity") {
@@ -388,7 +399,7 @@ class ExtendedTechniqueDatabase extends Database {
             this.addSortingGroup("keywords", itemTraits[i].trim(), value);
         }
         for (let i = 0; i < value.damageTypes.length; i++) {
-            this.addSortingGroup("damageType", value.damageTypes[i].trim(), value);
+            this.addSortingGroup("damageTypes", value.damageTypes[i].trim(), value);
         }
     }
 }
@@ -909,7 +920,7 @@ class TechniqueData extends WuxDatabaseData {
     
     updateVersion(newVersion) {
         let version = this.getVersionParts(newVersion);
-        let baseVersionValue = 2;
+        let baseVersionValue = 3;
         
         if (parseInt(version[0]) != baseVersionValue) {
             version[0] = baseVersionValue;
@@ -967,28 +978,28 @@ class TechniqueData extends WuxDatabaseData {
 
         if (longRange >= 7) {
             if (this.target == "Target") {
-                this.rangeType = `FilterType_RangeLong${targetingStyle}`;
+                this.rangeType = `TechFilterType_RangeLong${targetingStyle}`;
             }
             return;
         }
         if (rangeParts[0] == "" || rangeParts[0] == "Self" || this.target == "Self") {
-            this.rangeType = "FilterType_RangeSelf";
+            this.rangeType = "TechFilterType_RangeSelf";
             return;
         }
         if (shortRange == 1) {
             if (longRange >= 2) {
-                this.rangeType = `FilterType_RangeClose${targetingStyle}`;
+                this.rangeType = `TechFilterType_RangeClose${targetingStyle}`;
                 return;
             }
-            this.rangeType = "FilterType_RangeMelee";
+            this.rangeType = "TechFilterType_RangeMelee";
             return;
         }
         if (longRange > 2) {
-            this.rangeType = `FilterType_RangeShort${targetingStyle}`;
+            this.rangeType = `TechFilterType_RangeShort${targetingStyle}`;
             return;
         }
-        
-        this.rangeType = "FilterType_RangeSpecial";
+
+        this.rangeType = "TechFilterType_RangeSpecial";
     }
     getTargetingStyle() {
         let singleTargetTypes = ["Targets", "Objects", "Targets or Self", "Target", "Object", "Space", "Self", "Target or Self"];
@@ -6589,50 +6600,50 @@ class TechniqueFilterDefinitions extends BaseFilteredDefinitions{
                 new DatabaseFilterData("group", "TechFilterType"),
                 new DatabaseFilterData("subGroup", baseGroupFilters[i].getTitle())]);
         }
-        this.definitionDatabase["FilterType_CombatKeywords"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_CombatKeywords"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Trait"),
             new DatabaseFilterData("subGroup", "Combat Keyword")
         ]);
-        this.definitionDatabase["FilterType_SocialKeywords"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_SocialKeywords"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Trait"),
             new DatabaseFilterData("subGroup", "Social Keyword")
         ]);
-        this.definitionDatabase["FilterType_SupportKeywords"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_SupportKeywords"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Trait"),
             new DatabaseFilterData("subGroup", "Support Keyword")
         ]);
-        this.definitionDatabase["FilterType_UtilityKeywords"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_UtilityKeywords"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Trait"),
             new DatabaseFilterData("subGroup", "Utility Keyword")
         ]);
-        this.definitionDatabase["FilterType_Defense"] = WuxDef.Filter(
+        this.definitionDatabase["TechFilterType_Defense"] = WuxDef.Filter(
             new DatabaseFilterData("group", ["Defense", "Sense"]));
-        this.definitionDatabase["FilterType_DamageType"] = WuxDef.Filter(
+        this.definitionDatabase["TechFilterType_DamageType"] = WuxDef.Filter(
             new DatabaseFilterData("group", "DamageType"));
 
         let statusDefinitions = WuxDef.Filter(
             new DatabaseFilterData("group", "Status"));
         statusDefinitions = statusDefinitions.filter(item => item.canBeFiltered);
-        this.definitionDatabase["FilterType_StatusGood"] = statusDefinitions.filter(item => item.isBeneficial);
-        this.definitionDatabase["FilterType_StatusBad"] = statusDefinitions.filter(item => !item.isBeneficial);
-        
-        this.definitionDatabase["FilterType_WeaponKeywords"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_StatusGood"] = statusDefinitions.filter(item => item.isBeneficial);
+        this.definitionDatabase["TechFilterType_StatusBad"] = statusDefinitions.filter(item => !item.isBeneficial);
+
+        this.definitionDatabase["TechFilterType_WeaponKeywords"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Trait"),
             new DatabaseFilterData("subGroup", ["Martial Trait", "Aim Trait"])
         ]);
-        this.definitionDatabase["FilterType_AthleticSkills"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_AthleticSkills"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Skill"),
             new DatabaseFilterData("subGroup", ["Athletics"])
         ]);
-        this.definitionDatabase["FilterType_MagicSkills"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_MagicSkills"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Skill"),
             new DatabaseFilterData("subGroup", ["Magic"])
         ]);
-        this.definitionDatabase["FilterType_SocialSkills"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_SocialSkills"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Skill"),
             new DatabaseFilterData("subGroup", ["Persuade", "Cunning"])
         ]);
-        this.definitionDatabase["FilterType_WorldSkills"] = WuxDef.Filter([
+        this.definitionDatabase["TechFilterType_WorldSkills"] = WuxDef.Filter([
             new DatabaseFilterData("group", "Skill"),
             new DatabaseFilterData("subGroup", ["Perception", "Device", "Craft"])
         ]);
