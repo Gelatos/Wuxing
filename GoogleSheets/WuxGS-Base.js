@@ -550,6 +550,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
                 slottedConsumables = function () {
                     let syncedDef = WuxDef.Get("Title_EquippedInstantConsumables");
+                    let buyDef = WuxDef.Get("Gear_Buy");
                     let unequipDef = WuxDef.Get("Gear_Unequip");
                     let inspectDef = WuxDef.Get("Gear_Inspect");
                     let equippedIsVisibleAttr = WuxDef.GetAttribute("Gear_ConsumableIsVisible", WuxDef._gear);
@@ -577,6 +578,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                     </div>
                                     <div class="wuxEquipableButtonRow">
                                         <button class="wuxRepeatingTechActionButton" type="roll" value="${displayData.getSheetRollTemplate(true)}"><span style="color:#4caf50;">&#9654;</span><span> Use</span></button>
+                                        ${WuxSheetMain.Button(buyDef.getAttribute(countMod), `<span style="color:#5bc0de;">&#9670;</span> ${buyDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                         ${WuxSheetMain.Button(unequipDef.getAttribute(countMod), `<span style="color:#c8a020;">&#9881;</span> ${unequipDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                         ${WuxSheetMain.Button(inspectDef.getAttribute(countMod), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                     </div>

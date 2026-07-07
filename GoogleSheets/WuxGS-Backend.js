@@ -556,6 +556,7 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerDeleteRepeatingConsumable();
             output += listenerInspectRepeatingConsumable();
             output += listenerInspectSyncedConsumable();
+            output += listenerBuySyncedConsumable();
             output += listenerPurchaseRepeatingEquipment();
             output += listenerEquipRepeatingEquipment();
             output += listenerEquipGearItem();
@@ -697,6 +698,23 @@ var GearBuilder = GearBuilder || (function () {
                     output += WuxSheetBackend.OnChange(
                         [WuxDef.GetVariable("Gear_Inspect", countMod)],
                         `WuxWorkerGear.InspectSyncedConsumable(eventinfo, "${item.name}")`, true);
+                }
+            }
+            return output;
+        },
+
+        listenerBuySyncedConsumable = function () {
+            let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
+            let output = "";
+            for (let i = 0; i < consuTypes.length; i++) {
+                let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].getTitle()));
+                for (let j = 0; j < itemKeys.length; j++) {
+                    let item = itemKeys[j];
+                    if (item == undefined) continue;
+                    let countMod = item.technique.fieldName.replace(/_/g, "");
+                    output += WuxSheetBackend.OnChange(
+                        [WuxDef.GetVariable("Gear_Buy", countMod)],
+                        `WuxWorkerGear.BuySyncedConsumable(eventinfo, "${item.name}")`, true);
                 }
             }
             return output;

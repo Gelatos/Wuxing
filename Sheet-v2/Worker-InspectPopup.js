@@ -845,13 +845,16 @@ class ItemInspectionPopup extends InspectionPopup {
         const willAutoEquip = WuxWorkerGear.CanAutoEquipConsumable(attrHandler);
         Debug.Log(`Adding Consumable ${item.name} (autoEquip: ${willAutoEquip})`);
 
-        if (!willAutoEquip) {
-            let repeater = new WorkerRepeatingSectionHandler("RepeatingConsumables");
-            let newRowId = repeater.generateRowId();
-            this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
-            this.performAddSelectedInspectElementTechnique(attrHandler, repeater, newRowId, item.technique);
-            attrHandler.addUpdate(repeater.getFieldName(newRowId, buyInfoVar), buyDef.getTitle(`1 (${itemValue}J)`));
-            attrHandler.addUpdate(repeater.getFieldName(newRowId, buyMaxInfoVar), buyBulkDef.getTitle(`10 (${itemValue * 10}J)`));
+        let repeater = new WorkerRepeatingSectionHandler("RepeatingConsumables");
+        let newRowId = repeater.generateRowId();
+        this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
+        this.performAddSelectedInspectElementTechnique(attrHandler, repeater, newRowId, item.technique);
+        attrHandler.addUpdate(repeater.getFieldName(newRowId, buyInfoVar), buyDef.getTitle(`1 (${itemValue}J)`));
+        attrHandler.addUpdate(repeater.getFieldName(newRowId, buyMaxInfoVar), buyBulkDef.getTitle(`10 (${itemValue * 10}J)`));
+
+        if (willAutoEquip) {
+            attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemIsVisible")), "0");
+        } else {
             attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableIsVisible"), "on");
 
             let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);

@@ -924,6 +924,30 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             attributeHandler.run();
         },
 
+        buySyncedConsumable = function (eventinfo, itemName) {
+            let item = WuxItems.Get(itemName);
+            if (item == undefined) return;
+
+            let countMod = item.technique.fieldName.replace(/_/g, "");
+            let countAttr = WuxDef.GetVariable("ItemCount", countMod);
+            let jinVar = WuxDef.GetVariable("Jin");
+
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod(jinVar);
+            attributeHandler.addMod(countAttr);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let cost = parseInt(item.value) || 0;
+                let jin = attrHandler.parseInt(jinVar);
+                attrHandler.addUpdate(jinVar, (jin - cost).toString());
+
+                let currentCount = attrHandler.parseInt(countAttr) || 0;
+                attrHandler.addUpdate(countAttr, currentCount + 1);
+            });
+
+            attributeHandler.run();
+        },
+
         inspectSyncedConsumable = function (eventinfo, itemName) {
             let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
             let attributeHandler = new WorkerAttributeHandler();
@@ -1872,6 +1896,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         OpenFindConsumables: openFindConsumables,
         BuyConsumable: buyConsumable,
         BuyConsumableBulk: buyConsumableBulk,
+        BuySyncedConsumable: buySyncedConsumable,
         EquipConsumable: equipConsumable,
         UnequipConsumable: unequipConsumable,
         DeleteConsumable: deleteConsumable,
