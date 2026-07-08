@@ -1127,7 +1127,7 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             this.addMessage(`${this.senderTokenEffect.tokenTargetData.displayName} is Blinded: +2 Disadvantage`);
         }
         if (this.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Encouraged")) {
-            advantage -= 1;
+            advantage += 1;
             if (removeStatus) {
                 this.targetTokenEffect.tokenTargetData.removeStatus(targetAttributeHandler, "Stat_Encouraged");
             }
@@ -4327,6 +4327,9 @@ var TargetReference = TargetReference || (function () {
                 case "!tconflictstate":
                     commandSetConflictState(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
+                case "!taddtoconflict":
+                    commandAddToConflict(msg, TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
                 case "!tss":
                     commandSetRequestCheck(msg, TokenReference.GetTokenTargetDataArray(msg), content);
                     break;
@@ -4533,9 +4536,11 @@ var TargetReference = TargetReference || (function () {
             if (!playerIsGM(msg.playerid)) {
                 output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@0`);
                 output += tokenOptionButton("Prep4 Social", `tconflictstate Social@0`);
+                output += tokenOptionButton("Add to Conflict", `taddtoconflict 0`);
             } else {
                 output += tokenOptionButton("Prep4 Battle", `tconflictstate Battle@?{Set team index|0}`);
                 output += tokenOptionButton("Prep4 Social", `tconflictstate Social@?{Set team index|0}`);
+                output += tokenOptionButton("Add to Conflict", `taddtoconflict ?{Set team index|0}`);
             }
 
             output += tokenOptionSpacer();
@@ -4673,6 +4678,19 @@ var TargetReference = TargetReference || (function () {
             });
 
             sendTokenUpdateMessage(msg, targets, ` set to ${conflictState} state as ${state.WuxConflictManager.teams[teamIndex].name} unit(s)`);
+        },
+
+        // Adds a token to a team and to the active conflict without running battle/social
+        // setup — for tokens that are already prepped and shouldn't have their bars/statuses reset.
+        commandAddToConflict = function (msg, targets, content) {
+            let teamIndex = !isNaN(parseInt(content)) ? parseInt(content) : 0;
+
+            _.each(targets, function (tokenTargetData) {
+                tokenTargetData.setTeamIndex(teamIndex);
+                addToActiveCharacters(tokenTargetData);
+            });
+
+            sendTokenUpdateMessage(msg, targets, ` added to conflict as ${state.WuxConflictManager.teams[teamIndex].name} unit(s) without resetting their token`);
         },
 
         commandSetRequestCheck = function (msg, targets, content) {

@@ -246,7 +246,9 @@ class TechniqueAssessment {
     }
 
     pointVarianceRange() {
-        if (this.technique.action == "Passive") {
+
+        let restTypes = ["Brief", "Short", "Long"];
+        if (restTypes.includes(this.technique.action) || this.technique.action == "Passive") {
             return "0 < 15 < 30";
         }
 
@@ -312,7 +314,8 @@ class TechniqueAssessment {
             this.assessmentPercentage = undefined;
             this.setAssessment();
         } else {
-            if (this.technique.action == "Passive") {
+            let restTypes = ["Brief", "Short", "Long"];
+            if (restTypes.includes(this.technique.action) || this.technique.action == "Passive") {
                 this.assessmentPercentage = 20 + (assessor.points * 2);
             }
             else {
@@ -401,8 +404,8 @@ class TechniqueAssessment {
         }
 
         let energyValue = [8,11,16,22,30,39,50,62,76,91];
-
         output.points = energyValue[energy];
+        
         if (technique.action == "Full") {
             output.points += this.basePoints + 6;
             output.pointCalc.push("Full");

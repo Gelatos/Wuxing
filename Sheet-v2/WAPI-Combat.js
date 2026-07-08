@@ -1074,7 +1074,7 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             this.addMessage(`${this.senderTokenEffect.tokenTargetData.displayName} is Blinded: +2 Disadvantage`);
         }
         if (this.senderTokenEffect.tokenTargetData.hasStatus(senderAttributeHandler, "Stat_Encouraged")) {
-            advantage -= 1;
+            advantage += 1;
             if (removeStatus) {
                 this.targetTokenEffect.tokenTargetData.removeStatus(targetAttributeHandler, "Stat_Encouraged");
             }
