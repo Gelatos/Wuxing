@@ -2418,12 +2418,11 @@ var TargetReference = TargetReference || (function () {
                         `\They have a ${generator.character.motivation} Motivation and a ${generator.character.personality} Personality.`);
                 });
                 attributeHandler.run();
-
-                let messageObject = new SystemInfoMessage(outputMessage);
-                messageObject.setSender("System");
-                WuxMessage.Send(messageObject, "GM");
             });
 
+            let messageObject = new SystemInfoMessage(outputMessage);
+            messageObject.setSender("System");
+            WuxMessage.Send(messageObject, "GM");
         },
 
         sendTokenUpdateMessage = function (msg, targets, message) {
