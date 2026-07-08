@@ -5842,7 +5842,7 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
     // ─── Meal Helpers ───────────────────────────────────────────────────────────
 
     const getMeals = function () {
-        return WuxItems.Filter([new DatabaseFilterData("group", "Meal")]);
+        return WuxItems.Filter([new DatabaseFilterData("group", ["Basic Meal", "Meal"])]);
     };
 
     // ─── Commands ───────────────────────────────────────────────────────────────
@@ -42061,7 +42061,7 @@ var WuxTechs = WuxTechs || (function() {
                         "isCustom":false,"rank":0},
                     "hasTechnique":false},
                 "Bland Meal":{"name":"Bland Meal","fieldName":"","group":"Basic Meal","descriptions":[],
-                    "variable":"","category":"","itemType":"UsableItem","bulk":3,"value":null,"traits":"","description":"Gives no bonuses","valMod":null,"skill":"","dc":0,"time":1,"components":"5 Any","commonTechniques":"","technique":{"name":"Bland Meal","fieldName":"bland_meal","group":"","descriptions":[],
+                    "variable":"","category":"","itemType":"UsableItem","bulk":3,"value":null,"traits":"","description":"A boring meal. Created when a cooking skill check is too low. ","valMod":null,"skill":"","dc":0,"time":1,"components":"5 Any","commonTechniques":"","technique":{"name":"Bland Meal","fieldName":"bland_meal","group":"","descriptions":[],
                         "variable":"","techSet":"Gear","version":"3.0","affinity":"","tier":2,"action":"","forms":"","impacts":"","en":0,"willPower":0,"boon":0,"resourceCost":"","limits":"","skill":"","hasAdv":"","range":"","rangeType":"TechFilterType_RangeSelf","target":"","size":null,"requirement":"","itemTraits":"","trigger":"","flavorText":"","coreDefense":"","definitions":[],
                         "effects":{"keys":["T0"],
                             "values":{"T0":{"name":"T0","defense":"","target":"","type":"","subType":"","enhancing":"","dVal":"","dType":"","formula":{"formulaString":"","workers":[]},

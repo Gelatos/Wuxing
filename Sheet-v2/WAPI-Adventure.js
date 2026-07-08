@@ -212,7 +212,7 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
     // ─── Meal Helpers ───────────────────────────────────────────────────────────
 
     const getMeals = function () {
-        return WuxItems.Filter([new DatabaseFilterData("group", "Meal")]);
+        return WuxItems.Filter([new DatabaseFilterData("group", ["Basic Meal", "Meal"])]);
     };
 
     // ─── Commands ───────────────────────────────────────────────────────────────

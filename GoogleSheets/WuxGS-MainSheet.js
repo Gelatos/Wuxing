@@ -1091,9 +1091,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
                 }
                 skillGroupText += subGroups[i].getTitle();
             }
-            let showStatValue = `!cshowgroup @{${WuxDef.GetVariable("SheetName")}}@@@?{What will you show?|Defenses|Senses}`;
             let rollSkillValue = `!cskillgroupcheck @{${WuxDef.GetVariable("SheetName")}}@@@?{Choose a Skill Group to Roll|${skillGroupText}|Lore};?{Advantage|0}`;
-            contents += `<button class="wuxButton wuxSizePercent" type="roll" value="${showStatValue}"><span>Show Stat</span></button>`;
             contents += `<button class="wuxButton wuxSizePercent" type="roll" value="${rollSkillValue}"><span>Roll Skill</span></button>`;
 
             let titleDefinition = WuxDef.Get("Check");

@@ -6700,7 +6700,7 @@ var Debug = Debug || (function () {
     };
 }());
 
-function SplitLargeEntry(output, splitCharacter) {
+function SplitLargeEntry(output, splitCharacter, fallbackSplitCharacter) {
     if (splitCharacter == undefined) {
         splitCharacter = "\n";
     }
@@ -6714,19 +6714,34 @@ function SplitLargeEntry(output, splitCharacter) {
                 splitString = output.substring(0, 50000);
 
                 if (splitCharacter != "") {
+                    let activeSplitCharacter = splitCharacter;
+                    let triedFallback = false;
                     let foundSplit = false;
                     while (!foundSplit) {
-                        splitIndex = splitString.lastIndexOf(splitCharacter) + splitCharacter.length;
-                        if (splitIndex > 0) {
-                            if (splitString.substring(splitIndex, splitIndex + 1).includes(`"`)) {
-                                splitString = splitString.substring(0, splitIndex - 1 - splitCharacter.length);
+                        let matchIndex = splitString.lastIndexOf(activeSplitCharacter);
+                        if (matchIndex !== -1) {
+                            splitIndex = matchIndex + activeSplitCharacter.length;
+                            // A raw quote in valid JSON output can only be a real string delimiter
+                            // (embedded quotes are always escaped), so this check only applies to
+                            // splitters that don't already end the match on a quote themselves.
+                            let landsInsideQuotedText = !activeSplitCharacter.includes(`"`)
+                                && splitString.substring(splitIndex, splitIndex + 1).includes(`"`);
+                            if (landsInsideQuotedText) {
+                                splitString = splitString.substring(0, splitIndex - 1 - activeSplitCharacter.length);
                             }
                             else {
                                 foundSplit = true;
                             }
                         }
+                        // The active splitter never found a safe occurrence in this window — retry
+                        // the same window with the fallback splitter before resorting to a hard cut.
+                        else if (!triedFallback && fallbackSplitCharacter != undefined && fallbackSplitCharacter !== "" && fallbackSplitCharacter !== activeSplitCharacter) {
+                            triedFallback = true;
+                            activeSplitCharacter = fallbackSplitCharacter;
+                            splitString = output.substring(0, 50000);
+                        }
                         else {
-                            splitIndex = 50000 - splitCharacter.length;
+                            splitIndex = 50000 - activeSplitCharacter.length;
                             foundSplit = true;
                         }
                     }
@@ -8184,8 +8199,8 @@ class DatabaseAssessment {
         }
     }
     
-    printDataToColumn(data, splitCharacter, row, column) {
-        let arr = SplitLargeEntry(data, splitCharacter);
+    printDataToColumn(data, splitCharacter, row, column, fallbackSplitCharacter) {
+        let arr = SplitLargeEntry(data, splitCharacter, fallbackSplitCharacter);
         let output = [];
         for (let i = 0; i < 150; i++) {
             if (i < arr.length) {
@@ -8331,7 +8346,7 @@ class DatabaseAssessment {
             this.sheetsDb.readDatabase("RacesByRegion", 2));
         output += "\n" + nameDatabase.print("WuxNames");
 
-        this.printDataToColumn(output, "]", 3, this.definitionColumn);
+        this.printDataToColumn(output, "]", 3, this.definitionColumn, `",`);
     }
 
     printTechniqueDatabase() {
@@ -8412,12 +8427,12 @@ class DatabaseAssessment {
         let itemClassData = JavascriptDatabase.Create(itemsDatabase, WuxDefinition.GetItem);
         output += itemClassData.print("WuxItems") + "\n";
 
-        this.printDataToColumn(output, "}", 3, this.techColumn);
+        this.printDataToColumn(output, "}", 3, this.techColumn, `",`);
     }
 
     printCharacterSheetBase() {
         let output = BuildCharacterSheet.PrintBase(this.sheetsDb);
-        this.printDataToColumn(output, "\n", 3, this.sheetColumn);
+        this.printDataToColumn(output, "\n", 3, this.sheetColumn, `",`);
     }
     
     importBasicDefinitions(definitionDatabase, sheetName) {
@@ -10917,9 +10932,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
                 }
                 skillGroupText += subGroups[i].getTitle();
             }
-            let showStatValue = `!cshowgroup @{${WuxDef.GetVariable("SheetName")}}@@@?{What will you show?|Defenses|Senses}`;
             let rollSkillValue = `!cskillgroupcheck @{${WuxDef.GetVariable("SheetName")}}@@@?{Choose a Skill Group to Roll|${skillGroupText}|Lore};?{Advantage|0}`;
-            contents += `<button class="wuxButton wuxSizePercent" type="roll" value="${showStatValue}"><span>Show Stat</span></button>`;
             contents += `<button class="wuxButton wuxSizePercent" type="roll" value="${rollSkillValue}"><span>Roll Skill</span></button>`;
 
             let titleDefinition = WuxDef.Get("Check");
