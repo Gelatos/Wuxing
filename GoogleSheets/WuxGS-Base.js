@@ -903,15 +903,15 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
             var
                 print = function () {
-                    // contents += WuxSheetSidebar.BuildLanguageSection();
-                    return `${WuxSheet.MainPageDisplayInput()}
-                    ${WuxSheet.PageDisplay("ActionsData",
-                        WuxSheetSidebar.Build("", `${WuxSheetSidebar.BuildChatSection()}
+                    let coreContents = `${WuxSheetSidebar.BuildChatSection()}
                         ${WuxSheetSidebar.BuildChecksSection()}
                         ${WuxSheetSidebar.BuildBoonSection()}
-                        ${WuxSheetSidebar.BuildTechDebugSection()}`))}
-                    ${WuxSheet.PageDisplay("StylesData",
-                        WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Technique"))))}`;
+                        ${WuxSheetSidebar.BuildTechDebugSection()}`;
+                    let stylesContents = buildTechPointsSection(WuxDef.GetAttribute("Technique"));
+                    let contents = `${WuxSheet.MainPageDisplayInput()}
+                        ${WuxSheet.PageDisplay("ActionsData", coreContents)}
+                        ${WuxSheet.PageDisplay("StylesData", stylesContents)}`;
+                    return WuxSheetSidebar.Build("", contents);
                 },
 
                 buildTechPointsSection = function (fieldName, header) {
