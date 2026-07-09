@@ -11469,11 +11469,11 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
                         basics = function () {
                             let contents = "";
-                            contents += WuxDefinition.BuildText(WuxDef.Get("FullName"), 
+                            contents += WuxDefinition.BuildText(WuxDef.Get("FullName"),
                                 WuxSheetMain.Span(WuxDef.GetAttribute("FullName")));
-                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("DisplayName"), 
+                            contents += WuxDefinition.BuildTextInput(WuxDef.Get("DisplayName"),
                                 WuxDef.GetAttribute("DisplayName"));
-                            
+
                             let hiddenAttr = WuxDef.GetAttribute("AffinityAspect");
                             let affinityFilter = [WuxDef.Get("Unaspected")].concat(
                                 WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])
@@ -11481,10 +11481,10 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents += WuxSheetMain.HiddenFieldToggle(hiddenAttr,
                                 WuxDefinition.BuildText(WuxDef.Get("Affinity"),
                                     WuxSheetMain.Span(WuxDef.GetAttribute("Affinity"))),
-                                WuxDefinition.BuildSelect(WuxDef.Get("AffinityAspect"), 
+                                WuxDefinition.BuildSelect(WuxDef.Get("AffinityAspect"),
                                     WuxDef.GetAttribute("Affinity"), affinityFilter, false)
                             );
-                            
+
                             return WuxSheetMain.Table.FlexTableGroup(contents);
                         },
 
@@ -11595,7 +11595,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             let backgroundBuilder = new CharacterBackgroundBuilder();
                             let statSummaryDefinition = WuxDef.Get("Title_StatSummary");
                             let statsBuilder = new ExtendedCharacterStatisticsBuilder();
-                            
+
                             return `${WuxSheetMain.CollapsibleTab(statSummaryDefinition.getAttribute(WuxDef._tab, WuxDef._expand), statSummaryDefinition.title,
                                 WuxSheetMain.TabBlock(statsBuilder.print()))}
                                 ${WuxSheetMain.CollapsibleTab(originDefinition.getAttribute(WuxDef._tab, WuxDef._expand), originDefinition.title,
@@ -11625,7 +11625,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
 
                         createNotebookDisplay = function () {
                             let notebookCount = parseInt(WuxDef.Get("Note_NotebookCount").formula.getValue());
-                            let contents = WuxSheetMain.MultiRowGroup([notebookSelect(notebookCount), notebookPages(notebookCount)], 
+                            let contents = WuxSheetMain.MultiRowGroup([notebookSelect(notebookCount), notebookPages(notebookCount)],
                                 WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);
 
@@ -11667,7 +11667,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             let repeatingDef = WuxDef.Get("NotebookPages");
                             let staticNotebookPages = "";
                             for (let i = 0; i < notebookCount; i++) {
-                                staticNotebookPages += WuxSheetMain.HiddenUniqueIndexField(WuxDef.GetAttribute("Note_OpenNotebook"), i, 
+                                staticNotebookPages += WuxSheetMain.HiddenUniqueIndexField(WuxDef.GetAttribute("Note_OpenNotebook"), i,
                                     `${WuxSheetMain.Header(WuxSheetMain.Span(WuxDef.GetAttribute("Note_NotebookName", i)) + "<span> Pages</span>")}
                                 ${buildRepeater(repeatingDef.getVariable(i), addRepeaterContentsNotebookPages())}
                                 ${WuxSheetMain.Row("&nbsp;")}`)
@@ -11890,7 +11890,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             autoEquipDef.getAttribute(WuxDef._info),
                             WuxSheetMain.Header(autoEquipDef.getTitle()),
                             WuxDefinition.TooltipDescription(autoEquipDef)))];
-                        
+
                     let items = [];
                     for (let i = 0; i < consuTypes.length; i++) {
                         items.push(WuxSheetMain.Table.FlexTableGroup(
@@ -11945,7 +11945,9 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].getTitle()));
                         for (let j = 0; j < itemKeys.length; j++) {
                             let item = itemKeys[j];
-                            if (item == undefined) { continue; }
+                            if (item == undefined) {
+                                continue;
+                            }
                             let countMod = item.technique.fieldName.replace(/_/g, "");
                             let countAttribute = WuxDef.GetAttribute("ItemCount", countMod);
                             let displayData = new TechniqueDisplayData(item.technique);
@@ -12057,7 +12059,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let cookDef = WuxDef.Get("Gear_Cook");
 
                     let gearDef = WuxDef.Get("Gear");
-                    let itemNameVar  = gearDef.getVariable(`-${WuxDef.GetVariable("ItemName")}`);
+                    let itemNameVar = gearDef.getVariable(`-${WuxDef.GetVariable("ItemName")}`);
                     let itemCountVar = gearDef.getVariable(`-${WuxDef.GetVariable("ItemCount")}`);
                     let cookButtonValue = `!addingredient @{${itemNameVar}}|||@{${itemCountVar}}|||@{character_name}`;
 
@@ -12287,7 +12289,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 print = function () {
                     // contents += WuxSheetSidebar.BuildLanguageSection();
                     return `${WuxSheet.MainPageDisplayInput()}
-                    ${WuxSheet.PageDisplay("ActionsData", 
+                    ${WuxSheet.PageDisplay("ActionsData",
                         WuxSheetSidebar.Build("", `${WuxSheetSidebar.BuildChatSection()}
                         ${WuxSheetSidebar.BuildChecksSection()}
                         ${WuxSheetSidebar.BuildBoonSection()}
@@ -12347,7 +12349,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
                         `${sectionDef.getTitle()}`, contents);
                 },
-                
+
                 buildBaseFilterButtons = function () {
                     let titleDef = WuxDef.Get("TechBaseFilter");
                     let baseFilters = WuxDef.Filter([new DatabaseFilterData("group", "TechBaseFilter")]);
@@ -12379,7 +12381,9 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 },
                 buildStaticTechniqueDisplay = function (techniqueName) {
                     let technique = WuxTechs.Get(techniqueName);
-                    if (technique == undefined) { return ""; }
+                    if (technique == undefined) {
+                        return "";
+                    }
                     let displayData = new TechniqueDisplayData(technique);
                     displayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
                     displayData.technique.displayname = displayData.displayname;
@@ -12390,7 +12394,9 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 },
 
                 buildItemTechniqueDisplay = function (item) {
-                    if (item == undefined || !item.hasTechnique) { return ""; }
+                    if (item == undefined || !item.hasTechnique) {
+                        return "";
+                    }
                     let displayData = new TechniqueDisplayData(item.technique);
                     displayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
                     displayData.technique.displayname = displayData.displayname;
@@ -12413,7 +12419,9 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                             output += buildItemTechniqueDisplay(itemKeys[j]);
                         }
                     }
-                    if (output == "") { return ""; }
+                    if (output == "") {
+                        return "";
+                    }
                     let sectionDef = WuxDef.Get("Title_InstantConsumables");
                     return `${WuxSheetMain.Header(sectionDef.getTitle())}
                     <div class="wuxFlexTable">${output}</div>
@@ -12430,11 +12438,11 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                     let header = getFormeSectionHeader(
                         `<span>${sectionDefinition.getTitle()}</span>`, refreshField, filterField, removeFilterField);
-                    
-                    let actionDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible"), 
+
+                    let actionDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible"),
                         printFormTechniqueFullActionDisplay());
                     let displayTechniquesContents = buildRepeater(repeatingVariable, actionDisplay);
-                    
+
                     return `${WuxSheetMain.Header(header)}
                     ${displayTechniquesContents}
                     ${WuxSheetMain.Row("&nbsp;")}`;
@@ -12442,14 +12450,14 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 repeatingCustomTechniquesSection = function () {
                     let repeatingDef = WuxDef.Get("RepeatingCustomTech");
                     let setDataTechniqueAttr = WuxDef.GetAttribute("Action_SetData");
-                    
+
                     let header = `<span>${repeatingDef.getTitle()}</span>`;
 
                     let actionDisplay = WuxSheetMain.HiddenFieldToggle(
                         setDataTechniqueAttr,
-                        printFormTechniqueFullActionDisplay(), 
+                        printFormTechniqueFullActionDisplay(),
                         WuxSheetMain.Input("text", setDataTechniqueAttr));
-                    
+
                     let contents = `<div class="wuxRepeatingFlexSection">
                             <fieldset class="${repeatingDef.getVariable()}">
                             ${actionDisplay}
@@ -12459,7 +12467,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return `${WuxSheetMain.Header(header)}
                     ${contents}
                     ${WuxSheetMain.Row("&nbsp;")}`;
-                    
+
                     // return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
 
@@ -12468,7 +12476,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let loadFormeField = WuxDef.GetAttribute("Action_FormeLoadCount");
                     let loadFormeDef = WuxDef.Get("Action_FormeLoad");
                     headerButtons += WuxSheetMain.HiddenField(loadFormeField, WuxSheetMain.Button(loadFormeDef.getAttribute(),
-                        `<span class='wuxStyleHeaderButtonIcon'>&#10227;</span>${loadFormeDef.getTitle(`<span name="${loadFormeField}"></span>`)}`, 
+                        `<span class='wuxStyleHeaderButtonIcon'>&#10227;</span>${loadFormeDef.getTitle(`<span name="${loadFormeField}"></span>`)}`,
                         "wuxStyleHeaderButton"));
                     headerButtons += WuxSheetMain.Button(filterField,
                         "<span class='wuxStyleHeaderButtonIcon'>&#9776;</span> Filter", "wuxStyleHeaderButton");
@@ -12476,7 +12484,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         "<span class='wuxStyleHeaderButtonIconClear'>&#10008;</span> Remove Filter", "wuxStyleHeaderButton", "0"));
 
                     headerButtons = `${WuxSheet.MainPageDisplayInput()}
-                        ${WuxSheet.PageDisplay("Actions", 
+                        ${WuxSheet.PageDisplay("Actions",
                         `<span class="wuxStyleHeaderButtonContainer">${headerButtons}</span>`)}`;
                     return headerButtons + headerName;
                 },
@@ -12497,7 +12505,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 buildStylesList = function () {
                     let contents = "";
                     contents += WuxSheetMain.MultiRowGroup([
-                        styleListSection("RepeatingStyles"), buildStyleFilter()],
+                            styleListSection("RepeatingStyles"), buildStyleFilter()],
                         WuxSheetMain.Table.FlexTableReverse, 2);
                     contents = WuxSheetMain.TabBlock(contents);
 
@@ -12564,13 +12572,13 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                             WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
                                 nonElementDef.getAttribute(),
                                 nonElementDef.getAttribute(WuxDef._info),
-                                WuxSheetMain.Header(nonElementDef.getTitle()), 
+                                WuxSheetMain.Header(nonElementDef.getTitle()),
                                 WuxDefinition.TooltipDescription(nonElementDef))),
                         WuxSheetMain.Table.FlexTableGroup(
                             WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
                                 levelRestrictedDef.getAttribute(),
                                 levelRestrictedDef.getAttribute(WuxDef._info),
-                                WuxSheetMain.Header(levelRestrictedDef.getTitle()), 
+                                WuxSheetMain.Header(levelRestrictedDef.getTitle()),
                                 WuxDefinition.TooltipDescription(levelRestrictedDef)))
                     ];
                     return `${WuxSheetMain.Header2(WuxDef.GetTitle("Title_StyleFilterOption"))}
@@ -12582,7 +12590,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let customFilterDef = WuxDef.Get("Forme_CustomStyleFilter");
                     let items = [];
                     items.push(WuxSheetMain.Table.FlexTableGroup(
-                        WuxSheetMain.Button(recommendedFilterDef.getAttribute(), recommendedFilterDef.getTitle(), "wuxWidth160")
+                        WuxSheetMain.Button(recommendedFilterDef.getAttribute(), recommendedFilterDef.getTitle(), "wuxWidth160 wuxFocusButton")
                     ));
                     items.push(WuxSheetMain.Table.FlexTableGroup(
                         WuxSheetMain.Button(customFilterDef.getAttribute(), customFilterDef.getTitle(), "wuxWidth160")
@@ -12615,7 +12623,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         let categoryHeader = WuxSheetMain.Header2(
                             WuxSheetMain.CollapsibleHeaderInverse(`<span>${groupDef.getTitle()}</span>`, expandField));
                         let categoryContent = WuxSheetMain.HiddenField(expandField,
-                            WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 5));
+                            WuxSheetMain.Table.FlexTable(items.join("")));
 
                         filterOptions.push(WuxSheetMain.Table.FlexTableGroup(categoryHeader + categoryContent));
                     }
@@ -12761,17 +12769,17 @@ var DisplayPopups = DisplayPopups || (function () {
                     let itemSelectVisibleAttr = WuxDef.GetAttribute("Popup_ItemSelectVisible");
                     let affinityIcons =
                         WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayNeutral"), `<img class="wuxAffinityIcon wuxAffinityIconNeutral" src="https://i.imgur.com/5hQ5Bun.png">`) +
-                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayWood"),    `<img class="wuxAffinityIcon wuxAffinityIconWood"    src="https://i.imgur.com/pjMuXYy.png">`) +
-                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayFire"),    `<img class="wuxAffinityIcon wuxAffinityIconFire"    src="https://i.imgur.com/aD41Ap4.png">`) +
-                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayEarth"),   `<img class="wuxAffinityIcon wuxAffinityIconEarth"   src="https://i.imgur.com/1efdxRx.png">`) +
-                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayMetal"),   `<img class="wuxAffinityIcon wuxAffinityIconMetal"   src="https://i.imgur.com/CFQ9LJx.png">`) +
-                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayWater"),   `<img class="wuxAffinityIcon wuxAffinityIconWater"   src="https://i.imgur.com/KAcJG5h.png">`);
+                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayWood"), `<img class="wuxAffinityIcon wuxAffinityIconWood"    src="https://i.imgur.com/pjMuXYy.png">`) +
+                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayFire"), `<img class="wuxAffinityIcon wuxAffinityIconFire"    src="https://i.imgur.com/aD41Ap4.png">`) +
+                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayEarth"), `<img class="wuxAffinityIcon wuxAffinityIconEarth"   src="https://i.imgur.com/1efdxRx.png">`) +
+                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayMetal"), `<img class="wuxAffinityIcon wuxAffinityIconMetal"   src="https://i.imgur.com/CFQ9LJx.png">`) +
+                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayWater"), `<img class="wuxAffinityIcon wuxAffinityIconWater"   src="https://i.imgur.com/KAcJG5h.png">`);
                     let itemData = WuxSheetMain.HiddenField(itemSelectVisibleAttr,
                         WuxSheetMain.HiddenFieldToggle(itemSelectTypeAttr,
-                        `${WuxSheetMain.Input("hidden", itemSelectNameAttr)}
+                            `${WuxSheetMain.Input("hidden", itemSelectNameAttr)}
                         <input type="hidden" class="wuxInspectionPopupSelectContainer-flag" name="${itemSelectIsOnAttr}">
                         ${WuxSheetMain.Button(itemSelectIsOnAttr, WuxSheetMain.Span(itemSelectDisplayAttr) + affinityIcons, "wuxInspectionPopupSelectContainer")}`,
-                        `${WuxSheetMain.Header2(WuxSheetMain.Span(itemSelectDisplayAttr))}
+                            `${WuxSheetMain.Header2(WuxSheetMain.Span(itemSelectDisplayAttr))}
                         ${WuxSheetMain.HiddenField(itemSelectNameAttr, WuxSheetMain.Desc(WuxSheetMain.Span(itemSelectNameAttr)))}`)
                     );
 
@@ -12796,7 +12804,7 @@ var DisplayPopups = DisplayPopups || (function () {
 
         FilterPopup = FilterPopup || (function () {
             'use strict';
-    
+
             var
                 print = function () {
                     let filterPopupDisplayTypeAttr = WuxDef.GetAttribute("Popup_FilterPopupDisplayType");
@@ -12832,7 +12840,7 @@ var DisplayPopups = DisplayPopups || (function () {
                     let clearFilterDef = WuxDef.Get("Popup_ClearFilter");
                     return WuxSheetMain.Button(clearFilterDef.getAttribute(), `<span">${clearFilterDef.getTitle()}</span>`, "wuxPopupActionButton");
                 }
-    
+
             return {
                 Print: print,
                 PrintHeader: printHeader

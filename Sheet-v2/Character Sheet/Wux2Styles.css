@@ -6829,6 +6829,18 @@ Quest Box
     Overrides
 ========================================*/
 
+.wuxFocusButton {
+    background: linear-gradient(to bottom,
+    #ff8a5d 0%,
+    #ff5f23 80%);
+}
+.wuxFocusButton:hover {
+    background: linear-gradient(to bottom,
+    #f86831 0%,
+    #f34403 70%,
+    #c53300 100%);
+}
+
 .wuxInlineBlock 
 {
     display: inline-block;
