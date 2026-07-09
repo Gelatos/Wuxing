@@ -12607,7 +12607,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         let items = [];
                         for (let j = 0; j < groupButtons.length; j++) {
                             items.push(WuxSheetMain.Table.FlexTableGroup(
-                                WuxSheetMain.Button(groupButtons[j].getAttribute(), groupButtons[j].getTitle(), "wuxWidth160")
+                                WuxSheetMain.Button(groupButtons[j].getAttribute(), groupButtons[j].getTitle(), "wuxWidth90")
                             ));
                         }
 
@@ -12615,11 +12615,11 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         let categoryHeader = WuxSheetMain.Header2(
                             WuxSheetMain.CollapsibleHeaderInverse(`<span>${groupDef.getTitle()}</span>`, expandField));
                         let categoryContent = WuxSheetMain.HiddenField(expandField,
-                            WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 1));
+                            WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 5));
 
                         filterOptions.push(WuxSheetMain.Table.FlexTableGroup(categoryHeader + categoryContent));
                     }
-                    return WuxSheetMain.MultiRowGroup(filterOptions, WuxSheetMain.Table.FlexTable, 2);
+                    return WuxSheetMain.MultiRowGroup(filterOptions, WuxSheetMain.Table.FlexTable, 1);
                 }
 
             return {
