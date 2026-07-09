@@ -782,10 +782,12 @@ class FormeTechniqueDatabaseBase {
         let techVersion = techniqueAttributeHandler.getTechniqueVersion();
         let techniqueData = this.techDictionary.get(techniqueName);
         let technique = techniqueData.technique;
+        technique.rank = techniqueData.techniqueRank;
         if (technique.version != techVersion) {
             Debug.Log(`Updating ${techniqueName} as it has a new version (${technique.version} != ${techVersion})`);
-            technique.rank = techniqueData.techniqueRank;
             techniqueAttributeHandler.setTechniqueInfo(technique, true);
+        } else if (Object.keys(technique.enhancementEffects).length > 0) {
+            techniqueAttributeHandler.setTechniqueRankButtons(technique);
         }
         this.techDictionary.get(techniqueName).isSet = true;
         this.setRepeaterTechniqueVisibility(techniqueAttributeHandler, techniqueName);
@@ -978,16 +980,16 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
         });
     }
     iterateAllTechniquesFromLearnedStyles(callback) {
-        let allJobsArray = this.jobWorker.getStyles();
-        allJobsArray.forEach((styleData) => {
-            let filteredTechs = WuxTechs.Filter(new DatabaseFilterData("style", styleData.style.name));
-            filteredTechs.forEach(tech => callback(tech, 1));
-        });
         let allStyleTechniques = this.styleWorker.getAllStyleTechniqueData();
         for (const key in allStyleTechniques) {
             let techniqueData = allStyleTechniques[key];
             callback(techniqueData.technique, techniqueData.rank);
         }
+        let allJobsArray = this.jobWorker.getStyles();
+        allJobsArray.forEach((styleData) => {
+            let filteredTechs = WuxTechs.Filter(new DatabaseFilterData("style", styleData.style.name));
+            filteredTechs.forEach(tech => callback(tech, 1));
+        });
         let allPerkTechniques = this.perkWorker.getPerkTechniques();
         allPerkTechniques.forEach((technique) => {
             callback(technique, 1);

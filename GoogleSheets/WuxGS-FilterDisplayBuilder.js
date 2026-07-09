@@ -31,8 +31,8 @@ class FilterDisplayBuilder {
 
         let expandField = baseDefinition.getAttribute(WuxDef._expand);
         let header = WuxSheetMain.Header(
-            WuxSheetMain.CollapsibleHeader(`<span>${baseDefinition.getTitle()}</span>`, expandField));
-        let content = WuxSheetMain.HiddenAuxField(expandField,
+            WuxSheetMain.CollapsibleHeaderInverse(`<span>${baseDefinition.getTitle()}</span>`, expandField));
+        let content = WuxSheetMain.HiddenField(expandField,
             `${optionsOutput}
             ${WuxSheetMain.Row("&nbsp;")}`);
         return header + content;

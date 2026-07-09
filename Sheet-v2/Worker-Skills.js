@@ -29,24 +29,34 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
             });
         },
         
+        // Skills whose training should auto-open the matching Actions page filter category.
+        // Any Skill with subGroup Persuade/Cunning is treated as a Social skill.
+        skillAutoFilterCategories = {
+            Martial: "AutoFilter_MeleeWeapons",
+            Aim: "AutoFilter_RangedWeapons",
+            Physique: "AutoFilter_Athletics",
+            Agility: "AutoFilter_Athletics"
+        },
+        socialSkillSubGroups = ["Persuade", "Cunning"],
+
         updateStats = function (attributeHandler) {
             let skillDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
             for (let i = 0; i < skillDefinitions.length; i++) {
                 attributeHandler.addFormulaMods(skillDefinitions[i]);
-                attributeHandler.addMod([skillDefinitions[i].getVariable(WuxDef._rank), 
+                attributeHandler.addMod([skillDefinitions[i].getVariable(WuxDef._rank),
                     skillDefinitions[i].getVariable(WuxDef._expertise)]);
             }
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let skillExpertiseDef = WuxDef.Get("SkillExpertise");
                 let trainingBonus = 2 + attrHandler.parseInt(WuxDef.GetVariable("CR"));
-                
+
                 skillDefinitions.forEach(skillDefinition => {
                     let skillInfo = [];
                     let skillPointValueNoCr = skillDefinition.formula.getValue(attrHandler);
-                    skillInfo = skillInfo.concat(["-- Base Calculation --", 
+                    skillInfo = skillInfo.concat(["-- Base Calculation --",
                         `${skillDefinition.formula.getString()} = ${skillPointValueNoCr}`, ""]);
-                    
+
                     let skillPointValue = skillPointValueNoCr;
                     let skillRank = attrHandler.parseString(skillDefinition.getVariable(WuxDef._rank));
                     let skillExpertise = attrHandler.parseString(skillDefinition.getVariable(WuxDef._expertise));
@@ -58,6 +68,12 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
                         }
                         skillPointValue += trainingBonus;
                         skillInfo = skillInfo.concat(["-- Training Bonus --", `2 + [CR] = ${trainingBonus}`, ""]);
+
+                        let autoFilterCategory = skillAutoFilterCategories[skillDefinition.title]
+                            || (socialSkillSubGroups.includes(skillDefinition.subGroup) ? "AutoFilter_Social" : undefined);
+                        if (autoFilterCategory != undefined) {
+                            attrHandler.addUpdate(WuxDef.Get(autoFilterCategory).getVariable(WuxDef._expand), "1");
+                        }
                     }
                     attrHandler.addUpdate(skillDefinition.getVariable(WuxDef._max), skillPointValueNoCr);
                     attrHandler.addUpdate(skillDefinition.getVariable(), skillPointValue);

@@ -726,7 +726,7 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 	initializeData() {
 		let worker = this;
 		this.iterateBuildStats(function (techniqueVariableData) {
-			let technique = WuxTechs.Get(techniqueVariableData.name);
+			let technique = WuxTechs.GetByVariableName(techniqueVariableData.name);
 			if (technique == undefined) {
 				return;
 			}
@@ -1151,12 +1151,15 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		if (displayData.enhanceEffect != "") {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 				this.getVariable("TechEnhanceEffect"), displayData.getEnhanceEffects("\n"));
-			let cr = this.attrHandler.parseInt(WuxDef.GetVariable("CR"), 1);
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-				this.getVariable("TechRankUp", WuxDef._info), (technique.rank < technique.getMaxRank(cr) ? "1" : "0"));
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-				this.getVariable("TechRankDown", WuxDef._info), (technique.rank > 1 ? "1" : "0"));
+			this.setTechniqueRankButtons(technique);
 		}
+	}
+	setTechniqueRankButtons(technique) {
+		let cr = this.attrHandler.parseInt(WuxDef.GetVariable("CR"), 1);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechRankUp", WuxDef._info), (technique.rank < technique.getMaxRank(cr) ? "1" : "0"));
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechRankDown", WuxDef._info), (technique.rank > 1 ? "1" : "0"));
 	}
 	setTechniqueUseRollTemplate(technique, displayData) {
 		displayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;

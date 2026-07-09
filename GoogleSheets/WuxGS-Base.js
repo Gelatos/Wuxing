@@ -1227,17 +1227,15 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                             ));
                         }
 
-                        filterOptions.push(WuxSheetMain.Table.FlexTableGroup(WuxSheetMain.Header2(groupDef.getTitle()) +
-                            WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 1)));
-                    }
-                    let output = WuxSheetMain.MultiRowGroup(filterOptions, WuxSheetMain.Table.FlexTable, 2);
+                        let expandField = groupDef.getAttribute(WuxDef._expand);
+                        let categoryHeader = WuxSheetMain.Header2(
+                            WuxSheetMain.CollapsibleHeaderInverse(`<span>${groupDef.getTitle()}</span>`, expandField));
+                        let categoryContent = WuxSheetMain.HiddenField(expandField,
+                            WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 1));
 
-                    let expandedStylesDef = WuxDef.Get("Title_ExpandedStyleFilters");
-                    let hiddenField = expandedStylesDef.getAttribute(WuxDef._expand);
-                    let header = WuxSheetMain.Header(
-                        WuxSheetMain.CollapsibleHeader(
-                            `<span>${(expandedStylesDef.getTitle())}</span>`, hiddenField));
-                    return header + WuxSheetMain.HiddenAuxField(hiddenField, output);
+                        filterOptions.push(WuxSheetMain.Table.FlexTableGroup(categoryHeader + categoryContent));
+                    }
+                    return WuxSheetMain.MultiRowGroup(filterOptions, WuxSheetMain.Table.FlexTable, 2);
                 }
 
             return {

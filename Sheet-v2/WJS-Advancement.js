@@ -57,6 +57,22 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 				if (isPrimary) {
 					attrHandler.addUpdate(primaryAffinityVariable, eventinfo.newValue);
 					combatDetailsHandler.onUpdateAffinity(attrHandler, eventinfo.newValue);
+
+					// Open the matching Magic filter category (and Special Magic, which always
+					// opens alongside any elemental affinity) on the Actions page.
+					if (eventinfo.newValue && eventinfo.newValue !== "") {
+						let affinityMagicAutoFilterCategories = {
+							Wood: "AutoFilter_WoodMagic",
+							Fire: "AutoFilter_FireMagic",
+							Earth: "AutoFilter_EarthMagic",
+							Metal: "AutoFilter_MetalMagic",
+							Water: "AutoFilter_WaterMagic"
+						};
+						attrHandler.addUpdate(WuxDef.Get("AutoFilter_SpecialMagic").getVariable(WuxDef._expand), "1");
+						if (affinityMagicAutoFilterCategories.hasOwnProperty(eventinfo.newValue)) {
+							attrHandler.addUpdate(WuxDef.Get(affinityMagicAutoFilterCategories[eventinfo.newValue]).getVariable(WuxDef._expand), "1");
+						}
+					}
 				} else {
 					// AdvancedAffinity stores a semicolon-delimited array. When Secondary
 					// Affinity writes a new single value, preserve any non-AffinityType

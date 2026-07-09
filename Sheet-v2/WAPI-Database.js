@@ -1014,7 +1014,7 @@ class TechniqueData extends WuxDatabaseData {
         this.rank = rank;
     }
     getMaxRank(cr) {
-        let cap = 1 + cr - this.en;
+        let cap = 2 + cr - this.en;
         return Math.min(cap, 9);
     }
     getRankEnhanceValue() {

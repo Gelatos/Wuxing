@@ -89,9 +89,27 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             });
             attributeHandler.run();
         },
-        updatePrimaryAffinity = function () {
+        updatePrimaryAffinity = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
             WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+
+            // Opening the matching Magic filter category (and Special Magic, which always
+            // opens alongside any elemental affinity) on the Actions page.
+            let affinityMagicAutoFilterCategories = {
+                Wood: "AutoFilter_WoodMagic",
+                Fire: "AutoFilter_FireMagic",
+                Earth: "AutoFilter_EarthMagic",
+                Metal: "AutoFilter_MetalMagic",
+                Water: "AutoFilter_WaterMagic"
+            };
+            let affinity = eventinfo.newValue;
+            if (affinity != undefined && affinity !== "") {
+                attributeHandler.addUpdate(WuxDef.Get("AutoFilter_SpecialMagic").getVariable(WuxDef._expand), "1");
+                if (affinityMagicAutoFilterCategories.hasOwnProperty(affinity)) {
+                    attributeHandler.addUpdate(WuxDef.Get(affinityMagicAutoFilterCategories[affinity]).getVariable(WuxDef._expand), "1");
+                }
+            }
+
             attributeHandler.run();
         },
         generateCharacter = function () {
