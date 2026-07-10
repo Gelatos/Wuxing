@@ -1135,6 +1135,7 @@ button[type=roll].wuxFeatureHeaderNameButton span,
 
     font-size: 12px;
     font-weight: bold;
+    color: #000;
 }
 
 .wuxFeatureHeaderName
@@ -1310,6 +1311,7 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
     font-size: 12px;
     font-weight: bold;
     text-align: center;
+    color: #000;
 }
 
 .wuxFeatureHeaderDisplayInfoRangeSub,
@@ -1319,6 +1321,7 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
     left: 0;
     font-size: 5px;
     height: 2px;
+    color: #000;
 }
 
 .wuxFeatureHeaderDisplayInfoTargetType,
@@ -1326,6 +1329,7 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 {
     font-size: 8px;
     text-align: center;
+    color: #000;
 }
 
 .wuxFeatureHeaderDisplayInfoEnCost,
@@ -1404,6 +1408,7 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
     font-size: 12px;
     font-weight: bold;
     text-align: left;
+    color: #000;
 }
 
 .wuxFeatureHeaderDisplayInfoSubtitle,
@@ -1419,6 +1424,7 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 {
     font-size: 7px;
     font-weight: normal;
+    color: #000;
 }
 
 .wuxFeatureInfoDisplayBlock,
@@ -1481,6 +1487,7 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 .wuxFeatureHeaderInfoTraits,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoTraits
 {
+    color: #000;
     border: 1px solid #5e0505;
     background: #cacaca;
 }
@@ -1537,9 +1544,10 @@ input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActio
 {
     line-height: 14px;
     padding-left: 20px;
-    
+
     font-weight: bold;
     font-size: 10px;
+    color: #000;
 }
 
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitleHeader
@@ -1679,6 +1687,12 @@ input.wuxFeatureHeader-flag[value="Enhance"] + .wuxFeatureHeaderInfoEffectTitle
             #605c5c00 100%);
 }
 
+.wuxFeatureHeaderInfoEffectOnEnter .wuxFeatureHeaderInfoEffectTitleHeader,
+.sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectOnEnter .sheet-wuxFeatureHeaderInfoEffectTitleHeader
+{
+    color: white;
+}
+
 .wuxFeatureHeaderInfoEffectTitle,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Core,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-0,
@@ -1706,6 +1720,7 @@ input.wuxFeatureHeader-flag[value="Enhance"] + .wuxFeatureHeaderInfoEffectTitle
 .wuxFeatureHeaderInfoFlavor,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoFlavor
 {
+    color: #000;
     font-style: italic;
     background-color: #fff6f6;
 }
@@ -1761,6 +1776,7 @@ div.wuxFeatureButton:hover span
 
 .sheet-rolltemplate-technique .sheet-wuxFeatureUseBlock
 {
+    color: #000;
     border-top: 2px solid white;
     margin-top: 10px;
     padding: 5px;
