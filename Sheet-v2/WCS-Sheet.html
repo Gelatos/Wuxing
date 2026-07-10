@@ -827,16 +827,18 @@
 				</div>
 				<div class="wuxTab">
 					<div class="wuxFloatSidebarContents">
-						<div class="wuxHeader">&nbsp;Build</div>
-						<div class="wuxDistinctSection wuxSizeInverse">
-							<div class="wuxDistinctField">
-								<span class="wuxDistinctSubtitle">Pts</span>
-								<input type="hidden" class="wuxErrorField-flag" name="attr_trn_error" value="0">
-								<span class='wuxDistinctSubdata'>
-									<span name='attr_trn' value="0">0</span>
-									<span class="wuxFontSize7">/ </span>
-									<span class="wuxFontSize7" name='attr_trn_max' value="0">0</span>
-								</span>
+						<div class="wuxPointsRow">
+							<div class="wuxPointsItem">
+								<div class="wuxHeader">&nbsp;Build</div>
+								<div class="wuxDistinctSection wuxSizeInverse">
+									<div class="wuxDistinctField">
+										<input type="hidden" class="wuxErrorField-flag" name="attr_trn_error" value="0">
+										<span class="wuxDistinctSubtitle"><span name='attr_trn' value="0">0</span></span>
+										<span class='wuxDistinctSubdata'>
+											/ <span name='attr_trn_max' value="0">0</span>
+										</span>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -1039,28 +1041,30 @@
 				</div>
 				<div class="wuxTab">
 					<div class="wuxFloatSidebarContents">
-						<div class="wuxHeader">&nbsp;Adv. Pts</div>
-						<div class="wuxDistinctSection wuxSizeInverse">
-							<div class="wuxDistinctField">
-								<span class="wuxDistinctSubtitle">Pts</span>
-								<input type="hidden" class="wuxErrorField-flag" name="attr_adv_error" value="0">
-								<span class='wuxDistinctSubdata'>
-									<span name='attr_adv' value="0">0</span>
-									<span class="wuxFontSize7">/ </span>
-									<span class="wuxFontSize7" name='attr_adv_max' value="0">0</span>
-								</span>
+						<div class="wuxPointsRow">
+							<div class="wuxPointsItem">
+								<div class="wuxHeader">&nbsp;Adv. Pts</div>
+								<div class="wuxDistinctSection wuxSizeInverse">
+									<div class="wuxDistinctField">
+										<input type="hidden" class="wuxErrorField-flag" name="attr_adv_error" value="0">
+										<span class="wuxDistinctSubtitle"><span name='attr_adv' value="0">0</span></span>
+										<span class='wuxDistinctSubdata'>
+											/ <span name='attr_adv_max' value="0">0</span>
+										</span>
+									</div>
+								</div>
 							</div>
-						</div>
-						<div class="wuxHeader">&nbsp;Perk Pts</div>
-						<div class="wuxDistinctSection wuxSizeInverse">
-							<div class="wuxDistinctField">
-								<span class="wuxDistinctSubtitle">Pts</span>
-								<input type="hidden" class="wuxErrorField-flag" name="attr_perk_error" value="0">
-								<span class='wuxDistinctSubdata'>
-									<span name='attr_perk' value="0">0</span>
-									<span class="wuxFontSize7">/ </span>
-									<span class="wuxFontSize7" name='attr_perk_max' value="0">0</span>
-								</span>
+							<div class="wuxPointsItem">
+								<div class="wuxHeader">&nbsp;Perk Pts</div>
+								<div class="wuxDistinctSection wuxSizeInverse">
+									<div class="wuxDistinctField">
+										<input type="hidden" class="wuxErrorField-flag" name="attr_perk_error" value="0">
+										<span class="wuxDistinctSubtitle"><span name='attr_perk' value="0">0</span></span>
+										<span class='wuxDistinctSubdata'>
+											/ <span name='attr_perk_max' value="0">0</span>
+										</span>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -1182,7 +1186,7 @@
 								<div class="wuxFlexTableItemGroup">
 									<div class="wuxFlexTableItemGroup">
 										<div class="wuxHeader">Advancement</div>
-										<div class="wuxSlotSection"><span class="wuxSlotLabel">Adv. Pts</span><input type="hidden" class="wuxSlotStateFlag" name="" value="0"><span class="wuxSlotData"><span name="attr_adv" value="0">0</span> <span class="wuxFontSize7">/ <span name="attr_adv_max">0</span></span></span></div>
+										<div class="wuxSlotSection"><span class="wuxSlotLabel">Adv. Pts</span><input type="hidden" class="wuxSlotStateFlag" name="attr_adv_error" value="0"><span class="wuxSlotData"><span name="attr_adv" value="0">0</span> / <span name="attr_adv_max">0</span></span></div>
 										<div class="wuxHeader2"><span class="wuxTooltip">
 												<span class="wuxTooltipText">
 													Style Points
@@ -1231,7 +1235,7 @@
 					<div class="wuxSectionBlock wuxLayoutItem">
 						<div class="wuxTabContent">
 							<div class="wuxHeader">Perks</div>
-							<div class="wuxSlotSection"><span class="wuxSlotLabel">Perk Pts</span><input type="hidden" class="wuxSlotStateFlag" name="" value="0"><span class="wuxSlotData"><span name="attr_perk" value="0">0</span> <span class="wuxFontSize7">/ <span name="attr_perk_max">0</span></span></span></div>
+							<div class="wuxSlotSection"><span class="wuxSlotLabel">Perk Pts</span><input type="hidden" class="wuxSlotStateFlag" name="attr_perk_error" value="0"><span class="wuxSlotData"><span name="attr_perk" value="0">0</span> / <span name="attr_perk_max">0</span></span></div>
 							<div class="wuxHeader2"><span class="wuxTooltip">
 									<span class="wuxTooltipText">
 										Job Points
@@ -1789,16 +1793,18 @@
 				</div>
 				<div class="wuxTab">
 					<div class="wuxFloatSidebarContents">
-						<div class="wuxHeader">&nbsp;Build</div>
-						<div class="wuxDistinctSection wuxSizeInverse">
-							<div class="wuxDistinctField">
-								<span class="wuxDistinctSubtitle">Pts</span>
-								<input type="hidden" class="wuxErrorField-flag" name="attr_job_error" value="0">
-								<span class='wuxDistinctSubdata'>
-									<span name='attr_job' value="0">0</span>
-									<span class="wuxFontSize7">/ </span>
-									<span class="wuxFontSize7" name='attr_job_max' value="0">0</span>
-								</span>
+						<div class="wuxPointsRow">
+							<div class="wuxPointsItem">
+								<div class="wuxHeader">&nbsp;Build</div>
+								<div class="wuxDistinctSection wuxSizeInverse">
+									<div class="wuxDistinctField">
+										<input type="hidden" class="wuxErrorField-flag" name="attr_job_error" value="0">
+										<span class="wuxDistinctSubtitle"><span name='attr_job' value="0">0</span></span>
+										<span class='wuxDistinctSubdata'>
+											/ <span name='attr_job_max' value="0">0</span>
+										</span>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -2975,28 +2981,30 @@
 				</div>
 				<div class="wuxTab">
 					<div class="wuxFloatSidebarContents">
-						<div class="wuxHeader">&nbsp;Attr. Pts</div>
-						<div class="wuxDistinctSection wuxSizeInverse">
-							<div class="wuxDistinctField">
-								<span class="wuxDistinctSubtitle">Pts</span>
-								<input type="hidden" class="wuxErrorField-flag" name="attr_atr_error" value="0">
-								<span class='wuxDistinctSubdata'>
-									<span name='attr_atr' value="0">0</span>
-									<span class="wuxFontSize7">/ </span>
-									<span class="wuxFontSize7" name='attr_atr_max' value="0">0</span>
-								</span>
+						<div class="wuxPointsRow">
+							<div class="wuxPointsItem">
+								<div class="wuxHeader">&nbsp;Attr. Pts</div>
+								<div class="wuxDistinctSection wuxSizeInverse">
+									<div class="wuxDistinctField">
+										<input type="hidden" class="wuxErrorField-flag" name="attr_atr_error" value="0">
+										<span class="wuxDistinctSubtitle"><span name='attr_atr' value="0">0</span></span>
+										<span class='wuxDistinctSubdata'>
+											/ <span name='attr_atr_max' value="0">0</span>
+										</span>
+									</div>
+								</div>
 							</div>
-						</div>
-						<div class="wuxHeader">&nbsp;Skill Pts</div>
-						<div class="wuxDistinctSection wuxSizeInverse">
-							<div class="wuxDistinctField">
-								<span class="wuxDistinctSubtitle">Pts</span>
-								<input type="hidden" class="wuxErrorField-flag" name="attr_skl_error" value="0">
-								<span class='wuxDistinctSubdata'>
-									<span name='attr_skl' value="0">0</span>
-									<span class="wuxFontSize7">/ </span>
-									<span class="wuxFontSize7" name='attr_skl_max' value="0">0</span>
-								</span>
+							<div class="wuxPointsItem">
+								<div class="wuxHeader">&nbsp;Skill Pts</div>
+								<div class="wuxDistinctSection wuxSizeInverse">
+									<div class="wuxDistinctField">
+										<input type="hidden" class="wuxErrorField-flag" name="attr_skl_error" value="0">
+										<span class="wuxDistinctSubtitle"><span name='attr_skl' value="0">0</span></span>
+										<span class='wuxDistinctSubdata'>
+											/ <span name='attr_skl_max' value="0">0</span>
+										</span>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -6597,16 +6605,18 @@
 				</div>
 				<div class="wuxTab">
 					<div class="wuxFloatSidebarContents">
-						<div class="wuxHeader">&nbsp;Build</div>
-						<div class="wuxDistinctSection wuxSizeInverse">
-							<div class="wuxDistinctField">
-								<span class="wuxDistinctSubtitle">Pts</span>
-								<input type="hidden" class="wuxErrorField-flag" name="attr_knw_error" value="0">
-								<span class='wuxDistinctSubdata'>
-									<span name='attr_knw' value="0">0</span>
-									<span class="wuxFontSize7">/ </span>
-									<span class="wuxFontSize7" name='attr_knw_max' value="0">0</span>
-								</span>
+						<div class="wuxPointsRow">
+							<div class="wuxPointsItem">
+								<div class="wuxHeader">&nbsp;Build</div>
+								<div class="wuxDistinctSection wuxSizeInverse">
+									<div class="wuxDistinctField">
+										<input type="hidden" class="wuxErrorField-flag" name="attr_knw_error" value="0">
+										<span class="wuxDistinctSubtitle"><span name='attr_knw' value="0">0</span></span>
+										<span class='wuxDistinctSubdata'>
+											/ <span name='attr_knw_max' value="0">0</span>
+										</span>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -7806,16 +7816,18 @@
 				</div>
 				<div class="wuxTab">
 					<div class="wuxFloatSidebarContents">
-						<div class="wuxHeader">&nbsp;Build</div>
-						<div class="wuxDistinctSection wuxSizeInverse">
-							<div class="wuxDistinctField">
-								<span class="wuxDistinctSubtitle">Pts</span>
-								<input type="hidden" class="wuxErrorField-flag" name="attr_tch_error" value="0">
-								<span class='wuxDistinctSubdata'>
-									<span name='attr_tch' value="0">0</span>
-									<span class="wuxFontSize7">/ </span>
-									<span class="wuxFontSize7" name='attr_tch_max' value="0">0</span>
-								</span>
+						<div class="wuxPointsRow">
+							<div class="wuxPointsItem">
+								<div class="wuxHeader">&nbsp;Build</div>
+								<div class="wuxDistinctSection wuxSizeInverse">
+									<div class="wuxDistinctField">
+										<input type="hidden" class="wuxErrorField-flag" name="attr_tch_error" value="0">
+										<span class="wuxDistinctSubtitle"><span name='attr_tch' value="0">0</span></span>
+										<span class='wuxDistinctSubdata'>
+											/ <span name='attr_tch_max' value="0">0</span>
+										</span>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -11938,7 +11950,7 @@
 										<input type="number" class="wuxInput wuxMinWidth100" name="attr_jin" />
 									</div>
 									<div class="wuxRow">&nbsp;</div>
-									<div class="wuxSlotSection"><span class="wuxSlotLabel">Slots</span><input type="hidden" class="wuxSlotStateFlag" name="attr_gear-equipmentslotstate" value="0"><span class="wuxSlotData"><span name="attr_equipment" value="0">0</span> <span class="wuxFontSize7">/ <span name="attr_equipmentslotcount">0</span></span></span></div>
+									<div class="wuxSlotSection"><span class="wuxSlotLabel">Slots</span><input type="hidden" class="wuxSlotStateFlag" name="attr_gear-equipmentslotstate" value="0"><span class="wuxSlotData"><span name="attr_equipment" value="0">0</span> / <span name="attr_equipmentslotcount">0</span></span></div>
 									<div class="wuxHeader2"><span class="wuxTooltip">
 											<span class="wuxTooltipText">
 												Equipped Item Traits
@@ -12131,7 +12143,7 @@
 						<div class="wuxTabContent">
 							<div class="wuxFlexTable wuxFlexTableReverse">
 								<div class="wuxFlexTableItemGroup wuxMinWidth150">
-									<div class="wuxSlotSection"><span class="wuxSlotLabel">Slots</span><input type="hidden" class="wuxSlotStateFlag" name="attr_gear-consumableslotstate" value="0"><span class="wuxSlotData"><span name="attr_gear-consumableslot" value="0">0</span> <span class="wuxFontSize7">/ <span name="attr_consumableslotcount">0</span></span></span></div>
+									<div class="wuxSlotSection"><span class="wuxSlotLabel">Slots</span><input type="hidden" class="wuxSlotStateFlag" name="attr_gear-consumableslotstate" value="0"><span class="wuxSlotData"><span name="attr_gear-consumableslot" value="0">0</span> / <span name="attr_consumableslotcount">0</span></span></div>
 									<div class="wuxHeader">Equipped Instant Consumables</div>
 									<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-consumableslot" value="0">
 									<div class="wuxHiddenField">
@@ -12870,16 +12882,18 @@
 							</div>
 						</div>
 						<div class="wuxPageDisplay-StylesData">
-							<div class="wuxHeader">&nbsp;Build</div>
-							<div class="wuxDistinctSection wuxSizeInverse">
-								<div class="wuxDistinctField">
-									<span class="wuxDistinctSubtitle">Pts</span>
-									<input type="hidden" class="wuxErrorField-flag" name="attr_tch_error" value="0">
-									<span class='wuxDistinctSubdata'>
-										<span name='attr_tch' value="0">0</span>
-										<span class="wuxFontSize7">/ </span>
-										<span class="wuxFontSize7" name='attr_tch_max' value="0">0</span>
-									</span>
+							<div class="wuxPointsRow">
+								<div class="wuxPointsItem">
+									<div class="wuxHeader">&nbsp;Build</div>
+									<div class="wuxDistinctSection wuxSizeInverse">
+										<div class="wuxDistinctField">
+											<input type="hidden" class="wuxErrorField-flag" name="attr_tch_error" value="0">
+											<span class="wuxDistinctSubtitle"><span name='attr_tch' value="0">0</span></span>
+											<span class='wuxDistinctSubdata'>
+												/ <span name='attr_tch_max' value="0">0</span>
+											</span>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div class="wuxInteractiveBlock wuxSizeTiny">

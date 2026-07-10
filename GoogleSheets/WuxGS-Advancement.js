@@ -190,7 +190,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
 
             var
                 printTraining = function () {
-                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Training")));
+                    return WuxSheetSidebar.Build("", `<div class="wuxPointsRow">${buildTechPointsSection(WuxDef.GetAttribute("Training"))}</div>`);
                 },
 
                 buildTechPointsSection = function (fieldName) {
@@ -311,23 +311,27 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
             var
                 printAdvancement = function () {
-                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Advancement"), "Adv. Pts")
-                        + buildTechPointsSection(WuxDef.GetAttribute("Perk"), "Perk Pts")
-                    );
+                    let contents = `<div class="wuxPointsRow">
+                        ${buildTechPointsSection(WuxDef.GetAttribute("Advancement"), "Adv. Pts")}
+                        ${buildTechPointsSection(WuxDef.GetAttribute("Perk"), "Perk Pts")}
+                    </div>`;
+                    return WuxSheetSidebar.Build("", contents);
                 },
 
                 printJobs = function () {
-                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Job")));
+                    return WuxSheetSidebar.Build("", `<div class="wuxPointsRow">${buildTechPointsSection(WuxDef.GetAttribute("Job"))}</div>`);
                 },
 
                 printAttributes = function () {
-                    let contents = `${buildTechPointsSection(WuxDef.GetAttribute("Attribute"), "Attr. Pts")}
-                    ${buildTechPointsSection(WuxDef.GetAttribute("Skill"), "Skill Pts")}`;
+                    let contents = `<div class="wuxPointsRow">
+                        ${buildTechPointsSection(WuxDef.GetAttribute("Attribute"), "Attr. Pts")}
+                        ${buildTechPointsSection(WuxDef.GetAttribute("Skill"), "Skill Pts")}
+                    </div>`;
                     return WuxSheetSidebar.Build("", contents);
                 },
                 
                 printKnowledge = function () {
-                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Knowledge")));
+                    return WuxSheetSidebar.Build("", `<div class="wuxPointsRow">${buildTechPointsSection(WuxDef.GetAttribute("Knowledge"))}</div>`);
                 },
 
                 buildTechPointsSection = function (fieldName, headerText) {
@@ -425,7 +429,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let titleDefinition = WuxDef.Get("Title_Advancement");
                             contents += WuxSheetMain.Header(titleDefinition.getTitle());
 
-                            contents += WuxSheetMain.SlotDisplay("Adv. Pts", "", WuxDef.GetAttribute("Advancement"), WuxDef.GetAttribute("Advancement", WuxDef._max));
+                            contents += WuxSheetMain.SlotDisplay("Adv. Pts", WuxDef.GetAttribute("Advancement", WuxDef._error), WuxDef.GetAttribute("Advancement"), WuxDef.GetAttribute("Advancement", WuxDef._max));
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementTechnique"), WuxDef.GetAttribute("AdvancementTechnique"), `cost: 2 advancement points`);
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("TrainingKnowledge"), WuxDef.GetAttribute("TrainingKnowledge"), `cost: 1 advancement point`);
 
@@ -437,7 +441,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let perkDef = WuxDef.Get("Perk");
                             let perkPageDef = WuxDef.Get("Page_Perks");
                             contents += WuxSheetMain.Header(`${perkPageDef.getTitle()}`);
-                            contents += WuxSheetMain.SlotDisplay("Perk Pts", "", perkDef.getAttribute(), perkDef.getAttribute(WuxDef._max));
+                            contents += WuxSheetMain.SlotDisplay("Perk Pts", perkDef.getAttribute(WuxDef._error), perkDef.getAttribute(), perkDef.getAttribute(WuxDef._max));
                             let advJobDef = WuxDef.Get("AdvancementJob");
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementJob"), advJobDef.getAttribute(), `cost: 2 perk points`);
                             contents += WuxSheetMain.MultiRow(`<div class="wuxDescription">${advJobDef.getDescription()}</div>`);
@@ -1107,7 +1111,7 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
 
             var
                 print = function () {
-                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Technique")));
+                    return WuxSheetSidebar.Build("", `<div class="wuxPointsRow">${buildTechPointsSection(WuxDef.GetAttribute("Technique"))}</div>`);
                 },
 
                 buildTechPointsSection = function (fieldName, header) {
@@ -1373,7 +1377,7 @@ var DisplayAdvancedSheet = DisplayAdvancedSheet || (function () {
 
             var
                 print = function () {
-                    return WuxSheetSidebar.Build("", buildTechPointsSection(WuxDef.GetAttribute("Technique")));
+                    return WuxSheetSidebar.Build("", `<div class="wuxPointsRow">${buildTechPointsSection(WuxDef.GetAttribute("Technique"))}</div>`);
                 },
 
                 buildTechPointsSection = function (fieldName, header) {

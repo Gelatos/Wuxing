@@ -4,8 +4,8 @@
 
 .wuxFocusButton {
     background: linear-gradient(to bottom,
-    #ff8a5d 0%,
-    #ff5f23 80%);
+    #fda686 0%,
+    #e87345 80%);
 }
 .wuxFocusButton:hover {
     background: linear-gradient(to bottom,

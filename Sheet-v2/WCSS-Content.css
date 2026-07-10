@@ -162,6 +162,25 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
     /* margin-bottom: 10px; */
 }
 
+.wuxPointsRow
+{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.wuxPointsRow .wuxPointsItem
+{
+    flex: 0 1 110px;
+    min-width: 0;
+}
+
+.wuxPointsRow .wuxDistinctSection
+{
+    width: 100%;
+    max-width: 110px;
+}
+
 .wuxDistinctSection .wuxDistinctField
 {
     position: relative;
@@ -211,8 +230,8 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 
 .wuxDistinctSection .wuxDistinctSubtitle
 {
-    font-size: 8px;
-    line-height: 16px;
+    font-size: 12px;
+    line-height: 14.5px;
     text-align: right;
 
     background: linear-gradient(to right, #86530f, #815822, #6e420a);
@@ -322,13 +341,13 @@ input[type=hidden].wuxErrorField-flag[value="1"] + input.wuxFlexTableItemData
 }
 
 input[type=hidden].wuxErrorField-flag[value="-1"] + .wuxDistinctData,
-input[type=hidden].wuxErrorField-flag[value="-1"] + .wuxDistinctSubdata
+input[type=hidden].wuxErrorField-flag[value="-1"] + .wuxDistinctSubtitle
 {
     background: red;
 }
 
 input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctData,
-input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctSubdata
+input[type=hidden].wuxErrorField-flag[value="1"] + .wuxDistinctSubtitle
 {
     background: green;
 }

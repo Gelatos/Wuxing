@@ -915,7 +915,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 },
 
                 buildTechPointsSection = function (fieldName, header) {
-                    return `${WuxSheetSidebar.BuildPointsSection(fieldName, header)}
+                    return `<div class="wuxPointsRow">${WuxSheetSidebar.BuildPointsSection(fieldName, header)}</div>
                     ${WuxSheetSidebar.BuildTechDebugSection()}`;
                 }
 

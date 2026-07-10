@@ -516,7 +516,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         }()),
 
         slotDisplay = function (label, stateAttrName, currentAttrName, maxAttrName) {
-            return `<div class="wuxSlotSection"><span class="wuxSlotLabel">${label}</span><input type="hidden" class="wuxSlotStateFlag" name="${stateAttrName}" value="0"><span class="wuxSlotData"><span name="${currentAttrName}" value="0">0</span> <span class="wuxFontSize7">/ <span name="${maxAttrName}">0</span></span></span></div>`;
+            return `<div class="wuxSlotSection"><span class="wuxSlotLabel">${label}</span><input type="hidden" class="wuxSlotStateFlag" name="${stateAttrName}" value="0"><span class="wuxSlotData"><span name="${currentAttrName}" value="0">0</span> / <span name="${maxAttrName}">0</span></span></div>`;
         },
 
         distinctSection = distinctSection || (function () {
@@ -1047,8 +1047,8 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
 
         attributeSectionWithError = function (name, contents, errorFieldName) {
             return `<div class="wuxDistinctSection wuxSizeInverse">\n<div class="wuxDistinctField">
-            <span class="wuxDistinctSubtitle">${name}</span>
             <input type="hidden" class="wuxErrorField-flag" name="${errorFieldName}" value="0">
+            <span class="wuxDistinctSubtitle">${name}</span>
             <span class='wuxDistinctSubdata'>\n${contents}\n</span>
             </div>\n</div>`;
         },
@@ -1065,9 +1065,9 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             if (header == undefined) {
                 header = `Build`;
             }
-            let name = `Pts`;
-            let output = `<span name='${attrName}' value="0">0</span>\n<span class="wuxFontSize7">/ </span>\n<span class="wuxFontSize7" name='${attrName}_max' value="0">0</span>`;
-            return `<div class="wuxHeader">&nbsp;${header}</div>\n${attributeSectionWithError(name, output, `${attrName}_error`)}`;
+            let currentValue = `<span name='${attrName}' value="0">0</span>`;
+            let maxValue = `/ <span name='${attrName}_max' value="0">0</span>`;
+            return `<div class="wuxPointsItem"><div class="wuxHeader">&nbsp;${header}</div>\n${attributeSectionWithError(currentValue, maxValue, `${attrName}_error`)}</div>`;
         },
 
         buildChatSection = function () {

@@ -810,11 +810,13 @@ button.wuxRepeatingTechActionButton[type=roll]::before {
     border-radius: 0 5px 5px 0;
 }
 
-input.wuxSlotStateFlag[value="full"] + .wuxSlotData {
+input.wuxSlotStateFlag[value="full"] + .wuxSlotData,
+input.wuxSlotStateFlag[value="1"] + .wuxSlotData {
     background-color: #2a7a2a;
 }
 
-input.wuxSlotStateFlag[value="over"] + .wuxSlotData {
+input.wuxSlotStateFlag[value="over"] + .wuxSlotData,
+input.wuxSlotStateFlag[value="-1"] + .wuxSlotData {
     background-color: #8b1a1a;
 }
 
@@ -1165,7 +1167,6 @@ button[type=roll].wuxFeatureHeaderNameButton span,
 
 button[type=roll].wuxFeatureHeaderNameButton:hover
 {
-    text-shadow: #001e00;
     background: rgba(0,0,0,0.2);
     box-shadow: none;
 }
