@@ -9437,7 +9437,7 @@ class TechniqueDisplayData {
         this.actionsDesc = [];
         this.actionType = technique.action;
         
-        let actionTypeDef = WuxDef.Get(`FilterType_${technique.action}Action`);
+        let actionTypeDef = WuxDef.Get(`TechFilterType_${technique.action}Action`);
         this.actionsDesc.push(`[${actionTypeDef.getTitle()}]`);
         this.actionsDesc = this.actionsDesc.concat(actionTypeDef.descriptions);
         
