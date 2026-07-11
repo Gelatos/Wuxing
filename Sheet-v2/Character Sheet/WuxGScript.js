@@ -10758,9 +10758,9 @@ var WuxDefinition = WuxDefinition || (function () {
                 WuxSheetMain.Desc(textContents);
         },
 
-        buildTextInput = function (definition, fieldName) {
+        buildTextInput = function (definition, fieldName, className) {
             return buildHeader(definition) + "\n" +
-                WuxSheetMain.Input("text", fieldName);
+                WuxSheetMain.CustomInput("text", fieldName, className);
         },
 
         buildTextarea = function (definition, fieldName, className, placeholder) {
@@ -11987,6 +11987,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
                 buildGearItems = function () {
                     let contents = WuxSheetMain.MultiRowGroup([storedGear(), storedFoods()], WuxSheetMain.Table.FlexTable, 2);
+                    contents += cookingEvents();
                     contents = WuxSheetMain.TabBlock(contents);
                     let definition = WuxDef.Get("Page_GearItems");
                     return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
@@ -12114,6 +12115,56 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     }
                     return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddConsumable"))}
                         ${WuxSheetMain.MultiRowGroup(foodItems, WuxSheetMain.Table.FlexTable, 3)}`;
+                },
+
+                cookingEvents = function () {
+                    let cookingEventDef = WuxDef.Get("Gear_CookingEvent");
+                    let activeRecipeDef = WuxDef.Get("Gear_ActiveRecipe");
+                    let activeIngredientListDef = WuxDef.Get("Gear_ActiveIngredientList");
+
+                    let contents = `${WuxSheetMain.Header(cookingEventDef.getTitle())}
+                        ${WuxSheetMain.Row(WuxSheetMain.DescField(activeRecipeDef.getAttribute()))}
+                        ${storedCooking()}
+                        ${WuxSheetMain.Header(activeIngredientListDef.getTitle())}
+                        ${WuxSheetMain.Row(WuxSheetMain.DescField(activeIngredientListDef.getAttribute()))}`;
+
+                    return WuxSheetMain.HiddenField(activeRecipeDef.getAttribute(),
+                        WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2"));
+                },
+
+                storedCooking = function () {
+                    let repeatingDef = WuxDef.Get("RepeatingCooking");
+                    let removeDef = WuxDef.Get("Gear_Remove");
+                    let inspectDef = WuxDef.Get("Gear_Inspect");
+                    let deleteDef = WuxDef.Get("Gear_Delete");
+
+                    let rowContents = WuxSheetMain.MultiRow(`
+                        <div class="wuxEquipableRow">
+                            <input type="hidden" name="${getGearAttribute("ItemName")}">
+                            <div class="wuxEquipableCountCol">
+                                <span class="wuxEquipableCount" name="${getGearAttribute("ItemCount")}"></span>
+                            </div>
+                            <div class="wuxEquipableBody">
+                                <div class="wuxEquipableName">
+                                    <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
+                                    <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
+                                </div>
+                                <div class="wuxEquipableButtonRow">
+                                    ${WuxSheetMain.Button(removeDef.getAttribute(), `<span style="color:#e08a3c;">&#8854;</span> ${removeDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                                    ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                                    ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                                </div>
+                            </div>
+                        </div>`);
+
+                    let repeaterContent = buildRepeater(repeatingDef.getVariable(),
+                        `<input type="hidden" name="${getGearAttribute("ItemMainGroup")}" value="0">` +
+                        WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents));
+
+                    return `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                        <div>
+                            ${repeaterContent}
+                        </div>`;
                 },
 
                 buildEquipment = function () {
@@ -14436,13 +14487,34 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         buildAdvancementTab = function () {
-                            let leftColumn = WuxSheetMain.Table.FlexTableGroup(buildLevelStats() + buildTrainingConversion());
-                            let rightColumn = WuxSheetMain.Table.FlexTableGroup(buildAdvancementStats());
-                            let contents = WuxSheetMain.MultiRowGroup([leftColumn, rightColumn], WuxSheetMain.Table.FlexTable, 2);
+                            let fullContents = buildFullAdvancementContents();
+                            let builderContents = buildBuilderAdvancementContents();
+                            let contents = `${WuxSheet.PageSetPageDisplayInput()}
+                                ${WuxSheet.PageDisplay("Training", fullContents)}
+                                ${WuxSheet.PageDisplay("Advancement", fullContents)}
+                                ${WuxSheet.PageDisplay("Core", fullContents)}
+                                ${WuxSheet.PageDisplay("Builder", builderContents)}`;
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Advancement");
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                        },
+
+                        buildFullAdvancementContents = function () {
+                            let leftColumn = WuxSheetMain.Table.FlexTableGroup(buildLevelStats() + buildTrainingConversion());
+                            let rightColumn = WuxSheetMain.Table.FlexTableGroup(buildAdvancementPointsOnly() + buildAdvancementStatsContent());
+                            return WuxSheetMain.MultiRowGroup([leftColumn, rightColumn], WuxSheetMain.Table.FlexTable, 2);
+                        },
+
+                        buildBuilderAdvancementContents = function () {
+                            let contents = buildAdvancementPointsOnly();
+                            contents += buildBonusTrainingInput();
+                            contents += buildAdvancementStatsContent();
+                            return WuxSheetMain.Table.FlexTableGroup(contents);
+                        },
+
+                        buildBonusTrainingInput = function () {
+                            return WuxDefinition.BuildTextInput(WuxDef.Get("BonusTraining"), WuxDef.GetAttribute("BonusTraining"), "wuxMaxWidth100");
                         },
 
                         buildLevelStats = function () {
@@ -14480,24 +14552,28 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                             `To Adv. Point: ${ppDefinition.formula.getValue()}`)}
                                         ${WuxSheetMain.MultiRow(WuxSheetMain.Button(conversionTitleDef.getAttribute(),
                                             `Convert To AP`))}`),
-                                    WuxSheetMain.Table.FlexTableGroup(
-                                        WuxDefinition.BuildTextInput(WuxDef.Get("BonusTraining"), WuxDef.GetAttribute("BonusTraining")))
+                                    WuxSheetMain.Table.FlexTableGroup(buildBonusTrainingInput())
                                 ],
                                 WuxSheetMain.Table.FlexTable, 2);
 
                             return contents;
                         },
 
-                        buildAdvancementStats = function () {
+                        buildAdvancementPointsOnly = function () {
                             let contents = "";
                             let titleDefinition = WuxDef.Get("Title_Advancement");
                             contents += WuxSheetMain.Header(titleDefinition.getTitle());
 
                             contents += WuxSheetMain.SlotDisplay("Adv. Pts", WuxDef.GetAttribute("Advancement", WuxDef._error), WuxDef.GetAttribute("Advancement"), WuxDef.GetAttribute("Advancement", WuxDef._max));
-                            contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementTechnique"), WuxDef.GetAttribute("AdvancementTechnique"), `cost: 2 advancement points`);
+
+                            return contents;
+                        },
+
+                        buildAdvancementStatsContent = function () {
+                            let contents = WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementTechnique"), WuxDef.GetAttribute("AdvancementTechnique"), `cost: 2 advancement points`);
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("TrainingKnowledge"), WuxDef.GetAttribute("TrainingKnowledge"), `cost: 1 advancement point`);
 
-                            return WuxSheetMain.Table.FlexTableGroup(contents);
+                            return contents;
                         },
                         
                         buildPerks = function () {

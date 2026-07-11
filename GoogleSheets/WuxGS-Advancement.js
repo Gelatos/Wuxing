@@ -372,13 +372,34 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         buildAdvancementTab = function () {
-                            let leftColumn = WuxSheetMain.Table.FlexTableGroup(buildLevelStats() + buildTrainingConversion());
-                            let rightColumn = WuxSheetMain.Table.FlexTableGroup(buildAdvancementStats());
-                            let contents = WuxSheetMain.MultiRowGroup([leftColumn, rightColumn], WuxSheetMain.Table.FlexTable, 2);
+                            let fullContents = buildFullAdvancementContents();
+                            let builderContents = buildBuilderAdvancementContents();
+                            let contents = `${WuxSheet.PageSetPageDisplayInput()}
+                                ${WuxSheet.PageDisplay("Training", fullContents)}
+                                ${WuxSheet.PageDisplay("Advancement", fullContents)}
+                                ${WuxSheet.PageDisplay("Core", fullContents)}
+                                ${WuxSheet.PageDisplay("Builder", builderContents)}`;
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Advancement");
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                        },
+
+                        buildFullAdvancementContents = function () {
+                            let leftColumn = WuxSheetMain.Table.FlexTableGroup(buildLevelStats() + buildTrainingConversion());
+                            let rightColumn = WuxSheetMain.Table.FlexTableGroup(buildAdvancementPointsOnly() + buildAdvancementStatsContent());
+                            return WuxSheetMain.MultiRowGroup([leftColumn, rightColumn], WuxSheetMain.Table.FlexTable, 2);
+                        },
+
+                        buildBuilderAdvancementContents = function () {
+                            let contents = buildAdvancementPointsOnly();
+                            contents += buildBonusTrainingInput();
+                            contents += buildAdvancementStatsContent();
+                            return WuxSheetMain.Table.FlexTableGroup(contents);
+                        },
+
+                        buildBonusTrainingInput = function () {
+                            return WuxDefinition.BuildTextInput(WuxDef.Get("BonusTraining"), WuxDef.GetAttribute("BonusTraining"), "wuxMaxWidth100");
                         },
 
                         buildLevelStats = function () {
@@ -416,24 +437,28 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                             `To Adv. Point: ${ppDefinition.formula.getValue()}`)}
                                         ${WuxSheetMain.MultiRow(WuxSheetMain.Button(conversionTitleDef.getAttribute(),
                                             `Convert To AP`))}`),
-                                    WuxSheetMain.Table.FlexTableGroup(
-                                        WuxDefinition.BuildTextInput(WuxDef.Get("BonusTraining"), WuxDef.GetAttribute("BonusTraining")))
+                                    WuxSheetMain.Table.FlexTableGroup(buildBonusTrainingInput())
                                 ],
                                 WuxSheetMain.Table.FlexTable, 2);
 
                             return contents;
                         },
 
-                        buildAdvancementStats = function () {
+                        buildAdvancementPointsOnly = function () {
                             let contents = "";
                             let titleDefinition = WuxDef.Get("Title_Advancement");
                             contents += WuxSheetMain.Header(titleDefinition.getTitle());
 
                             contents += WuxSheetMain.SlotDisplay("Adv. Pts", WuxDef.GetAttribute("Advancement", WuxDef._error), WuxDef.GetAttribute("Advancement"), WuxDef.GetAttribute("Advancement", WuxDef._max));
-                            contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementTechnique"), WuxDef.GetAttribute("AdvancementTechnique"), `cost: 2 advancement points`);
+
+                            return contents;
+                        },
+
+                        buildAdvancementStatsContent = function () {
+                            let contents = WuxDefinition.BuildNumberLabelInput(WuxDef.Get("AdvancementTechnique"), WuxDef.GetAttribute("AdvancementTechnique"), `cost: 2 advancement points`);
                             contents += WuxDefinition.BuildNumberLabelInput(WuxDef.Get("TrainingKnowledge"), WuxDef.GetAttribute("TrainingKnowledge"), `cost: 1 advancement point`);
 
-                            return WuxSheetMain.Table.FlexTableGroup(contents);
+                            return contents;
                         },
                         
                         buildPerks = function () {

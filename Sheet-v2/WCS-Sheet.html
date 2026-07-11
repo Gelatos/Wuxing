@@ -130,7 +130,7 @@
 																<span class="wuxDescription">The name of the character sheet. This is the name of the character as written in the character's Journal entry.</span>
 															</div>
 														</span></div>
-													<input type="text" class="wuxInput" name="attr_charsheetname" />
+													<input type="text" class="undefined" name="attr_charsheetname" />
 												</div>
 												<div class="wuxPageDisplay-CharacterData">
 													<div class="wuxHeader2"><span class="wuxTooltip">
@@ -143,7 +143,7 @@
 																<span class="wuxDescription">The name of the character sheet. This is the name of the character as written in the character's Journal entry.</span>
 															</div>
 														</span></div>
-													<input type="text" class="wuxInput" name="attr_sheetname" />
+													<input type="text" class="undefined" name="attr_sheetname" />
 												</div>
 											</div>
 											<div class="wuxFlexTableItemGroup wuxFlexTableItemGroup2">
@@ -157,7 +157,7 @@
 															<span class="wuxDescription">A character's full name. This is for self referential use and is not used anywhere except on this character sheet page.</span>
 														</div>
 													</span></div>
-												<input type="text" class="wuxInput" name="attr_full_name" />
+												<input type="text" class="undefined" name="attr_full_name" />
 											</div>
 										</div>
 										<div class="wuxFlexTable">
@@ -245,7 +245,7 @@
 														<span class="wuxDescription">The currency of the modern age. Originating in Minerva, this is paper money accepted throughout the continent of Wuxing due to Minerva's trade agreements throughout the land.</span>
 													</div>
 												</span></div>
-											<input type="text" class="wuxInput" name="attr_jin" />
+											<input type="text" class="undefined" name="attr_jin" />
 										</div>
 									</div>
 									<div class="wuxFlexTableItemGroup">
@@ -259,7 +259,7 @@
 													<span class="wuxDescription"></span><span class="wuxDescription">This is a title given to the character to briefly describe them. Shown when an introduction call is made.</span>
 												</div>
 											</span></div>
-										<input type="text" class="wuxInput" name="attr_ttl" />
+										<input type="text" class="undefined" name="attr_ttl" />
 										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroup">
 												<div class="wuxHeader2"><span class="wuxTooltip">
@@ -272,7 +272,7 @@
 															<span class="wuxDescription">This represents how old the character is in years.</span>
 														</div>
 													</span></div>
-												<input type="text" class="wuxInput" name="attr_age" />
+												<input type="text" class="undefined" name="attr_age" />
 											</div>
 											<div class="wuxFlexTableItemGroup">
 												<div class="wuxHeader2"><span class="wuxTooltip">
@@ -439,7 +439,7 @@
 													<span class="wuxDescription"></span>
 												</div>
 											</span></div>
-										<input type="text" class="wuxInput" name="attr_note-genname" />
+										<input type="text" class="undefined" name="attr_note-genname" />
 										<div class="wuxHeader2"><span class="wuxTooltip">
 												<span class="wuxTooltipText">
 													Full Name
@@ -450,7 +450,7 @@
 													<span class="wuxDescription"></span>
 												</div>
 											</span></div>
-										<input type="text" class="wuxInput" name="attr_note-genfullname" />
+										<input type="text" class="undefined" name="attr_note-genfullname" />
 										<div class="wuxHeader2"><span class="wuxTooltip">
 												<span class="wuxTooltipText">
 													Gender
@@ -461,7 +461,7 @@
 													<span class="wuxDescription"></span>
 												</div>
 											</span></div>
-										<input type="text" class="wuxInput" name="attr_note-gengender" />
+										<input type="text" class="undefined" name="attr_note-gengender" />
 										<div class="wuxHeader2"><span class="wuxTooltip">
 												<span class="wuxTooltipText">
 													Home Region
@@ -494,7 +494,7 @@
 													<span class="wuxDescription"></span>
 												</div>
 											</span></div>
-										<input type="text" class="wuxInput" name="attr_note-genrace" />
+										<input type="text" class="undefined" name="attr_note-genrace" />
 									</div>
 									<div class="wuxFlexTableItemGroup">
 										<div class="wuxHeader2"><span class="wuxTooltip">
@@ -507,7 +507,7 @@
 													<span class="wuxDescription"></span>
 												</div>
 											</span></div>
-										<input type="text" class="wuxInput" name="attr_note-genpersonality" />
+										<input type="text" class="undefined" name="attr_note-genpersonality" />
 										<div class="wuxHeader2"><span class="wuxTooltip">
 												<span class="wuxTooltipText">
 													Motivation
@@ -518,7 +518,7 @@
 													<span class="wuxDescription"></span>
 												</div>
 											</span></div>
-										<input type="text" class="wuxInput" name="attr_note-genmotivation" />
+										<input type="text" class="undefined" name="attr_note-genmotivation" />
 										<div class="wuxMultiRow">
 											<div class="wuxButton">
 												<input type="checkbox" name="attr_note-generatecharacter">
@@ -1086,104 +1086,105 @@
 				<div class="wuxTab">
 					<div class="wuxSectionBlock wuxLayoutItem">
 						<div class="wuxTabContent">
-							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader">Character Level</div>
-									<div class="wuxFlexTable">
-										<div class="wuxFlexTableItemGroup">
-											<div class="wuxHeader2"><span class="wuxTooltip">
-													<span class="wuxTooltipText">
-														Experience
-													</span>
-													<div class="wuxTooltipContent">
-														<div class="wuxHeader2">Experience</div>
+							<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pgs" value="Builder" />
+							<div class="wuxPageDisplay-Training">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader">Character Level</div>
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Experience
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Experience</div>
 
-														<span class="wuxDescription">Experience is a resource that is gained after completing challenges in a plot. When you gain enough experience you level up.</span>
+															<span class="wuxDescription">Experience is a resource that is gained after completing challenges in a plot. When you gain enough experience you level up.</span>
+														</div>
+													</span></div>
+												<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-xp" value="" placeholder="0" />
+													<div class="wuxInputLabel">To Level: 60</div>
+												</div>
+												<div class="wuxMultiRow">
+													<div class="wuxButton">
+														<input type="checkbox" name="attr_ttl-advancementconversion">
+														<span>Convert To Levels</span>
 													</div>
-												</span></div>
-											<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-xp" value="" placeholder="0" />
-												<div class="wuxInputLabel">To Level: 60</div>
-											</div>
-											<div class="wuxMultiRow">
-												<div class="wuxButton">
-													<input type="checkbox" name="attr_ttl-advancementconversion">
-													<span>Convert To Levels</span>
 												</div>
 											</div>
-										</div>
-										<div class="wuxFlexTableItemGroup">
-											<div class="wuxHeader2"><span class="wuxTooltip">
-													<span class="wuxTooltipText">
-														Character Level
-													</span>
-													<div class="wuxTooltipContent">
-														<div class="wuxHeader2">Character Level</div>
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Character Level
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Character Level</div>
 
-														<span class="wuxDescription">A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP).</span>
-													</div>
-												</span></div>
-											<input type="text" class="wuxInput" name="attr_adv-level" />
-										</div>
-									</div>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Max CR
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Max CR</div>
-
-												<span class="wuxDescription">Your character rank applies to many of the values you record on your character sheet. </span><span class="wuxDescription">Your max character rank also increases many of the points given at character creation and through advancement. </span><span class="wuxDescription">Max character rank increases as you level.
-													At 1st level, it begins at 1.
-													At 4th Level it increases to 2.
-													At 9th Level it increases to 3.
-													At 15th Level it increases to 4.
-													At 22nd Level it increases to 5.
-													At 30th Level it increases to 6.
-													At 39th Level it increases to 7.
-													At 49th Level it increases to 8.
-													At 60th Level it increases to 9.</span>
+															<span class="wuxDescription">A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP).</span>
+														</div>
+													</span></div>
+												<input type="text" class="undefined" name="attr_adv-level" />
 											</div>
-										</span></div>
-									<span class="wuxDescription"><span name="attr_adv-cr_max"></span></span>
-									<div class="wuxHeader">Training Points</div>
-									<div class="wuxFlexTable">
-										<div class="wuxFlexTableItemGroup">
-											<div class="wuxHeader2"><span class="wuxTooltip">
-													<span class="wuxTooltipText">
-														Training Points
-													</span>
-													<div class="wuxTooltipContent">
-														<div class="wuxHeader2">Training Points</div>
+										</div>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Max CR
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Max CR</div>
 
-														<span class="wuxDescription">TP is gained when a character spends time learning new knowledge, styles, or techniques. This is usually gained by practicing a task during freetime at a rate of 1 per day. You may gain an additional TP if a character devotes an entire day to training. </span><span class="wuxDescription">Once a character reaches 60 TP, they may spend their TP to gain an advancement point.</span>
+													<span class="wuxDescription">Your character rank applies to many of the values you record on your character sheet. </span><span class="wuxDescription">Your max character rank also increases many of the points given at character creation and through advancement. </span><span class="wuxDescription">Max character rank increases as you level.
+														At 1st level, it begins at 1.
+														At 4th Level it increases to 2.
+														At 9th Level it increases to 3.
+														At 15th Level it increases to 4.
+														At 22nd Level it increases to 5.
+														At 30th Level it increases to 6.
+														At 39th Level it increases to 7.
+														At 49th Level it increases to 8.
+														At 60th Level it increases to 9.</span>
+												</div>
+											</span></div>
+										<span class="wuxDescription"><span name="attr_adv-cr_max"></span></span>
+										<div class="wuxHeader">Training Points</div>
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Training Points
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Training Points</div>
+
+															<span class="wuxDescription">TP is gained when a character spends time learning new knowledge, styles, or techniques. This is usually gained by practicing a task during freetime at a rate of 1 per day. You may gain an additional TP if a character devotes an entire day to training. </span><span class="wuxDescription">Once a character reaches 60 TP, they may spend their TP to gain an advancement point.</span>
+														</div>
+													</span></div>
+												<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-pp" value="" placeholder="0" />
+													<div class="wuxInputLabel">To Adv. Point: 60</div>
+												</div>
+												<div class="wuxMultiRow">
+													<div class="wuxButton">
+														<input type="checkbox" name="attr_ttl-trainingconversion">
+														<span>Convert To AP</span>
 													</div>
-												</span></div>
-											<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-pp" value="" placeholder="0" />
-												<div class="wuxInputLabel">To Adv. Point: 60</div>
-											</div>
-											<div class="wuxMultiRow">
-												<div class="wuxButton">
-													<input type="checkbox" name="attr_ttl-trainingconversion">
-													<span>Convert To AP</span>
 												</div>
 											</div>
-										</div>
-										<div class="wuxFlexTableItemGroup">
-											<div class="wuxHeader2"><span class="wuxTooltip">
-													<span class="wuxTooltipText">
-														Bonus Advancement Points
-													</span>
-													<div class="wuxTooltipContent">
-														<div class="wuxHeader2">Bonus Advancement Points</div>
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Bonus Advancement Points
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Bonus Advancement Points</div>
 
-														<span class="wuxDescription">Bonus advancement points are gained by spending TP - experience gained when performing tasks.</span><span class="wuxDescription">Whenever you gain 60 TP, you gain one Advancement Point.</span>
-													</div>
-												</span></div>
-											<input type="text" class="wuxInput" name="attr_trn-bonustraining" />
+															<span class="wuxDescription">Bonus advancement points are gained by spending TP - experience gained when performing tasks.</span><span class="wuxDescription">Whenever you gain 60 TP, you gain one Advancement Point.</span>
+														</div>
+													</span></div>
+												<input type="text" class="wuxMaxWidth100" name="attr_trn-bonustraining" />
+											</div>
 										</div>
 									</div>
-								</div>
-								<div class="wuxFlexTableItemGroup">
 									<div class="wuxFlexTableItemGroup">
 										<div class="wuxHeader">Advancement</div>
 										<div class="wuxSlotSection"><span class="wuxSlotLabel">Adv. Pts</span><input type="hidden" class="wuxSlotStateFlag" name="attr_adv_error" value="0"><span class="wuxSlotData"><span name="attr_adv" value="0">0</span> / <span name="attr_adv_max">0</span></span></div>
@@ -1213,6 +1214,309 @@
 										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-tp_knowledge" value="" placeholder="0" />
 											<div class="wuxInputLabel">cost: 1 advancement point</div>
 										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxPageDisplay-Advancement">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader">Character Level</div>
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Experience
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Experience</div>
+
+															<span class="wuxDescription">Experience is a resource that is gained after completing challenges in a plot. When you gain enough experience you level up.</span>
+														</div>
+													</span></div>
+												<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-xp" value="" placeholder="0" />
+													<div class="wuxInputLabel">To Level: 60</div>
+												</div>
+												<div class="wuxMultiRow">
+													<div class="wuxButton">
+														<input type="checkbox" name="attr_ttl-advancementconversion">
+														<span>Convert To Levels</span>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Character Level
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Character Level</div>
+
+															<span class="wuxDescription">A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP).</span>
+														</div>
+													</span></div>
+												<input type="text" class="undefined" name="attr_adv-level" />
+											</div>
+										</div>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Max CR
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Max CR</div>
+
+													<span class="wuxDescription">Your character rank applies to many of the values you record on your character sheet. </span><span class="wuxDescription">Your max character rank also increases many of the points given at character creation and through advancement. </span><span class="wuxDescription">Max character rank increases as you level.
+														At 1st level, it begins at 1.
+														At 4th Level it increases to 2.
+														At 9th Level it increases to 3.
+														At 15th Level it increases to 4.
+														At 22nd Level it increases to 5.
+														At 30th Level it increases to 6.
+														At 39th Level it increases to 7.
+														At 49th Level it increases to 8.
+														At 60th Level it increases to 9.</span>
+												</div>
+											</span></div>
+										<span class="wuxDescription"><span name="attr_adv-cr_max"></span></span>
+										<div class="wuxHeader">Training Points</div>
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Training Points
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Training Points</div>
+
+															<span class="wuxDescription">TP is gained when a character spends time learning new knowledge, styles, or techniques. This is usually gained by practicing a task during freetime at a rate of 1 per day. You may gain an additional TP if a character devotes an entire day to training. </span><span class="wuxDescription">Once a character reaches 60 TP, they may spend their TP to gain an advancement point.</span>
+														</div>
+													</span></div>
+												<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-pp" value="" placeholder="0" />
+													<div class="wuxInputLabel">To Adv. Point: 60</div>
+												</div>
+												<div class="wuxMultiRow">
+													<div class="wuxButton">
+														<input type="checkbox" name="attr_ttl-trainingconversion">
+														<span>Convert To AP</span>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Bonus Advancement Points
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Bonus Advancement Points</div>
+
+															<span class="wuxDescription">Bonus advancement points are gained by spending TP - experience gained when performing tasks.</span><span class="wuxDescription">Whenever you gain 60 TP, you gain one Advancement Point.</span>
+														</div>
+													</span></div>
+												<input type="text" class="wuxMaxWidth100" name="attr_trn-bonustraining" />
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader">Advancement</div>
+										<div class="wuxSlotSection"><span class="wuxSlotLabel">Adv. Pts</span><input type="hidden" class="wuxSlotStateFlag" name="attr_adv_error" value="0"><span class="wuxSlotData"><span name="attr_adv" value="0">0</span> / <span name="attr_adv_max">0</span></span></div>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Style Points
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Style Points</div>
+
+													<span class="wuxDescription">You can spend advancement points to gain Style Points. These style points can be used to learn a new style. You must spend 1 advancement points to gain 1 technique point.</span>
+												</div>
+											</span></div>
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_technique" value="" placeholder="0" />
+											<div class="wuxInputLabel">cost: 2 advancement points</div>
+										</div>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Knowledge Points
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Knowledge Points</div>
+
+													<span class="wuxDescription">You can spend training points to gain Knowledge Points. These knowledge points can be used to increase tier in a job. You must spend 1 training points to gain 1 knowledge point.</span>
+												</div>
+											</span></div>
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-tp_knowledge" value="" placeholder="0" />
+											<div class="wuxInputLabel">cost: 1 advancement point</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxPageDisplay-Core">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader">Character Level</div>
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Experience
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Experience</div>
+
+															<span class="wuxDescription">Experience is a resource that is gained after completing challenges in a plot. When you gain enough experience you level up.</span>
+														</div>
+													</span></div>
+												<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-xp" value="" placeholder="0" />
+													<div class="wuxInputLabel">To Level: 60</div>
+												</div>
+												<div class="wuxMultiRow">
+													<div class="wuxButton">
+														<input type="checkbox" name="attr_ttl-advancementconversion">
+														<span>Convert To Levels</span>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Character Level
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Character Level</div>
+
+															<span class="wuxDescription">A trait that determines a character's general level of experience in the world. It increases as a character receives experience points (XP).</span>
+														</div>
+													</span></div>
+												<input type="text" class="undefined" name="attr_adv-level" />
+											</div>
+										</div>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Max CR
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Max CR</div>
+
+													<span class="wuxDescription">Your character rank applies to many of the values you record on your character sheet. </span><span class="wuxDescription">Your max character rank also increases many of the points given at character creation and through advancement. </span><span class="wuxDescription">Max character rank increases as you level.
+														At 1st level, it begins at 1.
+														At 4th Level it increases to 2.
+														At 9th Level it increases to 3.
+														At 15th Level it increases to 4.
+														At 22nd Level it increases to 5.
+														At 30th Level it increases to 6.
+														At 39th Level it increases to 7.
+														At 49th Level it increases to 8.
+														At 60th Level it increases to 9.</span>
+												</div>
+											</span></div>
+										<span class="wuxDescription"><span name="attr_adv-cr_max"></span></span>
+										<div class="wuxHeader">Training Points</div>
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Training Points
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Training Points</div>
+
+															<span class="wuxDescription">TP is gained when a character spends time learning new knowledge, styles, or techniques. This is usually gained by practicing a task during freetime at a rate of 1 per day. You may gain an additional TP if a character devotes an entire day to training. </span><span class="wuxDescription">Once a character reaches 60 TP, they may spend their TP to gain an advancement point.</span>
+														</div>
+													</span></div>
+												<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-pp" value="" placeholder="0" />
+													<div class="wuxInputLabel">To Adv. Point: 60</div>
+												</div>
+												<div class="wuxMultiRow">
+													<div class="wuxButton">
+														<input type="checkbox" name="attr_ttl-trainingconversion">
+														<span>Convert To AP</span>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroup">
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Bonus Advancement Points
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Bonus Advancement Points</div>
+
+															<span class="wuxDescription">Bonus advancement points are gained by spending TP - experience gained when performing tasks.</span><span class="wuxDescription">Whenever you gain 60 TP, you gain one Advancement Point.</span>
+														</div>
+													</span></div>
+												<input type="text" class="wuxMaxWidth100" name="attr_trn-bonustraining" />
+											</div>
+										</div>
+									</div>
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader">Advancement</div>
+										<div class="wuxSlotSection"><span class="wuxSlotLabel">Adv. Pts</span><input type="hidden" class="wuxSlotStateFlag" name="attr_adv_error" value="0"><span class="wuxSlotData"><span name="attr_adv" value="0">0</span> / <span name="attr_adv_max">0</span></span></div>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Style Points
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Style Points</div>
+
+													<span class="wuxDescription">You can spend advancement points to gain Style Points. These style points can be used to learn a new style. You must spend 1 advancement points to gain 1 technique point.</span>
+												</div>
+											</span></div>
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_technique" value="" placeholder="0" />
+											<div class="wuxInputLabel">cost: 2 advancement points</div>
+										</div>
+										<div class="wuxHeader2"><span class="wuxTooltip">
+												<span class="wuxTooltipText">
+													Knowledge Points
+												</span>
+												<div class="wuxTooltipContent">
+													<div class="wuxHeader2">Knowledge Points</div>
+
+													<span class="wuxDescription">You can spend training points to gain Knowledge Points. These knowledge points can be used to increase tier in a job. You must spend 1 training points to gain 1 knowledge point.</span>
+												</div>
+											</span></div>
+										<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-tp_knowledge" value="" placeholder="0" />
+											<div class="wuxInputLabel">cost: 1 advancement point</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="wuxPageDisplay-Builder">
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxHeader">Advancement</div>
+									<div class="wuxSlotSection"><span class="wuxSlotLabel">Adv. Pts</span><input type="hidden" class="wuxSlotStateFlag" name="attr_adv_error" value="0"><span class="wuxSlotData"><span name="attr_adv" value="0">0</span> / <span name="attr_adv_max">0</span></span></div>
+									<div class="wuxHeader2"><span class="wuxTooltip">
+											<span class="wuxTooltipText">
+												Bonus Advancement Points
+											</span>
+											<div class="wuxTooltipContent">
+												<div class="wuxHeader2">Bonus Advancement Points</div>
+
+												<span class="wuxDescription">Bonus advancement points are gained by spending TP - experience gained when performing tasks.</span><span class="wuxDescription">Whenever you gain 60 TP, you gain one Advancement Point.</span>
+											</div>
+										</span></div>
+									<input type="text" class="wuxMaxWidth100" name="attr_trn-bonustraining" />
+									<div class="wuxHeader2"><span class="wuxTooltip">
+											<span class="wuxTooltipText">
+												Style Points
+											</span>
+											<div class="wuxTooltipContent">
+												<div class="wuxHeader2">Style Points</div>
+
+												<span class="wuxDescription">You can spend advancement points to gain Style Points. These style points can be used to learn a new style. You must spend 1 advancement points to gain 1 technique point.</span>
+											</div>
+										</span></div>
+									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_adv-ap_technique" value="" placeholder="0" />
+										<div class="wuxInputLabel">cost: 2 advancement points</div>
+									</div>
+									<div class="wuxHeader2"><span class="wuxTooltip">
+											<span class="wuxTooltipText">
+												Knowledge Points
+											</span>
+											<div class="wuxTooltipContent">
+												<div class="wuxHeader2">Knowledge Points</div>
+
+												<span class="wuxDescription">You can spend training points to gain Knowledge Points. These knowledge points can be used to increase tier in a job. You must spend 1 training points to gain 1 knowledge point.</span>
+											</div>
+										</span></div>
+									<div class="wuxMultiRow"><input type="number" class="wuxInput" name="attr_trn-tp_knowledge" value="" placeholder="0" />
+										<div class="wuxInputLabel">cost: 1 advancement point</div>
 									</div>
 								</div>
 							</div>
@@ -8051,7 +8355,7 @@
 													<span class="wuxDescription">This is the name that is displayed when your character speaks.</span>
 												</div>
 											</span></div>
-										<input type="text" class="wuxInput" name="attr_display_name" /><input type="hidden" class="wuxHiddenField-flag" name="attr_affinityaspect" value="0">
+										<input type="text" class="undefined" name="attr_display_name" /><input type="hidden" class="wuxHiddenField-flag" name="attr_affinityaspect" value="0">
 										<div class="wuxHiddenField">
 											<div class="wuxHeader2"><span class="wuxTooltip">
 													<span class="wuxTooltipText">
@@ -9978,7 +10282,7 @@
 																	<span class="wuxDescription">The name of the character sheet. This is the name of the character as written in the character's Journal entry.</span>
 																</div>
 															</span></div>
-														<input type="text" class="wuxInput" name="attr_charsheetname" />
+														<input type="text" class="undefined" name="attr_charsheetname" />
 													</div>
 													<div class="wuxPageDisplay-CharacterData">
 														<div class="wuxHeader2"><span class="wuxTooltip">
@@ -9991,7 +10295,7 @@
 																	<span class="wuxDescription">The name of the character sheet. This is the name of the character as written in the character's Journal entry.</span>
 																</div>
 															</span></div>
-														<input type="text" class="wuxInput" name="attr_sheetname" />
+														<input type="text" class="undefined" name="attr_sheetname" />
 													</div>
 												</div>
 												<div class="wuxFlexTableItemGroup wuxFlexTableItemGroup2">
@@ -10005,7 +10309,7 @@
 																<span class="wuxDescription">A character's full name. This is for self referential use and is not used anywhere except on this character sheet page.</span>
 															</div>
 														</span></div>
-													<input type="text" class="wuxInput" name="attr_full_name" />
+													<input type="text" class="undefined" name="attr_full_name" />
 												</div>
 											</div>
 											<div class="wuxFlexTable">
@@ -10093,7 +10397,7 @@
 															<span class="wuxDescription">The currency of the modern age. Originating in Minerva, this is paper money accepted throughout the continent of Wuxing due to Minerva's trade agreements throughout the land.</span>
 														</div>
 													</span></div>
-												<input type="text" class="wuxInput" name="attr_jin" />
+												<input type="text" class="undefined" name="attr_jin" />
 											</div>
 										</div>
 										<div class="wuxFlexTableItemGroup">
@@ -10107,7 +10411,7 @@
 														<span class="wuxDescription"></span><span class="wuxDescription">This is a title given to the character to briefly describe them. Shown when an introduction call is made.</span>
 													</div>
 												</span></div>
-											<input type="text" class="wuxInput" name="attr_ttl" />
+											<input type="text" class="undefined" name="attr_ttl" />
 											<div class="wuxFlexTable">
 												<div class="wuxFlexTableItemGroup">
 													<div class="wuxHeader2"><span class="wuxTooltip">
@@ -10120,7 +10424,7 @@
 																<span class="wuxDescription">This represents how old the character is in years.</span>
 															</div>
 														</span></div>
-													<input type="text" class="wuxInput" name="attr_age" />
+													<input type="text" class="undefined" name="attr_age" />
 												</div>
 												<div class="wuxFlexTableItemGroup">
 													<div class="wuxHeader2"><span class="wuxTooltip">
@@ -10287,7 +10591,7 @@
 														<span class="wuxDescription"></span>
 													</div>
 												</span></div>
-											<input type="text" class="wuxInput" name="attr_note-genname" />
+											<input type="text" class="undefined" name="attr_note-genname" />
 											<div class="wuxHeader2"><span class="wuxTooltip">
 													<span class="wuxTooltipText">
 														Full Name
@@ -10298,7 +10602,7 @@
 														<span class="wuxDescription"></span>
 													</div>
 												</span></div>
-											<input type="text" class="wuxInput" name="attr_note-genfullname" />
+											<input type="text" class="undefined" name="attr_note-genfullname" />
 											<div class="wuxHeader2"><span class="wuxTooltip">
 													<span class="wuxTooltipText">
 														Gender
@@ -10309,7 +10613,7 @@
 														<span class="wuxDescription"></span>
 													</div>
 												</span></div>
-											<input type="text" class="wuxInput" name="attr_note-gengender" />
+											<input type="text" class="undefined" name="attr_note-gengender" />
 											<div class="wuxHeader2"><span class="wuxTooltip">
 													<span class="wuxTooltipText">
 														Home Region
@@ -10342,7 +10646,7 @@
 														<span class="wuxDescription"></span>
 													</div>
 												</span></div>
-											<input type="text" class="wuxInput" name="attr_note-genrace" />
+											<input type="text" class="undefined" name="attr_note-genrace" />
 										</div>
 										<div class="wuxFlexTableItemGroup">
 											<div class="wuxHeader2"><span class="wuxTooltip">
@@ -10355,7 +10659,7 @@
 														<span class="wuxDescription"></span>
 													</div>
 												</span></div>
-											<input type="text" class="wuxInput" name="attr_note-genpersonality" />
+											<input type="text" class="undefined" name="attr_note-genpersonality" />
 											<div class="wuxHeader2"><span class="wuxTooltip">
 													<span class="wuxTooltipText">
 														Motivation
@@ -10366,7 +10670,7 @@
 														<span class="wuxDescription"></span>
 													</div>
 												</span></div>
-											<input type="text" class="wuxInput" name="attr_note-genmotivation" />
+											<input type="text" class="undefined" name="attr_note-genmotivation" />
 											<div class="wuxMultiRow">
 												<div class="wuxButton">
 													<input type="checkbox" name="attr_note-generatecharacter">
@@ -12635,7 +12939,55 @@
 										</div>
 									</div>
 								</div>
+							</div><input type="hidden" class="wuxHiddenField-flag" name="attr_gear-activerecipe" value="0">
+							<div class="wuxHiddenField">
+								<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
+									<div class="wuxHeader">Cooking Event</div>
+									<div class="wuxRow"><span class="wuxDescription" name="attr_gear-activerecipe"></span></div>
+									<div class="wuxHeader">Your Contributions</div>
+									<div>
+										<div class="wuxNoRepControl">
+											<fieldset class="repeating_cooking">
+												<input type="hidden" name="attr_gear-itemmaingroup" value="0"><input type="hidden" class="wuxHiddenField-flag" name="attr_gear-itemisvisible" value="0">
+												<div class="wuxHiddenField">
+													<div class="wuxMultiRow">
+														<div class="wuxEquipableRow">
+															<input type="hidden" name="attr_gear-itemname">
+															<div class="wuxEquipableCountCol">
+																<span class="wuxEquipableCount" name="attr_gear-itemcount"></span>
+															</div>
+															<div class="wuxEquipableBody">
+																<div class="wuxEquipableName">
+																	<span class="wuxDescription" name="attr_gear-itemname"></span>
+																	<span class="wuxSubHeader" name="attr_gear-itemgroup"></span>
+																</div>
+																<div class="wuxEquipableButtonRow">
+																	<div class="wuxButton wuxRepeatingTechActionButton">
+																		<input type="checkbox" name="attr_gear-remove">
+																		<span><span style="color:#e08a3c;">&#8854;</span> Remove</span>
+																	</div>
+																	<div class="wuxButton wuxRepeatingTechActionButton">
+																		<input type="checkbox" name="attr_gear-inspect">
+																		<span>&#9673; Inspect</span>
+																	</div>
+																	<div class="wuxButton wuxRepeatingTechActionButton">
+																		<input type="checkbox" name="attr_gear-delete">
+																		<span><span style="color:#cc3333;">&#10008;</span> Delete</span>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+
+											</fieldset>
+										</div>
+									</div>
+									<div class="wuxHeader">Others' Contributions</div>
+									<div class="wuxRow"><span class="wuxDescription" name="attr_gear-activeingredientlist"></span></div>
+								</div>
 							</div>
+
 						</div>
 					</div>
 				</div>
@@ -13948,7 +14300,7 @@
 
 										</div>
 										<div class="wuxFlexTableItemGroup wuxFlexTableItemGroup">
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_perk-spirit_conduit" value="0">
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_" value="0">
 											<div class="wuxHiddenField">
 												<div class="wuxHeader">Change Affinity</div>
 												<select class="wuxInput" name="attr_affinity" value="0">
@@ -18934,7 +19286,7 @@ WuxWorkerInspectPopup.OpenStyleFilterTechniqueInspection(eventinfo)
 on("change:techbasefilter-combat change:techbasefilter-social change:techbasefilter-utility", function (eventinfo) {
 WuxWorkerActions.QuickFilterFormeActions(eventinfo)
 });
-on("change:adv-ap_job change:perk-spirit_conduit", function (eventinfo) {
+on("change:adv-ap_job change:", function (eventinfo) {
 WuxWorkerActions.UpdateTechniqueChangeVisibility()
 });
 on("change:note-opennotebookactions change:note-notebookactions0 change:note-notebookactions1 change:note-notebookactions2 change:note-notebookactions3 change:repeating_jobstyles:forme-actions change::forme-actions change:repeating_styles:forme-actions change:forme-jobslot1_submenu change:forme-advancedslot1_submenu change:forme-styleslot1_submenu change:forme-jobslot2_submenu change:forme-advancedslot2_submenu change:forme-styleslot2_submenu change:forme-jobslot3_submenu change:forme-advancedslot3_submenu change:forme-styleslot3_submenu change:forme-styleslot4_submenu change:forme-styleslot5_submenu change:forme-styleslot6_submenu change:repeating_equipment:gear-itemaction change:repeating_consumables:gear-itemaction change:repeating_foods:gear-itemaction change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change::act-actions change:repeating_consumables:act-actions change::act-actions change::act-actions change::act-actions change::act-actions change:repeating_customtech:act-actions change:job-fighter_expand change:job-labourer_expand change:job-brawler_expand change:job-warden_expand change:job-sentinel_expand change:job-sniper_expand change:job-rogue_expand change:job-exemplar_expand change:job-hunter_expand change:job-warmage_expand change:job-geomancer_expand change:job-kineticist_expand change:job-trooper_expand change:job-yaksa_expand change:job-tactician_expand change:job-bard_expand change:job-spellwright_expand change:job-shade_expand change:job-medic_expand change:job-preacher_expand change:job-alchemist_expand change:job-courtier_expand change:job-merchant_expand change:job-diplomat_expand change:job-phantasm_expand", function (eventinfo) {

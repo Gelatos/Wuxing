@@ -914,9 +914,9 @@ var WuxDefinition = WuxDefinition || (function () {
                 WuxSheetMain.Desc(textContents);
         },
 
-        buildTextInput = function (definition, fieldName) {
+        buildTextInput = function (definition, fieldName, className) {
             return buildHeader(definition) + "\n" +
-                WuxSheetMain.Input("text", fieldName);
+                WuxSheetMain.CustomInput("text", fieldName, className);
         },
 
         buildTextarea = function (definition, fieldName, className, placeholder) {
