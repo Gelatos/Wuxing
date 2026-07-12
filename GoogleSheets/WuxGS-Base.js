@@ -513,7 +513,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             WuxSheetMain.Button(consuTypes[i].getAttribute(), searchButtonDef.getTitle(consuTypes[i].getTitle()), "wuxWidth120"),
                             "wuxMaxWidth220"));
                     }
-                    return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddConsumable"))}
+                    return `${WuxSheetMain.Header2(WuxDef.GetTitle("Title_AddConsumable"))}
                         ${WuxSheetMain.MultiRowGroup(autoEquip, WuxSheetMain.Table.FlexTable, 1)}
                         ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 3)}`;
                 },
@@ -593,8 +593,8 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let slotDisplay = WuxSheetMain.SlotDisplay("Slots", "attr_gear-consumableslotstate", WuxDef.GetAttribute("Gear_ConsumableSlot"), WuxDef.GetAttribute("ConsumableSlots"));
 
                     let unequipAllDef = WuxDef.Get("Gear_UnequipAll");
-                    let contents = `${slotDisplay}
-                        ${WuxSheetMain.Header(`${syncedDef.getTitle()}`)}
+                    let contents = `${WuxSheetMain.Header(`${syncedDef.getTitle()}`)}
+                        ${slotDisplay}
                         ${WuxSheetMain.HiddenField(WuxDef.GetAttribute("Gear_ConsumableSlot"), `<div style="float:right;">${WuxSheetMain.Button(unequipAllDef.getAttribute("consumable"), `<span style="color:#c8a020;">&#9881;</span> ${unequipAllDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>`)}
                         ${WuxSheetMain.HiddenFieldToggle(equippedIsVisibleAttr, `<div>${rows}</div>`, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}`;
 
@@ -655,7 +655,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             WuxSheetMain.Button(goodsTypes[i].getAttribute(), searchButtonDef.getTitle(goodsTypes[i].getTitle()), "wuxWidth120"),
                             "wuxMaxWidth220"));
                     }
-                    return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddGear"))}
+                    return `${WuxSheetMain.Header2(WuxDef.GetTitle("Title_AddGear"))}
                         ${WuxSheetMain.MultiRowGroup(gearItems, WuxSheetMain.Table.FlexTable, 3)}`;
                 },
 
@@ -721,7 +721,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             WuxSheetMain.Button(ingTypes[i].getAttribute(), searchButtonDef.getTitle(ingTypes[i].getTitle()), "wuxWidth120"),
                             "wuxMaxWidth220"));
                     }
-                    return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddConsumable"))}
+                    return `${WuxSheetMain.Header2(WuxDef.GetTitle("Title_AddFoodReageant"))}
                         ${WuxSheetMain.MultiRowGroup(foodItems, WuxSheetMain.Table.FlexTable, 3)}`;
                 },
 
@@ -846,7 +846,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     items.push(WuxSheetMain.Table.FlexTableGroup(
                         WuxSheetMain.Button(findByTechniqueDef.getAttribute(), findByTechniqueDef.getTitle(), "wuxWidth120"),
                         "wuxMaxWidth220"));
-                    return `${WuxSheetMain.Header(WuxDef.GetTitle("Title_AddEquipment"))}
+                    return `${WuxSheetMain.Header2(WuxDef.GetTitle("Title_AddEquipment"))}
                         ${WuxSheetMain.MultiRowGroup(autoEquip, WuxSheetMain.Table.FlexTable, 1)}
                         ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 3)}`;
                 },
@@ -889,6 +889,8 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     <div class="wuxEquipableRow">
                         <div class="wuxEquipableBody">
                             <div class="wuxEquipableName">
+                                <input type="hidden" class="wuxHiddenSingleCount-flag" name="${getGearAttribute("ItemCount")}" value="0">
+                                <span class="wuxDescription" name="${getGearAttribute("ItemCount")}" value="0"></span>
                                 <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
                                 <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
                             </div>
@@ -911,11 +913,11 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let unequipAllDef = WuxDef.Get("Gear_UnequipAll");
                     let contents = `${buildCurrency()}
                         ${WuxSheetMain.Row("&nbsp;")}
-                        ${slotDisplay}
-                        ${traitsDisplay}
                         ${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                        ${slotDisplay}
                         ${WuxSheetMain.HiddenField(WuxDef.GetAttribute("Equipment"), `<div style="float:right;">${WuxSheetMain.Button(unequipAllDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${unequipAllDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>`)}
-                        ${WuxSheetMain.HiddenFieldToggle(equippedIsVisibleAttr, `<div>${repeaterContent}</div>`, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}`;
+                        ${WuxSheetMain.HiddenFieldToggle(equippedIsVisibleAttr, `<div>${repeaterContent}</div>`, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}
+                        ${traitsDisplay}`;
 
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                 },

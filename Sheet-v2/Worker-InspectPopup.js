@@ -675,7 +675,7 @@ class ItemInspectionPopup extends InspectionPopup {
         this.attributeHandler.addRepeatingSection("RepeatingEquipment");
         this.attributeHandler.getRepeatingSection("RepeatingEquipment").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
         this.attributeHandler.addRepeatingSection("RepeatingSyncedEquipment");
-        this.attributeHandler.getRepeatingSection("RepeatingSyncedEquipment").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible")]);
+        this.attributeHandler.getRepeatingSection("RepeatingSyncedEquipment").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
         WuxWorkerActions.UpdateAllActionsFromMenu(this.attributeHandler);
         super.addItem();
     }
@@ -691,7 +691,7 @@ class ItemInspectionPopup extends InspectionPopup {
         this.attributeHandler.addRepeatingSection("RepeatingEquipment");
         this.attributeHandler.getRepeatingSection("RepeatingEquipment").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
         this.attributeHandler.addRepeatingSection("RepeatingSyncedEquipment");
-        this.attributeHandler.getRepeatingSection("RepeatingSyncedEquipment").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible")]);
+        this.attributeHandler.getRepeatingSection("RepeatingSyncedEquipment").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
         WuxWorkerActions.UpdateAllActionsFromMenu(this.attributeHandler);
         super.addItem2();
     }
@@ -794,7 +794,10 @@ class ItemInspectionPopup extends InspectionPopup {
             let syncedRowId = syncedRepeater.generateRowId();
             this.performAddSelectedInspectElementItem(attrHandler, syncedRepeater, syncedRowId, item);
             attrHandler.addUpdate(syncedRepeater.getFieldName(syncedRowId, this.getGearVariable("ItemIsVisible")), willAutoEquip ? "on" : "0");
+            attrHandler.addUpdate(syncedRepeater.getFieldName(syncedRowId, itemCountVar), willAutoEquip ? 1 : 0);
         } else if (willAutoEquip) {
+            let syncedCount = attrHandler.parseInt(existingSyncedRepeater.getFieldName(syncedAlreadyExistsId, itemCountVar)) || 0;
+            attrHandler.addUpdate(existingSyncedRepeater.getFieldName(syncedAlreadyExistsId, itemCountVar), syncedCount + 1);
             attrHandler.addUpdate(existingSyncedRepeater.getFieldName(syncedAlreadyExistsId, this.getGearVariable("ItemIsVisible")), "on");
         }
 

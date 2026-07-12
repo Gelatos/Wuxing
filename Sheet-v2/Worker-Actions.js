@@ -1057,21 +1057,27 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
     }
     addGearItemTechniques(attrHandler) {
         let gearEquipSet = new Set(this.gearEquipBuild);
-        let newGearBoosters = [];
         this.gearEquipBuildMax.forEach(itemName => {
             let item = WuxItems.Get(itemName);
             if (item == undefined) return;
             let isEquipped = gearEquipSet.has(itemName);
             if (item.hasTechnique && item.technique != undefined) {
                 this.tryAddGearTechniqueToTechDictionary(item.technique, isEquipped);
-                if (isEquipped && item.technique.action == "Passive" && !newGearBoosters.includes(itemName)) {
-                    newGearBoosters.push(itemName);
-                }
             }
             let commonTechniques = item.getCommonTechniques ? item.getCommonTechniques() : [];
             commonTechniques.forEach(technique => {
                 this.tryAddGearTechniqueToTechDictionary(technique, isEquipped);
             });
+        });
+
+        // Add one booster entry per equipped copy so passive boosts stack with duplicate equipment.
+        let newGearBoosters = [];
+        this.gearEquipBuild.forEach(itemName => {
+            let item = WuxItems.Get(itemName);
+            if (item == undefined || !item.hasTechnique || item.technique == undefined) return;
+            if (item.technique.action == "Passive") {
+                newGearBoosters.push(itemName);
+            }
         });
         attrHandler.addUpdate(WuxDef.GetVariable("BoostGearTech"), JSON.stringify(newGearBoosters));
     }

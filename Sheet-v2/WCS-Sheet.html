@@ -12254,19 +12254,8 @@
 										<input type="number" class="wuxInput wuxMinWidth100" name="attr_jin" />
 									</div>
 									<div class="wuxRow">&nbsp;</div>
+									<div class="wuxHeader">Equipped Items</div>
 									<div class="wuxSlotSection"><span class="wuxSlotLabel">Slots</span><input type="hidden" class="wuxSlotStateFlag" name="attr_gear-equipmentslotstate" value="0"><span class="wuxSlotData"><span name="attr_equipment" value="0">0</span> / <span name="attr_equipmentslotcount">0</span></span></div>
-									<div class="wuxHeader2"><span class="wuxTooltip">
-											<span class="wuxTooltipText">
-												Equipped Item Traits
-											</span>
-											<div class="wuxTooltipContent">
-												<div class="wuxHeader2">Equipped Item Traits</div>
-
-												<span class="wuxDescription">A list of item traits that exist in your equipped items. Some techniques require that you have an item trait in your equipment to be used.</span>
-											</div>
-										</span></div>
-									<span class="wuxDescription"><span name="attr_gear-equippeditemtraits"></span></span>
-									<div class="wuxHeader">Equipped</div>
 									<input type="hidden" class="wuxHiddenField-flag" name="attr_equipment" value="0">
 									<div class="wuxHiddenField">
 										<div style="float:right;">
@@ -12288,6 +12277,8 @@
 															<div class="wuxEquipableRow">
 																<div class="wuxEquipableBody">
 																	<div class="wuxEquipableName">
+																		<input type="hidden" class="wuxHiddenSingleCount-flag" name="attr_gear-itemcount" value="0">
+																		<span class="wuxDescription" name="attr_gear-itemcount" value="0"></span>
 																		<span class="wuxDescription" name="attr_gear-itemname"></span>
 																		<span class="wuxSubHeader" name="attr_gear-itemgroup"></span>
 																	</div>
@@ -12316,6 +12307,17 @@
 										<div class="wuxRow"><span class="wuxDescription">None</span></div>
 									</div>
 
+									<div class="wuxHeader2"><span class="wuxTooltip">
+											<span class="wuxTooltipText">
+												Equipped Item Traits
+											</span>
+											<div class="wuxTooltipContent">
+												<div class="wuxHeader2">Equipped Item Traits</div>
+
+												<span class="wuxDescription">A list of item traits that exist in your equipped items. Some techniques require that you have an item trait in your equipment to be used.</span>
+											</div>
+										</span></div>
+									<span class="wuxDescription"><span name="attr_gear-equippeditemtraits"></span></span>
 								</div>
 								<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
 									<div class="wuxHeader">Stored Equipment</div>
@@ -12365,7 +12367,7 @@
 										</div>
 
 										<div class="wuxRow">&nbsp;</div>
-										<div class="wuxHeader">Add Equipment</div>
+										<div class="wuxHeader2">Add Equipment</div>
 										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroup">
 												<div class="wuxInteractiveBlock wuxTooltip">
@@ -12478,7 +12480,7 @@
 										</div>
 
 										<div class="wuxRow">&nbsp;</div>
-										<div class="wuxHeader">Add Gear</div>
+										<div class="wuxHeader2">Add Gear</div>
 										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
@@ -12542,8 +12544,8 @@
 						<div class="wuxTabContent">
 							<div class="wuxFlexTable wuxFlexTableReverse">
 								<div class="wuxFlexTableItemGroup wuxMinWidth150">
+									<div class="wuxHeader">Equipped Consumables</div>
 									<div class="wuxSlotSection"><span class="wuxSlotLabel">Slots</span><input type="hidden" class="wuxSlotStateFlag" name="attr_gear-consumableslotstate" value="0"><span class="wuxSlotData"><span name="attr_gear-consumableslot" value="0">0</span> / <span name="attr_consumableslotcount">0</span></span></div>
-									<div class="wuxHeader">Equipped Instant Consumables</div>
 									<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-consumableslot" value="0">
 									<div class="wuxHiddenField">
 										<div style="float:right;">
@@ -12706,7 +12708,7 @@
 
 								</div>
 								<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
-									<div class="wuxHeader">Stored Instant Consumables</div>
+									<div class="wuxHeader">Stored Consumables</div>
 									<div>
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-consumableisvisible" value="0">
 										<div class="wuxHiddenField">
@@ -12761,7 +12763,7 @@
 										</div>
 
 										<div class="wuxRow">&nbsp;</div>
-										<div class="wuxHeader">Add Consumable</div>
+										<div class="wuxHeader2">Add Consumable</div>
 										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroup">
 												<div class="wuxInteractiveBlock wuxTooltip">
@@ -12811,7 +12813,7 @@
 							</div>
 							<div class="wuxFlexTable">
 								<div class="wuxFlexTableItemGroup wuxMinWidth350 wuxFlexTableItemGroup2">
-									<div class="wuxHeader">Stored Consumables</div>
+									<div class="wuxHeader">Stored Food and Reageants</div>
 									<div>
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_gear-foodisvisible" value="0">
 										<div class="wuxHiddenField">
@@ -12864,7 +12866,7 @@
 										</div>
 
 										<div class="wuxRow">&nbsp;</div>
-										<div class="wuxHeader">Add Consumable</div>
+										<div class="wuxHeader2">Add Food or Reageant</div>
 										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroupwuxMaxWidth220">
 												<div class="wuxButton wuxWidth120">
@@ -14650,7 +14652,7 @@
 								</fieldset>
 							</div>
 							<div class="wuxRow">&nbsp;</div>
-							<div class="wuxHeader">Instant Consumables</div>
+							<div class="wuxHeader">Consumables</div>
 							<div class="wuxFlexTable"><input type="hidden" class="wuxHiddenField-flag" name="attr_itemcounthealgel" value="0">
 								<div class="wuxHiddenField">
 									<div class="wuxFeature wuxActionFeature">

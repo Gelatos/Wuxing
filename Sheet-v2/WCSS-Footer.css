@@ -428,6 +428,11 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     opacity: 0;
 }
 
+input[type=hidden].wuxHiddenSingleCount-flag[value="1"] + .wuxDescription
+{
+    display: none;
+}
+
 /*========================================
     Popup
 ========================================*/
