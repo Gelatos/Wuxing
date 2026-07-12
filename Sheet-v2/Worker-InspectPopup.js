@@ -1001,7 +1001,7 @@ class GearInspectPopupAttributeHandler extends ItemInspectPopupAttributeHandler 
             this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPurchaseAffordable"),
                 (!isNaN(cost) && jin >= cost) ? "on" : "0");
             this.attrHandler.addUpdate(WuxDef.GetVariable("Title_InspectionItemCost"), !isNaN(cost) ? `${cost} J` : "");
-            this.itemDataAttributeHandler.setItemInfo(item);
+            this.itemDataAttributeHandler.setGoodsInfo(item);
             for (let i = 0; i <= 3; i++) { this.hideTechnique(i); }
             return;
         }

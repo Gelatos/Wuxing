@@ -217,6 +217,24 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
         addItemsToSection(charId, itemCounts, "RepeatingGear", "Animal Good");
     };
 
+    // Adds gathered items to a character, routing by group the same way Hunt does:
+    // Animal Good and Material goods go to RepeatingGear, everything else to RepeatingFoods.
+    const addGatheredItems = function (charId, itemCounts) {
+        const foodItems = {};
+        const gearItems = {};
+        Object.keys(itemCounts).forEach(function (itemName) {
+            const item  = WuxGoods.Get(itemName);
+            const group = item ? item.group : "";
+            if (group === "Animal Good" || group === "Material") {
+                gearItems[itemName] = itemCounts[itemName];
+            } else {
+                foodItems[itemName] = itemCounts[itemName];
+            }
+        });
+        if (Object.keys(foodItems).length > 0) addGoodsToCharacter(charId, foodItems);
+        if (Object.keys(gearItems).length > 0) addAnimalGoodToCharacter(charId, gearItems);
+    };
+
     // Creates a new RepeatingCooking row for an ingredient and returns its row id.
     const createCookingRow = function (charId, itemName, itemGroup) {
         const repeater        = new SandboxRepeatingSectionHandler("RepeatingCooking", charId);
@@ -396,7 +414,7 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 });
 
                 if (Object.keys(itemCounts).length > 0) {
-                    addGoodsToCharacter(tokenTargetData.charId, itemCounts);
+                    addGatheredItems(tokenTargetData.charId, itemCounts);
                 }
 
                 const rollDisplay = Format.ShowTooltip(result.toString(), noticeRoll.message);
@@ -454,7 +472,7 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 });
 
                 if (Object.keys(itemCounts).length > 0) {
-                    addGoodsToCharacter(tokenTargetData.charId, itemCounts);
+                    addGatheredItems(tokenTargetData.charId, itemCounts);
                 }
 
                 const rollDisplay = Format.ShowTooltip(result.toString(), noticeRoll.message);
@@ -675,11 +693,15 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             const ingredients      = state.WuxCookingEvent.ingredients;
             const totalQuantity    = Object.values(ingredients).reduce(function (sum, ing) { return sum + ing.quantity; }, 0);
             const feeds            = Math.floor(totalQuantity / 5);
+            const remainder        = totalQuantity % 5;
+            const neededForNext    = remainder === 0 ? 5 : 5 - remainder;
             const participantCount = Object.keys(state.WuxCookingEvent.tokens).length;
             const stillNeeded      = Math.max(0, participantCount - feeds);
 
             return [
                 getFeedsText(),
+                `${neededForNext} more ingredient${neededForNext !== 1 ? "s" : ""} needed for another meal.`,
+                "",
                 `${participantCount} ${participantCount === 1 ? "person is" : "people are"} involved in this cooking event.`,
                 stillNeeded > 0
                     ? `You need ${stillNeeded} more meal${stillNeeded !== 1 ? "s" : ""} for everyone to eat.`

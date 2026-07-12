@@ -11851,7 +11851,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let contents = "";
                     contents += buildEquipment();
                     contents += buildConsumables();
-                    contents += buildGearItems();
                     return WuxSheetMain.Build(contents);
                 },
 
@@ -11859,6 +11858,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let contents = "";
 
                     contents += WuxSheetMain.MultiRowGroup([slottedConsumables(), ownedConsumables()], WuxSheetMain.Table.FlexTableReverse, 2);
+                    contents += WuxSheetMain.MultiRowGroup([storedFoods(), cookingEvents()], WuxSheetMain.Table.FlexTable, 2);
 
                     contents = WuxSheetMain.TabBlock(contents);
 
@@ -11985,13 +11985,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                 },
 
-                buildGearItems = function () {
-                    let contents = WuxSheetMain.MultiRowGroup([storedGear(), storedFoods()], WuxSheetMain.Table.FlexTable, 2);
-                    contents = WuxSheetMain.TabBlock(contents);
-                    let definition = WuxDef.Get("Page_GearItems");
-                    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
-                },
-
                 storedGear = function () {
                     let repeatingDef = WuxDef.Get("RepeatingGear");
                     let buyDef = WuxDef.Get("Gear_Buy");
@@ -12093,7 +12086,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             ${WuxSheetMain.HiddenFieldToggle(WuxDef.GetAttribute("Gear_FoodIsVisible"), repeaterContent, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}
                             ${WuxSheetMain.Row("&nbsp;")}
                             ${addFoodsFilterButtons()}
-                            ${cookingEvents()}
                         </div>`;
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
@@ -12138,13 +12130,13 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         ${WuxSheetMain.Row(WuxSheetMain.DescField(cookingScoreDef.getAttribute()))}
                         <button class="wuxButton wuxWidth120" type="roll" value="${updateCookingButtonValue}"><span>${updateCookingDef.getTitle("")}</span></button>`;
 
-                    return WuxSheetMain.HiddenField(activeRecipeDef.getAttribute(), contents);
+                    return WuxSheetMain.Table.FlexTableGroup(
+                        WuxSheetMain.HiddenField(activeRecipeDef.getAttribute(), contents), " wuxMinWidth150");
                 },
 
                 storedCooking = function () {
                     let repeatingDef = WuxDef.Get("RepeatingCooking");
                     let removeDef = WuxDef.Get("Gear_Remove");
-                    let inspectDef = WuxDef.Get("Gear_Inspect");
                     let deleteDef = WuxDef.Get("Gear_Delete");
 
                     let gearDef = WuxDef.Get("Gear");
@@ -12164,7 +12156,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                     <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
                                 </div>
                                 <div class="wuxEquipableButtonRow">
-                                    ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                     <button class="wuxRepeatingTechActionButton" type="roll" value="${deleteButtonValue}"><span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}</button>
                                     <button class="wuxRepeatingTechActionButton" type="roll" value="${removeButtonValue}"><span style="color:#e08a3c;">&#8854;</span> ${removeDef.getTitle("")}</button>
                                 </div>
@@ -12184,7 +12175,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 buildEquipment = function () {
                     let contents = "";
 
-                    contents += WuxSheetMain.MultiRowGroup([equippedEquipment(), ownedEquipment()], WuxSheetMain.Table.FlexTableReverse, 2);
+                    contents += WuxSheetMain.MultiRowGroup([equippedEquipment(), ownedEquipment(), storedGear()], WuxSheetMain.Table.FlexTableReverse, 3);
 
                     contents = WuxSheetMain.TabBlock(contents);
 
@@ -13489,7 +13480,6 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerBuyFoodsItemBulk();
             output += listenerInspectFoodsItem();
             output += listenerDeleteFoodsItem();
-            output += listenerInspectCookingItem();
             output += listenerFindConsumablesButtons();
             output += listenerBuyConsumable();
             output += listenerBuyConsumableBulk();
@@ -13581,11 +13571,6 @@ var GearBuilder = GearBuilder || (function () {
             return WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingFoods")}:${WuxDef.GetVariable("Gear_Delete")}`],
                 `WuxWorkerGear.DeleteFoodsItem(eventinfo)`, true);
-        },
-        listenerInspectCookingItem = function () {
-            return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingCooking")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectCookingItem(eventinfo)`, true);
         },
         listenerFindConsumablesButtons = function () {
             let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);

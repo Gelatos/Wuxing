@@ -467,7 +467,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let contents = "";
                     contents += buildEquipment();
                     contents += buildConsumables();
-                    contents += buildGearItems();
                     return WuxSheetMain.Build(contents);
                 },
 
@@ -475,6 +474,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let contents = "";
 
                     contents += WuxSheetMain.MultiRowGroup([slottedConsumables(), ownedConsumables()], WuxSheetMain.Table.FlexTableReverse, 2);
+                    contents += WuxSheetMain.MultiRowGroup([storedFoods(), cookingEvents()], WuxSheetMain.Table.FlexTable, 2);
 
                     contents = WuxSheetMain.TabBlock(contents);
 
@@ -601,13 +601,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                 },
 
-                buildGearItems = function () {
-                    let contents = WuxSheetMain.MultiRowGroup([storedGear(), storedFoods()], WuxSheetMain.Table.FlexTable, 2);
-                    contents = WuxSheetMain.TabBlock(contents);
-                    let definition = WuxDef.Get("Page_GearItems");
-                    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
-                },
-
                 storedGear = function () {
                     let repeatingDef = WuxDef.Get("RepeatingGear");
                     let buyDef = WuxDef.Get("Gear_Buy");
@@ -709,7 +702,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             ${WuxSheetMain.HiddenFieldToggle(WuxDef.GetAttribute("Gear_FoodIsVisible"), repeaterContent, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}
                             ${WuxSheetMain.Row("&nbsp;")}
                             ${addFoodsFilterButtons()}
-                            ${cookingEvents()}
                         </div>`;
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
@@ -754,7 +746,8 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         ${WuxSheetMain.Row(WuxSheetMain.DescField(cookingScoreDef.getAttribute()))}
                         <button class="wuxButton wuxWidth120" type="roll" value="${updateCookingButtonValue}"><span>${updateCookingDef.getTitle("")}</span></button>`;
 
-                    return WuxSheetMain.HiddenField(activeRecipeDef.getAttribute(), contents);
+                    return WuxSheetMain.Table.FlexTableGroup(
+                        WuxSheetMain.HiddenField(activeRecipeDef.getAttribute(), contents), " wuxMinWidth150");
                 },
 
                 storedCooking = function () {
@@ -798,7 +791,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 buildEquipment = function () {
                     let contents = "";
 
-                    contents += WuxSheetMain.MultiRowGroup([equippedEquipment(), ownedEquipment()], WuxSheetMain.Table.FlexTableReverse, 2);
+                    contents += WuxSheetMain.MultiRowGroup([equippedEquipment(), ownedEquipment(), storedGear()], WuxSheetMain.Table.FlexTableReverse, 3);
 
                     contents = WuxSheetMain.TabBlock(contents);
 
