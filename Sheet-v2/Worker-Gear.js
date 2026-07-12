@@ -744,6 +744,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 }
             }
 
+            let wasAlreadyEquipped = false;
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let itemName = attrHandler.parseString(consuRepeater.getFieldName(selectedId, itemNameVar));
 
@@ -751,6 +752,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 let consuBuild = [];
                 try { consuBuild = JSON.parse(consuBuildRaw); } catch (e) {}
                 if (!Array.isArray(consuBuild)) consuBuild = [];
+                wasAlreadyEquipped = consuBuild.indexOf(itemName) !== -1;
                 consuBuild.push(itemName);
                 attrHandler.addUpdate(consuBuildVar, JSON.stringify(consuBuild));
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableSlot"), consuBuild.length.toString());
@@ -781,7 +783,16 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 }
             });
 
-            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+            attributeHandler.addFinishCallback(function () {
+                // Only rebuild the Forme Techniques action menu if this item wasn't already
+                // equipped — its techniques are already present in the menu otherwise.
+                if (!wasAlreadyEquipped) {
+                    let actionsAttributeHandler = new WorkerAttributeHandler();
+                    WuxWorkerActions.UpdateAllActionsFromMenu(actionsAttributeHandler);
+                    actionsAttributeHandler.run();
+                }
+            });
+
             attributeHandler.run();
         },
 
@@ -807,6 +818,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 attributeHandler.addMod(countAttr);
             }
 
+            let wasLastUnit = false;
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let consuBuildRaw = attrHandler.parseString(consuBuildVar);
                 let consuBuild = [];
@@ -814,6 +826,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 if (!Array.isArray(consuBuild)) consuBuild = [];
                 let index = consuBuild.indexOf(itemName);
                 if (index !== -1) consuBuild.splice(index, 1);
+                wasLastUnit = consuBuild.indexOf(itemName) === -1;
                 attrHandler.addUpdate(consuBuildVar, JSON.stringify(consuBuild));
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableSlot"), consuBuild.length.toString());
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableIsVisible", WuxDef._gear), consuBuild.length > 0 ? "on" : "0");
@@ -844,7 +857,16 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableIsVisible"), "on");
             });
 
-            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+            attributeHandler.addFinishCallback(function () {
+                // Only rebuild the Forme Techniques action menu if that was the last equipped
+                // unit of this item — its techniques stay available while any unit remains.
+                if (wasLastUnit) {
+                    let actionsAttributeHandler = new WorkerAttributeHandler();
+                    WuxWorkerActions.UpdateAllActionsFromMenu(actionsAttributeHandler);
+                    actionsAttributeHandler.run();
+                }
+            });
+
             attributeHandler.run();
         },
 
@@ -931,10 +953,13 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let countMod = item.technique.fieldName.replace(/_/g, "");
             let countAttr = WuxDef.GetVariable("ItemCount", countMod);
             let jinVar = WuxDef.GetVariable("Jin");
+            let consuBuildVar = WuxDef.GetVariable("Gear_ConsumableSlot", WuxDef._build);
 
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addMod(jinVar);
             attributeHandler.addMod(countAttr);
+            attributeHandler.addMod(consuBuildVar);
+            attributeHandler.addMod(WuxDef.GetVariable("ConsumableSlots"));
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let cost = parseInt(item.value) || 0;
@@ -943,6 +968,18 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
 
                 let currentCount = attrHandler.parseInt(countAttr) || 0;
                 attrHandler.addUpdate(countAttr, currentCount + 1);
+
+                // Keep the equipped-slot tracking (used by Unequip All, slot count/state) in sync.
+                let consuBuildRaw = attrHandler.parseString(consuBuildVar);
+                let consuBuild = [];
+                try { consuBuild = JSON.parse(consuBuildRaw); } catch (e) {}
+                if (!Array.isArray(consuBuild)) consuBuild = [];
+                consuBuild.push(itemName);
+                attrHandler.addUpdate(consuBuildVar, JSON.stringify(consuBuild));
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableSlot"), consuBuild.length.toString());
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_ConsumableIsVisible", WuxDef._gear), consuBuild.length > 0 ? "on" : "0");
+                let slotsMax = attrHandler.parseInt(WuxDef.GetVariable("ConsumableSlots"));
+                attrHandler.addUpdate(consuSlotStateAttr, getSlotState(consuBuild.length, slotsMax));
             });
 
             attributeHandler.run();
