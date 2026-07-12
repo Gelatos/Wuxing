@@ -1885,6 +1885,7 @@ var TargetReference = TargetReference || (function () {
                 output += tokenOptionTitle("Adventure Options");
                 output += tokenOptionButton("Adventure Options", `adventureoptions ?{Choose Location|${locationOptions}}|||?{Water Source|No Water|Freshwater|Saltwater}`);
                 output += tokenOptionButton("Rest", "rest");
+                output += tokenOptionButton("Start Cooking", "startcooking");
                 output += tokenOptionButton("Cook", "cook");
                 output += tokenOptionButton("End Cooking", "endcooking");
                 const meals = WuxItems.Filter([new DatabaseFilterData("group", "Meal")]);

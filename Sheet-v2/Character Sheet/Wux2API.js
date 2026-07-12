@@ -4626,6 +4626,7 @@ var TargetReference = TargetReference || (function () {
                 output += tokenOptionTitle("Adventure Options");
                 output += tokenOptionButton("Adventure Options", `adventureoptions ?{Choose Location|${locationOptions}}|||?{Water Source|No Water|Freshwater|Saltwater}`);
                 output += tokenOptionButton("Rest", "rest");
+                output += tokenOptionButton("Start Cooking", "startcooking");
                 output += tokenOptionButton("Cook", "cook");
                 output += tokenOptionButton("End Cooking", "endcooking");
                 const meals = WuxItems.Filter([new DatabaseFilterData("group", "Meal")]);
@@ -5758,6 +5759,16 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
         return WuxDef.Get("Gear").getVariable("-" + WuxDef.GetVariable(attributeKey));
     };
 
+    // Finds an existing character attribute or creates it, then sets its current value.
+    const setCharacterAttribute = function (charId, attrName, value) {
+        const attr = findObjs({ _characterid: charId, _type: "attribute", name: attrName })[0];
+        if (attr) {
+            attr.set("current", value);
+        } else {
+            createObj("attribute", { _characterid: charId, name: attrName, current: value });
+        }
+    };
+
     const addItemsToSection = function (charId, itemCounts, sectionName, mainGroup) {
         const repeater      = new SandboxRepeatingSectionHandler(sectionName, charId);
         const nameField     = getGearField("ItemName");
@@ -5830,8 +5841,98 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
         addItemsToSection(charId, itemCounts, "RepeatingFoods", "Goods");
     };
 
+    // Returns a character's current RepeatingFoods count for an item (0 if not present).
+    const getFoodsItemCount = function (charId, itemName) {
+        const nameField  = getGearField("ItemName");
+        const countField = getGearField("ItemCount");
+        const repeater    = new SandboxRepeatingSectionHandler("RepeatingFoods", charId);
+        const prefix      = `${repeater.repeatingSection}_`;
+        const nameSuffix  = `_${nameField}`;
+
+        let count = 0;
+        findObjs({ _characterid: charId, _type: "attribute" }).forEach(function (a) {
+            const n = a.get("name");
+            if (n.startsWith(prefix) && n.endsWith(nameSuffix) && a.get("current") === itemName) {
+                const rowId = n.slice(prefix.length, n.length - nameSuffix.length);
+                const countAttr = findObjs({ _characterid: charId, _type: "attribute", name: `${prefix}${rowId}_${countField}` })[0];
+                if (countAttr) count = parseInt(countAttr.get("current")) || 0;
+            }
+        });
+        return count;
+    };
+
     const addAnimalGoodToCharacter = function (charId, itemCounts) {
         addItemsToSection(charId, itemCounts, "RepeatingGear", "Animal Good");
+    };
+
+    // Creates a new RepeatingCooking row for an ingredient and returns its row id.
+    const createCookingRow = function (charId, itemName, itemGroup) {
+        const repeater        = new SandboxRepeatingSectionHandler("RepeatingCooking", charId);
+        const nameField       = getGearField("ItemName");
+        const countField      = getGearField("ItemCount");
+        const visibleField    = getGearField("ItemIsVisible");
+        const mainGroupField  = getGearField("ItemMainGroup");
+        const itemGroupField  = getGearField("ItemGroup");
+        const rowId           = repeater.generateRowId();
+        const prefix          = `${repeater.repeatingSection}_${rowId}_`;
+
+        createObj("attribute", { _characterid: charId, name: `${prefix}${nameField}`,      current: itemName });
+        createObj("attribute", { _characterid: charId, name: `${prefix}${countField}`,     current: 1 });
+        createObj("attribute", { _characterid: charId, name: `${prefix}${visibleField}`,   current: "on" });
+        createObj("attribute", { _characterid: charId, name: `${prefix}${mainGroupField}`, current: "Goods" });
+        createObj("attribute", { _characterid: charId, name: `${prefix}${itemGroupField}`, current: itemGroup });
+
+        return rowId;
+    };
+
+    // Increments an existing RepeatingCooking row's count by 1 using its cached row id.
+    const incrementCookingRowCount = function (charId, rowId) {
+        if (rowId === undefined) return;
+        const repeater       = new SandboxRepeatingSectionHandler("RepeatingCooking", charId);
+        const countField     = getGearField("ItemCount");
+        const countAttrName  = `${repeater.repeatingSection}_${rowId}_${countField}`;
+        const countAttr      = findObjs({ _characterid: charId, _type: "attribute", name: countAttrName })[0];
+        if (countAttr) {
+            const current = parseInt(countAttr.get("current")) || 0;
+            countAttr.set("current", current + 1);
+        }
+    };
+
+    // Decrements an existing RepeatingCooking row's count by 1 using its cached row id,
+    // clamped to 0. Returns the resulting count (0 if the row/attribute doesn't exist).
+    const decrementCookingRowCount = function (charId, rowId) {
+        if (rowId === undefined) return 0;
+        const repeater       = new SandboxRepeatingSectionHandler("RepeatingCooking", charId);
+        const countField     = getGearField("ItemCount");
+        const countAttrName  = `${repeater.repeatingSection}_${rowId}_${countField}`;
+        const countAttr      = findObjs({ _characterid: charId, _type: "attribute", name: countAttrName })[0];
+        if (!countAttr) return 0;
+        const newCount = Math.max(0, (parseInt(countAttr.get("current")) || 0) - 1);
+        countAttr.set("current", newCount);
+        return newCount;
+    };
+
+    // Deletes every attribute belonging to a RepeatingCooking row using its cached row id.
+    const deleteCookingRow = function (charId, rowId) {
+        if (rowId === undefined) return;
+        const repeater = new SandboxRepeatingSectionHandler("RepeatingCooking", charId);
+        const prefix   = `${repeater.repeatingSection}_${rowId}_`;
+        findObjs({ _characterid: charId, _type: "attribute" }).forEach(function (a) {
+            if (a.get("name").startsWith(prefix)) {
+                a.remove();
+            }
+        });
+    };
+
+    // Deletes every row in a character's RepeatingCooking section.
+    const clearCookingRows = function (charId) {
+        const repeater = new SandboxRepeatingSectionHandler("RepeatingCooking", charId);
+        const prefix   = `${repeater.repeatingSection}_`;
+        findObjs({ _characterid: charId, _type: "attribute" }).forEach(function (a) {
+            if (a.get("name").startsWith(prefix)) {
+                a.remove();
+            }
+        });
     };
 
     // ─── Notice Roll Runner ─────────────────────────────────────────────────────
@@ -5907,7 +6008,6 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 outputLines.push(`[Fish](!fish)`);
             }
             outputLines.push(`<div>&nbsp</div><div style='font-weight: bold'>Cooking</div>`);
-            outputLines.push(`[Start Cooking](!startcooking)`);
             outputLines.push(`[View Cooking](!viewcooking)`);
 
             const messageObject = new SystemInfoMessage(outputLines);
@@ -6113,7 +6213,7 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
 
         // ─── Cooking Event ───────────────────────────────────────────────────────────
 
-        cookingSchemaVersion = "0.1.0",
+        cookingSchemaVersion = "0.2.0",
         adventureSchemaVersion = "0.2.0",
 
         checkInstall = function () {
@@ -6122,7 +6222,8 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                     version: cookingSchemaVersion,
                     active: false,
                     initiatorName: "",
-                    ingredients: {}
+                    ingredients: {},
+                    tokens: {}
                 };
             }
             if (!state.hasOwnProperty("WuxAdventureState") || state.WuxAdventureState.version !== adventureSchemaVersion) {
@@ -6165,8 +6266,9 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             });
         },
 
-        // Returns a formatted ingredient list string for display.
-        formatIngredientList = function () {
+        // Returns a formatted ingredient list string for display. If viewerCharName is
+        // given, that contributor's own name is shown as "You" instead of their name.
+        formatIngredientList = function (viewerCharName) {
             const ingredients = state.WuxCookingEvent.ingredients;
             const entries = Object.values(ingredients);
             if (entries.length === 0) return "No ingredients";
@@ -6185,14 +6287,133 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 const total = ings.reduce(function (sum, ing) { return sum + ing.quantity; }, 0);
                 const lines = [`[${group}] (${total})`];
                 ings.forEach(function (ing) {
+                    const contributorName = viewerCharName != undefined && ing.charName === viewerCharName
+                        ? "You" : ing.charName;
                     const entry = ing.quantity > 1
-                        ? `${ing.name} x${ing.quantity} (${ing.charName})`
-                        : `${ing.name} (${ing.charName})`;
+                        ? `${ing.name} x${ing.quantity} (${contributorName})`
+                        : `${ing.name} (${contributorName})`;
                     lines.push(`  ${entry}`);
                 });
                 sections.push(lines.join("\n"));
             });
             return sections.join("\n\n");
+        },
+
+        // Returns the recipe name the cooking event currently predicts, defaulting to
+        // Tasty Meal when there aren't enough ingredients contributed yet to predict one.
+        getCurrentRecipeName = function () {
+            const ingredients   = state.WuxCookingEvent.ingredients;
+            const totalQuantity = Object.values(ingredients).reduce(function (sum, ing) { return sum + ing.quantity; }, 0);
+            return totalQuantity > 0 ? predictMeal(ingredients) : "Tasty Meal";
+        },
+
+        // Returns the "Feeds: X (Y ingredients)" text for the cooking event's current ingredients.
+        getFeedsText = function () {
+            const ingredients   = state.WuxCookingEvent.ingredients;
+            const totalQuantity = Object.values(ingredients).reduce(function (sum, ing) { return sum + ing.quantity; }, 0);
+            const feeds         = Math.floor(totalQuantity / 5);
+            return totalQuantity >= 5
+                ? `Feeds: ${feeds} (${totalQuantity} ingredient${totalQuantity !== 1 ? "s" : ""})`
+                : `Feeds: None (min 5 ingredients to cook)`;
+        },
+
+        // Returns the feeds text plus how many people are involved in the cooking event
+        // and a reminder of how many more meals are needed for everyone to eat.
+        getMealCountText = function () {
+            const ingredients      = state.WuxCookingEvent.ingredients;
+            const totalQuantity    = Object.values(ingredients).reduce(function (sum, ing) { return sum + ing.quantity; }, 0);
+            const feeds            = Math.floor(totalQuantity / 5);
+            const participantCount = Object.keys(state.WuxCookingEvent.tokens).length;
+            const stillNeeded      = Math.max(0, participantCount - feeds);
+
+            return [
+                getFeedsText(),
+                `${participantCount} ${participantCount === 1 ? "person is" : "people are"} involved in this cooking event.`,
+                stillNeeded > 0
+                    ? `You need ${stillNeeded} more meal${stillNeeded !== 1 ? "s" : ""} for everyone to eat.`
+                    : `You have enough meals for everyone to eat.`
+            ].join("\n");
+        },
+
+        // Writes the current recipe (name + description) to a participating token's character sheet.
+        applyActiveRecipeToToken = function (tokenTargetData) {
+            const recipeName = getCurrentRecipeName();
+            const recipeItem = WuxItems.Get(recipeName);
+            const description = recipeItem && recipeItem.description ? recipeItem.description : "";
+
+            const activeRecipeVar     = WuxDef.GetVariable("Gear_ActiveRecipe");
+            const activeRecipeInfoVar = WuxDef.GetVariable("Gear_ActiveRecipe", WuxDef._info);
+
+            setCharacterAttribute(tokenTargetData.charId, activeRecipeVar, recipeName);
+            setCharacterAttribute(tokenTargetData.charId, activeRecipeInfoVar, description);
+        },
+
+        // Clears a participant's RepeatingCooking rows and empties the Active Meal data
+        // (Gear_ActiveRecipe back to "0") so the Cooking Events section hides again.
+        clearCookingDataForToken = function (participant) {
+            clearCookingRows(participant.charId);
+
+            const activeRecipeVar     = WuxDef.GetVariable("Gear_ActiveRecipe");
+            const activeRecipeInfoVar = WuxDef.GetVariable("Gear_ActiveRecipe", WuxDef._info);
+
+            setCharacterAttribute(participant.charId, activeRecipeVar, "0");
+            setCharacterAttribute(participant.charId, activeRecipeInfoVar, "");
+            setCharacterAttribute(participant.charId, WuxDef.GetVariable("Gear_CookingIsVisible"), "0");
+        },
+
+        // Shows/hides a character's RepeatingCooking rows (vs. a "None" placeholder)
+        // depending on whether they currently have any contributed ingredients.
+        updateCookingVisibility = function (charId) {
+            const hasContributions = Object.values(state.WuxCookingEvent.ingredients)
+                .some(function (ing) { return ing.charId === charId; });
+            setCharacterAttribute(charId, WuxDef.GetVariable("Gear_CookingIsVisible"), hasContributions ? "on" : "0");
+        },
+
+        // Pushes the current predicted recipe (if changed), the meal count, and each
+        // participant's personalized ingredient list to every character in the cooking event.
+        broadcastCookingUpdate = function (recipeChanged) {
+            const activeIngredientListVar = WuxDef.GetVariable("Gear_ActiveIngredientList");
+            const mealCountVar            = WuxDef.GetVariable("Gear_MealCount");
+            const mealCountText            = getMealCountText();
+            Object.values(state.WuxCookingEvent.tokens).forEach(function (participant) {
+                if (recipeChanged) {
+                    applyActiveRecipeToToken(participant);
+                }
+                setCharacterAttribute(participant.charId, activeIngredientListVar, formatIngredientList(participant.charName));
+                setCharacterAttribute(participant.charId, mealCountVar, mealCountText);
+                updateCookingVisibility(participant.charId);
+            });
+        },
+
+        // Returns a character's Cook skill value.
+        getCookSkillValue = function (charId) {
+            const cookSkillVar = WuxDef.GetVariable("Skill_Cook");
+            const attributeHandler = new SandboxAttributeHandler(charId);
+            attributeHandler.addMod(cookSkillVar);
+            let cookMod = 0;
+            attributeHandler.addFinishCallback(function (attrHandler) {
+                cookMod = attrHandler.parseInt(cookSkillVar, 0, false);
+            });
+            attributeHandler.run();
+            return cookMod;
+        },
+
+        // Writes each participant's Cook skill value to Gear_CookingScore, marking
+        // whoever has the highest score (ties included) with "(You have the highest Cook skill)".
+        updateCookingScores = function () {
+            const participants = Object.values(state.WuxCookingEvent.tokens);
+            if (participants.length === 0) return;
+
+            const scores = participants.map(function (participant) {
+                return { participant: participant, score: getCookSkillValue(participant.charId) };
+            });
+            const bestScore = scores.reduce(function (max, s) { return Math.max(max, s.score); }, -Infinity);
+
+            const cookingScoreVar = WuxDef.GetVariable("Gear_CookingScore");
+            scores.forEach(function (s) {
+                const label = s.score === bestScore ? `${s.score} (You have the highest Cook skill)` : `${s.score}`;
+                setCharacterAttribute(s.participant.charId, cookingScoreVar, label);
+            });
         },
 
         commandViewCooking = function (msg) {
@@ -6205,9 +6426,9 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             const totalQuantity = hasIngredients
                 ? Object.values(ingredients).reduce(function (sum, ing) { return sum + ing.quantity; }, 0)
                 : 0;
-            const feeds         = Math.floor(totalQuantity / 5);
             const predicted     = hasIngredients ? predictMeal(ingredients) : null;
             const predictedItem = predicted ? WuxItems.Get(predicted) : null;
+
             const outputLines   = [
                 predicted ? `Recipe: ${predicted}` : "",
                 predictedItem && predictedItem.description ? predictedItem.description : "",
@@ -6215,9 +6436,7 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 `Cooking contributions:`,
                 hasIngredients ? formatIngredientList() : "No ingredients contributed yet.",
                 `-------------------`,
-                totalQuantity >= 5
-                    ? `Feeds: ${feeds} (${totalQuantity} ingredient${totalQuantity !== 1 ? "s" : ""})`
-                    : `Feeds: None (min 5 ingredients to cook)`,
+                getMealCountText(),
                 `[View Recipes](!viewrecipes)`,
                 totalQuantity >= 5 ? `[Cook](!cook)` : ""
             ].filter(function (l) { return l !== ""; });
@@ -6235,9 +6454,26 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 sendChat("System", `/w GM No cooking event is in progress.`, null, { noarchive: true });
                 return;
             }
+
+            // Return every contributed ingredient to its owner's RepeatingFoods, as if each had been deleted.
+            const returnByChar = {};
+            Object.values(state.WuxCookingEvent.ingredients).forEach(function (ing) {
+                if (!returnByChar[ing.charId]) returnByChar[ing.charId] = {};
+                returnByChar[ing.charId][ing.name] = (returnByChar[ing.charId][ing.name] || 0) + ing.quantity;
+            });
+            Object.keys(returnByChar).forEach(function (charId) {
+                addGoodsToCharacter(charId, returnByChar[charId]);
+            });
+
+            // Clear RepeatingCooking and reset the Active Recipe for every participant.
+            Object.values(state.WuxCookingEvent.tokens).forEach(function (participant) {
+                clearCookingDataForToken(participant);
+            });
+
             state.WuxCookingEvent.active = false;
             state.WuxCookingEvent.initiatorName = "";
             state.WuxCookingEvent.ingredients = {};
+            state.WuxCookingEvent.tokens = {};
             sendChat("System", `/w GM Cooking event ended. Ingredients cleared.`, null, { noarchive: true });
         },
 
@@ -6641,26 +6877,66 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 sendChat("System", `/w "${msg.who}" Only GMs can start a cooking event.`, null, { noarchive: true });
                 return;
             }
-            if (state.WuxCookingEvent.active) {
-                sendChat("System", `/w GM A cooking event is already in progress.`, null, { noarchive: true });
+
+            const targets = TokenReference.GetTokenTargetDataArray(msg);
+            if (targets.length === 0) {
+                sendChat("System", `/w GM No tokens selected. Select the tokens joining the cooking event first.`, null, { noarchive: true });
                 return;
             }
-            state.WuxCookingEvent.active = true;
-            state.WuxCookingEvent.initiatorName = msg.who;
-            state.WuxCookingEvent.ingredients = {};
 
-            const outputLines = [
-                "Cooking Event Started",
-                `Add ingredients using your character sheet's Cook button on each item.`,
-                `When ready, use [Cook](!cook) to make the skill check.`,
-                `[View Recipes](!viewrecipes)`
-            ];
+            const wasActive = state.WuxCookingEvent.active;
+            if (!wasActive) {
+                state.WuxCookingEvent.active = true;
+                state.WuxCookingEvent.initiatorName = msg.who;
+                state.WuxCookingEvent.ingredients = {};
+                state.WuxCookingEvent.tokens = {};
+            }
+
+            targets.forEach(function (tokenTargetData) {
+                if (!state.WuxCookingEvent.tokens[tokenTargetData.charId]) {
+                    state.WuxCookingEvent.tokens[tokenTargetData.charId] = {
+                        charId: tokenTargetData.charId,
+                        tokenId: tokenTargetData.tokenId,
+                        charName: tokenTargetData.charName,
+                        displayName: tokenTargetData.displayName
+                    };
+                }
+                applyActiveRecipeToToken(tokenTargetData);
+                updateCookingVisibility(tokenTargetData.charId);
+                setCharacterAttribute(tokenTargetData.charId, WuxDef.GetVariable("Gear_ActiveIngredientList"), formatIngredientList(tokenTargetData.charName));
+            });
+
+            // Set once the full participant roster is known so the "people involved" count is accurate.
+            const mealCountText = getMealCountText();
+            Object.values(state.WuxCookingEvent.tokens).forEach(function (participant) {
+                setCharacterAttribute(participant.charId, WuxDef.GetVariable("Gear_MealCount"), mealCountText);
+            });
+
+            updateCookingScores();
+
+            const participantNames = Object.values(state.WuxCookingEvent.tokens)
+                .map(function (t) { return t.displayName; });
+
+            const outputLines = wasActive
+                ? [
+                    "Cooking Event Updated",
+                    `Joined: ${formatNameList(targets.map(function (t) { return t.displayName; }))}`,
+                    `Participants: ${formatNameList(participantNames)}`,
+                    `[View Recipes](!viewrecipes)`
+                ]
+                : [
+                    "Cooking Event Started",
+                    `Participants: ${formatNameList(participantNames)}`,
+                    `Add ingredients using your character sheet's Cook button on each item.`,
+                    `When ready, use [Cook](!cook) to make the skill check.`,
+                    `[View Recipes](!viewrecipes)`
+                ];
             const messageObject = new SystemInfoMessage(outputLines);
             messageObject.setSender("Wuxing");
             WuxMessage.Send(messageObject);
         },
 
-        // Content: "ingredientName@@@inventoryCount@@@charName"
+        // Content: "ingredientName|||inventoryCount|||charName"
         commandAddIngredient = function (msg, content) {
             if (!state.WuxCookingEvent.active) {
                 sendChat("System", `/w "${msg.who}" No cooking event is in progress.`, null, { noarchive: true });
@@ -6676,28 +6952,126 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 return;
             }
 
-            const key         = `${ingredientName}:::${charName}`;
-            const ingredients = state.WuxCookingEvent.ingredients;
+            const characters = findObjs({ _type: "character", name: charName });
+            if (characters.length === 0) {
+                return;
+            }
+            const charId = characters[0].id;
+
+            if (getFoodsItemCount(charId, ingredientName) <= 0) {
+                return;
+            }
+
+            const key           = `${ingredientName}:::${charName}`;
+            const ingredients   = state.WuxCookingEvent.ingredients;
+            const previousRecipe = getCurrentRecipeName();
+
+            deductGoodsFromCharacter(charId, { [ingredientName]: 1 });
 
             if (ingredients[key]) {
                 ingredients[key].quantity += 1;
+                incrementCookingRowCount(charId, ingredients[key].rowId);
             } else {
-                ingredients[key] = { name: ingredientName, charName: charName, quantity: 1, inventoryCount: inventoryCount };
+                const itemGroup = (WuxGoods.Get(ingredientName) || {}).group || "";
+                const rowId = createCookingRow(charId, ingredientName, itemGroup);
+                ingredients[key] = {
+                    name: ingredientName,
+                    charName: charName,
+                    charId: charId,
+                    quantity: 1,
+                    inventoryCount: inventoryCount,
+                    rowId: rowId
+                };
             }
 
-            const myContributions = Object.values(ingredients)
-                .filter(function (ing) { return ing.charName === charName; })
-                .map(function (ing) { return `${ing.name} x${ing.quantity}`; })
-                .join(", ");
+            const recipeChanged = getCurrentRecipeName() !== previousRecipe;
+            broadcastCookingUpdate(recipeChanged);
+        },
 
-            const outputLines = [
-                `Ingredient accepted: ${ingredientName}`,
-                `${charName}'s contributions: ${myContributions}`,
-                `[View Cooking](!viewcooking)`
-            ];
-            const messageObject = new SystemInfoMessage(outputLines);
-            messageObject.setSender("Wuxing");
-            WuxMessage.SendToSender(messageObject, msg);
+        // Content: "ingredientName|||charName"
+        commandRemoveIngredient = function (msg, content) {
+            if (!state.WuxCookingEvent.active) {
+                sendChat("System", `/w "${msg.who}" No cooking event is in progress.`, null, { noarchive: true });
+                return;
+            }
+            const parts          = content.split("|||");
+            const ingredientName = parts[0] ? parts[0].trim() : "";
+            const charName       = parts[1] ? parts[1].trim() : msg.who;
+
+            if (!ingredientName) {
+                sendChat("System", `/w "${msg.who}" Invalid ingredient.`, null, { noarchive: true });
+                return;
+            }
+
+            const characters = findObjs({ _type: "character", name: charName });
+            if (characters.length === 0) {
+                return;
+            }
+            const charId = characters[0].id;
+
+            const key         = `${ingredientName}:::${charName}`;
+            const ingredients = state.WuxCookingEvent.ingredients;
+            const ingredient  = ingredients[key];
+            if (!ingredient) {
+                return;
+            }
+
+            const previousRecipe = getCurrentRecipeName();
+
+            ingredient.quantity -= 1;
+            decrementCookingRowCount(charId, ingredient.rowId);
+
+            if (ingredient.quantity <= 0) {
+                deleteCookingRow(charId, ingredient.rowId);
+                delete ingredients[key];
+            }
+
+            addGoodsToCharacter(charId, { [ingredientName]: 1 });
+
+            const recipeChanged = getCurrentRecipeName() !== previousRecipe;
+            broadcastCookingUpdate(recipeChanged);
+        },
+
+        // Content: "ingredientName|||charName"
+        // Removes an ingredient's entire contributed quantity from the cooking event and
+        // returns all of it to the character's RepeatingFoods.
+        commandDeleteIngredient = function (msg, content) {
+            if (!state.WuxCookingEvent.active) {
+                sendChat("System", `/w "${msg.who}" No cooking event is in progress.`, null, { noarchive: true });
+                return;
+            }
+            const parts          = content.split("|||");
+            const ingredientName = parts[0] ? parts[0].trim() : "";
+            const charName       = parts[1] ? parts[1].trim() : msg.who;
+
+            if (!ingredientName) {
+                sendChat("System", `/w "${msg.who}" Invalid ingredient.`, null, { noarchive: true });
+                return;
+            }
+
+            const characters = findObjs({ _type: "character", name: charName });
+            if (characters.length === 0) {
+                return;
+            }
+            const charId = characters[0].id;
+
+            const key         = `${ingredientName}:::${charName}`;
+            const ingredients = state.WuxCookingEvent.ingredients;
+            const ingredient  = ingredients[key];
+            if (!ingredient) {
+                return;
+            }
+
+            const previousRecipe = getCurrentRecipeName();
+            const removedQuantity = ingredient.quantity;
+
+            deleteCookingRow(charId, ingredient.rowId);
+            delete ingredients[key];
+
+            addGoodsToCharacter(charId, { [ingredientName]: removedQuantity });
+
+            const recipeChanged = getCurrentRecipeName() !== previousRecipe;
+            broadcastCookingUpdate(recipeChanged);
         },
 
         parseComponentRequirements = function (componentsStr) {
@@ -6757,8 +7131,12 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             return "Tasty Meal";
         },
 
-        commandCook = function (msg) {
-            if (!playerIsGM(msg.playerid)) {
+        // Content (optional): a character name — used by each character's own "Cook Meal"
+        // sheet button so any participant can trigger the cook as themselves. When omitted,
+        // falls back to the classic GM/selected-token flow.
+        commandCook = function (msg, content) {
+            const charName = content ? content.trim() : "";
+            if (!charName && !playerIsGM(msg.playerid)) {
                 sendChat("System", `/w "${msg.who}" Only GMs can trigger the cook.`, null, { noarchive: true });
                 return;
             }
@@ -6772,8 +7150,12 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 return;
             }
 
-            const targets      = TokenReference.GetTokenTargetDataArray(msg);
-            const cookTarget   = targets.length > 0 ? targets[0] : null;
+            const cookTarget   = charName
+                ? TargetReference.GetTargetDataByName(charName)
+                : (function () {
+                    const targets = TokenReference.GetTokenTargetDataArray(msg);
+                    return targets.length > 0 ? targets[0] : null;
+                })();
             const cookSkillVar = WuxDef.GetVariable("Skill_Cook");
             const cookCharId   = cookTarget ? cookTarget.charId : null;
 
@@ -6804,9 +7186,14 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                     }
                 });
 
+                Object.values(state.WuxCookingEvent.tokens).forEach(function (participant) {
+                    clearCookingDataForToken(participant);
+                });
+
                 state.WuxCookingEvent.active = false;
                 state.WuxCookingEvent.initiatorName = "";
                 state.WuxCookingEvent.ingredients = {};
+                state.WuxCookingEvent.tokens = {};
 
                 const rollDisplay = Format.ShowTooltip(roll.total, roll.message);
                 const giveMealCmd = hasSavor
@@ -6861,8 +7248,14 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 case "!addingredient":
                     commandAddIngredient(msg, content);
                     break;
+                case "!removeingredient":
+                    commandRemoveIngredient(msg, content);
+                    break;
+                case "!deleteingredient":
+                    commandDeleteIngredient(msg, content);
+                    break;
                 case "!cook":
-                    commandCook(msg);
+                    commandCook(msg, content);
                     break;
                 case "!viewcooking":
                     commandViewCooking(msg);
@@ -13420,7 +13813,7 @@ var WuxDef = WuxDef || (function() {
     'use strict';
 
     var
-        keys = ["Attribute","Skill","SkillGroup","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","DefIcon","InnateDefenseType","InnateSenseType","StatBonus","General","Chat","Combat","Social","Influence","SeverityRank","RequestType","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobClass","JobGroup","StyleCategory","StyleGroup","StyleSubGroup","BasicStyleGroup","AdvancedGroup","BranchGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Equipment","EquipmentType","EquipmentFilterType","ConsuType","ConsuFilterType","GearType","GoodsType","FoodType","IngType","LocationType","AnimalType","Currency","ToolSlot","ConsumableSlot","Note","PersonalityType","MotivationType","PatternType","TechFilterType","TechBaseFilter","TechAutoFilter","PerkAutoFilter","TechFilterPopup","_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_perk","_expertise","_gear","_affinity","_error","_refresh","_submenu","_db","_visible","Human","Spirit","Unaspected","Wood","WoodF","Fire","FireF","Earth","EarthF","Metal","MetalF","Water","WaterF","Def_BOD","Def_PRC","Def_QCK","Def_CNV","Def_INT","Def_RSN","Page_ActiveSkills","SkillGroup_Athletics","SkillGroup_Magic","Page_SocialSkills","SkillGroup_Persuade","SkillGroup_Cunning","Page_WorldSkills","SkillGroup_Craft","SkillGroup_Device","SkillGroup_Perception","SB_LowDef","SB_MedDef","SB_GoodDef","SB_GreatDef","SB_ExcellentDef","AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad","LoreTier0","LoreTier1","LoreTier2","LoreTier3","GeneralLoreTier0","GeneralLoreTier1","Request_Simple","Request_Inconvenient","Request_Disruptive","Request_Serious","Request_Life-Changing","Walthair","EastSea","Khem","Aridsha","Ceres","Colswei","Dowfeng","Wayling","Novus","Coastborne","Suntouched","Sandfolk","Plains-kin","Frostcloaked","Earthblood","Other","Male","Female","NonBinary","Notebook","Category","post-Notes","post-Info","post-Location","post-System","post-Chapter","post-History","post-Speak","post-Whisper","post-Yell","post-Comms","post-Think","post-Describe","Speak","Whisper","Yell","Comms","Think","Describe","PostToChat","PostToNotebook","Dawn","Morning","Midday","Evening","Night","Deepnight","Boon_Rest","Boon_Savor","InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal","Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity","Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Force","Dmg_Piercing","Dmg_Psyche","Dmg_Tension","Dmg_Weapon","Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden","PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks","JobClass_Simple","JobClass_Intermediate","JobClass_Advanced","JobClass_Spirit","JobGroup_Vanguard","JobGroup_Athlete","JobGroup_Operator","JobGroup_Strategist","JobGroup_Healer","JobGroup_Advocate","StyleCategory_Forme","StyleCategory_Gear","StyleCategory_Basic","StyleCategory_Combat","StyleCategory_Social","StyleCategory_Deprecated","BasicGroup_BasicAction","BasicGroup_BasicDetection","BasicGroup_BasicSpirit","BasicGroup_BasicAttack","BasicGroup_BasicMovement","BasicGroup_BasicRecovery","BasicGroup_BasicAgitation","BasicGroup_BasicInfluence","BasicGroup_BasicRequest","StyleGroup_Combat Arts","StyleGroup_Control Arts","StyleGroup_Social Arts","StyleSubGroup_Fast Melee Attacks","StyleSubGroup_Forceful Melee Attacks","StyleSubGroup_Resonant Melee Attacks","StyleSubGroup_Fast Ranged Attacks","StyleSubGroup_Forceful Ranged Attacks","StyleSubGroup_Resonant Ranged Attacks","StyleSubGroup_Area Control","StyleSubGroup_Terrain Molding","StyleSubGroup_Energy Control","StyleSubGroup_Material Control","StyleSubGroup_Enhanced Transmutation","StyleSubGroup_Damage Mitigation","StyleSubGroup_Positioning","StyleSubGroup_Enhancement","StyleSubGroup_Mythical","StyleSubGroup_Magical Assistance","StyleSubGroup_Charming Influence","StyleSubGroup_Compelling Influence","StyleSubGroup_Subtle Influence","GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear","Personality_Stoic","Personality_Charmer","Personality_Idealist","Personality_Cynic","Personality_Loner","Personality_Leader","Personality_Rebel","Personality_Thinker","Personality_Caregiver","Personality_Dreamer","Personality_Realist","Personality_Mediator","Personality_Strategist","Personality_Joker","Personality_Visionary","Personality_Survivor","Personality_Guardian","Personality_Tactician","Personality_Pacifist","Personality_Zealot","Motivation_Power","Motivation_Justice","Motivation_Freedom","Motivation_Revenge","Motivation_Survival","Motivation_Glory","Motivation_Knowledge","Motivation_Redemption","Motivation_Belonging","Motivation_Wealth","Motivation_Truth","Motivation_Peace","Motivation_Control","Motivation_Chaos","Motivation_Duty","Motivation_Fame","Motivation_Discovery","Motivation_Legacy","Motivation_Love","Motivation_Escape","TechFilterType_TechCategory","TechFilterType_Combat","TechFilterType_Social","TechFilterType_Utility","TechFilterType_ActionType","TechFilterType_SwiftAction","TechFilterType_AssistAction","TechFilterType_QuickAction","TechFilterType_FullAction","TechFilterType_ReactionAction","TechFilterType_BriefAction","TechFilterType_LongAction","TechFilterType_PassiveAction","TechFilterType_Targeting","TechFilterType_RangeSelf","TechFilterType_RangeMelee","TechFilterType_RangeClose","TechFilterType_RangeShort","TechFilterType_RangeShortArea","TechFilterType_RangeLong","TechFilterType_RangeLongArea","TechFilterType_RangeSpecial","TechFilterType_CombatKeywords","TechFilterType_SocialKeywords","TechFilterType_SupportKeywords","TechFilterType_UtilityKeywords","TechFilterType_Defense","TechFilterType_DamageType","TechFilterType_StatusGood","TechFilterType_StatusBad","TechFilterType_WeaponKeywords","TechFilterType_AthleticSkills","TechFilterType_MagicSkills","TechFilterType_SocialSkills","TechFilterType_WorldSkills","AutoFilter_MeleeWeapons","AutoFilter_LightBlade","AutoFilter_HeavyBlade","AutoFilter_Hammer","AutoFilter_Polearm","AutoFilter_Whip","AutoFilter_RangedWeapons","AutoFilter_Bow","AutoFilter_Handgun","AutoFilter_Longshot","AutoFilter_ThrownBlade","AutoFilter_Athletics","AutoFilter_ForcefulFist","AutoFilter_Grappler","AutoFilter_Swiftform","AutoFilter_Mobility","AutoFilter_Acrobatics","AutoFilter_Stealth","AutoFilter_Social","AutoFilter_FavorBuilding","AutoFilter_Request","AutoFilter_Influence","AutoFilter_Emotion","AutoFilter_WoodMagic","AutoFilter_PlantMartial","AutoFilter_Plants","AutoFilter_Wood","AutoFilter_Wind","AutoFilter_Mana","AutoFilter_WoodSound","AutoFilter_WoodHealing","AutoFilter_WoodEmpowering","AutoFilter_FireMagic","AutoFilter_FlameMartial","AutoFilter_Flames","AutoFilter_Glass","AutoFilter_Smoke","AutoFilter_FireHealing","AutoFilter_FireEmpowering","AutoFilter_EarthMagic","AutoFilter_SandMartial","AutoFilter_Rock","AutoFilter_Terrain","AutoFilter_Gravity","AutoFilter_EarthEmpowering","AutoFilter_MetalMagic","AutoFilter_LightningMartial","AutoFilter_Ironsand","AutoFilter_Metal","AutoFilter_Lightning","AutoFilter_Stasis","AutoFilter_MetalEmpowering","AutoFilter_WaterMagic","AutoFilter_IceMartial","AutoFilter_Water","AutoFilter_Cold","AutoFilter_Ice","AutoFilter_WaterHealing","AutoFilter_WaterSound","AutoFilter_WaterEmpowering","AutoFilter_SpecialMagic","AutoFilter_Ether","AutoFilter_Corrosion","AutoFilter_Light","AutoFilter_Shadow","AutoFilter_Blood","AutoFilter_Time","TechBaseFilter_Combat","TechBaseFilter_Social","TechBaseFilter_Utility","PerkFilter_Cost1Perk","PerkFilter_Cost2Perk","PerkFilter_Cost3Perk","EquipType_Weapon","EquipType_Apparel","EquipType_Tool","EquipFilter_WeaponType","EquipFilter_Melee","EquipFilter_Ranged","EquipFilter_WeaponKeywords","EquipFilter_ToolType","EquipFilter_Comms","EquipFilter_Bindings","EquipFilter_Light","EquipFilter_Misc","EquipFilter_ToolKeywords","EquipFilter_ApparelType","EquipFilter_Chest","EquipFilter_Head","EquipFilter_Eyes","EquipFilter_Back","EquipFilter_Arms","EquipFilter_Legs","EquipFilter_Feet","ConsuType_Recovery","ConsuType_Tonic","ConsuType_Bomb","GearType_Supplies","GearType_Implements","GearType_Records","GoodsType_Material","GoodsType_Goods","GoodsType_Animal Good","FoodType_Beverage","IngType_Compound","IngType_Supplement","IngType_Protein","IngType_Starch","IngType_Sugar","IngType_Fruit","IngType_Vegetable","LocationType_Coastal","LocationType_Cold","LocationType_Desert","LocationType_Forest","LocationType_Grassland","LocationType_Jungle","LocationType_Mountain","LocationType_Plains","LocationType_Swamp","LocationType_Tropical","LocationType_Volcanic","AnimalType_Beast","AnimalType_Bird","AnimalType_Lizard","Attr_BOD","Attr_PRC","Attr_QCK","STR","Attr_CNV","ESS","Attr_INT","Attr_RSN","Check","CombatDetails","FlatDC","Title_Boon","BoostStyleTech","BoostGearTech","BoostPerkTech","KeySkills","Level","CR","MaxCR","SB_MAX","Potency","SkillExpertise","DamageBonus","TechENLimit","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","AdvancementPerkTransfer","JobTier","JobTechniques","LearnStyle","StyleTechniques","TrainingKnowledge","TrainingTechniques","PP","BonusTraining","Def_Brace","Def_Warding","Def_Evasion","Def_Resolve","Def_Insight","Def_Logic","WillBreak","CharSheetName","SheetName","FullName","DisplayName","QuickDescription","Backstory","Age","Gender","HomeRegion","Homeland","Ethnicity","Ancestry","Affinity","AdvancedAffinity","SecondaryAffinity","AffinityAspect","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","EquipmentSlots","ConsumableSlots","Jin","HP","WILL","Surge","EN","StartEN","RoundEN","Recall","Initiative","Cmb_Vitality","Cmb_HV","TargetHV","Cmb_Armor","Cmb_BurnResist","Cmb_ColdResist","Cmb_EnergyResist","Cmb_ForceResist","Cmb_PiercingResist","Cmb_PsycheResist","Cmb_Mv","Cmb_MvDash","Soc_Favor","TargetFavor","RepeatingInfluences","Soc_Influence","Title_UsingInfluences","Soc_InfluenceCombat","Soc_InfluenceDesc","Soc_Severity","Soc_RequestCheck","Soc_Impatience","Trait_Accurate","Trait_AP","Trait_Break","Trait_Brutal","Trait_Truehit","Trait_Favor","Trait_Influence","Trait_Request","Trait_Cleanse","Trait_EN","Trait_Heal","Trait_BreakFocus","Trait_ForceMove","Trait_ForceMove-ForceMove","Trait_ForceMove-Pulled","Trait_ForceMove-Pushed","Trait_ForceMove-Fall","Trait_Illusion","Trait_Move","Trait_Move-FreeMove","Trait_Move-Jump","Trait_Move-Sneak","Trait_Move-Special","Trait_Move-Fly","Trait_Move-Teleport","Trait_Move-Temporal","Trait_Structure","Trait_Terrain","Trait_Damage","Trait_DamageTrue","Trait_DamageEvasion","Trait_DamageEgo","Trait_Delayed","Trait_Focus","Trait_OnEnter","Trait_PerRound","Trait_PerTurn","Trait_PerConflict","Trait_Permanent","Trait_Resonator","Trait_Social","Trait_SkillCheck-DC","Trait_SkillCheck-Defense","Trait_Trigger","Trait_MeleeWeapon","Trait_Hammer","Trait_HeavyBlade","Trait_LightBlade","Trait_Polearm","Trait_Whip","Trait_RangedWeapon","Trait_Bow","Trait_Handgun","Trait_Longshot","Trait_Scattershot","Trait_ThrownBlade","Trait_Ingested","Trait_Inhalent","Trait_Magitech","Trait_Medkit","Trait_DustContainer","Trait_FishingTool","Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Loud","Trait_Resonant","Trait_Sharp","Trait_Sturdy","Trait_Transparent","PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training","Page_Origin","Page_Jobs","Page_Skills","Page_Knowledge","Page_Attributes","Page_AffectedStats","Page_PotencyStats","Page_DefensiveStats","Page_SkillStats","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Post","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Techniques","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar","Page_NPC","Page_Notes","Title_Origin","Title_Background","Title_BackgroundGenerator","Title_StatSummary","Title_Conflict","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_LearnNewStyles","Title_PerkTechniques","Title_StyleFilterOption","Title_QuickStyleFilter","Title_PerkStyleFilter","Title_ExpandedStyleFilters","Title_Chat","Title_Emotes","Title_LanguageSelect","Title_LanguageCommon","Title_GeneralLore","Title_LoreCategory","Title_SpecializedLore","Title_Skills","Title_Outfits","Title_EquippedGear","Title_Notebook","Title_Techniques","Title_TechniqueChange","Title_ChangeAffinity","Title_Debug","Title_InstantConsumables","Title_EquippedInstantConsumables","Title_StartingJin","Title_YourJin","Title_InspectionItemCost","Title_JobsByDifficulty","Title_MainRole","Title_SubRole","Title_IsPlayer","IsPlayer_No","IsPlayer_Yes","Loading","Popup_PopupActive","Popup_PopupName","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_ItemInspectionName","Popup_EquipmentInspectionName","Popup_ConsumablesInspectionName","Popup_GearInspectionName","Popup_GoodsInspectionName","Popup_TechniqueInspectionName","Popup_PerkInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","TechPopupValues","ItemPopupValues","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectDisplay","Popup_ItemSelectDisplayNeutral","Popup_ItemSelectDisplayWood","Popup_ItemSelectDisplayFire","Popup_ItemSelectDisplayEarth","Popup_ItemSelectDisplayMetal","Popup_ItemSelectDisplayWater","Popup_ItemSelectType","Popup_ItemSelectIsOn","Popup_ItemSelectVisible","Popup_FilterPopupActive","Popup_FilterPopupName","Popup_FilterTechniquePopupName","Popup_CustomStylesFilterName","Popup_CustomItemsFilter","Popup_CustomItemTechFilter","Popup_ApplyFilter","Popup_ClearFilter","Popup_FilterPopupType","Popup_FilterPopupDisplayType","Popup_FindItemsByFilter","Popup_FindItemsByTechnique","Popup_SearchButton","Popup_FindGearByFilter","Chat_Type","Chat_PostTarget","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","RepeatingActiveEmotes","RepeatingActiveEmotesNotes","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_PostEmoteNote","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","RepeatingOutfits","Chat_OutfitDefault","Chat_OutfitDefaultURL","RepeaterAcademic","RepeaterProfession","RepeaterCraftmanship","RepeaterGeography","RepeaterHistory","RepeaterCulture","RepeaterReligion","Lore_Tier","Lore_SubType","Lore_Name","Lore_Description","Forme_SeeTechniques","Forme_ShowFromNonElement","Forme_ShowLevelRestricted","Forme_RecommendedStyles","Forme_CustomStyleFilter","RepeatingJobStyles","RepeatingStyles","RepeatingPerks","Action_StyleIsVisible","Action_PerkIsVisible","Forme_Name","Forme_Inspect","Forme_Delete","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_ActionCount","Forme_SelectJob","Forme_JobSlot","Forme_JobSlotCount","Forme_AdvancedSlot","Forme_AdvancedSlotCount","Forme_StyleSlot","Forme_StyleSlotCount","Action_Use","Action_Inspect","Action_Delete","Action_Actions","Action_SetData","Action_Techniques","RepeatingFormeTech","Action_FormeLoadCount","Action_FormeLoad","FormeTechDisplayVer","Action_FormeTechniques","RepeatingPermaTech","ActionsPermaTech","ActionsJobTech","ActionsAdvTech","ActionsPassiveTech","ActionsGearTech","ActionsBasicActions","ActionsBasicRecovery","ActionsBasicAttack","ActionsBasicSocial","ActionsBasicSpirit","RefreshTech","GearTech","BasicActions","BasicRecovery","BasicAttack","BasicSocial","BasicSpirit","RepeatingCustomTech","CustomTech","TechHeader","TechTrueName","TechActionType","TechActionName","TechActionTooltip","TechName","TechVersion","TechIsVisible","TechAffinity","TechTier","TechRank","TechRankUp","TechRankDown","TechDisplayName","TechResourceData","TechEnCost","TechWillCost","TechBoonCost","TechTargetingData","TechTargetDesc","TechTargetType","TechRange","TechLimit","TechForm","TechTrait","TechCoreDefense","TechTrigger","TechTraits","TechTraitsDesc","TechFlavorText","TechCoreEffect","TechOnEnter","TechCheckTitle","TechCheckEffect","TechEndEffect","TechWillBreakEffect","TechEnhanceEffect","TechDef","ItemIsVisible","ItemName","ItemAction","ItemCount","ItemMainGroup","ItemGroup","ItemSubGroup","ItemBulk","ItemBaseValue","ItemTrait","ItemDescription","ItemCraft","ItemSlotOpen","ItemPerFive","Gear_AutoEquipItems","Gear_Equip","Gear_Unequip","Gear_Delete","Gear_Inspect","Gear_Buy","Gear_BuyBulk","Gear_Remove","Gear_Use","Gear_Cook","Gear_UnequipAll","Gear_EquipmentSlot","Gear_ConsumableSlot","Gear_EquippedItemTraits","RepeatingEquipment","RepeatingConsumables","RepeatingSyncedEquipment","RepeatingGear","RepeatingFoods","RepeatingCooking","Gear_EquipmentIsVisible","Gear_ConsumableIsVisible","Gear_GearIsVisible","Gear_FoodIsVisible","Title_AddEquipment","Title_AddConsumable","Title_AddGear","Gear_ItemName","Gear_ItemType","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_UpdateEquipment","Gear_RemoveEquipment","Gear_UpdateConsumables","Gear_RemoveConsumables","Gear_CookingEvent","Gear_ActiveRecipe","Gear_UpdateCooking","Gear_ActiveIngredientList","System_CraftingBlueprint","System_CraftingRecipe","System_CraftSkillCheck","System_CraftSkillCheckBlueprint","System_CraftSkillCheckTraining","System_CraftSkillCheckBlueprintTraining","System_CraftTimeBlueprint","System_CraftTime","System_CraftingComponent","System_CraftMaterials","System_Cooking","System_HighQualityMeals","Title_Round","Title_Phase","Title_PhaseTeam","Title_Turn","Title_OffTurn","Title_Targetting","Pattern_Target","Pattern_Targets","Pattern_Target/Self","Pattern_Object","Pattern_Objects","Pattern_Space","Pattern_Spaces","Pattern_Line","Pattern_Wide Line","Pattern_Cone","Pattern_Blast","Pattern_Blast(3H)","Pattern_Blast(5H)","Pattern_Radial","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEndFocus","Title_TechEnhancement","Adjacency","Obstruction","Lifting","Bulk","Note_GenName","Note_GenFullName","Note_GenGender","Note_GenHomeRegion","Note_GenRace","Note_GenPersonality","Note_GenMotivation","Note_GenerateCharacter","Note_UseGeneration","Note_ClearBackground","Notebooks","Note_NotebookCount","Note_NotebookActions","Note_NotebookName","Note_NotebookContents","Note_NotebookOpen","Note_NotebookDelete","Note_NotebookReload","Note_NotebookClose","Note_NotebookSave","Note_NotebookIsDirty","Note_OpenNotebook","Note_OpenNotebookActions","NotebookPages","Note_PageType","Note_PageDisplay","Note_PagePost","Note_PageDelete","Note_PageTemplateData","Note_PageContents","Note_PageLocation","Note_PageArea","Note_PageDate","Note_PageTime","Note_PageCharName","Note_PageCharURL","Note_PageCharEmote","Note_PageCharLanguage","Note_PageQuestName","Note_PageChapter","Note_PagePart","Perk_Attribute","Perk_Skill","Perk_SkillGroup","Perk_Archetype","Perk_Job","Perk_JobStyle","Perk_Knowledge","Perk_Language","Perk_LoreCategory","Perk_Lore","Perk_Style","Perk_StyleType","Perk_Forme","Perk_Action","Perk_Technique","Perk_System","Perk_PageSet","Perk_Page","Perk_Title","Perk_Popup","Perk_Data","Perk_Advancement","Perk_Training","Perk_Perk","Perk_Defense","Perk_Sense","Perk_DefIcon","Perk_InnateDefenseType","Perk_InnateSenseType","Perk_StatBonus","Perk_General","Perk_Chat","Perk_Combat","Perk_Social","Perk_Influence","Perk_SeverityRank","Perk_RequestType","Perk_DamageType","Perk_TerrainFxType","Perk_Trait","Perk_Status","Perk_Condition","Perk_Emotion","Perk_Boon","Perk_PerkGroup","Perk_JobClass","Perk_JobGroup","Perk_StyleCategory","Perk_StyleGroup","Perk_StyleSubGroup","Perk_BasicStyleGroup","Perk_AdvancedGroup","Perk_BranchGroup","Perk_GearGroup","Perk_ResourceType","Perk_Goods","Perk_Gear","Perk_Consumable","Perk_Equipment","Perk_EquipmentType","Perk_EquipmentFilterType","Perk_ConsuType","Perk_ConsuFilterType","Perk_GearType","Perk_GoodsType","Perk_FoodType","Perk_IngType","Perk_LocationType","Perk_AnimalType","Perk_Currency","Perk_ToolSlot","Perk_ConsumableSlot","Perk_Note","Perk_PersonalityType","Perk_MotivationType","Perk_PatternType","Perk_TechBaseFilter","Perk__max","Perk__rank","Perk__build","Perk__filter","Perk__subfilter","Perk__expand","Perk__tab","Perk__page","Perk__info","Perk__exit","Perk__finish","Perk__origin","Perk__learn","Perk__pts","Perk__tech","Perk__techset","Perk__perk","Perk__expertise","Perk__gear","Perk__affinity","Perk__error","Perk__refresh","Perk__submenu","Perk__db","Perk__visible","Skill_Aesthetics","Skill_Agility","Skill_Aim","Skill_Alchemy","Skill_Analyze","Skill_Charm","Skill_Cook","Skill_Demoralize","Skill_Energize","Skill_Engineer","Skill_Empathy","Skill_Flux","Skill_Glyphwork","Skill_Inspire","Skill_Martial","Skill_Materialize","Skill_Medicine","Skill_Misdirect","Skill_Musicianship","Skill_Notice","Skill_Physio","Skill_Physique","Skill_Pilot","Skill_Rationalize","Skill_Resonance","Skill_Tinker","Skill_Transmute","Lang_Minere","Lang_Junal","Lang_Apollen","Lang_Lib","Lang_Cert","Lang_Dustell","Lang_Muralic","Lang_Shira","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq","Lang_Kleikan","Lang_Shorespeak","Lang_Verdeni","Lang_Emotion","Lang_Empathy","Lang_Jovean","Lang_Mytikan","LoreCat_Academic","Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","LoreCat_Profession","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","LoreCat_Craftmanship","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","LoreCat_Geography","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","LoreCat_History","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","LoreCat_Culture","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","LoreCat_Religion","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon","Job_Fighter","Job_Labourer","Job_Brawler","Job_Warden","Job_Sentinel","Job_Sniper","Job_Rogue","Job_Exemplar","Job_Hunter","Job_Warmage","Job_Geomancer","Job_Kineticist","Job_Trooper","Job_Yaksa","Job_Tactician","Job_Bard","Job_Spellwright","Job_Shade","Job_Medic","Job_Preacher","Job_Alchemist","Job_Courtier","Job_Merchant","Job_Diplomat","Job_Phantasm","JStyle_Fighter","JStyle_Labourer","JStyle_Brawler","JStyle_Warden","JStyle_Sentinel","JStyle_Sniper","JStyle_Rogue","JStyle_Exemplar","JStyle_Hunter","JStyle_Warmage","JStyle_Geomancer","JStyle_Kineticist","JStyle_Trooper","JStyle_Yaksa","JStyle_Tactician","JStyle_Bard","JStyle_Spellwright","JStyle_Shade","JStyle_Medic","JStyle_Preacher","JStyle_Alchemist","JStyle_Courtier","JStyle_Merchant","JStyle_Diplomat","JStyle_Phantasm","Stat_Blinded","Stat_Burst","Stat_Downed","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Focus","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Mantle","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious","Stat_Aflame","Stat_Burn Aegis","Stat_Chilled","Stat_Cold Aegis","Stat_Dazed","Stat_Dodge","Stat_Dying","Stat_Earthblight","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Iron Plates","Stat_Jolted","Stat_Magnetized","Stat_Prone","Stat_Quickened","Stat_Sand Aegis","Stat_Shielded","Stat_Shock Aegis","Stat_Sickened","Stat_Soaked","Stat_Static","Stat_Stunned","Stat_Vined","Stat_Agreeable","Stat_Angered","Stat_Calmed","Stat_Distracted","Stat_Doubt","Stat_Encouraged","Stat_Flustered","Stat_Frightened","Stat_Overjoyed","Stat_Oppositional","Stat_Persevering","Stat_Rally","Stat_Surprised","Stat_Steadfast"],
+        keys = ["Attribute","Skill","SkillGroup","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","DefIcon","InnateDefenseType","InnateSenseType","StatBonus","General","Chat","Combat","Social","Influence","SeverityRank","RequestType","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobClass","JobGroup","StyleCategory","StyleGroup","StyleSubGroup","BasicStyleGroup","AdvancedGroup","BranchGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Equipment","EquipmentType","EquipmentFilterType","ConsuType","ConsuFilterType","GearType","GoodsType","FoodType","IngType","LocationType","AnimalType","Currency","ToolSlot","ConsumableSlot","Note","PersonalityType","MotivationType","PatternType","TechFilterType","TechBaseFilter","TechAutoFilter","PerkAutoFilter","TechFilterPopup","_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_perk","_expertise","_gear","_affinity","_error","_refresh","_submenu","_db","_visible","Human","Spirit","Unaspected","Wood","WoodF","Fire","FireF","Earth","EarthF","Metal","MetalF","Water","WaterF","Def_BOD","Def_PRC","Def_QCK","Def_CNV","Def_INT","Def_RSN","Page_ActiveSkills","SkillGroup_Athletics","SkillGroup_Magic","Page_SocialSkills","SkillGroup_Persuade","SkillGroup_Cunning","Page_WorldSkills","SkillGroup_Craft","SkillGroup_Device","SkillGroup_Perception","SB_LowDef","SB_MedDef","SB_GoodDef","SB_GreatDef","SB_ExcellentDef","AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad","LoreTier0","LoreTier1","LoreTier2","LoreTier3","GeneralLoreTier0","GeneralLoreTier1","Request_Simple","Request_Inconvenient","Request_Disruptive","Request_Serious","Request_Life-Changing","Walthair","EastSea","Khem","Aridsha","Ceres","Colswei","Dowfeng","Wayling","Novus","Coastborne","Suntouched","Sandfolk","Plains-kin","Frostcloaked","Earthblood","Other","Male","Female","NonBinary","Notebook","Category","post-Notes","post-Info","post-Location","post-System","post-Chapter","post-History","post-Speak","post-Whisper","post-Yell","post-Comms","post-Think","post-Describe","Speak","Whisper","Yell","Comms","Think","Describe","PostToChat","PostToNotebook","Dawn","Morning","Midday","Evening","Night","Deepnight","Boon_Rest","Boon_Savor","InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal","Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity","Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Force","Dmg_Piercing","Dmg_Psyche","Dmg_Tension","Dmg_Weapon","Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden","PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks","JobClass_Simple","JobClass_Intermediate","JobClass_Advanced","JobClass_Spirit","JobGroup_Vanguard","JobGroup_Athlete","JobGroup_Operator","JobGroup_Strategist","JobGroup_Healer","JobGroup_Advocate","StyleCategory_Forme","StyleCategory_Gear","StyleCategory_Basic","StyleCategory_Combat","StyleCategory_Social","StyleCategory_Deprecated","BasicGroup_BasicAction","BasicGroup_BasicDetection","BasicGroup_BasicSpirit","BasicGroup_BasicAttack","BasicGroup_BasicMovement","BasicGroup_BasicRecovery","BasicGroup_BasicAgitation","BasicGroup_BasicInfluence","BasicGroup_BasicRequest","StyleGroup_Combat Arts","StyleGroup_Control Arts","StyleGroup_Social Arts","StyleSubGroup_Fast Melee Attacks","StyleSubGroup_Forceful Melee Attacks","StyleSubGroup_Resonant Melee Attacks","StyleSubGroup_Fast Ranged Attacks","StyleSubGroup_Forceful Ranged Attacks","StyleSubGroup_Resonant Ranged Attacks","StyleSubGroup_Area Control","StyleSubGroup_Terrain Molding","StyleSubGroup_Energy Control","StyleSubGroup_Material Control","StyleSubGroup_Enhanced Transmutation","StyleSubGroup_Damage Mitigation","StyleSubGroup_Positioning","StyleSubGroup_Enhancement","StyleSubGroup_Mythical","StyleSubGroup_Magical Assistance","StyleSubGroup_Charming Influence","StyleSubGroup_Compelling Influence","StyleSubGroup_Subtle Influence","GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear","Personality_Stoic","Personality_Charmer","Personality_Idealist","Personality_Cynic","Personality_Loner","Personality_Leader","Personality_Rebel","Personality_Thinker","Personality_Caregiver","Personality_Dreamer","Personality_Realist","Personality_Mediator","Personality_Strategist","Personality_Joker","Personality_Visionary","Personality_Survivor","Personality_Guardian","Personality_Tactician","Personality_Pacifist","Personality_Zealot","Motivation_Power","Motivation_Justice","Motivation_Freedom","Motivation_Revenge","Motivation_Survival","Motivation_Glory","Motivation_Knowledge","Motivation_Redemption","Motivation_Belonging","Motivation_Wealth","Motivation_Truth","Motivation_Peace","Motivation_Control","Motivation_Chaos","Motivation_Duty","Motivation_Fame","Motivation_Discovery","Motivation_Legacy","Motivation_Love","Motivation_Escape","TechFilterType_TechCategory","TechFilterType_Combat","TechFilterType_Social","TechFilterType_Utility","TechFilterType_ActionType","TechFilterType_SwiftAction","TechFilterType_AssistAction","TechFilterType_QuickAction","TechFilterType_FullAction","TechFilterType_ReactionAction","TechFilterType_BriefAction","TechFilterType_LongAction","TechFilterType_PassiveAction","TechFilterType_Targeting","TechFilterType_RangeSelf","TechFilterType_RangeMelee","TechFilterType_RangeClose","TechFilterType_RangeShort","TechFilterType_RangeShortArea","TechFilterType_RangeLong","TechFilterType_RangeLongArea","TechFilterType_RangeSpecial","TechFilterType_CombatKeywords","TechFilterType_SocialKeywords","TechFilterType_SupportKeywords","TechFilterType_UtilityKeywords","TechFilterType_Defense","TechFilterType_DamageType","TechFilterType_StatusGood","TechFilterType_StatusBad","TechFilterType_WeaponKeywords","TechFilterType_AthleticSkills","TechFilterType_MagicSkills","TechFilterType_SocialSkills","TechFilterType_WorldSkills","AutoFilter_MeleeWeapons","AutoFilter_LightBlade","AutoFilter_HeavyBlade","AutoFilter_Hammer","AutoFilter_Polearm","AutoFilter_Whip","AutoFilter_RangedWeapons","AutoFilter_Bow","AutoFilter_Handgun","AutoFilter_Longshot","AutoFilter_ThrownBlade","AutoFilter_Athletics","AutoFilter_ForcefulFist","AutoFilter_Grappler","AutoFilter_Swiftform","AutoFilter_Mobility","AutoFilter_Acrobatics","AutoFilter_Stealth","AutoFilter_Social","AutoFilter_FavorBuilding","AutoFilter_Request","AutoFilter_Influence","AutoFilter_Emotion","AutoFilter_WoodMagic","AutoFilter_PlantMartial","AutoFilter_Plants","AutoFilter_Wood","AutoFilter_Wind","AutoFilter_Mana","AutoFilter_WoodSound","AutoFilter_WoodHealing","AutoFilter_WoodEmpowering","AutoFilter_FireMagic","AutoFilter_FlameMartial","AutoFilter_Flames","AutoFilter_Glass","AutoFilter_Smoke","AutoFilter_FireHealing","AutoFilter_FireEmpowering","AutoFilter_EarthMagic","AutoFilter_SandMartial","AutoFilter_Rock","AutoFilter_Terrain","AutoFilter_Gravity","AutoFilter_EarthEmpowering","AutoFilter_MetalMagic","AutoFilter_LightningMartial","AutoFilter_Ironsand","AutoFilter_Metal","AutoFilter_Lightning","AutoFilter_Stasis","AutoFilter_MetalEmpowering","AutoFilter_WaterMagic","AutoFilter_IceMartial","AutoFilter_Water","AutoFilter_Cold","AutoFilter_Ice","AutoFilter_WaterHealing","AutoFilter_WaterSound","AutoFilter_WaterEmpowering","AutoFilter_SpecialMagic","AutoFilter_Ether","AutoFilter_Corrosion","AutoFilter_Light","AutoFilter_Shadow","AutoFilter_Blood","AutoFilter_Time","TechBaseFilter_Combat","TechBaseFilter_Social","TechBaseFilter_Utility","PerkFilter_Cost1Perk","PerkFilter_Cost2Perk","PerkFilter_Cost3Perk","EquipType_Weapon","EquipType_Apparel","EquipType_Tool","EquipFilter_WeaponType","EquipFilter_Melee","EquipFilter_Ranged","EquipFilter_WeaponKeywords","EquipFilter_ToolType","EquipFilter_Comms","EquipFilter_Bindings","EquipFilter_Light","EquipFilter_Misc","EquipFilter_ToolKeywords","EquipFilter_ApparelType","EquipFilter_Chest","EquipFilter_Head","EquipFilter_Eyes","EquipFilter_Back","EquipFilter_Arms","EquipFilter_Legs","EquipFilter_Feet","ConsuType_Recovery","ConsuType_Tonic","ConsuType_Bomb","GearType_Supplies","GearType_Implements","GearType_Records","GoodsType_Material","GoodsType_Goods","GoodsType_Animal Good","FoodType_Beverage","IngType_Compound","IngType_Supplement","IngType_Protein","IngType_Starch","IngType_Sugar","IngType_Fruit","IngType_Vegetable","LocationType_Coastal","LocationType_Cold","LocationType_Desert","LocationType_Forest","LocationType_Grassland","LocationType_Jungle","LocationType_Mountain","LocationType_Plains","LocationType_Swamp","LocationType_Tropical","LocationType_Volcanic","AnimalType_Beast","AnimalType_Bird","AnimalType_Lizard","Attr_BOD","Attr_PRC","Attr_QCK","STR","Attr_CNV","ESS","Attr_INT","Attr_RSN","Check","CombatDetails","FlatDC","Title_Boon","BoostStyleTech","BoostGearTech","BoostPerkTech","KeySkills","Level","CR","MaxCR","SB_MAX","Potency","SkillExpertise","DamageBonus","TechENLimit","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","AdvancementPerkTransfer","JobTier","JobTechniques","LearnStyle","StyleTechniques","TrainingKnowledge","TrainingTechniques","PP","BonusTraining","Def_Brace","Def_Warding","Def_Evasion","Def_Resolve","Def_Insight","Def_Logic","WillBreak","CharSheetName","SheetName","FullName","DisplayName","QuickDescription","Backstory","Age","Gender","HomeRegion","Homeland","Ethnicity","Ancestry","Affinity","AdvancedAffinity","SecondaryAffinity","AffinityAspect","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","EquipmentSlots","ConsumableSlots","Jin","HP","WILL","Surge","EN","StartEN","RoundEN","Recall","Initiative","Cmb_Vitality","Cmb_HV","TargetHV","Cmb_Armor","Cmb_BurnResist","Cmb_ColdResist","Cmb_EnergyResist","Cmb_ForceResist","Cmb_PiercingResist","Cmb_PsycheResist","Cmb_Mv","Cmb_MvDash","Soc_Favor","TargetFavor","RepeatingInfluences","Soc_Influence","Title_UsingInfluences","Soc_InfluenceCombat","Soc_InfluenceDesc","Soc_Severity","Soc_RequestCheck","Soc_Impatience","Trait_Accurate","Trait_AP","Trait_Break","Trait_Brutal","Trait_Truehit","Trait_Favor","Trait_Influence","Trait_Request","Trait_Cleanse","Trait_EN","Trait_Heal","Trait_BreakFocus","Trait_ForceMove","Trait_ForceMove-ForceMove","Trait_ForceMove-Pulled","Trait_ForceMove-Pushed","Trait_ForceMove-Fall","Trait_Illusion","Trait_Move","Trait_Move-FreeMove","Trait_Move-Jump","Trait_Move-Sneak","Trait_Move-Special","Trait_Move-Fly","Trait_Move-Teleport","Trait_Move-Temporal","Trait_Structure","Trait_Terrain","Trait_Damage","Trait_DamageTrue","Trait_DamageEvasion","Trait_DamageEgo","Trait_Delayed","Trait_Focus","Trait_OnEnter","Trait_PerRound","Trait_PerTurn","Trait_PerConflict","Trait_Permanent","Trait_Resonator","Trait_Social","Trait_SkillCheck-DC","Trait_SkillCheck-Defense","Trait_Trigger","Trait_MeleeWeapon","Trait_Hammer","Trait_HeavyBlade","Trait_LightBlade","Trait_Polearm","Trait_Whip","Trait_RangedWeapon","Trait_Bow","Trait_Handgun","Trait_Longshot","Trait_Scattershot","Trait_ThrownBlade","Trait_Ingested","Trait_Inhalent","Trait_Magitech","Trait_Medkit","Trait_DustContainer","Trait_FishingTool","Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Loud","Trait_Resonant","Trait_Sharp","Trait_Sturdy","Trait_Transparent","PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training","Page_Origin","Page_Jobs","Page_Skills","Page_Knowledge","Page_Attributes","Page_AffectedStats","Page_PotencyStats","Page_DefensiveStats","Page_SkillStats","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Post","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Techniques","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar","Page_NPC","Page_Notes","Title_Origin","Title_Background","Title_BackgroundGenerator","Title_StatSummary","Title_Conflict","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_LearnNewStyles","Title_PerkTechniques","Title_StyleFilterOption","Title_QuickStyleFilter","Title_PerkStyleFilter","Title_ExpandedStyleFilters","Title_Chat","Title_Emotes","Title_LanguageSelect","Title_LanguageCommon","Title_GeneralLore","Title_LoreCategory","Title_SpecializedLore","Title_Skills","Title_Outfits","Title_EquippedGear","Title_Notebook","Title_Techniques","Title_TechniqueChange","Title_ChangeAffinity","Title_Debug","Title_InstantConsumables","Title_EquippedInstantConsumables","Title_StartingJin","Title_YourJin","Title_InspectionItemCost","Title_JobsByDifficulty","Title_MainRole","Title_SubRole","Title_IsPlayer","IsPlayer_No","IsPlayer_Yes","Loading","Popup_PopupActive","Popup_PopupName","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_ItemInspectionName","Popup_EquipmentInspectionName","Popup_ConsumablesInspectionName","Popup_GearInspectionName","Popup_GoodsInspectionName","Popup_TechniqueInspectionName","Popup_PerkInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","TechPopupValues","ItemPopupValues","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectDisplay","Popup_ItemSelectDisplayNeutral","Popup_ItemSelectDisplayWood","Popup_ItemSelectDisplayFire","Popup_ItemSelectDisplayEarth","Popup_ItemSelectDisplayMetal","Popup_ItemSelectDisplayWater","Popup_ItemSelectType","Popup_ItemSelectIsOn","Popup_ItemSelectVisible","Popup_FilterPopupActive","Popup_FilterPopupName","Popup_FilterTechniquePopupName","Popup_CustomStylesFilterName","Popup_CustomItemsFilter","Popup_CustomItemTechFilter","Popup_ApplyFilter","Popup_ClearFilter","Popup_FilterPopupType","Popup_FilterPopupDisplayType","Popup_FindItemsByFilter","Popup_FindItemsByTechnique","Popup_SearchButton","Popup_FindGearByFilter","Chat_Type","Chat_PostTarget","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","RepeatingActiveEmotes","RepeatingActiveEmotesNotes","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_PostEmoteNote","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","RepeatingOutfits","Chat_OutfitDefault","Chat_OutfitDefaultURL","RepeaterAcademic","RepeaterProfession","RepeaterCraftmanship","RepeaterGeography","RepeaterHistory","RepeaterCulture","RepeaterReligion","Lore_Tier","Lore_SubType","Lore_Name","Lore_Description","Forme_SeeTechniques","Forme_ShowFromNonElement","Forme_ShowLevelRestricted","Forme_RecommendedStyles","Forme_CustomStyleFilter","RepeatingJobStyles","RepeatingStyles","RepeatingPerks","Action_StyleIsVisible","Action_PerkIsVisible","Forme_Name","Forme_Inspect","Forme_Delete","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_ActionCount","Forme_SelectJob","Forme_JobSlot","Forme_JobSlotCount","Forme_AdvancedSlot","Forme_AdvancedSlotCount","Forme_StyleSlot","Forme_StyleSlotCount","Action_Use","Action_Inspect","Action_Delete","Action_Actions","Action_SetData","Action_Techniques","RepeatingFormeTech","Action_FormeLoadCount","Action_FormeLoad","FormeTechDisplayVer","Action_FormeTechniques","RepeatingPermaTech","ActionsPermaTech","ActionsJobTech","ActionsAdvTech","ActionsPassiveTech","ActionsGearTech","ActionsBasicActions","ActionsBasicRecovery","ActionsBasicAttack","ActionsBasicSocial","ActionsBasicSpirit","RefreshTech","GearTech","BasicActions","BasicRecovery","BasicAttack","BasicSocial","BasicSpirit","RepeatingCustomTech","CustomTech","TechHeader","TechTrueName","TechActionType","TechActionName","TechActionTooltip","TechName","TechVersion","TechIsVisible","TechAffinity","TechTier","TechRank","TechRankUp","TechRankDown","TechDisplayName","TechResourceData","TechEnCost","TechWillCost","TechBoonCost","TechTargetingData","TechTargetDesc","TechTargetType","TechRange","TechLimit","TechForm","TechTrait","TechCoreDefense","TechTrigger","TechTraits","TechTraitsDesc","TechFlavorText","TechCoreEffect","TechOnEnter","TechCheckTitle","TechCheckEffect","TechEndEffect","TechWillBreakEffect","TechEnhanceEffect","TechDef","ItemIsVisible","ItemName","ItemAction","ItemCount","ItemMainGroup","ItemGroup","ItemSubGroup","ItemBulk","ItemBaseValue","ItemTrait","ItemDescription","ItemCraft","ItemSlotOpen","ItemPerFive","Gear_AutoEquipItems","Gear_Equip","Gear_Unequip","Gear_Delete","Gear_Inspect","Gear_Buy","Gear_BuyBulk","Gear_Remove","Gear_Use","Gear_Cook","Gear_UnequipAll","Gear_EquipmentSlot","Gear_ConsumableSlot","Gear_EquippedItemTraits","RepeatingEquipment","RepeatingConsumables","RepeatingSyncedEquipment","RepeatingGear","RepeatingFoods","RepeatingCooking","Gear_EquipmentIsVisible","Gear_ConsumableIsVisible","Gear_GearIsVisible","Gear_FoodIsVisible","Title_AddEquipment","Title_AddConsumable","Title_AddGear","Gear_ItemName","Gear_ItemType","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_UpdateEquipment","Gear_RemoveEquipment","Gear_UpdateConsumables","Gear_RemoveConsumables","Gear_CookingEvent","Gear_ActiveRecipe","Gear_MealCount","Gear_UpdateCooking","Gear_CookingScore","Gear_ActiveIngredientList","System_CraftingBlueprint","System_CraftingRecipe","System_CraftSkillCheck","System_CraftSkillCheckBlueprint","System_CraftSkillCheckTraining","System_CraftSkillCheckBlueprintTraining","System_CraftTimeBlueprint","System_CraftTime","System_CraftingComponent","System_CraftMaterials","System_Cooking","System_HighQualityMeals","Title_Round","Title_Phase","Title_PhaseTeam","Title_Turn","Title_OffTurn","Title_Targetting","Pattern_Target","Pattern_Targets","Pattern_Target/Self","Pattern_Object","Pattern_Objects","Pattern_Space","Pattern_Spaces","Pattern_Line","Pattern_Wide Line","Pattern_Cone","Pattern_Blast","Pattern_Blast(3H)","Pattern_Blast(5H)","Pattern_Radial","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEndFocus","Title_TechEnhancement","Adjacency","Obstruction","Lifting","Bulk","Note_GenName","Note_GenFullName","Note_GenGender","Note_GenHomeRegion","Note_GenRace","Note_GenPersonality","Note_GenMotivation","Note_GenerateCharacter","Note_UseGeneration","Note_ClearBackground","Notebooks","Note_NotebookCount","Note_NotebookActions","Note_NotebookName","Note_NotebookContents","Note_NotebookOpen","Note_NotebookDelete","Note_NotebookReload","Note_NotebookClose","Note_NotebookSave","Note_NotebookIsDirty","Note_OpenNotebook","Note_OpenNotebookActions","NotebookPages","Note_PageType","Note_PageDisplay","Note_PagePost","Note_PageDelete","Note_PageTemplateData","Note_PageContents","Note_PageLocation","Note_PageArea","Note_PageDate","Note_PageTime","Note_PageCharName","Note_PageCharURL","Note_PageCharEmote","Note_PageCharLanguage","Note_PageQuestName","Note_PageChapter","Note_PagePart","Perk_Bonus Vitality","Perk_Bonus Potency","Perk_Bonus Round EN","Perk_Second Affinity","Perk_Corrosion Magic","Perk_Light Magic","Perk_Shadow Magic","Perk_Blood Magic","Perk_Time Magic","Perk_Spirit Conduit","Perk_Increase HP","Perk_Increase WILL","Perk_Increase Base Speed","Perk_Increase Dash Speed","Perk_Increase Armor","Perk_Increase Starting EN","Perk_Bonus Equipment Slots","Perk_Light Sleeper","Perk_Iron Stomach","Perk_Sea Legs","Perk_Darkvision","Perk_Steel Nerves","Perk_Blind Sense","Perk_Time Sensitivity","Perk_Permanent Creations","Perk_Expel Spirit","Perk_Spirit Sense","Perk_Loosen Vines","Perk_Extinguish Fire","Perk_Clean Mud","Perk_Demagnetize","Perk_Quick-Dry","Perk_Resilient Mind","Perk_Cool Head","Perk_Fast Climb","Perk_Fast Swim","Perk_Earthglide","Perk_Windwalker","Perk_Stonegrip","Perk_Duskstep","Perk_Ice Skate","Perk_Cooking Expertise","Perk_Tinker Expertise","Perk_Build Expertise","Perk_Joyful Meal","Perk_Steadfast Meal","Perk_Find Ether Signature","Perk_Trace Ether Signature","Skill_Aesthetics","Skill_Agility","Skill_Aim","Skill_Alchemy","Skill_Analyze","Skill_Charm","Skill_Cook","Skill_Demoralize","Skill_Energize","Skill_Engineer","Skill_Empathy","Skill_Flux","Skill_Glyphwork","Skill_Inspire","Skill_Martial","Skill_Materialize","Skill_Medicine","Skill_Misdirect","Skill_Musicianship","Skill_Notice","Skill_Physio","Skill_Physique","Skill_Pilot","Skill_Rationalize","Skill_Resonance","Skill_Tinker","Skill_Transmute","Lang_Minere","Lang_Junal","Lang_Apollen","Lang_Lib","Lang_Cert","Lang_Dustell","Lang_Muralic","Lang_Shira","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq","Lang_Kleikan","Lang_Shorespeak","Lang_Verdeni","Lang_Emotion","Lang_Empathy","Lang_Jovean","Lang_Mytikan","LoreCat_Academic","Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","LoreCat_Profession","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","LoreCat_Craftmanship","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","LoreCat_Geography","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","LoreCat_History","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","LoreCat_Culture","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","LoreCat_Religion","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon","Job_Fighter","Job_Labourer","Job_Brawler","Job_Warden","Job_Sentinel","Job_Sniper","Job_Rogue","Job_Exemplar","Job_Hunter","Job_Warmage","Job_Geomancer","Job_Kineticist","Job_Trooper","Job_Yaksa","Job_Tactician","Job_Bard","Job_Spellwright","Job_Shade","Job_Medic","Job_Preacher","Job_Alchemist","Job_Courtier","Job_Merchant","Job_Diplomat","Job_Phantasm","JStyle_Fighter","JStyle_Labourer","JStyle_Brawler","JStyle_Warden","JStyle_Sentinel","JStyle_Sniper","JStyle_Rogue","JStyle_Exemplar","JStyle_Hunter","JStyle_Warmage","JStyle_Geomancer","JStyle_Kineticist","JStyle_Trooper","JStyle_Yaksa","JStyle_Tactician","JStyle_Bard","JStyle_Spellwright","JStyle_Shade","JStyle_Medic","JStyle_Preacher","JStyle_Alchemist","JStyle_Courtier","JStyle_Merchant","JStyle_Diplomat","JStyle_Phantasm","Stat_Blinded","Stat_Burst","Stat_Downed","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Focus","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Mantle","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious","Stat_Aflame","Stat_Burn Aegis","Stat_Chilled","Stat_Cold Aegis","Stat_Dazed","Stat_Dodge","Stat_Dying","Stat_Earthblight","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Iron Plates","Stat_Jolted","Stat_Magnetized","Stat_Prone","Stat_Quickened","Stat_Sand Aegis","Stat_Shielded","Stat_Shock Aegis","Stat_Sickened","Stat_Soaked","Stat_Static","Stat_Stunned","Stat_Vined","Stat_Agreeable","Stat_Angered","Stat_Calmed","Stat_Distracted","Stat_Doubt","Stat_Encouraged","Stat_Flustered","Stat_Frightened","Stat_Overjoyed","Stat_Oppositional","Stat_Persevering","Stat_Rally","Stat_Surprised","Stat_Steadfast"],
         values = {"Attribute":{"name":"Attribute","fieldName":"attribute","group":"Type","descriptions":[""],
                 "variable":"atr{0}{1}","title":"Attributes","subGroup":"","abbreviation":"Attr","baseFormula":"6;CR:_max;BonusAttributePoints","modifiers":"","formula":{"formulaString":"6;CR:_max;BonusAttributePoints","workers":[{"variableName":[],
                         "definitionName":[],
@@ -13772,8 +14165,7 @@ var WuxDef = WuxDef || (function() {
                 "variable":"crn{0}{1}","title":"Currency","subGroup":"","abbreviation":"Currency","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "ToolSlot":{"name":"ToolSlot","fieldName":"toolslot","group":"Type","descriptions":[""]
-                ,
+            "ToolSlot":{"name":"ToolSlot","fieldName":"toolslot","group":"Type","descriptions":[""],
                 "variable":"toolslot{0}{1}","title":"Tool Slot","subGroup":"","abbreviation":"ToolSlot","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
@@ -13781,7 +14173,8 @@ var WuxDef = WuxDef || (function() {
                 "variable":"consuslot{0}{1}","title":"Consumable Slot","subGroup":"","abbreviation":"ConsuSlot","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Note":{"name":"Note","fieldName":"note","group":"Type","descriptions":[""],
+            "Note":{"name":"Note","fieldName":"note","group":"Type","descriptions":[""]
+                ,
                 "variable":"note{0}{1}","title":"Note","subGroup":"","abbreviation":"Note","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
@@ -14367,8 +14760,7 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "Dmg_Burn":{"name":"Dmg_Burn","fieldName":"burn","group":"DamageType","descriptions":[""],
                 "variable":"dmg-burn{0}{1}","title":"Burn","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
-                "linkedGroups":[]
-                ,
+                "linkedGroups":[],
                 "isResource":""},
             "Dmg_Cold":{"name":"Dmg_Cold","fieldName":"cold","group":"DamageType","descriptions":[""],
                 "variable":"dmg-cold{0}{1}","title":"Cold","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
@@ -14376,7 +14768,8 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "Dmg_Energy":{"name":"Dmg_Energy","fieldName":"energy","group":"DamageType","descriptions":[""],
                 "variable":"dmg-energy{0}{1}","title":"Energy","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
-                "linkedGroups":[],
+                "linkedGroups":[]
+                ,
                 "isResource":""},
             "Dmg_Force":{"name":"Dmg_Force","fieldName":"force","group":"DamageType","descriptions":[""],
                 "variable":"dmg-force{0}{1}","title":"Force","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
@@ -14892,12 +15285,12 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "TechFilterType_RangeClose":{"name":"TechFilterType_RangeClose","fieldName":"rangeclose","group":"TechFilterType","descriptions":["This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.","This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target."],
                 "variable":"techfiltertype-rangeclose{0}{1}","title":"Close Range","subGroup":"Targeting","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
-                "linkedGroups":[]
-                ,
+                "linkedGroups":[],
                 "isResource":""},
             "TechFilterType_RangeShort":{"name":"TechFilterType_RangeShort","fieldName":"rangeshort","group":"TechFilterType","descriptions":["This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.","Range values that don't include 1 in their range are not allowed to be used in melee range. If a target is directly adjacent to the user the target is invalid."],
                 "variable":"techfiltertype-rangeshort{0}{1}","title":"Short Range","subGroup":"Targeting","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
-                "linkedGroups":[],
+                "linkedGroups":[]
+                ,
                 "isResource":""},
             "TechFilterType_RangeShortArea":{"name":"TechFilterType_RangeShortArea","fieldName":"rangeshortarea","group":"TechFilterType","descriptions":["This value represents the range and targetting pattern for this technique. The numbers specified indicate how many spaces away from the user the target may be to be a valid target.","Range values that don't include 1 in their range are not allowed to be used in melee range. If a target is directly adjacent to the user the target is invalid."],
                 "variable":"techfiltertype-rangeshortarea{0}{1}","title":"Short Range Area","subGroup":"Targeting","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
@@ -15421,8 +15814,7 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "LocationType_Desert":{"name":"LocationType_Desert","fieldName":"desert","group":"LocationType","descriptions":["location:Desert, Any"],
                 "variable":"locationtype-desert{0}{1}","title":"Desert","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
-                "linkedGroups":[]
-                ,
+                "linkedGroups":[],
                 "isResource":""},
             "LocationType_Forest":{"name":"LocationType_Forest","fieldName":"forest","group":"LocationType","descriptions":["location:Forest, Any"],
                 "variable":"locationtype-forest{0}{1}","title":"Forest","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
@@ -15430,7 +15822,8 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "LocationType_Grassland":{"name":"LocationType_Grassland","fieldName":"grassland","group":"LocationType","descriptions":["location:Grassland, Any"],
                 "variable":"locationtype-grassland{0}{1}","title":"Grassland","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
-                "linkedGroups":[],
+                "linkedGroups":[]
+                ,
                 "isResource":""},
             "LocationType_Jungle":{"name":"LocationType_Jungle","fieldName":"jungle","group":"LocationType","descriptions":["location:Jungle, Any"],
                 "variable":"locationtype-jungle{0}{1}","title":"Jungle","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
@@ -16094,8 +16487,7 @@ var WuxDef = WuxDef || (function() {
                         {"variableName":["cmb-hv_perk"],
                             "definitionName":[],
                             "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[]
-                ,
+                "linkedGroups":[],
                 "isResource":""},
             "TargetHV":{"name":"TargetHV","fieldName":"targethv","group":"Untyped","descriptions":[""],
                 "variable":"targethv","title":"Target's Regen Value","subGroup":"","abbreviation":"","baseFormula":"0","modifiers":"","formula":{"formulaString":"0","workers":[{"variableName":[],
@@ -16103,7 +16495,8 @@ var WuxDef = WuxDef || (function() {
                         "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Cmb_Armor":{"name":"Cmb_Armor","fieldName":"armor","group":"Combat","descriptions":["Armor reduces up to half of incoming HP damage from a single source by an amount equal to its rating. Armor is typically gained from gear, but techniques can grant armor temporarily."],
+            "Cmb_Armor":{"name":"Cmb_Armor","fieldName":"armor","group":"Combat","descriptions":["Armor reduces up to half of incoming HP damage from a single source by an amount equal to its rating. Armor is typically gained from gear, but techniques can grant armor temporarily."]
+                ,
                 "variable":"cmb-armor{0}{1}","title":"Armor","subGroup":"CombatStat","abbreviation":"","baseFormula":"","modifiers":"_tech;_gear;_affinity;_perk","formula":{"formulaString":"0","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":0,"multiplier":1,"max":0},
@@ -16561,14 +16954,14 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "Trait_Resonant":{"name":"Trait_Resonant","fieldName":"resonant","group":"Trait","descriptions":["This object has ether affecting it and can be sensed with the Resonance skill. Usually an object with the Resonant trait will have a source."],
                 "variable":"trt-resonant{0}{1}","title":"Resonant","subGroup":"Item Trait","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
-                "linkedGroups":[]
-                ,
+                "linkedGroups":[],
                 "isResource":""},
             "Trait_Sharp":{"name":"Trait_Sharp","fieldName":"sharp","group":"Trait","descriptions":["Sharp items have a bladed edge and are durable enough to cut through soft material."],
                 "variable":"trt-sharp{0}{1}","title":"Sharp","subGroup":"Item Trait","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Trait_Sturdy":{"name":"Trait_Sturdy","fieldName":"sturdy","group":"Trait","descriptions":["Sturdy items are especially durable and resilient."],
+            "Trait_Sturdy":{"name":"Trait_Sturdy","fieldName":"sturdy","group":"Trait","descriptions":["Sturdy items are especially durable and resilient."]
+                ,
                 "variable":"trt-sturdy{0}{1}","title":"Sturdy","subGroup":"Item Trait","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
@@ -17036,14 +17429,14 @@ var WuxDef = WuxDef || (function() {
                 "variable":"loading","title":"Loading","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Popup_PopupActive":{"name":"Popup_PopupActive","fieldName":"popupactive","group":"Popup","descriptions":[""]
-                ,
+            "Popup_PopupActive":{"name":"Popup_PopupActive","fieldName":"popupactive","group":"Popup","descriptions":[""],
                 "variable":"popup-popupactive{0}{1}","title":"PopupActive","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
             "Popup_PopupName":{"name":"Popup_PopupName","fieldName":"popupname","group":"Popup","descriptions":[""],
                 "variable":"popup-popupname{0}{1}","title":"PopupName","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
-                "linkedGroups":[],
+                "linkedGroups":[]
+                ,
                 "isResource":""},
             "Popup_SubMenuActive":{"name":"Popup_SubMenuActive","fieldName":"submenuactive","group":"Popup","descriptions":[""],
                 "variable":"popup-submenuactive{0}{1}","title":"","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
@@ -17645,8 +18038,7 @@ var WuxDef = WuxDef || (function() {
                 "variable":"techrankdown","title":"","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "TechDisplayName":{"name":"TechDisplayName","fieldName":"techdisplayname","group":"Untyped","descriptions":[""]
-                ,
+            "TechDisplayName":{"name":"TechDisplayName","fieldName":"techdisplayname","group":"Untyped","descriptions":[""],
                 "variable":"techdisplayname{0}{1}","title":"","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
@@ -17654,7 +18046,8 @@ var WuxDef = WuxDef || (function() {
                 "variable":"techresourcedata{0}{1}","title":"","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "TechEnCost":{"name":"TechEnCost","fieldName":"techencost","group":"Untyped","descriptions":[""],
+            "TechEnCost":{"name":"TechEnCost","fieldName":"techencost","group":"Untyped","descriptions":[""]
+                ,
                 "variable":"techencost{0}{1}","title":"","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
@@ -17966,12 +18359,20 @@ var WuxDef = WuxDef || (function() {
                 "variable":"gear-activerecipe{0}{1}","title":"Active Recipe","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
+            "Gear_MealCount":{"name":"Gear_MealCount","fieldName":"mealcount","group":"Gear","descriptions":[""],
+                "variable":"gear-mealcount{0}{1}","title":"Meal Count","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
             "Gear_UpdateCooking":{"name":"Gear_UpdateCooking","fieldName":"updatecooking","group":"Gear","descriptions":[""],
-                "variable":"gear-updatecooking{0}{1}","title":"Update Cooking","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
+                "variable":"gear-updatecooking{0}{1}","title":"Cook Meal","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
+                "linkedGroups":[],
+                "isResource":""},
+            "Gear_CookingScore":{"name":"Gear_CookingScore","fieldName":"cookingscore","group":"Gear","descriptions":[""],
+                "variable":"gear-cookingscore{0}{1}","title":"Cooking Score","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
             "Gear_ActiveIngredientList":{"name":"Gear_ActiveIngredientList","fieldName":"activeingredientlist","group":"Gear","descriptions":[""],
-                "variable":"gear-activeingredientlist{0}{1}","title":"Others' Contributions","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
+                "variable":"gear-activeingredientlist{0}{1}","title":"Full Contribution List","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
             "System_CraftingBlueprint":{"name":"System_CraftingBlueprint","fieldName":"craftingblueprint","group":"System","descriptions":["These are the crafting rules to create one of this item.","When crafting you will make a series of skill checks to determine your success in crafting. In addition, you will need the listed materials and components to successfully make this item."],
@@ -18329,8 +18730,8 @@ var WuxDef = WuxDef || (function() {
                 "variable":"note-pagepart{0}{1}","title":"Part","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Attribute":{"name":"Perk_Attribute","fieldName":"attribute","group":"Perk","descriptions":["atr"],
-                "variable":"perk-attribute{0}{1}","title":"Attribute","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Bonus Vitality":{"name":"Perk_Bonus Vitality","fieldName":"bonus_vitality","group":"Perk","descriptions":["Gain +1 Vitality per rank. Player characters should start with at least 1 Vitality."],
+                "variable":"perk-bonus_vitality{0}{1}","title":"Bonus Vitality","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18338,8 +18739,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Skill":{"name":"Perk_Skill","fieldName":"skill","group":"Perk","descriptions":["skl"],
-                "variable":"perk-skill{0}{1}","title":"Skill","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Bonus Potency":{"name":"Perk_Bonus Potency","fieldName":"bonus_potency","group":"Perk","descriptions":["Gain +1 Potency per rank.This perk is not intended for player characters."],
+                "variable":"perk-bonus_potency{0}{1}","title":"Bonus Potency","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18347,8 +18748,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_SkillGroup":{"name":"Perk_SkillGroup","fieldName":"skillgroup","group":"Perk","descriptions":["sklgrp"],
-                "variable":"perk-skillgroup{0}{1}","title":"SkillGroup","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Bonus Round EN":{"name":"Perk_Bonus Round EN","fieldName":"bonus_round_en","group":"Perk","descriptions":["Gain +1 Round EN per rank. This perk is not intended for player characters."],
+                "variable":"perk-bonus_round_en{0}{1}","title":"Bonus Round EN","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18356,8 +18757,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Archetype":{"name":"Perk_Archetype","fieldName":"archetype","group":"Perk","descriptions":["arc"],
-                "variable":"perk-archetype{0}{1}","title":"Archetype","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Second Affinity":{"name":"Perk_Second Affinity","fieldName":"second_affinity","group":"Perk","descriptions":["Human Only. Gain a second elemental affinity."],
+                "variable":"perk-second_affinity{0}{1}","title":"Second Affinity","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18365,8 +18766,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Job":{"name":"Perk_Job","fieldName":"job","group":"Perk","descriptions":["job"],
-                "variable":"perk-job{0}{1}","title":"Job","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Corrosion Magic":{"name":"Perk_Corrosion Magic","fieldName":"corrosion_magic","group":"Perk","descriptions":["Wood Affinity Only. You can now learn Corrosion affinity techniques granting access to acids and poisons."],
+                "variable":"perk-corrosion_magic{0}{1}","title":"Corrosion Magic","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18374,8 +18775,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_JobStyle":{"name":"Perk_JobStyle","fieldName":"jobstyle","group":"Perk","descriptions":["jbs"],
-                "variable":"perk-jobstyle{0}{1}","title":"JobStyle","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Light Magic":{"name":"Perk_Light Magic","fieldName":"light_magic","group":"Perk","descriptions":["Fire Affinity Only. You can now learn Light affinty techniques that can blind and create illusions."],
+                "variable":"perk-light_magic{0}{1}","title":"Light Magic","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18383,8 +18784,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Knowledge":{"name":"Perk_Knowledge","fieldName":"knowledge","group":"Perk","descriptions":["knw"],
-                "variable":"perk-knowledge{0}{1}","title":"Knowledge","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Shadow Magic":{"name":"Perk_Shadow Magic","fieldName":"shadow_magic","group":"Perk","descriptions":["Earth Affinity Only. You can now learn Shadow affinity techniques that can blind and hide."],
+                "variable":"perk-shadow_magic{0}{1}","title":"Shadow Magic","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18392,8 +18793,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Language":{"name":"Perk_Language","fieldName":"language","group":"Perk","descriptions":["lng"],
-                "variable":"perk-language{0}{1}","title":"Language","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Blood Magic":{"name":"Perk_Blood Magic","fieldName":"blood_magic","group":"Perk","descriptions":["Metal Affinity Only. You can now learn Blood affinty techniques that both heal and paralyze targets."],
+                "variable":"perk-blood_magic{0}{1}","title":"Blood Magic","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18401,8 +18802,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_LoreCategory":{"name":"Perk_LoreCategory","fieldName":"lorecategory","group":"Perk","descriptions":["lrc"],
-                "variable":"perk-lorecategory{0}{1}","title":"LoreCategory","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Time Magic":{"name":"Perk_Time Magic","fieldName":"time_magic","group":"Perk","descriptions":["Water Affinity Only. You can now learn Time affinity techniques that allow specialized movement actions."],
+                "variable":"perk-time_magic{0}{1}","title":"Time Magic","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18410,8 +18811,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Lore":{"name":"Perk_Lore","fieldName":"lore","group":"Perk","descriptions":["lor"],
-                "variable":"perk-lore{0}{1}","title":"Lore","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Spirit Conduit":{"name":"Perk_Spirit Conduit","fieldName":"spirit_conduit","group":"Perk","descriptions":["Unaspected Human Only. You can hold multiple spirits inside of your body. You are able to swap your active spirit as a swift action for the cost of 2 EN."],
+                "variable":"perk-spirit_conduit{0}{1}","title":"Spirit Conduit","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18419,8 +18820,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Style":{"name":"Perk_Style","fieldName":"style","group":"Perk","descriptions":["sty"],
-                "variable":"perk-style{0}{1}","title":"Style","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Increase HP":{"name":"Perk_Increase HP","fieldName":"increase_hp","group":"Perk","descriptions":["Gain 10 HP"],
+                "variable":"perk-increase_hp{0}{1}","title":"Increase HP","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18428,8 +18829,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_StyleType":{"name":"Perk_StyleType","fieldName":"styletype","group":"Perk","descriptions":["stt"],
-                "variable":"perk-styletype{0}{1}","title":"StyleType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Increase WILL":{"name":"Perk_Increase WILL","fieldName":"increase_will","group":"Perk","descriptions":["Gain 10 WILL"],
+                "variable":"perk-increase_will{0}{1}","title":"Increase WILL","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18437,8 +18838,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Forme":{"name":"Perk_Forme","fieldName":"forme","group":"Perk","descriptions":["forme"],
-                "variable":"perk-forme{0}{1}","title":"Forme","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Increase Base Speed":{"name":"Perk_Increase Base Speed","fieldName":"increase_base_speed","group":"Perk","descriptions":["Gain +1 Base Speed"],
+                "variable":"perk-increase_base_speed{0}{1}","title":"Increase Base Speed","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18446,8 +18847,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Action":{"name":"Perk_Action","fieldName":"action","group":"Perk","descriptions":["act"],
-                "variable":"perk-action{0}{1}","title":"Action","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Increase Dash Speed":{"name":"Perk_Increase Dash Speed","fieldName":"increase_dash_speed","group":"Perk","descriptions":["Gain +1 Dash Speed"],
+                "variable":"perk-increase_dash_speed{0}{1}","title":"Increase Dash Speed","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18455,8 +18856,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Technique":{"name":"Perk_Technique","fieldName":"technique","group":"Perk","descriptions":["tch"],
-                "variable":"perk-technique{0}{1}","title":"Technique","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Increase Armor":{"name":"Perk_Increase Armor","fieldName":"increase_armor","group":"Perk","descriptions":["Gain +1 Armor"],
+                "variable":"perk-increase_armor{0}{1}","title":"Increase Armor","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18464,8 +18865,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_System":{"name":"Perk_System","fieldName":"system","group":"Perk","descriptions":["sys"],
-                "variable":"perk-system{0}{1}","title":"System","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Increase Starting EN":{"name":"Perk_Increase Starting EN","fieldName":"increase_starting_en","group":"Perk","descriptions":["Gain +1 Starting EN"],
+                "variable":"perk-increase_starting_en{0}{1}","title":"Increase Starting EN","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18473,8 +18874,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_PageSet":{"name":"Perk_PageSet","fieldName":"pageset","group":"Perk","descriptions":["pgs"],
-                "variable":"perk-pageset{0}{1}","title":"PageSet","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Bonus Equipment Slots":{"name":"Perk_Bonus Equipment Slots","fieldName":"bonus_equipment_slots","group":"Perk","descriptions":["Gain +1 Equipment Slot"],
+                "variable":"perk-bonus_equipment_slots{0}{1}","title":"Bonus Equipment Slots","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18482,8 +18883,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Page":{"name":"Perk_Page","fieldName":"page","group":"Perk","descriptions":["pag"],
-                "variable":"perk-page{0}{1}","title":"Page","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Light Sleeper":{"name":"Perk_Light Sleeper","fieldName":"light_sleeper","group":"Perk","descriptions":[""],
+                "variable":"perk-light_sleeper{0}{1}","title":"Light Sleeper","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18491,8 +18892,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Title":{"name":"Perk_Title","fieldName":"title","group":"Perk","descriptions":["ttl"],
-                "variable":"perk-title{0}{1}","title":"Title","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Iron Stomach":{"name":"Perk_Iron Stomach","fieldName":"iron_stomach","group":"Perk","descriptions":[""],
+                "variable":"perk-iron_stomach{0}{1}","title":"Iron Stomach","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18500,8 +18901,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Popup":{"name":"Perk_Popup","fieldName":"popup","group":"Perk","descriptions":["popup"],
-                "variable":"perk-popup{0}{1}","title":"Popup","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Sea Legs":{"name":"Perk_Sea Legs","fieldName":"sea_legs","group":"Perk","descriptions":[""],
+                "variable":"perk-sea_legs{0}{1}","title":"Sea Legs","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18509,8 +18910,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Data":{"name":"Perk_Data","fieldName":"data","group":"Perk","descriptions":["data"],
-                "variable":"perk-data{0}{1}","title":"Data","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Darkvision":{"name":"Perk_Darkvision","fieldName":"darkvision","group":"Perk","descriptions":[""],
+                "variable":"perk-darkvision{0}{1}","title":"Darkvision","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18518,8 +18919,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Advancement":{"name":"Perk_Advancement","fieldName":"advancement","group":"Perk","descriptions":["adv",""],
-                "variable":"perk-advancement{0}{1}","title":"Advancement","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Steel Nerves":{"name":"Perk_Steel Nerves","fieldName":"steel_nerves","group":"Perk","descriptions":[""],
+                "variable":"perk-steel_nerves{0}{1}","title":"Steel Nerves","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18527,8 +18928,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Training":{"name":"Perk_Training","fieldName":"training","group":"Perk","descriptions":["trn",""],
-                "variable":"perk-training{0}{1}","title":"Training","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Blind Sense":{"name":"Perk_Blind Sense","fieldName":"blind_sense","group":"Perk","descriptions":[""],
+                "variable":"perk-blind_sense{0}{1}","title":"Blind Sense","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18536,8 +18937,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Perk":{"name":"Perk_Perk","fieldName":"perk","group":"Perk","descriptions":["perk",""],
-                "variable":"perk-perk{0}{1}","title":"Perk","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Time Sensitivity":{"name":"Perk_Time Sensitivity","fieldName":"time_sensitivity","group":"Perk","descriptions":[""],
+                "variable":"perk-time_sensitivity{0}{1}","title":"Time Sensitivity","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18545,8 +18946,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Defense":{"name":"Perk_Defense","fieldName":"defense","group":"Perk","descriptions":["def"],
-                "variable":"perk-defense{0}{1}","title":"Defense","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Permanent Creations":{"name":"Perk_Permanent Creations","fieldName":"permanent_creations","group":"Perk","descriptions":[""],
+                "variable":"perk-permanent_creations{0}{1}","title":"Permanent Creations","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18554,8 +18955,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Sense":{"name":"Perk_Sense","fieldName":"sense","group":"Perk","descriptions":["sen"],
-                "variable":"perk-sense{0}{1}","title":"Sense","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Expel Spirit":{"name":"Perk_Expel Spirit","fieldName":"expel_spirit","group":"Perk","descriptions":[""],
+                "variable":"perk-expel_spirit{0}{1}","title":"Expel Spirit","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18563,8 +18964,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_DefIcon":{"name":"Perk_DefIcon","fieldName":"deficon","group":"Perk","descriptions":["deficon"],
-                "variable":"perk-deficon{0}{1}","title":"DefIcon","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Spirit Sense":{"name":"Perk_Spirit Sense","fieldName":"spirit_sense","group":"Perk","descriptions":[""],
+                "variable":"perk-spirit_sense{0}{1}","title":"Spirit Sense","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18572,8 +18973,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_InnateDefenseType":{"name":"Perk_InnateDefenseType","fieldName":"innatedefensetype","group":"Perk","descriptions":["idf"],
-                "variable":"perk-innatedefensetype{0}{1}","title":"InnateDefenseType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Loosen Vines":{"name":"Perk_Loosen Vines","fieldName":"loosen_vines","group":"Perk","descriptions":[""],
+                "variable":"perk-loosen_vines{0}{1}","title":"Loosen Vines","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18581,8 +18982,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_InnateSenseType":{"name":"Perk_InnateSenseType","fieldName":"innatesensetype","group":"Perk","descriptions":["isn"],
-                "variable":"perk-innatesensetype{0}{1}","title":"InnateSenseType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Extinguish Fire":{"name":"Perk_Extinguish Fire","fieldName":"extinguish_fire","group":"Perk","descriptions":[""],
+                "variable":"perk-extinguish_fire{0}{1}","title":"Extinguish Fire","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18590,8 +18991,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_StatBonus":{"name":"Perk_StatBonus","fieldName":"statbonus","group":"Perk","descriptions":["sb"],
-                "variable":"perk-statbonus{0}{1}","title":"StatBonus","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Clean Mud":{"name":"Perk_Clean Mud","fieldName":"clean_mud","group":"Perk","descriptions":[""],
+                "variable":"perk-clean_mud{0}{1}","title":"Clean Mud","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18599,8 +19000,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_General":{"name":"Perk_General","fieldName":"general","group":"Perk","descriptions":["gen"],
-                "variable":"perk-general{0}{1}","title":"General","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Demagnetize":{"name":"Perk_Demagnetize","fieldName":"demagnetize","group":"Perk","descriptions":[""],
+                "variable":"perk-demagnetize{0}{1}","title":"Demagnetize","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18608,8 +19009,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Chat":{"name":"Perk_Chat","fieldName":"chat","group":"Perk","descriptions":["chat"],
-                "variable":"perk-chat{0}{1}","title":"Chat","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Quick-Dry":{"name":"Perk_Quick-Dry","fieldName":"quick-dry","group":"Perk","descriptions":[""],
+                "variable":"perk-quick-dry{0}{1}","title":"Quick-Dry","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18617,8 +19018,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Combat":{"name":"Perk_Combat","fieldName":"combat","group":"Perk","descriptions":["cmb"],
-                "variable":"perk-combat{0}{1}","title":"Combat","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Resilient Mind":{"name":"Perk_Resilient Mind","fieldName":"resilient_mind","group":"Perk","descriptions":[""],
+                "variable":"perk-resilient_mind{0}{1}","title":"Resilient Mind","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18626,8 +19027,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Social":{"name":"Perk_Social","fieldName":"social","group":"Perk","descriptions":["soc"],
-                "variable":"perk-social{0}{1}","title":"Social","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Cool Head":{"name":"Perk_Cool Head","fieldName":"cool_head","group":"Perk","descriptions":[""],
+                "variable":"perk-cool_head{0}{1}","title":"Cool Head","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18635,8 +19036,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Influence":{"name":"Perk_Influence","fieldName":"influence","group":"Perk","descriptions":["inf"],
-                "variable":"perk-influence{0}{1}","title":"Influence","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Fast Climb":{"name":"Perk_Fast Climb","fieldName":"fast_climb","group":"Perk","descriptions":[""],
+                "variable":"perk-fast_climb{0}{1}","title":"Fast Climb","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18644,8 +19045,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_SeverityRank":{"name":"Perk_SeverityRank","fieldName":"severityrank","group":"Perk","descriptions":["sev"],
-                "variable":"perk-severityrank{0}{1}","title":"SeverityRank","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Fast Swim":{"name":"Perk_Fast Swim","fieldName":"fast_swim","group":"Perk","descriptions":[""],
+                "variable":"perk-fast_swim{0}{1}","title":"Fast Swim","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18653,8 +19054,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_RequestType":{"name":"Perk_RequestType","fieldName":"requesttype","group":"Perk","descriptions":["req"],
-                "variable":"perk-requesttype{0}{1}","title":"RequestType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Earthglide":{"name":"Perk_Earthglide","fieldName":"earthglide","group":"Perk","descriptions":[""],
+                "variable":"perk-earthglide{0}{1}","title":"Earthglide","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18662,8 +19063,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_DamageType":{"name":"Perk_DamageType","fieldName":"damagetype","group":"Perk","descriptions":["dmg"],
-                "variable":"perk-damagetype{0}{1}","title":"DamageType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Windwalker":{"name":"Perk_Windwalker","fieldName":"windwalker","group":"Perk","descriptions":[""],
+                "variable":"perk-windwalker{0}{1}","title":"Windwalker","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18671,8 +19072,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_TerrainFxType":{"name":"Perk_TerrainFxType","fieldName":"terrainfxtype","group":"Perk","descriptions":["ter"],
-                "variable":"perk-terrainfxtype{0}{1}","title":"TerrainFxType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Stonegrip":{"name":"Perk_Stonegrip","fieldName":"stonegrip","group":"Perk","descriptions":[""],
+                "variable":"perk-stonegrip{0}{1}","title":"Stonegrip","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18680,8 +19081,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Trait":{"name":"Perk_Trait","fieldName":"trait","group":"Perk","descriptions":["trt"],
-                "variable":"perk-trait{0}{1}","title":"Trait","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Duskstep":{"name":"Perk_Duskstep","fieldName":"duskstep","group":"Perk","descriptions":[""],
+                "variable":"perk-duskstep{0}{1}","title":"Duskstep","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18689,8 +19090,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Status":{"name":"Perk_Status","fieldName":"status","group":"Perk","descriptions":["sts"],
-                "variable":"perk-status{0}{1}","title":"Status","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Ice Skate":{"name":"Perk_Ice Skate","fieldName":"ice_skate","group":"Perk","descriptions":[""],
+                "variable":"perk-ice_skate{0}{1}","title":"Ice Skate","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18698,8 +19099,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Condition":{"name":"Perk_Condition","fieldName":"condition","group":"Perk","descriptions":["cnd"],
-                "variable":"perk-condition{0}{1}","title":"Condition","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Cooking Expertise":{"name":"Perk_Cooking Expertise","fieldName":"cooking_expertise","group":"Perk","descriptions":[""],
+                "variable":"perk-cooking_expertise{0}{1}","title":"Cooking Expertise","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18707,8 +19108,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Emotion":{"name":"Perk_Emotion","fieldName":"emotion","group":"Perk","descriptions":["emo"],
-                "variable":"perk-emotion{0}{1}","title":"Emotion","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Tinker Expertise":{"name":"Perk_Tinker Expertise","fieldName":"tinker_expertise","group":"Perk","descriptions":[""],
+                "variable":"perk-tinker_expertise{0}{1}","title":"Tinker Expertise","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18716,8 +19117,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_Boon":{"name":"Perk_Boon","fieldName":"boon","group":"Perk","descriptions":["boon"],
-                "variable":"perk-boon{0}{1}","title":"Boon","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Build Expertise":{"name":"Perk_Build Expertise","fieldName":"build_expertise","group":"Perk","descriptions":[""],
+                "variable":"perk-build_expertise{0}{1}","title":"Build Expertise","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18725,8 +19126,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_PerkGroup":{"name":"Perk_PerkGroup","fieldName":"perkgroup","group":"Perk","descriptions":["perkgroup"],
-                "variable":"perk-perkgroup{0}{1}","title":"PerkGroup","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Joyful Meal":{"name":"Perk_Joyful Meal","fieldName":"joyful_meal","group":"Perk","descriptions":[""],
+                "variable":"perk-joyful_meal{0}{1}","title":"Joyful Meal","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18734,8 +19135,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_JobClass":{"name":"Perk_JobClass","fieldName":"jobclass","group":"Perk","descriptions":["jobclass"],
-                "variable":"perk-jobclass{0}{1}","title":"JobClass","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Steadfast Meal":{"name":"Perk_Steadfast Meal","fieldName":"steadfast_meal","group":"Perk","descriptions":[""],
+                "variable":"perk-steadfast_meal{0}{1}","title":"Steadfast Meal","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18743,8 +19144,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_JobGroup":{"name":"Perk_JobGroup","fieldName":"jobgroup","group":"Perk","descriptions":["jobgroup"],
-                "variable":"perk-jobgroup{0}{1}","title":"JobGroup","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Find Ether Signature":{"name":"Perk_Find Ether Signature","fieldName":"find_ether_signature","group":"Perk","descriptions":[""],
+                "variable":"perk-find_ether_signature{0}{1}","title":"Find Ether Signature","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -18752,495 +19153,8 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Perk_StyleCategory":{"name":"Perk_StyleCategory","fieldName":"stylecategory","group":"Perk","descriptions":["stylecategory"],
-                "variable":"perk-stylecategory{0}{1}","title":"StyleCategory","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_StyleGroup":{"name":"Perk_StyleGroup","fieldName":"stylegroup","group":"Perk","descriptions":["stylegroup"],
-                "variable":"perk-stylegroup{0}{1}","title":"StyleGroup","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_StyleSubGroup":{"name":"Perk_StyleSubGroup","fieldName":"stylesubgroup","group":"Perk","descriptions":["stylesubgroup"],
-                "variable":"perk-stylesubgroup{0}{1}","title":"StyleSubGroup","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_BasicStyleGroup":{"name":"Perk_BasicStyleGroup","fieldName":"basicstylegroup","group":"Perk","descriptions":["basicgroup"],
-                "variable":"perk-basicstylegroup{0}{1}","title":"BasicStyleGroup","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_AdvancedGroup":{"name":"Perk_AdvancedGroup","fieldName":"advancedgroup","group":"Perk","descriptions":["advancedgroup"],
-                "variable":"perk-advancedgroup{0}{1}","title":"AdvancedGroup","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_BranchGroup":{"name":"Perk_BranchGroup","fieldName":"branchgroup","group":"Perk","descriptions":["branch"],
-                "variable":"perk-branchgroup{0}{1}","title":"BranchGroup","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_GearGroup":{"name":"Perk_GearGroup","fieldName":"geargroup","group":"Perk","descriptions":["geargroup"],
-                "variable":"perk-geargroup{0}{1}","title":"GearGroup","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_ResourceType":{"name":"Perk_ResourceType","fieldName":"resourcetype","group":"Perk","descriptions":["resourcetype"],
-                "variable":"perk-resourcetype{0}{1}","title":"ResourceType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_Goods":{"name":"Perk_Goods","fieldName":"goods","group":"Perk","descriptions":["goods"],
-                "variable":"perk-goods{0}{1}","title":"Goods","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_Gear":{"name":"Perk_Gear","fieldName":"gear","group":"Perk","descriptions":["gear"],
-                "variable":"perk-gear{0}{1}","title":"Gear","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_Consumable":{"name":"Perk_Consumable","fieldName":"consumable","group":"Perk","descriptions":["consu"],
-                "variable":"perk-consumable{0}{1}","title":"Consumable","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_Equipment":{"name":"Perk_Equipment","fieldName":"equipment","group":"Perk","descriptions":["equipment"],
-                "variable":"perk-equipment{0}{1}","title":"Equipment","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_EquipmentType":{"name":"Perk_EquipmentType","fieldName":"equipmenttype","group":"Perk","descriptions":["equiptype"],
-                "variable":"perk-equipmenttype{0}{1}","title":"EquipmentType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_EquipmentFilterType":{"name":"Perk_EquipmentFilterType","fieldName":"equipmentfiltertype","group":"Perk","descriptions":["equipfilter"],
-                "variable":"perk-equipmentfiltertype{0}{1}","title":"EquipmentFilterType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_ConsuType":{"name":"Perk_ConsuType","fieldName":"consutype","group":"Perk","descriptions":["consutype"],
-                "variable":"perk-consutype{0}{1}","title":"ConsuType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_ConsuFilterType":{"name":"Perk_ConsuFilterType","fieldName":"consufiltertype","group":"Perk","descriptions":["consufilter"],
-                "variable":"perk-consufiltertype{0}{1}","title":"ConsuFilterType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_GearType":{"name":"Perk_GearType","fieldName":"geartype","group":"Perk","descriptions":["geartype"],
-                "variable":"perk-geartype{0}{1}","title":"GearType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_GoodsType":{"name":"Perk_GoodsType","fieldName":"goodstype","group":"Perk","descriptions":["goodstype"],
-                "variable":"perk-goodstype{0}{1}","title":"GoodsType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_FoodType":{"name":"Perk_FoodType","fieldName":"foodtype","group":"Perk","descriptions":["foodtype"],
-                "variable":"perk-foodtype{0}{1}","title":"FoodType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_IngType":{"name":"Perk_IngType","fieldName":"ingtype","group":"Perk","descriptions":["ingtype"],
-                "variable":"perk-ingtype{0}{1}","title":"IngType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_LocationType":{"name":"Perk_LocationType","fieldName":"locationtype","group":"Perk","descriptions":["locationtype"],
-                "variable":"perk-locationtype{0}{1}","title":"LocationType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_AnimalType":{"name":"Perk_AnimalType","fieldName":"animaltype","group":"Perk","descriptions":["animaltype"],
-                "variable":"perk-animaltype{0}{1}","title":"AnimalType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_Currency":{"name":"Perk_Currency","fieldName":"currency","group":"Perk","descriptions":["crn"],
-                "variable":"perk-currency{0}{1}","title":"Currency","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_ToolSlot":{"name":"Perk_ToolSlot","fieldName":"toolslot","group":"Perk","descriptions":["toolslot"],
-                "variable":"perk-toolslot{0}{1}","title":"ToolSlot","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_ConsumableSlot":{"name":"Perk_ConsumableSlot","fieldName":"consumableslot","group":"Perk","descriptions":["consuslot"],
-                "variable":"perk-consumableslot{0}{1}","title":"ConsumableSlot","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_Note":{"name":"Perk_Note","fieldName":"note","group":"Perk","descriptions":["note"],
-                "variable":"perk-note{0}{1}","title":"Note","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"]
-                            ,
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_PersonalityType":{"name":"Perk_PersonalityType","fieldName":"personalitytype","group":"Perk","descriptions":["personality"],
-                "variable":"perk-personalitytype{0}{1}","title":"PersonalityType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_MotivationType":{"name":"Perk_MotivationType","fieldName":"motivationtype","group":"Perk","descriptions":["motivation"],
-                "variable":"perk-motivationtype{0}{1}","title":"MotivationType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_PatternType":{"name":"Perk_PatternType","fieldName":"patterntype","group":"Perk","descriptions":["pattern"],
-                "variable":"perk-patterntype{0}{1}","title":"PatternType","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk_TechBaseFilter":{"name":"Perk_TechBaseFilter","fieldName":"techbasefilter","group":"Perk","descriptions":["techbasefilter"],
-                "variable":"perk-techbasefilter{0}{1}","title":"TechBaseFilter","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__max":{"name":"Perk__max","fieldName":"_max","group":"Perk","descriptions":["_max"],
-                "variable":"perk-_max{0}{1}","title":"_max","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__rank":{"name":"Perk__rank","fieldName":"_rank","group":"Perk","descriptions":["_rank"],
-                "variable":"perk-_rank{0}{1}","title":"_rank","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__build":{"name":"Perk__build","fieldName":"_build","group":"Perk","descriptions":["_build"],
-                "variable":"perk-_build{0}{1}","title":"_build","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__filter":{"name":"Perk__filter","fieldName":"_filter","group":"Perk","descriptions":["_filter"],
-                "variable":"perk-_filter{0}{1}","title":"_filter","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__subfilter":{"name":"Perk__subfilter","fieldName":"_subfilter","group":"Perk","descriptions":["_subfilter"],
-                "variable":"perk-_subfilter{0}{1}","title":"_subfilter","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__expand":{"name":"Perk__expand","fieldName":"_expand","group":"Perk","descriptions":["_expand"],
-                "variable":"perk-_expand{0}{1}","title":"_expand","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__tab":{"name":"Perk__tab","fieldName":"_tab","group":"Perk","descriptions":["_tab"],
-                "variable":"perk-_tab{0}{1}","title":"_tab","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__page":{"name":"Perk__page","fieldName":"_page","group":"Perk","descriptions":["_page"],
-                "variable":"perk-_page{0}{1}","title":"_page","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__info":{"name":"Perk__info","fieldName":"_info","group":"Perk","descriptions":["_info"],
-                "variable":"perk-_info{0}{1}","title":"_info","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__exit":{"name":"Perk__exit","fieldName":"_exit","group":"Perk","descriptions":["_exit"],
-                "variable":"perk-_exit{0}{1}","title":"_exit","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__finish":{"name":"Perk__finish","fieldName":"_finish","group":"Perk","descriptions":["_finish"],
-                "variable":"perk-_finish{0}{1}","title":"_finish","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__origin":{"name":"Perk__origin","fieldName":"_origin","group":"Perk","descriptions":["_origin"],
-                "variable":"perk-_origin{0}{1}","title":"_origin","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__learn":{"name":"Perk__learn","fieldName":"_learn","group":"Perk","descriptions":["_learn"],
-                "variable":"perk-_learn{0}{1}","title":"_learn","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__pts":{"name":"Perk__pts","fieldName":"_pts","group":"Perk","descriptions":["_pts"],
-                "variable":"perk-_pts{0}{1}","title":"_pts","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__tech":{"name":"Perk__tech","fieldName":"_tech","group":"Perk","descriptions":["_tech"],
-                "variable":"perk-_tech{0}{1}","title":"_tech","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__techset":{"name":"Perk__techset","fieldName":"_techset","group":"Perk","descriptions":["_techset"],
-                "variable":"perk-_techset{0}{1}","title":"_techset","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__perk":{"name":"Perk__perk","fieldName":"_perk","group":"Perk","descriptions":["_perk"],
-                "variable":"perk-_perk{0}{1}","title":"_perk","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__expertise":{"name":"Perk__expertise","fieldName":"_expertise","group":"Perk","descriptions":["_expertise"],
-                "variable":"perk-_expertise{0}{1}","title":"_expertise","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__gear":{"name":"Perk__gear","fieldName":"_gear","group":"Perk","descriptions":["_gear"],
-                "variable":"perk-_gear{0}{1}","title":"_gear","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__affinity":{"name":"Perk__affinity","fieldName":"_affinity","group":"Perk","descriptions":["_affinity"],
-                "variable":"perk-_affinity{0}{1}","title":"_affinity","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__error":{"name":"Perk__error","fieldName":"_error","group":"Perk","descriptions":["_error"],
-                "variable":"perk-_error{0}{1}","title":"_error","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__refresh":{"name":"Perk__refresh","fieldName":"_refresh","group":"Perk","descriptions":["_refresh"],
-                "variable":"perk-_refresh{0}{1}","title":"_refresh","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__submenu":{"name":"Perk__submenu","fieldName":"_submenu","group":"Perk","descriptions":["_submenu"],
-                "variable":"perk-_submenu{0}{1}","title":"_submenu","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__db":{"name":"Perk__db","fieldName":"_db","group":"Perk","descriptions":["_db"],
-                "variable":"perk-_db{0}{1}","title":"_db","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
-                        "definitionName":[],
-                        "value":2,"multiplier":1,"max":0},
-                        {"variableName":["adv-level"],
-                            "definitionName":["Level"],
-                            "value":0,"multiplier":1,"max":0}]},
-                "linkedGroups":[],
-                "isResource":""},
-            "Perk__visible":{"name":"Perk__visible","fieldName":"_visible","group":"Perk","descriptions":["_visible"],
-                "variable":"perk-_visible{0}{1}","title":"_visible","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
+            "Perk_Trace Ether Signature":{"name":"Perk_Trace Ether Signature","fieldName":"trace_ether_signature","group":"Perk","descriptions":[""],
+                "variable":"perk-trace_ether_signature{0}{1}","title":"Trace Ether Signature","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":2,"multiplier":1,"max":0},
                         {"variableName":["adv-level"],
@@ -19367,7 +19281,8 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "Skill_Inspire":{"name":"Skill_Inspire","fieldName":"inspire","group":"Skill","descriptions":["Inspire is a social skill used to evoke feelings of hope and to counter dispair. Inspire is used when motivating action. Techniques that use inspire often provide emotional boosts and bolster willpower. Inspire is also often used in persuasion attempts to convince another to help. "],
                 "variable":"skl-inspire{0}{1}","title":"Inspire","subGroup":"Persuade","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"Attr_CNV%","workers":[{"variableName":["atr-cnv",""],
-                        "definitionName":["Attr_CNV",""],
+                        "definitionName":["Attr_CNV",""]
+                        ,
                         "value":0,"multiplier":1,"max":0},
                         {"variableName":["skl-inspire_rank"],
                             "definitionName":[],
@@ -19656,8 +19571,7 @@ var WuxDef = WuxDef || (function() {
                             "value":0,"multiplier":1,"max":0}]},
                 "linkedGroups":[],
                 "isResource":""},
-            "LoreCat_Profession":{"name":"LoreCat_Profession","fieldName":"profession","group":"LoreCategory","descriptions":["Profession is the general knowledge of any kind of job, what they do, and how it is performed."]
-                ,
+            "LoreCat_Profession":{"name":"LoreCat_Profession","fieldName":"profession","group":"LoreCategory","descriptions":["Profession is the general knowledge of any kind of job, what they do, and how it is performed."],
                 "variable":"lrc-profession{0}{1}","title":"Profession","subGroup":"Profession","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"Recall","workers":[{"variableName":["gen-recall"],
                         "definitionName":["Recall"],
                         "value":0,"multiplier":1,"max":0},
@@ -20001,7 +19915,8 @@ var WuxDef = WuxDef || (function() {
                 "isResource":""},
             "Lore_Etiquette":{"name":"Lore_Etiquette","fieldName":"etiquette","group":"Lore","descriptions":["Etiquette knowledge represents your study of social customs within specific cultures and societies and will help you avoid embarrassing yourself or causing insult."],
                 "variable":"lor-etiquette{0}{1}","title":"Etiquette","subGroup":"Culture","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"Recall","workers":[{"variableName":["gen-recall"],
-                        "definitionName":["Recall"],
+                        "definitionName":["Recall"]
+                        ,
                         "value":0,"multiplier":1,"max":0},
                         {"variableName":["lor-etiquette_rank"],
                             "definitionName":[],
@@ -20264,8 +20179,7 @@ var WuxDef = WuxDef || (function() {
                 "variable":"jbs-kineticist{0}{1}","title":"Kineticist","subGroup":"JobClass_Intermediate","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":"","skills":"Flux","requirements":"None"},
-            "JStyle_Trooper":{"name":"JStyle_Trooper","fieldName":"jstyle_trooper","group":"JobStyle","descriptions":["A ranged zone specialist that uses ranged weapons to establish overwatch areas, denying movement and punishing enemies that enter coverage."]
-                ,
+            "JStyle_Trooper":{"name":"JStyle_Trooper","fieldName":"jstyle_trooper","group":"JobStyle","descriptions":["A ranged zone specialist that uses ranged weapons to establish overwatch areas, denying movement and punishing enemies that enter coverage."],
                 "variable":"jbs-trooper{0}{1}","title":"Trooper","subGroup":"JobClass_Advanced","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":"","skills":"Aim","requirements":"None"},
@@ -20419,7 +20333,8 @@ var WuxDef = WuxDef || (function() {
                 "isResource":"","shortDescription":"","points":"5","endsOnRoundStart":false,"endsOnTrigger":true,"hasRanks":false,"isBeneficial":true,"canBeFiltered":true,"presetStatus":false},
             "Stat_Hindered":{"name":"Stat_Hindered","fieldName":"stat_hindered","group":"Status","descriptions":["Skill checks against you gain +1 Advantage."],
                 "variable":"sts-hindered{0}{1}","title":"Hindered","subGroup":"Condition","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
-                "linkedGroups":[],
+                "linkedGroups":[]
+                ,
                 "isResource":"","shortDescription":"","points":"3","endsOnRoundStart":true,"endsOnTrigger":true,"hasRanks":false,"isBeneficial":false,"canBeFiltered":true,"presetStatus":false},
             "Stat_Immobilized":{"name":"Stat_Immobilized","fieldName":"stat_immobilized","group":"Status","descriptions":["You cannot make any voluntary movements, although involuntary movements are unaffected."],
                 "variable":"sts-immobilized{0}{1}","title":"Immobilized","subGroup":"Condition","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
@@ -20533,9 +20448,8 @@ var WuxDef = WuxDef || (function() {
                 "variable":"sts-steadfast{0}{1}","title":"Steadfast","subGroup":"Emotion","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":"","shortDescription":"","points":"12","endsOnRoundStart":false,"endsOnTrigger":true,"hasRanks":false,"isBeneficial":false,"canBeFiltered":false,"presetStatus":false}},
-        sortingGroups = {"group":{"Type":["Attribute","Skill","SkillGroup","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","DefIcon","InnateDefenseType","InnateSenseType","StatBonus","General","Chat","Combat","Social","Influence","SeverityRank","RequestType","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobClass","JobGroup","StyleCategory","StyleGroup","StyleSubGroup","BasicStyleGroup","AdvancedGroup","BranchGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Equipment","EquipmentType","EquipmentFilterType","ConsuType","ConsuFilterType","GearType","GoodsType","FoodType","IngType","LocationType","AnimalType","Currency","ToolSlot","ConsumableSlot","Note","PersonalityType","MotivationType","PatternType","TechFilterType","TechBaseFilter","TechAutoFilter","PerkAutoFilter","TechFilterPopup"],"VariableMod":["_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_perk","_expertise","_gear","_affinity","_error","_refresh","_submenu","_db","_visible"],"AncestryType":["Human","Spirit"],"Untyped":["Unaspected","Check","CombatDetails","FlatDC","BoostStyleTech","BoostGearTech","BoostPerkTech","KeySkills","SB_MAX","Potency","SkillExpertise","DamageBonus","TechENLimit","Ancestry","Affinity","AdvancedAffinity","SecondaryAffinity","AffinityAspect","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","EquipmentSlots","ConsumableSlots","Jin","TargetHV","TargetFavor","RepeatingInfluences","Loading","TechPopupValues","ItemPopupValues","RepeatingActiveEmotes","RepeatingActiveEmotesNotes","RepeatingOutfits","RepeaterAcademic","RepeaterProfession","RepeaterCraftmanship","RepeaterGeography","RepeaterHistory","RepeaterCulture","RepeaterReligion","RepeatingJobStyles","RepeatingStyles","RepeatingPerks","RepeatingFormeTech","FormeTechDisplayVer","RepeatingPermaTech","ActionsPermaTech","ActionsJobTech","ActionsAdvTech","ActionsPassiveTech","ActionsGearTech","ActionsBasicActions","ActionsBasicRecovery","ActionsBasicAttack","ActionsBasicSocial","ActionsBasicSpirit","RefreshTech","GearTech","BasicActions","BasicRecovery","BasicAttack","BasicSocial","BasicSpirit","RepeatingCustomTech","CustomTech","TechHeader","TechTrueName","TechActionType","TechActionName","TechActionTooltip","TechName","TechVersion","TechIsVisible","TechAffinity","TechTier","TechRank","TechRankUp","TechRankDown","TechDisplayName","TechResourceData","TechEnCost","TechWillCost","TechBoonCost","TechTargetingData","TechTargetDesc","TechTargetType","TechRange","TechLimit","TechForm","TechTrait","TechCoreDefense","TechTrigger","TechTraits","TechTraitsDesc","TechFlavorText","TechCoreEffect","TechOnEnter","TechCheckTitle","TechCheckEffect","TechEndEffect","TechWillBreakEffect","TechEnhanceEffect","TechDef","ItemIsVisible","ItemName","ItemAction","ItemCount","ItemMainGroup","ItemGroup","ItemSubGroup","ItemBulk","ItemBaseValue","ItemTrait","ItemDescription","ItemCraft","ItemSlotOpen","ItemPerFive","RepeatingEquipment","RepeatingConsumables","RepeatingSyncedEquipment","RepeatingGear","RepeatingFoods","RepeatingCooking","Adjacency","Obstruction","Lifting","Notebooks","NotebookPages"],"AffinityType":["Wood","Fire","Earth","Metal","Water"],"AffinityTypeDesc":["WoodF","FireF","EarthF","MetalF","WaterF"],"InnateDefenseType":["Def_BOD","Def_PRC","Def_QCK"],"InnateSenseType":["Def_CNV","Def_INT","Def_RSN"],"Page":["Page_ActiveSkills","Page_SocialSkills","Page_WorldSkills","Page_Origin","Page_Jobs","Page_Skills","Page_Knowledge","Page_Attributes","Page_AffectedStats","Page_PotencyStats","Page_DefensiveStats","Page_SkillStats","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Post","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Techniques","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar","Page_NPC","Page_Notes"],"SkillGroup":["SkillGroup_Athletics","SkillGroup_Magic","SkillGroup_Persuade","SkillGroup_Cunning","SkillGroup_Craft","SkillGroup_Device","SkillGroup_Perception"],"StatBonus":["SB_LowDef","SB_MedDef","SB_GoodDef","SB_GreatDef","SB_ExcellentDef"],"AttributeValue":["AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad"],"LoreTier":["LoreTier0","LoreTier1","LoreTier2","LoreTier3"],"GeneralLoreTier":["GeneralLoreTier0","GeneralLoreTier1"],"RequestType":["Request_Simple","Request_Inconvenient","Request_Disruptive","Request_Serious","Request_Life-Changing"],"RegionType":["Walthair","EastSea","Khem","Aridsha","Ceres","Colswei","Dowfeng","Wayling","Novus"],"RaceType":["Coastborne","Suntouched","Sandfolk","Plains-kin","Frostcloaked","Earthblood","Other"],"GenderType":["Male","Female","NonBinary"],"NotebookType":["Notebook","Category"],"PostType":["post-Notes","post-Info","post-Location","post-System","post-Chapter","post-History","post-Speak","post-Whisper","post-Yell","post-Comms","post-Think","post-Describe"],"ChatType":["Speak","Whisper","Yell","Comms","Think","Describe"],"EmotePostType":["PostToChat","PostToNotebook"],"TimeType":["Dawn","Morning","Midday","Evening","Night","Deepnight"],"Boon":["Boon_Rest","Boon_Savor"],"InfluenceType":["InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal"],"SeverityRank":["Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity"],"DamageType":["Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Force","Dmg_Piercing","Dmg_Psyche","Dmg_Tension","Dmg_Weapon"],"TerrainFxType":["Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden"],"PerkGroup":["PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks"],"JobClass":["JobClass_Simple","JobClass_Intermediate","JobClass_Advanced","JobClass_Spirit"],"JobGroup":["JobGroup_Vanguard","JobGroup_Athlete","JobGroup_Operator","JobGroup_Strategist","JobGroup_Healer","JobGroup_Advocate"],"StyleCategory":["StyleCategory_Forme","StyleCategory_Gear","StyleCategory_Basic","StyleCategory_Combat","StyleCategory_Social","StyleCategory_Deprecated"],"BasicStyleGroup":["BasicGroup_BasicAction","BasicGroup_BasicDetection","BasicGroup_BasicSpirit","BasicGroup_BasicAttack","BasicGroup_BasicMovement","BasicGroup_BasicRecovery","BasicGroup_BasicAgitation","BasicGroup_BasicInfluence","BasicGroup_BasicRequest"],"StyleGroup":["StyleGroup_Combat Arts","StyleGroup_Control Arts","StyleGroup_Social Arts"],"StyleSubGroup":["StyleSubGroup_Fast Melee Attacks","StyleSubGroup_Forceful Melee Attacks","StyleSubGroup_Resonant Melee Attacks","StyleSubGroup_Fast Ranged Attacks","StyleSubGroup_Forceful Ranged Attacks","StyleSubGroup_Resonant Ranged Attacks","StyleSubGroup_Area Control","StyleSubGroup_Terrain Molding","StyleSubGroup_Energy Control","StyleSubGroup_Material Control","StyleSubGroup_Enhanced Transmutation","StyleSubGroup_Damage Mitigation","StyleSubGroup_Positioning","StyleSubGroup_Enhancement","StyleSubGroup_Mythical","StyleSubGroup_Magical Assistance","StyleSubGroup_Charming Influence","StyleSubGroup_Compelling Influence","StyleSubGroup_Subtle Influence"],"GearGroup":["GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear"],"PersonalityType":["Personality_Stoic","Personality_Charmer","Personality_Idealist","Personality_Cynic","Personality_Loner","Personality_Leader","Personality_Rebel","Personality_Thinker","Personality_Caregiver","Personality_Dreamer","Personality_Realist","Personality_Mediator","Personality_Strategist","Personality_Joker","Personality_Visionary","Personality_Survivor","Personality_Guardian","Personality_Tactician","Personality_Pacifist","Personality_Zealot"]
-                ,"MotivationType":["Motivation_Power","Motivation_Justice","Motivation_Freedom","Motivation_Revenge","Motivation_Survival","Motivation_Glory","Motivation_Knowledge","Motivation_Redemption","Motivation_Belonging","Motivation_Wealth","Motivation_Truth","Motivation_Peace","Motivation_Control","Motivation_Chaos","Motivation_Duty","Motivation_Fame","Motivation_Discovery","Motivation_Legacy","Motivation_Love","Motivation_Escape"],"TechFilterType":["TechFilterType_TechCategory","TechFilterType_Combat","TechFilterType_Social","TechFilterType_Utility","TechFilterType_ActionType","TechFilterType_SwiftAction","TechFilterType_AssistAction","TechFilterType_QuickAction","TechFilterType_FullAction","TechFilterType_ReactionAction","TechFilterType_BriefAction","TechFilterType_LongAction","TechFilterType_PassiveAction","TechFilterType_Targeting","TechFilterType_RangeSelf","TechFilterType_RangeMelee","TechFilterType_RangeClose","TechFilterType_RangeShort","TechFilterType_RangeShortArea","TechFilterType_RangeLong","TechFilterType_RangeLongArea","TechFilterType_RangeSpecial","TechFilterType_CombatKeywords","TechFilterType_SocialKeywords","TechFilterType_SupportKeywords","TechFilterType_UtilityKeywords","TechFilterType_Defense","TechFilterType_DamageType","TechFilterType_StatusGood","TechFilterType_StatusBad","TechFilterType_WeaponKeywords","TechFilterType_AthleticSkills","TechFilterType_MagicSkills","TechFilterType_SocialSkills","TechFilterType_WorldSkills"],"TechAutoFilter":["AutoFilter_MeleeWeapons","AutoFilter_LightBlade","AutoFilter_HeavyBlade","AutoFilter_Hammer","AutoFilter_Polearm","AutoFilter_Whip","AutoFilter_RangedWeapons","AutoFilter_Bow","AutoFilter_Handgun","AutoFilter_Longshot","AutoFilter_ThrownBlade","AutoFilter_Athletics","AutoFilter_ForcefulFist","AutoFilter_Grappler","AutoFilter_Swiftform","AutoFilter_Mobility","AutoFilter_Acrobatics","AutoFilter_Stealth","AutoFilter_Social","AutoFilter_FavorBuilding","AutoFilter_Request","AutoFilter_Influence","AutoFilter_Emotion","AutoFilter_WoodMagic","AutoFilter_PlantMartial","AutoFilter_Plants","AutoFilter_Wood","AutoFilter_Wind","AutoFilter_Mana","AutoFilter_WoodSound","AutoFilter_WoodHealing","AutoFilter_WoodEmpowering","AutoFilter_FireMagic","AutoFilter_FlameMartial","AutoFilter_Flames","AutoFilter_Glass","AutoFilter_Smoke","AutoFilter_FireHealing","AutoFilter_FireEmpowering","AutoFilter_EarthMagic","AutoFilter_SandMartial","AutoFilter_Rock","AutoFilter_Terrain","AutoFilter_Gravity","AutoFilter_EarthEmpowering","AutoFilter_MetalMagic","AutoFilter_LightningMartial","AutoFilter_Ironsand","AutoFilter_Metal","AutoFilter_Lightning","AutoFilter_Stasis","AutoFilter_MetalEmpowering","AutoFilter_WaterMagic","AutoFilter_IceMartial","AutoFilter_Water","AutoFilter_Cold","AutoFilter_Ice","AutoFilter_WaterHealing","AutoFilter_WaterSound","AutoFilter_WaterEmpowering","AutoFilter_SpecialMagic","AutoFilter_Ether","AutoFilter_Corrosion","AutoFilter_Light","AutoFilter_Shadow","AutoFilter_Blood","AutoFilter_Time"],"TechBaseFilter":["TechBaseFilter_Combat","TechBaseFilter_Social","TechBaseFilter_Utility"],"PerkAutoFilter":["PerkFilter_Cost1Perk","PerkFilter_Cost2Perk","PerkFilter_Cost3Perk"],"EquipmentType":["EquipType_Weapon","EquipType_Apparel","EquipType_Tool"],"EquipmentFilterType":["EquipFilter_WeaponType","EquipFilter_Melee","EquipFilter_Ranged","EquipFilter_WeaponKeywords","EquipFilter_ToolType","EquipFilter_Comms","EquipFilter_Bindings","EquipFilter_Light","EquipFilter_Misc","EquipFilter_ToolKeywords","EquipFilter_ApparelType","EquipFilter_Chest","EquipFilter_Head","EquipFilter_Eyes","EquipFilter_Back","EquipFilter_Arms","EquipFilter_Legs","EquipFilter_Feet"],"ConsuType":["ConsuType_Recovery","ConsuType_Tonic","ConsuType_Bomb"],"GearType":["GearType_Supplies","GearType_Implements","GearType_Records"],"GoodsType":["GoodsType_Material","GoodsType_Goods","GoodsType_Animal Good"],"FoodType":["FoodType_Beverage"],"IngType":["IngType_Compound","IngType_Supplement","IngType_Protein","IngType_Starch","IngType_Sugar","IngType_Fruit","IngType_Vegetable"],"LocationType":["LocationType_Coastal","LocationType_Cold","LocationType_Desert","LocationType_Forest","LocationType_Grassland","LocationType_Jungle","LocationType_Mountain","LocationType_Plains","LocationType_Swamp","LocationType_Tropical","LocationType_Volcanic"],"AnimalType":["AnimalType_Beast","AnimalType_Bird","AnimalType_Lizard"],"Attribute":["Attr_BOD","Attr_PRC","Attr_QCK","Attr_CNV","Attr_INT","Attr_RSN"],"":["STR","ESS"],"Title":["Title_Boon","Title_UsingInfluences","Title_Origin","Title_Background","Title_BackgroundGenerator","Title_StatSummary","Title_Conflict","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_LearnNewStyles","Title_PerkTechniques","Title_StyleFilterOption","Title_QuickStyleFilter","Title_PerkStyleFilter","Title_ExpandedStyleFilters","Title_Chat","Title_Emotes","Title_LanguageSelect","Title_LanguageCommon","Title_GeneralLore","Title_LoreCategory","Title_SpecializedLore","Title_Skills","Title_Outfits","Title_EquippedGear","Title_Notebook","Title_Techniques","Title_TechniqueChange","Title_ChangeAffinity","Title_Debug","Title_InstantConsumables","Title_EquippedInstantConsumables","Title_StartingJin","Title_YourJin","Title_InspectionItemCost","Title_JobsByDifficulty","Title_MainRole","Title_SubRole","Title_IsPlayer","Title_AddEquipment","Title_AddConsumable","Title_AddGear","Title_Round","Title_Phase","Title_PhaseTeam","Title_Turn","Title_OffTurn","Title_Targetting","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEndFocus","Title_TechEnhancement"],"Advancement":["Level","CR","MaxCR","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","AdvancementPerkTransfer","JobTier","JobTechniques","LearnStyle","StyleTechniques"],"Training":["TrainingKnowledge","TrainingTechniques","PP","BonusTraining"],"Defense":["Def_Brace","Def_Warding","Def_Evasion"],"Sense":["Def_Resolve","Def_Insight","Def_Logic"],"Result":["WillBreak"],"Origin":["CharSheetName","SheetName","FullName","DisplayName","QuickDescription","Backstory","Age","Gender","HomeRegion","Homeland","Ethnicity"],"General":["HP","WILL","Surge","EN","StartEN","RoundEN","Recall","Initiative"],"Combat":["Cmb_Vitality","Cmb_HV","Cmb_Armor","Cmb_BurnResist","Cmb_ColdResist","Cmb_EnergyResist","Cmb_ForceResist","Cmb_PiercingResist","Cmb_PsycheResist","Cmb_Mv","Cmb_MvDash"],"Social":["Soc_Favor","Soc_Influence","Soc_InfluenceCombat","Soc_InfluenceDesc","Soc_Severity","Soc_RequestCheck","Soc_Impatience"],"Trait":["Trait_Accurate","Trait_AP","Trait_Break","Trait_Brutal","Trait_Truehit","Trait_Favor","Trait_Influence","Trait_Request","Trait_Cleanse","Trait_EN","Trait_Heal","Trait_BreakFocus","Trait_ForceMove","Trait_ForceMove-ForceMove","Trait_ForceMove-Pulled","Trait_ForceMove-Pushed","Trait_ForceMove-Fall","Trait_Illusion","Trait_Move","Trait_Move-FreeMove","Trait_Move-Jump","Trait_Move-Sneak","Trait_Move-Special","Trait_Move-Fly","Trait_Move-Teleport","Trait_Move-Temporal","Trait_Structure","Trait_Terrain","Trait_Damage","Trait_DamageTrue","Trait_DamageEvasion","Trait_DamageEgo","Trait_Delayed","Trait_Focus","Trait_OnEnter","Trait_PerRound","Trait_PerTurn","Trait_PerConflict","Trait_Permanent","Trait_Resonator","Trait_Social","Trait_SkillCheck-DC","Trait_SkillCheck-Defense","Trait_Trigger","Trait_MeleeWeapon","Trait_Hammer","Trait_HeavyBlade","Trait_LightBlade","Trait_Polearm","Trait_Whip","Trait_RangedWeapon","Trait_Bow","Trait_Handgun","Trait_Longshot","Trait_Scattershot","Trait_ThrownBlade","Trait_Ingested","Trait_Inhalent","Trait_Magitech","Trait_Medkit","Trait_DustContainer","Trait_FishingTool","Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Loud","Trait_Resonant","Trait_Sharp","Trait_Sturdy","Trait_Transparent"],"PageSet":["PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training"],"IsPlayer":["IsPlayer_No","IsPlayer_Yes"],"Popup":["Popup_PopupActive","Popup_PopupName","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_ItemInspectionName","Popup_EquipmentInspectionName","Popup_ConsumablesInspectionName","Popup_GearInspectionName","Popup_GoodsInspectionName","Popup_TechniqueInspectionName","Popup_PerkInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectDisplay","Popup_ItemSelectDisplayNeutral","Popup_ItemSelectDisplayWood","Popup_ItemSelectDisplayFire","Popup_ItemSelectDisplayEarth","Popup_ItemSelectDisplayMetal","Popup_ItemSelectDisplayWater","Popup_ItemSelectType","Popup_ItemSelectIsOn","Popup_ItemSelectVisible","Popup_FilterPopupActive","Popup_FilterPopupName","Popup_FilterTechniquePopupName","Popup_CustomStylesFilterName","Popup_CustomItemsFilter","Popup_CustomItemTechFilter","Popup_ApplyFilter","Popup_ClearFilter","Popup_FilterPopupType","Popup_FilterPopupDisplayType","Popup_FindItemsByFilter","Popup_FindItemsByTechnique","Popup_SearchButton","Popup_FindGearByFilter"],"Chat":["Chat_Type","Chat_PostTarget","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_PostEmoteNote","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","Chat_OutfitDefault","Chat_OutfitDefaultURL"],"Lore":["Lore_Tier","Lore_SubType","Lore_Name","Lore_Description","Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"],"Forme":["Forme_SeeTechniques","Forme_ShowFromNonElement","Forme_ShowLevelRestricted","Forme_RecommendedStyles","Forme_CustomStyleFilter","Forme_Name","Forme_Inspect","Forme_Delete","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_ActionCount","Forme_SelectJob","Forme_JobSlot","Forme_JobSlotCount","Forme_AdvancedSlot","Forme_AdvancedSlotCount","Forme_StyleSlot","Forme_StyleSlotCount"],"Action":["Action_StyleIsVisible","Action_PerkIsVisible","Action_Use","Action_Inspect","Action_Delete","Action_Actions","Action_SetData","Action_Techniques","Action_FormeLoadCount","Action_FormeLoad","Action_FormeTechniques"],"Gear":["Gear_AutoEquipItems","Gear_Equip","Gear_Unequip","Gear_Delete","Gear_Inspect","Gear_Buy","Gear_BuyBulk","Gear_Remove","Gear_Use","Gear_Cook","Gear_UnequipAll","Gear_EquipmentSlot","Gear_ConsumableSlot","Gear_EquippedItemTraits","Gear_EquipmentIsVisible","Gear_ConsumableIsVisible","Gear_GearIsVisible","Gear_FoodIsVisible","Gear_ItemName","Gear_ItemType","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_UpdateEquipment","Gear_RemoveEquipment","Gear_UpdateConsumables","Gear_RemoveConsumables","Gear_CookingEvent","Gear_ActiveRecipe","Gear_UpdateCooking","Gear_ActiveIngredientList"],"System":["System_CraftingBlueprint","System_CraftingRecipe","System_CraftSkillCheck","System_CraftSkillCheckBlueprint","System_CraftSkillCheckTraining","System_CraftSkillCheckBlueprintTraining","System_CraftTimeBlueprint","System_CraftTime","System_CraftingComponent","System_CraftMaterials","System_Cooking","System_HighQualityMeals"],"PatternType":["Pattern_Target","Pattern_Targets","Pattern_Target/Self","Pattern_Object","Pattern_Objects","Pattern_Space","Pattern_Spaces","Pattern_Line","Pattern_Wide Line","Pattern_Cone","Pattern_Blast","Pattern_Blast(3H)","Pattern_Blast(5H)","Pattern_Radial"],"Rules":["Bulk"],"Note":["Note_GenName","Note_GenFullName","Note_GenGender","Note_GenHomeRegion","Note_GenRace","Note_GenPersonality","Note_GenMotivation","Note_GenerateCharacter","Note_UseGeneration","Note_ClearBackground","Note_NotebookCount","Note_NotebookActions","Note_NotebookName","Note_NotebookContents","Note_NotebookOpen","Note_NotebookDelete","Note_NotebookReload","Note_NotebookClose","Note_NotebookSave","Note_NotebookIsDirty","Note_OpenNotebook","Note_OpenNotebookActions","Note_PageType","Note_PageDisplay","Note_PagePost","Note_PageDelete","Note_PageTemplateData","Note_PageContents","Note_PageLocation","Note_PageArea","Note_PageDate","Note_PageTime","Note_PageCharName","Note_PageCharURL","Note_PageCharEmote","Note_PageCharLanguage","Note_PageQuestName","Note_PageChapter","Note_PagePart"],"Perk":["Perk_Attribute","Perk_Skill","Perk_SkillGroup","Perk_Archetype","Perk_Job","Perk_JobStyle","Perk_Knowledge","Perk_Language","Perk_LoreCategory","Perk_Lore","Perk_Style","Perk_StyleType","Perk_Forme","Perk_Action","Perk_Technique","Perk_System","Perk_PageSet","Perk_Page","Perk_Title","Perk_Popup","Perk_Data","Perk_Advancement","Perk_Training","Perk_Perk","Perk_Defense","Perk_Sense","Perk_DefIcon","Perk_InnateDefenseType","Perk_InnateSenseType","Perk_StatBonus","Perk_General","Perk_Chat","Perk_Combat","Perk_Social","Perk_Influence","Perk_SeverityRank","Perk_RequestType","Perk_DamageType","Perk_TerrainFxType","Perk_Trait","Perk_Status","Perk_Condition","Perk_Emotion","Perk_Boon","Perk_PerkGroup","Perk_JobClass","Perk_JobGroup","Perk_StyleCategory","Perk_StyleGroup","Perk_StyleSubGroup","Perk_BasicStyleGroup","Perk_AdvancedGroup","Perk_BranchGroup","Perk_GearGroup","Perk_ResourceType","Perk_Goods","Perk_Gear","Perk_Consumable","Perk_Equipment","Perk_EquipmentType","Perk_EquipmentFilterType","Perk_ConsuType","Perk_ConsuFilterType","Perk_GearType","Perk_GoodsType","Perk_FoodType","Perk_IngType","Perk_LocationType","Perk_AnimalType","Perk_Currency","Perk_ToolSlot","Perk_ConsumableSlot","Perk_Note","Perk_PersonalityType","Perk_MotivationType","Perk_PatternType","Perk_TechBaseFilter","Perk__max","Perk__rank","Perk__build","Perk__filter","Perk__subfilter","Perk__expand","Perk__tab","Perk__page","Perk__info","Perk__exit","Perk__finish","Perk__origin","Perk__learn","Perk__pts","Perk__tech","Perk__techset","Perk__perk","Perk__expertise","Perk__gear","Perk__affinity","Perk__error","Perk__refresh","Perk__submenu","Perk__db","Perk__visible"],"Skill":["Skill_Aesthetics","Skill_Agility","Skill_Aim","Skill_Alchemy","Skill_Analyze","Skill_Charm","Skill_Cook","Skill_Demoralize","Skill_Energize","Skill_Engineer","Skill_Empathy","Skill_Flux","Skill_Glyphwork","Skill_Inspire","Skill_Martial","Skill_Materialize","Skill_Medicine","Skill_Misdirect","Skill_Musicianship","Skill_Notice","Skill_Physio","Skill_Physique","Skill_Pilot","Skill_Rationalize","Skill_Resonance","Skill_Tinker","Skill_Transmute"],"Language":["Lang_Minere","Lang_Junal","Lang_Apollen","Lang_Lib","Lang_Cert","Lang_Dustell","Lang_Muralic","Lang_Shira","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq","Lang_Kleikan","Lang_Shorespeak","Lang_Verdeni","Lang_Emotion","Lang_Empathy","Lang_Jovean","Lang_Mytikan"],"LoreCategory":["LoreCat_Academic","LoreCat_Profession","LoreCat_Craftmanship","LoreCat_Geography","LoreCat_History","LoreCat_Culture","LoreCat_Religion"],"Job":["Job_Fighter","Job_Labourer","Job_Brawler","Job_Warden","Job_Sentinel","Job_Sniper","Job_Rogue","Job_Exemplar","Job_Hunter","Job_Warmage","Job_Geomancer","Job_Kineticist","Job_Trooper","Job_Yaksa","Job_Tactician","Job_Bard","Job_Spellwright","Job_Shade","Job_Medic","Job_Preacher","Job_Alchemist","Job_Courtier","Job_Merchant","Job_Diplomat","Job_Phantasm"],"JobStyle":["JStyle_Fighter","JStyle_Labourer","JStyle_Brawler","JStyle_Warden","JStyle_Sentinel","JStyle_Sniper","JStyle_Rogue","JStyle_Exemplar","JStyle_Hunter","JStyle_Warmage","JStyle_Geomancer","JStyle_Kineticist","JStyle_Trooper","JStyle_Yaksa","JStyle_Tactician","JStyle_Bard","JStyle_Spellwright","JStyle_Shade","JStyle_Medic","JStyle_Preacher","JStyle_Alchemist","JStyle_Courtier","JStyle_Merchant","JStyle_Diplomat","JStyle_Phantasm"],"Status":["Stat_Blinded","Stat_Burst","Stat_Downed","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Focus","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Mantle","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious","Stat_Aflame","Stat_Burn Aegis","Stat_Chilled","Stat_Cold Aegis","Stat_Dazed","Stat_Dodge","Stat_Dying","Stat_Earthblight","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Iron Plates","Stat_Jolted","Stat_Magnetized","Stat_Prone","Stat_Quickened","Stat_Sand Aegis","Stat_Shielded","Stat_Shock Aegis","Stat_Sickened","Stat_Soaked","Stat_Static","Stat_Stunned","Stat_Vined","Stat_Agreeable","Stat_Angered","Stat_Calmed","Stat_Distracted","Stat_Doubt","Stat_Encouraged","Stat_Flustered","Stat_Frightened","Stat_Overjoyed","Stat_Oppositional","Stat_Persevering","Stat_Rally","Stat_Surprised","Stat_Steadfast"]},"subGroup":{"":["Attribute","Skill","SkillGroup","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","DefIcon","InnateDefenseType","InnateSenseType","StatBonus","General","Chat","Combat","Social","Influence","SeverityRank","RequestType","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobClass","JobGroup","StyleCategory","StyleGroup","StyleSubGroup","BasicStyleGroup","AdvancedGroup","BranchGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Equipment","EquipmentType","EquipmentFilterType","ConsuType","ConsuFilterType","GearType","GoodsType","FoodType","IngType","LocationType","AnimalType","Currency","ToolSlot","ConsumableSlot","Note","PersonalityType","MotivationType","PatternType","TechFilterType","TechBaseFilter","TechAutoFilter","PerkAutoFilter","TechFilterPopup","_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_perk","_expertise","_gear","_affinity","_error","_refresh","_submenu","_db","_visible","Human","Spirit","Unaspected","Wood","WoodF","Fire","FireF","Earth","EarthF","Metal","MetalF","Water","WaterF","Def_BOD","Def_PRC","Def_QCK","Def_CNV","Def_INT","Def_RSN","Page_ActiveSkills","Page_SocialSkills","Page_WorldSkills","SB_LowDef","SB_MedDef","SB_GoodDef","SB_GreatDef","SB_ExcellentDef","AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad","LoreTier0","LoreTier1","LoreTier2","LoreTier3","GeneralLoreTier0","GeneralLoreTier1","Request_Simple","Request_Inconvenient","Request_Disruptive","Request_Serious","Request_Life-Changing","Walthair","EastSea","Khem","Aridsha","Ceres","Colswei","Dowfeng","Wayling","Novus","Male","Female","NonBinary","Notebook","Category","post-Notes","post-Info","post-Location","post-System","post-Chapter","post-History","post-Speak","post-Whisper","post-Yell","post-Comms","post-Think","post-Describe","Speak","Whisper","Yell","Comms","Think","Describe","PostToChat","PostToNotebook","Dawn","Morning","Midday","Evening","Night","Deepnight","Boon_Rest","Boon_Savor","InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal","Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity","Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Force","Dmg_Piercing","Dmg_Psyche","Dmg_Tension","Dmg_Weapon","Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden","PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks","JobClass_Simple","JobClass_Intermediate","JobClass_Advanced","JobClass_Spirit","JobGroup_Vanguard","JobGroup_Athlete","JobGroup_Operator","JobGroup_Strategist","JobGroup_Healer","JobGroup_Advocate","StyleCategory_Forme","StyleCategory_Gear","StyleCategory_Basic","StyleCategory_Combat","StyleCategory_Social","StyleCategory_Deprecated","StyleGroup_Combat Arts","StyleGroup_Control Arts","StyleGroup_Social Arts","GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear","Personality_Stoic","Personality_Charmer","Personality_Idealist","Personality_Cynic","Personality_Loner","Personality_Leader","Personality_Rebel","Personality_Thinker","Personality_Caregiver","Personality_Dreamer","Personality_Realist","Personality_Mediator","Personality_Strategist","Personality_Joker","Personality_Visionary","Personality_Survivor","Personality_Guardian","Personality_Tactician","Personality_Pacifist","Personality_Zealot","Motivation_Power","Motivation_Justice","Motivation_Freedom","Motivation_Revenge","Motivation_Survival","Motivation_Glory","Motivation_Knowledge","Motivation_Redemption","Motivation_Belonging","Motivation_Wealth","Motivation_Truth","Motivation_Peace","Motivation_Control","Motivation_Chaos","Motivation_Duty","Motivation_Fame","Motivation_Discovery","Motivation_Legacy","Motivation_Love","Motivation_Escape","EquipType_Weapon","EquipType_Apparel","EquipType_Tool","ConsuType_Recovery","ConsuType_Tonic","ConsuType_Bomb","GearType_Supplies","GearType_Implements","GearType_Records","GoodsType_Material","GoodsType_Goods","GoodsType_Animal Good","FoodType_Beverage","IngType_Compound","IngType_Supplement","IngType_Protein","IngType_Starch","IngType_Sugar","IngType_Fruit","IngType_Vegetable","LocationType_Coastal","LocationType_Cold","LocationType_Desert","LocationType_Forest","LocationType_Grassland","LocationType_Jungle","LocationType_Mountain","LocationType_Plains","LocationType_Swamp","LocationType_Tropical","LocationType_Volcanic","AnimalType_Beast","AnimalType_Bird","AnimalType_Lizard","Attr_BOD","Attr_PRC","Attr_QCK","STR","Attr_CNV","ESS","Attr_INT","Attr_RSN","Check","CombatDetails","FlatDC","Title_Boon","BoostStyleTech","BoostGearTech","BoostPerkTech","KeySkills","Level","CR","MaxCR","SB_MAX","Potency","SkillExpertise","DamageBonus","TechENLimit","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","AdvancementPerkTransfer","JobTier","JobTechniques","LearnStyle","StyleTechniques","TrainingKnowledge","TrainingTechniques","PP","BonusTraining","Def_Brace","Def_Warding","Def_Evasion","Def_Resolve","Def_Insight","Def_Logic","WillBreak","CharSheetName","SheetName","FullName","DisplayName","QuickDescription","Backstory","Age","Gender","HomeRegion","Homeland","Ethnicity","Ancestry","Affinity","AdvancedAffinity","SecondaryAffinity","AffinityAspect","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","EquipmentSlots","ConsumableSlots","Jin","EN","Recall","Initiative","TargetHV","Cmb_BurnResist","Cmb_ColdResist","Cmb_EnergyResist","Cmb_ForceResist","Cmb_PiercingResist","Cmb_PsycheResist","Soc_Favor","TargetFavor","RepeatingInfluences","Soc_Influence","Title_UsingInfluences","Soc_InfluenceCombat","Soc_InfluenceDesc","Soc_Severity","Soc_RequestCheck","Soc_Impatience","Trait_Break","Trait_Brutal","Trait_ForceMove-ForceMove","Trait_ForceMove-Pulled","Trait_ForceMove-Pushed","Trait_ForceMove-Fall","Trait_Move-FreeMove","Trait_Move-Jump","Trait_Move-Fly","Trait_Move-Teleport","Trait_Move-Temporal","Trait_Damage","Trait_DamageTrue","Trait_DamageEvasion","Trait_DamageEgo","Trait_Delayed","Trait_Focus","Trait_OnEnter","Trait_PerRound","Trait_PerTurn","Trait_PerConflict","Trait_Permanent","Trait_Resonator","Trait_Social","Trait_SkillCheck-DC","Trait_SkillCheck-Defense","Trait_Trigger","Trait_MeleeWeapon","Trait_RangedWeapon","PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training","Page_Origin","Page_Jobs","Page_Skills","Page_Knowledge","Page_Attributes","Page_AffectedStats","Page_PotencyStats","Page_DefensiveStats","Page_SkillStats","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Post","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Techniques","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar","Page_NPC","Page_Notes","Title_Origin","Title_Background","Title_BackgroundGenerator","Title_StatSummary","Title_Conflict","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_LearnNewStyles","Title_PerkTechniques","Title_StyleFilterOption","Title_QuickStyleFilter","Title_PerkStyleFilter","Title_ExpandedStyleFilters","Title_Chat","Title_Emotes","Title_LanguageSelect","Title_LanguageCommon","Title_GeneralLore","Title_LoreCategory","Title_SpecializedLore","Title_Skills","Title_Outfits","Title_EquippedGear","Title_Notebook","Title_Techniques","Title_TechniqueChange","Title_ChangeAffinity","Title_Debug","Title_InstantConsumables","Title_EquippedInstantConsumables","Title_StartingJin","Title_YourJin","Title_InspectionItemCost","Title_JobsByDifficulty","Title_MainRole","Title_SubRole","Title_IsPlayer","IsPlayer_No","IsPlayer_Yes","Loading","Popup_PopupActive","Popup_PopupName","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_ItemInspectionName","Popup_EquipmentInspectionName","Popup_ConsumablesInspectionName","Popup_GearInspectionName","Popup_GoodsInspectionName","Popup_TechniqueInspectionName","Popup_PerkInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","TechPopupValues","ItemPopupValues","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectDisplay","Popup_ItemSelectDisplayNeutral","Popup_ItemSelectDisplayWood","Popup_ItemSelectDisplayFire","Popup_ItemSelectDisplayEarth","Popup_ItemSelectDisplayMetal","Popup_ItemSelectDisplayWater","Popup_ItemSelectType","Popup_ItemSelectIsOn","Popup_ItemSelectVisible","Popup_FilterPopupActive","Popup_FilterPopupName","Popup_FilterTechniquePopupName","Popup_CustomStylesFilterName","Popup_CustomItemsFilter","Popup_CustomItemTechFilter","Popup_ApplyFilter","Popup_ClearFilter","Popup_FilterPopupType","Popup_FilterPopupDisplayType","Popup_FindItemsByFilter","Popup_FindItemsByTechnique","Popup_SearchButton","Popup_FindGearByFilter","Chat_Type","Chat_PostTarget","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","RepeatingActiveEmotes","RepeatingActiveEmotesNotes","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_PostEmoteNote","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","RepeatingOutfits","Chat_OutfitDefault","Chat_OutfitDefaultURL","RepeaterAcademic","RepeaterProfession","RepeaterCraftmanship","RepeaterGeography","RepeaterHistory","RepeaterCulture","RepeaterReligion","Lore_Tier","Lore_SubType","Lore_Name","Lore_Description","Forme_SeeTechniques","Forme_ShowFromNonElement","Forme_ShowLevelRestricted","Forme_RecommendedStyles","Forme_CustomStyleFilter","RepeatingJobStyles","RepeatingStyles","RepeatingPerks","Action_StyleIsVisible","Action_PerkIsVisible","Forme_Name","Forme_Inspect","Forme_Delete","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_ActionCount","Forme_SelectJob","Forme_JobSlot","Forme_JobSlotCount","Forme_AdvancedSlot","Forme_AdvancedSlotCount","Forme_StyleSlot","Forme_StyleSlotCount","Action_Use","Action_Inspect","Action_Delete","Action_Actions","Action_SetData","Action_Techniques","RepeatingFormeTech","Action_FormeLoadCount","Action_FormeLoad","FormeTechDisplayVer","Action_FormeTechniques","RepeatingPermaTech","ActionsPermaTech","ActionsJobTech","ActionsAdvTech","ActionsPassiveTech","ActionsGearTech","ActionsBasicActions","ActionsBasicRecovery","ActionsBasicAttack","ActionsBasicSocial","ActionsBasicSpirit","RefreshTech","GearTech","BasicActions","BasicRecovery","BasicAttack","BasicSocial","BasicSpirit","RepeatingCustomTech","CustomTech","TechHeader","TechTrueName","TechActionType","TechActionName","TechActionTooltip","TechName","TechVersion","TechIsVisible","TechAffinity","TechTier","TechRank","TechRankUp","TechRankDown","TechDisplayName","TechResourceData","TechEnCost","TechWillCost","TechBoonCost","TechTargetingData","TechTargetDesc","TechTargetType","TechRange","TechLimit","TechForm","TechTrait","TechCoreDefense","TechTrigger","TechTraits","TechTraitsDesc","TechFlavorText","TechCoreEffect","TechOnEnter","TechCheckTitle","TechCheckEffect","TechEndEffect","TechWillBreakEffect","TechEnhanceEffect","TechDef","ItemIsVisible","ItemName","ItemAction","ItemCount","ItemMainGroup","ItemGroup","ItemSubGroup","ItemBulk","ItemBaseValue","ItemTrait","ItemDescription","ItemCraft","ItemSlotOpen","ItemPerFive","Gear_AutoEquipItems","Gear_Equip","Gear_Unequip","Gear_Delete","Gear_Inspect","Gear_Buy","Gear_BuyBulk","Gear_Remove","Gear_Use","Gear_Cook","Gear_UnequipAll","Gear_EquipmentSlot","Gear_ConsumableSlot","Gear_EquippedItemTraits","RepeatingEquipment","RepeatingConsumables","RepeatingSyncedEquipment","RepeatingGear","RepeatingFoods","RepeatingCooking","Gear_EquipmentIsVisible","Gear_ConsumableIsVisible","Gear_GearIsVisible","Gear_FoodIsVisible","Title_AddEquipment","Title_AddConsumable","Title_AddGear","Gear_ItemName","Gear_ItemType","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_UpdateEquipment","Gear_RemoveEquipment","Gear_UpdateConsumables","Gear_RemoveConsumables","Gear_CookingEvent","Gear_ActiveRecipe","Gear_UpdateCooking","Gear_ActiveIngredientList","System_CraftingBlueprint","System_CraftingRecipe","System_CraftSkillCheck","System_CraftSkillCheckBlueprint","System_CraftSkillCheckTraining","System_CraftSkillCheckBlueprintTraining","System_CraftTimeBlueprint","System_CraftTime","System_CraftingComponent","System_CraftMaterials","System_Cooking","System_HighQualityMeals","Pattern_Target","Pattern_Targets","Pattern_Target/Self","Pattern_Object","Pattern_Objects","Pattern_Space","Pattern_Spaces","Pattern_Line","Pattern_Wide Line","Pattern_Cone","Pattern_Blast","Pattern_Blast(3H)","Pattern_Blast(5H)","Pattern_Radial","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEndFocus","Title_TechEnhancement","Notebooks","Note_NotebookCount","Note_NotebookActions","Note_NotebookName","Note_NotebookContents","Note_NotebookOpen","Note_NotebookDelete","Note_NotebookReload","Note_NotebookClose","Note_NotebookSave","Note_NotebookIsDirty","Note_OpenNotebook","Note_OpenNotebookActions","NotebookPages","Note_PageType","Note_PageDisplay","Note_PagePost","Note_PageDelete","Note_PageTemplateData","Note_PageContents","Note_PageLocation","Note_PageArea","Note_PageDate","Note_PageTime","Note_PageCharName","Note_PageCharURL","Note_PageCharEmote","Note_PageCharLanguage","Note_PageQuestName","Note_PageChapter","Note_PagePart","Perk_Attribute","Perk_Skill","Perk_SkillGroup","Perk_Archetype","Perk_Job","Perk_JobStyle","Perk_Knowledge","Perk_Language","Perk_LoreCategory","Perk_Lore","Perk_Style","Perk_StyleType","Perk_Forme","Perk_Action","Perk_Technique","Perk_System","Perk_PageSet","Perk_Page","Perk_Title","Perk_Popup","Perk_Data","Perk_Advancement","Perk_Training","Perk_Perk","Perk_Defense","Perk_Sense","Perk_DefIcon","Perk_InnateDefenseType","Perk_InnateSenseType","Perk_StatBonus","Perk_General","Perk_Chat","Perk_Combat","Perk_Social","Perk_Influence","Perk_SeverityRank","Perk_RequestType","Perk_DamageType","Perk_TerrainFxType","Perk_Trait","Perk_Status","Perk_Condition","Perk_Emotion","Perk_Boon","Perk_PerkGroup","Perk_JobClass","Perk_JobGroup","Perk_StyleCategory","Perk_StyleGroup","Perk_StyleSubGroup","Perk_BasicStyleGroup","Perk_AdvancedGroup","Perk_BranchGroup","Perk_GearGroup","Perk_ResourceType","Perk_Goods","Perk_Gear","Perk_Consumable","Perk_Equipment","Perk_EquipmentType","Perk_EquipmentFilterType","Perk_ConsuType","Perk_ConsuFilterType","Perk_GearType","Perk_GoodsType","Perk_FoodType","Perk_IngType","Perk_LocationType","Perk_AnimalType","Perk_Currency","Perk_ToolSlot","Perk_ConsumableSlot","Perk_Note","Perk_PersonalityType","Perk_MotivationType","Perk_PatternType","Perk_TechBaseFilter","Perk__max","Perk__rank","Perk__build","Perk__filter","Perk__subfilter","Perk__expand","Perk__tab","Perk__page","Perk__info","Perk__exit","Perk__finish","Perk__origin","Perk__learn","Perk__pts","Perk__tech","Perk__techset","Perk__perk","Perk__expertise","Perk__gear","Perk__affinity","Perk__error","Perk__refresh","Perk__submenu","Perk__db","Perk__visible"],"ActiveSkills":["SkillGroup_Athletics","SkillGroup_Magic"],"SocialSkills":["SkillGroup_Persuade","SkillGroup_Cunning"],"WorldSkills":["SkillGroup_Craft","SkillGroup_Device","SkillGroup_Perception"],"Human":["Coastborne","Suntouched","Sandfolk","Plains-kin","Frostcloaked","Earthblood","Other"],"StyleCategory_Basic":["BasicGroup_BasicAction","BasicGroup_BasicDetection","BasicGroup_BasicSpirit"],"StyleCategory_Combat":["BasicGroup_BasicAttack","BasicGroup_BasicMovement","BasicGroup_BasicRecovery"],"StyleCategory_Social":["BasicGroup_BasicAgitation","BasicGroup_BasicInfluence","BasicGroup_BasicRequest"],"Combat Arts":["StyleSubGroup_Fast Melee Attacks","StyleSubGroup_Forceful Melee Attacks","StyleSubGroup_Resonant Melee Attacks","StyleSubGroup_Fast Ranged Attacks","StyleSubGroup_Forceful Ranged Attacks","StyleSubGroup_Resonant Ranged Attacks"],"Control Arts":["StyleSubGroup_Area Control","StyleSubGroup_Terrain Molding","StyleSubGroup_Energy Control","StyleSubGroup_Material Control","StyleSubGroup_Enhanced Transmutation"],"Support Arts":["StyleSubGroup_Damage Mitigation","StyleSubGroup_Positioning","StyleSubGroup_Enhancement","StyleSubGroup_Mythical"],"Social Arts":["StyleSubGroup_Magical Assistance","StyleSubGroup_Charming Influence","StyleSubGroup_Compelling Influence","StyleSubGroup_Subtle Influence"],"BaseGroup":["TechFilterType_TechCategory","TechFilterType_ActionType","TechFilterType_Targeting","TechFilterType_CombatKeywords","TechFilterType_SocialKeywords","TechFilterType_SupportKeywords","TechFilterType_UtilityKeywords","TechFilterType_Defense","TechFilterType_DamageType","TechFilterType_StatusGood","TechFilterType_StatusBad","TechFilterType_WeaponKeywords","TechFilterType_AthleticSkills","TechFilterType_MagicSkills","TechFilterType_SocialSkills","TechFilterType_WorldSkills","AutoFilter_MeleeWeapons","AutoFilter_RangedWeapons","AutoFilter_Athletics","AutoFilter_Social","AutoFilter_WoodMagic","AutoFilter_FireMagic","AutoFilter_EarthMagic","AutoFilter_MetalMagic","AutoFilter_WaterMagic","AutoFilter_SpecialMagic","TechBaseFilter_Combat","TechBaseFilter_Social","TechBaseFilter_Utility","PerkFilter_Cost1Perk","PerkFilter_Cost2Perk","PerkFilter_Cost3Perk","EquipFilter_WeaponType","EquipFilter_WeaponKeywords","EquipFilter_ToolType","EquipFilter_ToolKeywords","EquipFilter_ApparelType"],"Category":["TechFilterType_Combat","TechFilterType_Social","TechFilterType_Utility"],"Action Type":["TechFilterType_SwiftAction","TechFilterType_AssistAction","TechFilterType_QuickAction","TechFilterType_FullAction","TechFilterType_ReactionAction","TechFilterType_BriefAction","TechFilterType_LongAction","TechFilterType_PassiveAction"],"Targeting":["TechFilterType_RangeSelf","TechFilterType_RangeMelee","TechFilterType_RangeClose","TechFilterType_RangeShort","TechFilterType_RangeShortArea","TechFilterType_RangeLong","TechFilterType_RangeLongArea","TechFilterType_RangeSpecial"],"Melee Weapon Technique Filters":["AutoFilter_LightBlade","AutoFilter_HeavyBlade","AutoFilter_Hammer","AutoFilter_Polearm","AutoFilter_Whip"],"Ranged Weapon Technique Filters":["AutoFilter_Bow","AutoFilter_Handgun","AutoFilter_Longshot","AutoFilter_ThrownBlade"],"Athletics Technique Filters":["AutoFilter_ForcefulFist","AutoFilter_Grappler","AutoFilter_Swiftform","AutoFilter_Mobility","AutoFilter_Acrobatics","AutoFilter_Stealth"],"Negotiation Technique Filters":["AutoFilter_FavorBuilding","AutoFilter_Request","AutoFilter_Influence","AutoFilter_Emotion"],"Wood Magic Technique Filters":["AutoFilter_PlantMartial","AutoFilter_Plants","AutoFilter_Wood","AutoFilter_Wind","AutoFilter_Mana","AutoFilter_WoodSound","AutoFilter_WoodHealing","AutoFilter_WoodEmpowering"],"Fire Magic Technique Filters":["AutoFilter_FlameMartial","AutoFilter_Flames","AutoFilter_Glass","AutoFilter_Smoke","AutoFilter_FireHealing","AutoFilter_FireEmpowering"],"Earth Magic Technique Filters":["AutoFilter_SandMartial","AutoFilter_Rock","AutoFilter_Terrain","AutoFilter_Gravity","AutoFilter_EarthEmpowering"],"Metal Magic Technique Filters":["AutoFilter_LightningMartial","AutoFilter_Ironsand","AutoFilter_Metal","AutoFilter_Lightning","AutoFilter_Stasis","AutoFilter_MetalEmpowering"],"Water Magic Technique Filters":["AutoFilter_IceMartial","AutoFilter_Water","AutoFilter_Cold","AutoFilter_Ice","AutoFilter_WaterHealing","AutoFilter_WaterSound","AutoFilter_WaterEmpowering"],"Special Magic Technique Filters":["AutoFilter_Ether","AutoFilter_Corrosion","AutoFilter_Light","AutoFilter_Shadow","AutoFilter_Blood","AutoFilter_Time"],"Weapon Category":["EquipFilter_Melee","EquipFilter_Ranged"],"Tool Category":["EquipFilter_Comms","EquipFilter_Bindings","EquipFilter_Light","EquipFilter_Misc"],"Apparel Category":["EquipFilter_Chest","EquipFilter_Head","EquipFilter_Eyes","EquipFilter_Back","EquipFilter_Arms","EquipFilter_Legs","EquipFilter_Feet"],"CoreResource":["HP","WILL","Surge","Cmb_Vitality"],"EnStat":["StartEN","RoundEN"],"CombatStat":["Cmb_HV","Cmb_Armor"],"MoveStat":["Cmb_Mv","Cmb_MvDash"],"Combat Keyword":["Trait_Accurate","Trait_AP","Trait_Truehit"],"Social Keyword":["Trait_Favor","Trait_Influence","Trait_Request"],"Support Keyword":["Trait_Cleanse","Trait_EN","Trait_Heal"],"Utility Keyword":["Trait_BreakFocus","Trait_ForceMove","Trait_Illusion","Trait_Move","Trait_Move-Sneak","Trait_Move-Special","Trait_Structure","Trait_Terrain"],"Martial Trait":["Trait_Hammer","Trait_HeavyBlade","Trait_LightBlade","Trait_Polearm","Trait_Whip"],"Aim Trait":["Trait_Bow","Trait_Handgun","Trait_Longshot","Trait_Scattershot","Trait_ThrownBlade"],"Consumable Trait":["Trait_Ingested","Trait_Inhalent"],"Tool Trait":["Trait_Magitech","Trait_Medkit","Trait_DustContainer","Trait_FishingTool"],"Item Trait":["Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Loud","Trait_Resonant","Trait_Sharp","Trait_Sturdy","Trait_Transparent"],"Conflict":["Title_Round","Title_Phase","Title_PhaseTeam","Title_Turn","Title_OffTurn"],"Technique":["Title_Targetting"],"Movement":["Adjacency","Obstruction","Lifting"],"Gear":["Bulk"],"Generator":["Note_GenName","Note_GenFullName","Note_GenGender","Note_GenHomeRegion","Note_GenRace","Note_GenPersonality","Note_GenMotivation","Note_GenerateCharacter","Note_UseGeneration","Note_ClearBackground"],"Craft":["Skill_Aesthetics","Skill_Alchemy","Skill_Cook","Skill_Engineer"],"Athletics":["Skill_Agility","Skill_Aim","Skill_Martial","Skill_Physique"],"Perception":["Skill_Analyze","Skill_Empathy","Skill_Notice","Skill_Resonance"],"Persuade":["Skill_Charm","Skill_Inspire","Skill_Rationalize"],"Cunning":["Skill_Demoralize","Skill_Misdirect"],"Magic":["Skill_Energize","Skill_Flux","Skill_Materialize","Skill_Physio","Skill_Transmute"],"Device":["Skill_Glyphwork","Skill_Medicine","Skill_Musicianship","Skill_Pilot","Skill_Tinker"],"Walthair":["Lang_Minere","Lang_Shorespeak","Lang_Verdeni"],"Aridsha":["Lang_Junal","Lang_Dustell","Lang_Muralic","Lang_Shira"],"Khem":["Lang_Apollen","Lang_Kleikan"],"Colswei":["Lang_Lib"],"Ceres":["Lang_Cert","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq"],"Special":["Lang_Emotion","Lang_Empathy","Lang_Jovean","Lang_Mytikan"],"Academic":["LoreCat_Academic","Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology"],"Profession":["LoreCat_Profession","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining"],"Craftmanship":["LoreCat_Craftmanship","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving"],"Geography":["LoreCat_Geography","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane"],"History":["LoreCat_History","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History"],"Culture":["LoreCat_Culture","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater"],"Religion":["LoreCat_Religion","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"],"JobClass_Simple":["Job_Fighter","Job_Labourer","Job_Sniper","Job_Rogue","Job_Warmage","Job_Medic","Job_Courtier","JStyle_Fighter","JStyle_Labourer","JStyle_Sniper","JStyle_Rogue","JStyle_Warmage","JStyle_Medic","JStyle_Courtier"],"JobClass_Intermediate":["Job_Brawler","Job_Warden","Job_Exemplar","Job_Hunter","Job_Geomancer","Job_Kineticist","Job_Tactician","Job_Bard","Job_Preacher","Job_Merchant","Job_Diplomat","JStyle_Brawler","JStyle_Warden","JStyle_Exemplar","JStyle_Hunter","JStyle_Geomancer","JStyle_Kineticist","JStyle_Tactician","JStyle_Bard","JStyle_Preacher","JStyle_Merchant","JStyle_Diplomat"],"JobClass_Advanced":["Job_Sentinel","Job_Trooper","Job_Spellwright","Job_Alchemist","JStyle_Sentinel","JStyle_Trooper","JStyle_Spellwright","JStyle_Alchemist"],"JobClass_Spirit":["Job_Yaksa","Job_Shade","Job_Phantasm","JStyle_Yaksa","JStyle_Shade","JStyle_Phantasm"],"Status":["Stat_Blinded","Stat_Burst","Stat_Downed","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Focus","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Mantle","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious"],"Condition":["Stat_Aflame","Stat_Burn Aegis","Stat_Chilled","Stat_Cold Aegis","Stat_Dazed","Stat_Dodge","Stat_Dying","Stat_Earthblight","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Iron Plates","Stat_Jolted","Stat_Magnetized","Stat_Prone","Stat_Quickened","Stat_Sand Aegis","Stat_Shielded","Stat_Shock Aegis","Stat_Sickened","Stat_Soaked","Stat_Static","Stat_Stunned","Stat_Vined"],"Emotion":["Stat_Agreeable","Stat_Angered","Stat_Calmed","Stat_Distracted","Stat_Doubt","Stat_Encouraged","Stat_Flustered","Stat_Frightened","Stat_Overjoyed","Stat_Oppositional","Stat_Persevering","Stat_Rally","Stat_Surprised","Stat_Steadfast"]},"mainGroup":{},"formulaMods":{"CR":["Attribute","Skill","Knowledge","Style","Technique","Influence","SB_MAX","Potency","Def_Brace","Def_Warding","Def_Evasion","Def_Resolve","Def_Insight","Def_Logic","StyleSlots","HP","WILL","RoundEN","Recall","Initiative","Cmb_HV"],"BonusAttributePoints":["Attribute"],"Level":["Skill","Advancement","Perk","Perk_Attribute","Perk_Skill","Perk_SkillGroup","Perk_Archetype","Perk_Job","Perk_JobStyle","Perk_Knowledge","Perk_Language","Perk_LoreCategory","Perk_Lore","Perk_Style","Perk_StyleType","Perk_Forme","Perk_Action","Perk_Technique","Perk_System","Perk_PageSet","Perk_Page","Perk_Title","Perk_Popup","Perk_Data","Perk_Advancement","Perk_Training","Perk_Perk","Perk_Defense","Perk_Sense","Perk_DefIcon","Perk_InnateDefenseType","Perk_InnateSenseType","Perk_StatBonus","Perk_General","Perk_Chat","Perk_Combat","Perk_Social","Perk_Influence","Perk_SeverityRank","Perk_RequestType","Perk_DamageType","Perk_TerrainFxType","Perk_Trait","Perk_Status","Perk_Condition","Perk_Emotion","Perk_Boon","Perk_PerkGroup","Perk_JobClass","Perk_JobGroup","Perk_StyleCategory","Perk_StyleGroup","Perk_StyleSubGroup","Perk_BasicStyleGroup","Perk_AdvancedGroup","Perk_BranchGroup","Perk_GearGroup","Perk_ResourceType","Perk_Goods","Perk_Gear","Perk_Consumable","Perk_Equipment","Perk_EquipmentType","Perk_EquipmentFilterType","Perk_ConsuType","Perk_ConsuFilterType","Perk_GearType","Perk_GoodsType","Perk_FoodType","Perk_IngType","Perk_LocationType","Perk_AnimalType","Perk_Currency","Perk_ToolSlot","Perk_ConsumableSlot","Perk_Note","Perk_PersonalityType","Perk_MotivationType","Perk_PatternType","Perk_TechBaseFilter","Perk__max","Perk__rank","Perk__build","Perk__filter","Perk__subfilter","Perk__expand","Perk__tab","Perk__page","Perk__info","Perk__exit","Perk__finish","Perk__origin","Perk__learn","Perk__pts","Perk__tech","Perk__techset","Perk__perk","Perk__expertise","Perk__gear","Perk__affinity","Perk__error","Perk__refresh","Perk__submenu","Perk__db","Perk__visible"],"AdvancementSkill":["Skill"],"AdvancementJob":["Job"],"TrainingKnowledge":["Knowledge"],"AdvancementTechnique":["Style","Technique"],"BonusTraining":["Advancement"],"CR+2":["DamageBonus","TechENLimit"],"Attr_BOD":["Def_Brace","HP","Skill_Energize","Skill_Martial","Skill_Materialize","Skill_Physique","Skill_Pilot","Skill_Resonance"],"Attr_PRC":["Def_Warding","Skill_Agility","Skill_Aim","Skill_Flux","Skill_Martial","Skill_Musicianship","Skill_Tinker","Skill_Transmute"],"Attr_QCK":["Def_Evasion","Initiative","Skill_Agility","Skill_Cook","Skill_Glyphwork","Skill_Medicine","Skill_Physio","Skill_Tinker"],"Attr_CNV":["Def_Resolve","WILL","Cmb_HV","Skill_Cook","Skill_Demoralize","Skill_Energize","Skill_Inspire","Skill_Materialize","Skill_Pilot","Skill_Resonance"],"Attr_INT":["Def_Insight","Initiative","Skill_Aesthetics","Skill_Charm","Skill_Empathy","Skill_Medicine","Skill_Misdirect","Skill_Notice","Skill_Physio"],"Attr_RSN":["Def_Logic","Recall","Skill_Alchemy","Skill_Analyze","Skill_Engineer","Skill_Glyphwork","Skill_Misdirect","Skill_Rationalize","Skill_Transmute"],"":["Skill_Aesthetics","Skill_Aim","Skill_Alchemy","Skill_Analyze","Skill_Charm","Skill_Demoralize","Skill_Engineer","Skill_Empathy","Skill_Flux","Skill_Inspire","Skill_Musicianship","Skill_Notice","Skill_Physique","Skill_Rationalize"],"Recall":["LoreCat_Academic","Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","LoreCat_Profession","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","LoreCat_Craftmanship","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","LoreCat_Geography","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","LoreCat_History","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","LoreCat_Culture","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","LoreCat_Religion","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"]},"techMods":{"_tech":["Influence","SB_MAX","Potency","DamageBonus","TechENLimit","Def_Brace","Def_Warding","Def_Evasion","Def_Resolve","Def_Insight","Def_Logic","JobSlots","AdvancedSlots","StyleSlots","EquipmentSlots","ConsumableSlots","HP","WILL","Surge","StartEN","RoundEN","Recall","Initiative","Cmb_Vitality","Cmb_HV","Cmb_Armor","Cmb_BurnResist","Cmb_ColdResist","Cmb_EnergyResist","Cmb_ForceResist","Cmb_PiercingResist","Cmb_PsycheResist","Cmb_Mv","Cmb_MvDash"],"_techset":["SB_MAX","Potency","DamageBonus","TechENLimit","Recall"],"_gear":["Def_Brace","Def_Warding","Def_Evasion","EquipmentSlots","ConsumableSlots","HP","WILL","Surge","StartEN","Initiative","Cmb_Vitality","Cmb_HV","Cmb_Armor","Cmb_BurnResist","Cmb_ColdResist","Cmb_EnergyResist","Cmb_ForceResist","Cmb_PiercingResist","Cmb_PsycheResist","Cmb_Mv","Cmb_MvDash"]},"hasMax":{"true":["Data","Advancement","Training","General","CR","XP","BonusTraining","HP","WILL","Surge","EN","Cmb_Vitality","Soc_Favor","Soc_Impatience"]
-            }},
+        sortingGroups = {"group":{"Type":["Attribute","Skill","SkillGroup","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","DefIcon","InnateDefenseType","InnateSenseType","StatBonus","General","Chat","Combat","Social","Influence","SeverityRank","RequestType","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobClass","JobGroup","StyleCategory","StyleGroup","StyleSubGroup","BasicStyleGroup","AdvancedGroup","BranchGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Equipment","EquipmentType","EquipmentFilterType","ConsuType","ConsuFilterType","GearType","GoodsType","FoodType","IngType","LocationType","AnimalType","Currency","ToolSlot","ConsumableSlot","Note","PersonalityType","MotivationType","PatternType","TechFilterType","TechBaseFilter","TechAutoFilter","PerkAutoFilter","TechFilterPopup"],"VariableMod":["_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_perk","_expertise","_gear","_affinity","_error","_refresh","_submenu","_db","_visible"],"AncestryType":["Human","Spirit"],"Untyped":["Unaspected","Check","CombatDetails","FlatDC","BoostStyleTech","BoostGearTech","BoostPerkTech","KeySkills","SB_MAX","Potency","SkillExpertise","DamageBonus","TechENLimit","Ancestry","Affinity","AdvancedAffinity","SecondaryAffinity","AffinityAspect","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","EquipmentSlots","ConsumableSlots","Jin","TargetHV","TargetFavor","RepeatingInfluences","Loading","TechPopupValues","ItemPopupValues","RepeatingActiveEmotes","RepeatingActiveEmotesNotes","RepeatingOutfits","RepeaterAcademic","RepeaterProfession","RepeaterCraftmanship","RepeaterGeography","RepeaterHistory","RepeaterCulture","RepeaterReligion","RepeatingJobStyles","RepeatingStyles","RepeatingPerks","RepeatingFormeTech","FormeTechDisplayVer","RepeatingPermaTech","ActionsPermaTech","ActionsJobTech","ActionsAdvTech","ActionsPassiveTech","ActionsGearTech","ActionsBasicActions","ActionsBasicRecovery","ActionsBasicAttack","ActionsBasicSocial","ActionsBasicSpirit","RefreshTech","GearTech","BasicActions","BasicRecovery","BasicAttack","BasicSocial","BasicSpirit","RepeatingCustomTech","CustomTech","TechHeader","TechTrueName","TechActionType","TechActionName","TechActionTooltip","TechName","TechVersion","TechIsVisible","TechAffinity","TechTier","TechRank","TechRankUp","TechRankDown","TechDisplayName","TechResourceData","TechEnCost","TechWillCost","TechBoonCost","TechTargetingData","TechTargetDesc","TechTargetType","TechRange","TechLimit","TechForm","TechTrait","TechCoreDefense","TechTrigger","TechTraits","TechTraitsDesc","TechFlavorText","TechCoreEffect","TechOnEnter","TechCheckTitle","TechCheckEffect","TechEndEffect","TechWillBreakEffect","TechEnhanceEffect","TechDef","ItemIsVisible","ItemName","ItemAction","ItemCount","ItemMainGroup","ItemGroup","ItemSubGroup","ItemBulk","ItemBaseValue","ItemTrait","ItemDescription","ItemCraft","ItemSlotOpen","ItemPerFive","RepeatingEquipment","RepeatingConsumables","RepeatingSyncedEquipment","RepeatingGear","RepeatingFoods","RepeatingCooking","Adjacency","Obstruction","Lifting","Notebooks","NotebookPages"],"AffinityType":["Wood","Fire","Earth","Metal","Water"],"AffinityTypeDesc":["WoodF","FireF","EarthF","MetalF","WaterF"],"InnateDefenseType":["Def_BOD","Def_PRC","Def_QCK"],"InnateSenseType":["Def_CNV","Def_INT","Def_RSN"],"Page":["Page_ActiveSkills","Page_SocialSkills","Page_WorldSkills","Page_Origin","Page_Jobs","Page_Skills","Page_Knowledge","Page_Attributes","Page_AffectedStats","Page_PotencyStats","Page_DefensiveStats","Page_SkillStats","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Post","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Techniques","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar","Page_NPC","Page_Notes"],"SkillGroup":["SkillGroup_Athletics","SkillGroup_Magic","SkillGroup_Persuade","SkillGroup_Cunning","SkillGroup_Craft","SkillGroup_Device","SkillGroup_Perception"],"StatBonus":["SB_LowDef","SB_MedDef","SB_GoodDef","SB_GreatDef","SB_ExcellentDef"],"AttributeValue":["AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad"],"LoreTier":["LoreTier0","LoreTier1","LoreTier2","LoreTier3"],"GeneralLoreTier":["GeneralLoreTier0","GeneralLoreTier1"],"RequestType":["Request_Simple","Request_Inconvenient","Request_Disruptive","Request_Serious","Request_Life-Changing"],"RegionType":["Walthair","EastSea","Khem","Aridsha","Ceres","Colswei","Dowfeng","Wayling","Novus"],"RaceType":["Coastborne","Suntouched","Sandfolk","Plains-kin","Frostcloaked","Earthblood","Other"],"GenderType":["Male","Female","NonBinary"],"NotebookType":["Notebook","Category"],"PostType":["post-Notes","post-Info","post-Location","post-System","post-Chapter","post-History","post-Speak","post-Whisper","post-Yell","post-Comms","post-Think","post-Describe"],"ChatType":["Speak","Whisper","Yell","Comms","Think","Describe"],"EmotePostType":["PostToChat","PostToNotebook"],"TimeType":["Dawn","Morning","Midday","Evening","Night","Deepnight"],"Boon":["Boon_Rest","Boon_Savor"],"InfluenceType":["InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal"],"SeverityRank":["Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity"],"DamageType":["Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Force","Dmg_Piercing","Dmg_Psyche","Dmg_Tension","Dmg_Weapon"],"TerrainFxType":["Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden"],"PerkGroup":["PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks"],"JobClass":["JobClass_Simple","JobClass_Intermediate","JobClass_Advanced","JobClass_Spirit"],"JobGroup":["JobGroup_Vanguard","JobGroup_Athlete","JobGroup_Operator","JobGroup_Strategist","JobGroup_Healer","JobGroup_Advocate"],"StyleCategory":["StyleCategory_Forme","StyleCategory_Gear","StyleCategory_Basic","StyleCategory_Combat","StyleCategory_Social","StyleCategory_Deprecated"],"BasicStyleGroup":["BasicGroup_BasicAction","BasicGroup_BasicDetection","BasicGroup_BasicSpirit","BasicGroup_BasicAttack","BasicGroup_BasicMovement","BasicGroup_BasicRecovery","BasicGroup_BasicAgitation","BasicGroup_BasicInfluence","BasicGroup_BasicRequest"],"StyleGroup":["StyleGroup_Combat Arts","StyleGroup_Control Arts","StyleGroup_Social Arts"],"StyleSubGroup":["StyleSubGroup_Fast Melee Attacks","StyleSubGroup_Forceful Melee Attacks","StyleSubGroup_Resonant Melee Attacks","StyleSubGroup_Fast Ranged Attacks","StyleSubGroup_Forceful Ranged Attacks","StyleSubGroup_Resonant Ranged Attacks","StyleSubGroup_Area Control","StyleSubGroup_Terrain Molding","StyleSubGroup_Energy Control","StyleSubGroup_Material Control","StyleSubGroup_Enhanced Transmutation","StyleSubGroup_Damage Mitigation","StyleSubGroup_Positioning","StyleSubGroup_Enhancement","StyleSubGroup_Mythical","StyleSubGroup_Magical Assistance","StyleSubGroup_Charming Influence","StyleSubGroup_Compelling Influence","StyleSubGroup_Subtle Influence"],"GearGroup":["GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear"],"PersonalityType":["Personality_Stoic","Personality_Charmer","Personality_Idealist","Personality_Cynic","Personality_Loner","Personality_Leader","Personality_Rebel","Personality_Thinker","Personality_Caregiver","Personality_Dreamer","Personality_Realist","Personality_Mediator","Personality_Strategist","Personality_Joker","Personality_Visionary","Personality_Survivor","Personality_Guardian","Personality_Tactician","Personality_Pacifist","Personality_Zealot"],"MotivationType":["Motivation_Power","Motivation_Justice","Motivation_Freedom","Motivation_Revenge","Motivation_Survival","Motivation_Glory","Motivation_Knowledge","Motivation_Redemption","Motivation_Belonging","Motivation_Wealth","Motivation_Truth","Motivation_Peace","Motivation_Control","Motivation_Chaos","Motivation_Duty","Motivation_Fame","Motivation_Discovery","Motivation_Legacy","Motivation_Love","Motivation_Escape"],"TechFilterType":["TechFilterType_TechCategory","TechFilterType_Combat","TechFilterType_Social","TechFilterType_Utility","TechFilterType_ActionType","TechFilterType_SwiftAction","TechFilterType_AssistAction","TechFilterType_QuickAction","TechFilterType_FullAction","TechFilterType_ReactionAction","TechFilterType_BriefAction","TechFilterType_LongAction","TechFilterType_PassiveAction","TechFilterType_Targeting","TechFilterType_RangeSelf","TechFilterType_RangeMelee","TechFilterType_RangeClose","TechFilterType_RangeShort","TechFilterType_RangeShortArea","TechFilterType_RangeLong","TechFilterType_RangeLongArea","TechFilterType_RangeSpecial","TechFilterType_CombatKeywords","TechFilterType_SocialKeywords","TechFilterType_SupportKeywords","TechFilterType_UtilityKeywords","TechFilterType_Defense","TechFilterType_DamageType","TechFilterType_StatusGood","TechFilterType_StatusBad","TechFilterType_WeaponKeywords","TechFilterType_AthleticSkills","TechFilterType_MagicSkills","TechFilterType_SocialSkills","TechFilterType_WorldSkills"],"TechAutoFilter":["AutoFilter_MeleeWeapons","AutoFilter_LightBlade","AutoFilter_HeavyBlade","AutoFilter_Hammer","AutoFilter_Polearm","AutoFilter_Whip","AutoFilter_RangedWeapons","AutoFilter_Bow","AutoFilter_Handgun","AutoFilter_Longshot","AutoFilter_ThrownBlade","AutoFilter_Athletics","AutoFilter_ForcefulFist","AutoFilter_Grappler","AutoFilter_Swiftform","AutoFilter_Mobility","AutoFilter_Acrobatics","AutoFilter_Stealth","AutoFilter_Social","AutoFilter_FavorBuilding","AutoFilter_Request","AutoFilter_Influence","AutoFilter_Emotion","AutoFilter_WoodMagic","AutoFilter_PlantMartial","AutoFilter_Plants","AutoFilter_Wood","AutoFilter_Wind","AutoFilter_Mana","AutoFilter_WoodSound","AutoFilter_WoodHealing","AutoFilter_WoodEmpowering","AutoFilter_FireMagic","AutoFilter_FlameMartial","AutoFilter_Flames","AutoFilter_Glass","AutoFilter_Smoke","AutoFilter_FireHealing","AutoFilter_FireEmpowering","AutoFilter_EarthMagic","AutoFilter_SandMartial","AutoFilter_Rock","AutoFilter_Terrain","AutoFilter_Gravity","AutoFilter_EarthEmpowering","AutoFilter_MetalMagic","AutoFilter_LightningMartial","AutoFilter_Ironsand","AutoFilter_Metal","AutoFilter_Lightning","AutoFilter_Stasis","AutoFilter_MetalEmpowering","AutoFilter_WaterMagic","AutoFilter_IceMartial","AutoFilter_Water","AutoFilter_Cold","AutoFilter_Ice","AutoFilter_WaterHealing","AutoFilter_WaterSound","AutoFilter_WaterEmpowering","AutoFilter_SpecialMagic","AutoFilter_Ether","AutoFilter_Corrosion","AutoFilter_Light","AutoFilter_Shadow","AutoFilter_Blood","AutoFilter_Time"],"TechBaseFilter":["TechBaseFilter_Combat","TechBaseFilter_Social","TechBaseFilter_Utility"],"PerkAutoFilter":["PerkFilter_Cost1Perk","PerkFilter_Cost2Perk","PerkFilter_Cost3Perk"],"EquipmentType":["EquipType_Weapon","EquipType_Apparel","EquipType_Tool"],"EquipmentFilterType":["EquipFilter_WeaponType","EquipFilter_Melee","EquipFilter_Ranged","EquipFilter_WeaponKeywords","EquipFilter_ToolType","EquipFilter_Comms","EquipFilter_Bindings","EquipFilter_Light","EquipFilter_Misc","EquipFilter_ToolKeywords","EquipFilter_ApparelType","EquipFilter_Chest","EquipFilter_Head","EquipFilter_Eyes","EquipFilter_Back","EquipFilter_Arms","EquipFilter_Legs","EquipFilter_Feet"],"ConsuType":["ConsuType_Recovery","ConsuType_Tonic","ConsuType_Bomb"],"GearType":["GearType_Supplies","GearType_Implements","GearType_Records"],"GoodsType":["GoodsType_Material","GoodsType_Goods","GoodsType_Animal Good"],"FoodType":["FoodType_Beverage"],"IngType":["IngType_Compound","IngType_Supplement","IngType_Protein","IngType_Starch","IngType_Sugar","IngType_Fruit","IngType_Vegetable"],"LocationType":["LocationType_Coastal","LocationType_Cold","LocationType_Desert","LocationType_Forest","LocationType_Grassland","LocationType_Jungle","LocationType_Mountain","LocationType_Plains","LocationType_Swamp","LocationType_Tropical","LocationType_Volcanic"],"AnimalType":["AnimalType_Beast","AnimalType_Bird","AnimalType_Lizard"],"Attribute":["Attr_BOD","Attr_PRC","Attr_QCK","Attr_CNV","Attr_INT","Attr_RSN"],"":["STR","ESS"],"Title":["Title_Boon","Title_UsingInfluences","Title_Origin","Title_Background","Title_BackgroundGenerator","Title_StatSummary","Title_Conflict","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_LearnNewStyles","Title_PerkTechniques","Title_StyleFilterOption","Title_QuickStyleFilter","Title_PerkStyleFilter","Title_ExpandedStyleFilters","Title_Chat","Title_Emotes","Title_LanguageSelect","Title_LanguageCommon","Title_GeneralLore","Title_LoreCategory","Title_SpecializedLore","Title_Skills","Title_Outfits","Title_EquippedGear","Title_Notebook","Title_Techniques","Title_TechniqueChange","Title_ChangeAffinity","Title_Debug","Title_InstantConsumables","Title_EquippedInstantConsumables","Title_StartingJin","Title_YourJin","Title_InspectionItemCost","Title_JobsByDifficulty","Title_MainRole","Title_SubRole","Title_IsPlayer","Title_AddEquipment","Title_AddConsumable","Title_AddGear","Title_Round","Title_Phase","Title_PhaseTeam","Title_Turn","Title_OffTurn","Title_Targetting","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEndFocus","Title_TechEnhancement"],"Advancement":["Level","CR","MaxCR","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","AdvancementPerkTransfer","JobTier","JobTechniques","LearnStyle","StyleTechniques"],"Training":["TrainingKnowledge","TrainingTechniques","PP","BonusTraining"],"Defense":["Def_Brace","Def_Warding","Def_Evasion"],"Sense":["Def_Resolve","Def_Insight","Def_Logic"],"Result":["WillBreak"],"Origin":["CharSheetName","SheetName","FullName","DisplayName","QuickDescription","Backstory","Age","Gender","HomeRegion","Homeland","Ethnicity"],"General":["HP","WILL","Surge","EN","StartEN","RoundEN","Recall","Initiative"],"Combat":["Cmb_Vitality","Cmb_HV","Cmb_Armor","Cmb_BurnResist","Cmb_ColdResist","Cmb_EnergyResist","Cmb_ForceResist","Cmb_PiercingResist","Cmb_PsycheResist","Cmb_Mv","Cmb_MvDash"],"Social":["Soc_Favor","Soc_Influence","Soc_InfluenceCombat","Soc_InfluenceDesc","Soc_Severity","Soc_RequestCheck","Soc_Impatience"],"Trait":["Trait_Accurate","Trait_AP","Trait_Break","Trait_Brutal","Trait_Truehit","Trait_Favor","Trait_Influence","Trait_Request","Trait_Cleanse","Trait_EN","Trait_Heal","Trait_BreakFocus","Trait_ForceMove","Trait_ForceMove-ForceMove","Trait_ForceMove-Pulled","Trait_ForceMove-Pushed","Trait_ForceMove-Fall","Trait_Illusion","Trait_Move","Trait_Move-FreeMove","Trait_Move-Jump","Trait_Move-Sneak","Trait_Move-Special","Trait_Move-Fly","Trait_Move-Teleport","Trait_Move-Temporal","Trait_Structure","Trait_Terrain","Trait_Damage","Trait_DamageTrue","Trait_DamageEvasion","Trait_DamageEgo","Trait_Delayed","Trait_Focus","Trait_OnEnter","Trait_PerRound","Trait_PerTurn","Trait_PerConflict","Trait_Permanent","Trait_Resonator","Trait_Social","Trait_SkillCheck-DC","Trait_SkillCheck-Defense","Trait_Trigger","Trait_MeleeWeapon","Trait_Hammer","Trait_HeavyBlade","Trait_LightBlade","Trait_Polearm","Trait_Whip","Trait_RangedWeapon","Trait_Bow","Trait_Handgun","Trait_Longshot","Trait_Scattershot","Trait_ThrownBlade","Trait_Ingested","Trait_Inhalent","Trait_Magitech","Trait_Medkit","Trait_DustContainer","Trait_FishingTool","Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Loud","Trait_Resonant","Trait_Sharp","Trait_Sturdy","Trait_Transparent"],"PageSet":["PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training"],"IsPlayer":["IsPlayer_No","IsPlayer_Yes"],"Popup":["Popup_PopupActive","Popup_PopupName","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_ItemInspectionName","Popup_EquipmentInspectionName","Popup_ConsumablesInspectionName","Popup_GearInspectionName","Popup_GoodsInspectionName","Popup_TechniqueInspectionName","Popup_PerkInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectDisplay","Popup_ItemSelectDisplayNeutral","Popup_ItemSelectDisplayWood","Popup_ItemSelectDisplayFire","Popup_ItemSelectDisplayEarth","Popup_ItemSelectDisplayMetal","Popup_ItemSelectDisplayWater","Popup_ItemSelectType","Popup_ItemSelectIsOn","Popup_ItemSelectVisible","Popup_FilterPopupActive","Popup_FilterPopupName","Popup_FilterTechniquePopupName","Popup_CustomStylesFilterName","Popup_CustomItemsFilter","Popup_CustomItemTechFilter","Popup_ApplyFilter","Popup_ClearFilter","Popup_FilterPopupType","Popup_FilterPopupDisplayType","Popup_FindItemsByFilter","Popup_FindItemsByTechnique","Popup_SearchButton","Popup_FindGearByFilter"],"Chat":["Chat_Type","Chat_PostTarget","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_PostEmoteNote","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","Chat_OutfitDefault","Chat_OutfitDefaultURL"],"Lore":["Lore_Tier","Lore_SubType","Lore_Name","Lore_Description","Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"],"Forme":["Forme_SeeTechniques","Forme_ShowFromNonElement","Forme_ShowLevelRestricted","Forme_RecommendedStyles","Forme_CustomStyleFilter","Forme_Name","Forme_Inspect","Forme_Delete","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_ActionCount","Forme_SelectJob","Forme_JobSlot","Forme_JobSlotCount","Forme_AdvancedSlot","Forme_AdvancedSlotCount","Forme_StyleSlot","Forme_StyleSlotCount"],"Action":["Action_StyleIsVisible","Action_PerkIsVisible","Action_Use","Action_Inspect","Action_Delete","Action_Actions","Action_SetData","Action_Techniques","Action_FormeLoadCount","Action_FormeLoad","Action_FormeTechniques"],"Gear":["Gear_AutoEquipItems","Gear_Equip","Gear_Unequip","Gear_Delete","Gear_Inspect","Gear_Buy","Gear_BuyBulk","Gear_Remove","Gear_Use","Gear_Cook","Gear_UnequipAll","Gear_EquipmentSlot","Gear_ConsumableSlot","Gear_EquippedItemTraits","Gear_EquipmentIsVisible","Gear_ConsumableIsVisible","Gear_GearIsVisible","Gear_FoodIsVisible","Gear_ItemName","Gear_ItemType","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_UpdateEquipment","Gear_RemoveEquipment","Gear_UpdateConsumables","Gear_RemoveConsumables","Gear_CookingEvent","Gear_ActiveRecipe","Gear_MealCount","Gear_UpdateCooking","Gear_CookingScore","Gear_ActiveIngredientList"],"System":["System_CraftingBlueprint","System_CraftingRecipe","System_CraftSkillCheck","System_CraftSkillCheckBlueprint","System_CraftSkillCheckTraining","System_CraftSkillCheckBlueprintTraining","System_CraftTimeBlueprint","System_CraftTime","System_CraftingComponent","System_CraftMaterials","System_Cooking","System_HighQualityMeals"],"PatternType":["Pattern_Target","Pattern_Targets","Pattern_Target/Self","Pattern_Object","Pattern_Objects","Pattern_Space","Pattern_Spaces","Pattern_Line","Pattern_Wide Line","Pattern_Cone","Pattern_Blast","Pattern_Blast(3H)","Pattern_Blast(5H)","Pattern_Radial"],"Rules":["Bulk"],"Note":["Note_GenName","Note_GenFullName","Note_GenGender","Note_GenHomeRegion","Note_GenRace","Note_GenPersonality","Note_GenMotivation","Note_GenerateCharacter","Note_UseGeneration","Note_ClearBackground","Note_NotebookCount","Note_NotebookActions","Note_NotebookName","Note_NotebookContents","Note_NotebookOpen","Note_NotebookDelete","Note_NotebookReload","Note_NotebookClose","Note_NotebookSave","Note_NotebookIsDirty","Note_OpenNotebook","Note_OpenNotebookActions","Note_PageType","Note_PageDisplay","Note_PagePost","Note_PageDelete","Note_PageTemplateData","Note_PageContents","Note_PageLocation","Note_PageArea","Note_PageDate","Note_PageTime","Note_PageCharName","Note_PageCharURL","Note_PageCharEmote","Note_PageCharLanguage","Note_PageQuestName","Note_PageChapter","Note_PagePart"],"Perk":["Perk_Bonus Vitality","Perk_Bonus Potency","Perk_Bonus Round EN","Perk_Second Affinity","Perk_Corrosion Magic","Perk_Light Magic","Perk_Shadow Magic","Perk_Blood Magic","Perk_Time Magic","Perk_Spirit Conduit","Perk_Increase HP","Perk_Increase WILL","Perk_Increase Base Speed","Perk_Increase Dash Speed","Perk_Increase Armor","Perk_Increase Starting EN","Perk_Bonus Equipment Slots","Perk_Light Sleeper","Perk_Iron Stomach","Perk_Sea Legs","Perk_Darkvision","Perk_Steel Nerves","Perk_Blind Sense","Perk_Time Sensitivity","Perk_Permanent Creations","Perk_Expel Spirit","Perk_Spirit Sense","Perk_Loosen Vines","Perk_Extinguish Fire","Perk_Clean Mud","Perk_Demagnetize","Perk_Quick-Dry","Perk_Resilient Mind","Perk_Cool Head","Perk_Fast Climb","Perk_Fast Swim","Perk_Earthglide","Perk_Windwalker","Perk_Stonegrip","Perk_Duskstep","Perk_Ice Skate","Perk_Cooking Expertise","Perk_Tinker Expertise","Perk_Build Expertise","Perk_Joyful Meal","Perk_Steadfast Meal","Perk_Find Ether Signature","Perk_Trace Ether Signature"],"Skill":["Skill_Aesthetics","Skill_Agility","Skill_Aim","Skill_Alchemy","Skill_Analyze","Skill_Charm","Skill_Cook","Skill_Demoralize","Skill_Energize","Skill_Engineer","Skill_Empathy","Skill_Flux","Skill_Glyphwork","Skill_Inspire","Skill_Martial","Skill_Materialize","Skill_Medicine","Skill_Misdirect","Skill_Musicianship","Skill_Notice","Skill_Physio","Skill_Physique","Skill_Pilot","Skill_Rationalize","Skill_Resonance","Skill_Tinker","Skill_Transmute"],"Language":["Lang_Minere","Lang_Junal","Lang_Apollen","Lang_Lib","Lang_Cert","Lang_Dustell","Lang_Muralic","Lang_Shira","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq","Lang_Kleikan","Lang_Shorespeak","Lang_Verdeni","Lang_Emotion","Lang_Empathy","Lang_Jovean","Lang_Mytikan"],"LoreCategory":["LoreCat_Academic","LoreCat_Profession","LoreCat_Craftmanship","LoreCat_Geography","LoreCat_History","LoreCat_Culture","LoreCat_Religion"],"Job":["Job_Fighter","Job_Labourer","Job_Brawler","Job_Warden","Job_Sentinel","Job_Sniper","Job_Rogue","Job_Exemplar","Job_Hunter","Job_Warmage","Job_Geomancer","Job_Kineticist","Job_Trooper","Job_Yaksa","Job_Tactician","Job_Bard","Job_Spellwright","Job_Shade","Job_Medic","Job_Preacher","Job_Alchemist","Job_Courtier","Job_Merchant","Job_Diplomat","Job_Phantasm"],"JobStyle":["JStyle_Fighter","JStyle_Labourer","JStyle_Brawler","JStyle_Warden","JStyle_Sentinel","JStyle_Sniper","JStyle_Rogue","JStyle_Exemplar","JStyle_Hunter","JStyle_Warmage","JStyle_Geomancer","JStyle_Kineticist","JStyle_Trooper","JStyle_Yaksa","JStyle_Tactician","JStyle_Bard","JStyle_Spellwright","JStyle_Shade","JStyle_Medic","JStyle_Preacher","JStyle_Alchemist","JStyle_Courtier","JStyle_Merchant","JStyle_Diplomat","JStyle_Phantasm"],"Status":["Stat_Blinded","Stat_Burst","Stat_Downed","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Focus","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Mantle","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious","Stat_Aflame","Stat_Burn Aegis","Stat_Chilled","Stat_Cold Aegis","Stat_Dazed","Stat_Dodge","Stat_Dying","Stat_Earthblight","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Iron Plates","Stat_Jolted","Stat_Magnetized","Stat_Prone","Stat_Quickened","Stat_Sand Aegis","Stat_Shielded","Stat_Shock Aegis","Stat_Sickened","Stat_Soaked","Stat_Static","Stat_Stunned","Stat_Vined","Stat_Agreeable","Stat_Angered","Stat_Calmed","Stat_Distracted","Stat_Doubt","Stat_Encouraged","Stat_Flustered","Stat_Frightened","Stat_Overjoyed","Stat_Oppositional","Stat_Persevering","Stat_Rally","Stat_Surprised","Stat_Steadfast"]
+            },"subGroup":{"":["Attribute","Skill","SkillGroup","Archetype","Job","JobStyle","Knowledge","Language","LoreCategory","Lore","Style","StyleType","Forme","Action","Technique","System","PageSet","Page","Title","Popup","Data","Advancement","Training","Perk","Defense","Sense","DefIcon","InnateDefenseType","InnateSenseType","StatBonus","General","Chat","Combat","Social","Influence","SeverityRank","RequestType","DamageType","TerrainFxType","Trait","Status","Condition","Emotion","Boon","PerkGroup","JobClass","JobGroup","StyleCategory","StyleGroup","StyleSubGroup","BasicStyleGroup","AdvancedGroup","BranchGroup","GearGroup","ResourceType","Goods","Gear","Consumable","Equipment","EquipmentType","EquipmentFilterType","ConsuType","ConsuFilterType","GearType","GoodsType","FoodType","IngType","LocationType","AnimalType","Currency","ToolSlot","ConsumableSlot","Note","PersonalityType","MotivationType","PatternType","TechFilterType","TechBaseFilter","TechAutoFilter","PerkAutoFilter","TechFilterPopup","_max","_true","_rank","_build","_filter","_subfilter","_expand","_tab","_page","_info","_exit","_finish","_origin","_learn","_pts","_tech","_techset","_perk","_expertise","_gear","_affinity","_error","_refresh","_submenu","_db","_visible","Human","Spirit","Unaspected","Wood","WoodF","Fire","FireF","Earth","EarthF","Metal","MetalF","Water","WaterF","Def_BOD","Def_PRC","Def_QCK","Def_CNV","Def_INT","Def_RSN","Page_ActiveSkills","Page_SocialSkills","Page_WorldSkills","SB_LowDef","SB_MedDef","SB_GoodDef","SB_GreatDef","SB_ExcellentDef","AttributeValueMediocre","AttributeValueGreat","AttributeValueGood","AttributeValueAverage","AttributeValueBad","LoreTier0","LoreTier1","LoreTier2","LoreTier3","GeneralLoreTier0","GeneralLoreTier1","Request_Simple","Request_Inconvenient","Request_Disruptive","Request_Serious","Request_Life-Changing","Walthair","EastSea","Khem","Aridsha","Ceres","Colswei","Dowfeng","Wayling","Novus","Male","Female","NonBinary","Notebook","Category","post-Notes","post-Info","post-Location","post-System","post-Chapter","post-History","post-Speak","post-Whisper","post-Yell","post-Comms","post-Think","post-Describe","Speak","Whisper","Yell","Comms","Think","Describe","PostToChat","PostToNotebook","Dawn","Morning","Midday","Evening","Night","Deepnight","Boon_Rest","Boon_Savor","InfluenceTrait","InfluenceIdeal","InfluenceBond","InfluenceGoal","Svr_LowSeverity","Svr_ModerateSeverity","Svr_HighSeverity","Dmg_Burn","Dmg_Cold","Dmg_Energy","Dmg_Force","Dmg_Piercing","Dmg_Psyche","Dmg_Tension","Dmg_Weapon","Ter_Darkness","Ter_Fog","Ter_Harsh","Ter_Heavy","Ter_Liftstream","Ter_Light","Ter_Slippery","Ter_Sodden","PerkGroup_Origin Perks","PerkGroup_Stat Boost Perks","JobClass_Simple","JobClass_Intermediate","JobClass_Advanced","JobClass_Spirit","JobGroup_Vanguard","JobGroup_Athlete","JobGroup_Operator","JobGroup_Strategist","JobGroup_Healer","JobGroup_Advocate","StyleCategory_Forme","StyleCategory_Gear","StyleCategory_Basic","StyleCategory_Combat","StyleCategory_Social","StyleCategory_Deprecated","StyleGroup_Combat Arts","StyleGroup_Control Arts","StyleGroup_Social Arts","GearGroup_HeadGear","GearGroup_FaceGear","GearGroup_ChestGear","GearGroup_ArmGear","GearGroup_LegGear","GearGroup_FootGear","Personality_Stoic","Personality_Charmer","Personality_Idealist","Personality_Cynic","Personality_Loner","Personality_Leader","Personality_Rebel","Personality_Thinker","Personality_Caregiver","Personality_Dreamer","Personality_Realist","Personality_Mediator","Personality_Strategist","Personality_Joker","Personality_Visionary","Personality_Survivor","Personality_Guardian","Personality_Tactician","Personality_Pacifist","Personality_Zealot","Motivation_Power","Motivation_Justice","Motivation_Freedom","Motivation_Revenge","Motivation_Survival","Motivation_Glory","Motivation_Knowledge","Motivation_Redemption","Motivation_Belonging","Motivation_Wealth","Motivation_Truth","Motivation_Peace","Motivation_Control","Motivation_Chaos","Motivation_Duty","Motivation_Fame","Motivation_Discovery","Motivation_Legacy","Motivation_Love","Motivation_Escape","EquipType_Weapon","EquipType_Apparel","EquipType_Tool","ConsuType_Recovery","ConsuType_Tonic","ConsuType_Bomb","GearType_Supplies","GearType_Implements","GearType_Records","GoodsType_Material","GoodsType_Goods","GoodsType_Animal Good","FoodType_Beverage","IngType_Compound","IngType_Supplement","IngType_Protein","IngType_Starch","IngType_Sugar","IngType_Fruit","IngType_Vegetable","LocationType_Coastal","LocationType_Cold","LocationType_Desert","LocationType_Forest","LocationType_Grassland","LocationType_Jungle","LocationType_Mountain","LocationType_Plains","LocationType_Swamp","LocationType_Tropical","LocationType_Volcanic","AnimalType_Beast","AnimalType_Bird","AnimalType_Lizard","Attr_BOD","Attr_PRC","Attr_QCK","STR","Attr_CNV","ESS","Attr_INT","Attr_RSN","Check","CombatDetails","FlatDC","Title_Boon","BoostStyleTech","BoostGearTech","BoostPerkTech","KeySkills","Level","CR","MaxCR","SB_MAX","Potency","SkillExpertise","DamageBonus","TechENLimit","XP","AdvancementJob","AdvancementSkill","AdvancementTechnique","AdvancementPerkTransfer","JobTier","JobTechniques","LearnStyle","StyleTechniques","TrainingKnowledge","TrainingTechniques","PP","BonusTraining","Def_Brace","Def_Warding","Def_Evasion","Def_Resolve","Def_Insight","Def_Logic","WillBreak","CharSheetName","SheetName","FullName","DisplayName","QuickDescription","Backstory","Age","Gender","HomeRegion","Homeland","Ethnicity","Ancestry","Affinity","AdvancedAffinity","SecondaryAffinity","AffinityAspect","BonusAttributePoints","JobSlots","AdvancedSlots","StyleSlots","EquipmentSlots","ConsumableSlots","Jin","EN","Recall","Initiative","TargetHV","Cmb_BurnResist","Cmb_ColdResist","Cmb_EnergyResist","Cmb_ForceResist","Cmb_PiercingResist","Cmb_PsycheResist","Soc_Favor","TargetFavor","RepeatingInfluences","Soc_Influence","Title_UsingInfluences","Soc_InfluenceCombat","Soc_InfluenceDesc","Soc_Severity","Soc_RequestCheck","Soc_Impatience","Trait_Break","Trait_Brutal","Trait_ForceMove-ForceMove","Trait_ForceMove-Pulled","Trait_ForceMove-Pushed","Trait_ForceMove-Fall","Trait_Move-FreeMove","Trait_Move-Jump","Trait_Move-Fly","Trait_Move-Teleport","Trait_Move-Temporal","Trait_Damage","Trait_DamageTrue","Trait_DamageEvasion","Trait_DamageEgo","Trait_Delayed","Trait_Focus","Trait_OnEnter","Trait_PerRound","Trait_PerTurn","Trait_PerConflict","Trait_Permanent","Trait_Resonator","Trait_Social","Trait_SkillCheck-DC","Trait_SkillCheck-Defense","Trait_Trigger","Trait_MeleeWeapon","Trait_RangedWeapon","PageSet_Character Creator","PageSet_Core","PageSet_TechType","PageSet_Advancement","PageSet_Training","Page_Origin","Page_Jobs","Page_Skills","Page_Knowledge","Page_Attributes","Page_AffectedStats","Page_PotencyStats","Page_DefensiveStats","Page_SkillStats","Page_Styles","Page_LearnTechniques","Page_AdvancedStyles","Page_Forme","Page_JobStyles","Page_Character","Page_Overview","Page_OverviewCharacter","Page_OverviewResources","Page_OverviewStatus","Page_Details","Page_Post","Page_Options","Page_Gear","Page_Equipped","Page_GearCurrency","Page_GearEquipment","Page_GearItems","Page_GearConsumables","Page_GearGoods","Page_SlotEmpty","Page_AddItem","Page_AddMeleeWeapon","Page_AddRangedWeapon","Page_AddTool","Page_AddCommsTool","Page_AddLightTool","Page_AddBindingsTool","Page_AddMiscTool","Page_AddHeadGear","Page_AddFaceGear","Page_AddChestGear","Page_AddArmGear","Page_AddLegGear","Page_AddFootGear","Page_AddMiscGear","Page_AddRecoveryItem","Page_AddTonicItem","Page_AddBombItem","Page_AddBeverageItem","Page_AddMaterial","Page_AddCompound","Page_AddAnimalGood","Page_AddSupplement","Page_AddFruit","Page_AddVegetable","Page_AddStarch","Page_Actions","Page_Techniques","Page_Training","Page_Advancement","Page_Perks","Page_Sidebar","Page_NPC","Page_Notes","Title_Origin","Title_Background","Title_BackgroundGenerator","Title_StatSummary","Title_Conflict","Title_OriginAdvancement","Title_OriginTraining","Title_Advancement","Title_AdvancementConversion","Title_Training","Title_TrainingConversion","Title_ShowTechnique","Title_UseTechnique","Title_LearnNewStyles","Title_PerkTechniques","Title_StyleFilterOption","Title_QuickStyleFilter","Title_PerkStyleFilter","Title_ExpandedStyleFilters","Title_Chat","Title_Emotes","Title_LanguageSelect","Title_LanguageCommon","Title_GeneralLore","Title_LoreCategory","Title_SpecializedLore","Title_Skills","Title_Outfits","Title_EquippedGear","Title_Notebook","Title_Techniques","Title_TechniqueChange","Title_ChangeAffinity","Title_Debug","Title_InstantConsumables","Title_EquippedInstantConsumables","Title_StartingJin","Title_YourJin","Title_InspectionItemCost","Title_JobsByDifficulty","Title_MainRole","Title_SubRole","Title_IsPlayer","IsPlayer_No","IsPlayer_Yes","Loading","Popup_PopupActive","Popup_PopupName","Popup_SubMenuActive","Popup_SubMenuActiveId","Popup_InspectPopupActive","Popup_ItemInspectionName","Popup_EquipmentInspectionName","Popup_ConsumablesInspectionName","Popup_GearInspectionName","Popup_GoodsInspectionName","Popup_TechniqueInspectionName","Popup_PerkInspectionName","Popup_InspectSelectGroup","Popup_InspectSelectType","Popup_InspectSelectId","TechPopupValues","ItemPopupValues","Popup_InspectShowAdd","Popup_InspectAddType","Popup_InspectAddClick","Popup_ItemSelectName","Popup_ItemSelectDisplay","Popup_ItemSelectDisplayNeutral","Popup_ItemSelectDisplayWood","Popup_ItemSelectDisplayFire","Popup_ItemSelectDisplayEarth","Popup_ItemSelectDisplayMetal","Popup_ItemSelectDisplayWater","Popup_ItemSelectType","Popup_ItemSelectIsOn","Popup_ItemSelectVisible","Popup_FilterPopupActive","Popup_FilterPopupName","Popup_FilterTechniquePopupName","Popup_CustomStylesFilterName","Popup_CustomItemsFilter","Popup_CustomItemTechFilter","Popup_ApplyFilter","Popup_ClearFilter","Popup_FilterPopupType","Popup_FilterPopupDisplayType","Popup_FindItemsByFilter","Popup_FindItemsByTechnique","Popup_SearchButton","Popup_FindGearByFilter","Chat_Type","Chat_PostTarget","Chat_Target","Chat_Message","Chat_Language","Chat_LanguageTag","Chat_PostContent","RepeatingActiveEmotes","RepeatingActiveEmotesNotes","Chat_SetId","Chat_Emotes","Chat_DefaultEmote","Chat_PostName","Chat_PostURL","Chat_PostEmoteNote","Chat_OutfitName","Chat_OutfitEmotes","Chat_EmoteName","Chat_EmoteURL","RepeatingOutfits","Chat_OutfitDefault","Chat_OutfitDefaultURL","RepeaterAcademic","RepeaterProfession","RepeaterCraftmanship","RepeaterGeography","RepeaterHistory","RepeaterCulture","RepeaterReligion","Lore_Tier","Lore_SubType","Lore_Name","Lore_Description","Forme_SeeTechniques","Forme_ShowFromNonElement","Forme_ShowLevelRestricted","Forme_RecommendedStyles","Forme_CustomStyleFilter","RepeatingJobStyles","RepeatingStyles","RepeatingPerks","Action_StyleIsVisible","Action_PerkIsVisible","Forme_Name","Forme_Inspect","Forme_Delete","Forme_Tier","Forme_IsAdvanced","Forme_Actions","Forme_IsEquipped","Forme_Equip","Forme_EquipAdvanced","Forme_Unequip","Forme_ActionCount","Forme_SelectJob","Forme_JobSlot","Forme_JobSlotCount","Forme_AdvancedSlot","Forme_AdvancedSlotCount","Forme_StyleSlot","Forme_StyleSlotCount","Action_Use","Action_Inspect","Action_Delete","Action_Actions","Action_SetData","Action_Techniques","RepeatingFormeTech","Action_FormeLoadCount","Action_FormeLoad","FormeTechDisplayVer","Action_FormeTechniques","RepeatingPermaTech","ActionsPermaTech","ActionsJobTech","ActionsAdvTech","ActionsPassiveTech","ActionsGearTech","ActionsBasicActions","ActionsBasicRecovery","ActionsBasicAttack","ActionsBasicSocial","ActionsBasicSpirit","RefreshTech","GearTech","BasicActions","BasicRecovery","BasicAttack","BasicSocial","BasicSpirit","RepeatingCustomTech","CustomTech","TechHeader","TechTrueName","TechActionType","TechActionName","TechActionTooltip","TechName","TechVersion","TechIsVisible","TechAffinity","TechTier","TechRank","TechRankUp","TechRankDown","TechDisplayName","TechResourceData","TechEnCost","TechWillCost","TechBoonCost","TechTargetingData","TechTargetDesc","TechTargetType","TechRange","TechLimit","TechForm","TechTrait","TechCoreDefense","TechTrigger","TechTraits","TechTraitsDesc","TechFlavorText","TechCoreEffect","TechOnEnter","TechCheckTitle","TechCheckEffect","TechEndEffect","TechWillBreakEffect","TechEnhanceEffect","TechDef","ItemIsVisible","ItemName","ItemAction","ItemCount","ItemMainGroup","ItemGroup","ItemSubGroup","ItemBulk","ItemBaseValue","ItemTrait","ItemDescription","ItemCraft","ItemSlotOpen","ItemPerFive","Gear_AutoEquipItems","Gear_Equip","Gear_Unequip","Gear_Delete","Gear_Inspect","Gear_Buy","Gear_BuyBulk","Gear_Remove","Gear_Use","Gear_Cook","Gear_UnequipAll","Gear_EquipmentSlot","Gear_ConsumableSlot","Gear_EquippedItemTraits","RepeatingEquipment","RepeatingConsumables","RepeatingSyncedEquipment","RepeatingGear","RepeatingFoods","RepeatingCooking","Gear_EquipmentIsVisible","Gear_ConsumableIsVisible","Gear_GearIsVisible","Gear_FoodIsVisible","Title_AddEquipment","Title_AddConsumable","Title_AddGear","Gear_ItemName","Gear_ItemType","Gear_ItemIsEquipped","Gear_ItemEquipMenu","Gear_ItemGroup","Gear_ItemStats","Gear_ItemTrait","Gear_ItemDescription","Gear_UpdateEquipment","Gear_RemoveEquipment","Gear_UpdateConsumables","Gear_RemoveConsumables","Gear_CookingEvent","Gear_ActiveRecipe","Gear_MealCount","Gear_UpdateCooking","Gear_CookingScore","Gear_ActiveIngredientList","System_CraftingBlueprint","System_CraftingRecipe","System_CraftSkillCheck","System_CraftSkillCheckBlueprint","System_CraftSkillCheckTraining","System_CraftSkillCheckBlueprintTraining","System_CraftTimeBlueprint","System_CraftTime","System_CraftingComponent","System_CraftMaterials","System_Cooking","System_HighQualityMeals","Pattern_Target","Pattern_Targets","Pattern_Target/Self","Pattern_Object","Pattern_Objects","Pattern_Space","Pattern_Spaces","Pattern_Line","Pattern_Wide Line","Pattern_Cone","Pattern_Blast","Pattern_Blast(3H)","Pattern_Blast(5H)","Pattern_Radial","Title_ValidTargets","Title_LineOfSight","Title_Cover","Title_TechEffect","Title_TechDC","Title_TechEvasion","Title_TechDefense","Title_TechOnRound","Title_TechOnTurn","Title_TechOnEndFocus","Title_TechEnhancement","Notebooks","Note_NotebookCount","Note_NotebookActions","Note_NotebookName","Note_NotebookContents","Note_NotebookOpen","Note_NotebookDelete","Note_NotebookReload","Note_NotebookClose","Note_NotebookSave","Note_NotebookIsDirty","Note_OpenNotebook","Note_OpenNotebookActions","NotebookPages","Note_PageType","Note_PageDisplay","Note_PagePost","Note_PageDelete","Note_PageTemplateData","Note_PageContents","Note_PageLocation","Note_PageArea","Note_PageDate","Note_PageTime","Note_PageCharName","Note_PageCharURL","Note_PageCharEmote","Note_PageCharLanguage","Note_PageQuestName","Note_PageChapter","Note_PagePart","Perk_Bonus Vitality","Perk_Bonus Potency","Perk_Bonus Round EN","Perk_Second Affinity","Perk_Corrosion Magic","Perk_Light Magic","Perk_Shadow Magic","Perk_Blood Magic","Perk_Time Magic","Perk_Spirit Conduit","Perk_Increase HP","Perk_Increase WILL","Perk_Increase Base Speed","Perk_Increase Dash Speed","Perk_Increase Armor","Perk_Increase Starting EN","Perk_Bonus Equipment Slots","Perk_Light Sleeper","Perk_Iron Stomach","Perk_Sea Legs","Perk_Darkvision","Perk_Steel Nerves","Perk_Blind Sense","Perk_Time Sensitivity","Perk_Permanent Creations","Perk_Expel Spirit","Perk_Spirit Sense","Perk_Loosen Vines","Perk_Extinguish Fire","Perk_Clean Mud","Perk_Demagnetize","Perk_Quick-Dry","Perk_Resilient Mind","Perk_Cool Head","Perk_Fast Climb","Perk_Fast Swim","Perk_Earthglide","Perk_Windwalker","Perk_Stonegrip","Perk_Duskstep","Perk_Ice Skate","Perk_Cooking Expertise","Perk_Tinker Expertise","Perk_Build Expertise","Perk_Joyful Meal","Perk_Steadfast Meal","Perk_Find Ether Signature","Perk_Trace Ether Signature"],"ActiveSkills":["SkillGroup_Athletics","SkillGroup_Magic"],"SocialSkills":["SkillGroup_Persuade","SkillGroup_Cunning"],"WorldSkills":["SkillGroup_Craft","SkillGroup_Device","SkillGroup_Perception"],"Human":["Coastborne","Suntouched","Sandfolk","Plains-kin","Frostcloaked","Earthblood","Other"],"StyleCategory_Basic":["BasicGroup_BasicAction","BasicGroup_BasicDetection","BasicGroup_BasicSpirit"],"StyleCategory_Combat":["BasicGroup_BasicAttack","BasicGroup_BasicMovement","BasicGroup_BasicRecovery"],"StyleCategory_Social":["BasicGroup_BasicAgitation","BasicGroup_BasicInfluence","BasicGroup_BasicRequest"],"Combat Arts":["StyleSubGroup_Fast Melee Attacks","StyleSubGroup_Forceful Melee Attacks","StyleSubGroup_Resonant Melee Attacks","StyleSubGroup_Fast Ranged Attacks","StyleSubGroup_Forceful Ranged Attacks","StyleSubGroup_Resonant Ranged Attacks"],"Control Arts":["StyleSubGroup_Area Control","StyleSubGroup_Terrain Molding","StyleSubGroup_Energy Control","StyleSubGroup_Material Control","StyleSubGroup_Enhanced Transmutation"],"Support Arts":["StyleSubGroup_Damage Mitigation","StyleSubGroup_Positioning","StyleSubGroup_Enhancement","StyleSubGroup_Mythical"],"Social Arts":["StyleSubGroup_Magical Assistance","StyleSubGroup_Charming Influence","StyleSubGroup_Compelling Influence","StyleSubGroup_Subtle Influence"],"BaseGroup":["TechFilterType_TechCategory","TechFilterType_ActionType","TechFilterType_Targeting","TechFilterType_CombatKeywords","TechFilterType_SocialKeywords","TechFilterType_SupportKeywords","TechFilterType_UtilityKeywords","TechFilterType_Defense","TechFilterType_DamageType","TechFilterType_StatusGood","TechFilterType_StatusBad","TechFilterType_WeaponKeywords","TechFilterType_AthleticSkills","TechFilterType_MagicSkills","TechFilterType_SocialSkills","TechFilterType_WorldSkills","AutoFilter_MeleeWeapons","AutoFilter_RangedWeapons","AutoFilter_Athletics","AutoFilter_Social","AutoFilter_WoodMagic","AutoFilter_FireMagic","AutoFilter_EarthMagic","AutoFilter_MetalMagic","AutoFilter_WaterMagic","AutoFilter_SpecialMagic","TechBaseFilter_Combat","TechBaseFilter_Social","TechBaseFilter_Utility","PerkFilter_Cost1Perk","PerkFilter_Cost2Perk","PerkFilter_Cost3Perk","EquipFilter_WeaponType","EquipFilter_WeaponKeywords","EquipFilter_ToolType","EquipFilter_ToolKeywords","EquipFilter_ApparelType"],"Category":["TechFilterType_Combat","TechFilterType_Social","TechFilterType_Utility"],"Action Type":["TechFilterType_SwiftAction","TechFilterType_AssistAction","TechFilterType_QuickAction","TechFilterType_FullAction","TechFilterType_ReactionAction","TechFilterType_BriefAction","TechFilterType_LongAction","TechFilterType_PassiveAction"],"Targeting":["TechFilterType_RangeSelf","TechFilterType_RangeMelee","TechFilterType_RangeClose","TechFilterType_RangeShort","TechFilterType_RangeShortArea","TechFilterType_RangeLong","TechFilterType_RangeLongArea","TechFilterType_RangeSpecial"],"Melee Weapon Technique Filters":["AutoFilter_LightBlade","AutoFilter_HeavyBlade","AutoFilter_Hammer","AutoFilter_Polearm","AutoFilter_Whip"],"Ranged Weapon Technique Filters":["AutoFilter_Bow","AutoFilter_Handgun","AutoFilter_Longshot","AutoFilter_ThrownBlade"],"Athletics Technique Filters":["AutoFilter_ForcefulFist","AutoFilter_Grappler","AutoFilter_Swiftform","AutoFilter_Mobility","AutoFilter_Acrobatics","AutoFilter_Stealth"],"Negotiation Technique Filters":["AutoFilter_FavorBuilding","AutoFilter_Request","AutoFilter_Influence","AutoFilter_Emotion"],"Wood Magic Technique Filters":["AutoFilter_PlantMartial","AutoFilter_Plants","AutoFilter_Wood","AutoFilter_Wind","AutoFilter_Mana","AutoFilter_WoodSound","AutoFilter_WoodHealing","AutoFilter_WoodEmpowering"],"Fire Magic Technique Filters":["AutoFilter_FlameMartial","AutoFilter_Flames","AutoFilter_Glass","AutoFilter_Smoke","AutoFilter_FireHealing","AutoFilter_FireEmpowering"],"Earth Magic Technique Filters":["AutoFilter_SandMartial","AutoFilter_Rock","AutoFilter_Terrain","AutoFilter_Gravity","AutoFilter_EarthEmpowering"],"Metal Magic Technique Filters":["AutoFilter_LightningMartial","AutoFilter_Ironsand","AutoFilter_Metal","AutoFilter_Lightning","AutoFilter_Stasis","AutoFilter_MetalEmpowering"],"Water Magic Technique Filters":["AutoFilter_IceMartial","AutoFilter_Water","AutoFilter_Cold","AutoFilter_Ice","AutoFilter_WaterHealing","AutoFilter_WaterSound","AutoFilter_WaterEmpowering"],"Special Magic Technique Filters":["AutoFilter_Ether","AutoFilter_Corrosion","AutoFilter_Light","AutoFilter_Shadow","AutoFilter_Blood","AutoFilter_Time"],"Weapon Category":["EquipFilter_Melee","EquipFilter_Ranged"],"Tool Category":["EquipFilter_Comms","EquipFilter_Bindings","EquipFilter_Light","EquipFilter_Misc"],"Apparel Category":["EquipFilter_Chest","EquipFilter_Head","EquipFilter_Eyes","EquipFilter_Back","EquipFilter_Arms","EquipFilter_Legs","EquipFilter_Feet"],"CoreResource":["HP","WILL","Surge","Cmb_Vitality"],"EnStat":["StartEN","RoundEN"],"CombatStat":["Cmb_HV","Cmb_Armor"],"MoveStat":["Cmb_Mv","Cmb_MvDash"],"Combat Keyword":["Trait_Accurate","Trait_AP","Trait_Truehit"],"Social Keyword":["Trait_Favor","Trait_Influence","Trait_Request"],"Support Keyword":["Trait_Cleanse","Trait_EN","Trait_Heal"],"Utility Keyword":["Trait_BreakFocus","Trait_ForceMove","Trait_Illusion","Trait_Move","Trait_Move-Sneak","Trait_Move-Special","Trait_Structure","Trait_Terrain"],"Martial Trait":["Trait_Hammer","Trait_HeavyBlade","Trait_LightBlade","Trait_Polearm","Trait_Whip"],"Aim Trait":["Trait_Bow","Trait_Handgun","Trait_Longshot","Trait_Scattershot","Trait_ThrownBlade"],"Consumable Trait":["Trait_Ingested","Trait_Inhalent"],"Tool Trait":["Trait_Magitech","Trait_Medkit","Trait_DustContainer","Trait_FishingTool"],"Item Trait":["Trait_Edible","Trait_Flammable","Trait_Flexible","Trait_Frozen","Trait_Loud","Trait_Resonant","Trait_Sharp","Trait_Sturdy","Trait_Transparent"],"Conflict":["Title_Round","Title_Phase","Title_PhaseTeam","Title_Turn","Title_OffTurn"],"Technique":["Title_Targetting"],"Movement":["Adjacency","Obstruction","Lifting"],"Gear":["Bulk"],"Generator":["Note_GenName","Note_GenFullName","Note_GenGender","Note_GenHomeRegion","Note_GenRace","Note_GenPersonality","Note_GenMotivation","Note_GenerateCharacter","Note_UseGeneration","Note_ClearBackground"],"Craft":["Skill_Aesthetics","Skill_Alchemy","Skill_Cook","Skill_Engineer"],"Athletics":["Skill_Agility","Skill_Aim","Skill_Martial","Skill_Physique"],"Perception":["Skill_Analyze","Skill_Empathy","Skill_Notice","Skill_Resonance"],"Persuade":["Skill_Charm","Skill_Inspire","Skill_Rationalize"],"Cunning":["Skill_Demoralize","Skill_Misdirect"],"Magic":["Skill_Energize","Skill_Flux","Skill_Materialize","Skill_Physio","Skill_Transmute"],"Device":["Skill_Glyphwork","Skill_Medicine","Skill_Musicianship","Skill_Pilot","Skill_Tinker"],"Walthair":["Lang_Minere","Lang_Shorespeak","Lang_Verdeni"],"Aridsha":["Lang_Junal","Lang_Dustell","Lang_Muralic","Lang_Shira"],"Khem":["Lang_Apollen","Lang_Kleikan"],"Colswei":["Lang_Lib"],"Ceres":["Lang_Cert","Lang_Ciel","Lang_Citeq","Lang_Manstan","Lang_Salkan","Lang_Sansic","Lang_Silq"],"Special":["Lang_Emotion","Lang_Empathy","Lang_Jovean","Lang_Mytikan"],"Academic":["LoreCat_Academic","Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology"],"Profession":["LoreCat_Profession","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining"],"Craftmanship":["LoreCat_Craftmanship","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving"],"Geography":["LoreCat_Geography","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane"],"History":["LoreCat_History","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History"],"Culture":["LoreCat_Culture","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater"],"Religion":["LoreCat_Religion","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"],"JobClass_Simple":["Job_Fighter","Job_Labourer","Job_Sniper","Job_Rogue","Job_Warmage","Job_Medic","Job_Courtier","JStyle_Fighter","JStyle_Labourer","JStyle_Sniper","JStyle_Rogue","JStyle_Warmage","JStyle_Medic","JStyle_Courtier"],"JobClass_Intermediate":["Job_Brawler","Job_Warden","Job_Exemplar","Job_Hunter","Job_Geomancer","Job_Kineticist","Job_Tactician","Job_Bard","Job_Preacher","Job_Merchant","Job_Diplomat","JStyle_Brawler","JStyle_Warden","JStyle_Exemplar","JStyle_Hunter","JStyle_Geomancer","JStyle_Kineticist","JStyle_Tactician","JStyle_Bard","JStyle_Preacher","JStyle_Merchant","JStyle_Diplomat"],"JobClass_Advanced":["Job_Sentinel","Job_Trooper","Job_Spellwright","Job_Alchemist","JStyle_Sentinel","JStyle_Trooper","JStyle_Spellwright","JStyle_Alchemist"],"JobClass_Spirit":["Job_Yaksa","Job_Shade","Job_Phantasm","JStyle_Yaksa","JStyle_Shade","JStyle_Phantasm"],"Status":["Stat_Blinded","Stat_Burst","Stat_Downed","Stat_Engaged","Stat_Ethereal","Stat_Exhausted","Stat_Float","Stat_Focus","Stat_Frozen","Stat_Grappled","Stat_Hidden","Stat_Invisible","Stat_Mantle","Stat_Paralyzed","Stat_Restrained","Stat_Unconscious"],"Condition":["Stat_Aflame","Stat_Burn Aegis","Stat_Chilled","Stat_Cold Aegis","Stat_Dazed","Stat_Dodge","Stat_Dying","Stat_Earthblight","Stat_Empowered","Stat_Hindered","Stat_Immobilized","Stat_Iron Plates","Stat_Jolted","Stat_Magnetized","Stat_Prone","Stat_Quickened","Stat_Sand Aegis","Stat_Shielded","Stat_Shock Aegis","Stat_Sickened","Stat_Soaked","Stat_Static","Stat_Stunned","Stat_Vined"],"Emotion":["Stat_Agreeable","Stat_Angered","Stat_Calmed","Stat_Distracted","Stat_Doubt","Stat_Encouraged","Stat_Flustered","Stat_Frightened","Stat_Overjoyed","Stat_Oppositional","Stat_Persevering","Stat_Rally","Stat_Surprised","Stat_Steadfast"]},"mainGroup":{},"formulaMods":{"CR":["Attribute","Skill","Knowledge","Style","Technique","Influence","SB_MAX","Potency","Def_Brace","Def_Warding","Def_Evasion","Def_Resolve","Def_Insight","Def_Logic","StyleSlots","HP","WILL","RoundEN","Recall","Initiative","Cmb_HV"],"BonusAttributePoints":["Attribute"],"Level":["Skill","Advancement","Perk","Perk_Bonus Vitality","Perk_Bonus Potency","Perk_Bonus Round EN","Perk_Second Affinity","Perk_Corrosion Magic","Perk_Light Magic","Perk_Shadow Magic","Perk_Blood Magic","Perk_Time Magic","Perk_Spirit Conduit","Perk_Increase HP","Perk_Increase WILL","Perk_Increase Base Speed","Perk_Increase Dash Speed","Perk_Increase Armor","Perk_Increase Starting EN","Perk_Bonus Equipment Slots","Perk_Light Sleeper","Perk_Iron Stomach","Perk_Sea Legs","Perk_Darkvision","Perk_Steel Nerves","Perk_Blind Sense","Perk_Time Sensitivity","Perk_Permanent Creations","Perk_Expel Spirit","Perk_Spirit Sense","Perk_Loosen Vines","Perk_Extinguish Fire","Perk_Clean Mud","Perk_Demagnetize","Perk_Quick-Dry","Perk_Resilient Mind","Perk_Cool Head","Perk_Fast Climb","Perk_Fast Swim","Perk_Earthglide","Perk_Windwalker","Perk_Stonegrip","Perk_Duskstep","Perk_Ice Skate","Perk_Cooking Expertise","Perk_Tinker Expertise","Perk_Build Expertise","Perk_Joyful Meal","Perk_Steadfast Meal","Perk_Find Ether Signature","Perk_Trace Ether Signature"],"AdvancementSkill":["Skill"],"AdvancementJob":["Job"],"TrainingKnowledge":["Knowledge"],"AdvancementTechnique":["Style","Technique"],"BonusTraining":["Advancement"],"CR+2":["DamageBonus","TechENLimit"],"Attr_BOD":["Def_Brace","HP","Skill_Energize","Skill_Martial","Skill_Materialize","Skill_Physique","Skill_Pilot","Skill_Resonance"],"Attr_PRC":["Def_Warding","Skill_Agility","Skill_Aim","Skill_Flux","Skill_Martial","Skill_Musicianship","Skill_Tinker","Skill_Transmute"],"Attr_QCK":["Def_Evasion","Initiative","Skill_Agility","Skill_Cook","Skill_Glyphwork","Skill_Medicine","Skill_Physio","Skill_Tinker"],"Attr_CNV":["Def_Resolve","WILL","Cmb_HV","Skill_Cook","Skill_Demoralize","Skill_Energize","Skill_Inspire","Skill_Materialize","Skill_Pilot","Skill_Resonance"],"Attr_INT":["Def_Insight","Initiative","Skill_Aesthetics","Skill_Charm","Skill_Empathy","Skill_Medicine","Skill_Misdirect","Skill_Notice","Skill_Physio"],"Attr_RSN":["Def_Logic","Recall","Skill_Alchemy","Skill_Analyze","Skill_Engineer","Skill_Glyphwork","Skill_Misdirect","Skill_Rationalize","Skill_Transmute"],"":["Skill_Aesthetics","Skill_Aim","Skill_Alchemy","Skill_Analyze","Skill_Charm","Skill_Demoralize","Skill_Engineer","Skill_Empathy","Skill_Flux","Skill_Inspire","Skill_Musicianship","Skill_Notice","Skill_Physique","Skill_Rationalize"],"Recall":["LoreCat_Academic","Lore_Health","Lore_Mana","Lore_Mathematics","Lore_Nature","Lore_School","Lore_Spirit","Lore_Warfare","Lore_Zoology","LoreCat_Profession","Lore_Arboriculture","Lore_Farming","Lore_Fishing","Lore_Hunting","Lore_Legal","Lore_Mercantile","Lore_Mining","LoreCat_Craftmanship","Lore_Alchemy","Lore_Architecture","Lore_Brewing","Lore_Cooking","Lore_Engineering","Lore_Glassblowing","Lore_Leatherworking","Lore_Sculpting","Lore_Smithing","Lore_Weaving","LoreCat_Geography","Lore_Aridsha","Lore_Ceres","Lore_Colswei","Lore_Khem","Lore_Novus","Lore_Walthair","Lore_Wayling","Lore_Ethereal Plane","LoreCat_History","Lore_Aridsha History","Lore_Ceres History","Lore_Colswei History","Lore_Khem History","Lore_Novus History","Lore_Walthair History","Lore_Wayling History","LoreCat_Culture","Lore_Art","Lore_Etiquette","Lore_Fashion","Lore_Games","Lore_Music","Lore_Scribing","Lore_Theater","LoreCat_Religion","Lore_Church of Kongkwei","Lore_Guidance","Lore_Life's Circle","Lore_Ocean Court","Lore_Sylvan","Lore_Zushaon"]},"techMods":{"_tech":["Influence","SB_MAX","Potency","DamageBonus","TechENLimit","Def_Brace","Def_Warding","Def_Evasion","Def_Resolve","Def_Insight","Def_Logic","JobSlots","AdvancedSlots","StyleSlots","EquipmentSlots","ConsumableSlots","HP","WILL","Surge","StartEN","RoundEN","Recall","Initiative","Cmb_Vitality","Cmb_HV","Cmb_Armor","Cmb_BurnResist","Cmb_ColdResist","Cmb_EnergyResist","Cmb_ForceResist","Cmb_PiercingResist","Cmb_PsycheResist","Cmb_Mv","Cmb_MvDash"],"_techset":["SB_MAX","Potency","DamageBonus","TechENLimit","Recall"],"_gear":["Def_Brace","Def_Warding","Def_Evasion","EquipmentSlots","ConsumableSlots","HP","WILL","Surge","StartEN","Initiative","Cmb_Vitality","Cmb_HV","Cmb_Armor","Cmb_BurnResist","Cmb_ColdResist","Cmb_EnergyResist","Cmb_ForceResist","Cmb_PiercingResist","Cmb_PsycheResist","Cmb_Mv","Cmb_MvDash"]},"hasMax":{"true":["Data","Advancement","Training","General","CR","XP","BonusTraining","HP","WILL","Surge","EN","Cmb_Vitality","Soc_Favor","Soc_Impatience"]}},
         _max = "_max",
         _true = "_true",
         _rank = "_rank",
@@ -20817,7 +20731,8 @@ var WuxNames = WuxNames || (function() {
                 "Family":["Baifan","Baihou","Baikwan","Baitang","Chandu","Chanhu","Chanlam","Chenma","Chensun","Chenwu","Choubai","Choujiang","Chouzhao","Chowguan","Chowlin","Chowtan","Ducheung","Duhou","Duli","Dupan","Fanchou","Fanhuang","Fanlau","Fanwen","Guanhou","Guansun","Guanxu","Guanzhou","Guochan","Guojin","Guoli","Guoruan","Hancheung","Hankuang","Hansong","Hanzhao","Houchen","Houliao","Housong","Houwong","Hujin","Hulam","Hutan","Huwong","Jianghsu","Jiangwen","Jiangyu","Jinbai","Jinkwan","Jinliao","Kwandu","Kwanlam","Kwanma","Kwanzhang","Lauchan","Lauman","Lauxu","Lifan","Litang","Lixun","Liaobai","Liaojiang","Liaosong","Linkuang","Linwen","Linyu","Liuhan","Liutan","Liuyeung","Lubai","Luwen","Luzhou","Macheung","Majiang","Malin","Mazhang","Panguan","Panlau","Pansun","Panxu","Songfan","Songguo","Songlin","Songwu","Sunchou","Sunhuang","Sunli","Sunzhao","Tanchou","Wanghan","Wangkwan","Wangliao","Wenliu","Wenruan","Wenxun","Wonghu","Wongli","Wongman","Wukuang","Wuxun","Wuzhang","Xucheung","Xulau","Xuma","Xuyuen","Xundu","Xunguan","Xunkwan","Xunpan","Yujin","Yuman","Yutang","Yuzhou","Zhaodu","Zhaoguo","Zhaoliu","Zhaowu","Zhoufan","Zhouma","Zhoupan","Zhouhsu","Zhukuang","Zhusun","Zhuyeung"]},
             "Ceres":{"Male":["Abioye","Ade","Adkachi","Akpan","Anan","Axmed","Ayo","Baako","Bandile","Berphane","Berhanu","Berko","Bitrus","Bongani","Buhle","Cali","Chi","Chidi","Chike","Chima","Chizoba","Chuks","Dayo","Dejen","Desta","Dumi","Dumisani","Efe","Ejiro","Ekene","Eliud","Emeka","Emem","Enitan","Enu","Eskender","Darai","Faraji","Femi","Filbert","Folami","Fungai","Gadisa","Gudina","Gwandoya","Iakkopa","Idir","Ifa","Ikaia","Imamu","Ime","Inyene","Itoro","Izem","Jatau","Jengo","Jumaane","Kaipo","Kalei","Kato","Keanu","Kekoa","Keoni","Kojo","Kweku","Lanre","Lekan","Lishan","Maina","Makaio","Maui","Melisizwe","Mikala","Moana","Mwangi","Mwenye","Nalani","Neo","Ngozi","Nijinga","Noa","Nsia","Nthanda","Obi","Ochieng","Oghenero","Okafor","Okeke","Olabode","Oluchi","Otieno","Peni","Pika","Refilwe","Rutendo","Sefu","Sekani","Seydou","Sifiso","Simiyu","Sipho","Sizwe","Tadala","Tadesse","Tafari","Tesfaye","Thabo","Themba","Tionge","Tumelo","Udo","Uduak","Ufuoma","Unathi","Uzochi","Uzoma","Wafula","Wanjala","Wassma","Wekesa","Workneh","Xasan","Zolani","Yakubu","Yao","Yared","Zikomo","Zuberi"],
                 "Female":["Abena","Adaeze","Ade","Afia","Akua","Alaba","Ama","Anan","Awiti","Ayanda","Baako","Babirye","Berhane","Bolanle","Bontu","Bosede","Buhle","Charlize","Chichi","Chika","Chioma","Chisomo","Chizoba","Dada","Dayo","Desta","Dikeledi","Dubaku","Ebele","Efemena","Ejiro","Ekene","Ekua","Emem","Enu","Eshe","Dadumo","Farai","Fatsani","Folami","Funanya","Fungai","Gadise","Ganizani","Gugulethu","Hadiza","Haukea","Hibo","Hiwot","Hodan","Hokulani","Idowu","Iekika","Ife","Ime","Iolana","Itoro","Kagiso","Kahina","Kalea","Kapua","Keone","Kiana","Kidist","Kirabo","Konani","Lani","Lehua","Lerato","Lulit","Lungile","Malie","Makena","Meklit","Mele","Momi","Monifa","Mumbi","Muthoni","Nafula","Nakato","Nanjala","Neo","Nia","Njeri","Nneka","Nontle","Nosipho","Nyah","Ogechi","Olamide","Oluchi","Onyeka","Opeyemi","Oyibo","Palesa","Pemphero","Pilirani","Puleng","Retha","Rufaro","Rutendo","Sauda","Saynab","Seble","Sibongile","Simisola","Subira","Tadala","Taonga","Tapiwa","Thema","Tidir","Titrit","Tumelo","Uzoma","Wairimu","Wangari","Wikolia","Yamikani","Yejide","Yewande","Zodwa","Zola"],
-                "Family":["Choi","Chung","Gang","Gim","Han","Jeong","Jo","Kang","Kim","Lee","Moon","Mun","Park","Rhee","Song","Yi"]},
+                "Family":["Choi","Chung","Gang","Gim","Han","Jeong","Jo","Kang","Kim","Lee","Moon","Mun","Park","Rhee","Song","Yi"]
+            },
             "Aridsha":{"Male":["Aamir","Abhay","Adel","Ajit","Ala","Almas","Amrit","Anik","Anwer","Aseem","Atif","Ayaz","Babur","Baha","Bahij","Baki","Baldev","Basant","Bilal","Botros","Bulis","Burhan","Chand","Chander","Chandra","Cheten","Chiranjeevi","Chiranjivi","Daniyal","Darshan","Dawud","Danyal","Debdas","Dharma","Dilip","Diya","Durai","Dushyant","Ebrahim","Eesa","Esmail","Essa","Ezhil","Fadil","Fahd","Faisal","Faizel","Farag","Faraj","Faruk","Fathi","Firdos","Fuad","Furqan","Gabir","Gafar","Galal","Ganesh","Ghassan","Ghufran","Girish","Gopal","Govind","Guda","Gul","Hadi","Hafiz","Hakim","Hayder","Hesham","Hidayat","Hisein","Hosni","Idris","Ihab","Ikram","Ilyas","Imad","Imran","Inayat","Indra","Iskander","Itimad","Jabir","Jafer","Jagadish","Jaya","Jibril","Jinan","Jitender","Jothi","Juda","Juma","Jyoti","Kais","Kalash","Kali","Kalyan","Kanta","Kavi","Khayri","Kishan","Kuldeep","Kumaran","Kunal","Lakshman","Lal","Latif","Laxmi","Laxmi","Lochan","Maalik","Magdi","Mahir","Maram","Mehdi","Midhat","Miraj","Mitul","Mohan","Mushin","Naaji","Nader","Narendra","Neelam","Nihal","Nima","Nitin","Noor","Nuri","Nurul","Om","Omar","Omran","Othman","Othmane","Oualid","Padma","Parth","Parveen","Pitambar","Prakash","Pran","Pratap","Prem","Qadir","Qamar","Qays","Qismat","Qusay","Rabi","Radha","Rafiq","Rajesh","Ramiz","Rehman","Riaz","Rifat","Ruh","Rusul","Safi","Saleh","Sandeep","Satish","Shadi","Shakeel","Sib","Sri","Suhayl","Suresh","Tabassum","Tahir","Tahmid","Talib","Tariq","Tayyib","Thamir","Toufik","Tufayl","Tushar","Umar","Umran","Usama","Usman","Uthman","Uttar","Varghese","Vasant","Venkat","Vijay","Vipul","Vishal","Vivek","Wafai","Waheed","Walid","Wassim","Yahya","Yakub","Yaser","Yousaf","Yusuf","Zaahir","Zahid","Zain","Zaki","Ziad","Ziya","Zulfaqar"],
                 "Female":["Aaminah","Aarti","Abha","Afra","Alia","Aliyya","Alya","Amal","Anila","Aqila","Arij","Badr","Bahija","Bahiyya","Balqis","Basira","Batul","Bhavana","Bhavna","Budur","Bushra","Chanda","Chandana","Chandra","Chandrakanta","Chetana","Dalal","Dalia","Danya","Deepa","Deepti","Dema","Devi","Drishti","Dua","Durga","Eman","Ezhil","Fadia","Fadila","Fahima","Fahmida","Fairuz","Faiza","Fareeha","Farida","Fikriyya","Fizza","Galila","Gargi","Gayatri","Ghadir","Gowri","Grishma","Gulnaz","Gulrukh","Gurmeet","Habiba","Hadil","Hafza","Hagir","Hana","Hema","Hind","Hooda","Hosni","Husna","Husniya","Ihab","Ihsan","Ikram","Ila","Inas","Indira","Iqra","Ishani","Isra","Izdihar","Jalila","Jameela","Janan","Jannat","Jasvinder","Jawdat","Jinan","Jothi","Jumanah","Jyoti","Kajal","Kalyani","Kamatchi","Kamini","Kashi","Khadija","Kirtida","Kubra","Kumari","Laila","Lateefah","Leela","Leila","Lina","Lochana","Lujayn","Maha","Mahinder","Mala","Malati","Maya","Mira","Mitra","Mohini","Mubina","Munya","Nadia","Narinder","Neela","Nida","Nihal","Nisha","Noor","Noora","Nour","Nuha","Nurul","Padma","Pallabi","Parminder","Pooja","Prachi","Preethi","Punita","Pushpa","Rabab","Rachana","Radha","Raisa","Rajani","Rakshi","Reem","Reva","Ritika","Ruba","Ruya","Sabah","Sadaf","Sadia","Samar","Seema","Shadya","Shreya","Shukriyya","Shweta","Shyama","Sita","Sitara","Somaya","Sona","Souad","Sri","Suad","Suha","Sujata","Tabassum","Tahira","Taliba","Tara","Tejal","Thamina","Thana","Thurayya","Trishna","Tuba","Uma","Upasana","Urvi","Usha","Uttara","Uzma","Vaishnavi","Varsha","Vasanti","Vasuda","Vasundhara","Veda","Vijaya","Vimala","Wafiya","Wahida","Warda","Wedad","Widad","Yamuna","Yusra","Zahia","Zahra","Zeenat","Zulekha"],
                 "Family":["Abarca","Abello","Abreu","Agua","Aiza","Alonso","Alvarez","Antunez","Araya","Barros","Bello","Belmonte","Bernat","Blanco","Bosch","Bustillo","Bustos","Cabello","Campos","Cantu","Castro","Chaves","Coello","Cruz","Cuesta","Dali","Diaz","Duarte","Elizondo","Esparza","Espina","Estrada","Felix","Ferreira","Ferrer","Flores","Fontana","Franco","Fuentes","Gallego","Garcia","Garza","Gebara","Gomez","Grec","Guerra","Guzma","Herrera","Hierro","Huerta","Ibarra","Iglesias","Inguez","Jaso","Jorda","Juarez","Lobo","Losa","Lucas","Macias","Magro","Marti","Mateu","Medina","Merlo","Moles","Moreno","Narvaez","Nieves","Noguera","Nunez","Obando","Ochoa","Ola","Olguin","Ortega","Ortiz","Otxoa","Palomo","Pavia","Pena","Pereiro","Petit","Puga","Puig","Quntana","Quiros","Ramrez","Ramos","Reyes","Rios","Rivera","Robles","Rocha","Roig","Rojo","Sala","Salazar","Sanchez","Sandoval","Silva","Solos","Suarez","Tapia","Terrazas","Tomas","Tosell","Trujillo","Ubina","Urbina","Valdez","Varela","Vega","Ventura","Vicario","Viteri","Vives","Ybarra","Zabala","Zavala","Zubizarreta","Zuniga"]},

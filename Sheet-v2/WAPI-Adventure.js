@@ -111,6 +111,16 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
         return WuxDef.Get("Gear").getVariable("-" + WuxDef.GetVariable(attributeKey));
     };
 
+    // Finds an existing character attribute or creates it, then sets its current value.
+    const setCharacterAttribute = function (charId, attrName, value) {
+        const attr = findObjs({ _characterid: charId, _type: "attribute", name: attrName })[0];
+        if (attr) {
+            attr.set("current", value);
+        } else {
+            createObj("attribute", { _characterid: charId, name: attrName, current: value });
+        }
+    };
+
     const addItemsToSection = function (charId, itemCounts, sectionName, mainGroup) {
         const repeater      = new SandboxRepeatingSectionHandler(sectionName, charId);
         const nameField     = getGearField("ItemName");
@@ -183,8 +193,98 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
         addItemsToSection(charId, itemCounts, "RepeatingFoods", "Goods");
     };
 
+    // Returns a character's current RepeatingFoods count for an item (0 if not present).
+    const getFoodsItemCount = function (charId, itemName) {
+        const nameField  = getGearField("ItemName");
+        const countField = getGearField("ItemCount");
+        const repeater    = new SandboxRepeatingSectionHandler("RepeatingFoods", charId);
+        const prefix      = `${repeater.repeatingSection}_`;
+        const nameSuffix  = `_${nameField}`;
+
+        let count = 0;
+        findObjs({ _characterid: charId, _type: "attribute" }).forEach(function (a) {
+            const n = a.get("name");
+            if (n.startsWith(prefix) && n.endsWith(nameSuffix) && a.get("current") === itemName) {
+                const rowId = n.slice(prefix.length, n.length - nameSuffix.length);
+                const countAttr = findObjs({ _characterid: charId, _type: "attribute", name: `${prefix}${rowId}_${countField}` })[0];
+                if (countAttr) count = parseInt(countAttr.get("current")) || 0;
+            }
+        });
+        return count;
+    };
+
     const addAnimalGoodToCharacter = function (charId, itemCounts) {
         addItemsToSection(charId, itemCounts, "RepeatingGear", "Animal Good");
+    };
+
+    // Creates a new RepeatingCooking row for an ingredient and returns its row id.
+    const createCookingRow = function (charId, itemName, itemGroup) {
+        const repeater        = new SandboxRepeatingSectionHandler("RepeatingCooking", charId);
+        const nameField       = getGearField("ItemName");
+        const countField      = getGearField("ItemCount");
+        const visibleField    = getGearField("ItemIsVisible");
+        const mainGroupField  = getGearField("ItemMainGroup");
+        const itemGroupField  = getGearField("ItemGroup");
+        const rowId           = repeater.generateRowId();
+        const prefix          = `${repeater.repeatingSection}_${rowId}_`;
+
+        createObj("attribute", { _characterid: charId, name: `${prefix}${nameField}`,      current: itemName });
+        createObj("attribute", { _characterid: charId, name: `${prefix}${countField}`,     current: 1 });
+        createObj("attribute", { _characterid: charId, name: `${prefix}${visibleField}`,   current: "on" });
+        createObj("attribute", { _characterid: charId, name: `${prefix}${mainGroupField}`, current: "Goods" });
+        createObj("attribute", { _characterid: charId, name: `${prefix}${itemGroupField}`, current: itemGroup });
+
+        return rowId;
+    };
+
+    // Increments an existing RepeatingCooking row's count by 1 using its cached row id.
+    const incrementCookingRowCount = function (charId, rowId) {
+        if (rowId === undefined) return;
+        const repeater       = new SandboxRepeatingSectionHandler("RepeatingCooking", charId);
+        const countField     = getGearField("ItemCount");
+        const countAttrName  = `${repeater.repeatingSection}_${rowId}_${countField}`;
+        const countAttr      = findObjs({ _characterid: charId, _type: "attribute", name: countAttrName })[0];
+        if (countAttr) {
+            const current = parseInt(countAttr.get("current")) || 0;
+            countAttr.set("current", current + 1);
+        }
+    };
+
+    // Decrements an existing RepeatingCooking row's count by 1 using its cached row id,
+    // clamped to 0. Returns the resulting count (0 if the row/attribute doesn't exist).
+    const decrementCookingRowCount = function (charId, rowId) {
+        if (rowId === undefined) return 0;
+        const repeater       = new SandboxRepeatingSectionHandler("RepeatingCooking", charId);
+        const countField     = getGearField("ItemCount");
+        const countAttrName  = `${repeater.repeatingSection}_${rowId}_${countField}`;
+        const countAttr      = findObjs({ _characterid: charId, _type: "attribute", name: countAttrName })[0];
+        if (!countAttr) return 0;
+        const newCount = Math.max(0, (parseInt(countAttr.get("current")) || 0) - 1);
+        countAttr.set("current", newCount);
+        return newCount;
+    };
+
+    // Deletes every attribute belonging to a RepeatingCooking row using its cached row id.
+    const deleteCookingRow = function (charId, rowId) {
+        if (rowId === undefined) return;
+        const repeater = new SandboxRepeatingSectionHandler("RepeatingCooking", charId);
+        const prefix   = `${repeater.repeatingSection}_${rowId}_`;
+        findObjs({ _characterid: charId, _type: "attribute" }).forEach(function (a) {
+            if (a.get("name").startsWith(prefix)) {
+                a.remove();
+            }
+        });
+    };
+
+    // Deletes every row in a character's RepeatingCooking section.
+    const clearCookingRows = function (charId) {
+        const repeater = new SandboxRepeatingSectionHandler("RepeatingCooking", charId);
+        const prefix   = `${repeater.repeatingSection}_`;
+        findObjs({ _characterid: charId, _type: "attribute" }).forEach(function (a) {
+            if (a.get("name").startsWith(prefix)) {
+                a.remove();
+            }
+        });
     };
 
     // ─── Notice Roll Runner ─────────────────────────────────────────────────────
@@ -260,7 +360,6 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 outputLines.push(`[Fish](!fish)`);
             }
             outputLines.push(`<div>&nbsp</div><div style='font-weight: bold'>Cooking</div>`);
-            outputLines.push(`[Start Cooking](!startcooking)`);
             outputLines.push(`[View Cooking](!viewcooking)`);
 
             const messageObject = new SystemInfoMessage(outputLines);
@@ -466,7 +565,7 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
 
         // ─── Cooking Event ───────────────────────────────────────────────────────────
 
-        cookingSchemaVersion = "0.1.0",
+        cookingSchemaVersion = "0.2.0",
         adventureSchemaVersion = "0.2.0",
 
         checkInstall = function () {
@@ -475,7 +574,8 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                     version: cookingSchemaVersion,
                     active: false,
                     initiatorName: "",
-                    ingredients: {}
+                    ingredients: {},
+                    tokens: {}
                 };
             }
             if (!state.hasOwnProperty("WuxAdventureState") || state.WuxAdventureState.version !== adventureSchemaVersion) {
@@ -518,8 +618,9 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             });
         },
 
-        // Returns a formatted ingredient list string for display.
-        formatIngredientList = function () {
+        // Returns a formatted ingredient list string for display. If viewerCharName is
+        // given, that contributor's own name is shown as "You" instead of their name.
+        formatIngredientList = function (viewerCharName) {
             const ingredients = state.WuxCookingEvent.ingredients;
             const entries = Object.values(ingredients);
             if (entries.length === 0) return "No ingredients";
@@ -538,14 +639,133 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 const total = ings.reduce(function (sum, ing) { return sum + ing.quantity; }, 0);
                 const lines = [`[${group}] (${total})`];
                 ings.forEach(function (ing) {
+                    const contributorName = viewerCharName != undefined && ing.charName === viewerCharName
+                        ? "You" : ing.charName;
                     const entry = ing.quantity > 1
-                        ? `${ing.name} x${ing.quantity} (${ing.charName})`
-                        : `${ing.name} (${ing.charName})`;
+                        ? `${ing.name} x${ing.quantity} (${contributorName})`
+                        : `${ing.name} (${contributorName})`;
                     lines.push(`  ${entry}`);
                 });
                 sections.push(lines.join("\n"));
             });
             return sections.join("\n\n");
+        },
+
+        // Returns the recipe name the cooking event currently predicts, defaulting to
+        // Tasty Meal when there aren't enough ingredients contributed yet to predict one.
+        getCurrentRecipeName = function () {
+            const ingredients   = state.WuxCookingEvent.ingredients;
+            const totalQuantity = Object.values(ingredients).reduce(function (sum, ing) { return sum + ing.quantity; }, 0);
+            return totalQuantity > 0 ? predictMeal(ingredients) : "Tasty Meal";
+        },
+
+        // Returns the "Feeds: X (Y ingredients)" text for the cooking event's current ingredients.
+        getFeedsText = function () {
+            const ingredients   = state.WuxCookingEvent.ingredients;
+            const totalQuantity = Object.values(ingredients).reduce(function (sum, ing) { return sum + ing.quantity; }, 0);
+            const feeds         = Math.floor(totalQuantity / 5);
+            return totalQuantity >= 5
+                ? `Feeds: ${feeds} (${totalQuantity} ingredient${totalQuantity !== 1 ? "s" : ""})`
+                : `Feeds: None (min 5 ingredients to cook)`;
+        },
+
+        // Returns the feeds text plus how many people are involved in the cooking event
+        // and a reminder of how many more meals are needed for everyone to eat.
+        getMealCountText = function () {
+            const ingredients      = state.WuxCookingEvent.ingredients;
+            const totalQuantity    = Object.values(ingredients).reduce(function (sum, ing) { return sum + ing.quantity; }, 0);
+            const feeds            = Math.floor(totalQuantity / 5);
+            const participantCount = Object.keys(state.WuxCookingEvent.tokens).length;
+            const stillNeeded      = Math.max(0, participantCount - feeds);
+
+            return [
+                getFeedsText(),
+                `${participantCount} ${participantCount === 1 ? "person is" : "people are"} involved in this cooking event.`,
+                stillNeeded > 0
+                    ? `You need ${stillNeeded} more meal${stillNeeded !== 1 ? "s" : ""} for everyone to eat.`
+                    : `You have enough meals for everyone to eat.`
+            ].join("\n");
+        },
+
+        // Writes the current recipe (name + description) to a participating token's character sheet.
+        applyActiveRecipeToToken = function (tokenTargetData) {
+            const recipeName = getCurrentRecipeName();
+            const recipeItem = WuxItems.Get(recipeName);
+            const description = recipeItem && recipeItem.description ? recipeItem.description : "";
+
+            const activeRecipeVar     = WuxDef.GetVariable("Gear_ActiveRecipe");
+            const activeRecipeInfoVar = WuxDef.GetVariable("Gear_ActiveRecipe", WuxDef._info);
+
+            setCharacterAttribute(tokenTargetData.charId, activeRecipeVar, recipeName);
+            setCharacterAttribute(tokenTargetData.charId, activeRecipeInfoVar, description);
+        },
+
+        // Clears a participant's RepeatingCooking rows and empties the Active Meal data
+        // (Gear_ActiveRecipe back to "0") so the Cooking Events section hides again.
+        clearCookingDataForToken = function (participant) {
+            clearCookingRows(participant.charId);
+
+            const activeRecipeVar     = WuxDef.GetVariable("Gear_ActiveRecipe");
+            const activeRecipeInfoVar = WuxDef.GetVariable("Gear_ActiveRecipe", WuxDef._info);
+
+            setCharacterAttribute(participant.charId, activeRecipeVar, "0");
+            setCharacterAttribute(participant.charId, activeRecipeInfoVar, "");
+            setCharacterAttribute(participant.charId, WuxDef.GetVariable("Gear_CookingIsVisible"), "0");
+        },
+
+        // Shows/hides a character's RepeatingCooking rows (vs. a "None" placeholder)
+        // depending on whether they currently have any contributed ingredients.
+        updateCookingVisibility = function (charId) {
+            const hasContributions = Object.values(state.WuxCookingEvent.ingredients)
+                .some(function (ing) { return ing.charId === charId; });
+            setCharacterAttribute(charId, WuxDef.GetVariable("Gear_CookingIsVisible"), hasContributions ? "on" : "0");
+        },
+
+        // Pushes the current predicted recipe (if changed), the meal count, and each
+        // participant's personalized ingredient list to every character in the cooking event.
+        broadcastCookingUpdate = function (recipeChanged) {
+            const activeIngredientListVar = WuxDef.GetVariable("Gear_ActiveIngredientList");
+            const mealCountVar            = WuxDef.GetVariable("Gear_MealCount");
+            const mealCountText            = getMealCountText();
+            Object.values(state.WuxCookingEvent.tokens).forEach(function (participant) {
+                if (recipeChanged) {
+                    applyActiveRecipeToToken(participant);
+                }
+                setCharacterAttribute(participant.charId, activeIngredientListVar, formatIngredientList(participant.charName));
+                setCharacterAttribute(participant.charId, mealCountVar, mealCountText);
+                updateCookingVisibility(participant.charId);
+            });
+        },
+
+        // Returns a character's Cook skill value.
+        getCookSkillValue = function (charId) {
+            const cookSkillVar = WuxDef.GetVariable("Skill_Cook");
+            const attributeHandler = new SandboxAttributeHandler(charId);
+            attributeHandler.addMod(cookSkillVar);
+            let cookMod = 0;
+            attributeHandler.addFinishCallback(function (attrHandler) {
+                cookMod = attrHandler.parseInt(cookSkillVar, 0, false);
+            });
+            attributeHandler.run();
+            return cookMod;
+        },
+
+        // Writes each participant's Cook skill value to Gear_CookingScore, marking
+        // whoever has the highest score (ties included) with "(You have the highest Cook skill)".
+        updateCookingScores = function () {
+            const participants = Object.values(state.WuxCookingEvent.tokens);
+            if (participants.length === 0) return;
+
+            const scores = participants.map(function (participant) {
+                return { participant: participant, score: getCookSkillValue(participant.charId) };
+            });
+            const bestScore = scores.reduce(function (max, s) { return Math.max(max, s.score); }, -Infinity);
+
+            const cookingScoreVar = WuxDef.GetVariable("Gear_CookingScore");
+            scores.forEach(function (s) {
+                const label = s.score === bestScore ? `${s.score} (You have the highest Cook skill)` : `${s.score}`;
+                setCharacterAttribute(s.participant.charId, cookingScoreVar, label);
+            });
         },
 
         commandViewCooking = function (msg) {
@@ -558,9 +778,9 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             const totalQuantity = hasIngredients
                 ? Object.values(ingredients).reduce(function (sum, ing) { return sum + ing.quantity; }, 0)
                 : 0;
-            const feeds         = Math.floor(totalQuantity / 5);
             const predicted     = hasIngredients ? predictMeal(ingredients) : null;
             const predictedItem = predicted ? WuxItems.Get(predicted) : null;
+
             const outputLines   = [
                 predicted ? `Recipe: ${predicted}` : "",
                 predictedItem && predictedItem.description ? predictedItem.description : "",
@@ -568,9 +788,7 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 `Cooking contributions:`,
                 hasIngredients ? formatIngredientList() : "No ingredients contributed yet.",
                 `-------------------`,
-                totalQuantity >= 5
-                    ? `Feeds: ${feeds} (${totalQuantity} ingredient${totalQuantity !== 1 ? "s" : ""})`
-                    : `Feeds: None (min 5 ingredients to cook)`,
+                getMealCountText(),
                 `[View Recipes](!viewrecipes)`,
                 totalQuantity >= 5 ? `[Cook](!cook)` : ""
             ].filter(function (l) { return l !== ""; });
@@ -588,9 +806,26 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 sendChat("System", `/w GM No cooking event is in progress.`, null, { noarchive: true });
                 return;
             }
+
+            // Return every contributed ingredient to its owner's RepeatingFoods, as if each had been deleted.
+            const returnByChar = {};
+            Object.values(state.WuxCookingEvent.ingredients).forEach(function (ing) {
+                if (!returnByChar[ing.charId]) returnByChar[ing.charId] = {};
+                returnByChar[ing.charId][ing.name] = (returnByChar[ing.charId][ing.name] || 0) + ing.quantity;
+            });
+            Object.keys(returnByChar).forEach(function (charId) {
+                addGoodsToCharacter(charId, returnByChar[charId]);
+            });
+
+            // Clear RepeatingCooking and reset the Active Recipe for every participant.
+            Object.values(state.WuxCookingEvent.tokens).forEach(function (participant) {
+                clearCookingDataForToken(participant);
+            });
+
             state.WuxCookingEvent.active = false;
             state.WuxCookingEvent.initiatorName = "";
             state.WuxCookingEvent.ingredients = {};
+            state.WuxCookingEvent.tokens = {};
             sendChat("System", `/w GM Cooking event ended. Ingredients cleared.`, null, { noarchive: true });
         },
 
@@ -994,26 +1229,66 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 sendChat("System", `/w "${msg.who}" Only GMs can start a cooking event.`, null, { noarchive: true });
                 return;
             }
-            if (state.WuxCookingEvent.active) {
-                sendChat("System", `/w GM A cooking event is already in progress.`, null, { noarchive: true });
+
+            const targets = TokenReference.GetTokenTargetDataArray(msg);
+            if (targets.length === 0) {
+                sendChat("System", `/w GM No tokens selected. Select the tokens joining the cooking event first.`, null, { noarchive: true });
                 return;
             }
-            state.WuxCookingEvent.active = true;
-            state.WuxCookingEvent.initiatorName = msg.who;
-            state.WuxCookingEvent.ingredients = {};
 
-            const outputLines = [
-                "Cooking Event Started",
-                `Add ingredients using your character sheet's Cook button on each item.`,
-                `When ready, use [Cook](!cook) to make the skill check.`,
-                `[View Recipes](!viewrecipes)`
-            ];
+            const wasActive = state.WuxCookingEvent.active;
+            if (!wasActive) {
+                state.WuxCookingEvent.active = true;
+                state.WuxCookingEvent.initiatorName = msg.who;
+                state.WuxCookingEvent.ingredients = {};
+                state.WuxCookingEvent.tokens = {};
+            }
+
+            targets.forEach(function (tokenTargetData) {
+                if (!state.WuxCookingEvent.tokens[tokenTargetData.charId]) {
+                    state.WuxCookingEvent.tokens[tokenTargetData.charId] = {
+                        charId: tokenTargetData.charId,
+                        tokenId: tokenTargetData.tokenId,
+                        charName: tokenTargetData.charName,
+                        displayName: tokenTargetData.displayName
+                    };
+                }
+                applyActiveRecipeToToken(tokenTargetData);
+                updateCookingVisibility(tokenTargetData.charId);
+                setCharacterAttribute(tokenTargetData.charId, WuxDef.GetVariable("Gear_ActiveIngredientList"), formatIngredientList(tokenTargetData.charName));
+            });
+
+            // Set once the full participant roster is known so the "people involved" count is accurate.
+            const mealCountText = getMealCountText();
+            Object.values(state.WuxCookingEvent.tokens).forEach(function (participant) {
+                setCharacterAttribute(participant.charId, WuxDef.GetVariable("Gear_MealCount"), mealCountText);
+            });
+
+            updateCookingScores();
+
+            const participantNames = Object.values(state.WuxCookingEvent.tokens)
+                .map(function (t) { return t.displayName; });
+
+            const outputLines = wasActive
+                ? [
+                    "Cooking Event Updated",
+                    `Joined: ${formatNameList(targets.map(function (t) { return t.displayName; }))}`,
+                    `Participants: ${formatNameList(participantNames)}`,
+                    `[View Recipes](!viewrecipes)`
+                ]
+                : [
+                    "Cooking Event Started",
+                    `Participants: ${formatNameList(participantNames)}`,
+                    `Add ingredients using your character sheet's Cook button on each item.`,
+                    `When ready, use [Cook](!cook) to make the skill check.`,
+                    `[View Recipes](!viewrecipes)`
+                ];
             const messageObject = new SystemInfoMessage(outputLines);
             messageObject.setSender("Wuxing");
             WuxMessage.Send(messageObject);
         },
 
-        // Content: "ingredientName@@@inventoryCount@@@charName"
+        // Content: "ingredientName|||inventoryCount|||charName"
         commandAddIngredient = function (msg, content) {
             if (!state.WuxCookingEvent.active) {
                 sendChat("System", `/w "${msg.who}" No cooking event is in progress.`, null, { noarchive: true });
@@ -1029,28 +1304,126 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 return;
             }
 
-            const key         = `${ingredientName}:::${charName}`;
-            const ingredients = state.WuxCookingEvent.ingredients;
+            const characters = findObjs({ _type: "character", name: charName });
+            if (characters.length === 0) {
+                return;
+            }
+            const charId = characters[0].id;
+
+            if (getFoodsItemCount(charId, ingredientName) <= 0) {
+                return;
+            }
+
+            const key           = `${ingredientName}:::${charName}`;
+            const ingredients   = state.WuxCookingEvent.ingredients;
+            const previousRecipe = getCurrentRecipeName();
+
+            deductGoodsFromCharacter(charId, { [ingredientName]: 1 });
 
             if (ingredients[key]) {
                 ingredients[key].quantity += 1;
+                incrementCookingRowCount(charId, ingredients[key].rowId);
             } else {
-                ingredients[key] = { name: ingredientName, charName: charName, quantity: 1, inventoryCount: inventoryCount };
+                const itemGroup = (WuxGoods.Get(ingredientName) || {}).group || "";
+                const rowId = createCookingRow(charId, ingredientName, itemGroup);
+                ingredients[key] = {
+                    name: ingredientName,
+                    charName: charName,
+                    charId: charId,
+                    quantity: 1,
+                    inventoryCount: inventoryCount,
+                    rowId: rowId
+                };
             }
 
-            const myContributions = Object.values(ingredients)
-                .filter(function (ing) { return ing.charName === charName; })
-                .map(function (ing) { return `${ing.name} x${ing.quantity}`; })
-                .join(", ");
+            const recipeChanged = getCurrentRecipeName() !== previousRecipe;
+            broadcastCookingUpdate(recipeChanged);
+        },
 
-            const outputLines = [
-                `Ingredient accepted: ${ingredientName}`,
-                `${charName}'s contributions: ${myContributions}`,
-                `[View Cooking](!viewcooking)`
-            ];
-            const messageObject = new SystemInfoMessage(outputLines);
-            messageObject.setSender("Wuxing");
-            WuxMessage.SendToSender(messageObject, msg);
+        // Content: "ingredientName|||charName"
+        commandRemoveIngredient = function (msg, content) {
+            if (!state.WuxCookingEvent.active) {
+                sendChat("System", `/w "${msg.who}" No cooking event is in progress.`, null, { noarchive: true });
+                return;
+            }
+            const parts          = content.split("|||");
+            const ingredientName = parts[0] ? parts[0].trim() : "";
+            const charName       = parts[1] ? parts[1].trim() : msg.who;
+
+            if (!ingredientName) {
+                sendChat("System", `/w "${msg.who}" Invalid ingredient.`, null, { noarchive: true });
+                return;
+            }
+
+            const characters = findObjs({ _type: "character", name: charName });
+            if (characters.length === 0) {
+                return;
+            }
+            const charId = characters[0].id;
+
+            const key         = `${ingredientName}:::${charName}`;
+            const ingredients = state.WuxCookingEvent.ingredients;
+            const ingredient  = ingredients[key];
+            if (!ingredient) {
+                return;
+            }
+
+            const previousRecipe = getCurrentRecipeName();
+
+            ingredient.quantity -= 1;
+            decrementCookingRowCount(charId, ingredient.rowId);
+
+            if (ingredient.quantity <= 0) {
+                deleteCookingRow(charId, ingredient.rowId);
+                delete ingredients[key];
+            }
+
+            addGoodsToCharacter(charId, { [ingredientName]: 1 });
+
+            const recipeChanged = getCurrentRecipeName() !== previousRecipe;
+            broadcastCookingUpdate(recipeChanged);
+        },
+
+        // Content: "ingredientName|||charName"
+        // Removes an ingredient's entire contributed quantity from the cooking event and
+        // returns all of it to the character's RepeatingFoods.
+        commandDeleteIngredient = function (msg, content) {
+            if (!state.WuxCookingEvent.active) {
+                sendChat("System", `/w "${msg.who}" No cooking event is in progress.`, null, { noarchive: true });
+                return;
+            }
+            const parts          = content.split("|||");
+            const ingredientName = parts[0] ? parts[0].trim() : "";
+            const charName       = parts[1] ? parts[1].trim() : msg.who;
+
+            if (!ingredientName) {
+                sendChat("System", `/w "${msg.who}" Invalid ingredient.`, null, { noarchive: true });
+                return;
+            }
+
+            const characters = findObjs({ _type: "character", name: charName });
+            if (characters.length === 0) {
+                return;
+            }
+            const charId = characters[0].id;
+
+            const key         = `${ingredientName}:::${charName}`;
+            const ingredients = state.WuxCookingEvent.ingredients;
+            const ingredient  = ingredients[key];
+            if (!ingredient) {
+                return;
+            }
+
+            const previousRecipe = getCurrentRecipeName();
+            const removedQuantity = ingredient.quantity;
+
+            deleteCookingRow(charId, ingredient.rowId);
+            delete ingredients[key];
+
+            addGoodsToCharacter(charId, { [ingredientName]: removedQuantity });
+
+            const recipeChanged = getCurrentRecipeName() !== previousRecipe;
+            broadcastCookingUpdate(recipeChanged);
         },
 
         parseComponentRequirements = function (componentsStr) {
@@ -1110,8 +1483,12 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             return "Tasty Meal";
         },
 
-        commandCook = function (msg) {
-            if (!playerIsGM(msg.playerid)) {
+        // Content (optional): a character name — used by each character's own "Cook Meal"
+        // sheet button so any participant can trigger the cook as themselves. When omitted,
+        // falls back to the classic GM/selected-token flow.
+        commandCook = function (msg, content) {
+            const charName = content ? content.trim() : "";
+            if (!charName && !playerIsGM(msg.playerid)) {
                 sendChat("System", `/w "${msg.who}" Only GMs can trigger the cook.`, null, { noarchive: true });
                 return;
             }
@@ -1125,8 +1502,12 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 return;
             }
 
-            const targets      = TokenReference.GetTokenTargetDataArray(msg);
-            const cookTarget   = targets.length > 0 ? targets[0] : null;
+            const cookTarget   = charName
+                ? TargetReference.GetTargetDataByName(charName)
+                : (function () {
+                    const targets = TokenReference.GetTokenTargetDataArray(msg);
+                    return targets.length > 0 ? targets[0] : null;
+                })();
             const cookSkillVar = WuxDef.GetVariable("Skill_Cook");
             const cookCharId   = cookTarget ? cookTarget.charId : null;
 
@@ -1157,9 +1538,14 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                     }
                 });
 
+                Object.values(state.WuxCookingEvent.tokens).forEach(function (participant) {
+                    clearCookingDataForToken(participant);
+                });
+
                 state.WuxCookingEvent.active = false;
                 state.WuxCookingEvent.initiatorName = "";
                 state.WuxCookingEvent.ingredients = {};
+                state.WuxCookingEvent.tokens = {};
 
                 const rollDisplay = Format.ShowTooltip(roll.total, roll.message);
                 const giveMealCmd = hasSavor
@@ -1214,8 +1600,14 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 case "!addingredient":
                     commandAddIngredient(msg, content);
                     break;
+                case "!removeingredient":
+                    commandRemoveIngredient(msg, content);
+                    break;
+                case "!deleteingredient":
+                    commandDeleteIngredient(msg, content);
+                    break;
                 case "!cook":
-                    commandCook(msg);
+                    commandCook(msg, content);
                     break;
                 case "!viewcooking":
                     commandViewCooking(msg);

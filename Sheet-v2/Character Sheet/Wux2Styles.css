@@ -2126,8 +2126,11 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     display: inline-block;
     width: 40px;
 
-    line-height: 12px;
-    font-size: 10px;
+    line-height: 16px;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+    color: #e1e1e1;
 }
 
 .wuxEquipableName .wuxSubHeader
