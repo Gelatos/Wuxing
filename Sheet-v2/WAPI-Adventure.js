@@ -682,9 +682,7 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             const ingredients   = state.WuxCookingEvent.ingredients;
             const totalQuantity = Object.values(ingredients).reduce(function (sum, ing) { return sum + ing.quantity; }, 0);
             const feeds         = Math.floor(totalQuantity / 5);
-            return totalQuantity >= 5
-                ? `Feeds: ${feeds} (${totalQuantity} ingredient${totalQuantity !== 1 ? "s" : ""})`
-                : `Feeds: None (min 5 ingredients to cook)`;
+            return `Feeds: ${feeds} (${totalQuantity} ingredient${totalQuantity !== 1 ? "s" : ""})`;
         },
 
         // Returns the feeds text plus how many people are involved in the cooking event
