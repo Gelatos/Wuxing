@@ -1026,6 +1026,10 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 buildBaseFilterButtons = function () {
                     let titleDef = WuxDef.Get("TechBaseFilter");
+                    let clearAllDef = WuxDef.Get("Action_ClearFilter");
+                    let customFilterDef = WuxDef.Get("Action_CustomFilter");
+                    let sectionDefinition = WuxDef.Get("Action_FormeTechniques");
+                    let filterField = sectionDefinition.getAttribute(WuxDef._learn);
                     let baseGroups = WuxDef.Filter([
                         new DatabaseFilterData("group", "TechBaseFilter"),
                         new DatabaseFilterData("subGroup", "BaseGroup")
@@ -1042,7 +1046,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         let items = [];
                         for (let j = 0; j < groupButtons.length; j++) {
                             items.push(WuxSheetMain.Table.FlexTableGroup(
-                                WuxSheetMain.Button(groupButtons[j].getAttribute(), groupButtons[j].getTitle(), "wuxWidth120"),
+                                WuxSheetMain.InteractionElement.BuildCheckboxInput(
+                                    groupButtons[j].getAttribute(), groupButtons[j].getTitle()),
                                 " wuxTechBaseFilterButtonGroup"));
                         }
 
@@ -1054,8 +1059,23 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                         filterOptions.push(WuxSheetMain.Table.FlexTableGroup(categoryHeader + categoryContent));
                     }
-                    return WuxSheetMain.Header(titleDef.getTitle()) +
-                        WuxSheetMain.MultiRowGroup(filterOptions, WuxSheetMain.Table.FlexTable, 1);
+
+                    let clearAllButton = WuxSheetMain.Table.FlexTableGroup(
+                        WuxSheetMain.Button(clearAllDef.getAttribute(), clearAllDef.getTitle(), "wuxWidth120"),
+                        " wuxTechBaseFilterButtonGroup");
+
+                    let customFilterButton = WuxSheetMain.Table.FlexTableGroup(
+                        WuxSheetMain.Button(filterField, customFilterDef.getTitle(), "wuxWidth120"),
+                        " wuxTechBaseFilterButtonGroup");
+
+                    let sectionExpandField = titleDef.getAttribute(WuxDef._expand);
+                    let sectionHeader = WuxSheetMain.Header(
+                        WuxSheetMain.CollapsibleHeader(`<span>${titleDef.getTitle()}</span>`, sectionExpandField));
+                    let sectionContent = WuxSheetMain.HiddenAuxField(sectionExpandField,
+                        WuxSheetMain.Table.FlexTable(clearAllButton + customFilterButton) +
+                        WuxSheetMain.MultiRowGroup(filterOptions, WuxSheetMain.Table.FlexTable, 1));
+
+                    return sectionHeader + sectionContent;
                 },
 
                 buildJobSelection = function () {
@@ -1176,10 +1196,10 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     headerButtons += WuxSheetMain.HiddenField(loadFormeField, WuxSheetMain.Button(loadFormeDef.getAttribute(),
                         `<span class='wuxStyleHeaderButtonIcon'>&#10227;</span>${loadFormeDef.getTitle(`<span name="${loadFormeField}"></span>`)}`,
                         "wuxStyleHeaderButton"));
-                    headerButtons += WuxSheetMain.Button(filterField,
-                        "<span class='wuxStyleHeaderButtonIcon'>&#9776;</span> Filter", "wuxStyleHeaderButton");
-                    headerButtons += WuxSheetMain.HiddenSpanField(removeFilterField, WuxSheetMain.Button(removeFilterField,
-                        "<span class='wuxStyleHeaderButtonIconClear'>&#10008;</span> Remove Filter", "wuxStyleHeaderButton", "0"));
+                    // headerButtons += WuxSheetMain.Button(filterField,
+                    //     "<span class='wuxStyleHeaderButtonIcon'>&#9776;</span> Filter", "wuxStyleHeaderButton");
+                    // headerButtons += WuxSheetMain.HiddenSpanField(removeFilterField, WuxSheetMain.Button(removeFilterField,
+                    //     "<span class='wuxStyleHeaderButtonIconClear'>&#10008;</span> Remove Filter", "wuxStyleHeaderButton", "0"));
 
                     headerButtons = `${WuxSheet.MainPageDisplayInput()}
                         ${WuxSheet.PageDisplay("Actions",

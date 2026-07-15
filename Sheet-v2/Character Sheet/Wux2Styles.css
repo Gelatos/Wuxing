@@ -1077,6 +1077,11 @@ button.wuxPostButton[type=roll]::before {
 	padding: 5px 5px 5px 0;
 }
 
+.wuxTechBaseFilterButtonGroup .wuxInteractiveContent
+{
+	color: #d0d0d0;
+}
+
 .wuxFlexTableItemGroup3
 {
 	flex: 3;

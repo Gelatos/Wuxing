@@ -247,58 +247,123 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             attributeHandler.run();
         },
 
-        quickFilterFormeActions = function (eventinfo) {
-            Debug.Log("Quick Filter Forme Actions");
-            let allBaseFilters = WuxDef.Filter([new DatabaseFilterData("group", "TechBaseFilter")]);
-            let pressedDef = null;
-            for (let i = 0; i < allBaseFilters.length; i++) {
-                if (allBaseFilters[i].getVariable() === eventinfo.sourceAttribute) {
-                    pressedDef = allBaseFilters[i];
-                    break;
-                }
-            }
-            if (pressedDef == null) {
-                Debug.Log(`No TechBaseFilter definition found for attribute: ${eventinfo.sourceAttribute}`);
-                return;
-            }
+        getBaseFilterLeafDefinitions = function () {
+            return WuxDef.Filter([new DatabaseFilterData("group", "TechBaseFilter")])
+                .filter(def => def.subGroup !== "BaseGroup");
+        },
 
-            let description = pressedDef.getDescription();
-            if (description === "") {
-                Debug.Log(`No filter rules defined for "${pressedDef.getTitle()}"`);
-                return;
-            }
-
-            let filters = [];
-            let rules = description.split("\n").flatMap(line => line.split(";"));
-            for (let rule of rules) {
-                rule = rule.trim();
-                if (rule === "") continue;
-                let colonIndex = rule.indexOf(":");
-                if (colonIndex === -1) continue;
-                let key = rule.substring(0, colonIndex).trim();
-                let values = rule.substring(colonIndex + 1).split(",").map(v => v.trim()).filter(v => v !== "");
-                if (values.length === 0) continue;
-                filters.push(new DatabaseFilterData(key, values.length === 1 ? values[0] : values));
-            }
-
-            if (filters.length === 0) {
-                Debug.Log(`No valid filter rules found for "${pressedDef.getTitle()}"`);
-                return;
-            }
-
+        applyBaseFilters = function (filters) {
             // Write the filter JSON to _filter so the "Remove Filter" button becomes visible,
             // and apply the filter directly since setAttrs is always silent and won't trigger onChange.
             let filterVariable = WuxDef.GetVariable("Action_FormeTechniques", WuxDef._filter);
+            let filtersToStore = filters.length > 0 ? filters : 0;
             let loader = new LoadingScreenHandler();
             loader.showLoadingScreen(() => {
                 let attributeHandler = new WorkerAttributeHandler();
-                attributeHandler.addUpdate(filterVariable, JSON.stringify(filters));
-                updateAllFormeActions(attributeHandler, filters);
+                attributeHandler.addUpdate(filterVariable, JSON.stringify(filtersToStore));
+                updateAllFormeActions(attributeHandler, filters.length > 0 ? filters : undefined);
                 attributeHandler.addFinishCallback(() => {
                     loader.hideLoadingScreen();
                 });
                 attributeHandler.run();
             });
+        },
+
+        getBaseFilterCategoryKeys = function () {
+            let baseGroups = WuxDef.Filter([
+                new DatabaseFilterData("group", "TechBaseFilter"),
+                new DatabaseFilterData("subGroup", "BaseGroup")
+            ]);
+            let categoryKeyByTitle = {};
+            baseGroups.forEach(groupDef => {
+                categoryKeyByTitle[groupDef.getTitle()] = groupDef.getDescription();
+            });
+            return categoryKeyByTitle;
+        },
+
+        quickFilterFormeActions = function () {
+            Debug.Log("Quick Filter Forme Actions");
+            let categoryKeyByTitle = getBaseFilterCategoryKeys();
+            let allBaseFilters = getBaseFilterLeafDefinitions();
+            let filterVariables = allBaseFilters.map(def => def.getVariable());
+
+            // These two filters compute their match values dynamically instead of from a
+            // static description: Job follows whichever style is currently equipped in the
+            // Job Forme slot, and Style follows whichever styles the player has learned.
+            let styleWorker = new WuxStyleWorkerBuild();
+            let jobSlotVariable = WuxDef.GetVariable("Forme_JobSlot");
+
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod(filterVariables);
+            attributeHandler.addMod(styleWorker.attrBuildDraft);
+            attributeHandler.addMod(jobSlotVariable);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                styleWorker.setBuildStatsDraft(attrHandler);
+                let equippedJobStyle = attrHandler.parseString(jobSlotVariable);
+                let learnedStyleNames = styleWorker.getStyles().map(technique => technique.name);
+
+                let mergedRules = {};
+                // A checked box always claims its key, even with zero values - an empty value
+                // list still filters correctly (Database.filter treats it as "match nothing"),
+                // so checking e.g. Style with no styles learned should show nothing, not everything.
+                let addValues = function (key, values) {
+                    if (mergedRules[key] == undefined) {
+                        mergedRules[key] = new Set();
+                    }
+                    values.forEach(v => mergedRules[key].add(v));
+                };
+
+                for (let def of allBaseFilters) {
+                    if (attrHandler.parseString(def.getVariable()) !== "on") {
+                        continue;
+                    }
+
+                    if (def.name === "TechBaseFilter_Job") {
+                        addValues("style", equippedJobStyle !== "" ? [equippedJobStyle] : []);
+                        continue;
+                    }
+                    if (def.name === "TechBaseFilter_Style") {
+                        // sortingGroups.style[<style name>] only lists that style's variant
+                        // techniques, not the base style technique itself - so also match the
+                        // broad "Style" category to pick up the learned base(s). This can't leak
+                        // in unlearned styles' bases since checkTechniqueIsVisibleInFilter only
+                        // ever runs against techniques already registered in the kit.
+                        addValues("style", learnedStyleNames.length > 0 ? learnedStyleNames.concat("Style") : []);
+                        continue;
+                    }
+
+                    let key = categoryKeyByTitle[def.subGroup];
+                    if (key == undefined || key === "") {
+                        Debug.Log(`No filter key defined for category "${def.subGroup}"`);
+                        continue;
+                    }
+                    let description = def.getDescription();
+                    if (description === "") {
+                        continue;
+                    }
+                    addValues(key, description.split(",").map(v => v.trim()).filter(v => v !== ""));
+                }
+
+                let filters = Object.keys(mergedRules).map(key => {
+                    let values = Array.from(mergedRules[key]);
+                    return new DatabaseFilterData(key, values.length === 1 ? values[0] : values);
+                });
+                applyBaseFilters(filters);
+            });
+            attributeHandler.run();
+        },
+
+        clearBaseFilterCheckboxes = function (attributeHandler) {
+            let allBaseFilters = getBaseFilterLeafDefinitions();
+            allBaseFilters.forEach(def => attributeHandler.addUpdate(def.getVariable(), 0));
+        },
+
+        clearBaseFilters = function () {
+            Debug.Log("Clear All Base Filters");
+            let attributeHandler = new WorkerAttributeHandler();
+            clearBaseFilterCheckboxes(attributeHandler);
+            attributeHandler.run();
+            applyBaseFilters([]);
         },
 
         updateTechniqueChangeVisibility = function () {
@@ -341,6 +406,8 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         RemoveAllOldStyleData: removeAllOldStyleData,
         SetCustomTechnique: setCustomTechnique,
         QuickFilterFormeActions: quickFilterFormeActions,
+        ClearBaseFilters: clearBaseFilters,
+        ClearBaseFilterCheckboxes: clearBaseFilterCheckboxes,
         UpdateTechniqueChangeVisibility: updateTechniqueChangeVisibility,
         TriggerBuilderActionUpdate: triggerBuilderActionUpdate,
         OnEnterActionsPage: onEnterActionsPage,
@@ -971,14 +1038,16 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
         WuxWorkerActionsService.SetTechniqueBoosters(attrHandler);
     }
     updateHeaderDictionary() {
-        let entries = Object.entries(this.techDictionary.values)
+        let visibleEntries = Object.entries(this.techDictionary.values)
             .filter(([, v]) => v.isVisible && !v.isHeader)
             .sort((a, b) => a[1].sortOrder - b[1].sortOrder);
 
+        let sectionsWithVisibleMembers = new Set();
         let lastSectionName = undefined;
         let offset = 0;
-        entries.forEach(([, techniqueData]) => {
+        visibleEntries.forEach(([, techniqueData]) => {
             let sectionName = techniqueData.technique.action || "Other";
+            sectionsWithVisibleMembers.add(sectionName);
             if (sectionName != lastSectionName) {
                 let headerKey = `__Header_${sectionName}__`;
                 this.techDictionary.add(headerKey, {
@@ -997,6 +1066,30 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
             techniqueData.sortOrder += offset;
         });
         this.techSorter.listSize += offset;
+
+        // A section can have active members in the kit that are all currently filtered out,
+        // leaving it with zero visible members. Explicitly register a hidden header for those
+        // too, so an existing header row gets hidden via the same isVisible toggle every other
+        // technique row already relies on, instead of depending on the row-removal cleanup path.
+        let allSections = new Set();
+        Object.values(this.techDictionary.values).forEach(v => {
+            if (v.isHeader || !v.isActive) return;
+            allSections.add(v.technique.action || "Other");
+        });
+        allSections.forEach(sectionName => {
+            if (sectionsWithVisibleMembers.has(sectionName)) return;
+            let headerKey = `__Header_${sectionName}__`;
+            this.techDictionary.add(headerKey, {
+                technique: {name: headerKey},
+                techniqueRank: 0,
+                isSet: false,
+                isActive: true,
+                isVisible: false,
+                isHeader: true,
+                headerText: sectionName,
+                sortOrder: -1
+            });
+        });
     }
     addAllBasicTechniques() {
         let allBasicTechniques = this.styleWorker.getAllBasicTechniqueData();

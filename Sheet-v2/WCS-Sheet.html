@@ -14370,103 +14370,288 @@
 				<div class="wuxTab">
 					<div class="wuxSectionBlock wuxLayoutItem">
 						<div class="wuxTabContent">
-							<div class="wuxHeader">Quick Filters</div>
-							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader2"><span class="wuxStyleHeaderButtonContainer">
+							<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
 
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter-general_expand" value="0">
-											<span class="wuxHiddenInlineField">
-												<div class="wuxButton wuxStyleHeaderButton">
-													<input type="checkbox" name="attr_techbasefilter-general_expand">
-													<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
-												</div>
-											</span>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter_expand" value="0">
+									<span class="wuxHiddenInlineField">
+										<div class="wuxButton wuxStyleHeaderButton">
+											<input type="checkbox" name="attr_techbasefilter_expand">
+											<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
+										</div>
+									</span>
 
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter-general_expand" value="0">
-											<span class="wuxHiddenInlineAuxField">
-												<div class="wuxButton wuxStyleHeaderButton">
-													<input type="checkbox" name="attr_techbasefilter-general_expand">
-													<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
-												</div>
-											</span>
+									<input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter_expand" value="0">
+									<span class="wuxHiddenInlineAuxField">
+										<div class="wuxButton wuxStyleHeaderButton">
+											<input type="checkbox" name="attr_techbasefilter_expand">
+											<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
+										</div>
+									</span>
 
-										</span><span>General Type</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter-general_expand" value="0">
-									<div class="wuxHiddenAuxField">
-										<div class="wuxFlexTable">
-											<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
-												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_techbasefilter-combat">
-													<span>Combat Techniques</span>
-												</div>
-											</div>
-											<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
-												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_techbasefilter-social">
-													<span>Social Techniques</span>
-												</div>
-											</div>
-											<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
-												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_techbasefilter-utility">
-													<span>Utility Techniques</span>
-												</div>
-											</div>
+								</span><span>Technique Filters</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter_expand" value="0">
+							<div class="wuxHiddenAuxField">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
+										<div class="wuxButton wuxWidth120">
+											<input type="checkbox" name="attr_act-clearfilter">
+											<span>Clear Selection</span>
 										</div>
 									</div>
-
+									<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
+										<div class="wuxButton wuxWidth120">
+											<input type="checkbox" name="attr_act-formetechniques_learn">
+											<span>Custom Filter</span>
+										</div>
+									</div>
 								</div>
-							</div>
-							<div class="wuxFlexTable">
-								<div class="wuxFlexTableItemGroup">
-									<div class="wuxHeader2"><span class="wuxStyleHeaderButtonContainer">
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader2"><span class="wuxStyleHeaderButtonContainer">
 
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter-actiontype_expand" value="0">
-											<span class="wuxHiddenInlineField">
-												<div class="wuxButton wuxStyleHeaderButton">
-													<input type="checkbox" name="attr_techbasefilter-actiontype_expand">
-													<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
-												</div>
-											</span>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter-generalcategory_expand" value="0">
+												<span class="wuxHiddenInlineField">
+													<div class="wuxButton wuxStyleHeaderButton">
+														<input type="checkbox" name="attr_techbasefilter-generalcategory_expand">
+														<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
+													</div>
+												</span>
 
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter-actiontype_expand" value="0">
-											<span class="wuxHiddenInlineAuxField">
-												<div class="wuxButton wuxStyleHeaderButton">
-													<input type="checkbox" name="attr_techbasefilter-actiontype_expand">
-													<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
-												</div>
-											</span>
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter-generalcategory_expand" value="0">
+												<span class="wuxHiddenInlineAuxField">
+													<div class="wuxButton wuxStyleHeaderButton">
+														<input type="checkbox" name="attr_techbasefilter-generalcategory_expand">
+														<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
+													</div>
+												</span>
 
-										</span><span>Action Type</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter-actiontype_expand" value="0">
-									<div class="wuxHiddenAuxField">
-										<div class="wuxFlexTable">
-											<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
-												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_techbasefilter-majoractions">
-													<span>Major Actions</span>
+											</span><span>General Category</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter-generalcategory_expand" value="0">
+										<div class="wuxHiddenAuxField">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techbasefilter-combat" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-combat" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-combat" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-combat" />
+																Combat Techniques
+															</div>
+														</div>
+													</div>
 												</div>
-											</div>
-											<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
-												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_techbasefilter-assistreaction">
-													<span>Off-Turn Actions</span>
+												<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techbasefilter-social" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-social" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-social" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-social" />
+																Social Techniques
+															</div>
+														</div>
+													</div>
 												</div>
-											</div>
-											<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
-												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_techbasefilter-swiftactions">
-													<span>Swift Actions</span>
-												</div>
-											</div>
-											<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
-												<div class="wuxButton wuxWidth120">
-													<input type="checkbox" name="attr_techbasefilter-passiveactions">
-													<span>Passive Actions</span>
+												<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techbasefilter-utility" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-utility" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-utility" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-utility" />
+																Utility Techniques
+															</div>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
 
+									</div>
+								</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader2"><span class="wuxStyleHeaderButtonContainer">
+
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter-generaltype_expand" value="0">
+												<span class="wuxHiddenInlineField">
+													<div class="wuxButton wuxStyleHeaderButton">
+														<input type="checkbox" name="attr_techbasefilter-generaltype_expand">
+														<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
+													</div>
+												</span>
+
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter-generaltype_expand" value="0">
+												<span class="wuxHiddenInlineAuxField">
+													<div class="wuxButton wuxStyleHeaderButton">
+														<input type="checkbox" name="attr_techbasefilter-generaltype_expand">
+														<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
+													</div>
+												</span>
+
+											</span><span>General Type</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter-generaltype_expand" value="0">
+										<div class="wuxHiddenAuxField">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techbasefilter-basic" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-basic" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-basic" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-basic" />
+																Basic Techniques
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techbasefilter-job" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-job" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-job" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-job" />
+																Job Techniques
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techbasefilter-style" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-style" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-style" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-style" />
+																Style Techniques
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techbasefilter-gear" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-gear" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-gear" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-gear" />
+																Gear Techniques
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</div>
+								<div class="wuxFlexTable">
+									<div class="wuxFlexTableItemGroup">
+										<div class="wuxHeader2"><span class="wuxStyleHeaderButtonContainer">
+
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter-actiontype_expand" value="0">
+												<span class="wuxHiddenInlineField">
+													<div class="wuxButton wuxStyleHeaderButton">
+														<input type="checkbox" name="attr_techbasefilter-actiontype_expand">
+														<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
+													</div>
+												</span>
+
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter-actiontype_expand" value="0">
+												<span class="wuxHiddenInlineAuxField">
+													<div class="wuxButton wuxStyleHeaderButton">
+														<input type="checkbox" name="attr_techbasefilter-actiontype_expand">
+														<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
+													</div>
+												</span>
+
+											</span><span>Action Type</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter-actiontype_expand" value="0">
+										<div class="wuxHiddenAuxField">
+											<div class="wuxFlexTable">
+												<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techbasefilter-majoractions" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-majoractions" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-majoractions" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-majoractions" />
+																Major Actions
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techbasefilter-assistreaction" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-assistreaction" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-assistreaction" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-assistreaction" />
+																Off-Turn Actions
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techbasefilter-swiftactions" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-swiftactions" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-swiftactions" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-swiftactions" />
+																Swift Actions
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techbasefilter-passiveactions" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-passiveactions" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-passiveactions" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techbasefilter-passiveactions" />
+																Passive Actions
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+									</div>
 								</div>
 							</div>
 							<div class="wuxHeader"><input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
@@ -14478,16 +14663,6 @@
 												<span><span class='wuxStyleHeaderButtonIcon'>&#10227;</span>Load Techs (<span name="attr_act-formeloadcount"></span> more)</span>
 											</div>
 										</div>
-										<div class="wuxButton wuxStyleHeaderButton">
-											<input type="checkbox" name="attr_act-formetechniques_learn">
-											<span><span class='wuxStyleHeaderButtonIcon'>&#9776;</span> Filter</span>
-										</div><input type="hidden" class="wuxHiddenField-flag" name="attr_act-formetechniques_filter" value="0">
-										<span class="wuxHiddenInlineField">
-											<div class="wuxButton wuxStyleHeaderButton">
-												<input type="checkbox" name="attr_act-formetechniques_filter" value="0">
-												<span><span class='wuxStyleHeaderButtonIconClear'>&#10008;</span> Remove Filter</span>
-											</div>
-										</span>
 									</span>
 								</div><span>Techniques</span>
 							</div>
@@ -19379,8 +19554,11 @@ WuxWorkerInspectPopup.OpenRecommendedStylesInspection()
 on("change:autofilter-meleeweapons change:autofilter-lightblade change:autofilter-heavyblade change:autofilter-hammer change:autofilter-polearm change:autofilter-whip change:autofilter-rangedweapons change:autofilter-bow change:autofilter-handgun change:autofilter-longshot change:autofilter-thrownblade change:autofilter-athletics change:autofilter-forcefulfist change:autofilter-grappler change:autofilter-swiftform change:autofilter-mobility change:autofilter-acrobatics change:autofilter-stealth change:autofilter-social change:autofilter-favorbuilding change:autofilter-request change:autofilter-influence change:autofilter-emotion change:autofilter-woodmagic change:autofilter-plantmartial change:autofilter-plants change:autofilter-wood change:autofilter-wind change:autofilter-mana change:autofilter-woodsound change:autofilter-woodhealing change:autofilter-woodempowering change:autofilter-firemagic change:autofilter-flamemartial change:autofilter-flames change:autofilter-glass change:autofilter-smoke change:autofilter-firehealing change:autofilter-fireempowering change:autofilter-earthmagic change:autofilter-sandmartial change:autofilter-rock change:autofilter-terrain change:autofilter-gravity change:autofilter-earthempowering change:autofilter-metalmagic change:autofilter-lightningmartial change:autofilter-ironsand change:autofilter-metal change:autofilter-lightning change:autofilter-stasis change:autofilter-metalempowering change:autofilter-watermagic change:autofilter-icemartial change:autofilter-water change:autofilter-cold change:autofilter-ice change:autofilter-waterhealing change:autofilter-watersound change:autofilter-waterempowering change:autofilter-specialmagic change:autofilter-ether change:autofilter-corrosion change:autofilter-light change:autofilter-shadow change:autofilter-blood change:autofilter-time", function (eventinfo) {
 WuxWorkerInspectPopup.OpenStyleFilterTechniqueInspection(eventinfo)
 });
-on("change:techbasefilter-general change:techbasefilter-combat change:techbasefilter-social change:techbasefilter-utility change:techbasefilter-actiontype change:techbasefilter-majoractions change:techbasefilter-assistreaction change:techbasefilter-swiftactions change:techbasefilter-passiveactions", function (eventinfo) {
-WuxWorkerActions.QuickFilterFormeActions(eventinfo)
+on("change:techbasefilter-combat change:techbasefilter-social change:techbasefilter-utility change:techbasefilter-basic change:techbasefilter-job change:techbasefilter-style change:techbasefilter-gear change:techbasefilter-majoractions change:techbasefilter-assistreaction change:techbasefilter-swiftactions change:techbasefilter-passiveactions", function (eventinfo) {
+WuxWorkerActions.QuickFilterFormeActions()
+});
+on("change:act-clearfilter", function (eventinfo) {
+WuxWorkerActions.ClearBaseFilters()
 });
 on("change:adv-ap_job change:perk-spirit_conduit", function (eventinfo) {
 WuxWorkerActions.UpdateTechniqueChangeVisibility()

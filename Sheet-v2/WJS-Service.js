@@ -726,7 +726,14 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 	initializeData() {
 		let worker = this;
 		this.iterateBuildStats(function (techniqueVariableData) {
+			// Entries in this build-stats blob are keyed inconsistently depending on how they
+			// were written: rankTechnique() (Worker-Actions.js) stores by attribute variable
+			// name, while learning a style (TechniqueInspectionPopup.performAddItem in
+			// Worker-InspectPopup.js) stores by the technique's plain display name. Try both.
 			let technique = WuxTechs.GetByVariableName(techniqueVariableData.name);
+			if (technique == undefined) {
+				technique = WuxTechs.Get(techniqueVariableData.name);
+			}
 			if (technique == undefined) {
 				return;
 			}

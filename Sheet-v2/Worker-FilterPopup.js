@@ -150,6 +150,10 @@ class TechniqueFilterPopup extends FilterPopup {
         loader.showLoadingScreen(() => {
             let filterPopup = this;
             this.attributeHandler.addMod(this.filterDefinitions.getAllVariables());
+            // A custom filter from the popup replaces whatever the quick filter checkboxes
+            // had set, so uncheck them - otherwise they'd still show as active while no
+            // longer reflecting what's actually being filtered.
+            WuxWorkerActions.ClearBaseFilterCheckboxes(this.attributeHandler);
 
             this.attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let filterPopupAttrHandler = new FilterPopupAttributeHandler(attrHandler, filterPopup.filterDefinitions, filterPopup.equipmentFilterDefinitions);

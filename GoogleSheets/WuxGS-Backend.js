@@ -826,6 +826,7 @@ var ActionBuilder = ActionBuilder || (function () {
             output += listenerTechniquesFilterPopup();
             output += listenerStyleAutoFilterButtons();
             output += listenerBaseFilterButtons();
+            output += listenerClearBaseFilters();
             output += listenerUpdateTechniqueChangeVisibility();
             return output;
         },
@@ -894,12 +895,18 @@ var ActionBuilder = ActionBuilder || (function () {
             return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerInspectPopup.OpenStyleFilterTechniqueInspection(eventinfo)`, true);
         },
         listenerBaseFilterButtons = function () {
-            let baseFilters = WuxDef.Filter([new DatabaseFilterData("group", "TechBaseFilter")]);
+            let baseFilters = WuxDef.Filter([new DatabaseFilterData("group", "TechBaseFilter")])
+                .filter(def => def.subGroup !== "BaseGroup");
             let groupVariableNames = [];
             for (let i = 0; i < baseFilters.length; i++) {
                 groupVariableNames.push(baseFilters[i].getVariable());
             }
-            return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerActions.QuickFilterFormeActions(eventinfo)`, true);
+            return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerActions.QuickFilterFormeActions()`, true);
+        },
+        listenerClearBaseFilters = function () {
+            return WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Action_ClearFilter")],
+                `WuxWorkerActions.ClearBaseFilters()`, true);
         },
         listenerUpdateTechniqueChangeVisibility = function () {
             return WuxSheetBackend.OnChange(
