@@ -1165,10 +1165,14 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 printFormTechniqueFullActionDisplay = function () {
                     let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilderUsable(WuxDef.Get("Action"));
+                    let techDisplayTypeField = getActionTypeAttribute("TechDisplayType");
+                    let headerContent = `<div class="wuxFeatureSectionHeader">
+                        ${WuxSheetMain.Header2(`<span name="${getActionTypeAttribute("TechName")}"></span>`)}
+                    </div>`;
 
                     return `<input type="hidden" name="${WuxDef.GetAttribute("Action_Use")}" value="" />
                     <input type="hidden" name="${getActionTypeAttribute("TechVersion")}" value="" />
-                    ${techniqueDisplayBuilder.print()}`;
+                    ${WuxSheetMain.HiddenFieldToggle(techDisplayTypeField, headerContent, techniqueDisplayBuilder.print())}`;
                 },
 
                 getActionTypeAttribute = function (attribute, suffix) {

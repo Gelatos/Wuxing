@@ -1235,6 +1235,19 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.getVariable("TechRankUp", WuxDef._info), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechRankDown", WuxDef._info), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechDisplayType"), "0");
+	}
+	setHeaderInfo(headerKey, headerText) {
+		this.clearTechniqueInfo();
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechTrueName"), headerKey);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechVersion"), "1.0");
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechName"), headerText);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechDisplayType"), "1");
 	}
 	
 	calcAndSetVisibility(affinities, maxTier, cr) {

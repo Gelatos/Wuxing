@@ -2449,10 +2449,25 @@ input[type=hidden].wuxFilterFeature-flag[value="1"] + .wuxFeature
     display: none;
 }
 
-.wuxRepeatingFlexSection .wuxFeature 
+.wuxRepeatingFlexSection .wuxFeature
 {
     display: inline-block;
     flex: 1;
+}
+
+.wuxRepeatingFlexSection .wuxFeatureSectionHeader
+{
+    display: block;
+    flex: 1 1 100%;
+    min-width: 100vw;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding-top: 5px;
+}
+
+.wuxRepeatingFlexSection .wuxFeatureSectionHeader span
+{
+    font-size: 14px;
 }
 
 .wuxFeatureHeader,

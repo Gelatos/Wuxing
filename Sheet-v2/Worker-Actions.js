@@ -779,8 +779,14 @@ class FormeTechniqueDatabaseBase {
         return false;
     }
     updateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName) {
-        let techVersion = techniqueAttributeHandler.getTechniqueVersion();
         let techniqueData = this.techDictionary.get(techniqueName);
+        if (techniqueData.isHeader) {
+            techniqueAttributeHandler.setHeaderInfo(techniqueName, techniqueData.headerText);
+            this.techDictionary.get(techniqueName).isSet = true;
+            this.setRepeaterTechniqueVisibility(techniqueAttributeHandler, techniqueName);
+            return;
+        }
+        let techVersion = techniqueAttributeHandler.getTechniqueVersion();
         let technique = techniqueData.technique;
         technique.rank = techniqueData.techniqueRank;
         if (technique.version != techVersion) {
@@ -960,8 +966,37 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
         });
         formeTechDatabase.addGearItemTechniques(attrHandler);
         this.techSorter.getSortOrder("Action", formeTechDatabase.techDictionary);
+        this.updateHeaderDictionary();
         this.sortList = [this.techSorter.listSize];
         WuxWorkerActionsService.SetTechniqueBoosters(attrHandler);
+    }
+    updateHeaderDictionary() {
+        let entries = Object.entries(this.techDictionary.values)
+            .filter(([, v]) => v.isVisible && !v.isHeader)
+            .sort((a, b) => a[1].sortOrder - b[1].sortOrder);
+
+        let lastSectionName = undefined;
+        let offset = 0;
+        entries.forEach(([, techniqueData]) => {
+            let sectionName = techniqueData.technique.action || "Other";
+            if (sectionName != lastSectionName) {
+                let headerKey = `__Header_${sectionName}__`;
+                this.techDictionary.add(headerKey, {
+                    technique: {name: headerKey},
+                    techniqueRank: 0,
+                    isSet: false,
+                    isActive: true,
+                    isVisible: true,
+                    isHeader: true,
+                    headerText: sectionName,
+                    sortOrder: techniqueData.sortOrder + offset
+                });
+                offset++;
+                lastSectionName = sectionName;
+            }
+            techniqueData.sortOrder += offset;
+        });
+        this.techSorter.listSize += offset;
     }
     addAllBasicTechniques() {
         let allBasicTechniques = this.styleWorker.getAllBasicTechniqueData();
