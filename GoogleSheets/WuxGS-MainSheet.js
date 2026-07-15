@@ -304,8 +304,11 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return output;
         },
 
-        hiddenField = function (fieldName, contents) {
-            return `<input type="hidden" class="wuxHiddenField-flag" name="${fieldName}" value="0">
+        hiddenField = function (fieldName, contents, defaultValue) {
+            if (defaultValue == undefined) {
+                defaultValue = "0";
+            }
+            return `<input type="hidden" class="wuxHiddenField-flag" name="${fieldName}" value="${defaultValue}">
             <div class="wuxHiddenField">\n${contents}\n</div>\n`;
         },
 

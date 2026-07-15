@@ -1026,12 +1026,36 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 buildBaseFilterButtons = function () {
                     let titleDef = WuxDef.Get("TechBaseFilter");
-                    let baseFilters = WuxDef.Filter([new DatabaseFilterData("group", "TechBaseFilter")]);
-                    let items = [];
-                    for (let i = 0; i < baseFilters.length; i++) {
-                        items.push(WuxSheetMain.Button(baseFilters[i].getAttribute(), baseFilters[i].getTitle(), "wuxWidth120"));
+                    let baseGroups = WuxDef.Filter([
+                        new DatabaseFilterData("group", "TechBaseFilter"),
+                        new DatabaseFilterData("subGroup", "BaseGroup")
+                    ]);
+
+                    let filterOptions = [];
+                    for (let i = 0; i < baseGroups.length; i++) {
+                        let groupDef = baseGroups[i];
+                        let groupButtons = WuxDef.Filter([
+                            new DatabaseFilterData("group", "TechBaseFilter"),
+                            new DatabaseFilterData("subGroup", groupDef.getTitle())
+                        ]);
+
+                        let items = [];
+                        for (let j = 0; j < groupButtons.length; j++) {
+                            items.push(WuxSheetMain.Table.FlexTableGroup(
+                                WuxSheetMain.Button(groupButtons[j].getAttribute(), groupButtons[j].getTitle(), "wuxWidth120"),
+                                " wuxTechBaseFilterButtonGroup"));
+                        }
+
+                        let expandField = groupDef.getAttribute(WuxDef._expand);
+                        let categoryHeader = WuxSheetMain.Header2(
+                            WuxSheetMain.CollapsibleHeader(`<span>${groupDef.getTitle()}</span>`, expandField));
+                        let categoryContent = WuxSheetMain.HiddenAuxField(expandField,
+                            WuxSheetMain.Table.FlexTable(items.join("")));
+
+                        filterOptions.push(WuxSheetMain.Table.FlexTableGroup(categoryHeader + categoryContent));
                     }
-                    return WuxSheetMain.Header(titleDef.getTitle()) + WuxSheetMain.MultiRow(items.join(""));
+                    return WuxSheetMain.Header(titleDef.getTitle()) +
+                        WuxSheetMain.MultiRowGroup(filterOptions, WuxSheetMain.Table.FlexTable, 1);
                 },
 
                 buildJobSelection = function () {
