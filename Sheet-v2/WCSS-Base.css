@@ -125,6 +125,27 @@ input[type=number]::-webkit-inner-spin-button {
     flex: 1;
 }
 
+.wuxFormeTechRepeater .repcontainer > .repitem {
+    flex: 0 0 auto !important;
+    width: 240px !important;
+    min-width: 240px !important;
+    max-width: 240px !important;
+    box-sizing: border-box !important;
+}
+
+.wuxFormeTechRepeater .wuxFeature {
+    box-sizing: border-box;
+}
+
+.wuxFormeTechRepeater .repcontainer > .repitem:has(input[name*="techdisplaytype"]:not([value="0"])) {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden;
+}
+
 
 /*========================================
   Master Layout

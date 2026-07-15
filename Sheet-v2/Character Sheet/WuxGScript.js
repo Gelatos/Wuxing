@@ -12546,7 +12546,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                     let actionDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible"),
                         printFormTechniqueFullActionDisplay());
-                    let displayTechniquesContents = buildRepeater(repeatingVariable, actionDisplay);
+                    let displayTechniquesContents = buildRepeater(repeatingVariable, actionDisplay, "wuxFormeTechRepeater");
 
                     return `${WuxSheetMain.Header(header)}
                     ${displayTechniquesContents}
@@ -12655,8 +12655,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     </div>`;
                 },
 
-                buildRepeater = function (repeaterName, repeaterData) {
-                    return `<div class="wuxNoRepControl wuxRepeatingFlexSection">
+                buildRepeater = function (repeaterName, repeaterData, extraClass) {
+                    return `<div class="wuxNoRepControl wuxRepeatingFlexSection${extraClass != undefined ? ` ${extraClass}` : ""}">
                         <fieldset class="${repeaterName}">
                             ${repeaterData}
                         </fieldset>
