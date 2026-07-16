@@ -287,9 +287,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             let allBaseFilters = getBaseFilterLeafDefinitions();
             let filterVariables = allBaseFilters.map(def => def.getVariable());
 
-            // These two filters compute their match values dynamically instead of from a
-            // static description: Job follows whichever style is currently equipped in the
-            // Job Forme slot, and Style follows whichever styles the player has learned.
+            // The Style filter computes its match values dynamically instead of from a static
+            // description: it covers both the style currently equipped in the Job Forme slot
+            // and every individually learned style.
             let styleWorker = new WuxStyleWorkerBuild();
             let jobSlotVariable = WuxDef.GetVariable("Forme_JobSlot");
 
@@ -318,17 +318,19 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                         continue;
                     }
 
-                    if (def.name === "TechBaseFilter_Job") {
-                        addValues("style", equippedJobStyle !== "" ? [equippedJobStyle] : []);
-                        continue;
-                    }
                     if (def.name === "TechBaseFilter_Style") {
-                        // sortingGroups.style[<style name>] only lists that style's variant
+                        // "Job" and "Style" were merged into one checkbox, so this now needs to
+                        // cover both: the equipped job's style, plus every individually learned
+                        // style. sortingGroups.style[<style name>] only lists that style's variant
                         // techniques, not the base style technique itself - so also match the
-                        // broad "Style" category to pick up the learned base(s). This can't leak
-                        // in unlearned styles' bases since checkTechniqueIsVisibleInFilter only
-                        // ever runs against techniques already registered in the kit.
-                        addValues("style", learnedStyleNames.length > 0 ? learnedStyleNames.concat("Style") : []);
+                        // broad "Style" category to pick up the learned/equipped base(s). This
+                        // can't leak in unlearned styles' bases since checkTechniqueIsVisibleInFilter
+                        // only ever runs against techniques already registered in the kit.
+                        let styleNames = learnedStyleNames.slice();
+                        if (equippedJobStyle !== "") {
+                            styleNames.push(equippedJobStyle);
+                        }
+                        addValues("style", styleNames.length > 0 ? styleNames.concat("Style") : []);
                         continue;
                     }
 
