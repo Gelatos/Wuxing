@@ -109,6 +109,7 @@ class WorkerAttributeHandler extends AttributeHandler {
 			});
 		} catch(e) {
 			// No active character in sandbox — skip silently
+			Debug.LogError(`[WorkerAttributeHandler][run] Caught error: ${e.message}\n${e.stack}`);
 		}
 	}
 	
