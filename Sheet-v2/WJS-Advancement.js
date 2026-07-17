@@ -51,6 +51,18 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 				attributeHandler.addUpdate(WuxDef.GetVariable(key, WuxDef._info), "0");
 			}
 		},
+		goToNextSection = function () {
+			const sectionOrder = ["Origin", "Jobs", "Attributes", "Knowledge", "Gear", "Styles", "Advancement"];
+			let pageVar = WuxDef.GetVariable("Page");
+			let attributeHandler = new WorkerAttributeHandler();
+			attributeHandler.addMod(pageVar);
+			attributeHandler.addGetAttrCallback(function (attrHandler) {
+				let currentIndex = sectionOrder.indexOf(attrHandler.parseString(pageVar));
+				let nextIndex = Math.min(currentIndex + 1, sectionOrder.length - 1);
+				attrHandler.addUpdate(pageVar, sectionOrder[nextIndex]);
+			});
+			attributeHandler.run();
+		},
 		setAffinityValue = function (eventinfo) {
 			Debug.Log(`Setting ${eventinfo.sourceAttribute}`);
 
@@ -238,6 +250,7 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 
 	return {
 		FinishBuild: finishBuild,
+		GoToNextSection: goToNextSection,
 		SetAffinityValue: setAffinityValue,
 		SetBonusAttributes: setBonusAttributes,
 		SetInnateDefense: setInnateDefense,

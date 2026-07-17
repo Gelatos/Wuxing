@@ -185,15 +185,21 @@ input[type=number]::-webkit-inner-spin-button {
 ========================================*/
 
 .wuxMainContent {
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
     flex: 5;
 
     width: calc(100% - 90px);
 
     position: sticky;
     top: 80px;
-    height: calc(100vh - 100px);
-    max-height: calc(100vh - 100px);
+    height: calc(100vh - 150px);
+    max-height: calc(100vh - 150px);
+}
+
+.wuxMainContentScroll {
+    flex: 1;
+    min-height: 0;
 
     overflow-y: auto;
     overflow-x: hidden;
@@ -201,8 +207,25 @@ input[type=number]::-webkit-inner-spin-button {
     scrollbar-width: none; /* Firefox */
 }
 
-.wuxMainContent::-webkit-scrollbar {
+.wuxMainContentScroll::-webkit-scrollbar {
     display: none;
+}
+
+.wuxMainFooter {
+    flex-shrink: 0;
+
+    display: flex;
+    justify-content: flex-end;
+
+    padding: 5px 10px;
+
+    background: #1d1e1f;
+    border-top: 3px solid;
+    border-color: #DE9B72 transparent transparent transparent;
+}
+
+.wuxMainFooter .wuxTabButton {
+    flex: 0 0 auto;
 }
 
 input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxMainContent {
@@ -280,8 +303,8 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment {
     top: 80px;
 
     width: 80px;
-    height: calc(100vh - 100px);
-    max-height: calc(100vh - 100px);
+    height: calc(100vh - 150px);
+    max-height: calc(100vh - 150px);
     margin-right: 10px;
     padding: 0px;
 

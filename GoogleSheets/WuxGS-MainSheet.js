@@ -111,8 +111,33 @@ var WuxSheetMain = WuxSheetMain || (function () {
     const build = function (contents) {
             return `<input type="hidden" class="wuxSideBarExtend-flag" name="${WuxDef.GetAttribute("Page_Sidebar")}" />
         <div class="wuxMainContent">
+        <div class="wuxMainContentScroll">
         ${contents}
+        </div>
+        ${WuxSheet.PageSetPageDisplayInput()}
+        ${WuxSheet.PageDisplay("Builder", buildMainFooter())}
         </div>`;
+        },
+
+        buildMainFooter = function () {
+            let nextSectionDef = WuxDef.Get("Title_NextSection");
+            let nextSectionButton = `<div class="wuxMainFooter">
+            ${WuxSheetNavigation.BuildTabButton("checkbox", nextSectionDef.getAttribute(), nextSectionDef.getTitle(), nextSectionDef.getTitle(), false, "")}
+            </div>`;
+
+            let finishFieldName = `${WuxDef.GetAttribute("PageSet_Character Creator")}${WuxDef._finish}`;
+            let finishButton = `<div class="wuxMainFooter">
+            ${WuxSheetNavigation.BuildTabButton("checkbox", finishFieldName, "Finish", "Finish", false, "")}
+            </div>`;
+
+            return `${WuxSheet.MainPageDisplayInput()}
+            ${WuxSheet.PageDisplay("Origin", nextSectionButton)}
+            ${WuxSheet.PageDisplay("Jobs", nextSectionButton)}
+            ${WuxSheet.PageDisplay("Attributes", nextSectionButton)}
+            ${WuxSheet.PageDisplay("Knowledge", nextSectionButton)}
+            ${WuxSheet.PageDisplay("Gear", nextSectionButton)}
+            ${WuxSheet.PageDisplay("StylesData", nextSectionButton)}
+            ${WuxSheet.PageDisplay("Advancement", finishButton)}`;
         },
 
         tab = function (contents) {
@@ -1369,7 +1394,8 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         BuildTechniquesNavigation: buildTechniquesNavigation,
         BuildStylesNavigation: buildStylesNavigation,
         BuildTrainingPageNavigation: buildTrainingPageNavigation,
-        BuildAdvancementPageNavigation: buildAdvancementPageNavigation
+        BuildAdvancementPageNavigation: buildAdvancementPageNavigation,
+        BuildTabButton: buildTabButton
     };
 
 }());
