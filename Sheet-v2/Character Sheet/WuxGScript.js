@@ -9967,10 +9967,12 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return `<div class="wuxTabHeader">\n${contents}\n</div>`;
         },
 
-        collapsibleTab = function (fieldName, title, contents) {
+        collapsibleTab = function (fieldName, title, contents, infoDefinition) {
+            let infoButton = infoDefinition != undefined ? WuxSheetMain.Info.Button(infoDefinition.getAttribute(WuxDef._info)) : "";
+            let infoContents = infoDefinition != undefined ? WuxSheetMain.Info.DefaultContents(infoDefinition) : "";
             return `<div class="wuxSegment">
-            ${customInput("checkbox", fieldName, "wuxTab-flag", ` checked="checked"`)}
-            ${tabHeader(interactionElement.ExpandableBlockIcon(fieldName) + (title.startsWith("<") ? title : `<span>${title}</span>`))}
+            ${tabHeader(infoButton + (title.startsWith("<") ? title : `<span>${title}</span>`))}
+            ${infoContents}
             ${tab(contents)}
             </div>`;
         },
@@ -10999,69 +11001,45 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
 }());
 
 var WuxSheetNavigation = WuxSheetNavigation || (function () {
-    const overviewInfoContents = function (fieldName, tabFieldName) {
-        let output = "";
-        output += WuxSheet.PageDisplayInput(tabFieldName, "Overview");
-        output += WuxSheet.PageDisplay("Overview", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Overview")));
-        output += WuxSheet.PageDisplay("Details", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Details")));
-        output += WuxSheet.PageDisplay("Post", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Post")));
-        // output += WuxSheet.PageDisplay("Options", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Options")));
-        return WuxSheetMain.Info.Contents(fieldName, output);
-    };
-    const mainPageNavigation = function (tabTitle, subheader, infoAttribute, sideBarButtons) {
+    const mainPageNavigation = function (tabTitle, subheader, sideBarButtons) {
         let mainContents = ""
         mainContents += buildTabs(tabTitle, WuxDef.GetAttribute("Page"), ["Actions", "Gear", "Character"]);
         mainContents += sideBarButtons;
-        mainContents += buildMainSheetHeader(subheader, infoAttribute);
+        mainContents += buildMainSheetHeader(subheader);
 
         return mainContents;
     };
-    const buildMainSheetHeader = function (subheader, infoFieldName) {
+    const buildMainSheetHeader = function (subheader) {
         let header = `<input type="text" name="${WuxDef.GetAttribute("DisplayName")}" placeholder="Display Name" />`;
-        return buildHeader(header, subheader, infoFieldName);
+        return buildHeader(header, subheader);
     };
     const trainingPageNavigation = function (definition, subheader) {
         let fieldName = WuxDef.GetAttribute("PageSet_Training");
         let mainContents = "";
         mainContents += buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Knowledge", "Styles", "Training"]);
         mainContents += buildExitStickyButtons(fieldName, true);
-        mainContents += buildHeader("Training", subheader, definition.getAttribute(WuxDef._info));
+        mainContents += buildHeader("Training", subheader);
         return mainContents;
     };
     const advancementPageNavigation = function (definition, subheader) {
         let fieldName = WuxDef.GetAttribute("PageSet_Advancement");
         let mainContents = buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Styles", "Knowledge", "Attributes", "Jobs", "Advancement"]);
         mainContents += buildExitStickyButtons(fieldName, true);
-        mainContents += buildHeader("Advancement", subheader, definition.getAttribute(WuxDef._info));
+        mainContents += buildHeader("Advancement", subheader);
         return mainContents;
     };
     const techniquesCorePageNavigation = function () {
         let tabFieldName = WuxDef.GetAttribute("Page");
-        let learnDefinition = WuxDef.Get("Page_LearnTechniques");
         let setStyleDefinition = WuxDef.Get("Page_SetStyles");
         let actionsDefinition = WuxDef.Get("Page_Actions");
         return `${WuxSheet.PageDisplayInput(tabFieldName, "Styles")}
-        ${WuxSheet.PageDisplay("Styles", mainPageNavigation(setStyleDefinition.title, setStyleDefinition.title, learnDefinition.getAttribute(WuxDef._info), ""))}
-        ${WuxSheet.PageDisplay("Actions", mainPageNavigation(actionsDefinition.title, actionsDefinition.title, learnDefinition.getAttribute(WuxDef._info), ""))}`;
-    };
-    const techniquesInfoContents = function (infoFieldName, tabFieldName, pageFieldName) {
-        let coreOutput = "";
-        coreOutput += WuxSheet.PageDisplayInput(pageFieldName, "Styles");
-        coreOutput += WuxSheet.PageDisplay("Styles", WuxDefinition.TooltipDescription(WuxDef.Get("Page_SetStyles")));
-        coreOutput += WuxSheet.PageDisplay("Actions", WuxDefinition.TooltipDescription(WuxDef.Get("Page_Actions")));
-
-        let output = "";
-        output += WuxSheet.PageDisplayInput(tabFieldName, "Builder");
-        output += WuxSheet.PageDisplay("Builder", WuxDefinition.TooltipDescription(WuxDef.Get("Page_LearnTechniques")));
-        output += WuxSheet.PageDisplay("Training", WuxDefinition.TooltipDescription(WuxDef.Get("Page_LearnTechniques")));
-        output += WuxSheet.PageDisplay("Advancement", WuxDefinition.TooltipDescription(WuxDef.Get("Page_LearnTechniques")));
-        output += WuxSheet.PageDisplay("Core", coreOutput);
-        return WuxSheetMain.Info.Contents(infoFieldName, output);
+        ${WuxSheet.PageDisplay("Styles", mainPageNavigation(setStyleDefinition.title, setStyleDefinition.title, ""))}
+        ${WuxSheet.PageDisplay("Actions", mainPageNavigation(actionsDefinition.title, actionsDefinition.title, ""))}`;
     };
     const characterCreationNavigation = function (definition, subheader) {
         let mainContents = buildCharacterCreationTabs(definition.title);
         mainContents += buildExitStickyButtons(WuxDef.GetAttribute("PageSet_Character Creator"), false);
-        mainContents += buildHeader("Character Creation", subheader, definition.getAttribute(WuxDef._info));
+        mainContents += buildHeader("Character Creation", subheader);
         return mainContents;
     };
     const buildCharacterCreationTabs = function (sheetName) {
@@ -11085,20 +11063,19 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
 
         return buildStickySideTab(output);
     };
-    const partyManagerNavigation = function (tabTitle, subheader, infoAttribute, sideBarButtons) {
+    const partyManagerNavigation = function (tabTitle, subheader, sideBarButtons) {
         let mainContents = ""
         mainContents += buildTabs(tabTitle, WuxDef.GetAttribute("Page"), ["NPC", "Notes"]);
         mainContents += sideBarButtons;
-        mainContents += buildMainSheetHeader(subheader, infoAttribute);
+        mainContents += buildMainSheetHeader(subheader);
 
         return mainContents;
     };
     'use strict';
 
-    const buildSection = function (contents, infoContents) {
+    const buildSection = function (contents) {
             return `<div class="wuxFloatHeader wuxStickyHeader">\n<div class="wuxSectionBlock wuxLargeLayoutItem">
         ${contents}
-        ${infoContents}
         </div>\n</div>`;
         },
 
@@ -11132,8 +11109,8 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             return output;
         },
 
-        buildHeader = function (header, subheader, infoFieldName) {
-            return `<div class="wuxHeader2">${WuxSheetMain.Info.Button(infoFieldName)}${subheader}</div>\n<div class="wuxHeader">${header}</div>`;
+        buildHeader = function (header, subheader) {
+            return `<div class="wuxHeader2">${subheader}</div>\n<div class="wuxHeader">${header}</div>`;
         },
 
         buildOverviewPageNavigation = function (selectedTab) {
@@ -11145,8 +11122,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             sideBarButtons += buildTabButton("radio", tabFieldName, "Overview", "Overview", selectedTab == "Overview", "") + "\n";
 
             let definition = WuxDef.Get("Page_Character");
-            return buildSection(mainPageNavigation(definition.title, WuxDef.GetTitle(`Page_${selectedTab}`), definition.getAttribute(WuxDef._info), buildStickySideTab(buildTabButtonRow(sideBarButtons))),
-                overviewInfoContents(definition.getAttribute(WuxDef._info), tabFieldName));
+            return buildSection(mainPageNavigation(definition.title, WuxDef.GetTitle(`Page_${selectedTab}`), buildStickySideTab(buildTabButtonRow(sideBarButtons))));
         },
 
         buildGearPageNavigation = function () {
@@ -11156,57 +11132,56 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             let finishButton = buildTabButton("checkbox", `${WuxDef.GetAttribute("PageSet_Character Creator")}${WuxDef._finish}`, "Finish", "Finish", false, "") + "\n";
             let gearCharacterCreationContents = buildCharacterCreationTabs(definition.title) +
                 buildStickySideTab(jinDisplay + buildTabButtonRow(finishButton)) +
-                buildHeader("Character Creation", definition.title, definition.getAttribute(WuxDef._info));
+                buildHeader("Character Creation", definition.title);
 
             let output = buildCharacterCreationSplit("Core",
-                mainPageNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), buildStickySideTab(jinDisplay)),
+                mainPageNavigation(definition.title, definition.title, buildStickySideTab(jinDisplay)),
                 gearCharacterCreationContents);
-            return buildSection(output, WuxSheetMain.Info.DefaultContents(definition));
+            return buildSection(output);
         },
 
         buildActionsPageNavigation = function () {
             let actionsDefinition = WuxDef.Get("Page_Actions");
             let techniquesDefinition = WuxDef.Get("Page_Styles");
             let output = `${WuxSheet.PageSetPageDisplayInput()}
-            ${WuxSheet.PageDisplay("Core", 
-                mainPageNavigation(actionsDefinition.title, actionsDefinition.title, actionsDefinition.getAttribute(WuxDef._info), ""))}
+            ${WuxSheet.PageDisplay("Core",
+                mainPageNavigation(actionsDefinition.title, actionsDefinition.title, ""))}
             ${WuxSheet.PageDisplay("Builder",
                 characterCreationNavigation(techniquesDefinition, techniquesDefinition.title))}
             ${WuxSheet.PageDisplay("Advancement",
                 advancementPageNavigation(techniquesDefinition, techniquesDefinition.title))}`;
-            return buildSection(output, WuxSheetMain.Info.DefaultContents(actionsDefinition));
+            return buildSection(output);
         },
 
         buildNpcPageNavigation = function () {
             let definition = WuxDef.Get("Page_NPC");
-            return buildSection(partyManagerNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), ""), WuxSheetMain.Info.DefaultContents(definition));
+            return buildSection(partyManagerNavigation(definition.title, definition.title, ""));
         },
 
         buildNotesPageNavigation = function () {
             let definition = WuxDef.Get("Page_Notes");
-            return buildSection(partyManagerNavigation(definition.title, definition.title, definition.getAttribute(WuxDef._info), ""), WuxSheetMain.Info.DefaultContents(definition));
+            return buildSection(partyManagerNavigation(definition.title, definition.title, ""));
         },
 
         buildOriginPageNavigation = function (definition) {
-            return buildSection(characterCreationNavigation(definition, definition.title), WuxSheetMain.Info.DefaultContents(definition));
+            return buildSection(characterCreationNavigation(definition, definition.title));
         },
 
         buildTrainingPageNavigation = function (definition) {
             let characterCreationContents = characterCreationNavigation(definition, definition.title);
             let output = buildCharacterCreationSplit("Training", trainingPageNavigation(definition, definition.title), characterCreationContents);
-            return buildSection(output, WuxSheetMain.Info.DefaultContents(definition));
+            return buildSection(output);
         },
 
         buildAdvancementPageNavigation = function (definition) {
             let characterCreationContents = characterCreationNavigation(definition, definition.title);
             let output = buildCharacterCreationSplit("Advancement", advancementPageNavigation(definition, definition.title), characterCreationContents);
-            return buildSection(output, WuxSheetMain.Info.DefaultContents(definition));
+            return buildSection(output);
         },
 
         buildTechniquesNavigation = function () {
             let learnDefinition = WuxDef.Get("Page_LearnTechniques");
             let tabFieldName = WuxDef.GetAttribute("PageSet");
-            let pageFieldName = WuxDef.GetAttribute("Page");
             let learnSubtitle = learnDefinition.title;
             let output = `${WuxSheet.PageDisplayInput(tabFieldName, "Builder")}
             ${WuxSheet.PageDisplay("Builder", characterCreationNavigation(learnDefinition, learnSubtitle))}
@@ -11214,20 +11189,19 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             ${WuxSheet.PageDisplay("Advancement", advancementPageNavigation(learnDefinition, learnSubtitle))}
             ${WuxSheet.PageDisplay("Core", techniquesCorePageNavigation())}`;
 
-            return buildSection(output, techniquesInfoContents(learnDefinition.getAttribute(WuxDef._info), tabFieldName, pageFieldName));
+            return buildSection(output);
         },
 
         buildStylesNavigation = function (styleDefinitionName) {
             let styleDefinition = WuxDef.Get(styleDefinitionName);
             let tabFieldName = WuxDef.GetAttribute("PageSet");
-            let pageFieldName = WuxDef.GetAttribute("Page");
             let learnSubtitle = styleDefinition.title;
             let output = `${WuxSheet.PageDisplayInput(tabFieldName, "Builder")}
             ${WuxSheet.PageDisplay("Builder", characterCreationNavigation(styleDefinition, learnSubtitle))}
             ${WuxSheet.PageDisplay("Training", trainingPageNavigation(styleDefinition, learnSubtitle))}
             ${WuxSheet.PageDisplay("Advancement", advancementPageNavigation(styleDefinition, learnSubtitle))}`;
 
-            return buildSection(output, techniquesInfoContents(styleDefinition.getAttribute(WuxDef._info), tabFieldName, pageFieldName));
+            return buildSection(output);
         };
     return {
         BuildOverviewPageNavigation: buildOverviewPageNavigation,
@@ -11372,7 +11346,7 @@ var WuxCharacterSheetBuilders = WuxCharacterSheetBuilders || (function () {
             contents += buildBackgroundGenerator();
 
             let definition = WuxDef.Get("Title_Background");
-            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, WuxSheetMain.TabBlock(contents));
+            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, WuxSheetMain.TabBlock(contents), definition);
         }
 
     ;
@@ -11467,7 +11441,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_OverviewCharacter");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
 
                         basics = function () {
@@ -11594,15 +11568,15 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                     var
                         build = function () {
 
-                            let originDefinition = WuxDef.Get("Page_Origin");
+                            let originDefinition = WuxDef.Get("Title_Origin");
                             let backgroundBuilder = new CharacterBackgroundBuilder();
                             let statSummaryDefinition = WuxDef.Get("Title_StatSummary");
                             let statsBuilder = new ExtendedCharacterStatisticsBuilder();
 
                             return `${WuxSheetMain.CollapsibleTab(statSummaryDefinition.getAttribute(WuxDef._tab, WuxDef._expand), statSummaryDefinition.title,
-                                WuxSheetMain.TabBlock(statsBuilder.print()))}
+                                WuxSheetMain.TabBlock(statsBuilder.print()), statSummaryDefinition)}
                                 ${WuxSheetMain.CollapsibleTab(originDefinition.getAttribute(WuxDef._tab, WuxDef._expand), originDefinition.title,
-                                WuxSheetMain.TabBlock(backgroundBuilder.print()))}`;
+                                WuxSheetMain.TabBlock(backgroundBuilder.print()), originDefinition)}`;
                         }
 
                     return {
@@ -11633,7 +11607,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Title_Notebook");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
                         notebookSelect = function (notebookCount) {
                             let staticNotebooks = "";
@@ -11866,7 +11840,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     contents = WuxSheetMain.TabBlock(contents);
 
                     let definition = WuxDef.Get("Page_GearConsumables");
-                    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                 },
 
                 ownedConsumables = function () {
@@ -12183,7 +12157,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     contents = WuxSheetMain.TabBlock(contents);
 
                     let definition = WuxDef.Get("Page_GearEquipment");
-                    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                 },
 
                 ownedEquipment = function () {
@@ -12394,7 +12368,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         WuxSheetMain.HiddenField(sectionDef.getAttribute(WuxDef._build),
                             WuxSheetMain.CollapsibleTab(
                                 sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
-                                sectionDef.getTitle(), contents)))}`;
+                                sectionDef.getTitle(), contents, sectionDef)))}`;
                 },
 
                 buildFormeActions = function () {
@@ -12408,7 +12382,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     contents = WuxSheetMain.TabBlock(contents);
                     let sectionDef = WuxDef.Get("Title_Techniques");
                     return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
-                        `${sectionDef.getTitle()}`, contents);
+                        `${sectionDef.getTitle()}`, contents, sectionDef);
                 },
 
                 buildBaseFilterButtons = function () {
@@ -12623,7 +12597,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     ${WuxSheet.PageDisplay("StylesData",
                         WuxSheetMain.CollapsibleTab(
                             sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
-                            sectionDef.getTitle(), contents))}`;
+                            sectionDef.getTitle(), contents, sectionDef))}`;
                 },
 
                 styleListSection = function (repeatingSectionName) {
@@ -14328,7 +14302,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             let definition = WuxDef.Get("Page_Origin");
                             let backgroundBuilder = new CharacterBackgroundBuilder();
                             contents += `${WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title,
-                                WuxSheetMain.TabBlock(backgroundBuilder.print()))}`;
+                                WuxSheetMain.TabBlock(backgroundBuilder.print()), definition)}`;
                             contents += new ChatDisplayBuilder(false).print();
                             return contents;
                         }
@@ -14400,7 +14374,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Training");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
 
                         buildConversion = function () {
@@ -14562,7 +14536,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Advancement");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
 
                         buildFullAdvancementContents = function () {
@@ -14656,7 +14630,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                             contents += buildBasicPerkList();
                             contents = WuxSheetMain.TabBlock(contents);
-                            return WuxSheetMain.CollapsibleTab(perkPageDef.getAttribute(WuxDef._tab, WuxDef._expand), perkPageDef.title, contents);
+                            return WuxSheetMain.CollapsibleTab(perkPageDef.getAttribute(WuxDef._tab, WuxDef._expand), perkPageDef.title, contents, perkPageDef);
                         },
 
                         buildBasicPerkList = function () {
@@ -14791,7 +14765,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             return WuxSheetMain.CollapsibleTab(
                                 sectionDef.getAttribute(WuxDef._expand),
                                 sectionDef.getTitle(),
-                                contents);
+                                contents,
+                                sectionDef);
                         }
                     ;
                     return {
@@ -14814,7 +14789,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 output += buildJobClass(jobClasses[i], jobsDictionary);
                             }
                             let sectionDef = WuxDef.Get("Title_JobsByDifficulty");
-                            return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand), sectionDef.getTitle(), WuxSheetMain.TabBlock(output));
+                            return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand), sectionDef.getTitle(), WuxSheetMain.TabBlock(output), sectionDef);
                         },
 
                         buildJobClass = function (jobclassDefinition, jobsDictionary) {
@@ -14925,7 +14900,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Attributes");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
                         buildAttributes = function () {
                             let attributes = WuxDef.Filter([new DatabaseFilterData("group", "Attribute")]);
@@ -14961,8 +14936,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             }
                             contents = WuxSheetMain.TabBlock(contents);
 
-                            let definition = WuxDef.Get("Skill");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            let definition = WuxDef.Get("Page_Skills");
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
                         buildSkillSubGroups = function (database, subGroups) {
                             let output = [];
@@ -15051,7 +15026,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let contents = WuxSheetMain.TabBlock(pageContents);
 
                             let definition = WuxDef.Get("Page_AffectedStats");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
                         buildJobSelection = function () {
                             let jobSelection = new JobSelectionBuilder();
@@ -15082,8 +15057,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let contents = WuxSheetMain.MultiRowGroup([leftColumn, rightColumn], WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);
 
-                            let definition = WuxDef.Get("Language");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            let definition = WuxDef.Get("Page_Language");
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
 
                         buildCommonSection = function (database) {
@@ -15184,8 +15159,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let contents = WuxSheetMain.MultiRowGroup(buildGroups(database), WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);
 
-                            let definition = WuxDef.Get("Lore");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            let definition = WuxDef.Get("Page_Lore");
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
 
                         buildGroups = function (database) {
@@ -16662,7 +16637,7 @@ class ChatDisplayBuilder {
         contents = WuxSheetMain.TabBlock(contents);
 
         let definition = WuxDef.Get("Title_Emotes");
-        return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+        return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
     }
 
     languageSelect() {

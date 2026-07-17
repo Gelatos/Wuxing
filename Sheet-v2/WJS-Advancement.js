@@ -29,7 +29,8 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 			WuxWorkerGeneral.UpdateStats(attributeHandler);
 
 			leavePageVariables(attributeHandler);
-			
+			hideHelpSections(attributeHandler);
+
 			let loader = new LoadingScreenHandler(attributeHandler);
 			loader.run();
 		},
@@ -37,6 +38,18 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 			attributeHandler.addUpdate(WuxDef.GetVariable("Page"), "Character");
 			attributeHandler.addUpdate(WuxDef.GetVariable("PageSet"), "Core");
 			attributeHandler.addUpdate(WuxDef.GetVariable("Core", WuxDef._tab), "Overview");
+		},
+		hideHelpSections = function (attributeHandler) {
+			const helpSectionKeys = [
+				"Page_OverviewCharacter", "Title_StatSummary", "Title_Origin", "Title_Notebook",
+				"Page_GearConsumables", "Page_GearEquipment", "Title_TechniqueChange", "Title_Techniques",
+				"Page_Styles", "Title_Emotes", "Page_Origin", "Page_Training", "Page_Advancement",
+				"Page_Perks", "Title_PerkTechniques", "Title_JobsByDifficulty", "Page_Attributes",
+				"Page_Skills", "Page_AffectedStats", "Page_Language", "Page_Lore", "Title_Background"
+			];
+			for (const key of helpSectionKeys) {
+				attributeHandler.addUpdate(WuxDef.GetVariable(key, WuxDef._info), "0");
+			}
 		},
 		setAffinityValue = function (eventinfo) {
 			Debug.Log(`Setting ${eventinfo.sourceAttribute}`);

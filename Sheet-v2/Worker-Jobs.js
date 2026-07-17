@@ -86,7 +86,7 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
                     if (tier > 1) {
                         let level = Format.GetLevelPrerequisites(tier);
                         return new InspectionInventoryItem(`Level ${level}`,
-                            `These techniques are gained upon reaching Level ${level}`, 
+                            `These techniques are automatically gained upon reaching Level ${level}`, 
                             true);
                     }
                 });

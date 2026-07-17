@@ -257,6 +257,11 @@ input[type=hidden].wuxPageDisplay-Flag[value="Item"] ~ .wuxPageDisplay-FilterIte
     border: 2px solid black;
 }
 
+.wuxSegment .wuxInfoContent
+{
+    margin-bottom: 16px;
+}
+
 .wuxInfoContent .wuxHeader2
 {
     width: 94%;
@@ -268,7 +273,8 @@ input[type=hidden].wuxPageDisplay-Flag[value="Item"] ~ .wuxPageDisplay-FilterIte
 }
 
 .wuxStickyHeader .wuxInfoContent .wuxDescription,
-.wuxSectionBlock .wuxInfoContent .wuxDescription
+.wuxSectionBlock .wuxInfoContent .wuxDescription,
+.wuxSegment .wuxInfoContent .wuxDescription
 {
     color: #3e3e3e;
     margin: 2px 10px;

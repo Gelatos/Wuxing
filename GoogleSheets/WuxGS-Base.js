@@ -80,7 +80,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_OverviewCharacter");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
 
                         basics = function () {
@@ -207,15 +207,15 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                     var
                         build = function () {
 
-                            let originDefinition = WuxDef.Get("Page_Origin");
+                            let originDefinition = WuxDef.Get("Title_Origin");
                             let backgroundBuilder = new CharacterBackgroundBuilder();
                             let statSummaryDefinition = WuxDef.Get("Title_StatSummary");
                             let statsBuilder = new ExtendedCharacterStatisticsBuilder();
 
                             return `${WuxSheetMain.CollapsibleTab(statSummaryDefinition.getAttribute(WuxDef._tab, WuxDef._expand), statSummaryDefinition.title,
-                                WuxSheetMain.TabBlock(statsBuilder.print()))}
+                                WuxSheetMain.TabBlock(statsBuilder.print()), statSummaryDefinition)}
                                 ${WuxSheetMain.CollapsibleTab(originDefinition.getAttribute(WuxDef._tab, WuxDef._expand), originDefinition.title,
-                                WuxSheetMain.TabBlock(backgroundBuilder.print()))}`;
+                                WuxSheetMain.TabBlock(backgroundBuilder.print()), originDefinition)}`;
                         }
 
                     return {
@@ -246,7 +246,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Title_Notebook");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
                         notebookSelect = function (notebookCount) {
                             let staticNotebooks = "";
@@ -479,7 +479,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     contents = WuxSheetMain.TabBlock(contents);
 
                     let definition = WuxDef.Get("Page_GearConsumables");
-                    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                 },
 
                 ownedConsumables = function () {
@@ -796,7 +796,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     contents = WuxSheetMain.TabBlock(contents);
 
                     let definition = WuxDef.Get("Page_GearEquipment");
-                    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                    return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                 },
 
                 ownedEquipment = function () {
@@ -1007,7 +1007,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         WuxSheetMain.HiddenField(sectionDef.getAttribute(WuxDef._build),
                             WuxSheetMain.CollapsibleTab(
                                 sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
-                                sectionDef.getTitle(), contents)))}`;
+                                sectionDef.getTitle(), contents, sectionDef)))}`;
                 },
 
                 buildFormeActions = function () {
@@ -1021,7 +1021,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     contents = WuxSheetMain.TabBlock(contents);
                     let sectionDef = WuxDef.Get("Title_Techniques");
                     return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
-                        `${sectionDef.getTitle()}`, contents);
+                        `${sectionDef.getTitle()}`, contents, sectionDef);
                 },
 
                 buildBaseFilterButtons = function () {
@@ -1236,7 +1236,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     ${WuxSheet.PageDisplay("StylesData",
                         WuxSheetMain.CollapsibleTab(
                             sectionDef.getAttribute(WuxDef._tab, WuxDef._expand),
-                            sectionDef.getTitle(), contents))}`;
+                            sectionDef.getTitle(), contents, sectionDef))}`;
                 },
 
                 styleListSection = function (repeatingSectionName) {

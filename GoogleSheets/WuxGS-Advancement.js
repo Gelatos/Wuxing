@@ -148,7 +148,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             let definition = WuxDef.Get("Page_Origin");
                             let backgroundBuilder = new CharacterBackgroundBuilder();
                             contents += `${WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title,
-                                WuxSheetMain.TabBlock(backgroundBuilder.print()))}`;
+                                WuxSheetMain.TabBlock(backgroundBuilder.print()), definition)}`;
                             contents += new ChatDisplayBuilder(false).print();
                             return contents;
                         }
@@ -220,7 +220,7 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Training");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
 
                         buildConversion = function () {
@@ -382,7 +382,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Advancement");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
 
                         buildFullAdvancementContents = function () {
@@ -476,7 +476,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                             contents += buildBasicPerkList();
                             contents = WuxSheetMain.TabBlock(contents);
-                            return WuxSheetMain.CollapsibleTab(perkPageDef.getAttribute(WuxDef._tab, WuxDef._expand), perkPageDef.title, contents);
+                            return WuxSheetMain.CollapsibleTab(perkPageDef.getAttribute(WuxDef._tab, WuxDef._expand), perkPageDef.title, contents, perkPageDef);
                         },
 
                         buildBasicPerkList = function () {
@@ -611,7 +611,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             return WuxSheetMain.CollapsibleTab(
                                 sectionDef.getAttribute(WuxDef._expand),
                                 sectionDef.getTitle(),
-                                contents);
+                                contents,
+                                sectionDef);
                         }
                     ;
                     return {
@@ -634,7 +635,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 output += buildJobClass(jobClasses[i], jobsDictionary);
                             }
                             let sectionDef = WuxDef.Get("Title_JobsByDifficulty");
-                            return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand), sectionDef.getTitle(), WuxSheetMain.TabBlock(output));
+                            return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand), sectionDef.getTitle(), WuxSheetMain.TabBlock(output), sectionDef);
                         },
 
                         buildJobClass = function (jobclassDefinition, jobsDictionary) {
@@ -745,7 +746,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Attributes");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
                         buildAttributes = function () {
                             let attributes = WuxDef.Filter([new DatabaseFilterData("group", "Attribute")]);
@@ -781,8 +782,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             }
                             contents = WuxSheetMain.TabBlock(contents);
 
-                            let definition = WuxDef.Get("Skill");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            let definition = WuxDef.Get("Page_Skills");
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
                         buildSkillSubGroups = function (database, subGroups) {
                             let output = [];
@@ -871,7 +872,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let contents = WuxSheetMain.TabBlock(pageContents);
 
                             let definition = WuxDef.Get("Page_AffectedStats");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
                         buildJobSelection = function () {
                             let jobSelection = new JobSelectionBuilder();
@@ -902,8 +903,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let contents = WuxSheetMain.MultiRowGroup([leftColumn, rightColumn], WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);
 
-                            let definition = WuxDef.Get("Language");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            let definition = WuxDef.Get("Page_Language");
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
 
                         buildCommonSection = function (database) {
@@ -1004,8 +1005,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let contents = WuxSheetMain.MultiRowGroup(buildGroups(database), WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);
 
-                            let definition = WuxDef.Get("Lore");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+                            let definition = WuxDef.Get("Page_Lore");
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
 
                         buildGroups = function (database) {

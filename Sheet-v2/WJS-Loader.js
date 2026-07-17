@@ -1,4 +1,29 @@
-var wuxCurrentVersion = "2.0.2";
+var wuxCurrentVersion = "2.0.3";
+
+var upgrade_to_2_0_3 = function (currentVersion) {
+	let attributeHandler = loaderAttrubuteHandler(currentVersion, "2.0.3");
+
+	const helpSectionKeys = [
+		"Page_OverviewCharacter", "Title_StatSummary", "Title_Origin", "Title_Notebook",
+		"Page_GearConsumables", "Page_GearEquipment", "Title_TechniqueChange", "Title_Techniques",
+		"Page_Styles", "Title_Emotes", "Page_Origin", "Page_Training", "Page_Advancement",
+		"Page_Perks", "Title_PerkTechniques", "Title_JobsByDifficulty", "Page_Attributes",
+		"Page_Skills", "Page_AffectedStats", "Page_Language", "Page_Lore", "Title_Background"
+	];
+
+	const pageSetVar = WuxDef.GetVariable("PageSet");
+	attributeHandler.addMod(pageSetVar);
+	attributeHandler.addGetAttrCallback(function (attrHandler) {
+		if (attrHandler.parseString(pageSetVar) !== "Builder") {
+			return;
+		}
+		for (const key of helpSectionKeys) {
+			attrHandler.addUpdate(WuxDef.GetVariable(key, WuxDef._info), "on");
+		}
+	});
+
+	attributeHandler.run();
+};
 
 var upgrade_to_2_0_2 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "2.0.2");
@@ -252,6 +277,9 @@ var versioning = function () {
 		switch(v["version"]) {
 			case wuxCurrentVersion:
 				console.log(`Wuxing Sheet modified from 5th Edition OGL by Roll20 v${wuxCurrentVersion}`);
+				break;
+			case "2.0.2":
+				upgrade_to_2_0_3(v["version"]);
 				break;
 			case "2.0.1":
 			case "2.0.0":

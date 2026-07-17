@@ -359,7 +359,7 @@ class ChatDisplayBuilder {
         contents = WuxSheetMain.TabBlock(contents);
 
         let definition = WuxDef.Get("Title_Emotes");
-        return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents);
+        return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
     }
 
     languageSelect() {
