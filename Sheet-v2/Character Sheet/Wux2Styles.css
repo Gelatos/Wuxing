@@ -189,6 +189,20 @@ input[type=number]::-webkit-inner-spin-button {
     flex: 5;
 
     width: calc(100% - 90px);
+
+    position: sticky;
+    top: 80px;
+    height: calc(100vh - 100px);
+    max-height: calc(100vh - 100px);
+
+    overflow-y: auto;
+    overflow-x: hidden;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.wuxMainContent::-webkit-scrollbar {
+    display: none;
 }
 
 input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxMainContent {
