@@ -3,11 +3,6 @@ var wuxCurrentVersion = "2.0.3";
 var upgrade_to_2_0_3 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "2.0.3");
 
-	// Seed the brand-new Next Section attribute to "0" (unchecked) — otherwise Roll20
-	// initializes a checkbox attribute using its first-rendered value= as the default,
-	// which here would be "Next Section" itself, making the button look permanently checked.
-	attributeHandler.addUpdate(WuxDef.GetVariable("Title_NextSection"), "0");
-
 	const helpSectionKeys = [
 		"Page_OverviewCharacter", "Title_StatSummary", "Title_Origin", "Title_Notebook",
 		"Page_GearConsumables", "Page_GearEquipment", "Title_TechniqueChange", "Title_Techniques",
