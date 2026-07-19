@@ -1979,12 +1979,12 @@ input[type=hidden].wuxAncestrySelection-flag[value="Spirit"] + .wuxAncestrySelec
     display: block;
 }
 
-.wuxIsPlayerSelection-Generic
+.wuxIsPlayerSelection-NotPlayer
 {
     display: none;
 }
 
-input[type=hidden].wuxIsPlayerSelection-flag[value="2"] + .wuxIsPlayerSelection-Generic
+input[type=hidden].wuxIsPlayerSelection-flag:not([value="1"]) + .wuxIsPlayerSelection-NotPlayer
 {
     display: block;
 }

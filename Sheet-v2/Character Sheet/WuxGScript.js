@@ -14853,12 +14853,14 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             }
                             let hiddenField = jobclassDefinition.getAttribute(WuxDef._expand);
                             let headerContents = WuxSheetMain.CollapsibleHeader(`<span>${jobclassDefinition.getTitle()}</span>`, hiddenField);
+                            const difficultyGroups = ["JobClass_Simple", "JobClass_Intermediate", "JobClass_Advanced"];
+                            let description = difficultyGroups.includes(jobClassGroup) ? WuxDefinition.DefinitionContents(jobclassDefinition) : "";
                             let contents = WuxSheetMain.MultiRowGroup(jobData, WuxSheetMain.Table.FlexTable, 2);
-                            let output = WuxSheetMain.Header(headerContents) + WuxSheetMain.HiddenAuxField(hiddenField, contents);
+                            let output = WuxSheetMain.Header(headerContents) + description + WuxSheetMain.HiddenAuxField(hiddenField, contents);
 
                             if (jobClassGroup === "JobClass_Common") {
                                 return `<input type="hidden" class="wuxIsPlayerSelection-flag" name="${WuxDef.GetAttribute("Title_IsPlayer")}" value="0">
-                                    <div class="wuxIsPlayerSelection-Generic">${output}</div>`;
+                                    <div class="wuxIsPlayerSelection-NotPlayer">${output}</div>`;
                             }
                             if (jobClassGroup === "JobClass_Spirit") {
                                 return `<input type="hidden" class="wuxAncestrySelection-flag" name="${WuxDef.GetAttribute("Ancestry")}" value="0">
@@ -14896,14 +14898,9 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 let subRoleDisplay = WuxSheetMain.Tooltip.Inline(job.subRole, WuxDefinition.TooltipDescription(subRoleGroupDef));
                                 roleContent += ` | ${WuxDef.GetTitle("Title_SubRole")}: ${subRoleDisplay}`;
                             }
-                            const difficultyClassKeys = ["", "JobClass_Simple", "JobClass_Intermediate", "JobClass_Advanced"];
                             let difficultyIcons = Format.PrintIcons(job.difficulty, 3, `★`, `☆`);
-                            let difficultyClassDef = WuxDef.Get(difficultyClassKeys[job.difficulty] || "");
-                            let difficultyDisplay = difficultyClassDef && job.difficulty > 0
-                                ? WuxSheetMain.Tooltip.Inline(difficultyIcons, WuxDefinition.TooltipDescription(difficultyClassDef))
-                                : difficultyIcons;
                             return WuxSheetMain.Desc(`<span>${roleContent}</span>
-<span>Difficulty: ${difficultyDisplay}</span>
+<span>Difficulty: ${difficultyIcons}</span>
 <span>Main Skills: ${printTechniqueSkills(job.skills)}</span>
 <span>&nbsp;</span>
 <span>${job.getDescription("</span><span>")}</span>`);
