@@ -71,38 +71,36 @@ class FilteredTechniquesInventoryItemHandler extends InspectionInventoryItemHand
     }
 }
 
-class FilteredStylesInventoryItemHandler extends FilteredTechniquesInventoryItemHandler {
-    getFilteredTechniques(filters) {
-        let allStyleNames = [...WuxTechs.GetSortedGroup("style", "Style"), "Style"];
-        let filteredTechniques = WuxTechs.Filter([...filters, new DatabaseFilterData("style", allStyleNames)]);
-        let newFilteredTechniquesList = [];
-        let addedFilteredTechniqueNames = [];
-        
-        for (let technique of filteredTechniques) {
-            if (technique == undefined || addedFilteredTechniqueNames.includes(technique.name)) {
-                continue;
-            }
-            
-            if (technique.techSet == "Style") {
-                addedFilteredTechniqueNames.push(technique.name);
-                newFilteredTechniquesList.push(technique);
-                continue;
-            }
-            
-            if (addedFilteredTechniqueNames.includes(technique.techSet)) {
-                continue;
-            }
+const getFilteredBaseStyles = function (filters) {
+    let allStyleNames = [...WuxTechs.GetSortedGroup("style", "Style"), "Style"];
+    let filteredTechniques = WuxTechs.Filter([...filters, new DatabaseFilterData("style", allStyleNames)]);
+    let newFilteredTechniquesList = [];
+    let addedFilteredTechniqueNames = [];
 
-            let baseTechnique = WuxTechs.Get(technique.techSet);
-            if (baseTechnique != undefined && baseTechnique.techSet == "Style") {
-                addedFilteredTechniqueNames.push(baseTechnique.name);
-                newFilteredTechniquesList.push(baseTechnique);
-            }
+    for (let technique of filteredTechniques) {
+        if (technique == undefined || addedFilteredTechniqueNames.includes(technique.name)) {
+            continue;
         }
 
-        return WuxTechs.SortFilteredTechniquesByRequirement(newFilteredTechniquesList);
+        if (technique.techSet == "Style") {
+            addedFilteredTechniqueNames.push(technique.name);
+            newFilteredTechniquesList.push(technique);
+            continue;
+        }
+
+        if (addedFilteredTechniqueNames.includes(technique.techSet)) {
+            continue;
+        }
+
+        let baseTechnique = WuxTechs.Get(technique.techSet);
+        if (baseTechnique != undefined && baseTechnique.techSet == "Style") {
+            addedFilteredTechniqueNames.push(baseTechnique.name);
+            newFilteredTechniquesList.push(baseTechnique);
+        }
     }
-}
+
+    return newFilteredTechniquesList;
+};
 
 const getTechHeader = function (affinity) {
     if (affinity === "") return "0";
@@ -1713,34 +1711,21 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
     };
 
     const performStyleFilterInspection = function (filters, title) {
-        let inventoryItems = new FilteredStylesInventoryItemHandler(filters,
-            function (tier, affinity) {
-                let level = Format.GetLevelPrerequisites(tier);
-                let itemTitle = level > 0 ? `Level ${level}` : "";
-                if (affinity !== "") {
-                    itemTitle = itemTitle !== "" ? `${affinity} - ${itemTitle}` : affinity;
-                }
-                if (itemTitle === "") {
-                    itemTitle = "Level 1";
-                }
-                return new InspectionInventoryItem(itemTitle, "", true, affinity, tier);
-            },
-            function (technique) {
-                let iconAffinities = technique.getAffinityParts();
-                let variants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
-                
-                for (let i = 0; i < variants.length; i++) {
-                    let variantTechnique = variants[i];
-                    let variantParts = variantTechnique.getAffinityParts();
-                    for (let j = 0; j < variantParts.length; j++) {
-                        if (!iconAffinities.includes(variantParts[j])) {
-                            iconAffinities.push(variantParts[j]);
-                        }
+        let displayCallback = function (technique) {
+            let iconAffinities = technique.getAffinityParts();
+            let variants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
+
+            for (let i = 0; i < variants.length; i++) {
+                let variantTechnique = variants[i];
+                let variantParts = variantTechnique.getAffinityParts();
+                for (let j = 0; j < variantParts.length; j++) {
+                    if (!iconAffinities.includes(variantParts[j])) {
+                        iconAffinities.push(variantParts[j]);
                     }
                 }
-                return { display: technique.name, iconAffinities: iconAffinities };
             }
-        );
+            return { display: technique.name, iconAffinities: iconAffinities };
+        };
 
         let attributeHandler = new WorkerAttributeHandler();
         attributeHandler.addMod([
@@ -1764,49 +1749,68 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             ];
             let userCr = attrHandler.parseInt(WuxDef.GetVariable("CR", WuxDef._max));
 
-            let filteredItems = inventoryItems.items.filter(function (item) {
-                if (item.isTitle) {
-                    if (showFromNonElement === "0" && item.affinity !== "") {
-                        if (item.affinity.includes(";")) {
-                            let affinityParts = item.affinity.split(";").map(s => s.trim());
-                            if (!affinityParts.some(part => userAffinities.includes(part))) return false;
-                        } else if (!userAffinities.includes(item.affinity)) {
-                            return false;
-                        }
-                    }
-                    if (showLevelRestricted === "0" && item.tier > 0) {
-                        if (item.tier > userCr) return false;
-                    }
-                    return true;
-                }
+            let matchesAffinity = function (style) {
+                if (showFromNonElement !== "0") return true;
+                if (style.affinity === "") return true;
+                let affinityParts = style.affinity.split(";").map(s => s.trim());
+                return affinityParts.some(part => userAffinities.includes(part));
+            };
 
-                let technique = WuxTechs.Get(item.name);
-                if (technique == undefined) {
-                    return false;
-                }
-
-                if (showFromNonElement === "0") {
-                    if (technique.affinity.includes(";")) {
-                        let affinityParts = technique.affinity.split(";").map(s => s.trim());
-                        if (!affinityParts.some(part => userAffinities.includes(part))) {
-                            return false;
-                        }
-                    } else if (technique.affinity != "" && !userAffinities.includes(technique.affinity)) {
-                        return false;
-                    }
-                }
-
-                if (showLevelRestricted === "0") {
-                    if (technique.tier > userCr) {
-                        return false;
-                    }
-                }
-
-                return true;
+            let baseStyles = getFilteredBaseStyles(filters);
+            let learnableStyles = baseStyles.filter(function (style) {
+                return matchesAffinity(style) && style.tier <= userCr;
             });
+            let unlearnableStyles = showLevelRestricted !== "0"
+                ? baseStyles.filter(function (style) { return matchesAffinity(style) && style.tier > userCr; })
+                : [];
+
+            let inventoryItemHandler = new InspectionInventoryItemHandler();
+            let sortedStyles = WuxTechs.SortFilteredTechniquesByRequirement(learnableStyles.concat(unlearnableStyles));
+            let maxTier = 9;
+
+            let addTierGroup = function (tier, isLearnable) {
+                let tierData = sortedStyles.get(tier);
+                tierData.iterate(function (techsByAffinity, affinity) {
+                    if (techsByAffinity.length === 0) return;
+
+                    let level = Format.GetLevelPrerequisites(tier);
+                    let requirementParts = [];
+                    if (level > 0) {
+                        requirementParts.push(`Min. Level ${level}`);
+                    }
+                    if (affinity !== "") {
+                        let affinityParts = affinity.split(";").map(s => s.trim()).filter(s => s !== "");
+                        let coreElements = ["Wood", "Fire", "Earth", "Metal", "Water"];
+                        if (coreElements.every(element => affinityParts.includes(element))) {
+                            requirementParts.push("Able to cast magic");
+                        } else {
+                            requirementParts.push(`${formatListWithOr(affinityParts)} affinity`);
+                        }
+                    }
+                    let requirementText = requirementParts.length > 0 ? requirementParts.join(", ") : "Level 1";
+                    let itemTitle = isLearnable
+                        ? `Requirements: ${requirementText}`
+                        : `*- You do not meet Requirements -* ${requirementText}`;
+                    inventoryItemHandler.addItem(new InspectionInventoryItem(itemTitle, "", true, affinity, tier));
+
+                    techsByAffinity.forEach(function (technique) {
+                        let result = displayCallback(technique);
+                        inventoryItemHandler.addItem(new InspectionInventoryItem(result.display, technique.name, false, undefined, undefined, result.iconAffinities));
+                    });
+                });
+            };
+
+            for (let tier = Math.min(maxTier, userCr); tier >= 1; tier--) {
+                addTierGroup(tier, true);
+            }
+            if (showLevelRestricted !== "0") {
+                for (let tier = userCr + 1; tier <= maxTier; tier++) {
+                    addTierGroup(tier, false);
+                }
+            }
 
             let attributeHandler2 = new WorkerAttributeHandler();
-            openTechniqueInspection(attributeHandler2, title, filteredItems, ["Add Style"]);
+            openTechniqueInspection(attributeHandler2, title, inventoryItemHandler.items, ["Add Style"]);
             attributeHandler2.run();
         });
 
@@ -1816,6 +1820,84 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
     const openCustomStyleFilterInspection = function (filters, title) {
         Debug.Log("Open Custom Style Filter Inspection");
         performStyleFilterInspection(filters, title);
+    };
+
+    const shuffleArray = function (array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            let temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        return array;
+    };
+
+    const formatListWithOr = function (items) {
+        if (items.length === 1) return items[0];
+        if (items.length === 2) return `${items[0]} or ${items[1]}`;
+        return `${items.slice(0, -1).join(", ")}, or ${items[items.length - 1]}`;
+    };
+
+    // Picks up to maxCount styles: first guaranteeing skill variety (one style per skill,
+    // preferring the highest tier learnable), then filling remaining slots with each skill's
+    // next-highest-tier style round-robin, then any leftover item-trait-only matches.
+    // Ties are broken randomly at every step.
+    const selectTopRecommendedStyles = function (recommendedStyles, styleNameToSkills, maxCount) {
+        let skillToStyles = new Map();
+        let noSkillStyles = [];
+        for (let i = 0; i < recommendedStyles.length; i++) {
+            let style = recommendedStyles[i];
+            let skills = styleNameToSkills.get(style.name);
+            if (skills == undefined || skills.size === 0) {
+                noSkillStyles.push(style);
+                continue;
+            }
+            skills.forEach(function (skill) {
+                if (!skillToStyles.has(skill)) skillToStyles.set(skill, []);
+                skillToStyles.get(skill).push(style);
+            });
+        }
+
+        let sortByTierDesc = function (styles) {
+            shuffleArray(styles);
+            styles.sort(function (a, b) { return b.tier - a.tier; });
+        };
+        skillToStyles.forEach(function (styles) { sortByTierDesc(styles); });
+        sortByTierDesc(noSkillStyles);
+
+        let skillKeys = shuffleArray([...skillToStyles.keys()]);
+        let cursors = {};
+        skillKeys.forEach(function (skill) { cursors[skill] = 0; });
+
+        let selected = [];
+        let selectedNames = new Set();
+        let addedThisRound = true;
+        while (selected.length < maxCount && addedThisRound) {
+            addedThisRound = false;
+            for (let i = 0; i < skillKeys.length && selected.length < maxCount; i++) {
+                let skill = skillKeys[i];
+                let styles = skillToStyles.get(skill);
+                while (cursors[skill] < styles.length && selectedNames.has(styles[cursors[skill]].name)) {
+                    cursors[skill]++;
+                }
+                if (cursors[skill] < styles.length) {
+                    let candidate = styles[cursors[skill]];
+                    cursors[skill]++;
+                    selected.push(candidate);
+                    selectedNames.add(candidate.name);
+                    addedThisRound = true;
+                }
+            }
+        }
+
+        for (let i = 0; i < noSkillStyles.length && selected.length < maxCount; i++) {
+            let candidate = noSkillStyles[i];
+            if (selectedNames.has(candidate.name)) continue;
+            selected.push(candidate);
+            selectedNames.add(candidate.name);
+        }
+
+        return selected;
     };
 
     const openRecommendedStylesInspection = function () {
@@ -1834,7 +1916,8 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             WuxDef.GetVariable("Affinity"),
             WuxDef.GetVariable("AdvancedAffinity"),
             WuxDef.GetVariable("Ancestry"),
-            WuxDef.GetVariable("CR", WuxDef._max)
+            WuxDef.GetVariable("CR", WuxDef._max),
+            WuxDef.GetVariable("Forme_ShowLevelRestricted")
         ]);
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
@@ -1896,6 +1979,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
 
             // Skill filter: styles where any technique has a matching plain skill
             let skillMatchedStyleNames = new Set();
+            let styleNameToSkills = new Map();
             if (allSkillTitles.size > 0) {
                 let skillMatchedTechs = WuxTechs.Filter([
                     new DatabaseFilterData("skill", [...allSkillTitles]),
@@ -1903,14 +1987,21 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 ]);
                 for (let i = 0; i < skillMatchedTechs.length; i++) {
                     let tech = skillMatchedTechs[i];
+                    let baseStyleName = undefined;
                     if (tech.techSet === "Style") {
-                        skillMatchedStyleNames.add(tech.name);
+                        baseStyleName = tech.name;
                     } else {
                         let base = WuxTechs.Get(tech.techSet);
                         if (base != undefined && base.techSet === "Style") {
-                            skillMatchedStyleNames.add(base.name);
+                            baseStyleName = base.name;
                         }
                     }
+                    if (baseStyleName == undefined) continue;
+                    skillMatchedStyleNames.add(baseStyleName);
+                    if (!styleNameToSkills.has(baseStyleName)) {
+                        styleNameToSkills.set(baseStyleName, new Set());
+                    }
+                    styleNameToSkills.get(baseStyleName).add(tech.skill);
                 }
             }
 
@@ -1936,33 +2027,56 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 }
             }
 
-            // Union both sets, exclude learned, always apply level/affinity restrictions
-            let recommendedStyles = allBaseStyles.filter(function (style) {
+            let showLevelRestricted = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowLevelRestricted"));
+
+            // Base criteria shared by learnable and unlearnable styles: skill/trait match, not learned, affinity
+            let matchesBaseCriteria = function (style) {
                 if (!skillMatchedStyleNames.has(style.name) && !itemTraitMatchedStyleNames.has(style.name)) return false;
                 if (learnedStyleNames.has(style.name)) return false;
-                if (style.tier > userCr) return false;
                 if (style.affinity !== "") {
                     let affinityParts = style.affinity.split(";").map(function (s) { return s.trim(); });
                     if (!affinityParts.some(function (part) { return userAffinities.includes(part); })) return false;
                 }
                 return true;
+            };
+
+            let learnableStyles = allBaseStyles.filter(function (style) {
+                return matchesBaseCriteria(style) && style.tier <= userCr;
             });
+            learnableStyles = selectTopRecommendedStyles(learnableStyles, styleNameToSkills, 12);
+
+            let unlearnableStyles = showLevelRestricted !== "0"
+                ? allBaseStyles.filter(function (style) { return matchesBaseCriteria(style) && style.tier > userCr; })
+                : [];
 
             // Build inventory items from the pre-filtered sorted list
             let inventoryItemHandler = new InspectionInventoryItemHandler();
-            let sortedStyles = WuxTechs.SortFilteredTechniquesByRequirement(recommendedStyles);
+            let sortedStyles = WuxTechs.SortFilteredTechniquesByRequirement(learnableStyles.concat(unlearnableStyles));
             let maxTier = 9;
-            for (let tier = 1; tier <= maxTier; tier++) {
+
+            let addTierGroup = function (tier, isLearnable) {
                 let tierData = sortedStyles.get(tier);
                 tierData.iterate(function (techsByAffinity, affinity) {
                     if (techsByAffinity.length === 0) return;
 
                     let level = Format.GetLevelPrerequisites(tier);
-                    let itemTitle = level > 0 ? `Level ${level}` : "";
-                    if (affinity !== "") {
-                        itemTitle = itemTitle !== "" ? `${affinity} - ${itemTitle}` : affinity;
+                    let requirementParts = [];
+                    if (level > 0) {
+                        requirementParts.push(`Min. Level ${level}`);
                     }
-                    if (itemTitle === "") itemTitle = "Level 1";
+                    if (affinity !== "") {
+                        let affinityParts = affinity.split(";").map(function (s) { return s.trim(); }).filter(function (s) { return s !== ""; });
+                        let coreElements = ["Wood", "Fire", "Earth", "Metal", "Water"];
+                        if (coreElements.every(function (element) { return affinityParts.includes(element); })) {
+                            requirementParts.push("Able to cast magic");
+                        } else {
+                            requirementParts.push(`${formatListWithOr(affinityParts)} affinity`);
+                        }
+                    }
+                    let requirementText = requirementParts.length > 0 ? requirementParts.join(", ") : "Level 1";
+                    let itemTitle = isLearnable
+                        ? `Requirements: ${requirementText}`
+                        : `*- You do not meet Requirements -* ${requirementText}`;
                     inventoryItemHandler.addItem(new InspectionInventoryItem(itemTitle, "", true, affinity, tier));
 
                     techsByAffinity.forEach(function (technique) {
@@ -1977,6 +2091,17 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                         inventoryItemHandler.addItem(new InspectionInventoryItem(technique.name, technique.name, false, undefined, undefined, iconAffinities));
                     });
                 });
+            };
+
+            // Learnable tiers: highest to lowest
+            for (let tier = Math.min(maxTier, userCr); tier >= 1; tier--) {
+                addTierGroup(tier, true);
+            }
+            // Unlearnable tiers (only if requested): lowest to highest
+            if (showLevelRestricted !== "0") {
+                for (let tier = userCr + 1; tier <= maxTier; tier++) {
+                    addTierGroup(tier, false);
+                }
             }
 
             let attributeHandler2 = new WorkerAttributeHandler();
