@@ -603,6 +603,10 @@ class TechniqueEffectDatabase extends Database {
         return this.filter(new DatabaseFilterData("type", "Boost"));
     }
 
+    hasRequestCheck() {
+        return this.filter(new DatabaseFilterData("type", "Request")).length > 0;
+    }
+
     sanitizeSheetRollAction() {
         let sheetRoll = JSON.stringify(this);
         sheetRoll = sheetRoll.replace(/"/g, "%%");
@@ -1311,10 +1315,11 @@ class TechniqueUseEffect extends dbObj {
         this.skill = json.skill;
         this.coreDefense = json.coreDefense;
         this.impacts = json.impacts;
+        this.forms = json.forms ?? "";
         this.traits = undefined;
         this.effects = new TechniqueEffectDatabase(json.effects);
     }
-    
+
     importSheets(dataArray) {
         this.createEmpty();
         let i = 0;
@@ -1329,24 +1334,25 @@ class TechniqueUseEffect extends dbObj {
         i++;
         this.effects = new TechniqueEffectDatabase();
     }
-    
+
     importFromTechnique(technique) {
-        this.import(technique.name, technique.rank, technique.skill, technique.coreDefense, technique.impacts, technique.getEffects());
+        this.import(technique.name, technique.rank, technique.skill, technique.coreDefense, technique.impacts, technique.getEffects(), technique.forms);
     }
-    
-    import(name, rank, skill, coreDefense, impacts, effects) {
+
+    import(name, rank, skill, coreDefense, impacts, effects, forms) {
         this.name = name;
         this.rank = rank;
         this.skill = skill;
         this.coreDefense = coreDefense;
         this.impacts = impacts;
+        this.forms = forms ?? "";
         if (effects != undefined) {
             this.effects = effects;
         } else {
             this.effects = new TechniqueEffectDatabase();
         }
     }
-    
+
     createEmpty() {
         super.createEmpty();
         this.name = "";
@@ -1354,6 +1360,7 @@ class TechniqueUseEffect extends dbObj {
         this.skillType = "";
         this.coreDefense = "";
         this.impacts = "";
+        this.forms = "";
         this.traits = undefined;
         this.effects = new TechniqueEffectDatabase();
     }
@@ -6464,9 +6471,13 @@ class WuxingHumanCharacterGenerator {
         if (this.character.firstName == "" || this.character.fullName == "") {
             this.generateName();
         }
-        
-        this.generateRandomPersonality();
-        this.generateRandomMotivation();
+
+        if (this.character.personality == "" || this.character.personality == "0") {
+            this.generateRandomPersonality();
+        }
+        if (this.character.motivation == "" || this.character.motivation == "0") {
+            this.generateRandomMotivation();
+        }
     }
     
     generateRandom(groupName) {

@@ -1094,7 +1094,8 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
         }
 
         // add advantages based on what statuses the target has
-        if (this.technique.getTraits().includes("Social")) {
+        Debug.Log(`[Personality] Technique "${this.technique.name}" forms: "${this.technique.forms}". Is Social: ${this.technique.forms.indexOf("Social") >= 0}. Has Request check: ${this.technique.effects.hasRequestCheck()}.`);
+        if (this.technique.forms.indexOf("Social") >= 0) {
             let agreeable = this.targetTokenEffect.tokenTargetData.getStatusRank(targetAttributeHandler, "Stat_Agreeable");
             if (agreeable > 0) {
                 advantage += agreeable;
@@ -1104,6 +1105,15 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             if (oppositional > 0) {
                 advantage -= oppositional;
                 this.addMessage(`${this.senderTokenEffect.tokenTargetData.displayName} is Oppositional: +${oppositional} Disadvantage.`);
+            }
+
+            if (!this.technique.effects.hasRequestCheck()) {
+                let personalityAdvantage = this.getPersonalityAdvantage();
+                if (personalityAdvantage != 0) {
+                    advantage += personalityAdvantage;
+                    let advantageWord = personalityAdvantage > 0 ? "Advantage" : "Disadvantage";
+                    this.addMessage(`${this.senderTokenEffect.tokenTargetData.displayName} Personality: ${Math.abs(personalityAdvantage)} ${advantageWord}.`);
+                }
             }
         }
         if (this.targetTokenEffect.tokenTargetData.hasStatus(targetAttributeHandler, "Stat_Hindered")) {
@@ -1149,8 +1159,54 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             advantage -= 1;
             this.addMessage(`${this.targetTokenEffect.tokenTargetData.displayName} is Exhausted: +1 Advantage.`);
         }
-        
+
         return advantage;
+    }
+
+    getPersonalityAdvantage() {
+        const generating = {Wood: "Fire", Fire: "Earth", Earth: "Metal", Metal: "Water", Water: "Wood"};
+        const controlling = {Wood: "Earth", Earth: "Water", Water: "Fire", Fire: "Metal", Metal: "Wood"};
+
+        let senderPersonality = new TokenNoteReference(this.senderTokenEffect.tokenTargetData.getTokenNote()).personality;
+        let targetPersonality = new TokenNoteReference(this.targetTokenEffect.tokenTargetData.getTokenNote()).personality;
+        Debug.Log(`[Personality] Sender (${this.senderTokenEffect.tokenTargetData.displayName}) personality: "${senderPersonality}". Target (${this.targetTokenEffect.tokenTargetData.displayName}) personality: "${targetPersonality}".`);
+        if (senderPersonality == "" || senderPersonality == "0" || targetPersonality == "" || targetPersonality == "0") {
+            Debug.Log(`[Personality] Skipping: sender or target has no personality recorded on their token note.`);
+            return 0;
+        }
+
+        let attackerElement = WuxDef.Get(senderPersonality).subGroup;
+        let defenderElement = WuxDef.Get(targetPersonality).subGroup;
+        Debug.Log(`[Personality] Attacker element: "${attackerElement}". Defender element: "${defenderElement}".`);
+
+        let techniqueTraits = this.technique.getTraits();
+        let castElements = techniqueTraits
+            .filter(trait => trait.startsWith("Soc-"))
+            .map(trait => trait.substring("Soc-".length));
+        Debug.Log(`[Personality] Technique "${this.technique.name}" traits: [${techniqueTraits.join(", ")}]. Cast elements: [${castElements.join(", ")}].`);
+
+        let candidateElements = new Set([attackerElement].concat(castElements));
+
+        let bestAdvantage = -Infinity;
+        for (let element of candidateElements) {
+            let value = 0;
+            if (generating[element] == defenderElement) {
+                value = 1;
+            } else if (controlling[element] == defenderElement) {
+                value = -1;
+            }
+            let clamped = false;
+            if (value < 0 && element == attackerElement && castElements.includes(attackerElement)) {
+                value = 0;
+                clamped = true;
+            }
+            Debug.Log(`[Personality] Candidate element "${element}" vs defender "${defenderElement}": ${value}${clamped ? " (clamped from disadvantage - matches core personality)" : ""}.`);
+            if (value > bestAdvantage) {
+                bestAdvantage = value;
+            }
+        }
+        Debug.Log(`[Personality] Final personality advantage: ${bestAdvantage}.`);
+        return bestAdvantage;
     }
 }
 

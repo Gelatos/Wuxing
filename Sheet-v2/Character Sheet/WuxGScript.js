@@ -603,6 +603,10 @@ class TechniqueEffectDatabase extends Database {
         return this.filter(new DatabaseFilterData("type", "Boost"));
     }
 
+    hasRequestCheck() {
+        return this.filter(new DatabaseFilterData("type", "Request")).length > 0;
+    }
+
     sanitizeSheetRollAction() {
         let sheetRoll = JSON.stringify(this);
         sheetRoll = sheetRoll.replace(/"/g, "%%");
@@ -1311,10 +1315,11 @@ class TechniqueUseEffect extends dbObj {
         this.skill = json.skill;
         this.coreDefense = json.coreDefense;
         this.impacts = json.impacts;
+        this.forms = json.forms ?? "";
         this.traits = undefined;
         this.effects = new TechniqueEffectDatabase(json.effects);
     }
-    
+
     importSheets(dataArray) {
         this.createEmpty();
         let i = 0;
@@ -1329,24 +1334,25 @@ class TechniqueUseEffect extends dbObj {
         i++;
         this.effects = new TechniqueEffectDatabase();
     }
-    
+
     importFromTechnique(technique) {
-        this.import(technique.name, technique.rank, technique.skill, technique.coreDefense, technique.impacts, technique.getEffects());
+        this.import(technique.name, technique.rank, technique.skill, technique.coreDefense, technique.impacts, technique.getEffects(), technique.forms);
     }
-    
-    import(name, rank, skill, coreDefense, impacts, effects) {
+
+    import(name, rank, skill, coreDefense, impacts, effects, forms) {
         this.name = name;
         this.rank = rank;
         this.skill = skill;
         this.coreDefense = coreDefense;
         this.impacts = impacts;
+        this.forms = forms ?? "";
         if (effects != undefined) {
             this.effects = effects;
         } else {
             this.effects = new TechniqueEffectDatabase();
         }
     }
-    
+
     createEmpty() {
         super.createEmpty();
         this.name = "";
@@ -1354,6 +1360,7 @@ class TechniqueUseEffect extends dbObj {
         this.skillType = "";
         this.coreDefense = "";
         this.impacts = "";
+        this.forms = "";
         this.traits = undefined;
         this.effects = new TechniqueEffectDatabase();
     }
@@ -6464,9 +6471,13 @@ class WuxingHumanCharacterGenerator {
         if (this.character.firstName == "" || this.character.fullName == "") {
             this.generateName();
         }
-        
-        this.generateRandomPersonality();
-        this.generateRandomMotivation();
+
+        if (this.character.personality == "" || this.character.personality == "0") {
+            this.generateRandomPersonality();
+        }
+        if (this.character.motivation == "" || this.character.motivation == "0") {
+            this.generateRandomMotivation();
+        }
     }
     
     generateRandom(groupName) {
@@ -11284,36 +11295,30 @@ var WuxCharacterSheetBuilders = WuxCharacterSheetBuilders || (function () {
         buildInfluences = function () {
             let contents = "";
             let influenceDef = WuxDef.Get("Soc_Influence");
-            let usingInfluences = WuxDef.Get("Title_UsingInfluences");
 
             let influenceInfo = WuxDefinition.TooltipDescription(influenceDef);
-            influenceInfo += WuxDefinition.TooltipDescription(usingInfluences);
             influenceInfo = WuxSheetMain.Info.Contents(influenceDef.getAttribute(WuxDef._info), influenceInfo);
 
             contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(influenceDef.getAttribute(WuxDef._info))}${influenceDef.title}`)}
                 ${influenceInfo}`;
 
-            let influenceContents = WuxSheetMain.MultiRow(
-                WuxSheetMain.Select(
-                    WuxDef.GetAttribute("Soc_Severity"),
-                    WuxDef.Filter([new DatabaseFilterData("group", "SeverityRank")]),
-                    false,
-                    "wuxInfluenceType") +
-                WuxSheetMain.CustomInput(
-                    "text",
-                    influenceDef.getAttribute(),
-                    "wuxInput wuxInfluenceDescription",
-                    ` placeholder="Influence"`)
-            );
-            influenceContents += WuxSheetMain.Textarea(WuxDef.GetAttribute("Soc_InfluenceDesc"),
-                "wuxInput wuxHeight30", WuxDef.GetTitle("Soc_InfluenceDesc"));
+            contents += buildInfluenceTypeSelect(WuxDef.Get("Soc_Personality"), "PersonalityType");
+            contents += buildInfluenceTypeSelect(WuxDef.Get("Soc_Motivation"), "MotivationType");
 
-            contents += `<div>
-                <fieldset class="${WuxDef.GetVariable("RepeatingInfluences")}">
-                    ${influenceContents}
-                </fieldset>
-            </div>`;
             return WuxSheetMain.Table.FlexTableGroup(contents);
+        },
+
+        buildInfluenceTypeSelect = function (selectDef, groupName) {
+            let options = WuxDef.Filter([new DatabaseFilterData("group", groupName)]);
+            let optionsHtml = `<option value="0">-</option>`;
+            for (let i = 0; i < options.length; i++) {
+                optionsHtml += `\n<option value="${options[i].name}">${options[i].subGroup} - ${options[i].title}</option>`;
+            }
+
+            return `${WuxDefinition.BuildHeader(selectDef)}
+                <select class="wuxInput" name="${selectDef.getAttribute()}" value="0">${optionsHtml}
+                </select>
+                ${WuxSheetMain.DescField(selectDef.getAttribute(WuxDef._db))}`;
         },
 
         buildBackgroundBasics = function () {
@@ -13343,6 +13348,8 @@ var OverviewBuilder = OverviewBuilder || (function () {
             output += listenerUpdateSurge();
             output += listenerUpdateVitality();
             output += listenerOriginBuilderFieldsUpdate();
+            output += listenerUpdatePersonalityDescription();
+            output += listenerUpdateMotivationDescription();
             return output;
         },
         listenerUpdateDisplayName = function () {
@@ -13428,6 +13435,18 @@ var OverviewBuilder = OverviewBuilder || (function () {
             let output = `WuxWorkerActions.TriggerBuilderActionUpdate();\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+        },
+        listenerUpdatePersonalityDescription = function () {
+            let groupVariableNames = [WuxDef.GetVariable("Soc_Personality")];
+            let output = `WuxWorkerGeneral.UpdatePersonalityDescription(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerUpdateMotivationDescription = function () {
+            let groupVariableNames = [WuxDef.GetVariable("Soc_Motivation")];
+            let output = `WuxWorkerGeneral.UpdateMotivationDescription(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         }
 
     return {
@@ -14835,7 +14854,17 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let hiddenField = jobclassDefinition.getAttribute(WuxDef._expand);
                             let headerContents = WuxSheetMain.CollapsibleHeader(`<span>${jobclassDefinition.getTitle()}</span>`, hiddenField);
                             let contents = WuxSheetMain.MultiRowGroup(jobData, WuxSheetMain.Table.FlexTable, 2);
-                            return WuxSheetMain.Header(headerContents) + WuxSheetMain.HiddenAuxField(hiddenField, contents);
+                            let output = WuxSheetMain.Header(headerContents) + WuxSheetMain.HiddenAuxField(hiddenField, contents);
+
+                            if (jobClassGroup === "JobClass_Common") {
+                                return `<input type="hidden" class="wuxIsPlayerSelection-flag" name="${WuxDef.GetAttribute("Title_IsPlayer")}" value="0">
+                                    <div class="wuxIsPlayerSelection-Generic">${output}</div>`;
+                            }
+                            if (jobClassGroup === "JobClass_Spirit") {
+                                return `<input type="hidden" class="wuxAncestrySelection-flag" name="${WuxDef.GetAttribute("Ancestry")}" value="0">
+                                    <div class="wuxAncestrySelection-Spirit">${output}</div>`;
+                            }
+                            return output;
                         },
 
                         buildJob = function (job) {
@@ -16358,16 +16387,12 @@ class CharacterBackgroundBuilder {
         
         let quickDescriptionField = WuxDefinition.BuildTextarea(WuxDef.Get("QuickDescription"), WuxDef.GetAttribute("QuickDescription"),
             "wuxInput wuxHeight30");
-        
-        let startingJinField = `${WuxSheet.MainPageDisplayInput()}
-                ${WuxSheet.PageDisplay("OriginData", WuxDefinition.BuildTextInput(WuxDef.Get("Title_StartingJin"), WuxDef.GetAttribute("Jin")))}`;
-        
+
         return WuxSheetMain.Table.FlexTableGroup(`${isPlayerField}
         ${nameFields}
         ${ancestryFields}
         ${affinityField}
-        ${quickDescriptionField}
-        ${startingJinField}`);
+        ${quickDescriptionField}`);
     }
 
     backgroundBackstory() {
@@ -16396,10 +16421,11 @@ class CharacterBackgroundBuilder {
     
     buildAdvancementData() {
         let contents = "";
-        contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginAdvancement"));
+        contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_StartingData"));
         contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Level"), WuxDef.GetAttribute("Level"));
         contents += WuxDefinition.BuildText(WuxDef.Get("CR"), WuxSheetMain.Span(WuxDef.GetAttribute("CR", WuxDef._max)));
         contents += WuxDefinition.BuildText(WuxDef.Get("Potency"), WuxSheetMain.Span(WuxDef.GetAttribute("Potency")));
+        contents += WuxDefinition.BuildTextInput(WuxDef.Get("Title_StartingJin"), WuxDef.GetAttribute("Jin"));
 
         return WuxSheetMain.Table.FlexTableGroup(contents);
     }

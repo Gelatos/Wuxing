@@ -358,6 +358,8 @@ var OverviewBuilder = OverviewBuilder || (function () {
             output += listenerUpdateSurge();
             output += listenerUpdateVitality();
             output += listenerOriginBuilderFieldsUpdate();
+            output += listenerUpdatePersonalityDescription();
+            output += listenerUpdateMotivationDescription();
             return output;
         },
         listenerUpdateDisplayName = function () {
@@ -443,6 +445,18 @@ var OverviewBuilder = OverviewBuilder || (function () {
             let output = `WuxWorkerActions.TriggerBuilderActionUpdate();\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+        },
+        listenerUpdatePersonalityDescription = function () {
+            let groupVariableNames = [WuxDef.GetVariable("Soc_Personality")];
+            let output = `WuxWorkerGeneral.UpdatePersonalityDescription(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerUpdateMotivationDescription = function () {
+            let groupVariableNames = [WuxDef.GetVariable("Soc_Motivation")];
+            let output = `WuxWorkerGeneral.UpdateMotivationDescription(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         }
 
     return {

@@ -1969,6 +1969,26 @@ input[type=hidden].wuxAncestrySelection-flag[value="Human"] + .wuxAncestrySelect
     display: block;
 }
 
+.wuxAncestrySelection-Spirit
+{
+    display: none;
+}
+
+input[type=hidden].wuxAncestrySelection-flag[value="Spirit"] + .wuxAncestrySelection-Spirit
+{
+    display: block;
+}
+
+.wuxIsPlayerSelection-Generic
+{
+    display: none;
+}
+
+input[type=hidden].wuxIsPlayerSelection-flag[value="2"] + .wuxIsPlayerSelection-Generic
+{
+    display: block;
+}
+
 .wuxCharacterStatistics
 {
     position: relative;

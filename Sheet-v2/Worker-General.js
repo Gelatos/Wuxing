@@ -73,7 +73,6 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                 attrHandler.addUpdate("character_name", spacesLessName);
                 attrHandler.addUpdate(WuxDef.GetVariable("CharSheetName"), spacesLessName);
                 attrHandler.addUpdate(WuxDef.GetVariable("SheetName"), spacesLessName);
-                attrHandler.addUpdate(WuxDef.GetVariable("FullName"), eventinfo.newValue);
                 attrHandler.addUpdate(WuxDef.GetVariable("DisplayName"), eventinfo.newValue);
                 combatDetailsHandler.onUpdateDisplayName(attrHandler, eventinfo.newValue);
             });
@@ -86,6 +85,24 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                 let spacesLessName = eventinfo.newValue.replace(/\s+/g, '');
                 attrHandler.addUpdate("character_name", spacesLessName);
                 attrHandler.addUpdate(WuxDef.GetVariable("SheetName"), spacesLessName);
+            });
+            attributeHandler.run();
+        },
+        updatePersonalityDescription = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let description = eventinfo.newValue === "0" ? "" : WuxDef.Get(eventinfo.newValue).descriptions[0];
+                attrHandler.addUpdate(WuxDef.GetVariable("Soc_Personality", WuxDef._db), description);
+            });
+            attributeHandler.run();
+        },
+        updateMotivationDescription = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let description = eventinfo.newValue === "0" ? "" : WuxDef.Get(eventinfo.newValue).descriptions[0];
+                attrHandler.addUpdate(WuxDef.GetVariable("Soc_Motivation", WuxDef._db), description);
             });
             attributeHandler.run();
         },
@@ -112,6 +129,19 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
 
             attributeHandler.run();
         },
+        getTitleFromDefinitionName = function (name) {
+            if (name == undefined || name === "" || name === "0") {
+                return "";
+            }
+            return WuxDef.Get(name).title;
+        },
+        getDefinitionNameFromTitle = function (groupName, title) {
+            if (title == undefined || title === "") {
+                return "0";
+            }
+            let match = WuxDef.Filter([new DatabaseFilterData("group", groupName)]).find(definition => definition.title === title);
+            return match != undefined ? match.name : "0";
+        },
         generateCharacter = function () {
             let attributeHandler = new WorkerAttributeHandler();
             let nameVar = WuxDef.GetVariable("DisplayName");
@@ -119,7 +149,9 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             let ethnicityVar = WuxDef.GetVariable("Ethnicity");
             let genderVar = WuxDef.GetVariable("Gender");
             let homeRegionVar = WuxDef.GetVariable("HomeRegion");
-            attributeHandler.addMod([nameVar, fullNameVar, ethnicityVar, genderVar, homeRegionVar]);
+            let personalityVar = WuxDef.GetVariable("Soc_Personality");
+            let motivationVar = WuxDef.GetVariable("Soc_Motivation");
+            attributeHandler.addMod([nameVar, fullNameVar, ethnicityVar, genderVar, homeRegionVar, personalityVar, motivationVar]);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let generator = new WuxingHumanCharacterGenerator();
@@ -128,6 +160,8 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                 generator.character.ancestry = attrHandler.parseString(ethnicityVar);
                 generator.character.gender = attrHandler.parseString(genderVar);
                 generator.character.homeRegion = attrHandler.parseString(homeRegionVar);
+                generator.character.personality = getTitleFromDefinitionName(attrHandler.parseString(personalityVar));
+                generator.character.motivation = getTitleFromDefinitionName(attrHandler.parseString(motivationVar));
                 generator.generateCharacter();
                 attrHandler.addUpdate(WuxDef.GetVariable("Note_GenName"), generator.character.firstName);
                 attrHandler.addUpdate(WuxDef.GetVariable("Note_GenFullName"), generator.character.fullName);
@@ -147,7 +181,9 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             let genderVar = WuxDef.GetVariable("Note_GenGender");
             let homeRegionVar = WuxDef.GetVariable("Note_GenHomeRegion");
             let raceVar = WuxDef.GetVariable("Note_GenRace");
-            attributeHandler.addMod([nameVar, fullNameVar, genderVar, homeRegionVar, raceVar]);
+            let personalityVar = WuxDef.GetVariable("Note_GenPersonality");
+            let motivationVar = WuxDef.GetVariable("Note_GenMotivation");
+            attributeHandler.addMod([nameVar, fullNameVar, genderVar, homeRegionVar, raceVar, personalityVar, motivationVar]);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 attrHandler.addUpdate("character_name", attrHandler.parseString(nameVar));
                 attrHandler.addUpdate(WuxDef.GetVariable("SheetName"), attrHandler.parseString(nameVar));
@@ -156,6 +192,13 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                 attrHandler.addUpdate(WuxDef.GetVariable("Gender"), attrHandler.parseString(genderVar));
                 attrHandler.addUpdate(WuxDef.GetVariable("HomeRegion"), attrHandler.parseString(homeRegionVar));
                 attrHandler.addUpdate(WuxDef.GetVariable("Ethnicity"), attrHandler.parseString(raceVar));
+
+                let personalityName = getDefinitionNameFromTitle("PersonalityType", attrHandler.parseString(personalityVar));
+                let motivationName = getDefinitionNameFromTitle("MotivationType", attrHandler.parseString(motivationVar));
+                attrHandler.addUpdate(WuxDef.GetVariable("Soc_Personality"), personalityName);
+                attrHandler.addUpdate(WuxDef.GetVariable("Soc_Motivation"), motivationName);
+                attrHandler.addUpdate(WuxDef.GetVariable("Soc_Personality", WuxDef._db), personalityName === "0" ? "" : WuxDef.Get(personalityName).descriptions[0]);
+                attrHandler.addUpdate(WuxDef.GetVariable("Soc_Motivation", WuxDef._db), motivationName === "0" ? "" : WuxDef.Get(motivationName).descriptions[0]);
             });
             attributeHandler.run();
         },
@@ -272,6 +315,8 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
         UpdateDisplayName: updateDisplayName,
         UpdateCharacterSheetName: updateCharacterSheetName,
         UpdateSheetName: updateSheetName,
+        UpdatePersonalityDescription: updatePersonalityDescription,
+        UpdateMotivationDescription: updateMotivationDescription,
         UpdatePrimaryAffinity: updatePrimaryAffinity,
         GenerateCharacter: generateCharacter,
         UseGeneration: useGeneration,

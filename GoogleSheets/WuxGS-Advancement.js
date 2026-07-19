@@ -648,7 +648,17 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let hiddenField = jobclassDefinition.getAttribute(WuxDef._expand);
                             let headerContents = WuxSheetMain.CollapsibleHeader(`<span>${jobclassDefinition.getTitle()}</span>`, hiddenField);
                             let contents = WuxSheetMain.MultiRowGroup(jobData, WuxSheetMain.Table.FlexTable, 2);
-                            return WuxSheetMain.Header(headerContents) + WuxSheetMain.HiddenAuxField(hiddenField, contents);
+                            let output = WuxSheetMain.Header(headerContents) + WuxSheetMain.HiddenAuxField(hiddenField, contents);
+
+                            if (jobClassGroup === "JobClass_Common") {
+                                return `<input type="hidden" class="wuxIsPlayerSelection-flag" name="${WuxDef.GetAttribute("Title_IsPlayer")}" value="0">
+                                    <div class="wuxIsPlayerSelection-Generic">${output}</div>`;
+                            }
+                            if (jobClassGroup === "JobClass_Spirit") {
+                                return `<input type="hidden" class="wuxAncestrySelection-flag" name="${WuxDef.GetAttribute("Ancestry")}" value="0">
+                                    <div class="wuxAncestrySelection-Spirit">${output}</div>`;
+                            }
+                            return output;
                         },
 
                         buildJob = function (job) {

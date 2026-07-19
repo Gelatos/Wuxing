@@ -95,10 +95,10 @@
 											<div class="wuxPageDisplay-OriginData">
 												<div class="wuxHeader2"><span class="wuxTooltip">
 														<span class="wuxTooltipText">
-															Is this a Player Character
+															Type of Character Sheet
 														</span>
 														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Is this a Player Character</div>
+															<div class="wuxHeader2">Type of Character Sheet</div>
 
 															<span class="wuxDescription">Is this character a player character. Setting this to Yes will automatically setup the sheet with default player character values.</span>
 														</div>
@@ -106,6 +106,7 @@
 												<select class="wuxInput" name="attr_ttl-isplayer" value="0">
 													<option value="0">Not a Player</option>
 													<option value="1">Player Character</option>
+													<option value="2">Generic</option>
 												</select>
 											</div>
 											<div class="wuxFlexTable">
@@ -225,20 +226,6 @@
 													</div>
 												</span></div>
 											<textarea class="wuxInput wuxHeight30" name="attr_quickdescription"></textarea>
-											<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
-											<div class="wuxPageDisplay-OriginData">
-												<div class="wuxHeader2"><span class="wuxTooltip">
-														<span class="wuxTooltipText">
-															Starting Jin
-														</span>
-														<div class="wuxTooltipContent">
-															<div class="wuxHeader2">Starting Jin</div>
-
-															<span class="wuxDescription">The currency of the modern age. Originating in Minerva, this is paper money accepted throughout the continent of Wuxing due to Minerva's trade agreements throughout the land.</span>
-														</div>
-													</span></div>
-												<input type="text" class="undefined" name="attr_jin" />
-											</div>
 										</div>
 										<div class="wuxFlexTableItemGroup">
 											<div class="wuxHeader2"><span class="wuxTooltip">
@@ -327,14 +314,14 @@
 									<div class="wuxFlexTable">
 										<div class="wuxFlexTableItemGroup">
 											<div class="wuxHeader">
-												<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-originadvancement_info" undefined><span>?</span></div>Advancement
+												<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-startingdata_info" undefined><span>?</span></div>Starting Data
 											</div>
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-originadvancement_info" value="0">
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-startingdata_info" value="0">
 											<div class="wuxHiddenField">
 												<div class="wuxInfoContent">
-													<div class="wuxHeader2">Advancement</div>
+													<div class="wuxHeader2">Starting Data</div>
 
-													<span class="wuxDescription">As a character adventures, learns, and grows, they become more experienced in the world. Advancement tracks this progress through the character's level and experience. </span><span class="wuxDescription">Here you can set your character's level. You may also spend any advancement points gained from increasing your character level on additional build points for jobs, skills, or techniques.</span>
+													<span class="wuxDescription">The character's starting values for Level and Wealth. </span><span class="wuxDescription">A character's level determines how much experience the character has gained in the world. It will affect the number of points they are given to expand their character and grants them less restrictions on what they can learn. Importantly, it also icreases the character's Character Rank (CR) which is a base modifier to all of the character's major stats.</span><span class="wuxDescription">Wealth is how much money the character has when starting out. </span>
 												</div>
 											</div>
 											<div class="wuxHeader2"><span class="wuxTooltip">
@@ -370,6 +357,17 @@
 													</div>
 												</span></div>
 											<span class="wuxDescription"><span name="attr_potency"></span></span>
+											<div class="wuxHeader2"><span class="wuxTooltip">
+													<span class="wuxTooltipText">
+														Starting Wealth
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Starting Wealth</div>
+
+														<span class="wuxDescription">The character's amount of wealth they start with.</span>
+													</div>
+												</span></div>
+											<input type="text" class="undefined" name="attr_jin" />
 										</div>
 										<div class="wuxFlexTableItemGroup">
 											<div class="wuxHeader">
@@ -380,21 +378,77 @@
 												<div class="wuxInfoContent">
 													<div class="wuxHeader2">Influences</div>
 
-													<span class="wuxDescription">An influence is a phrase or desription of something of some importance to the character. </span><span class="wuxDescription">An influence is written as a few words to describe a personality trait, bond, or ideal. Each Influence should be clearly defined and unique. Descriptors like “Skilled” or “Determined” are too general, since they could fit nearly any context. Instead, choose something more distinct, like “Street Duelist” or “Focused Studier.” These influences can then be further explained in a description for when it would be used if necessary.</span>
-													<div class="wuxHeader2">Using Influences</div>
-
-													<span class="wuxDescription">Influences can be used to better perform skill checks. Whenenver a character makes a skill check, if they feel like the skill check is related to an influence they may draw on the influence to gain advantage. The number of advantages gained are equal to the influence's severity. Using an influence in this way always closts a Boon.</span><span class="wuxDescription">Whenever you play your character and leverage an influence you may gain a Boon of Truth. Gaining this boon is usually reserved for particularly dramatic uses of your influence.</span><span class="wuxDescription">Influences are used to modify social checks. Whenenver making a check that modifies favor, if your statements reference your target's influences it may grant you advantage or disadvantage to your check.</span><span class="wuxDescription">Influences also modify persuade checks. Whenever performing a persuade check you will add or removed 1d6 to the check result. This value can increase by +5 on a moderate influence, or +10 on a severe.</span><span class="wuxDescription">Only the most supportive influence and most opposing influence may affect any one persuade or favor roll.</span>
+													<span class="wuxDescription">Influences determine how a character interacts in a social situation and what motivates their decisions. Influence coes in two core forms, Personality and Motivation. </span><span class="wuxDescription">Personality determines how a character attacks with a social technique. A character's core personality is how they attack by default. It is also what determines their own defense when others wish to manipulate them. Techniques can also come with their own forms of attacking, allowing a character to use a personality that does not match their own core personality.</span><span class="wuxDescription">Motivations determine a character's goals and desires. Their Core Motivation helps shape how strongly they feel about the motivation at a base level. Motivations are always leveraged against to make requests of the character.</span><span class="wuxDescription">All Personalities and Motivations have an elemental association. A character's core personality and motivation need not reflect their elemental affinity. However there is always a strong bias for them to match.</span>
 												</div>
 											</div>
-											<div>
-												<fieldset class="repeating_influences">
-													<div class="wuxMultiRow"><select class="wuxInput wuxInfluenceType" name="attr_soc-severity" value="0">
-															<option value="sev-low{0}{1}">+1 Low</option>
-															<option value="sev-moderate{0}{1}">+2 Moderate</option>
-															<option value="sev-high{0}{1}">+3 High</option>
-														</select><input type="text" class="wuxInput wuxInfluenceDescription" name="attr_soc-influence" placeholder="Influence" /></div><textarea class="wuxInput wuxHeight30" name="attr_soc-influencedesc" placeholder="Description"></textarea>
-												</fieldset>
-											</div>
+											<div class="wuxHeader2"><span class="wuxTooltip">
+													<span class="wuxTooltipText">
+														Core Personality
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Core Personality</div>
+
+														<span class="wuxDescription">A character's core personality reflects how they think, feel, and engage with the world. Every personality belongs to one of the five elements: Wood (growth, vision), Fire (passion, action), Earth (stability, care), Metal (precision, discipline), or Water (depth, flow). A character's core personality need not reflect their elemental affinity, however there is always a strong bias for them to match.</span><span class="wuxDescription">A character's element shapes how their approach lands with others when attacking their Will or making requests. It is also used to determine how effective a social attack is on their Will. The flow goes in two cycles:</span><span class="wuxDescription">Generating (Wood → Fire → Earth → Metal → Water → Wood): Your element nourishes the target's — social skills gain advantage.</span><span class="wuxDescription">Controlling (Wood controls Earth → Water → Fire → Metal → Wood): Your element conflicts with the target's — social skills suffer disadvantage.</span>
+													</div>
+												</span></div>
+											<select class="wuxInput" name="attr_soc-personality" value="0">
+												<option value="0">-</option>
+												<option value="Personality_Cultivator">Wood - Cultivator</option>
+												<option value="Personality_Pioneer">Wood - Pioneer</option>
+												<option value="Personality_Visionary">Wood - Visionary</option>
+												<option value="Personality_Idealist">Wood - Idealist</option>
+												<option value="Personality_Zealot">Fire - Zealot</option>
+												<option value="Personality_Charmer">Fire - Charmer</option>
+												<option value="Personality_Catalyst">Fire - Catalyst</option>
+												<option value="Personality_Leader">Fire - Leader</option>
+												<option value="Personality_Bastion">Earth - Bastion</option>
+												<option value="Personality_Realist">Earth - Realist</option>
+												<option value="Personality_Traditionalist">Earth - Traditionalist</option>
+												<option value="Personality_Provider">Earth - Provider</option>
+												<option value="Personality_Stoic">Metal - Stoic</option>
+												<option value="Personality_Purist">Metal - Purist</option>
+												<option value="Personality_Arbiter">Metal - Arbiter</option>
+												<option value="Personality_Blade">Metal - Blade</option>
+												<option value="Personality_Sage">Water - Sage</option>
+												<option value="Personality_Mystic">Water - Mystic</option>
+												<option value="Personality_Schemer">Water - Schemer</option>
+												<option value="Personality_Adapter">Water - Adapter</option>
+											</select>
+											<span class="wuxDescription" name="attr_soc-personality_db"></span>
+											<div class="wuxHeader2"><span class="wuxTooltip">
+													<span class="wuxTooltipText">
+														Core Motivation
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Core Motivation</div>
+
+														<span class="wuxDescription">A character's core motivation is the force that drives why they take risks, form alliances, and pursue goals at all. Every motivation belongs to one of the five Wu Xing elements: Wood (growth, legacy), Fire (passion, recognition), Earth (community, security), Metal (order, authority), or Water (wisdom, the hidden). A character's core motivation need not reflect their elemental affinity, however there is always a strong bias for them to match.</span><span class="wuxDescription">A character's core motivation is rarely used directly, but rather it helps shape how their day to day motivations are shifted.</span><span class="wuxDescription">When a character gains a motivation it always gains a severity. These severities are +1 Low, +2 Moderate, and +3 High. A motivation's starting point is determined by how well it matches with their core motivation. One that loosely matches gains a +1. A motivation that matches gain a +2 and one that is a strong match gains a +3. A motivation must always be something the character desires otherwise it is not a motivation at all.</span>
+													</div>
+												</span></div>
+											<select class="wuxInput" name="attr_soc-motivation" value="0">
+												<option value="0">-</option>
+												<option value="Motivation_Discovery">Wood - Discovery</option>
+												<option value="Motivation_Freedom">Wood - Freedom</option>
+												<option value="Motivation_Legacy">Wood - Legacy</option>
+												<option value="Motivation_Wealth">Wood - Wealth</option>
+												<option value="Motivation_Fame">Fire - Fame</option>
+												<option value="Motivation_Glory">Fire - Glory</option>
+												<option value="Motivation_Love">Fire - Love</option>
+												<option value="Motivation_Revenge">Fire - Revenge</option>
+												<option value="Motivation_Belonging">Earth - Belonging</option>
+												<option value="Motivation_Duty">Earth - Duty</option>
+												<option value="Motivation_Peace">Earth - Peace</option>
+												<option value="Motivation_Survival">Earth - Survival</option>
+												<option value="Motivation_Control">Metal - Control</option>
+												<option value="Motivation_Justice">Metal - Justice</option>
+												<option value="Motivation_Power">Metal - Power</option>
+												<option value="Motivation_Truth">Metal - Truth</option>
+												<option value="Motivation_Chaos">Water - Chaos</option>
+												<option value="Motivation_Escape">Water - Escape</option>
+												<option value="Motivation_Knowledge">Water - Knowledge</option>
+												<option value="Motivation_Redemption">Water - Redemption</option>
+											</select>
+											<span class="wuxDescription" name="attr_soc-motivation_db"></span>
 										</div>
 									</div>
 								</div>
@@ -738,50 +792,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>
@@ -990,50 +1044,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>
@@ -2094,50 +2148,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>
@@ -3173,386 +3227,390 @@
 										</div>
 									</div>
 								</div>
-								<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
+								<input type="hidden" class="wuxAncestrySelection-flag" name="attr_ancestry" value="0">
+								<div class="wuxAncestrySelection-Spirit">
+									<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
 
-										<input type="hidden" class="wuxHiddenField-flag" name="attr_jobclass-spirit_expand" value="0">
-										<span class="wuxHiddenInlineField">
-											<div class="wuxButton wuxStyleHeaderButton">
-												<input type="checkbox" name="attr_jobclass-spirit_expand">
-												<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
-											</div>
-										</span>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_jobclass-spirit_expand" value="0">
+											<span class="wuxHiddenInlineField">
+												<div class="wuxButton wuxStyleHeaderButton">
+													<input type="checkbox" name="attr_jobclass-spirit_expand">
+													<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
+												</div>
+											</span>
 
-										<input type="hidden" class="wuxHiddenField-flag" name="attr_jobclass-spirit_expand" value="0">
-										<span class="wuxHiddenInlineAuxField">
-											<div class="wuxButton wuxStyleHeaderButton">
-												<input type="checkbox" name="attr_jobclass-spirit_expand">
-												<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
-											</div>
-										</span>
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_jobclass-spirit_expand" value="0">
+											<span class="wuxHiddenInlineAuxField">
+												<div class="wuxButton wuxStyleHeaderButton">
+													<input type="checkbox" name="attr_jobclass-spirit_expand">
+													<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
+												</div>
+											</span>
 
-									</span><span>Spirit Only Jobs</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_jobclass-spirit_expand" value="0">
-								<div class="wuxHiddenAuxField">
-									<div class="wuxFlexTable">
-										<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
-											<div class="wuxSectionBlock">
-												<div class="wuxInteractiveBlock">
-													<div class="wuxInteractiveInnerBlock">
-														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-yaksa" />
-														<div class="wuxInteractiveContent">
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-yaksa" />
-															<span class="wuxInteractiveIcon">&#9635;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-yaksa" />
-															<span class="wuxInteractiveAuxIcon">&#9634;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-yaksa" />
-															<span class="wuxHeader">Yaksa</span>
+										</span><span>Spirit Only Jobs</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_jobclass-spirit_expand" value="0">
+									<div class="wuxHiddenAuxField">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
+												<div class="wuxSectionBlock">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-yaksa" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-yaksa" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-yaksa" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-yaksa" />
+																<span class="wuxHeader">Yaksa</span>
+															</div>
 														</div>
 													</div>
+													<div class="wuxSectionHeaderFooter"></div>
+													<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Operator</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Operator</div>
+
+																	<span class="wuxDescription">An operator is an area control specialist that focuses on reducing the area their foes can maintain and ensuring the battlefield is maintained in their control.</span>
+																</span></span> | Sub-Role: <span class="wuxTooltip"><span class="wuxTooltipText">Vanguard</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Vanguard</div>
+
+																	<span class="wuxDescription">Vanguards are frontline attackers with strong defenses and self sustain to ensure they stay in the fight.</span>
+																</span></span></span>
+														<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★★☆</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Intermediate Complexity Jobs</div>
+
+																	<span class="wuxDescription">These Jobs often have techniques that require tracking during a conflict. To play these jobs optimally you often will need to look for opportunities to capitalize on your actions.</span>
+																</span></span></span>
+														<span>Main Skills: Transmute</span>
+														<span>&nbsp;</span>
+														<span>Spirit Only. Powerful nature spirits that use transmutation magic to shape and defend their domain, growing stronger within the land they inhabit.</span></span>
+													<div class="wuxButton ">
+														<input type="checkbox" name="attr_job-yaksa_info" value="Yaksa">
+														<span><span>See Techniques</span></span>
+													</div>
 												</div>
-												<div class="wuxSectionHeaderFooter"></div>
-												<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Operator</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Operator</div>
+											</div>
+											<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
+												<div class="wuxSectionBlock">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-shade" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-shade" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-shade" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-shade" />
+																<span class="wuxHeader">Shade</span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxSectionHeaderFooter"></div>
+													<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Strategist</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Strategist</div>
 
-																<span class="wuxDescription">An operator is an area control specialist that focuses on reducing the area their foes can maintain and ensuring the battlefield is maintained in their control.</span>
-															</span></span> | Sub-Role: <span class="wuxTooltip"><span class="wuxTooltipText">Vanguard</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Vanguard</div>
+																	<span class="wuxDescription">Strategists are support specialists that grant expanded options to their allies in the form of buffs and additional actions.</span>
+																</span></span> | Sub-Role: <span class="wuxTooltip"><span class="wuxTooltipText">Athlete</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Athlete</div>
 
-																<span class="wuxDescription">Vanguards are frontline attackers with strong defenses and self sustain to ensure they stay in the fight.</span>
-															</span></span></span>
-													<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★★☆</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Intermediate Complexity Jobs</div>
+																	<span class="wuxDescription">Athletes are highly mobile jobs with the ability to dart in and out of a conflict.</span>
+																</span></span></span>
+														<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★★☆</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Intermediate Complexity Jobs</div>
 
-																<span class="wuxDescription">These Jobs often have techniques that require tracking during a conflict. To play these jobs optimally you often will need to look for opportunities to capitalize on your actions.</span>
-															</span></span></span>
-													<span>Main Skills: Transmute</span>
-													<span>&nbsp;</span>
-													<span>Spirit Only. Powerful nature spirits that use transmutation magic to shape and defend their domain, growing stronger within the land they inhabit.</span></span>
-												<div class="wuxButton ">
-													<input type="checkbox" name="attr_job-yaksa_info" value="Yaksa">
-													<span><span>See Techniques</span></span>
+																	<span class="wuxDescription">These Jobs often have techniques that require tracking during a conflict. To play these jobs optimally you often will need to look for opportunities to capitalize on your actions.</span>
+																</span></span></span>
+														<span>Main Skills: Resonance</span>
+														<span>&nbsp;</span>
+														<span>Spirit Only. A shadowy spirit that manifests into objects and shadows to infiltrate and strike targets unseen.</span></span>
+													<div class="wuxButton ">
+														<input type="checkbox" name="attr_job-shade_info" value="Shade">
+														<span><span>See Techniques</span></span>
+													</div>
 												</div>
 											</div>
 										</div>
-										<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
-											<div class="wuxSectionBlock">
-												<div class="wuxInteractiveBlock">
-													<div class="wuxInteractiveInnerBlock">
-														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-shade" />
-														<div class="wuxInteractiveContent">
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-shade" />
-															<span class="wuxInteractiveIcon">&#9635;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-shade" />
-															<span class="wuxInteractiveAuxIcon">&#9634;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-shade" />
-															<span class="wuxHeader">Shade</span>
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
+												<div class="wuxSectionBlock">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-phantasm" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-phantasm" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-phantasm" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-phantasm" />
+																<span class="wuxHeader">Phantasm</span>
+															</div>
 														</div>
 													</div>
-												</div>
-												<div class="wuxSectionHeaderFooter"></div>
-												<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Strategist</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Strategist</div>
+													<div class="wuxSectionHeaderFooter"></div>
+													<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Advocate</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Advocate</div>
 
-																<span class="wuxDescription">Strategists are support specialists that grant expanded options to their allies in the form of buffs and additional actions.</span>
-															</span></span> | Sub-Role: <span class="wuxTooltip"><span class="wuxTooltipText">Athlete</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Athlete</div>
+																	<span class="wuxDescription">Advocates are experts at negotiations and grant many options to improve their odds of success in a social combat.</span>
+																</span></span> | Sub-Role: <span class="wuxTooltip"><span class="wuxTooltipText">Strategist</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Strategist</div>
 
-																<span class="wuxDescription">Athletes are highly mobile jobs with the ability to dart in and out of a conflict.</span>
-															</span></span></span>
-													<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★★☆</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Intermediate Complexity Jobs</div>
+																	<span class="wuxDescription">Strategists are support specialists that grant expanded options to their allies in the form of buffs and additional actions.</span>
+																</span></span></span>
+														<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★★☆</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Intermediate Complexity Jobs</div>
 
-																<span class="wuxDescription">These Jobs often have techniques that require tracking during a conflict. To play these jobs optimally you often will need to look for opportunities to capitalize on your actions.</span>
-															</span></span></span>
-													<span>Main Skills: Resonance</span>
-													<span>&nbsp;</span>
-													<span>Spirit Only. A shadowy spirit that manifests into objects and shadows to infiltrate and strike targets unseen.</span></span>
-												<div class="wuxButton ">
-													<input type="checkbox" name="attr_job-shade_info" value="Shade">
-													<span><span>See Techniques</span></span>
+																	<span class="wuxDescription">These Jobs often have techniques that require tracking during a conflict. To play these jobs optimally you often will need to look for opportunities to capitalize on your actions.</span>
+																</span></span></span>
+														<span>Main Skills: Charm</span>
+														<span>&nbsp;</span>
+														<span>Spirit Only. Illusionist spirits that use Charm to weave hallucinations and manipulate emotion and thought.</span></span>
+													<div class="wuxButton ">
+														<input type="checkbox" name="attr_job-phantasm_info" value="Phantasm">
+														<span><span>See Techniques</span></span>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-									<div class="wuxFlexTable">
-										<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
-											<div class="wuxSectionBlock">
-												<div class="wuxInteractiveBlock">
-													<div class="wuxInteractiveInnerBlock">
-														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-phantasm" />
-														<div class="wuxInteractiveContent">
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-phantasm" />
-															<span class="wuxInteractiveIcon">&#9635;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-phantasm" />
-															<span class="wuxInteractiveAuxIcon">&#9634;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-phantasm" />
-															<span class="wuxHeader">Phantasm</span>
+								</div><input type="hidden" class="wuxIsPlayerSelection-flag" name="attr_ttl-isplayer" value="0">
+								<div class="wuxIsPlayerSelection-Generic">
+									<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
+
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_jobclass-common_expand" value="0">
+											<span class="wuxHiddenInlineField">
+												<div class="wuxButton wuxStyleHeaderButton">
+													<input type="checkbox" name="attr_jobclass-common_expand">
+													<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
+												</div>
+											</span>
+
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_jobclass-common_expand" value="0">
+											<span class="wuxHiddenInlineAuxField">
+												<div class="wuxButton wuxStyleHeaderButton">
+													<input type="checkbox" name="attr_jobclass-common_expand">
+													<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
+												</div>
+											</span>
+
+										</span><span>Commoner Jobs</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_jobclass-common_expand" value="0">
+									<div class="wuxHiddenAuxField">
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
+												<div class="wuxSectionBlock">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-vanguard" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-vanguard" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-vanguard" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-vanguard" />
+																<span class="wuxHeader">Vanguard</span>
+															</div>
 														</div>
 													</div>
+													<div class="wuxSectionHeaderFooter"></div>
+													<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Vanguard</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Vanguard</div>
+
+																	<span class="wuxDescription">Vanguards are frontline attackers with strong defenses and self sustain to ensure they stay in the fight.</span>
+																</span></span></span>
+														<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★☆☆</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Low Complexity Jobs</div>
+
+																	<span class="wuxDescription">These Jobs have simple mechanics and will perform their roles well. During conflicts they are often focused on their own turn and managing their own actions.</span>
+																</span></span></span>
+														<span>Main Skills: None</span>
+														<span>&nbsp;</span>
+														<span>Vanguards are frontline attackers with strong defenses and self sustain to ensure they stay in the fight.</span></span>
+													<div class="wuxButton ">
+														<input type="checkbox" name="attr_job-vanguard_info" value="Vanguard">
+														<span><span>See Techniques</span></span>
+													</div>
 												</div>
-												<div class="wuxSectionHeaderFooter"></div>
-												<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Advocate</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Advocate</div>
+											</div>
+											<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
+												<div class="wuxSectionBlock">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-athlete" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-athlete" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-athlete" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-athlete" />
+																<span class="wuxHeader">Athlete</span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxSectionHeaderFooter"></div>
+													<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Athlete</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Athlete</div>
 
-																<span class="wuxDescription">Advocates are experts at negotiations and grant many options to improve their odds of success in a social combat.</span>
-															</span></span> | Sub-Role: <span class="wuxTooltip"><span class="wuxTooltipText">Strategist</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Strategist</div>
+																	<span class="wuxDescription">Athletes are highly mobile jobs with the ability to dart in and out of a conflict.</span>
+																</span></span></span>
+														<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★☆☆</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Low Complexity Jobs</div>
 
-																<span class="wuxDescription">Strategists are support specialists that grant expanded options to their allies in the form of buffs and additional actions.</span>
-															</span></span></span>
-													<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★★☆</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Intermediate Complexity Jobs</div>
+																	<span class="wuxDescription">These Jobs have simple mechanics and will perform their roles well. During conflicts they are often focused on their own turn and managing their own actions.</span>
+																</span></span></span>
+														<span>Main Skills: None</span>
+														<span>&nbsp;</span>
+														<span>Athletes are highly mobile jobs with the ability to dart in and out of a conflict.</span></span>
+													<div class="wuxButton ">
+														<input type="checkbox" name="attr_job-athlete_info" value="Athlete">
+														<span><span>See Techniques</span></span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
+												<div class="wuxSectionBlock">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-operator" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-operator" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-operator" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-operator" />
+																<span class="wuxHeader">Operator</span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxSectionHeaderFooter"></div>
+													<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Operator</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Operator</div>
 
-																<span class="wuxDescription">These Jobs often have techniques that require tracking during a conflict. To play these jobs optimally you often will need to look for opportunities to capitalize on your actions.</span>
-															</span></span></span>
-													<span>Main Skills: Charm</span>
-													<span>&nbsp;</span>
-													<span>Spirit Only. Illusionist spirits that use Charm to weave hallucinations and manipulate emotion and thought.</span></span>
-												<div class="wuxButton ">
-													<input type="checkbox" name="attr_job-phantasm_info" value="Phantasm">
-													<span><span>See Techniques</span></span>
+																	<span class="wuxDescription">An operator is an area control specialist that focuses on reducing the area their foes can maintain and ensuring the battlefield is maintained in their control.</span>
+																</span></span></span>
+														<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★☆☆</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Low Complexity Jobs</div>
+
+																	<span class="wuxDescription">These Jobs have simple mechanics and will perform their roles well. During conflicts they are often focused on their own turn and managing their own actions.</span>
+																</span></span></span>
+														<span>Main Skills: None</span>
+														<span>&nbsp;</span>
+														<span>An operator is an area control specialist that focuses on reducing the area their foes can maintain and ensuring the battlefield is maintained in their control.</span></span>
+													<div class="wuxButton ">
+														<input type="checkbox" name="attr_job-operator_info" value="Operator">
+														<span><span>See Techniques</span></span>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
+												<div class="wuxSectionBlock">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-strategist" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-strategist" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-strategist" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-strategist" />
+																<span class="wuxHeader">Strategist</span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxSectionHeaderFooter"></div>
+													<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Strategist</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Strategist</div>
+
+																	<span class="wuxDescription">Strategists are support specialists that grant expanded options to their allies in the form of buffs and additional actions.</span>
+																</span></span></span>
+														<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★☆☆</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Low Complexity Jobs</div>
+
+																	<span class="wuxDescription">These Jobs have simple mechanics and will perform their roles well. During conflicts they are often focused on their own turn and managing their own actions.</span>
+																</span></span></span>
+														<span>Main Skills: None</span>
+														<span>&nbsp;</span>
+														<span>Strategists are support specialists that grant expanded options to their allies in the form of buffs and additional actions.</span></span>
+													<div class="wuxButton ">
+														<input type="checkbox" name="attr_job-strategist_info" value="Strategist">
+														<span><span>See Techniques</span></span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFlexTable">
+											<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
+												<div class="wuxSectionBlock">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-healer" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-healer" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-healer" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-healer" />
+																<span class="wuxHeader">Healer</span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxSectionHeaderFooter"></div>
+													<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Healer</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Healer</div>
+
+																	<span class="wuxDescription">A healer specializes at healing damage, removing debilitating status effects, and overall improving the survival of their allies.</span>
+																</span></span></span>
+														<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★☆☆</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Low Complexity Jobs</div>
+
+																	<span class="wuxDescription">These Jobs have simple mechanics and will perform their roles well. During conflicts they are often focused on their own turn and managing their own actions.</span>
+																</span></span></span>
+														<span>Main Skills: None</span>
+														<span>&nbsp;</span>
+														<span>A healer specializes at healing damage, removing debilitating status effects, and overall improving the survival of their allies.</span></span>
+													<div class="wuxButton ">
+														<input type="checkbox" name="attr_job-healer_info" value="Healer">
+														<span><span>See Techniques</span></span>
+													</div>
+												</div>
+											</div>
+											<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
+												<div class="wuxSectionBlock">
+													<div class="wuxInteractiveBlock">
+														<div class="wuxInteractiveInnerBlock">
+															<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-advocate" />
+															<div class="wuxInteractiveContent">
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-advocate" />
+																<span class="wuxInteractiveIcon">&#9635;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-advocate" />
+																<span class="wuxInteractiveAuxIcon">&#9634;</span>
+																<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-advocate" />
+																<span class="wuxHeader">Advocate</span>
+															</div>
+														</div>
+													</div>
+													<div class="wuxSectionHeaderFooter"></div>
+													<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Advocate</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Advocate</div>
+
+																	<span class="wuxDescription">Advocates are experts at negotiations and grant many options to improve their odds of success in a social combat.</span>
+																</span></span></span>
+														<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★☆☆</span><span class="wuxTooltipContent">
+																	<div class="wuxHeader2">Low Complexity Jobs</div>
+
+																	<span class="wuxDescription">These Jobs have simple mechanics and will perform their roles well. During conflicts they are often focused on their own turn and managing their own actions.</span>
+																</span></span></span>
+														<span>Main Skills: None</span>
+														<span>&nbsp;</span>
+														<span>Advocates are experts at negotiations and grant many options to improve their odds of success in a social combat.</span></span>
+													<div class="wuxButton ">
+														<input type="checkbox" name="attr_job-advocate_info" value="Advocate">
+														<span><span>See Techniques</span></span>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
-
-										<input type="hidden" class="wuxHiddenField-flag" name="attr_jobclass-common_expand" value="0">
-										<span class="wuxHiddenInlineField">
-											<div class="wuxButton wuxStyleHeaderButton">
-												<input type="checkbox" name="attr_jobclass-common_expand">
-												<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
-											</div>
-										</span>
-
-										<input type="hidden" class="wuxHiddenField-flag" name="attr_jobclass-common_expand" value="0">
-										<span class="wuxHiddenInlineAuxField">
-											<div class="wuxButton wuxStyleHeaderButton">
-												<input type="checkbox" name="attr_jobclass-common_expand">
-												<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
-											</div>
-										</span>
-
-									</span><span>Commoner Jobs</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_jobclass-common_expand" value="0">
-								<div class="wuxHiddenAuxField">
-									<div class="wuxFlexTable">
-										<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
-											<div class="wuxSectionBlock">
-												<div class="wuxInteractiveBlock">
-													<div class="wuxInteractiveInnerBlock">
-														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-vanguard" />
-														<div class="wuxInteractiveContent">
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-vanguard" />
-															<span class="wuxInteractiveIcon">&#9635;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-vanguard" />
-															<span class="wuxInteractiveAuxIcon">&#9634;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-vanguard" />
-															<span class="wuxHeader">Vanguard</span>
-														</div>
-													</div>
-												</div>
-												<div class="wuxSectionHeaderFooter"></div>
-												<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Vanguard</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Vanguard</div>
-
-																<span class="wuxDescription">Vanguards are frontline attackers with strong defenses and self sustain to ensure they stay in the fight.</span>
-															</span></span></span>
-													<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★☆☆</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Low Complexity Jobs</div>
-
-																<span class="wuxDescription">These Jobs have simple mechanics and will perform their roles well. During conflicts they are often focused on their own turn and managing their own actions.</span>
-															</span></span></span>
-													<span>Main Skills: None</span>
-													<span>&nbsp;</span>
-													<span>Vanguards are frontline attackers with strong defenses and self sustain to ensure they stay in the fight.</span></span>
-												<div class="wuxButton ">
-													<input type="checkbox" name="attr_job-vanguard_info" value="Vanguard">
-													<span><span>See Techniques</span></span>
-												</div>
-											</div>
-										</div>
-										<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
-											<div class="wuxSectionBlock">
-												<div class="wuxInteractiveBlock">
-													<div class="wuxInteractiveInnerBlock">
-														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-athlete" />
-														<div class="wuxInteractiveContent">
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-athlete" />
-															<span class="wuxInteractiveIcon">&#9635;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-athlete" />
-															<span class="wuxInteractiveAuxIcon">&#9634;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-athlete" />
-															<span class="wuxHeader">Athlete</span>
-														</div>
-													</div>
-												</div>
-												<div class="wuxSectionHeaderFooter"></div>
-												<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Athlete</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Athlete</div>
-
-																<span class="wuxDescription">Athletes are highly mobile jobs with the ability to dart in and out of a conflict.</span>
-															</span></span></span>
-													<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★☆☆</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Low Complexity Jobs</div>
-
-																<span class="wuxDescription">These Jobs have simple mechanics and will perform their roles well. During conflicts they are often focused on their own turn and managing their own actions.</span>
-															</span></span></span>
-													<span>Main Skills: None</span>
-													<span>&nbsp;</span>
-													<span>Athletes are highly mobile jobs with the ability to dart in and out of a conflict.</span></span>
-												<div class="wuxButton ">
-													<input type="checkbox" name="attr_job-athlete_info" value="Athlete">
-													<span><span>See Techniques</span></span>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="wuxFlexTable">
-										<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
-											<div class="wuxSectionBlock">
-												<div class="wuxInteractiveBlock">
-													<div class="wuxInteractiveInnerBlock">
-														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-operator" />
-														<div class="wuxInteractiveContent">
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-operator" />
-															<span class="wuxInteractiveIcon">&#9635;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-operator" />
-															<span class="wuxInteractiveAuxIcon">&#9634;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-operator" />
-															<span class="wuxHeader">Operator</span>
-														</div>
-													</div>
-												</div>
-												<div class="wuxSectionHeaderFooter"></div>
-												<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Operator</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Operator</div>
-
-																<span class="wuxDescription">An operator is an area control specialist that focuses on reducing the area their foes can maintain and ensuring the battlefield is maintained in their control.</span>
-															</span></span></span>
-													<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★☆☆</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Low Complexity Jobs</div>
-
-																<span class="wuxDescription">These Jobs have simple mechanics and will perform their roles well. During conflicts they are often focused on their own turn and managing their own actions.</span>
-															</span></span></span>
-													<span>Main Skills: None</span>
-													<span>&nbsp;</span>
-													<span>An operator is an area control specialist that focuses on reducing the area their foes can maintain and ensuring the battlefield is maintained in their control.</span></span>
-												<div class="wuxButton ">
-													<input type="checkbox" name="attr_job-operator_info" value="Operator">
-													<span><span>See Techniques</span></span>
-												</div>
-											</div>
-										</div>
-										<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
-											<div class="wuxSectionBlock">
-												<div class="wuxInteractiveBlock">
-													<div class="wuxInteractiveInnerBlock">
-														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-strategist" />
-														<div class="wuxInteractiveContent">
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-strategist" />
-															<span class="wuxInteractiveIcon">&#9635;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-strategist" />
-															<span class="wuxInteractiveAuxIcon">&#9634;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-strategist" />
-															<span class="wuxHeader">Strategist</span>
-														</div>
-													</div>
-												</div>
-												<div class="wuxSectionHeaderFooter"></div>
-												<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Strategist</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Strategist</div>
-
-																<span class="wuxDescription">Strategists are support specialists that grant expanded options to their allies in the form of buffs and additional actions.</span>
-															</span></span></span>
-													<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★☆☆</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Low Complexity Jobs</div>
-
-																<span class="wuxDescription">These Jobs have simple mechanics and will perform their roles well. During conflicts they are often focused on their own turn and managing their own actions.</span>
-															</span></span></span>
-													<span>Main Skills: None</span>
-													<span>&nbsp;</span>
-													<span>Strategists are support specialists that grant expanded options to their allies in the form of buffs and additional actions.</span></span>
-												<div class="wuxButton ">
-													<input type="checkbox" name="attr_job-strategist_info" value="Strategist">
-													<span><span>See Techniques</span></span>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="wuxFlexTable">
-										<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
-											<div class="wuxSectionBlock">
-												<div class="wuxInteractiveBlock">
-													<div class="wuxInteractiveInnerBlock">
-														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-healer" />
-														<div class="wuxInteractiveContent">
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-healer" />
-															<span class="wuxInteractiveIcon">&#9635;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-healer" />
-															<span class="wuxInteractiveAuxIcon">&#9634;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-healer" />
-															<span class="wuxHeader">Healer</span>
-														</div>
-													</div>
-												</div>
-												<div class="wuxSectionHeaderFooter"></div>
-												<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Healer</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Healer</div>
-
-																<span class="wuxDescription">A healer specializes at healing damage, removing debilitating status effects, and overall improving the survival of their allies.</span>
-															</span></span></span>
-													<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★☆☆</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Low Complexity Jobs</div>
-
-																<span class="wuxDescription">These Jobs have simple mechanics and will perform their roles well. During conflicts they are often focused on their own turn and managing their own actions.</span>
-															</span></span></span>
-													<span>Main Skills: None</span>
-													<span>&nbsp;</span>
-													<span>A healer specializes at healing damage, removing debilitating status effects, and overall improving the survival of their allies.</span></span>
-												<div class="wuxButton ">
-													<input type="checkbox" name="attr_job-healer_info" value="Healer">
-													<span><span>See Techniques</span></span>
-												</div>
-											</div>
-										</div>
-										<div class="wuxFlexTableItemGroupHalf wuxMinWidth220">
-											<div class="wuxSectionBlock">
-												<div class="wuxInteractiveBlock">
-													<div class="wuxInteractiveInnerBlock">
-														<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_job-advocate" />
-														<div class="wuxInteractiveContent">
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-advocate" />
-															<span class="wuxInteractiveIcon">&#9635;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-advocate" />
-															<span class="wuxInteractiveAuxIcon">&#9634;</span>
-															<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_job-advocate" />
-															<span class="wuxHeader">Advocate</span>
-														</div>
-													</div>
-												</div>
-												<div class="wuxSectionHeaderFooter"></div>
-												<span class="wuxDescription"><span>Role: <span class="wuxTooltip"><span class="wuxTooltipText">Advocate</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Advocate</div>
-
-																<span class="wuxDescription">Advocates are experts at negotiations and grant many options to improve their odds of success in a social combat.</span>
-															</span></span></span>
-													<span>Difficulty: <span class="wuxTooltip"><span class="wuxTooltipText">★☆☆</span><span class="wuxTooltipContent">
-																<div class="wuxHeader2">Low Complexity Jobs</div>
-
-																<span class="wuxDescription">These Jobs have simple mechanics and will perform their roles well. During conflicts they are often focused on their own turn and managing their own actions.</span>
-															</span></span></span>
-													<span>Main Skills: None</span>
-													<span>&nbsp;</span>
-													<span>Advocates are experts at negotiations and grant many options to improve their odds of success in a social combat.</span></span>
-												<div class="wuxButton ">
-													<input type="checkbox" name="attr_job-advocate_info" value="Advocate">
-													<span><span>See Techniques</span></span>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
 							</div>
 						</div>
 					</div>
@@ -3563,50 +3621,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>
@@ -7283,50 +7341,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>
@@ -8493,50 +8551,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>
@@ -8674,50 +8732,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>
@@ -8963,21 +9021,77 @@
 												<div class="wuxInfoContent">
 													<div class="wuxHeader2">Influences</div>
 
-													<span class="wuxDescription">An influence is a phrase or desription of something of some importance to the character. </span><span class="wuxDescription">An influence is written as a few words to describe a personality trait, bond, or ideal. Each Influence should be clearly defined and unique. Descriptors like “Skilled” or “Determined” are too general, since they could fit nearly any context. Instead, choose something more distinct, like “Street Duelist” or “Focused Studier.” These influences can then be further explained in a description for when it would be used if necessary.</span>
-													<div class="wuxHeader2">Using Influences</div>
-
-													<span class="wuxDescription">Influences can be used to better perform skill checks. Whenenver a character makes a skill check, if they feel like the skill check is related to an influence they may draw on the influence to gain advantage. The number of advantages gained are equal to the influence's severity. Using an influence in this way always closts a Boon.</span><span class="wuxDescription">Whenever you play your character and leverage an influence you may gain a Boon of Truth. Gaining this boon is usually reserved for particularly dramatic uses of your influence.</span><span class="wuxDescription">Influences are used to modify social checks. Whenenver making a check that modifies favor, if your statements reference your target's influences it may grant you advantage or disadvantage to your check.</span><span class="wuxDescription">Influences also modify persuade checks. Whenever performing a persuade check you will add or removed 1d6 to the check result. This value can increase by +5 on a moderate influence, or +10 on a severe.</span><span class="wuxDescription">Only the most supportive influence and most opposing influence may affect any one persuade or favor roll.</span>
+													<span class="wuxDescription">Influences determine how a character interacts in a social situation and what motivates their decisions. Influence coes in two core forms, Personality and Motivation. </span><span class="wuxDescription">Personality determines how a character attacks with a social technique. A character's core personality is how they attack by default. It is also what determines their own defense when others wish to manipulate them. Techniques can also come with their own forms of attacking, allowing a character to use a personality that does not match their own core personality.</span><span class="wuxDescription">Motivations determine a character's goals and desires. Their Core Motivation helps shape how strongly they feel about the motivation at a base level. Motivations are always leveraged against to make requests of the character.</span><span class="wuxDescription">All Personalities and Motivations have an elemental association. A character's core personality and motivation need not reflect their elemental affinity. However there is always a strong bias for them to match.</span>
 												</div>
 											</div>
-											<div>
-												<fieldset class="repeating_influences">
-													<div class="wuxMultiRow"><select class="wuxInput wuxInfluenceType" name="attr_soc-severity" value="0">
-															<option value="sev-low{0}{1}">+1 Low</option>
-															<option value="sev-moderate{0}{1}">+2 Moderate</option>
-															<option value="sev-high{0}{1}">+3 High</option>
-														</select><input type="text" class="wuxInput wuxInfluenceDescription" name="attr_soc-influence" placeholder="Influence" /></div><textarea class="wuxInput wuxHeight30" name="attr_soc-influencedesc" placeholder="Description"></textarea>
-												</fieldset>
-											</div>
+											<div class="wuxHeader2"><span class="wuxTooltip">
+													<span class="wuxTooltipText">
+														Core Personality
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Core Personality</div>
+
+														<span class="wuxDescription">A character's core personality reflects how they think, feel, and engage with the world. Every personality belongs to one of the five elements: Wood (growth, vision), Fire (passion, action), Earth (stability, care), Metal (precision, discipline), or Water (depth, flow). A character's core personality need not reflect their elemental affinity, however there is always a strong bias for them to match.</span><span class="wuxDescription">A character's element shapes how their approach lands with others when attacking their Will or making requests. It is also used to determine how effective a social attack is on their Will. The flow goes in two cycles:</span><span class="wuxDescription">Generating (Wood → Fire → Earth → Metal → Water → Wood): Your element nourishes the target's — social skills gain advantage.</span><span class="wuxDescription">Controlling (Wood controls Earth → Water → Fire → Metal → Wood): Your element conflicts with the target's — social skills suffer disadvantage.</span>
+													</div>
+												</span></div>
+											<select class="wuxInput" name="attr_soc-personality" value="0">
+												<option value="0">-</option>
+												<option value="Personality_Cultivator">Wood - Cultivator</option>
+												<option value="Personality_Pioneer">Wood - Pioneer</option>
+												<option value="Personality_Visionary">Wood - Visionary</option>
+												<option value="Personality_Idealist">Wood - Idealist</option>
+												<option value="Personality_Zealot">Fire - Zealot</option>
+												<option value="Personality_Charmer">Fire - Charmer</option>
+												<option value="Personality_Catalyst">Fire - Catalyst</option>
+												<option value="Personality_Leader">Fire - Leader</option>
+												<option value="Personality_Bastion">Earth - Bastion</option>
+												<option value="Personality_Realist">Earth - Realist</option>
+												<option value="Personality_Traditionalist">Earth - Traditionalist</option>
+												<option value="Personality_Provider">Earth - Provider</option>
+												<option value="Personality_Stoic">Metal - Stoic</option>
+												<option value="Personality_Purist">Metal - Purist</option>
+												<option value="Personality_Arbiter">Metal - Arbiter</option>
+												<option value="Personality_Blade">Metal - Blade</option>
+												<option value="Personality_Sage">Water - Sage</option>
+												<option value="Personality_Mystic">Water - Mystic</option>
+												<option value="Personality_Schemer">Water - Schemer</option>
+												<option value="Personality_Adapter">Water - Adapter</option>
+											</select>
+											<span class="wuxDescription" name="attr_soc-personality_db"></span>
+											<div class="wuxHeader2"><span class="wuxTooltip">
+													<span class="wuxTooltipText">
+														Core Motivation
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Core Motivation</div>
+
+														<span class="wuxDescription">A character's core motivation is the force that drives why they take risks, form alliances, and pursue goals at all. Every motivation belongs to one of the five Wu Xing elements: Wood (growth, legacy), Fire (passion, recognition), Earth (community, security), Metal (order, authority), or Water (wisdom, the hidden). A character's core motivation need not reflect their elemental affinity, however there is always a strong bias for them to match.</span><span class="wuxDescription">A character's core motivation is rarely used directly, but rather it helps shape how their day to day motivations are shifted.</span><span class="wuxDescription">When a character gains a motivation it always gains a severity. These severities are +1 Low, +2 Moderate, and +3 High. A motivation's starting point is determined by how well it matches with their core motivation. One that loosely matches gains a +1. A motivation that matches gain a +2 and one that is a strong match gains a +3. A motivation must always be something the character desires otherwise it is not a motivation at all.</span>
+													</div>
+												</span></div>
+											<select class="wuxInput" name="attr_soc-motivation" value="0">
+												<option value="0">-</option>
+												<option value="Motivation_Discovery">Wood - Discovery</option>
+												<option value="Motivation_Freedom">Wood - Freedom</option>
+												<option value="Motivation_Legacy">Wood - Legacy</option>
+												<option value="Motivation_Wealth">Wood - Wealth</option>
+												<option value="Motivation_Fame">Fire - Fame</option>
+												<option value="Motivation_Glory">Fire - Glory</option>
+												<option value="Motivation_Love">Fire - Love</option>
+												<option value="Motivation_Revenge">Fire - Revenge</option>
+												<option value="Motivation_Belonging">Earth - Belonging</option>
+												<option value="Motivation_Duty">Earth - Duty</option>
+												<option value="Motivation_Peace">Earth - Peace</option>
+												<option value="Motivation_Survival">Earth - Survival</option>
+												<option value="Motivation_Control">Metal - Control</option>
+												<option value="Motivation_Justice">Metal - Justice</option>
+												<option value="Motivation_Power">Metal - Power</option>
+												<option value="Motivation_Truth">Metal - Truth</option>
+												<option value="Motivation_Chaos">Water - Chaos</option>
+												<option value="Motivation_Escape">Water - Escape</option>
+												<option value="Motivation_Knowledge">Water - Knowledge</option>
+												<option value="Motivation_Redemption">Water - Redemption</option>
+											</select>
+											<span class="wuxDescription" name="attr_soc-motivation_db"></span>
 										</div>
 									</div>
 									<div class="wuxFlexTable">
@@ -9253,50 +9367,50 @@
 					<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 					<div class="wuxPageDisplay-Origin">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Jobs">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Attributes">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Knowledge">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Gear">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-StylesData">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Advancement">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 							</div>
 						</div>
 					</div>
@@ -10851,10 +10965,10 @@
 												<div class="wuxPageDisplay-OriginData">
 													<div class="wuxHeader2"><span class="wuxTooltip">
 															<span class="wuxTooltipText">
-																Is this a Player Character
+																Type of Character Sheet
 															</span>
 															<div class="wuxTooltipContent">
-																<div class="wuxHeader2">Is this a Player Character</div>
+																<div class="wuxHeader2">Type of Character Sheet</div>
 
 																<span class="wuxDescription">Is this character a player character. Setting this to Yes will automatically setup the sheet with default player character values.</span>
 															</div>
@@ -10862,6 +10976,7 @@
 													<select class="wuxInput" name="attr_ttl-isplayer" value="0">
 														<option value="0">Not a Player</option>
 														<option value="1">Player Character</option>
+														<option value="2">Generic</option>
 													</select>
 												</div>
 												<div class="wuxFlexTable">
@@ -10981,20 +11096,6 @@
 														</div>
 													</span></div>
 												<textarea class="wuxInput wuxHeight30" name="attr_quickdescription"></textarea>
-												<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
-												<div class="wuxPageDisplay-OriginData">
-													<div class="wuxHeader2"><span class="wuxTooltip">
-															<span class="wuxTooltipText">
-																Starting Jin
-															</span>
-															<div class="wuxTooltipContent">
-																<div class="wuxHeader2">Starting Jin</div>
-
-																<span class="wuxDescription">The currency of the modern age. Originating in Minerva, this is paper money accepted throughout the continent of Wuxing due to Minerva's trade agreements throughout the land.</span>
-															</div>
-														</span></div>
-													<input type="text" class="undefined" name="attr_jin" />
-												</div>
 											</div>
 											<div class="wuxFlexTableItemGroup">
 												<div class="wuxHeader2"><span class="wuxTooltip">
@@ -11083,14 +11184,14 @@
 										<div class="wuxFlexTable">
 											<div class="wuxFlexTableItemGroup">
 												<div class="wuxHeader">
-													<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-originadvancement_info" undefined><span>?</span></div>Advancement
+													<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-startingdata_info" undefined><span>?</span></div>Starting Data
 												</div>
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-originadvancement_info" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-startingdata_info" value="0">
 												<div class="wuxHiddenField">
 													<div class="wuxInfoContent">
-														<div class="wuxHeader2">Advancement</div>
+														<div class="wuxHeader2">Starting Data</div>
 
-														<span class="wuxDescription">As a character adventures, learns, and grows, they become more experienced in the world. Advancement tracks this progress through the character's level and experience. </span><span class="wuxDescription">Here you can set your character's level. You may also spend any advancement points gained from increasing your character level on additional build points for jobs, skills, or techniques.</span>
+														<span class="wuxDescription">The character's starting values for Level and Wealth. </span><span class="wuxDescription">A character's level determines how much experience the character has gained in the world. It will affect the number of points they are given to expand their character and grants them less restrictions on what they can learn. Importantly, it also icreases the character's Character Rank (CR) which is a base modifier to all of the character's major stats.</span><span class="wuxDescription">Wealth is how much money the character has when starting out. </span>
 													</div>
 												</div>
 												<div class="wuxHeader2"><span class="wuxTooltip">
@@ -11126,6 +11227,17 @@
 														</div>
 													</span></div>
 												<span class="wuxDescription"><span name="attr_potency"></span></span>
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Starting Wealth
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Starting Wealth</div>
+
+															<span class="wuxDescription">The character's amount of wealth they start with.</span>
+														</div>
+													</span></div>
+												<input type="text" class="undefined" name="attr_jin" />
 											</div>
 											<div class="wuxFlexTableItemGroup">
 												<div class="wuxHeader">
@@ -11136,21 +11248,77 @@
 													<div class="wuxInfoContent">
 														<div class="wuxHeader2">Influences</div>
 
-														<span class="wuxDescription">An influence is a phrase or desription of something of some importance to the character. </span><span class="wuxDescription">An influence is written as a few words to describe a personality trait, bond, or ideal. Each Influence should be clearly defined and unique. Descriptors like “Skilled” or “Determined” are too general, since they could fit nearly any context. Instead, choose something more distinct, like “Street Duelist” or “Focused Studier.” These influences can then be further explained in a description for when it would be used if necessary.</span>
-														<div class="wuxHeader2">Using Influences</div>
-
-														<span class="wuxDescription">Influences can be used to better perform skill checks. Whenenver a character makes a skill check, if they feel like the skill check is related to an influence they may draw on the influence to gain advantage. The number of advantages gained are equal to the influence's severity. Using an influence in this way always closts a Boon.</span><span class="wuxDescription">Whenever you play your character and leverage an influence you may gain a Boon of Truth. Gaining this boon is usually reserved for particularly dramatic uses of your influence.</span><span class="wuxDescription">Influences are used to modify social checks. Whenenver making a check that modifies favor, if your statements reference your target's influences it may grant you advantage or disadvantage to your check.</span><span class="wuxDescription">Influences also modify persuade checks. Whenever performing a persuade check you will add or removed 1d6 to the check result. This value can increase by +5 on a moderate influence, or +10 on a severe.</span><span class="wuxDescription">Only the most supportive influence and most opposing influence may affect any one persuade or favor roll.</span>
+														<span class="wuxDescription">Influences determine how a character interacts in a social situation and what motivates their decisions. Influence coes in two core forms, Personality and Motivation. </span><span class="wuxDescription">Personality determines how a character attacks with a social technique. A character's core personality is how they attack by default. It is also what determines their own defense when others wish to manipulate them. Techniques can also come with their own forms of attacking, allowing a character to use a personality that does not match their own core personality.</span><span class="wuxDescription">Motivations determine a character's goals and desires. Their Core Motivation helps shape how strongly they feel about the motivation at a base level. Motivations are always leveraged against to make requests of the character.</span><span class="wuxDescription">All Personalities and Motivations have an elemental association. A character's core personality and motivation need not reflect their elemental affinity. However there is always a strong bias for them to match.</span>
 													</div>
 												</div>
-												<div>
-													<fieldset class="repeating_influences">
-														<div class="wuxMultiRow"><select class="wuxInput wuxInfluenceType" name="attr_soc-severity" value="0">
-																<option value="sev-low{0}{1}">+1 Low</option>
-																<option value="sev-moderate{0}{1}">+2 Moderate</option>
-																<option value="sev-high{0}{1}">+3 High</option>
-															</select><input type="text" class="wuxInput wuxInfluenceDescription" name="attr_soc-influence" placeholder="Influence" /></div><textarea class="wuxInput wuxHeight30" name="attr_soc-influencedesc" placeholder="Description"></textarea>
-													</fieldset>
-												</div>
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Core Personality
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Core Personality</div>
+
+															<span class="wuxDescription">A character's core personality reflects how they think, feel, and engage with the world. Every personality belongs to one of the five elements: Wood (growth, vision), Fire (passion, action), Earth (stability, care), Metal (precision, discipline), or Water (depth, flow). A character's core personality need not reflect their elemental affinity, however there is always a strong bias for them to match.</span><span class="wuxDescription">A character's element shapes how their approach lands with others when attacking their Will or making requests. It is also used to determine how effective a social attack is on their Will. The flow goes in two cycles:</span><span class="wuxDescription">Generating (Wood → Fire → Earth → Metal → Water → Wood): Your element nourishes the target's — social skills gain advantage.</span><span class="wuxDescription">Controlling (Wood controls Earth → Water → Fire → Metal → Wood): Your element conflicts with the target's — social skills suffer disadvantage.</span>
+														</div>
+													</span></div>
+												<select class="wuxInput" name="attr_soc-personality" value="0">
+													<option value="0">-</option>
+													<option value="Personality_Cultivator">Wood - Cultivator</option>
+													<option value="Personality_Pioneer">Wood - Pioneer</option>
+													<option value="Personality_Visionary">Wood - Visionary</option>
+													<option value="Personality_Idealist">Wood - Idealist</option>
+													<option value="Personality_Zealot">Fire - Zealot</option>
+													<option value="Personality_Charmer">Fire - Charmer</option>
+													<option value="Personality_Catalyst">Fire - Catalyst</option>
+													<option value="Personality_Leader">Fire - Leader</option>
+													<option value="Personality_Bastion">Earth - Bastion</option>
+													<option value="Personality_Realist">Earth - Realist</option>
+													<option value="Personality_Traditionalist">Earth - Traditionalist</option>
+													<option value="Personality_Provider">Earth - Provider</option>
+													<option value="Personality_Stoic">Metal - Stoic</option>
+													<option value="Personality_Purist">Metal - Purist</option>
+													<option value="Personality_Arbiter">Metal - Arbiter</option>
+													<option value="Personality_Blade">Metal - Blade</option>
+													<option value="Personality_Sage">Water - Sage</option>
+													<option value="Personality_Mystic">Water - Mystic</option>
+													<option value="Personality_Schemer">Water - Schemer</option>
+													<option value="Personality_Adapter">Water - Adapter</option>
+												</select>
+												<span class="wuxDescription" name="attr_soc-personality_db"></span>
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Core Motivation
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Core Motivation</div>
+
+															<span class="wuxDescription">A character's core motivation is the force that drives why they take risks, form alliances, and pursue goals at all. Every motivation belongs to one of the five Wu Xing elements: Wood (growth, legacy), Fire (passion, recognition), Earth (community, security), Metal (order, authority), or Water (wisdom, the hidden). A character's core motivation need not reflect their elemental affinity, however there is always a strong bias for them to match.</span><span class="wuxDescription">A character's core motivation is rarely used directly, but rather it helps shape how their day to day motivations are shifted.</span><span class="wuxDescription">When a character gains a motivation it always gains a severity. These severities are +1 Low, +2 Moderate, and +3 High. A motivation's starting point is determined by how well it matches with their core motivation. One that loosely matches gains a +1. A motivation that matches gain a +2 and one that is a strong match gains a +3. A motivation must always be something the character desires otherwise it is not a motivation at all.</span>
+														</div>
+													</span></div>
+												<select class="wuxInput" name="attr_soc-motivation" value="0">
+													<option value="0">-</option>
+													<option value="Motivation_Discovery">Wood - Discovery</option>
+													<option value="Motivation_Freedom">Wood - Freedom</option>
+													<option value="Motivation_Legacy">Wood - Legacy</option>
+													<option value="Motivation_Wealth">Wood - Wealth</option>
+													<option value="Motivation_Fame">Fire - Fame</option>
+													<option value="Motivation_Glory">Fire - Glory</option>
+													<option value="Motivation_Love">Fire - Love</option>
+													<option value="Motivation_Revenge">Fire - Revenge</option>
+													<option value="Motivation_Belonging">Earth - Belonging</option>
+													<option value="Motivation_Duty">Earth - Duty</option>
+													<option value="Motivation_Peace">Earth - Peace</option>
+													<option value="Motivation_Survival">Earth - Survival</option>
+													<option value="Motivation_Control">Metal - Control</option>
+													<option value="Motivation_Justice">Metal - Justice</option>
+													<option value="Motivation_Power">Metal - Power</option>
+													<option value="Motivation_Truth">Metal - Truth</option>
+													<option value="Motivation_Chaos">Water - Chaos</option>
+													<option value="Motivation_Escape">Water - Escape</option>
+													<option value="Motivation_Knowledge">Water - Knowledge</option>
+													<option value="Motivation_Redemption">Water - Redemption</option>
+												</select>
+												<span class="wuxDescription" name="attr_soc-motivation_db"></span>
 											</div>
 										</div>
 									</div>
@@ -11299,50 +11467,50 @@
 					<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 					<div class="wuxPageDisplay-Origin">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Jobs">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Attributes">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Knowledge">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Gear">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-StylesData">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Advancement">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 							</div>
 						</div>
 					</div>
@@ -12601,50 +12769,50 @@
 					<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 					<div class="wuxPageDisplay-Origin">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Jobs">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Attributes">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Knowledge">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Gear">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-StylesData">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Advancement">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton">
-								<input type="checkbox" class="wuxTabButton" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+							<div class="wuxTabButton ">
+								<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 							</div>
 						</div>
 					</div>
@@ -12670,7 +12838,7 @@
 
 					</div>
 					<div class="wuxStickySideTab">
-						<div class="wuxSlotSection"><span class="wuxSlotLabel">Your Jin</span><span class="wuxSlotData"><span name="attr_jin"></span><span> J</span></span></div>
+						<div class="wuxSlotSection"><span class="wuxSlotLabel">Your Wealth</span><span class="wuxSlotData"><span name="attr_jin"></span><span> J</span></span></div>
 					</div>
 					<div class="wuxHeader2">Gear</div>
 					<div class="wuxHeader"><input type="text" name="attr_display_name" placeholder="Display Name" /></div>
@@ -12701,7 +12869,7 @@
 
 					</div>
 					<div class="wuxStickySideTab">
-						<div class="wuxSlotSection"><span class="wuxSlotLabel">Your Jin</span><span class="wuxSlotData"><span name="attr_jin"></span><span> J</span></span></div>
+						<div class="wuxSlotSection"><span class="wuxSlotLabel">Your Wealth</span><span class="wuxSlotData"><span name="attr_jin"></span><span> J</span></span></div>
 						<div class="wuxTabButtonRow">
 							<div class="wuxTabButton ">
 								<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
@@ -13665,50 +13833,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>
@@ -16210,50 +16378,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton">
-							<input type="checkbox" class="wuxTabButton" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton ">
+							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>
@@ -16271,7 +16439,7 @@
 						<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-inspectshowadd2" value="0">
 						<div class="wuxHiddenField">
 							<div style="display:flex;flex-direction:column;">
-								<div class="wuxSlotSection"><span class="wuxSlotLabel">Your Jin</span><span class="wuxSlotData"><span name="attr_jin"></span><span> J</span></span></div>
+								<div class="wuxSlotSection"><span class="wuxSlotLabel">Your Wealth</span><span class="wuxSlotData"><span name="attr_jin"></span><span> J</span></span></div>
 								<div class="wuxSlotSection"><span class="wuxSlotLabel">Item Cost</span><span class="wuxSlotData"><span name="attr_ttl-inspectionitemcost"></span></span></div>
 							</div>
 						</div>
@@ -19832,7 +20000,7 @@
 
 </div>
 <div class="wuxHiddenFields">
-	<input type="hidden" class="wuxInput" name="attr_tch_page_learn" /><input type="hidden" class="wuxInput" name="attr_cmbdtls" /><input type="hidden" class="wuxInput" name="attr_jobslotcount" /><input type="hidden" class="wuxInput" name="attr_advancedslotcount" /><input type="hidden" class="wuxInput" name="attr_styleslotcount" /><input type="hidden" class="wuxInput" name="attr_equipmentslotcount" /><input type="hidden" class="wuxInput" name="attr_targethv" value="0" /><input type="hidden" class="wuxInput" name="attr_targetfavor" value="0" /><input type="hidden" class="wuxInput" name="attr_adv-xp" value="0" /><input type="hidden" class="wuxInput" name="attr_trn-pp" value="0" /><input type="hidden" class="wuxInput" name="attr_" value="0" /><input type="hidden" class="wuxInput" name="attr_equipment_build" value="0" /><input type="hidden" class="wuxInput" name="attr_consu_build" value="0" /><input type="hidden" class="wuxInput" name="attr_soc-favor" /><input type="hidden" class="wuxInput" name="attr_soc-influence" /><input type="hidden" class="wuxInput" name="attr_soc-influencecombat" /><input type="hidden" class="wuxInput" name="attr_soc-influencedesc" /><input type="hidden" class="wuxInput" name="attr_soc-severity" /><input type="hidden" class="wuxInput" name="attr_soc-requestcheck" /><input type="hidden" class="wuxInput" name="attr_soc-impatience" />
+	<input type="hidden" class="wuxInput" name="attr_tch_page_learn" /><input type="hidden" class="wuxInput" name="attr_cmbdtls" /><input type="hidden" class="wuxInput" name="attr_jobslotcount" /><input type="hidden" class="wuxInput" name="attr_advancedslotcount" /><input type="hidden" class="wuxInput" name="attr_styleslotcount" /><input type="hidden" class="wuxInput" name="attr_equipmentslotcount" /><input type="hidden" class="wuxInput" name="attr_targethv" value="0" /><input type="hidden" class="wuxInput" name="attr_targetfavor" value="0" /><input type="hidden" class="wuxInput" name="attr_adv-xp" value="0" /><input type="hidden" class="wuxInput" name="attr_trn-pp" value="0" /><input type="hidden" class="wuxInput" name="attr_" value="0" /><input type="hidden" class="wuxInput" name="attr_equipment_build" value="0" /><input type="hidden" class="wuxInput" name="attr_consu_build" value="0" /><input type="hidden" class="wuxInput" name="attr_soc-favor" /><input type="hidden" class="wuxInput" name="attr_soc-influence" /><input type="hidden" class="wuxInput" name="attr_soc-personality" /><input type="hidden" class="wuxInput" name="attr_soc-motivation" /><input type="hidden" class="wuxInput" name="attr_soc-severity" /><input type="hidden" class="wuxInput" name="attr_soc-requestcheck" /><input type="hidden" class="wuxInput" name="attr_soc-impatience" />
 </div>
 <script type="text/worker">
 on("sheet:opened", function(eventinfo) {
@@ -20003,6 +20171,12 @@ WuxWorkerGeneral.UpdateVitality(eventinfo)
 on("change:full_name change:ancestry change:ethnicity change:quickdescription change:jin change:ttl change:age change:gender change:homeregion change:backstory change:note-genname change:note-genfullname change:note-gengender change:note-genhomeregion change:note-genrace change:note-genpersonality change:note-genmotivation", function (eventinfo) {
 WuxWorkerActions.TriggerBuilderActionUpdate();
 
+});
+on("change:soc-personality", function (eventinfo) {
+WuxWorkerGeneral.UpdatePersonalityDescription(eventinfo)
+});
+on("change:soc-motivation", function (eventinfo) {
+WuxWorkerGeneral.UpdateMotivationDescription(eventinfo)
 });
 on("change:repeating_jobstyles:forme-isequipped", function (eventinfo) {
 WuxWorkerStyles.ToggleEquipJobStyle(eventinfo)

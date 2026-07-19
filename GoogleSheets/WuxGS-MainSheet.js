@@ -1440,36 +1440,30 @@ var WuxCharacterSheetBuilders = WuxCharacterSheetBuilders || (function () {
         buildInfluences = function () {
             let contents = "";
             let influenceDef = WuxDef.Get("Soc_Influence");
-            let usingInfluences = WuxDef.Get("Title_UsingInfluences");
 
             let influenceInfo = WuxDefinition.TooltipDescription(influenceDef);
-            influenceInfo += WuxDefinition.TooltipDescription(usingInfluences);
             influenceInfo = WuxSheetMain.Info.Contents(influenceDef.getAttribute(WuxDef._info), influenceInfo);
 
             contents += `${WuxSheetMain.Header(`${WuxSheetMain.Info.Button(influenceDef.getAttribute(WuxDef._info))}${influenceDef.title}`)}
                 ${influenceInfo}`;
 
-            let influenceContents = WuxSheetMain.MultiRow(
-                WuxSheetMain.Select(
-                    WuxDef.GetAttribute("Soc_Severity"),
-                    WuxDef.Filter([new DatabaseFilterData("group", "SeverityRank")]),
-                    false,
-                    "wuxInfluenceType") +
-                WuxSheetMain.CustomInput(
-                    "text",
-                    influenceDef.getAttribute(),
-                    "wuxInput wuxInfluenceDescription",
-                    ` placeholder="Influence"`)
-            );
-            influenceContents += WuxSheetMain.Textarea(WuxDef.GetAttribute("Soc_InfluenceDesc"),
-                "wuxInput wuxHeight30", WuxDef.GetTitle("Soc_InfluenceDesc"));
+            contents += buildInfluenceTypeSelect(WuxDef.Get("Soc_Personality"), "PersonalityType");
+            contents += buildInfluenceTypeSelect(WuxDef.Get("Soc_Motivation"), "MotivationType");
 
-            contents += `<div>
-                <fieldset class="${WuxDef.GetVariable("RepeatingInfluences")}">
-                    ${influenceContents}
-                </fieldset>
-            </div>`;
             return WuxSheetMain.Table.FlexTableGroup(contents);
+        },
+
+        buildInfluenceTypeSelect = function (selectDef, groupName) {
+            let options = WuxDef.Filter([new DatabaseFilterData("group", groupName)]);
+            let optionsHtml = `<option value="0">-</option>`;
+            for (let i = 0; i < options.length; i++) {
+                optionsHtml += `\n<option value="${options[i].name}">${options[i].subGroup} - ${options[i].title}</option>`;
+            }
+
+            return `${WuxDefinition.BuildHeader(selectDef)}
+                <select class="wuxInput" name="${selectDef.getAttribute()}" value="0">${optionsHtml}
+                </select>
+                ${WuxSheetMain.DescField(selectDef.getAttribute(WuxDef._db))}`;
         },
 
         buildBackgroundBasics = function () {

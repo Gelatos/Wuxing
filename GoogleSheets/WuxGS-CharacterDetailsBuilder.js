@@ -47,16 +47,12 @@ class CharacterBackgroundBuilder {
         
         let quickDescriptionField = WuxDefinition.BuildTextarea(WuxDef.Get("QuickDescription"), WuxDef.GetAttribute("QuickDescription"),
             "wuxInput wuxHeight30");
-        
-        let startingJinField = `${WuxSheet.MainPageDisplayInput()}
-                ${WuxSheet.PageDisplay("OriginData", WuxDefinition.BuildTextInput(WuxDef.Get("Title_StartingJin"), WuxDef.GetAttribute("Jin")))}`;
-        
+
         return WuxSheetMain.Table.FlexTableGroup(`${isPlayerField}
         ${nameFields}
         ${ancestryFields}
         ${affinityField}
-        ${quickDescriptionField}
-        ${startingJinField}`);
+        ${quickDescriptionField}`);
     }
 
     backgroundBackstory() {
@@ -85,10 +81,11 @@ class CharacterBackgroundBuilder {
     
     buildAdvancementData() {
         let contents = "";
-        contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_OriginAdvancement"));
+        contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_StartingData"));
         contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Level"), WuxDef.GetAttribute("Level"));
         contents += WuxDefinition.BuildText(WuxDef.Get("CR"), WuxSheetMain.Span(WuxDef.GetAttribute("CR", WuxDef._max)));
         contents += WuxDefinition.BuildText(WuxDef.Get("Potency"), WuxSheetMain.Span(WuxDef.GetAttribute("Potency")));
+        contents += WuxDefinition.BuildTextInput(WuxDef.Get("Title_StartingJin"), WuxDef.GetAttribute("Jin"));
 
         return WuxSheetMain.Table.FlexTableGroup(contents);
     }

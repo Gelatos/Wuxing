@@ -1,4 +1,23 @@
-var wuxCurrentVersion = "2.0.3";
+var wuxCurrentVersion = "2.0.4";
+
+var upgrade_to_2_0_4 = function (currentVersion) {
+	let attributeHandler = loaderAttrubuteHandler(currentVersion, "2.0.4");
+
+	const helpSectionKeys = ["Title_StartingData", "Soc_Influence"];
+
+	const pageSetVar = WuxDef.GetVariable("PageSet");
+	attributeHandler.addMod(pageSetVar);
+	attributeHandler.addGetAttrCallback(function (attrHandler) {
+		if (attrHandler.parseString(pageSetVar) !== "Builder") {
+			return;
+		}
+		for (const key of helpSectionKeys) {
+			attrHandler.addUpdate(WuxDef.GetVariable(key, WuxDef._info), "on");
+		}
+	});
+
+	attributeHandler.run();
+};
 
 var upgrade_to_2_0_3 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "2.0.3");
@@ -277,6 +296,9 @@ var versioning = function () {
 		switch(v["version"]) {
 			case wuxCurrentVersion:
 				console.log(`Wuxing Sheet modified from 5th Edition OGL by Roll20 v${wuxCurrentVersion}`);
+				break;
+			case "2.0.3":
+				upgrade_to_2_0_4(v["version"]);
 				break;
 			case "2.0.2":
 				upgrade_to_2_0_3(v["version"]);

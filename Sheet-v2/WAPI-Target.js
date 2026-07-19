@@ -102,8 +102,11 @@ class TargetData {
 
     setOwner(character) {
         let ownerId = character.get("controlledby").split(",")[0];
-        if (ownerId != "") {
-            this.owner = getObj("player", ownerId).get("_displayname");
+        if (ownerId != "" && ownerId != "all") {
+            let player = getObj("player", ownerId);
+            if (player != undefined) {
+                this.owner = player.get("_displayname");
+            }
         }
     }
 
@@ -438,7 +441,8 @@ class TokenTargetData extends TargetData {
         let tokenTargetData = this;
         let surgeDef = WuxDef.GetVariable("Surge");
         let vitalityDef = WuxDef.GetVariable("Cmb_Vitality");
-        attributeHandler.addAttribute(surgeDef, vitalityDef);
+        let personalityDef = WuxDef.GetVariable("Soc_Personality");
+        attributeHandler.addAttribute(surgeDef, vitalityDef, personalityDef);
 
         attributeHandler.addGetAttrCallback(function (attrHandler) {
             let tokenNoteRef = new TokenNoteReference(tokenTargetData.getTokenNote());
@@ -446,6 +450,14 @@ class TokenTargetData extends TargetData {
             tokenNoteRef.surges.max = tokenNoteRef.surges.current;
             tokenNoteRef.vitality.current = attrHandler.parseInt(vitalityDef, 0, true);
             tokenNoteRef.vitality.max = tokenNoteRef.vitality.current;
+
+            let personality = attrHandler.parseString(personalityDef, "0", false);
+            if (personality == "" || personality == "0") {
+                let personalityOptions = WuxDef.Filter([new DatabaseFilterData("group", "PersonalityType")]);
+                personality = personalityOptions[Math.floor(Math.random() * personalityOptions.length)].name;
+            }
+            tokenNoteRef.personality = personality;
+
             Debug.Log(`Importing token note reference data for ${tokenTargetData.displayName} with values ${tokenNoteRef.surges.current}/${tokenNoteRef.surges.max} and ${tokenNoteRef.vitality.current}/${tokenNoteRef.vitality.max}`);
             tokenTargetData.setTokenNote(JSON.stringify(tokenNoteRef));
         });
@@ -1526,7 +1538,8 @@ class TokenNoteReference {
         this.surges = {current: 0, max: 0};
         this.vitality = {current: 0, max: 0};
         this.teamIndex = 0;
-        
+        this.personality = "";
+
     }
 
     importJson(json) {
@@ -1538,6 +1551,7 @@ class TokenNoteReference {
         this.surges = json.surges == undefined ? {current: 0, max: 0} : json.surges;
         this.vitality = json.vitality == undefined ? {current: 0, max: 0} : json.vitality;
         this.teamIndex = json.teamIndex ?? 0;
+        this.personality = json.personality ?? "";
     }
 }
 

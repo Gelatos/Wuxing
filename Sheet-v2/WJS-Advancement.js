@@ -45,7 +45,8 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 				"Page_GearConsumables", "Page_GearEquipment", "Title_TechniqueChange", "Title_Techniques",
 				"Page_Styles", "Title_Emotes", "Page_Origin", "Page_Training", "Page_Advancement",
 				"Page_Perks", "Title_PerkTechniques", "Title_JobsByDifficulty", "Page_Attributes",
-				"Page_Skills", "Page_AffectedStats", "Page_Language", "Page_Lore", "Title_Background"
+				"Page_Skills", "Page_AffectedStats", "Page_Language", "Page_Lore", "Title_Background",
+				"Title_StartingData", "Soc_Influence"
 			];
 			for (const key of helpSectionKeys) {
 				attributeHandler.addUpdate(WuxDef.GetVariable(key, WuxDef._info), "0");
@@ -869,6 +870,14 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 		setIsPlayer = function (eventinfo) {
 			Debug.Log("eventinfo.newValue: " + eventinfo.newValue);
 			let newValue = parseInt(eventinfo.newValue) || 0;
+
+			if (newValue === 2) {
+				let attributeHandler = new WorkerAttributeHandler();
+				attributeHandler.addUpdate(WuxDef.GetVariable("FullName"), "GenericOverride");
+				attributeHandler.run();
+				return;
+			}
+
 			if (newValue !== 1) return;
 			let perk = WuxPerks.Get("Bonus Vitality");
 			Debug.Log("perk is: " + perk.name);
