@@ -31,6 +31,66 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
         };
     };
 
+    // ─── Item Density ───────────────────────────────────────────────────────────
+
+    // Ordered richest-to-poorest. "Normal" preserves the original (pre-density)
+    // Gather Material/Fishing behavior, so it stays at 0/0 unless the baseline itself
+    // is being retuned.
+    const itemDensityStages = ["Plentiful", "Normal", "Scarce", "Barren"];
+
+    // dcModifier shifts every roll threshold (positive = harder to hit).
+    // capModifier shifts the maximum item count a single roll can grant (negative = lower ceiling).
+    // disabledRollCount removes that many of the hardest (rarity 2+) gather loot table rolls
+    // entirely, counting from the last roll backward. Gather only.
+    // Placeholder values — tune freely.
+    const itemDensityConfig = {
+        Plentiful: { gather: { dcModifier: -2, capModifier: 2,  disabledRollCount: 0 }, fishing: { dcModifier: -2, capModifier: 1  } },
+        Normal:    { gather: { dcModifier: 0,  capModifier: 0,  disabledRollCount: 1 }, fishing: { dcModifier: 0,  capModifier: 0  } },
+        Scarce:    { gather: { dcModifier: 2,  capModifier: -1, disabledRollCount: 2 }, fishing: { dcModifier: 1,  capModifier: -1 } },
+        Barren:    { gather: { dcModifier: 3,  capModifier: -2, disabledRollCount: 3 }, fishing: { dcModifier: 3,  capModifier: -1 } }
+    };
+
+    const getItemDensityConfig = function () {
+        const density = (state.WuxAdventureState || {}).itemDensity;
+        return itemDensityConfig[density] || itemDensityConfig.Normal;
+    };
+
+    const applyDensityThreshold = function (threshold, densityDomain) {
+        return threshold + densityDomain.dcModifier;
+    };
+
+    const applyDensityCap = function (cap, densityDomain) {
+        return Math.max(1, cap + densityDomain.capModifier);
+    };
+
+    // Additional flat amount modifier applied on top of density, keyed by item rarity
+    // (1 = common ... 4 = rare). Rarer finds yield less; common finds yield more.
+    // Placeholder values — tune freely.
+    const rarityAmountModifier = {
+        1: 0,
+        2: -2,
+        3: -3,
+        4: -4
+    };
+
+    // Applies the rarity amount modifier to an already-computed count, floored at 1
+    // (an item that was actually found should always yield at least 1).
+    const applyRarityAmount = function (count, rarity) {
+        const modifier = rarityAmountModifier[rarity] || 0;
+        return Math.max(1, count + modifier);
+    };
+
+    // Applies the rarity amount modifier once per item, after every loot table roll has
+    // already been summed into a single total per item. itemCounts: { itemName: rawTotal }.
+    const applyRarityToItemCounts = function (itemCounts) {
+        const adjusted = {};
+        Object.keys(itemCounts).forEach(function (itemName) {
+            const item = WuxGoods.Get(itemName);
+            adjusted[itemName] = applyRarityAmount(itemCounts[itemName], item ? item.rarity : 1);
+        });
+        return adjusted;
+    };
+
     const pickFromTable = function (table) {
         if (table.slots.length === 0) return null;
         const rarity = table.slots[Math.floor(Math.random() * table.slots.length)];
@@ -53,29 +113,39 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
         rolls.push({ item: item, count: Math.min(base + (result - threshold), cap) });
     };
 
-    const resolveLoot = function (result, tables) {
+    const resolveLoot = function (result, tables, densityDomain) {
         let rolls = [];
-        addRoll(rolls, result, tables.allRarities, 7,  2, 6);
-        rolls = rolls.concat(resolveExtraLoot(result, tables));
+        addRoll(rolls, result, tables.allRarities, applyDensityThreshold(7, densityDomain), 2, applyDensityCap(6, densityDomain));
+        rolls = rolls.concat(resolveExtraLoot(result, tables, densityDomain));
         return rolls;
     };
 
     // Returns the count of the specific chosen item from roll 1.
     // Threshold = 7 + ceil(rarity * 1.5), base 2, cap 4 (max 6 total). Returns 0 if below threshold.
-    const resolveSpecificItemCount = function (result, item) {
-        const threshold = 6 + Math.ceil((item.rarity || 1) * (item.rarity || 1) * 0.77);
+    const resolveSpecificItemCount = function (result, item, densityDomain) {
+        const threshold = applyDensityThreshold(6 + Math.ceil((item.rarity || 1) * (item.rarity || 1) * 0.77), densityDomain);
         if (result < threshold) return 0;
-        return Math.min(2 + (result - threshold), 6);
+        return Math.min(2 + (result - threshold), applyDensityCap(6, densityDomain));
     };
 
     // Returns [{item, count}] for rolls 2-6 only (random items from the table).
-    const resolveExtraLoot = function (result, tables) {
+    const resolveExtraLoot = function (result, tables, densityDomain) {
         const rolls = [];
-        addRoll(rolls, result, tables.allRarities, 8,  1, 5);
-        addRoll(rolls, result, tables.allRarities, 11, 1, 5);
-        addRoll(rolls, result, tables.allRarities, 13, 1, 3);
-        addRoll(rolls, result, tables.rarity2Plus, 16, 1, 3);
-        addRoll(rolls, result, tables.rarity2Plus, 19, 1, 3);
+        const disabledRollCount = densityDomain.disabledRollCount || 0;
+        addRoll(rolls, result, tables.allRarities, applyDensityThreshold(8, densityDomain),  1, applyDensityCap(5, densityDomain));
+        addRoll(rolls, result, tables.allRarities, applyDensityThreshold(11, densityDomain), 1, applyDensityCap(5, densityDomain));
+        addRoll(rolls, result, tables.allRarities, applyDensityThreshold(13, densityDomain), 1, applyDensityCap(3, densityDomain));
+        // Roll 5 (16+) and roll 6 (19+) are the hardest, rarest rolls — density can disable
+        // them entirely, counting backward from the last roll.
+        if (disabledRollCount < 3) {
+            addRoll(rolls, result, tables.rarity2Plus, applyDensityThreshold(16, densityDomain), 1, applyDensityCap(3, densityDomain));
+        }
+        if (disabledRollCount < 2) {
+            addRoll(rolls, result, tables.rarity2Plus, applyDensityThreshold(19, densityDomain), 1, applyDensityCap(3, densityDomain));
+        }
+        if (disabledRollCount < 1) {
+            addRoll(rolls, result, tables.rarity2Plus, applyDensityThreshold(19, densityDomain), 1, applyDensityCap(3, densityDomain));
+        }
         return rolls;
     };
 
@@ -342,10 +412,14 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             const parts       = content ? content.split("|||") : [];
             const locationArg = parts[0] ? parts[0].trim() : "";
             const waterArg    = parts[1] ? parts[1].trim() : null;
+            const densityArg  = parts[2] ? parts[2].trim() : null;
             const isExplicit  = !!locationArg;
 
             const resolved     = isExplicit ? locationArg : (state.WuxAdventureState || {}).currentLocation || "";
             const waterSource  = waterArg !== null ? waterArg : (state.WuxAdventureState || {}).waterSource || "";
+            const itemDensity  = itemDensityStages.includes(densityArg)
+                ? densityArg
+                : (state.WuxAdventureState || {}).itemDensity || "Normal";
 
             if (!resolved) {
                 sendChat("System", `/w "${msg.who}" No location is set. Use the location picker to set one first.`, null, { noarchive: true });
@@ -355,6 +429,7 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             if (isExplicit) {
                 state.WuxAdventureState.currentLocation = resolved;
                 state.WuxAdventureState.waterSource     = waterSource;
+                state.WuxAdventureState.itemDensity     = itemDensity;
             }
 
             const locationData = getLocationData(resolved);
@@ -362,6 +437,7 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 `Adventure Options`,
                 `Current Environment: ${resolved}`,
                 waterSource && waterSource !== "No Water" ? `Water Source: ${waterSource}` : "",
+                `Item Density: ${itemDensity}`,
                 `[Gather Materials (Any)](!gather ${resolved})`
             ].filter(function (l) { return l !== ""; });
 
@@ -377,8 +453,10 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
             if (waterSource && waterSource !== "No Water") {
                 outputLines.push(`[Fish](!fish)`);
             }
-            outputLines.push(`<div>&nbsp</div><div style='font-weight: bold'>Cooking</div>`);
-            outputLines.push(`[View Cooking](!viewcooking)`);
+            const cookingStatus = state.WuxCookingEvent.active
+                ? `A cooking event is currently active.`
+                : `No cooking event is currently active.`;
+            outputLines.push(`<div>&nbsp</div><div style='font-weight: bold'>Cooking</div><div>${cookingStatus}</div><div>[View Recipes](!viewrecipes)</div>`);
 
             const messageObject = new SystemInfoMessage(outputLines);
             messageObject.setSender("Wuxing");
@@ -405,13 +483,16 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 return;
             }
 
-            const tables = buildLootTables(locationData.items);
+            const tables       = buildLootTables(locationData.items);
+            const densityDomain = getItemDensityConfig().gather;
+            const minThreshold  = applyDensityThreshold(7, densityDomain);
             runGatherCheck(targets, tables, function (result, noticeRoll, tokenTargetData) {
-                const lootRolls  = resolveLoot(result, tables);
-                const itemCounts = {};
+                const lootRolls = resolveLoot(result, tables, densityDomain);
+                let itemCounts  = {};
                 lootRolls.forEach(function (loot) {
                     itemCounts[loot.item.name] = (itemCounts[loot.item.name] || 0) + loot.count;
                 });
+                itemCounts = applyRarityToItemCounts(itemCounts);
 
                 if (Object.keys(itemCounts).length > 0) {
                     addGatheredItems(tokenTargetData.charId, itemCounts);
@@ -422,12 +503,14 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                     `${tokenTargetData.displayName} — Gathering: ${locationData.locationDef.title}`,
                     `Notice Check: ${rollDisplay}`
                 ];
-                if (lootRolls.length === 0) {
-                    outputLines.push(`No materials found (need 7+).`);
+                if (Object.keys(itemCounts).length === 0) {
+                    outputLines.push(`No materials found (need ${minThreshold}+).`);
                 } else {
                     outputLines.push(`Materials gathered:`);
-                    lootRolls.forEach(function (loot) {
-                        outputLines.push(`${loot.item.title || loot.item.name} x${loot.count}`);
+                    Object.keys(itemCounts).sort().forEach(function (itemName) {
+                        const item    = WuxGoods.Get(itemName);
+                        const display = item ? (item.title || item.name) : itemName;
+                        outputLines.push(`${display} x${itemCounts[itemName]}`);
                     });
                 }
 
@@ -455,21 +538,23 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 return;
             }
 
-            const threshold   = 7 + Math.floor((item.rarity || 1) * 1.5);
+            const densityDomain = getItemDensityConfig().gather;
+            const threshold   = applyDensityThreshold(7 + Math.floor((item.rarity || 1) * 1.5), densityDomain);
             const tables      = buildLootTables(locationData.items);
             const itemDisplay = item.title || item.name;
 
             runGatherCheck(targets, tables, function (result, noticeRoll, tokenTargetData) {
-                const specificCount = resolveSpecificItemCount(result, item);
-                const extraRolls    = resolveExtraLoot(result, tables);
+                const specificCount = resolveSpecificItemCount(result, item, densityDomain);
+                const extraRolls    = resolveExtraLoot(result, tables, densityDomain);
 
-                const itemCounts = {};
+                let itemCounts = {};
                 if (specificCount > 0) {
                     itemCounts[item.name] = specificCount;
                 }
                 extraRolls.forEach(function (loot) {
                     itemCounts[loot.item.name] = (itemCounts[loot.item.name] || 0) + loot.count;
                 });
+                itemCounts = applyRarityToItemCounts(itemCounts);
 
                 if (Object.keys(itemCounts).length > 0) {
                     addGatheredItems(tokenTargetData.charId, itemCounts);
@@ -480,14 +565,13 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                     `${tokenTargetData.displayName} — Gathering: ${itemDisplay}`,
                     `Notice Check: ${rollDisplay} (need ${threshold}+)`
                 ];
-                if (specificCount === 0 && extraRolls.length === 0) {
+                if (Object.keys(itemCounts).length === 0) {
                     outputLines.push(`No materials found (need ${threshold}+).`);
                 } else {
-                    if (specificCount > 0) {
-                        outputLines.push(`${itemDisplay} x${specificCount}`);
-                    }
-                    extraRolls.forEach(function (loot) {
-                        outputLines.push(`${loot.item.title || loot.item.name} x${loot.count}`);
+                    Object.keys(itemCounts).sort().forEach(function (rolledName) {
+                        const rolledItem = WuxGoods.Get(rolledName);
+                        const display    = rolledItem ? (rolledItem.title || rolledItem.name) : rolledName;
+                        outputLines.push(`${display} x${itemCounts[rolledName]}`);
                     });
                 }
 
@@ -584,7 +668,7 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
         // ─── Cooking Event ───────────────────────────────────────────────────────────
 
         cookingSchemaVersion = "0.2.0",
-        adventureSchemaVersion = "0.2.0",
+        adventureSchemaVersion = "0.3.0",
 
         checkInstall = function () {
             if (!state.hasOwnProperty("WuxCookingEvent") || state.WuxCookingEvent.version !== cookingSchemaVersion) {
@@ -600,7 +684,8 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 state.WuxAdventureState = {
                     version: adventureSchemaVersion,
                     currentLocation: "",
-                    waterSource: ""
+                    waterSource: "",
+                    itemDensity: "Normal"
                 };
             }
         },
@@ -1079,6 +1164,8 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
 
             const tables        = buildLootTables(fishItems);
             const athleticDefs  = WuxDef.Filter([new DatabaseFilterData("subGroup", "Athletics")]);
+            const densityDomain = getItemDensityConfig().fishing;
+            const minThreshold  = applyDensityThreshold(8, densityDomain);
 
             _.each(targets, function (tokenTargetData) {
                 const advantage   = tokenTargetData.getAdvantage();
@@ -1103,7 +1190,7 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                     const skillName     = bestDef ? bestDef.title : "Athletics";
                     const athleticDisp  = Format.ShowTooltip(athleticTotal.toString(), athleticDie.message);
 
-                    if (athleticTotal < 8) {
+                    if (athleticTotal < minThreshold) {
                         const out = new SystemInfoMessage([
                             `${tokenTargetData.displayName} — Fishing: ${waterSource}`,
                             `${skillName} Check: ${athleticDisp}`,
@@ -1115,15 +1202,16 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                     }
 
                     const rolls = [];
-                    addRoll(rolls, athleticTotal, tables.allRarities, 8,  1, 3);
-                    addRoll(rolls, athleticTotal, tables.allRarities, 10, 1, 2);
-                    addRoll(rolls, athleticTotal, tables.allRarities, 12, 1, 2);
-                    addRoll(rolls, athleticTotal, tables.allRarities, 14, 1, 2);
+                    addRoll(rolls, athleticTotal, tables.allRarities, applyDensityThreshold(8, densityDomain),  1, applyDensityCap(3, densityDomain));
+                    addRoll(rolls, athleticTotal, tables.allRarities, applyDensityThreshold(10, densityDomain), 1, applyDensityCap(2, densityDomain));
+                    addRoll(rolls, athleticTotal, tables.allRarities, applyDensityThreshold(12, densityDomain), 1, applyDensityCap(2, densityDomain));
+                    addRoll(rolls, athleticTotal, tables.allRarities, applyDensityThreshold(14, densityDomain), 1, applyDensityCap(2, densityDomain));
 
-                    const itemCounts = {};
+                    let itemCounts = {};
                     rolls.forEach(function (loot) {
                         itemCounts[loot.item.name] = (itemCounts[loot.item.name] || 0) + loot.count;
                     });
+                    itemCounts = applyRarityToItemCounts(itemCounts);
 
                     const foodItems = {};
                     const gearItems = {};

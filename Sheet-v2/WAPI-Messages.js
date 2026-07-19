@@ -522,9 +522,9 @@ class InfoMessage extends SimpleMessage {
                 }
                 messageIndex++;
             }
-            if (msgArray.length >= messageMaxCount) {
+            if (msgArray.length - 1 > messageMaxCount) {
                 let tempMessage = "";
-                for (let i = messageMaxCount; i < msgArray.length; i++) {
+                for (let i = messageMaxCount + 1; i < msgArray.length; i++) {
                     if (tempMessage != "") {
                         tempMessage += " ";
                     }
