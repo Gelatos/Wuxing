@@ -667,7 +667,7 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
 
         // ─── Cooking Event ───────────────────────────────────────────────────────────
 
-        cookingSchemaVersion = "0.2.0",
+        cookingSchemaVersion = "0.4.0",
         adventureSchemaVersion = "0.3.0",
 
         checkInstall = function () {
@@ -807,6 +807,12 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
 
         // Clears a participant's RepeatingCooking rows and empties the Active Meal data
         // (Gear_ActiveRecipe back to "0") so the Cooking Events section hides again.
+        // Deliberately does NOT touch Gear_CookingIsVisible — that flag is only ever set by
+        // commandStartCooking (a character joining a cooking event) or by the participant's
+        // own Lock in Ingredients click (Worker-Gear's ConsumeCookingIngredients). Since the
+        // whole Cooking Events panel is already hidden by the Gear_ActiveRecipe reset below,
+        // leaving a stale lock-in flag behind is harmless — it gets reset to "0" for real the
+        // next time this character joins a cooking event.
         clearCookingDataForToken = function (participant) {
             clearCookingRows(participant.charId);
 
@@ -815,19 +821,25 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
 
             setCharacterAttribute(participant.charId, activeRecipeVar, "0");
             setCharacterAttribute(participant.charId, activeRecipeInfoVar, "");
-            setCharacterAttribute(participant.charId, WuxDef.GetVariable("Gear_CookingIsVisible"), "0");
         },
 
-        // Shows/hides a character's RepeatingCooking rows (vs. a "None" placeholder)
-        // depending on whether they currently have any contributed ingredients.
-        updateCookingVisibility = function (charId) {
-            const hasContributions = Object.values(state.WuxCookingEvent.ingredients)
-                .some(function (ing) { return ing.charId === charId; });
-            setCharacterAttribute(charId, WuxDef.GetVariable("Gear_CookingIsVisible"), hasContributions ? "on" : "0");
+        // Same end-state as clearCookingDataForToken, minus the RepeatingCooking row scan —
+        // by the time a cook succeeds every participant has already locked in and cleared
+        // their own rows client-side, so this only needs the (cheap, targeted) attribute
+        // resets. Safe to loop over every participant in one call, unlike clearCookingRows'
+        // unfiltered per-character findObjs scan, which is what used to freeze the API here.
+        // Also deliberately does NOT touch Gear_CookingIsVisible — see clearCookingDataForToken.
+        endCookingForToken = function (participant) {
+            setCharacterAttribute(participant.charId, WuxDef.GetVariable("Gear_ActiveRecipe"), "0");
+            setCharacterAttribute(participant.charId, WuxDef.GetVariable("Gear_ActiveRecipe", WuxDef._info), "");
         },
 
         // Pushes the current predicted recipe (if changed), the meal count, and each
         // participant's personalized ingredient list to every character in the cooking event.
+        // Deliberately does NOT touch Gear_CookingIsVisible — that flag now means "this
+        // participant has locked in," set only by their own Lock in Ingredients click and
+        // reset only at the start/end of the event. It must not be recomputed here just
+        // because someone else added or removed an ingredient from the shared pot.
         broadcastCookingUpdate = function (recipeChanged) {
             const activeIngredientListVar = WuxDef.GetVariable("Gear_ActiveIngredientList");
             const mealCountVar            = WuxDef.GetVariable("Gear_MealCount");
@@ -838,7 +850,6 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 }
                 setCharacterAttribute(participant.charId, activeIngredientListVar, formatIngredientList(participant.charName));
                 setCharacterAttribute(participant.charId, mealCountVar, mealCountText);
-                updateCookingVisibility(participant.charId);
             });
         },
 
@@ -1362,7 +1373,10 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                     };
                 }
                 applyActiveRecipeToToken(tokenTargetData);
-                updateCookingVisibility(tokenTargetData.charId);
+                // Force everyone back to "not locked in" for this meal, regardless of
+                // whatever their lock-in state was left at from a previous round — they
+                // always have to lock in again from scratch.
+                setCharacterAttribute(tokenTargetData.charId, WuxDef.GetVariable("Gear_CookingIsVisible"), "0");
                 setCharacterAttribute(tokenTargetData.charId, WuxDef.GetVariable("Gear_ActiveIngredientList"), formatIngredientList(tokenTargetData.charName));
             });
 
@@ -1604,6 +1618,14 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 sendChat("System", `/w GM No cooking event is in progress.`, null, { noarchive: true });
                 return;
             }
+            const cookingIsVisibleVar = WuxDef.GetVariable("Gear_CookingIsVisible");
+            const notLockedIn = Object.values(state.WuxCookingEvent.tokens)
+                .filter(function (participant) { return getAttrByName(participant.charId, cookingIsVisibleVar, "current") !== "on"; })
+                .map(function (participant) { return participant.charName; });
+            if (notLockedIn.length > 0) {
+                sendChat("System", `Cannot cook yet — still waiting on ${notLockedIn.join(", ")} to lock in their ingredients.`, null, { noarchive: true });
+                return;
+            }
             const ingredients = state.WuxCookingEvent.ingredients;
             if (Object.keys(ingredients).length === 0) {
                 sendChat("System", `/w GM No ingredients have been added.`, null, { noarchive: true });
@@ -1632,22 +1654,18 @@ var WuxAdventureManager = WuxAdventureManager || (function () {
                 const cookedMealName = isBland ? "Bland Meal" : predictMeal(ingredients);
                 const mealLabel      = hasSavor ? `Savoury ${cookedMealName}` : cookedMealName;
 
-                // Deduct ingredients from each character's supplies
-                const deductByChar = {};
-                Object.keys(ingredients).forEach(function (key) {
-                    const ing = ingredients[key];
-                    if (!deductByChar[ing.charName]) deductByChar[ing.charName] = {};
-                    deductByChar[ing.charName][ing.name] = (deductByChar[ing.charName][ing.name] || 0) + ing.quantity;
-                });
-                Object.keys(deductByChar).forEach(function (charName) {
-                    const chars = findObjs({ _type: "character", name: charName });
-                    if (chars.length > 0) {
-                        deductGoodsFromCharacter(chars[0].id, deductByChar[charName]);
-                    }
-                });
-
+                // Ingredients are no longer deducted here — each participant locks in their
+                // own ingredients from their sheet (Worker-Gear's ConsumeCookingIngredients),
+                // which clears their RepeatingCooking rows and sets Gear_CookingIsVisible to
+                // "on" client-side. commandCook checks that flag on every participant before
+                // allowing the cook, so by the time this runs everyone has already locked in.
+                // A successful cook ends the event for everyone: reset each participant's
+                // Active Recipe (hides their Cooking Events panel) and lock-in flag. This is
+                // only safe to loop here because rows are already gone and endCookingForToken
+                // is cheap, targeted attribute writes — not the unfiltered per-character
+                // findObjs scan (clearCookingRows) that used to freeze the API in this loop.
                 Object.values(state.WuxCookingEvent.tokens).forEach(function (participant) {
-                    clearCookingDataForToken(participant);
+                    endCookingForToken(participant);
                 });
 
                 state.WuxCookingEvent.active = false;

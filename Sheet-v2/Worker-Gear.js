@@ -1804,6 +1804,25 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
 
             WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
             attributeHandler.run();
+        },
+
+        // Clears this character's RepeatingCooking rows and marks Gear_CookingIsVisible
+        // "on" as a locked-in flag — entirely client-side, no API call, so a large group
+        // locking in can't freeze the API. Does NOT touch Gear_ActiveRecipe: the character
+        // should still see the cooking event (recipe, meal count, Cook button) after
+        // locking in, just with their own contribution list cleared. The GM-side !cook
+        // command reads this same flag off every participant before allowing a cook.
+        consumeCookingIngredients = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("RepeatingCooking");
+            let cookingRepeater = attributeHandler.getRepeatingSection("RepeatingCooking");
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                cookingRepeater.removeAllIds();
+                attrHandler.addUpdate(WuxDef.GetVariable("Gear_CookingIsVisible"), "on");
+            });
+
+            attributeHandler.run();
         }
 
     const buildConsuItemCountMap = function (attributeHandler) {
@@ -1955,6 +1974,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         RemoveAllConsumables: removeAllConsumables,
         UnequipAllGear: unequipAllGear,
         UnequipAllConsumables: unequipAllConsumables,
+        ConsumeCookingIngredients: consumeCookingIngredients,
         BuildConsuItemCountMap: buildConsuItemCountMap,
         CanAutoEquipGear: canAutoEquipGear,
         CanAutoEquipConsumable: canAutoEquipConsumable,

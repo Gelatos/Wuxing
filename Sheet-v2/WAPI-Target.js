@@ -618,6 +618,9 @@ class TokenTargetData extends TargetData {
             attrHandler.addUpdate(attributeVar, results.newValue, false);
         }
         tokenTargetData.setEnergyIcon(results.newValue);
+        if (tokenTargetData.combatDetails != undefined) {
+            tokenTargetData.combatDetails.onUpdateEN(attrHandler, results.newValue);
+        }
         return results;
     }
 

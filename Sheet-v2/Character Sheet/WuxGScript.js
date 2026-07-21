@@ -5004,6 +5004,7 @@ class CombatDetails {
         this.mvSpeed = 0;
         this.dashSpeed = 0;
         this.weaponDamage = "";
+        this.en = 0;
     }
 
     importJson(json) {
@@ -5037,6 +5038,7 @@ class CombatDetails {
         this.mvSpeed = json.mvSpeed;
         this.dashSpeed = json.dashSpeed;
         this.weaponDamage = json.weaponDamage != undefined ? json.weaponDamage : "Force";
+        this.en = json.en != undefined ? json.en : 0;
     }
 
     printTooltip() {
@@ -5178,6 +5180,9 @@ class CombatDetailsHandler {
     }
     getWeaponDamage() {
         return this.combatDetails.weaponDamage;
+    }
+    getEN() {
+        return this.combatDetails.en;
     }
     getResistance(resistance) {
         switch (resistance) {
@@ -5338,6 +5343,12 @@ class CombatDetailsHandler {
     onUpdateWeaponDamageType(attrHandler, value) {
         this.setData(attrHandler);
         this.combatDetails.weaponDamage = value;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+
+    onUpdateEN(attrHandler, value) {
+        this.setData(attrHandler);
+        this.combatDetails.en = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
     
@@ -12125,6 +12136,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let cookingScoreDef = WuxDef.Get("Gear_CookingScore");
                     let updateCookingDef = WuxDef.Get("Gear_UpdateCooking");
                     let updateCookingButtonValue = `!cook @{character_name}`;
+                    let consumeDef = WuxDef.Get("Gear_ConsumeIngredients");
 
                     let contents = `${WuxSheetMain.Header(cookingEventDef.getTitle())}
                         ${WuxSheetMain.Row(WuxSheetMain.DescField(activeRecipeDef.getAttribute()))}
@@ -12136,7 +12148,8 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         ${WuxSheetMain.Row(WuxSheetMain.DescField(mealCountDef.getAttribute()))}
                         ${WuxSheetMain.Header2(cookingScoreDef.getTitle())}
                         ${WuxSheetMain.Row(WuxSheetMain.DescField(cookingScoreDef.getAttribute()))}
-                        <button class="wuxButton wuxWidth120" type="roll" value="${updateCookingButtonValue}"><span>${updateCookingDef.getTitle("")}</span></button>`;
+                        ${WuxSheetMain.HiddenAuxField(WuxDef.GetAttribute("Gear_CookingIsVisible"), WuxSheetMain.Button(consumeDef.getAttribute(), consumeDef.getTitle(""), "wuxWidth120"))}
+                        ${WuxSheetMain.HiddenField(WuxDef.GetAttribute("Gear_CookingIsVisible"), `<button class="wuxButton wuxWidth120" type="roll" value="${updateCookingButtonValue}"><span>${updateCookingDef.getTitle("")}</span></button>`)}`;
 
                     return WuxSheetMain.Table.FlexTableGroup(
                         WuxSheetMain.HiddenField(activeRecipeDef.getAttribute(), contents), " wuxMinWidth150");
@@ -12174,10 +12187,10 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         `<input type="hidden" name="${getGearAttribute("ItemMainGroup")}" value="0">` +
                         WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents));
 
-                    return `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                    return WuxSheetMain.HiddenAuxField(WuxDef.GetAttribute("Gear_CookingIsVisible"), `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
                         <div>
-                            ${WuxSheetMain.HiddenFieldToggle(WuxDef.GetAttribute("Gear_CookingIsVisible"), repeaterContent, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}
-                        </div>`;
+                            ${repeaterContent}
+                        </div>`);
                 },
 
                 buildEquipment = function () {
@@ -13581,6 +13594,7 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerUpdateConsumables();
             output += listenerRemoveAllConsumables();
             output += listenerUnequipAllConsumables();
+            output += listenerConsumeCookingIngredients();
             output += listenerSetGearOptions();
             return output;
         },
@@ -13788,6 +13802,11 @@ var GearBuilder = GearBuilder || (function () {
             return `${WuxSheetBackend.OnChange(
                 [WuxDef.GetVariable("Gear_UnequipAll", "consumable")],
                 `WuxWorkerGear.UnequipAllConsumables(eventinfo)`, true)}`;
+        },
+        listenerConsumeCookingIngredients = function () {
+            return `${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Gear_ConsumeIngredients")],
+                `WuxWorkerGear.ConsumeCookingIngredients(eventinfo)`, true)}`;
         },
         listenerUpdateConsumables = function () {
             return `${WuxSheetBackend.OnChange(

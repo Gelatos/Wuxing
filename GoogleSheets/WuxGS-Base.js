@@ -733,6 +733,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let cookingScoreDef = WuxDef.Get("Gear_CookingScore");
                     let updateCookingDef = WuxDef.Get("Gear_UpdateCooking");
                     let updateCookingButtonValue = `!cook @{character_name}`;
+                    let consumeDef = WuxDef.Get("Gear_ConsumeIngredients");
 
                     let contents = `${WuxSheetMain.Header(cookingEventDef.getTitle())}
                         ${WuxSheetMain.Row(WuxSheetMain.DescField(activeRecipeDef.getAttribute()))}
@@ -744,7 +745,8 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         ${WuxSheetMain.Row(WuxSheetMain.DescField(mealCountDef.getAttribute()))}
                         ${WuxSheetMain.Header2(cookingScoreDef.getTitle())}
                         ${WuxSheetMain.Row(WuxSheetMain.DescField(cookingScoreDef.getAttribute()))}
-                        <button class="wuxButton wuxWidth120" type="roll" value="${updateCookingButtonValue}"><span>${updateCookingDef.getTitle("")}</span></button>`;
+                        ${WuxSheetMain.HiddenAuxField(WuxDef.GetAttribute("Gear_CookingIsVisible"), WuxSheetMain.Button(consumeDef.getAttribute(), consumeDef.getTitle(""), "wuxWidth120"))}
+                        ${WuxSheetMain.HiddenField(WuxDef.GetAttribute("Gear_CookingIsVisible"), `<button class="wuxButton wuxWidth120" type="roll" value="${updateCookingButtonValue}"><span>${updateCookingDef.getTitle("")}</span></button>`)}`;
 
                     return WuxSheetMain.Table.FlexTableGroup(
                         WuxSheetMain.HiddenField(activeRecipeDef.getAttribute(), contents), " wuxMinWidth150");
@@ -782,10 +784,10 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                         `<input type="hidden" name="${getGearAttribute("ItemMainGroup")}" value="0">` +
                         WuxSheetMain.HiddenField(getGearAttribute("ItemIsVisible"), rowContents));
 
-                    return `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
+                    return WuxSheetMain.HiddenAuxField(WuxDef.GetAttribute("Gear_CookingIsVisible"), `${WuxSheetMain.Header(`${repeatingDef.getTitle()}`)}
                         <div>
-                            ${WuxSheetMain.HiddenFieldToggle(WuxDef.GetAttribute("Gear_CookingIsVisible"), repeaterContent, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}
-                        </div>`;
+                            ${repeaterContent}
+                        </div>`);
                 },
 
                 buildEquipment = function () {

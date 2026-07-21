@@ -591,6 +591,7 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerUpdateConsumables();
             output += listenerRemoveAllConsumables();
             output += listenerUnequipAllConsumables();
+            output += listenerConsumeCookingIngredients();
             output += listenerSetGearOptions();
             return output;
         },
@@ -798,6 +799,11 @@ var GearBuilder = GearBuilder || (function () {
             return `${WuxSheetBackend.OnChange(
                 [WuxDef.GetVariable("Gear_UnequipAll", "consumable")],
                 `WuxWorkerGear.UnequipAllConsumables(eventinfo)`, true)}`;
+        },
+        listenerConsumeCookingIngredients = function () {
+            return `${WuxSheetBackend.OnChange(
+                [WuxDef.GetVariable("Gear_ConsumeIngredients")],
+                `WuxWorkerGear.ConsumeCookingIngredients(eventinfo)`, true)}`;
         },
         listenerUpdateConsumables = function () {
             return `${WuxSheetBackend.OnChange(

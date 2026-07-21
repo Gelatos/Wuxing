@@ -5004,6 +5004,7 @@ class CombatDetails {
         this.mvSpeed = 0;
         this.dashSpeed = 0;
         this.weaponDamage = "";
+        this.en = 0;
     }
 
     importJson(json) {
@@ -5037,6 +5038,7 @@ class CombatDetails {
         this.mvSpeed = json.mvSpeed;
         this.dashSpeed = json.dashSpeed;
         this.weaponDamage = json.weaponDamage != undefined ? json.weaponDamage : "Force";
+        this.en = json.en != undefined ? json.en : 0;
     }
 
     printTooltip() {
@@ -5178,6 +5180,9 @@ class CombatDetailsHandler {
     }
     getWeaponDamage() {
         return this.combatDetails.weaponDamage;
+    }
+    getEN() {
+        return this.combatDetails.en;
     }
     getResistance(resistance) {
         switch (resistance) {
@@ -5338,6 +5343,12 @@ class CombatDetailsHandler {
     onUpdateWeaponDamageType(attrHandler, value) {
         this.setData(attrHandler);
         this.combatDetails.weaponDamage = value;
+        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
+    }
+
+    onUpdateEN(attrHandler, value) {
+        this.setData(attrHandler);
+        this.combatDetails.en = value;
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
     
