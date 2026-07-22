@@ -1352,7 +1352,10 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                     techUseResolver.targetTokenEffect.halveAllDamage = false;
                 }
                 else if (techniqueEffect.defense == "") {
-                    passCheck = techUseResolver.passedCheck;
+                    // "" marks a core/free effect - it always applies regardless of whether
+                    // the technique's skill check succeeds (that's what "Core"-defense effects
+                    // are for, handled below).
+                    passCheck = true;
                 }
                 else {
                     if (techniqueEffect.type == "Damage") {
