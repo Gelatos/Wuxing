@@ -8,8 +8,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         let techniqueNameField = techniquesRepeater.getFieldName(
             selectedId, WuxDef.GetUntypedVariable("Action", "TechTrueName"));
         let crField = WuxDef.GetVariable("CR");
-        
-        attributeHandler.addMod([techniqueNameField, crField]);
+        let fullNameField = WuxDef.GetVariable("FullName");
+
+        attributeHandler.addMod([techniqueNameField, crField, fullNameField]);
         
         attributeHandler.addGetAttrCallback(function (attrHandler) {
             styleWorker.setBuildStatsDraft(attrHandler);
