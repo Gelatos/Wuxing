@@ -136,48 +136,37 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 			let attributeHandler = new WorkerAttributeHandler();
 			let innateDefenseVariable = WuxDef.GetVariable("InnateDefense");
 			let braceDef = WuxDef.Get("Def_Brace");
-			let fortitudeDef = WuxDef.Get("Def_Fortitude");
-			let disruptionDef = WuxDef.Get("Def_Disruption");
-			let hideDef = WuxDef.Get("Def_Hide");
-			let reflexDef = WuxDef.Get("Def_Reflex");
+			let wardingDef = WuxDef.Get("Def_Warding");
 			let evasionDef = WuxDef.Get("Def_Evasion");
 			attributeHandler.addFormulaMods(braceDef);
-			attributeHandler.addFormulaMods(fortitudeDef);
-			attributeHandler.addFormulaMods(disruptionDef);
-			attributeHandler.addFormulaMods(hideDef);
-			attributeHandler.addFormulaMods(reflexDef);
+			attributeHandler.addFormulaMods(wardingDef);
 			attributeHandler.addFormulaMods(evasionDef);
 
-			attributeHandler.addMod(innateDefenseVariable);
+			attributeHandler.addMod([innateDefenseVariable, WuxDef.GetVariable("CR")]);
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				attrHandler.addUpdate(braceDef.getVariable(WuxDef._expertise), 0);
-				attrHandler.addUpdate(fortitudeDef.getVariable(WuxDef._expertise), 0);
-				attrHandler.addUpdate(disruptionDef.getVariable(WuxDef._expertise), 0);
-				attrHandler.addUpdate(hideDef.getVariable(WuxDef._expertise), 0);
-				attrHandler.addUpdate(reflexDef.getVariable(WuxDef._expertise), 0);
+				attrHandler.addUpdate(wardingDef.getVariable(WuxDef._expertise), 0);
 				attrHandler.addUpdate(evasionDef.getVariable(WuxDef._expertise), 0);
 
 				switch (attrHandler.parseString(innateDefenseVariable)) {
 					case "BOD":
-						setDefenseVariables(attrHandler, "Defense", "BOD", "Brace", "Fortitude");
+						setDefenseVariable(attrHandler, "Defense", "BOD", "Brace");
 						break;
 					case "PRC":
-						setDefenseVariables(attrHandler, "Defense", "PRC", "Disruption", "Hide");
+						setDefenseVariable(attrHandler, "Defense", "PRC", "Warding");
 						break;
 					case "QCK":
-						setDefenseVariables(attrHandler, "Defense", "QCK", "Reflex", "Evasion");
+						setDefenseVariable(attrHandler, "Defense", "QCK", "Evasion");
 						break;
 					default:
 						attrHandler.addUpdate(WuxDef.GetVariable("InnateDefense", WuxDef._learn), "Choose an attribute");
 						break;
 				}
 
-				attrHandler.addUpdate(braceDef.getVariable(), braceDef.formula.getValue(attrHandler));
-				attrHandler.addUpdate(fortitudeDef.getVariable(), fortitudeDef.formula.getValue(attrHandler));
-				attrHandler.addUpdate(disruptionDef.getVariable(), disruptionDef.formula.getValue(attrHandler));
-				attrHandler.addUpdate(hideDef.getVariable(), hideDef.formula.getValue(attrHandler));
-				attrHandler.addUpdate(reflexDef.getVariable(), reflexDef.formula.getValue(attrHandler));
-				attrHandler.addUpdate(evasionDef.getVariable(), evasionDef.formula.getValue(attrHandler));
+				let crValue = attrHandler.parseInt(WuxDef.GetVariable("CR"));
+				updateDefenseStat(attrHandler, braceDef, crValue);
+				updateDefenseStat(attrHandler, wardingDef, crValue);
+				updateDefenseStat(attrHandler, evasionDef, crValue);
 			});
 			attributeHandler.run();
 		},
@@ -186,65 +175,60 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 			let attributeHandler = new WorkerAttributeHandler();
 			let innateSenseVariable = WuxDef.GetVariable("InnateSense");
 			let senseResolveDef = WuxDef.Get("Def_Resolve");
-			let senseFreewillDef = WuxDef.Get("Def_Freewill");
 			let senseInsightDef = WuxDef.Get("Def_Insight");
-			let senseNoticeDef = WuxDef.Get("Def_Notice");
-			let senseScrutinyDef = WuxDef.Get("Def_Scrutiny");
-			let senseDetectDef = WuxDef.Get("Def_Detect");
+			let senseLogicDef = WuxDef.Get("Def_Logic");
 			attributeHandler.addFormulaMods(senseResolveDef);
-			attributeHandler.addFormulaMods(senseFreewillDef);
 			attributeHandler.addFormulaMods(senseInsightDef);
-			attributeHandler.addFormulaMods(senseNoticeDef);
-			attributeHandler.addFormulaMods(senseScrutinyDef);
-			attributeHandler.addFormulaMods(senseDetectDef);
+			attributeHandler.addFormulaMods(senseLogicDef);
 
-			attributeHandler.addMod(innateSenseVariable);
+			attributeHandler.addMod([innateSenseVariable, WuxDef.GetVariable("CR")]);
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				attrHandler.addUpdate(senseResolveDef.getVariable(WuxDef._expertise), 0);
-				attrHandler.addUpdate(senseFreewillDef.getVariable(WuxDef._expertise), 0);
 				attrHandler.addUpdate(senseInsightDef.getVariable(WuxDef._expertise), 0);
-				attrHandler.addUpdate(senseNoticeDef.getVariable(WuxDef._expertise), 0);
-				attrHandler.addUpdate(senseScrutinyDef.getVariable(WuxDef._expertise), 0);
-				attrHandler.addUpdate(senseDetectDef.getVariable(WuxDef._expertise), 0);
+				attrHandler.addUpdate(senseLogicDef.getVariable(WuxDef._expertise), 0);
 
 				switch (attrHandler.parseString(innateSenseVariable)) {
 					case "CNV":
-						setDefenseVariables(attrHandler, "Sense", "CNV", "Resolve", "Freewill");
+						setDefenseVariable(attrHandler, "Sense", "CNV", "Resolve");
 						break;
 					case "INT":
-						setDefenseVariables(attrHandler, "Sense", "INT", "Insight", "Notice");
+						setDefenseVariable(attrHandler, "Sense", "INT", "Insight");
 						break;
 					case "RSN":
-						setDefenseVariables(attrHandler, "Sense", "RSN", "Scrutiny", "Detect");
+						setDefenseVariable(attrHandler, "Sense", "RSN", "Logic");
 						break;
 					default:
 						attrHandler.addUpdate(WuxDef.GetVariable("InnateSense", WuxDef._learn), "Choose an attribute");
 						break;
 				}
 
-				attrHandler.addUpdate(senseResolveDef.getVariable(), senseResolveDef.formula.getValue(attrHandler));
-				attrHandler.addUpdate(senseFreewillDef.getVariable(), senseFreewillDef.formula.getValue(attrHandler));
-				attrHandler.addUpdate(senseInsightDef.getVariable(), senseInsightDef.formula.getValue(attrHandler));
-				attrHandler.addUpdate(senseNoticeDef.getVariable(), senseNoticeDef.formula.getValue(attrHandler));
-				attrHandler.addUpdate(senseScrutinyDef.getVariable(), senseScrutinyDef.formula.getValue(attrHandler));
-				attrHandler.addUpdate(senseDetectDef.getVariable(), senseDetectDef.formula.getValue(attrHandler));
+				let crValue = attrHandler.parseInt(WuxDef.GetVariable("CR"));
+				updateDefenseStat(attrHandler, senseResolveDef, crValue);
+				updateDefenseStat(attrHandler, senseInsightDef, crValue);
+				updateDefenseStat(attrHandler, senseLogicDef, crValue);
 			});
 			attributeHandler.run();
 		},
-		setDefenseVariables = function (attrHandler, type, attribute, defense1, defense2) {
-			let attrDefinition = WuxDef.Get(`Attr_${attribute}`);
-			let def1Definition = WuxDef.Get(`Def_${defense1}`);
-			let def2Definition = WuxDef.Get(`Def_${defense2}`);
-
-			attrHandler.addUpdate(WuxDef.GetVariable(`Innate${type}`, WuxDef._learn), getDefenseDescription(type, attrDefinition, def1Definition, def2Definition));
-			attrHandler.addUpdate(def1Definition.getVariable(WuxDef._expertise), 2);
-			attrHandler.addUpdate(def2Definition.getVariable(WuxDef._expertise), 2);
+		updateDefenseStat = function (attrHandler, definition, crValue) {
+			// Average = 7 (base) + CR + 1 (job + attribute) = 8 + CR.
+			let value = definition.formula.getValue(attrHandler);
+			let evaluation = Format.EvaluateAgainstAverage(value, 8 + crValue);
+			let evaluationVar = definition.getVariable(WuxDef._evaluation);
+			attrHandler.addUpdate(definition.getVariable(), value);
+			attrHandler.addUpdate(evaluationVar, evaluation);
 		},
-		getDefenseDescription = function (type, attrDefinition, def1Definition, def2Definition) {
+		setDefenseVariable = function (attrHandler, type, attribute, defense) {
+			let attrDefinition = WuxDef.Get(`Attr_${attribute}`);
+			let defDefinition = WuxDef.Get(`Def_${defense}`);
+
+			attrHandler.addUpdate(WuxDef.GetVariable(`Innate${type}`, WuxDef._learn), getDefenseDescription(type, attrDefinition, defDefinition));
+			attrHandler.addUpdate(defDefinition.getVariable(WuxDef._expertise), 2);
+		},
+		getDefenseDescription = function (type, attrDefinition, defDefinition) {
 			Debug.Log("Getting Defense Description");
 
-			let output = `${attrDefinition.title} is associated with the following ${type}s:\n\n`;
-			output += `${def1Definition.title}: ${def1Definition.getDescription()}\n\n${def2Definition.title}: ${def2Definition.getDescription()}`;
+			let output = `${attrDefinition.title} is associated with the following ${type}:\n\n`;
+			output += `${defDefinition.title}: ${defDefinition.getDescription()}`;
 			Debug.Log(output);
 			return output;
 		}
@@ -488,14 +472,27 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			worker.convertXp(attributeHandler);
 			attributeHandler.run();
 		},
-		setLevel = function (eventinfo) {
+		setLevel = async function (eventinfo) {
 			Debug.Log("Setting Level");
 			let attributeHandler = new WorkerAttributeHandler();
 			let advWorker = new WuxAdvancementWorkerBuild();
 			advWorker.updateLevel(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
 			let trnWorker = new WuxTrainingWorkerBuild();
 			trnWorker.updateLevel(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
-			attributeHandler.run();
+
+			// CR may change as part of a level update. Since attribute writes are always
+			// silent, the sheet's native CR-change listeners never fire on their own -
+			// explicitly refresh everything that depends on CR/Level here.
+			let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
+			WuxWorkerGeneral.UpdateStats(attributeHandler, combatDetailsHandler);
+			WuxWorkerSkills.UpdateStats(attributeHandler);
+			WuxWorkerAttributes.UpdateStats(attributeHandler);
+			await attributeHandler.run();
+
+			// Defense/Sense stats run through their own handler, so they must wait
+			// until the CR write above is persisted before reading it fresh.
+			WuxWorkerCharacterCreation.SetInnateDefense();
+			WuxWorkerCharacterCreation.SetInnateSense();
 		},
 		setBonusTrainingAdvancementPoints = function () {
 			Debug.Log("Setting Bonus Training Advancement Points");
@@ -907,7 +904,7 @@ var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
 	'use strict';
 
 	var
-		updateBuildPoints = function (eventinfo) {
+		updateBuildPoints = async function (eventinfo) {
 			Debug.Log("Update Attributes");
 			let attributeHandler = new WorkerAttributeHandler();
 			let worker = new WuxAttributeWorkerBuild();
@@ -915,7 +912,15 @@ var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
 			updateStats(attributeHandler);
 			WuxWorkerSkills.UpdateStats(attributeHandler);
 			WuxWorkerActions.TriggerBuilderActionUpdate();
-			attributeHandler.run();
+
+			// Defense/Sense values are formula-driven off attribute scores, but their
+			// evaluations only get recomputed by explicitly refreshing them here.
+			let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
+			WuxWorkerGeneral.UpdateStats(attributeHandler, combatDetailsHandler);
+			await attributeHandler.run();
+
+			WuxWorkerCharacterCreation.SetInnateDefense();
+			WuxWorkerCharacterCreation.SetInnateSense();
 		},
 
 		refreshStats = function (attributeHandler) {
@@ -946,6 +951,8 @@ var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
 				attributeHandler.addFormulaMods(formulaDefinitions[i]);
 			}
 
+			attributeHandler.addMod(attributeDefinitions.map(definition => definition.getVariable()));
+
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				for (let i = 0; i < formulaDefinitions.length; i++) {
 					if (formulaDefinitions[i].group == "Skill") {
@@ -957,6 +964,14 @@ var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
 					} else {
 						attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
 					}
+				}
+
+				// Average attribute value is 1; evaluation is shifted down by 1 so 0 lines up
+				// with the Stat Summary's "average" color bucket.
+				for (let i = 0; i < attributeDefinitions.length; i++) {
+					let attributeValue = attrHandler.parseInt(attributeDefinitions[i].getVariable());
+					let evaluationVar = attributeDefinitions[i].getVariable(WuxDef._evaluation);
+					attrHandler.addUpdate(evaluationVar, attributeValue - 1);
 				}
 			});
 		}

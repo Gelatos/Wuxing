@@ -6359,6 +6359,37 @@ var Format = Format || (function () {
                 if (lower.startsWith(ex)) return "a";
             }
             return /^[aeiou]/i.test(word) ? "an" : "a";
+        },
+
+        // Buckets a value against an average into the Stat Summary's 5-point evaluation scale:
+        // -2 greatly below, -1 below, 0 average, 1 above, 2 greatly above.
+        // aboveThreshold/greatThreshold default to 2/4 (Attributes/Defenses/Skills); pass explicit
+        // values for stats with their own thresholds (e.g. Armor uses CR/CR*2).
+        // Pass allowBelowAverage = false to clamp negative results to 0 (e.g. Skills should never read as below average).
+        evaluateAgainstAverage = function (value, average, allowBelowAverage, aboveThreshold, greatThreshold) {
+            if (aboveThreshold == undefined) {
+                aboveThreshold = 2;
+            }
+            if (greatThreshold == undefined) {
+                greatThreshold = 4;
+            }
+            let diff = value - average;
+            let evaluation;
+            if (diff <= -greatThreshold) {
+                evaluation = -2;
+            } else if (diff <= -aboveThreshold) {
+                evaluation = -1;
+            } else if (diff >= greatThreshold) {
+                evaluation = 2;
+            } else if (diff >= aboveThreshold) {
+                evaluation = 1;
+            } else {
+                evaluation = 0;
+            }
+            if (allowBelowAverage == false && evaluation < 0) {
+                evaluation = 0;
+            }
+            return evaluation;
         }
 
     ;
@@ -6367,6 +6398,7 @@ var Format = Format || (function () {
         ToUpperCamelCase: toUpperCamelCase,
         ToFieldName: toFieldName,
         Romanize: romanize,
+        EvaluateAgainstAverage: evaluateAgainstAverage,
         NumberToWord: numberToWord,
         GetDefinitionName: getDefinitionName,
         GetLevelPrerequisites: getLevelPrerequisites,

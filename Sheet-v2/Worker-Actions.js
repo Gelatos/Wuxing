@@ -163,15 +163,18 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 }
             });
         },
-        updateAllActionsFromMenu = function (attributeHandler) {
+        updateAllActionsFromMenu = function (attributeHandler, onComplete) {
             let pageSetVariable = WuxDef.GetVariable("PageSet");
             attributeHandler.addMod(pageSetVariable);
             updateAllActionsFromMenuSilent(attributeHandler, function (attributeHandler2) {
                 let loader = new LoadingScreenHandler(attributeHandler2);
-                loader.run();
+                let result = loader.run();
+                if (onComplete) {
+                    result.then(onComplete);
+                }
             });
         },
-        updateJobActionsFromMenu = function (attributeHandler, jobName) {
+        updateJobActionsFromMenu = function (attributeHandler, jobName, onComplete) {
             let formeTechniqueFilterVariable = WuxDef.GetVariable("Action_FormeTechniques", WuxDef._filter);
             attributeHandler.addMod(formeTechniqueFilterVariable);
             attributeHandler.addFinishCallback(function (attrHandler) {
@@ -179,7 +182,10 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 let filter = attrHandler.parseJSON(formeTechniqueFilterVariable);
                 updateJobActions(attributeHandler2, jobName, filter);
                 let loader = new LoadingScreenHandler(attributeHandler2);
-                loader.run();
+                let result = loader.run();
+                if (onComplete) {
+                    result.then(onComplete);
+                }
             });
         },
         updateAllFormeActions = function (attributeHandler, filters) {

@@ -19,7 +19,21 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
     
     'use strict';
 
-    const updateBuildPoints = function (eventinfo) {
+    const refreshStatEvaluations = function () {
+            // Called only once the job's technique boosters have actually finished
+            // applying (they run in their own deferred attributeHandler), so this
+            // reads post-booster values instead of racing them.
+            let attributeHandler = new WorkerAttributeHandler();
+            let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
+            WuxWorkerGeneral.UpdateStats(attributeHandler, combatDetailsHandler);
+            WuxWorkerSkills.UpdateStats(attributeHandler);
+            attributeHandler.run().then(() => {
+                WuxWorkerCharacterCreation.SetInnateDefense();
+                WuxWorkerCharacterCreation.SetInnateSense();
+            });
+        },
+
+        updateBuildPoints = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
             let worker = new WuxJobWorkerBuild();
             worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
@@ -29,7 +43,7 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             if (eventinfo.newValue == "on") {
                 equipJob(attributeHandler, style.name);
             }
-            WuxWorkerActions.UpdateJobActionsFromMenu(attributeHandler, style.name);
+            WuxWorkerActions.UpdateJobActionsFromMenu(attributeHandler, style.name, refreshStatEvaluations);
             attributeHandler.run();
         },
 
@@ -101,7 +115,7 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             let jobName = eventinfo.newValue;
             let attributeHandler = new WorkerAttributeHandler();
             equipJob(attributeHandler, jobName);
-            WuxWorkerActions.UpdateJobActionsFromMenu(attributeHandler, jobName);
+            WuxWorkerActions.UpdateJobActionsFromMenu(attributeHandler, jobName, refreshStatEvaluations);
             attributeHandler.run();
         };
 

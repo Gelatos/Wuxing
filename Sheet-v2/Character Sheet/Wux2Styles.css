@@ -1989,6 +1989,33 @@ input[type=hidden].wuxIsPlayerSelection-flag:not([value="1"]) + .wuxIsPlayerSele
     display: block;
 }
 
+/*========================================
+    Stat Summary Evaluation Coloring
+    -2: greatly below average, -1: below average, 0: average, 1: above average, 2: greatly above average
+========================================*/
+
+input[type=hidden].wuxStatEvaluation-flag[value="-2"] + .wuxStatEvaluation-value
+{
+    color: #ff0000;
+    font-size: 11px;
+}
+
+input[type=hidden].wuxStatEvaluation-flag[value="-1"] + .wuxStatEvaluation-value
+{
+    color: #e46226;
+}
+
+input[type=hidden].wuxStatEvaluation-flag[value="1"] + .wuxStatEvaluation-value
+{
+    color: #0bae0d;
+}
+
+input[type=hidden].wuxStatEvaluation-flag[value="2"] + .wuxStatEvaluation-value
+{
+    color: #00ffea;
+    font-size: 14px;
+}
+
 .wuxCharacterStatistics
 {
     position: relative;

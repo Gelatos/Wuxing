@@ -49,7 +49,9 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let skillExpertiseDef = WuxDef.Get("SkillExpertise");
-                let trainingBonus = 2 + attrHandler.parseInt(WuxDef.GetVariable("CR"));
+                let crValue = attrHandler.parseInt(WuxDef.GetVariable("CR"));
+                let trainingBonus = 2 + crValue;
+                let averageSkillValue = 1 + crValue;
 
                 skillDefinitions.forEach(skillDefinition => {
                     let skillInfo = [];
@@ -78,6 +80,10 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
                     attrHandler.addUpdate(skillDefinition.getVariable(WuxDef._max), skillPointValueNoCr);
                     attrHandler.addUpdate(skillDefinition.getVariable(), skillPointValue);
                     attrHandler.addUpdate(skillDefinition.getVariable(WuxDef._info), skillInfo.join(`\n`));
+                    // Skills never read as below average - anything under average still shows as average.
+                    let skillEvaluation = Format.EvaluateAgainstAverage(skillPointValue, averageSkillValue, false);
+                    let skillEvaluationVar = skillDefinition.getVariable(WuxDef._evaluation);
+                    attrHandler.addUpdate(skillEvaluationVar, skillEvaluation);
                 });
             });
         },

@@ -6359,6 +6359,37 @@ var Format = Format || (function () {
                 if (lower.startsWith(ex)) return "a";
             }
             return /^[aeiou]/i.test(word) ? "an" : "a";
+        },
+
+        // Buckets a value against an average into the Stat Summary's 5-point evaluation scale:
+        // -2 greatly below, -1 below, 0 average, 1 above, 2 greatly above.
+        // aboveThreshold/greatThreshold default to 2/4 (Attributes/Defenses/Skills); pass explicit
+        // values for stats with their own thresholds (e.g. Armor uses CR/CR*2).
+        // Pass allowBelowAverage = false to clamp negative results to 0 (e.g. Skills should never read as below average).
+        evaluateAgainstAverage = function (value, average, allowBelowAverage, aboveThreshold, greatThreshold) {
+            if (aboveThreshold == undefined) {
+                aboveThreshold = 2;
+            }
+            if (greatThreshold == undefined) {
+                greatThreshold = 4;
+            }
+            let diff = value - average;
+            let evaluation;
+            if (diff <= -greatThreshold) {
+                evaluation = -2;
+            } else if (diff <= -aboveThreshold) {
+                evaluation = -1;
+            } else if (diff >= greatThreshold) {
+                evaluation = 2;
+            } else if (diff >= aboveThreshold) {
+                evaluation = 1;
+            } else {
+                evaluation = 0;
+            }
+            if (allowBelowAverage == false && evaluation < 0) {
+                evaluation = 0;
+            }
+            return evaluation;
         }
 
     ;
@@ -6367,6 +6398,7 @@ var Format = Format || (function () {
         ToUpperCamelCase: toUpperCamelCase,
         ToFieldName: toFieldName,
         Romanize: romanize,
+        EvaluateAgainstAverage: evaluateAgainstAverage,
         NumberToWord: numberToWord,
         GetDefinitionName: getDefinitionName,
         GetLevelPrerequisites: getLevelPrerequisites,
@@ -10130,6 +10162,11 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return `<span name="${fieldName}">${contents}</span>`;
         },
 
+        evaluatedSpan = function (fieldName, evaluationFieldName) {
+            return `<input type="hidden" class="wuxStatEvaluation-flag" name="${evaluationFieldName}" value="0">
+            <span class="wuxStatEvaluation-value" name="${fieldName}"></span>`;
+        },
+
         row = function (contents) {
             return `<div class="wuxRow">${contents}</div>`;
         },
@@ -10581,6 +10618,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         Desc: desc,
         DescField: descField,
         Span: span,
+        EvaluatedSpan: evaluatedSpan,
         Row: row,
         MultiRow: multiRow,
         Input: input,
@@ -15094,7 +15132,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
                         printSkillStat = function(definition, fieldAttr, statCalculationField) {
                             return `<span class="wuxFloatRight">
-                                ${WuxSheetMain.Tooltip.Text(WuxSheetMain.Span(fieldAttr),
+                                ${WuxSheetMain.Tooltip.Text(WuxSheetMain.EvaluatedSpan(fieldAttr, definition.getAttribute(WuxDef._evaluation)),
                                     printStatCalculationTooltipContent(definition, statCalculationField))}
                             </span>`;
                         },
@@ -16519,7 +16557,7 @@ class CharacterStatisticsBuilder {
         for (let definition of filteredStats) {
             resourceContents += `<div class="wuxRow">
             ${this.printStat(definition, definition.abbreviation,
-                definition.getAttribute(WuxDef._max), definition.getAttribute(WuxDef._info))}
+                definition.getAttribute(WuxDef._max), definition.getAttribute(WuxDef._info), true)}
             </div>`;
         }
         
@@ -16534,7 +16572,8 @@ class CharacterStatisticsBuilder {
             ${resourceContents}`;
     }
     printDefenses() {
-        let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", ["Defense", "Sense"])]);
+        let defenseOrder = ["Def_Brace", "Def_Resolve", "Def_Warding", "Def_Logic", "Def_Evasion", "Def_Insight"];
+        let filteredStats = defenseOrder.map(name => WuxDef.Get(name));
         let contents = this.printHeader(WuxDef.GetTitle("Defense"));
         for (let definition of filteredStats) {
             let abilityScores = [];
@@ -16551,25 +16590,25 @@ class CharacterStatisticsBuilder {
                 attributesLine = `(${abilityScores.join("/")})`;
             }
             
-            contents += this.printStat(definition, `${definition.getTitle()} ${attributesLine}`, 
-                definition.getAttribute(), definition.getAttribute(WuxDef._info));
+            contents += this.printStat(definition, `${definition.getTitle()} ${attributesLine}`,
+                definition.getAttribute(), definition.getAttribute(WuxDef._info), true);
         }
         return contents;
     }
-    
+
     printExpandedStats() {
         let contents = this.printHeader(WuxDef.GetTitle("Title_Conflict"));
-        contents += this.printFilteredSubGroupStats("EnStat");
-        contents += this.printFilteredSubGroupStats("MoveStat");
-        contents += this.printFilteredSubGroupStats("CombatStat");
+        contents += this.printFilteredSubGroupStats("EnStat", true);
+        contents += this.printFilteredSubGroupStats("MoveStat", true);
+        contents += this.printFilteredSubGroupStats("CombatStat", true);
         return contents;
     }
-    printFilteredSubGroupStats(subGroupName) {
+    printFilteredSubGroupStats(subGroupName, useEvaluation) {
         let contents = "";
         let filteredStats = WuxDef.Filter([new DatabaseFilterData("subGroup", subGroupName)]);
         for (let definition of filteredStats) {
             contents += this.printStat(definition, definition.getTitle(),
-                definition.getAttribute(), definition.getAttribute(WuxDef._info));
+                definition.getAttribute(), definition.getAttribute(WuxDef._info), useEvaluation);
         }
         return `${contents}
         `;
@@ -16579,12 +16618,15 @@ class CharacterStatisticsBuilder {
         return WuxSheetMain.Header(header);
     }
 
-    printSetStat(definition, title, fieldAttr) {
+    printSetStat(definition, title, fieldAttr, useEvaluation) {
+        let valueDisplay = useEvaluation
+            ? WuxSheetMain.EvaluatedSpan(fieldAttr, definition.getAttribute(WuxDef._evaluation))
+            : WuxSheetMain.Span(fieldAttr);
         return `<div class="wuxFlexTableItemGroup">
             <strong>${WuxSheetMain.Tooltip.Text(title,
             this.printDefinitionTooltipContents(definition))}</strong>
             <div class="wuxCharacterStatisticsStat">
-                ${WuxSheetMain.Span(fieldAttr)}
+                ${valueDisplay}
             </div>
         </div>`;
     }
@@ -16592,13 +16634,16 @@ class CharacterStatisticsBuilder {
         return `${WuxSheetMain.Header2(definitionData.title)}
         <span class="wuxDescription">${definitionData.getDescription(`</span><span class="wuxDescription">`)}</span>`;
     }
-    
-    printStat(definition, title, fieldAttr, statCalculationField) {
+
+    printStat(definition, title, fieldAttr, statCalculationField, useEvaluation) {
+        let valueDisplay = useEvaluation
+            ? WuxSheetMain.EvaluatedSpan(fieldAttr, definition.getAttribute(WuxDef._evaluation))
+            : WuxSheetMain.Span(fieldAttr);
         return `<div class="wuxFlexTableItemGroup">
             ${WuxSheetMain.Tooltip.Text(title,
             this.printDefinitionTooltipContents(definition))}
             <div class="wuxCharacterStatisticsStat">
-                ${WuxSheetMain.Tooltip.Text(WuxSheetMain.Span(fieldAttr),
+                ${WuxSheetMain.Tooltip.Text(valueDisplay,
             this.printStatCalculationTooltipContent(definition, statCalculationField))}
             </div>
         </div>`;
@@ -16634,10 +16679,11 @@ class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
     }
     
     printAttributes() {
-        let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", "Attribute")]);
+        let attributeOrder = ["Attr_BOD", "Attr_CNV", "Attr_PRC", "Attr_RSN", "Attr_QCK", "Attr_INT"];
+        let filteredStats = attributeOrder.map(name => WuxDef.Get(name));
         let contents = this.printHeader(WuxDef.GetTitle("Attribute"));
         for (let definition of filteredStats) {
-            contents += this.printSetStat(definition, definition.getTitle(), definition.getAttribute());
+            contents += this.printSetStat(definition, definition.getTitle(), definition.getAttribute(), true);
         }
         return contents;
     }
@@ -16708,7 +16754,7 @@ class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
                 let skillDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Skill"),
                     new DatabaseFilterData("subGroup", subSkillGroup.getTitle())]);
                 for (let definition of skillDefinitions) {
-                    contents += this.printStat(definition, definition.getTitle(), definition.getAttribute(), definition.getAttribute(WuxDef._info));
+                    contents += this.printStat(definition, definition.getTitle(), definition.getAttribute(), definition.getAttribute(WuxDef._info), true);
                 }
             }
         }

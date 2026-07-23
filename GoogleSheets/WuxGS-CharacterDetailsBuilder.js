@@ -147,7 +147,7 @@ class CharacterStatisticsBuilder {
         for (let definition of filteredStats) {
             resourceContents += `<div class="wuxRow">
             ${this.printStat(definition, definition.abbreviation,
-                definition.getAttribute(WuxDef._max), definition.getAttribute(WuxDef._info))}
+                definition.getAttribute(WuxDef._max), definition.getAttribute(WuxDef._info), true)}
             </div>`;
         }
         
@@ -162,7 +162,8 @@ class CharacterStatisticsBuilder {
             ${resourceContents}`;
     }
     printDefenses() {
-        let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", ["Defense", "Sense"])]);
+        let defenseOrder = ["Def_Brace", "Def_Resolve", "Def_Warding", "Def_Logic", "Def_Evasion", "Def_Insight"];
+        let filteredStats = defenseOrder.map(name => WuxDef.Get(name));
         let contents = this.printHeader(WuxDef.GetTitle("Defense"));
         for (let definition of filteredStats) {
             let abilityScores = [];
@@ -179,25 +180,25 @@ class CharacterStatisticsBuilder {
                 attributesLine = `(${abilityScores.join("/")})`;
             }
             
-            contents += this.printStat(definition, `${definition.getTitle()} ${attributesLine}`, 
-                definition.getAttribute(), definition.getAttribute(WuxDef._info));
+            contents += this.printStat(definition, `${definition.getTitle()} ${attributesLine}`,
+                definition.getAttribute(), definition.getAttribute(WuxDef._info), true);
         }
         return contents;
     }
-    
+
     printExpandedStats() {
         let contents = this.printHeader(WuxDef.GetTitle("Title_Conflict"));
-        contents += this.printFilteredSubGroupStats("EnStat");
-        contents += this.printFilteredSubGroupStats("MoveStat");
-        contents += this.printFilteredSubGroupStats("CombatStat");
+        contents += this.printFilteredSubGroupStats("EnStat", true);
+        contents += this.printFilteredSubGroupStats("MoveStat", true);
+        contents += this.printFilteredSubGroupStats("CombatStat", true);
         return contents;
     }
-    printFilteredSubGroupStats(subGroupName) {
+    printFilteredSubGroupStats(subGroupName, useEvaluation) {
         let contents = "";
         let filteredStats = WuxDef.Filter([new DatabaseFilterData("subGroup", subGroupName)]);
         for (let definition of filteredStats) {
             contents += this.printStat(definition, definition.getTitle(),
-                definition.getAttribute(), definition.getAttribute(WuxDef._info));
+                definition.getAttribute(), definition.getAttribute(WuxDef._info), useEvaluation);
         }
         return `${contents}
         `;
@@ -207,12 +208,15 @@ class CharacterStatisticsBuilder {
         return WuxSheetMain.Header(header);
     }
 
-    printSetStat(definition, title, fieldAttr) {
+    printSetStat(definition, title, fieldAttr, useEvaluation) {
+        let valueDisplay = useEvaluation
+            ? WuxSheetMain.EvaluatedSpan(fieldAttr, definition.getAttribute(WuxDef._evaluation))
+            : WuxSheetMain.Span(fieldAttr);
         return `<div class="wuxFlexTableItemGroup">
             <strong>${WuxSheetMain.Tooltip.Text(title,
             this.printDefinitionTooltipContents(definition))}</strong>
             <div class="wuxCharacterStatisticsStat">
-                ${WuxSheetMain.Span(fieldAttr)}
+                ${valueDisplay}
             </div>
         </div>`;
     }
@@ -220,13 +224,16 @@ class CharacterStatisticsBuilder {
         return `${WuxSheetMain.Header2(definitionData.title)}
         <span class="wuxDescription">${definitionData.getDescription(`</span><span class="wuxDescription">`)}</span>`;
     }
-    
-    printStat(definition, title, fieldAttr, statCalculationField) {
+
+    printStat(definition, title, fieldAttr, statCalculationField, useEvaluation) {
+        let valueDisplay = useEvaluation
+            ? WuxSheetMain.EvaluatedSpan(fieldAttr, definition.getAttribute(WuxDef._evaluation))
+            : WuxSheetMain.Span(fieldAttr);
         return `<div class="wuxFlexTableItemGroup">
             ${WuxSheetMain.Tooltip.Text(title,
             this.printDefinitionTooltipContents(definition))}
             <div class="wuxCharacterStatisticsStat">
-                ${WuxSheetMain.Tooltip.Text(WuxSheetMain.Span(fieldAttr),
+                ${WuxSheetMain.Tooltip.Text(valueDisplay,
             this.printStatCalculationTooltipContent(definition, statCalculationField))}
             </div>
         </div>`;
@@ -262,10 +269,11 @@ class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
     }
     
     printAttributes() {
-        let filteredStats = WuxDef.Filter([new DatabaseFilterData("group", "Attribute")]);
+        let attributeOrder = ["Attr_BOD", "Attr_CNV", "Attr_PRC", "Attr_RSN", "Attr_QCK", "Attr_INT"];
+        let filteredStats = attributeOrder.map(name => WuxDef.Get(name));
         let contents = this.printHeader(WuxDef.GetTitle("Attribute"));
         for (let definition of filteredStats) {
-            contents += this.printSetStat(definition, definition.getTitle(), definition.getAttribute());
+            contents += this.printSetStat(definition, definition.getTitle(), definition.getAttribute(), true);
         }
         return contents;
     }
@@ -336,7 +344,7 @@ class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
                 let skillDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Skill"),
                     new DatabaseFilterData("subGroup", subSkillGroup.getTitle())]);
                 for (let definition of skillDefinitions) {
-                    contents += this.printStat(definition, definition.getTitle(), definition.getAttribute(), definition.getAttribute(WuxDef._info));
+                    contents += this.printStat(definition, definition.getTitle(), definition.getAttribute(), definition.getAttribute(WuxDef._info), true);
                 }
             }
         }

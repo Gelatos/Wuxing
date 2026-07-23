@@ -853,7 +853,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
                         printSkillStat = function(definition, fieldAttr, statCalculationField) {
                             return `<span class="wuxFloatRight">
-                                ${WuxSheetMain.Tooltip.Text(WuxSheetMain.Span(fieldAttr),
+                                ${WuxSheetMain.Tooltip.Text(WuxSheetMain.EvaluatedSpan(fieldAttr, definition.getAttribute(WuxDef._evaluation)),
                                     printStatCalculationTooltipContent(definition, statCalculationField))}
                             </span>`;
                         },

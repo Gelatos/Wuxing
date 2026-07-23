@@ -248,6 +248,11 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return `<span name="${fieldName}">${contents}</span>`;
         },
 
+        evaluatedSpan = function (fieldName, evaluationFieldName) {
+            return `<input type="hidden" class="wuxStatEvaluation-flag" name="${evaluationFieldName}" value="0">
+            <span class="wuxStatEvaluation-value" name="${fieldName}"></span>`;
+        },
+
         row = function (contents) {
             return `<div class="wuxRow">${contents}</div>`;
         },
@@ -699,6 +704,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         Desc: desc,
         DescField: descField,
         Span: span,
+        EvaluatedSpan: evaluatedSpan,
         Row: row,
         MultiRow: multiRow,
         Input: input,
