@@ -25,11 +25,11 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             worker.changeWorkerAttribute(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
             WuxWorkerSkills.UpdateKeySkills(attributeHandler);
             Debug.Log(`Setting ${eventinfo.sourceAttribute} to ${eventinfo.newValue}`);
+            let style = WuxStyles.GetByVariableName(eventinfo.sourceAttribute);
             if (eventinfo.newValue == "on") {
-                let style = WuxStyles.GetByVariableName(eventinfo.sourceAttribute);
                 equipJob(attributeHandler, style.name);
             }
-            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+            WuxWorkerActions.UpdateJobActionsFromMenu(attributeHandler, style.name);
             attributeHandler.run();
         },
 
@@ -101,7 +101,7 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
             let jobName = eventinfo.newValue;
             let attributeHandler = new WorkerAttributeHandler();
             equipJob(attributeHandler, jobName);
-            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+            WuxWorkerActions.UpdateJobActionsFromMenu(attributeHandler, jobName);
             attributeHandler.run();
         };
 

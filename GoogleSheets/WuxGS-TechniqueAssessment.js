@@ -1295,26 +1295,26 @@ class TechniqueAssessment {
             case "Targets":
             case "Spaces":
             case "Objects":
-                output.points = Math.floor(points * (this.size - 1) * 0.65);
+                output.points = Math.floor(points * (this.size - 1) * 0.4);
                 output.name = `${this.size} ${this.target}`;
                 break;
             case "Blast":
             case "Blast(3H)":
             case "Blast(5H)":
-                output.points = Math.floor(points * this.getAreaPointMod(0.75, 1));
+                output.points = Math.floor(points * this.getAreaPointMod(0.5, 1));
                 output.name = `${this.target} ${this.size}`;
                 break;
             case "Radial":
-                output.points = Math.floor(points * this.getAreaPointMod(0.6, 1));
+                output.points = Math.floor(points * this.getAreaPointMod(0.4, 1));
                 output.name = `${this.target} ${this.size}`;
                 break;
             case "Cone":
             case "Line":
-                output.points = Math.floor(points * this.getAreaPointMod(0.4, 0.66));
+                output.points = Math.floor(points * this.getAreaPointMod(0.3, 0.66));
                 output.name = `${this.target} ${this.size}`;
                 break;
             case "Wide Line":
-                output.points = Math.floor(points * this.getAreaPointMod(0.6, 0.66));
+                output.points = Math.floor(points * this.getAreaPointMod(0.4, 0.66));
                 output.name = `${this.target} ${this.size}`;
                 break;
         }

@@ -78,6 +78,22 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         });
     }
 
+    // Builds the full tech dictionary (so boosters are registered for everything, same as updateAllActions),
+    // but only pushes the newly-set job's own techniques into the repeater right away. Everything else stays
+    // queued as "unset" for the incremental builder loop to pick up, instead of loading the whole kit at once.
+    const updateJobActions = function (attributeHandler, jobName, filters) {
+        let formeTech = new FormeTechniqueDatabase(attributeHandler, filters);
+        attributeHandler.addGetAttrCallback(function (attrHandler) {
+            formeTech.setupPostGetAttr(attrHandler);
+            formeTech.registerTechDictionary(attrHandler);
+            formeTech.updateDataAndVisibilityOfRepeaterTechniques(attrHandler);
+            formeTech.addMissingJobTechniques(attrHandler, jobName);
+        });
+        attributeHandler.addFinishCallback(function () {
+            formeTech.setSortOrder();
+        });
+    }
+
     const updateBuilderActions = function (attributeHandler, filters) {
         let pageSetVariable = WuxDef.GetVariable("PageSet");
         let remainingVar = WuxDef.GetVariable("Technique", WuxDef._db);
@@ -151,6 +167,17 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             let pageSetVariable = WuxDef.GetVariable("PageSet");
             attributeHandler.addMod(pageSetVariable);
             updateAllActionsFromMenuSilent(attributeHandler, function (attributeHandler2) {
+                let loader = new LoadingScreenHandler(attributeHandler2);
+                loader.run();
+            });
+        },
+        updateJobActionsFromMenu = function (attributeHandler, jobName) {
+            let formeTechniqueFilterVariable = WuxDef.GetVariable("Action_FormeTechniques", WuxDef._filter);
+            attributeHandler.addMod(formeTechniqueFilterVariable);
+            attributeHandler.addFinishCallback(function (attrHandler) {
+                let attributeHandler2 = new WorkerAttributeHandler();
+                let filter = attrHandler.parseJSON(formeTechniqueFilterVariable);
+                updateJobActions(attributeHandler2, jobName, filter);
                 let loader = new LoadingScreenHandler(attributeHandler2);
                 loader.run();
             });
@@ -401,6 +428,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
     return {
         UpdateAllActionsFromMenu: updateAllActionsFromMenu,
         UpdateAllFormeActions: updateAllFormeActions,
+        UpdateJobActionsFromMenu: updateJobActionsFromMenu,
         RefreshAllFormeActions: refreshAllFormeActions,
         LoadFormeActions: loadFormeActions,
         UpdateVisibilityOfFormeActions: updateVisibilityOfFormeActions,
@@ -905,6 +933,29 @@ class FormeTechniqueDatabaseBase {
     getUnsetTechniqueData() {
         Debug.Log(this.techDictionary);
         return Object.values(this.techDictionary.values).filter(v => !v.isSet);
+    }
+    // Immediately adds every unset technique belonging to a single job's kit (technique.style === jobName),
+    // instead of waiting for the generic one-at-a-time builder queue to eventually reach them. Boosters are
+    // already registered for these by the time this runs, since registerTechDictionary must be called first.
+    addMissingJobTechniques(attrHandler, jobName) {
+        let unsetBaseTechniqueData = this.getUnsetTechniqueData();
+        let jobTechniqueData = unsetBaseTechniqueData.filter((techData) => !techData.isHeader && techData.technique.style === jobName);
+
+        let repeater = attrHandler.getRepeatingSection(this.formeActionsRepeaterId);
+        let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");
+        techniqueAttributeHandler.setRepeaterData(repeater);
+
+        jobTechniqueData.forEach((techData) => {
+            let id = repeater.generateRowId();
+            techniqueAttributeHandler.setId(id);
+            this.tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, techData.technique.name, repeater, id);
+            this.setSortId(techData.technique.name, id);
+        });
+
+        let remaining = this.getUnsetTechniqueData();
+        attrHandler.addUpdate(WuxDef.GetVariable("Action_FormeLoadCount"), Math.max(remaining.length, 0));
+        let remainingNames = remaining.map(data => data.technique.name);
+        attrHandler.addUpdate(WuxDef.GetVariable("Technique", WuxDef._db), JSON.stringify(remainingNames));
     }
 }
 
