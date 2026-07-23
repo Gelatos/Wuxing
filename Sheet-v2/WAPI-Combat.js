@@ -645,7 +645,12 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
     }
     
     run() {
+        if (this.tokenEffect.tokenTargetData == undefined) {
+            Debug.LogError(`[TechniqueConsumptionResolver] No token target data available. Aborting resource consumption for ${this.techniqueName}.`);
+            return;
+        }
         let attributeHandler = new SandboxAttributeHandler(this.tokenEffect.tokenTargetData.charId);
+        this.tokenEffect.tokenTargetData.refreshCombatDetails(attributeHandler);
         let techniqueConsumptionResolver = this;
         this.checkIfResourcesAvailable(techniqueConsumptionResolver, attributeHandler);
         this.tryConsumeResources(techniqueConsumptionResolver, attributeHandler);
@@ -677,7 +682,7 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
                 true, resourceName, resourceValue, attributeVar, results, techniqueConsumptionResolver.consumeEnergy);
         });
     }
-    
+
     consumeEnergy(techniqueConsumptionResolver, attrHandler, resourceObject) {
         let message = `Consumed ${resourceObject.resourceValue} ${WuxDef.GetTitle(resourceObject.resourceName)}`;
         techniqueConsumptionResolver.tokenEffect.addMessage(message);

@@ -1198,6 +1198,14 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
             let commonTechniques = item.getCommonTechniques ? item.getCommonTechniques() : [];
             commonTechniques.forEach(technique => {
                 this.tryAddGearTechniqueToTechDictionary(technique, isEquipped);
+                // Common techniques can themselves be a base with variants (e.g. "Quick Aid"
+                // has "Dress Wound"/"Surge Healing" under techSet "Quick Aid") - the inspect
+                // popup already expands these (Worker-InspectPopup.js), so the live Actions
+                // list needs to do the same or the variants never appear when equipped.
+                let variants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
+                variants.forEach(variant => {
+                    this.tryAddGearTechniqueToTechDictionary(variant, isEquipped);
+                });
             });
         });
 

@@ -620,6 +620,7 @@ class TokenTargetData extends TargetData {
         tokenTargetData.setEnergyIcon(results.newValue);
         if (tokenTargetData.combatDetails != undefined) {
             tokenTargetData.combatDetails.onUpdateEN(attrHandler, results.newValue);
+            tokenTargetData.setCombatDetails(attrHandler);
         }
         return results;
     }
@@ -726,7 +727,7 @@ class TokenTargetData extends TargetData {
         resultsCallback = resultsCallback == undefined ? tokenTargetData.applyResultsSurge : resultsCallback;
         tokenTargetData.refreshCombatDetails(attributeHandler);
 
-        if (tokenTargetData.isBarLinked(1)) {
+        if (tokenTargetData.isCharacter()) {
             this.modifyResourceAttribute(attributeHandler, "Surge", value,
                 tokenTargetData.addModifierToAttribute, resultsCallback);
         } else {
@@ -2251,7 +2252,7 @@ var TargetReference = TargetReference || (function () {
 
                 let affinityVar = WuxDef.GetVariable("Affinity");
                 let crVar = WuxDef.GetVariable("CR");
-                let jobVar = WuxDef.GetVariable("Forme_JobSlot", 1);
+                let jobVar = WuxDef.GetVariable("Forme_JobSlot");
                 
                 let braceVar = WuxDef.GetVariable("Def_Brace");
                 let wardingVar = WuxDef.GetVariable("Def_Warding");

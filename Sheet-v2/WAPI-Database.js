@@ -5043,6 +5043,7 @@ class CombatDetails {
 
     printTooltip() {
         let output = `${this.displayName} [CR${this.cr}] ${this.affinity == 0 ? "" : ` ${this.affinity}`} ${this.job}`;
+        output += `\nEN:${this.en}`;
         output += ` =========================== `;
         output += `${this.defenses.printDefenses(this.cr)} - `;
         switch (this.displayStyle) {
@@ -5691,7 +5692,7 @@ class SandboxAttributeHandler extends AttributeHandler {
                 }
             }
         }
-        
+
     }
 
     getCharacterAttribute(attrName) {
