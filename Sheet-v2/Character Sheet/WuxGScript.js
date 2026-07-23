@@ -4086,7 +4086,7 @@ class FormulaData {
 
                 formulaData.workers.push(formulaData.makeWorker(formulaVar, definitionNames, 0, multiplier, max));
             } else {
-                formulaData.workers.push(formulaData.makeWorker([], [], parseInt(definitionName), multiplier, max));
+                formulaData.workers.push(formulaData.makeWorker([], [], parseFloat(definitionName), multiplier, max));
             }
         })
     }
@@ -4241,8 +4241,11 @@ class FormulaData {
             } else if (printName != undefined) {
                 printOutput = this.addPrintModifier(printOutput, `${worker.value}`, multiplier);
             }
+            if (printName != undefined && worker.max > 0) {
+                printOutput += `(min:${worker.max})`;
+            }
             mod = worker.value * multiplier;
-            if (worker.max > 0 && mod > worker.max) {
+            if (worker.max > 0 && mod < worker.max) {
                 mod = worker.max;
             }
             output += mod;
@@ -4318,14 +4321,20 @@ class FormulaData {
                     }
 
                     if (worker.max > 0) {
-                        output += `(max:${worker.max}) `;
+                        output += `(min:${worker.max}) `;
                     }
                 }
             } else if (worker.value > 0) {
                 output += `${output != "" ? "+ " : ""} ${worker.value} `;
+                if (worker.max > 0) {
+                    output += `(min:${worker.max}) `;
+                }
             }
             else if (worker.value < 0) {
                 output += `- ${Math.abs(worker.value)} `;
+                if (worker.max > 0) {
+                    output += `(min:${worker.max}) `;
+                }
             }
         });
         return output;
@@ -4384,15 +4393,21 @@ class FormulaData {
                     }
 
                     if (worker.max > 0) {
-                        output += `(max:${worker.max}) `;
+                        output += `(min:${worker.max}) `;
                     }
                 }
             } 
             else if (worker.value > 0) {
                 output += `${output != "" ? "+ " : ""} ${worker.value} `;
+                if (worker.max > 0) {
+                    output += `(min:${worker.max}) `;
+                }
             }
             else if (worker.value < 0) {
                 output += `- ${Math.abs(worker.value)} `;
+                if (worker.max > 0) {
+                    output += `(min:${worker.max}) `;
+                }
             }
 
         });
