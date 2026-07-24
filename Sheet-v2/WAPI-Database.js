@@ -1138,6 +1138,29 @@ class TechniqueData extends WuxDatabaseData {
         return parts.length > 0 ? parts : ["Neutral"];
     }
 
+    // Neutral always passes; otherwise the character needs at least one of the
+    // technique's required affinities (same rule FormeTechniqueDatabase.checkTechniqueIsActive
+    // applies for the technique's own affinity, exposed here so a technique can check
+    // itself against any given affinity list without needing that class).
+    hasRequiredAffinity(userAffinities) {
+        return this.getAffinityParts().some(part => part == "Neutral" || userAffinities.includes(part));
+    }
+
+    // A variant's techSet holds its base technique's name (common techniques can
+    // themselves be a base with variants, e.g. "Quick Aid" has "Dress Wound"/"Surge
+    // Healing" under techSet "Quick Aid"). A true base's own techSet is a general
+    // category ("Style"/"Gear"/etc), never a real technique name, so checking
+    // WuxTechs.Get against each techSet part reliably finds the real root.
+    getRootName() {
+        let techSetParts = this.techSet.split(";").map(part => part.trim()).filter(part => part != "");
+        for (let i = 0; i < techSetParts.length; i++) {
+            if (WuxTechs.Get(techSetParts[i]) != undefined) {
+                return techSetParts[i];
+            }
+        }
+        return this.name;
+    }
+
     addDefinition(definition) {
         if (!this.definitions.includes(definition)) {
             this.definitions.push(definition);

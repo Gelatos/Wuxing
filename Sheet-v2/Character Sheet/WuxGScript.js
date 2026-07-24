@@ -1138,6 +1138,29 @@ class TechniqueData extends WuxDatabaseData {
         return parts.length > 0 ? parts : ["Neutral"];
     }
 
+    // Neutral always passes; otherwise the character needs at least one of the
+    // technique's required affinities (same rule FormeTechniqueDatabase.checkTechniqueIsActive
+    // applies for the technique's own affinity, exposed here so a technique can check
+    // itself against any given affinity list without needing that class).
+    hasRequiredAffinity(userAffinities) {
+        return this.getAffinityParts().some(part => part == "Neutral" || userAffinities.includes(part));
+    }
+
+    // A variant's techSet holds its base technique's name (common techniques can
+    // themselves be a base with variants, e.g. "Quick Aid" has "Dress Wound"/"Surge
+    // Healing" under techSet "Quick Aid"). A true base's own techSet is a general
+    // category ("Style"/"Gear"/etc), never a real technique name, so checking
+    // WuxTechs.Get against each techSet part reliably finds the real root.
+    getRootName() {
+        let techSetParts = this.techSet.split(";").map(part => part.trim()).filter(part => part != "");
+        for (let i = 0; i < techSetParts.length; i++) {
+            if (WuxTechs.Get(techSetParts[i]) != undefined) {
+                return techSetParts[i];
+            }
+        }
+        return this.name;
+    }
+
     addDefinition(definition) {
         if (!this.definitions.includes(definition)) {
             this.definitions.push(definition);
@@ -13915,6 +13938,7 @@ var ActionBuilder = ActionBuilder || (function () {
             let output = "";
             output += listenerEnterActionsPage();
             output += listenerRankRepeatingStyles();
+            output += listenerSwapTechniqueVariant();
             output += listenerSetDataRepeatingStyles();
             output += listenerFormeButtonActions();
             output += listenerRefreshBasicActions();
@@ -13944,6 +13968,21 @@ var ActionBuilder = ActionBuilder || (function () {
                     `WuxWorkerActions.RankDownTechnique(eventinfo, "${repeaterName}")`, true)}`;
             }
             
+            return output;
+        },
+        listenerSwapTechniqueVariant = function () {
+            let repeaters = ["RepeatingFormeTech"];
+            let baseDef = WuxDef.Get("Action");
+            let variantSelectVar = baseDef.getVariable(`-${WuxDef.GetVariable("TechVariant", "3")}`);
+
+            let output = "";
+            for (let i = 0; i < repeaters.length; i++) {
+                let repeaterName = repeaters[i];
+                let repeaterVar = WuxDef.GetVariable(repeaterName);
+                output += WuxSheetBackend.OnChange([`${repeaterVar}:${variantSelectVar}`],
+                    `WuxWorkerActions.SwapTechniqueVariant(eventinfo, "${repeaterName}")`, true);
+            }
+
             return output;
         },
         listenerSetDataRepeatingStyles = function () {
@@ -15860,6 +15899,7 @@ var DisplayAdvancedSheet = DisplayAdvancedSheet || (function () {
             <div class="wuxFeatureHeaderDisplayBlock">
                 <div class="wuxFeatureHeaderDisplayTitleBlock">
                     ${this.printName()}
+                    ${this.printVariants()}
                     ${this.printActionType()}
                 </div>
                 ${contents}
@@ -15872,6 +15912,8 @@ var DisplayAdvancedSheet = DisplayAdvancedSheet || (function () {
     printNameField (contents) {
         return `<div class="wuxFeatureHeaderName">${contents}</div>`;
     }
+
+    printVariants() {}
 
     printActionType() {}
     printActionTypeField (input, contents) {
@@ -16177,6 +16219,28 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         let contents = this.printSpanActionTypeAttribute("TechName");
         return `<input type="hidden" name="${this.getActionTypeAttribute("TechTrueName")}">
         ${this.printNameField(contents)}`;
+    }
+    printVariants() {
+        // 6 slots (2 per attribute pair, base+max - see WJS-Service.js) each hold
+        // "ElementName:TechniqueName". CSS matches the ElementName prefix to pick each
+        // button's icon (WCSS-Specialized.css). Clicking a button submits its own slot
+        // index (0-5) to the shared select field (pair 3), which Worker-Actions.js reads
+        // to find that slot's TechniqueName and swap the display to it.
+        let selectField = this.getActionTypeAttribute("TechVariant", "3");
+        let buttons = "";
+        for (let i = 0; i < 6; i++) {
+            let pairIndex = Math.floor(i / 2);
+            let pairSuffix = pairIndex == 0 ? "" : `${pairIndex}`;
+            let fieldName = i % 2 == 1
+                ? this.getActionTypeAttribute("TechVariant", `${pairSuffix}${WuxDef._max}`)
+                : this.getActionTypeAttribute("TechVariant", pairSuffix);
+            buttons += `<input type="hidden" class="wuxTechVariant-flag" name="${fieldName}" value="0">
+            ${WuxSheetMain.Button(selectField, "", "wuxTechVariantButton", `${i}`)}`;
+        }
+        // Each slot is a fixed element index (see WJS-Service.js), not sequentially
+        // packed, so no single slot reliably indicates "nothing to show" - the whole
+        // row hides in CSS instead, based on whether any of the 6 flags is non-empty.
+        return `<div class="wuxTechVariantButtons"><span class="wuxTechVariantButtonsLabel">Variants: </span>${buttons}</div>`;
     }
     printActionType () {
         return this.printActionTypeField(

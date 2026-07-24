@@ -40,6 +40,7 @@ class BaseFeatureDisplayBuilder {
             <div class="wuxFeatureHeaderDisplayBlock">
                 <div class="wuxFeatureHeaderDisplayTitleBlock">
                     ${this.printName()}
+                    ${this.printVariants()}
                     ${this.printActionType()}
                 </div>
                 ${contents}
@@ -52,6 +53,8 @@ class BaseFeatureDisplayBuilder {
     printNameField (contents) {
         return `<div class="wuxFeatureHeaderName">${contents}</div>`;
     }
+
+    printVariants() {}
 
     printActionType() {}
     printActionTypeField (input, contents) {
@@ -357,6 +360,28 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         let contents = this.printSpanActionTypeAttribute("TechName");
         return `<input type="hidden" name="${this.getActionTypeAttribute("TechTrueName")}">
         ${this.printNameField(contents)}`;
+    }
+    printVariants() {
+        // 6 slots (2 per attribute pair, base+max - see WJS-Service.js) each hold
+        // "ElementName:TechniqueName". CSS matches the ElementName prefix to pick each
+        // button's icon (WCSS-Specialized.css). Clicking a button submits its own slot
+        // index (0-5) to the shared select field (pair 3), which Worker-Actions.js reads
+        // to find that slot's TechniqueName and swap the display to it.
+        let selectField = this.getActionTypeAttribute("TechVariant", "3");
+        let buttons = "";
+        for (let i = 0; i < 6; i++) {
+            let pairIndex = Math.floor(i / 2);
+            let pairSuffix = pairIndex == 0 ? "" : `${pairIndex}`;
+            let fieldName = i % 2 == 1
+                ? this.getActionTypeAttribute("TechVariant", `${pairSuffix}${WuxDef._max}`)
+                : this.getActionTypeAttribute("TechVariant", pairSuffix);
+            buttons += `<input type="hidden" class="wuxTechVariant-flag" name="${fieldName}" value="0">
+            ${WuxSheetMain.Button(selectField, "", "wuxTechVariantButton", `${i}`)}`;
+        }
+        // Each slot is a fixed element index (see WJS-Service.js), not sequentially
+        // packed, so no single slot reliably indicates "nothing to show" - the whole
+        // row hides in CSS instead, based on whether any of the 6 flags is non-empty.
+        return `<div class="wuxTechVariantButtons"><span class="wuxTechVariantButtonsLabel">Variants: </span>${buttons}</div>`;
     }
     printActionType () {
         return this.printActionTypeField(

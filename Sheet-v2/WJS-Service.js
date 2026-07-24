@@ -788,6 +788,18 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 	}
 
 	getTechniqueData(techniqueName) {
+		// Rank is shared across variants and always stored under the base technique's
+		// name - a true variant must always defer to its root's entry, checked before
+		// any direct match. Otherwise a variant that ever got ranked independently
+		// before rank-sharing existed would keep reading its own stale entry forever,
+		// since a direct match would always win over falling back to the root.
+		let technique = WuxTechs.Get(techniqueName);
+		if (technique != undefined) {
+			let rootName = technique.getRootName();
+			if (rootName != techniqueName) {
+				return this.getTechniqueData(rootName);
+			}
+		}
 		if (this.styledTechniqueData.hasOwnProperty(techniqueName)) {
 			return this.styledTechniqueData[techniqueName];
 		}
@@ -795,7 +807,6 @@ class WuxStyleWorkerBuild extends WuxWorkerBuild {
 			return this.basicTechniqueData[techniqueName];
 		}
 		return undefined;
-		
 	}
 
 	getStyles() {
@@ -1076,15 +1087,70 @@ class DatabaseItemAttributeHandler {
 
 class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 
-	setTechniqueInfo (technique, setUse) {
+	setTechniqueInfo (technique, setUse, variantOptions) {
 		this.clearTechniqueInfo();
 		let displayData = new TechniqueDisplayData(technique);
 
 		this.setTechniqueHeaderInfo(technique, displayData);
+		this.setTechniqueVariants(technique, variantOptions);
 		this.setTechniqueEffectsInfo(technique, displayData);
 
 		if (setUse) {
 			this.setTechniqueUseRollTemplate(technique, displayData);
+		}
+	}
+	// Up to 6 variant slots (5 elements + Neutral) are packed two-per-attribute using
+	// base+max, so only the single "TechVariant" definition is needed: pair 0 is the
+	// plain attribute, pairs 1/2 use "1"/"2" as an extra suffix ahead of _max. Pair 3
+	// (base only, no max) is a shared click trigger - each button submits its own slot
+	// index (0-5) there, since a checkbox click would otherwise overwrite a display slot.
+	getVariantFieldName(slotIndex) {
+		let pairIndex = Math.floor(slotIndex / 2);
+		let pairSuffix = pairIndex == 0 ? "" : `${pairIndex}`;
+		return slotIndex % 2 == 1
+			? this.getVariable("TechVariant", `${pairSuffix}${WuxDef._max}`)
+			: this.getVariable("TechVariant", pairSuffix);
+	}
+	getVariantSelectFieldName() {
+		return this.getVariable("TechVariant", "3");
+	}
+	// variantOptions (only passed by the FormeTechniques repeater's own callers - see
+	// Worker-Actions.js - so other contexts like the Inspect Popup keep showing every
+	// variant unfiltered):
+	//   excludeCurrent  - drop the technique currently on display from its own button row.
+	//   userAffinities  - drop variants the character can't use for lacking the affinity.
+	setTechniqueVariants(technique, variantOptions) {
+		// Fixed per-element slot index rather than packing candidates sequentially from
+		// 0: with only 2 members in a family, "the other one" would always land in slot
+		// 0 regardless of which is currently active, so toggling back and forth submits
+		// the same index twice in a row - Roll20 only fires change on an actual value
+		// transition, so the second click would silently do nothing. A stable index per
+		// element means switching either direction always changes the click field's value.
+		let elementSlotIndex = {"Neutral": 0, "Wood": 1, "Fire": 2, "Earth": 3, "Metal": 4, "Water": 5};
+		// Each slot holds "ElementName:TechniqueName" - the display builder's CSS reads
+		// the ElementName prefix to pick the button's icon, and clicking a button reads
+		// the TechniqueName half to switch which variant is being displayed. The slots
+		// always represent the base technique plus every one of its sibling variants,
+		// regardless of which of them is the one currently on display.
+		let rootName = technique.getRootName();
+		let root = WuxTechs.Get(rootName);
+		let candidates = [root].concat(WuxTechs.Filter(new DatabaseFilterData("style", rootName)));
+		if (variantOptions?.excludeCurrent) {
+			candidates = candidates.filter(tech => tech.name != technique.name);
+		}
+		if (variantOptions?.userAffinities != undefined) {
+			candidates = candidates.filter(tech => tech.hasRequiredAffinity(variantOptions.userAffinities));
+		}
+		let slots = [0, 0, 0, 0, 0, 0];
+		candidates.forEach(tech => {
+			tech.getAffinityParts().forEach(part => {
+				slots[elementSlotIndex[part]] = `${part}:${tech.name}`;
+			});
+		});
+
+		for (let i = 0; i < 6; i++) {
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				this.getVariantFieldName(i), slots[i]);
 		}
 	}
 	setTechniqueHeaderInfo(technique, displayData) {
@@ -1204,6 +1270,10 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		// Version is piggybacked onto TechName's max slot.
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechName", WuxDef._max), "");
+		for (let i = 0; i < 6; i++) {
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				this.getVariantFieldName(i), 0);
+		}
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechActionType"), "");
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,

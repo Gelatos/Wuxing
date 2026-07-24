@@ -847,6 +847,7 @@ var ActionBuilder = ActionBuilder || (function () {
             let output = "";
             output += listenerEnterActionsPage();
             output += listenerRankRepeatingStyles();
+            output += listenerSwapTechniqueVariant();
             output += listenerSetDataRepeatingStyles();
             output += listenerFormeButtonActions();
             output += listenerRefreshBasicActions();
@@ -876,6 +877,21 @@ var ActionBuilder = ActionBuilder || (function () {
                     `WuxWorkerActions.RankDownTechnique(eventinfo, "${repeaterName}")`, true)}`;
             }
             
+            return output;
+        },
+        listenerSwapTechniqueVariant = function () {
+            let repeaters = ["RepeatingFormeTech"];
+            let baseDef = WuxDef.Get("Action");
+            let variantSelectVar = baseDef.getVariable(`-${WuxDef.GetVariable("TechVariant", "3")}`);
+
+            let output = "";
+            for (let i = 0; i < repeaters.length; i++) {
+                let repeaterName = repeaters[i];
+                let repeaterVar = WuxDef.GetVariable(repeaterName);
+                output += WuxSheetBackend.OnChange([`${repeaterVar}:${variantSelectVar}`],
+                    `WuxWorkerActions.SwapTechniqueVariant(eventinfo, "${repeaterName}")`, true);
+            }
+
             return output;
         },
         listenerSetDataRepeatingStyles = function () {

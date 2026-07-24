@@ -1235,6 +1235,144 @@ button[type=roll].wuxFeatureHeaderNameButton span,
     line-height: 16px;
 }
 
+/*========================================
+    Technique Variant Buttons
+========================================*/
+
+.wuxTechVariantButtons
+{
+    display: none;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+    margin: 2px 0;
+    margin-left: 5px;
+}
+
+/* Each slot is a fixed element index, so no single slot means "nothing to show" -
+   only show the whole row (label included) once at least one of the 6 flags is set. */
+.wuxTechVariantButtons:has(.wuxTechVariant-flag:not([value="0"]))
+{
+    display: flex;
+}
+
+.wuxTechVariantButtonsLabel
+{
+    font-size: 10px;
+    font-weight: bold;
+    color: #000;
+}
+
+.wuxTechVariantButton
+{
+    height: 16px;
+    width: 16px;
+    margin-right: 0;
+    border: none;
+
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14px 14px;
+
+    display: none;
+}
+
+/* Hidden by default; an empty/unused slot's flag stays at "0". */
+.wuxTechVariant-flag:not([value="0"]) + .wuxTechVariantButton
+{
+    display: inline-block;
+}
+
+/* The icons are plain black/gray line art - color comes from the same filter chains
+   used for wuxAffinityIcon(Element) (see WCSS-Footer.css), applied here since these
+   buttons use a CSS background-image rather than an <img class="wuxAffinityIcon..."> */
+.wuxTechVariant-flag[value^="Neutral:"] + .wuxTechVariantButton
+{
+    background-image: url(https://i.imgur.com/5hQ5Bun.png);
+    filter: brightness(0) saturate(0%) invert(68%);
+}
+.wuxTechVariant-flag[value^="Wood:"] + .wuxTechVariantButton
+{
+    background-image: url(https://i.imgur.com/pjMuXYy.png);
+    filter: brightness(0) saturate(100%) invert(55%) sepia(67%) saturate(700%) hue-rotate(100deg) brightness(100%);
+}
+.wuxTechVariant-flag[value^="Fire:"] + .wuxTechVariantButton
+{
+    background-image: url(https://i.imgur.com/aD41Ap4.png);
+    filter: brightness(0) saturate(100%) invert(15%) sepia(100%) saturate(2000%) hue-rotate(350deg) brightness(92%);
+}
+.wuxTechVariant-flag[value^="Earth:"] + .wuxTechVariantButton
+{
+    background-image: url(https://i.imgur.com/1efdxRx.png);
+    filter: brightness(0) saturate(100%) invert(52%) sepia(100%) saturate(700%) hue-rotate(10deg) brightness(100%);
+}
+.wuxTechVariant-flag[value^="Metal:"] + .wuxTechVariantButton
+{
+    background-image: url(https://i.imgur.com/CFQ9LJx.png);
+    filter: brightness(0) saturate(100%) invert(28%) sepia(100%) saturate(1000%) hue-rotate(250deg) brightness(90%);
+}
+.wuxTechVariant-flag[value^="Water:"] + .wuxTechVariantButton
+{
+    background-image: url(https://i.imgur.com/KAcJG5h.png);
+    filter: brightness(0) saturate(100%) invert(52%) sepia(97%) saturate(500%) hue-rotate(200deg) brightness(105%);
+}
+
+/* Same filters as above with the trailing brightness reduced ~20% - keeps each
+   element's color but darkens it slightly on hover. background-image/-size/-position/
+   -repeat are all repeated here (not just filter) since .wuxButton:hover's own
+   "background: ..." shorthand has enough specificity to reset every background
+   sub-property not re-declared at equal-or-higher specificity - background-image alone
+   wasn't enough, since the icon then rendered at full natural size/tiled/top-left
+   instead of the intended 14px centered icon, which looked identical to it vanishing. */
+.wuxTechVariant-flag[value^="Neutral:"] + .wuxTechVariantButton:hover
+{
+    background-image: url(https://i.imgur.com/5hQ5Bun.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14px 14px;
+    filter: brightness(0) saturate(0%) invert(68%) brightness(80%);
+}
+.wuxTechVariant-flag[value^="Wood:"] + .wuxTechVariantButton:hover
+{
+    background-image: url(https://i.imgur.com/pjMuXYy.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14px 14px;
+    filter: brightness(0) saturate(100%) invert(55%) sepia(67%) saturate(700%) hue-rotate(100deg) brightness(80%);
+}
+.wuxTechVariant-flag[value^="Fire:"] + .wuxTechVariantButton:hover
+{
+    background-image: url(https://i.imgur.com/aD41Ap4.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14px 14px;
+    filter: brightness(0) saturate(100%) invert(15%) sepia(100%) saturate(2000%) hue-rotate(350deg) brightness(74%);
+}
+.wuxTechVariant-flag[value^="Earth:"] + .wuxTechVariantButton:hover
+{
+    background-image: url(https://i.imgur.com/1efdxRx.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14px 14px;
+    filter: brightness(0) saturate(100%) invert(52%) sepia(100%) saturate(700%) hue-rotate(10deg) brightness(80%);
+}
+.wuxTechVariant-flag[value^="Metal:"] + .wuxTechVariantButton:hover
+{
+    background-image: url(https://i.imgur.com/CFQ9LJx.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14px 14px;
+    filter: brightness(0) saturate(100%) invert(28%) sepia(100%) saturate(1000%) hue-rotate(250deg) brightness(72%);
+}
+.wuxTechVariant-flag[value^="Water:"] + .wuxTechVariantButton:hover
+{
+    background-image: url(https://i.imgur.com/KAcJG5h.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14px 14px;
+    filter: brightness(0) saturate(100%) invert(52%) sepia(97%) saturate(500%) hue-rotate(200deg) brightness(84%);
+}
+
 button[type=roll].wuxFeatureHeaderNameButton:hover
 {
     background: rgba(0,0,0,0.2);

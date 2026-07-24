@@ -1,4 +1,15 @@
 var WuxWorkerActions = WuxWorkerActions || (function () {
+    // Same affinity fields/computation FormeTechniqueDatabase.setupPostGetAttr uses -
+    // needed here too since rankTechnique/swapTechniqueVariant populate the
+    // FormeTechniques repeater's variant buttons but don't otherwise build a full
+    // FormeTechniqueDatabase instance.
+    const getUserAffinityFields = function () {
+        return [WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("Ancestry")];
+    };
+    const getUserAffinities = function (attrHandler, affinityFields) {
+        let advancedAffinities = attrHandler.parseString(affinityFields[1]).split(";").map(s => s.trim()).filter(s => s !== "");
+        return [attrHandler.parseString(affinityFields[0]), ...advancedAffinities, attrHandler.parseString(affinityFields[2])];
+    };
     const rankTechnique = function (attributeHandler, repeatingSectionName, sourceFieldName, rankChange) {
         let styleWorker = new WuxStyleWorkerBuild();
         attributeHandler.addMod([styleWorker.attrBuildDraft, styleWorker.attrMax]);
@@ -9,45 +20,47 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             selectedId, WuxDef.GetUntypedVariable("Action", "TechTrueName"));
         let crField = WuxDef.GetVariable("CR");
         let fullNameField = WuxDef.GetVariable("FullName");
+        let affinityFields = getUserAffinityFields();
 
-        attributeHandler.addMod([techniqueNameField, crField, fullNameField]);
-        
+        attributeHandler.addMod([techniqueNameField, crField, fullNameField].concat(affinityFields));
+
         attributeHandler.addGetAttrCallback(function (attrHandler) {
             styleWorker.setBuildStatsDraft(attrHandler);
             let techniqueName = attrHandler.parseString(techniqueNameField);
             Debug.Log(`Ranking ${rankChange > 0 ? "Up" : "Down"} ${techniqueName}`);
-            let technique;
+            // Rank is shared across variants, so it's always stored under the root
+            // technique's own name/variable - the displayed technique (which may be a
+            // variant) only matters for the rank cap and for what stays on screen.
+            let displayTechnique = WuxTechs.Get(techniqueName);
+            let rootTechnique = WuxTechs.Get(displayTechnique.getRootName());
+            let updatingAttr = rootTechnique.createDefinition(WuxDef.Get("Technique")).getVariable();
             let newRank;
-            let updatingAttr;
             let techniqueData = styleWorker.getTechniqueData(techniqueName);
             if (techniqueData != undefined) {
-                technique = techniqueData.technique;
                 newRank = techniqueData.rank + rankChange;
-                updatingAttr = technique.createDefinition(WuxDef.Get("Technique")).getVariable();
             }
             else {
-                technique = WuxTechs.Get(techniqueName);
                 newRank = 1 + rankChange;
-                updatingAttr = technique.createDefinition(WuxDef.Get("Technique")).getVariable();
-                styleWorker.changeWorkerAttribute(attributeHandler, updatingAttr, newRank, technique.techSet);
+                styleWorker.changeWorkerAttribute(attributeHandler, updatingAttr, newRank, rootTechnique.techSet);
             }
 
             if (rankChange > 0) {
-                let maxRank = technique.getMaxRank(attrHandler.parseInt(crField));
+                let maxRank = displayTechnique.getMaxRank(attrHandler.parseInt(crField));
                 newRank = Math.min(newRank, maxRank);
             }
             else {
                 newRank = Math.max(newRank, 1);
             }
-            Debug.Log(`${techniqueName} set to rank ${newRank}`);
-            styleWorker.updateBuildStats(attrHandler, updatingAttr, {value: newRank, group: technique.techSet});
+            Debug.Log(`${techniqueName} (shared with ${rootTechnique.name}) set to rank ${newRank}`);
+            styleWorker.updateBuildStats(attrHandler, updatingAttr, {value: newRank, group: rootTechnique.techSet});
             styleWorker.updatePoints(attrHandler);
 
             let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");
             techniqueAttributeHandler.setRepeaterData(techniquesRepeater);
             techniqueAttributeHandler.setId(selectedId);
-            technique.setRank(newRank);
-            techniqueAttributeHandler.setTechniqueInfo(technique, true);
+            displayTechnique.setRank(newRank);
+            let userAffinities = getUserAffinities(attrHandler, affinityFields);
+            techniqueAttributeHandler.setTechniqueInfo(displayTechnique, true, {excludeCurrent: true, userAffinities: userAffinities});
         });
         attributeHandler.run();
     }
@@ -236,6 +249,57 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         rankDownTechnique = function (eventinfo, repeatingSection) {
             let attributeHandler = new WorkerAttributeHandler();
             rankTechnique(attributeHandler, repeatingSection, eventinfo.sourceAttribute, -1);
+        },
+        swapTechniqueVariant = function (attributeHandler, repeatingSectionName, sourceFieldName) {
+            let styleWorker = new WuxStyleWorkerBuild();
+            attributeHandler.addMod([styleWorker.attrBuildDraft, styleWorker.attrMax]);
+
+            let techniquesRepeater = new WorkerRepeatingSectionHandler(repeatingSectionName);
+            let selectedId = techniquesRepeater.getIdFromFieldName(sourceFieldName);
+
+            let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attributeHandler, "Action");
+            techniqueAttributeHandler.setRepeaterData(techniquesRepeater, selectedId);
+
+            let selectField = techniqueAttributeHandler.getVariantSelectFieldName();
+            let slotFields = [];
+            for (let i = 0; i < 6; i++) {
+                slotFields.push(techniqueAttributeHandler.getVariantFieldName(i));
+            }
+            let affinityFields = getUserAffinityFields();
+            // setTechniqueRankButtons (run via setTechniqueInfo below) needs CR fetched
+            // ahead of time too, or it silently falls back to a default of 1 and makes
+            // both rank buttons compute as disabled regardless of the real max rank.
+            attributeHandler.addMod([selectField, WuxDef.GetVariable("CR")].concat(slotFields).concat(affinityFields));
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                styleWorker.setBuildStatsDraft(attrHandler);
+                let slotIndex = attrHandler.parseInt(selectField);
+                if (isNaN(slotIndex) || slotIndex < 0 || slotIndex >= slotFields.length) {
+                    return;
+                }
+                let slotValue = attrHandler.parseString(slotFields[slotIndex]);
+                let separatorIndex = slotValue.indexOf(":");
+                if (separatorIndex == -1) {
+                    return;
+                }
+                let technique = WuxTechs.Get(slotValue.substring(separatorIndex + 1));
+                if (technique == undefined) {
+                    return;
+                }
+                // Rank is shared across variants (see rankTechnique) - carry it over
+                // rather than letting the newly displayed variant reset to its default.
+                let techniqueData = styleWorker.getTechniqueData(technique.name);
+                if (techniqueData != undefined) {
+                    technique.setRank(techniqueData.rank);
+                }
+                let userAffinities = getUserAffinities(attrHandler, affinityFields);
+                techniqueAttributeHandler.setTechniqueInfo(technique, true, {excludeCurrent: true, userAffinities: userAffinities});
+            });
+            attributeHandler.run();
+        },
+        swapTechniqueVariantEvent = function (eventinfo, repeatingSection) {
+            let attributeHandler = new WorkerAttributeHandler();
+            swapTechniqueVariant(attributeHandler, repeatingSection, eventinfo.sourceAttribute);
         },
         removeAllOldStyleData = function () {
             Debug.Log("Killing all old style repeaters");
@@ -440,6 +504,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         UpdateVisibilityOfFormeActions: updateVisibilityOfFormeActions,
         RankUpTechnique: rankUpTechnique,
         RankDownTechnique: rankDownTechnique,
+        SwapTechniqueVariant: swapTechniqueVariantEvent,
         RemoveAllOldStyleData: removeAllOldStyleData,
         SetCustomTechnique: setCustomTechnique,
         QuickFilterFormeActions: quickFilterFormeActions,
@@ -893,11 +958,18 @@ class FormeTechniqueDatabaseBase {
         let techVersion = techniqueAttributeHandler.getTechniqueVersion();
         let technique = techniqueData.technique;
         technique.rank = techniqueData.techniqueRank;
+        let variantOptions = {excludeCurrent: true, userAffinities: this.userAffinities};
         if (technique.version != techVersion) {
             Debug.Log(`Updating ${techniqueName} as it has a new version (${technique.version} != ${techVersion})`);
-            techniqueAttributeHandler.setTechniqueInfo(technique, true);
-        } else if (Object.keys(technique.enhancementEffects).length > 0) {
-            techniqueAttributeHandler.setTechniqueRankButtons(technique);
+            techniqueAttributeHandler.setTechniqueInfo(technique, true, variantOptions);
+        } else {
+            if (Object.keys(technique.enhancementEffects).length > 0) {
+                techniqueAttributeHandler.setTechniqueRankButtons(technique);
+            }
+            // Variant buttons are newer than this version-gate check, so rows loaded
+            // before the feature existed still need this populated even though nothing
+            // else about their display has changed.
+            techniqueAttributeHandler.setTechniqueVariants(technique, variantOptions);
         }
         this.techDictionary.get(techniqueName).isSet = true;
         this.setRepeaterTechniqueVisibility(techniqueAttributeHandler, techniqueName);
@@ -1183,11 +1255,15 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
             callback(technique, 1);
         });
     }
+    // A base technique and its variants (see getRootName()) are now shown as a single
+    // row with buttons to switch between them, so only the root ever needs its own
+    // dictionary entry - redirect here rather than at every caller.
     tryAddTechniqueToTechDictionary(technique, techniqueRank) {
-        if (!this.techDictionary.has(technique.name)) {
-            let isActive = this.checkTechniqueIsActive(technique);
-            let newEntry = this.createTechDictionaryTechnique(technique, techniqueRank, isActive);
-            this.techDictionary.add(technique.name, newEntry);
+        let rootTechnique = WuxTechs.Get(technique.getRootName());
+        if (!this.techDictionary.has(rootTechnique.name)) {
+            let isActive = this.checkTechniqueIsActive(rootTechnique);
+            let newEntry = this.createTechDictionaryTechnique(rootTechnique, techniqueRank, isActive);
+            this.techDictionary.add(rootTechnique.name, newEntry);
             return newEntry;
         }
         return undefined;
@@ -1252,17 +1328,14 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
             if (item.hasTechnique && item.technique != undefined) {
                 this.tryAddGearTechniqueToTechDictionary(item.technique, isEquipped);
             }
+            // Common techniques can themselves be a base with variants (e.g. "Quick Aid"
+            // has "Dress Wound"/"Surge Healing" under techSet "Quick Aid"), but a base and
+            // its variants now share one row with buttons to switch between them, so
+            // tryAddGearTechniqueToTechDictionary's own root redirect is all that's needed -
+            // no separate variant expansion here.
             let commonTechniques = item.getCommonTechniques ? item.getCommonTechniques() : [];
             commonTechniques.forEach(technique => {
                 this.tryAddGearTechniqueToTechDictionary(technique, isEquipped);
-                // Common techniques can themselves be a base with variants (e.g. "Quick Aid"
-                // has "Dress Wound"/"Surge Healing" under techSet "Quick Aid") - the inspect
-                // popup already expands these (Worker-InspectPopup.js), so the live Actions
-                // list needs to do the same or the variants never appear when equipped.
-                let variants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
-                variants.forEach(variant => {
-                    this.tryAddGearTechniqueToTechDictionary(variant, isEquipped);
-                });
             });
         });
 
@@ -1278,11 +1351,14 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
         attrHandler.addUpdate(WuxDef.GetVariable("BoostGearTech"), JSON.stringify(newGearBoosters));
     }
 
+    // Same deduplication as tryAddTechniqueToTechDictionary - a variant collapses to
+    // its base's own entry rather than getting a row of its own.
     tryAddGearTechniqueToTechDictionary(technique, isEquipped) {
-        if (!this.techDictionary.has(technique.name)) {
-            let isVisible = isEquipped && this.checkTechniqueIsVisibleInFilter(technique) && this.checkTechniqueItemTraits(technique);
-            this.techDictionary.add(technique.name, {
-                technique: technique,
+        let rootTechnique = WuxTechs.Get(technique.getRootName());
+        if (!this.techDictionary.has(rootTechnique.name)) {
+            let isVisible = isEquipped && this.checkTechniqueIsVisibleInFilter(rootTechnique) && this.checkTechniqueItemTraits(rootTechnique);
+            this.techDictionary.add(rootTechnique.name, {
+                technique: rootTechnique,
                 techniqueRank: 1,
                 isSet: false,
                 isActive: true,
