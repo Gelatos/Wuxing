@@ -83,7 +83,7 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
                     // Skills never read as below average - anything under average still shows as average.
                     let skillEvaluation = Format.EvaluateAgainstAverage(skillPointValue, averageSkillValue, false);
                     let skillEvaluationVar = skillDefinition.getVariable(WuxDef._evaluation);
-                    attrHandler.addUpdate(skillEvaluationVar, skillEvaluation);
+                    attrHandler.addUpdate(skillEvaluationVar, Format.EvaluationToAttrValue(skillEvaluation));
                 });
             });
         },

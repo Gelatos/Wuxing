@@ -249,8 +249,8 @@ var WuxSheetMain = WuxSheetMain || (function () {
         },
 
         evaluatedSpan = function (fieldName, evaluationFieldName) {
-            return `<input type="hidden" class="wuxStatEvaluation-flag" name="${evaluationFieldName}" value="0">
-            <span class="wuxStatEvaluation-value" name="${fieldName}"></span>`;
+            return `<input type="hidden" class="wuxStatSummary-flag" name="${evaluationFieldName}" value="0">
+            <span class="wuxStatSummary-value" name="${fieldName}"></span>`;
         },
 
         row = function (contents) {

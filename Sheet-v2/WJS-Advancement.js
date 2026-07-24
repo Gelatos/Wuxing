@@ -215,7 +215,7 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 			let evaluation = Format.EvaluateAgainstAverage(value, 8 + crValue);
 			let evaluationVar = definition.getVariable(WuxDef._evaluation);
 			attrHandler.addUpdate(definition.getVariable(), value);
-			attrHandler.addUpdate(evaluationVar, evaluation);
+			attrHandler.addUpdate(evaluationVar, Format.EvaluationToAttrValue(evaluation));
 		},
 		setDefenseVariable = function (attrHandler, type, attribute, defense) {
 			let attrDefinition = WuxDef.Get(`Attr_${attribute}`);
@@ -971,7 +971,7 @@ var WuxWorkerAttributes = WuxWorkerAttributes || (function () {
 				for (let i = 0; i < attributeDefinitions.length; i++) {
 					let attributeValue = attrHandler.parseInt(attributeDefinitions[i].getVariable());
 					let evaluationVar = attributeDefinitions[i].getVariable(WuxDef._evaluation);
-					attrHandler.addUpdate(evaluationVar, attributeValue - 1);
+					attrHandler.addUpdate(evaluationVar, Format.EvaluationToAttrValue(attributeValue - 1));
 				}
 			});
 		}

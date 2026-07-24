@@ -6390,6 +6390,13 @@ var Format = Format || (function () {
                 evaluation = 0;
             }
             return evaluation;
+        },
+
+        // Roll20's CSS sanitizer mishandles a literal "-" inside an attribute-value selector
+        // (e.g. input[value="-2"]) and silently drops chat/rolltemplate styling as a result.
+        // Encode negative evaluations as "n2"/"n1" instead so the CSS never needs a minus sign.
+        evaluationToAttrValue = function (evaluation) {
+            return evaluation < 0 ? `n${-evaluation}` : `${evaluation}`;
         }
 
     ;
@@ -6399,6 +6406,7 @@ var Format = Format || (function () {
         ToFieldName: toFieldName,
         Romanize: romanize,
         EvaluateAgainstAverage: evaluateAgainstAverage,
+        EvaluationToAttrValue: evaluationToAttrValue,
         NumberToWord: numberToWord,
         GetDefinitionName: getDefinitionName,
         GetLevelPrerequisites: getLevelPrerequisites,
@@ -10163,8 +10171,8 @@ var WuxSheetMain = WuxSheetMain || (function () {
         },
 
         evaluatedSpan = function (fieldName, evaluationFieldName) {
-            return `<input type="hidden" class="wuxStatEvaluation-flag" name="${evaluationFieldName}" value="0">
-            <span class="wuxStatEvaluation-value" name="${fieldName}"></span>`;
+            return `<input type="hidden" class="wuxStatSummary-flag" name="${evaluationFieldName}" value="0">
+            <span class="wuxStatSummary-value" name="${fieldName}"></span>`;
         },
 
         row = function (contents) {

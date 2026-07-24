@@ -58,49 +58,49 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                 // Starting EN: average 5, above/below at a difference of 1, great at 2.
                 let startEnValue = attrHandler.parseInt(startEnDef.getVariable());
                 let startEnEvaluation = Format.EvaluateAgainstAverage(startEnValue, 5, true, 1, 2);
-                attrHandler.addUpdate(startEnDef.getVariable(WuxDef._evaluation), startEnEvaluation);
+                attrHandler.addUpdate(startEnDef.getVariable(WuxDef._evaluation), Format.EvaluationToAttrValue(startEnEvaluation));
 
                 // EN Charge (RoundEN) always reads as average.
-                attrHandler.addUpdate(roundEnDef.getVariable(WuxDef._evaluation), 0);
+                attrHandler.addUpdate(roundEnDef.getVariable(WuxDef._evaluation), Format.EvaluationToAttrValue(0));
 
                 // Base Speed: average 4, above/below at a difference of 1, great at more than 3 (4).
                 let mvSpeedValue = attrHandler.parseInt(mvSpeedVar);
                 let mvSpeedEvaluation = Format.EvaluateAgainstAverage(mvSpeedValue, 4, true, 1, 4);
-                attrHandler.addUpdate(cmbMvDef.getVariable(WuxDef._evaluation), mvSpeedEvaluation);
+                attrHandler.addUpdate(cmbMvDef.getVariable(WuxDef._evaluation), Format.EvaluationToAttrValue(mvSpeedEvaluation));
 
                 // Dash Speed: same thresholds as Base Speed, average 2.
                 attrHandler.addUpdate(cmbMvDashDef.getVariable(WuxDef._evaluation),
-                    Format.EvaluateAgainstAverage(attrHandler.parseInt(mvDashVar), 2, true, 1, 4));
+                    Format.EvaluationToAttrValue(Format.EvaluateAgainstAverage(attrHandler.parseInt(mvDashVar), 2, true, 1, 4)));
 
                 // Regen Value: average 15 + CR*10, above/below at a difference of 10, great at 30.
                 let healValue = attrHandler.parseInt(healValueVar);
                 let healEvaluation = Format.EvaluateAgainstAverage(healValue, 15 + crValue * 10, true, 5 + crValue * 5, 5 + crValue * 10);
-                attrHandler.addUpdate(cmbHvDef.getVariable(WuxDef._evaluation), healEvaluation);
+                attrHandler.addUpdate(cmbHvDef.getVariable(WuxDef._evaluation), Format.EvaluationToAttrValue(healEvaluation));
 
                 // Armor: average CR, never below average, above at +CR, great at +CR*2.
                 let armorValue = attrHandler.parseInt(armorDefVar);
                 let armorEvaluation = Format.EvaluateAgainstAverage(armorValue, crValue, false, crValue, crValue * 2);
-                attrHandler.addUpdate(cmbArmorDef.getVariable(WuxDef._evaluation), armorEvaluation);
+                attrHandler.addUpdate(cmbArmorDef.getVariable(WuxDef._evaluation), Format.EvaluationToAttrValue(armorEvaluation));
 
                 // HP: average 35 + CR*30, above/below at a difference of 10 + CR*10, great at 15 + CR*20.
                 let hpValue = attrHandler.parseInt(hpDef.getVariable());
-                let hpEvaluation = Format.EvaluateAgainstAverage(hpValue, 25 + crValue * 25, true, crValue * 10, 20 + crValue * 20);
-                attrHandler.addUpdate(hpDef.getVariable(WuxDef._evaluation), hpEvaluation);
+                let hpEvaluation = Format.EvaluateAgainstAverage(hpValue, 25 + crValue * 25, true, crValue * 10, 10 + crValue * 20);
+                attrHandler.addUpdate(hpDef.getVariable(WuxDef._evaluation), Format.EvaluationToAttrValue(hpEvaluation));
 
                 // Willpower: average 25 + CR*15, above/below at a difference of 5 + CR*5, great at 10 + CR*10.
                 let willValue = attrHandler.parseInt(willDef.getVariable());
                 let willEvaluation = Format.EvaluateAgainstAverage(willValue, 25 + crValue * 15, true, 5 + crValue * 5, 10 + crValue * 10);
-                attrHandler.addUpdate(willDef.getVariable(WuxDef._evaluation), willEvaluation);
+                attrHandler.addUpdate(willDef.getVariable(WuxDef._evaluation), Format.EvaluationToAttrValue(willEvaluation));
 
                 // Surge: average 3, above/below at a difference of 1, great at 2.
                 let surgeValue = attrHandler.parseInt(surgeDef.getVariable());
                 let surgeEvaluation = Format.EvaluateAgainstAverage(surgeValue, 3, true, 1, 2);
-                attrHandler.addUpdate(surgeDef.getVariable(WuxDef._evaluation), surgeEvaluation);
+                attrHandler.addUpdate(surgeDef.getVariable(WuxDef._evaluation), Format.EvaluationToAttrValue(surgeEvaluation));
 
                 // Vitality: average 0, above/below at a difference of 1, great at 2.
                 let vitalityValue = attrHandler.parseInt(vitalityDef.getVariable());
                 let vitalityEvaluation = Format.EvaluateAgainstAverage(vitalityValue, 0, true, 1, 2);
-                attrHandler.addUpdate(vitalityDef.getVariable(WuxDef._evaluation), vitalityEvaluation);
+                attrHandler.addUpdate(vitalityDef.getVariable(WuxDef._evaluation), Format.EvaluationToAttrValue(vitalityEvaluation));
 
                 if (combatDetailsHandler != undefined) {
                     combatDetailsHandler.onUpdateHealValue(attrHandler, attrHandler.parseInt(healValueVar));

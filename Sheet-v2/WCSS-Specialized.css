@@ -353,28 +353,27 @@ input[type=hidden].wuxIsPlayerSelection-flag:not([value="1"]) + .wuxIsPlayerSele
 
 /*========================================
     Stat Summary Evaluation Coloring
-    -2: greatly below average, -1: below average, 0: average, 1: above average, 2: greatly above average
 ========================================*/
 
-input[type=hidden].wuxStatEvaluation-flag[value="-2"] + .wuxStatEvaluation-value
+input[type=hidden].wuxStatSummary-flag[value="n2"] + .wuxStatSummary-value
 {
-    color: #ff0000;
+    color: #ff7300;
     font-size: 11px;
 }
 
-input[type=hidden].wuxStatEvaluation-flag[value="-1"] + .wuxStatEvaluation-value
+input[type=hidden].wuxStatSummary-flag[value="n1"] + .wuxStatSummary-value
 {
-    color: #e46226;
+    color: #ffdc00;
 }
 
-input[type=hidden].wuxStatEvaluation-flag[value="1"] + .wuxStatEvaluation-value
+input[type=hidden].wuxStatSummary-flag[value="1"] + .wuxStatSummary-value
 {
-    color: #0bae0d;
+    color: #02f1d7;
 }
 
-input[type=hidden].wuxStatEvaluation-flag[value="2"] + .wuxStatEvaluation-value
+input[type=hidden].wuxStatSummary-flag[value="2"] + .wuxStatSummary-value
 {
-    color: #00ffea;
+    color: #155dfa;
     font-size: 14px;
 }
 
