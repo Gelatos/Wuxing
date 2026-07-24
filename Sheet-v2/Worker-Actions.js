@@ -795,8 +795,8 @@ class FormeTechniqueDatabaseBase {
         attributeHandler.addRepeatingSection(this.formeActionsRepeaterId);
         attributeHandler.getRepeatingSection(this.formeActionsRepeaterId).addFieldNames([
             techniqueAttributeHandler.getVariable("TechTrueName"),
-            techniqueAttributeHandler.getVariable("TechVersion"),
-            techniqueAttributeHandler.getVariable("TechIsVisible")
+            techniqueAttributeHandler.getVariable("TechName", WuxDef._max),
+            techniqueAttributeHandler.getVariable("TechActionType", WuxDef._max)
         ]);
     }
     createTechDictionaryTechnique(technique, techniqueRank, isActive) {

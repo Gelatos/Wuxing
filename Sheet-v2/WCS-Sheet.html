@@ -2300,12 +2300,12 @@
 			<div class="wuxMainContentScroll">
 				<div class="wuxSegment">
 					<div class="wuxTabHeader">
-						<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-jobsbydifficulty_info" undefined><span>?</span></div><span>Jobs By Difficulty</span>
+						<div class="wuxInfoButton"><input type="checkbox" name="attr_ttl-jobsbydifficulty_info" undefined><span>?</span></div><span>Jobs</span>
 					</div>
 					<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-jobsbydifficulty_info" value="0">
 					<div class="wuxHiddenField">
 						<div class="wuxInfoContent">
-							<div class="wuxHeader2">Jobs By Difficulty</div>
+							<div class="wuxHeader2">Jobs</div>
 
 							<span class="wuxDescription">A job represents a character's role and set a baseline for how they perform in the game. When learning a job you immediately gain a set of techniques the job grants. These jobs will always include techniques that set the base statistics for many of your core stats such as HP, defenses, and movement speed.</span><span class="wuxDescription">A character is capable of learning multiple jobs but only one can ever be active at one time. If you learn multiple jobs you are abile to swap between them by spending energy.</span><span class="wuxDescription">On this page you can spend a job point by selecting one of these jobs. The job will then automatically be equipped.</span>
 						</div>
@@ -3803,7 +3803,7 @@
 						<div class="wuxInfoContent">
 							<div class="wuxHeader2">Skills</div>
 
-							<span class="wuxDescription">Skills represent a broad application of techniques and ability. Anytime you do anything complex in Wuxing you will be making a skill check to determine your success. In addition, most techniques will require the use of a skill to function.</span><span class="wuxDescription">Skills are all tied to one of the six attributes. As a base, a skill modifier is equal to its associated attribute. When you are trained in a skill your modifier increases by 2 + your Character Rank.</span><span class="wuxDescription">On this page you can see the number of skill points you have available to spend on the left column. Each time you spend a skill point you may become trained in one skill. To train a skill you must check the skill off on the checkbox.</span><span class="wuxDescription">You begin play with 3 skill points and gain an additional 2 at 2nd, 3rd, and 4th level. You gain an additional skill point whenever you increase in Character Rank. You may choose to gain additional skill points by spending advancement points on level up.</span>
+							<span class="wuxDescription">Skills represent a broad application of techniques and ability. Anytime you do anything complex in Wuxing you will be making a skill check to determine your success. In addition, most techniques will require the use of a skill to function.</span><span class="wuxDescription">Skills are all tied to at least one of the six attributes. Some have two and the skill will take the better of the two. As a base, a skill modifier is equal to its associated attribute. When you are trained in a skill your modifier increases to 2 + your CR.</span><span class="wuxDescription">You begin play with 6 skill points. You gain an additional skill point whenever you increase your CR. You may choose to gain additional skill points by spending advancement points on level up.</span><span class="wuxDescription">Some skills in this section may have a red color. That means a job or a style you have learned uses that skill. You should prioritize training these skills.</span>
 						</div>
 					</div>
 
@@ -6622,14 +6622,14 @@
 				</div>
 				<div class="wuxSegment">
 					<div class="wuxTabHeader">
-						<div class="wuxInfoButton"><input type="checkbox" name="attr_pag-affectedstats_info" undefined><span>?</span></div><span>Stat Summary</span>
+						<div class="wuxInfoButton"><input type="checkbox" name="attr_" undefined><span>?</span></div><span></span>
 					</div>
-					<input type="hidden" class="wuxHiddenField-flag" name="attr_pag-affectedstats_info" value="0">
+					<input type="hidden" class="wuxHiddenField-flag" name="attr_" value="0">
 					<div class="wuxHiddenField">
 						<div class="wuxInfoContent">
-							<div class="wuxHeader2">Stat Summary</div>
+							<div class="wuxHeader2"></div>
 
-							<span class="wuxDescription">These are the statistics that are modified based on your Attributes. </span><span class="wuxDescription">These stats will automatically update as you change your attributes. Many of these stats are modified based on your Character Rank (CR) and other modifiers. Your stats will be shown both by what the attributes grant and the final result with your other modifiers in (brackets).</span>
+							<span class="wuxDescription"></span>
 						</div>
 					</div>
 
@@ -9526,7 +9526,7 @@
 							<div class="wuxInfoContent">
 								<div class="wuxHeader2">Stat Summary</div>
 
-								<span class="wuxDescription">This displays a summary of all of your character's core stats. You can hover over each stat to get details of where it is used or over their value to get a detailed breakdown of how that stat is calculated.</span>
+								<span class="wuxDescription">This displays a summary of all of your character's core stats. You can hover over each stat to get details of where it is used or over their value to get a detailed breakdown of how that stat is calculated.</span><span class="wuxDescription">Each stat may appear colored. These colors represent how close to the average the stat is.</span><span class="wuxDescription">Green represents above average, Red is a below average stat, and White is a stat around average.</span>
 							</div>
 						</div>
 
@@ -15582,18 +15582,18 @@
 								</div>
 								<div class="wuxNoRepControl wuxRepeatingFlexSection wuxFormeTechRepeater">
 									<fieldset class="repeating_formetech">
-										<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techisvisible" value="0">
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techactiontype_max" value="0">
 										<div class="wuxHiddenField">
 											<input type="hidden" name="attr_act-use" value="" />
-											<input type="hidden" name="attr_act-techversion" value="" />
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techdisplaytype" value="0">
+											<input type="hidden" name="attr_act-techname_max" value="" />
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtruename_max" value="0">
 											<div class="wuxHiddenField">
 												<div class="wuxFeatureSectionHeader">
 													<div class="wuxHeader2"><span name="attr_act-techname"></span></div>
 												</div>
 											</div>
 
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techdisplaytype" value="0">
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtruename_max" value="0">
 											<div class="wuxHiddenAuxField">
 												<div class="wuxFeature">
 													<div class="wuxFeatureHeader">
@@ -15603,18 +15603,18 @@
 																		<span name="attr_act-techname"></span>
 																	</button></div>
 																<input type="hidden" class="wuxFeatureHeader-flag" name="attr_act-techactiontype">
-																<div class="wuxFeatureHeaderDisplayInfoActionType"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techactiontooltip" value="0">
+																<div class="wuxFeatureHeaderDisplayInfoActionType"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techactionname_max" value="0">
 																	<span class="wuxHiddenInlineField">
 																		<span class="wuxTooltip">
 																			<span class="wuxTooltipText"><strong><span name="attr_act-techactionname"></span></strong></span>
 																			<div class="wuxTooltipContent">
 																				<div class="wuxHeader2">Action</div>
-																				<span class="wuxDescription" name="attr_act-techactiontooltip"></span>
+																				<span class="wuxDescription" name="attr_act-techactionname_max"></span>
 																			</div>
 																		</span>
 																	</span>
 
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techactiontooltip" value="0">
+																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techactionname_max" value="0">
 																	<span class="wuxHiddenInlineAuxField">
 																		<span name="attr_act-techactionname"></span>
 																	</span>
@@ -15623,18 +15623,18 @@
 															<div class="wuxFeatureHeaderDisplayInfoBlock">
 																<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techrange" value="0">
 																<div class="wuxHiddenField">
-																	<div class="wuxFeatureHeaderDisplayInfoRange"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtargetdesc" value="0">
+																	<div class="wuxFeatureHeaderDisplayInfoRange"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtargettype_max" value="0">
 																		<span class="wuxHiddenInlineField">
 																			<span class="wuxTooltip">
 																				<span class="wuxTooltipText"><strong><span name="attr_act-techrange"></span></strong></span>
 																				<div class="wuxTooltipContent">
 																					<div class="wuxHeader2">Range</div>
-																					<span class="wuxDescription" name="attr_act-techtargetdesc"></span>
+																					<span class="wuxDescription" name="attr_act-techtargettype_max"></span>
 																				</div>
 																			</span>
 																		</span>
 
-																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtargetdesc" value="0">
+																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtargettype_max" value="0">
 																		<span class="wuxHiddenInlineAuxField">
 																			<span name="attr_act-techrange"></span>
 																		</span>
@@ -15653,34 +15653,34 @@
 																	<div class="wuxFeatureHeaderDisplayInfoEnCost"><span name="attr_act-techencost"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> EN</span></div>
 																</div>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillcost" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techencost_max" value="0">
 																<div class="wuxHiddenField">
-																	<div class="wuxFeatureHeaderDisplayInfoWillCost"><span name="attr_act-techwillcost"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>
+																	<div class="wuxFeatureHeaderDisplayInfoWillCost"><span name="attr_act-techencost_max"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>
 																</div>
 
 															</div>
 														</div>
 													</div>
 													<div class="wuxFeatureInfoDisplayBlock">
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrigger" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techrange_max" value="0">
 														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> <span name="attr_act-techtrigger"></span></div>
+															<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> <span name="attr_act-techrange_max"></span></div>
 														</div>
 
 														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtraits" value="0">
 														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderInfoTraits"><strong><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtraitsdesc" value="0">
+															<div class="wuxFeatureHeaderInfoTraits"><strong><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtraits_max" value="0">
 																	<span class="wuxHiddenInlineField">
 																		<span class="wuxTooltip">
 																			<span class="wuxTooltipText"><strong>Traits</strong></span>
 																			<div class="wuxTooltipContent">
 																				<div class="wuxHeader2">Traits</div>
-																				<span class="wuxDescription" name="attr_act-techtraitsdesc"></span>
+																				<span class="wuxDescription" name="attr_act-techtraits_max"></span>
 																			</div>
 																		</span>
 																	</span>
 
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtraitsdesc" value="0">
+																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtraits_max" value="0">
 																	<span class="wuxHiddenInlineAuxField">
 																		Traits
 																	</span>
@@ -15696,18 +15696,18 @@
 														<div class="wuxHiddenField">
 															<div class="wuxFeatureHeaderInfoEffect-Core">
 																<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-																<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcoreeffect_info" value="0">
+																<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcoreeffect_max" value="0">
 																		<span class="wuxHiddenInlineField">
 																			<span class="wuxTooltip">
 																				<span class="wuxTooltipText"><strong>Effects</strong></span>
 																				<div class="wuxTooltipContent">
 																					<div class="wuxHeader2">Core Effects</div>
-																					<span class="wuxDescription" name="attr_act-techcoreeffect_info"></span>
+																					<span class="wuxDescription" name="attr_act-techcoreeffect_max"></span>
 																				</div>
 																			</span>
 																		</span>
 
-																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcoreeffect_info" value="0">
+																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcoreeffect_max" value="0">
 																		<span class="wuxHiddenInlineAuxField">
 																			Effects
 																		</span>
@@ -15731,47 +15731,47 @@
 														<div class="wuxHiddenField">
 															<div class="wuxFeatureHeaderInfoEffect-Check">
 																<input type="hidden" class="wuxFeatureHeader-flag" name="attr_act-techcoredef">
-																<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcheckeffect_info" value="0">
+																<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcheckeffect_max" value="0">
 																		<span class="wuxHiddenInlineField">
 																			<span class="wuxTooltip">
-																				<span class="wuxTooltipText"><strong><span name="attr_act-techchecktitle"></span></strong></span>
+																				<span class="wuxTooltipText"><strong><span name="attr_act-techcoredef_max"></span></strong></span>
 																				<div class="wuxTooltipContent">
 																					<div class="wuxHeader2">Skill Check Effects</div>
-																					<span class="wuxDescription" name="attr_act-techcheckeffect_info"></span>
+																					<span class="wuxDescription" name="attr_act-techcheckeffect_max"></span>
 																				</div>
 																			</span>
 																		</span>
 
-																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcheckeffect_info" value="0">
+																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcheckeffect_max" value="0">
 																		<span class="wuxHiddenInlineAuxField">
-																			<span name="attr_act-techchecktitle"></span>
+																			<span name="attr_act-techcoredef_max"></span>
 																		</span>
 																	</span></div>
 																<div class="wuxFeatureHeaderInfoContents"><span name="attr_act-techcheckeffect"></span></div>
 															</div>
 														</div>
 
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techendeffect" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techflavortext_max" value="0">
 														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderInfoEffect"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span name="attr_act-techendeffect"></span></span></div>
+															<div class="wuxFeatureHeaderInfoEffect"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span name="attr_act-techflavortext_max"></span></span></div>
 														</div>
 
 														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillbreakeffect" value="0">
 														<div class="wuxHiddenField">
 															<div class="wuxFeatureHeaderInfoEffect-WillBreak">
 																<input type="hidden" class="wuxFeatureHeader-flag" value="WillBreak">
-																<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillbreakeffect_info" value="0">
+																<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillbreakeffect_max" value="0">
 																		<span class="wuxHiddenInlineField">
 																			<span class="wuxTooltip">
 																				<span class="wuxTooltipText"><strong>Will Break Effects</strong></span>
 																				<div class="wuxTooltipContent">
 																					<div class="wuxHeader2">Will Break Effects</div>
-																					<span class="wuxDescription" name="attr_act-techwillbreakeffect_info"></span>
+																					<span class="wuxDescription" name="attr_act-techwillbreakeffect_max"></span>
 																				</div>
 																			</span>
 																		</span>
 
-																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillbreakeffect_info" value="0">
+																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillbreakeffect_max" value="0">
 																		<span class="wuxHiddenInlineAuxField">
 																			Will Break Effects
 																		</span>
@@ -15780,7 +15780,7 @@
 															</div>
 														</div>
 
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techenhanceeffect" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techonenter_max" value="0">
 														<div class="wuxHiddenField">
 															<div class="wuxFeatureHeaderInfoEffect-Enhance">
 																<input type="hidden" class="wuxFeatureHeader-flag" value="Enhance">
@@ -15791,7 +15791,7 @@
 																				<span class="wuxDescription">You may increase the rank of this technique so that it becomes more powerful. Each time you increase the rank you spend 1 additional EN to gain the effects listed below.</span>
 																			</div>
 																		</span></span></div>
-																<div class="wuxFeatureHeaderInfoContents"><span name="attr_act-techenhanceeffect"></span></div>
+																<div class="wuxFeatureHeaderInfoContents"><span name="attr_act-techonenter_max"></span></div>
 															</div>
 															<div class="wuxFeatureHeaderInfoEffect-EnhanceButtons"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techrankdown" value="0">
 																<span class="wuxHiddenInlineField">
@@ -16117,15 +16117,15 @@
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_act-setdata" value="0">
 										<div class="wuxHiddenField">
 											<input type="hidden" name="attr_act-use" value="" />
-											<input type="hidden" name="attr_act-techversion" value="" />
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techdisplaytype" value="0">
+											<input type="hidden" name="attr_act-techname_max" value="" />
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtruename_max" value="0">
 											<div class="wuxHiddenField">
 												<div class="wuxFeatureSectionHeader">
 													<div class="wuxHeader2"><span name="attr_act-techname"></span></div>
 												</div>
 											</div>
 
-											<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techdisplaytype" value="0">
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtruename_max" value="0">
 											<div class="wuxHiddenAuxField">
 												<div class="wuxFeature">
 													<div class="wuxFeatureHeader">
@@ -16135,18 +16135,18 @@
 																		<span name="attr_act-techname"></span>
 																	</button></div>
 																<input type="hidden" class="wuxFeatureHeader-flag" name="attr_act-techactiontype">
-																<div class="wuxFeatureHeaderDisplayInfoActionType"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techactiontooltip" value="0">
+																<div class="wuxFeatureHeaderDisplayInfoActionType"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techactionname_max" value="0">
 																	<span class="wuxHiddenInlineField">
 																		<span class="wuxTooltip">
 																			<span class="wuxTooltipText"><strong><span name="attr_act-techactionname"></span></strong></span>
 																			<div class="wuxTooltipContent">
 																				<div class="wuxHeader2">Action</div>
-																				<span class="wuxDescription" name="attr_act-techactiontooltip"></span>
+																				<span class="wuxDescription" name="attr_act-techactionname_max"></span>
 																			</div>
 																		</span>
 																	</span>
 
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techactiontooltip" value="0">
+																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techactionname_max" value="0">
 																	<span class="wuxHiddenInlineAuxField">
 																		<span name="attr_act-techactionname"></span>
 																	</span>
@@ -16155,18 +16155,18 @@
 															<div class="wuxFeatureHeaderDisplayInfoBlock">
 																<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techrange" value="0">
 																<div class="wuxHiddenField">
-																	<div class="wuxFeatureHeaderDisplayInfoRange"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtargetdesc" value="0">
+																	<div class="wuxFeatureHeaderDisplayInfoRange"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtargettype_max" value="0">
 																		<span class="wuxHiddenInlineField">
 																			<span class="wuxTooltip">
 																				<span class="wuxTooltipText"><strong><span name="attr_act-techrange"></span></strong></span>
 																				<div class="wuxTooltipContent">
 																					<div class="wuxHeader2">Range</div>
-																					<span class="wuxDescription" name="attr_act-techtargetdesc"></span>
+																					<span class="wuxDescription" name="attr_act-techtargettype_max"></span>
 																				</div>
 																			</span>
 																		</span>
 
-																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtargetdesc" value="0">
+																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtargettype_max" value="0">
 																		<span class="wuxHiddenInlineAuxField">
 																			<span name="attr_act-techrange"></span>
 																		</span>
@@ -16185,34 +16185,34 @@
 																	<div class="wuxFeatureHeaderDisplayInfoEnCost"><span name="attr_act-techencost"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> EN</span></div>
 																</div>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillcost" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techencost_max" value="0">
 																<div class="wuxHiddenField">
-																	<div class="wuxFeatureHeaderDisplayInfoWillCost"><span name="attr_act-techwillcost"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>
+																	<div class="wuxFeatureHeaderDisplayInfoWillCost"><span name="attr_act-techencost_max"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>
 																</div>
 
 															</div>
 														</div>
 													</div>
 													<div class="wuxFeatureInfoDisplayBlock">
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtrigger" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techrange_max" value="0">
 														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> <span name="attr_act-techtrigger"></span></div>
+															<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> <span name="attr_act-techrange_max"></span></div>
 														</div>
 
 														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtraits" value="0">
 														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderInfoTraits"><strong><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtraitsdesc" value="0">
+															<div class="wuxFeatureHeaderInfoTraits"><strong><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtraits_max" value="0">
 																	<span class="wuxHiddenInlineField">
 																		<span class="wuxTooltip">
 																			<span class="wuxTooltipText"><strong>Traits</strong></span>
 																			<div class="wuxTooltipContent">
 																				<div class="wuxHeader2">Traits</div>
-																				<span class="wuxDescription" name="attr_act-techtraitsdesc"></span>
+																				<span class="wuxDescription" name="attr_act-techtraits_max"></span>
 																			</div>
 																		</span>
 																	</span>
 
-																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtraitsdesc" value="0">
+																	<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techtraits_max" value="0">
 																	<span class="wuxHiddenInlineAuxField">
 																		Traits
 																	</span>
@@ -16228,18 +16228,18 @@
 														<div class="wuxHiddenField">
 															<div class="wuxFeatureHeaderInfoEffect-Core">
 																<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-																<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcoreeffect_info" value="0">
+																<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcoreeffect_max" value="0">
 																		<span class="wuxHiddenInlineField">
 																			<span class="wuxTooltip">
 																				<span class="wuxTooltipText"><strong>Effects</strong></span>
 																				<div class="wuxTooltipContent">
 																					<div class="wuxHeader2">Core Effects</div>
-																					<span class="wuxDescription" name="attr_act-techcoreeffect_info"></span>
+																					<span class="wuxDescription" name="attr_act-techcoreeffect_max"></span>
 																				</div>
 																			</span>
 																		</span>
 
-																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcoreeffect_info" value="0">
+																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcoreeffect_max" value="0">
 																		<span class="wuxHiddenInlineAuxField">
 																			Effects
 																		</span>
@@ -16263,47 +16263,47 @@
 														<div class="wuxHiddenField">
 															<div class="wuxFeatureHeaderInfoEffect-Check">
 																<input type="hidden" class="wuxFeatureHeader-flag" name="attr_act-techcoredef">
-																<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcheckeffect_info" value="0">
+																<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcheckeffect_max" value="0">
 																		<span class="wuxHiddenInlineField">
 																			<span class="wuxTooltip">
-																				<span class="wuxTooltipText"><strong><span name="attr_act-techchecktitle"></span></strong></span>
+																				<span class="wuxTooltipText"><strong><span name="attr_act-techcoredef_max"></span></strong></span>
 																				<div class="wuxTooltipContent">
 																					<div class="wuxHeader2">Skill Check Effects</div>
-																					<span class="wuxDescription" name="attr_act-techcheckeffect_info"></span>
+																					<span class="wuxDescription" name="attr_act-techcheckeffect_max"></span>
 																				</div>
 																			</span>
 																		</span>
 
-																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcheckeffect_info" value="0">
+																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techcheckeffect_max" value="0">
 																		<span class="wuxHiddenInlineAuxField">
-																			<span name="attr_act-techchecktitle"></span>
+																			<span name="attr_act-techcoredef_max"></span>
 																		</span>
 																	</span></div>
 																<div class="wuxFeatureHeaderInfoContents"><span name="attr_act-techcheckeffect"></span></div>
 															</div>
 														</div>
 
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techendeffect" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techflavortext_max" value="0">
 														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderInfoEffect"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span name="attr_act-techendeffect"></span></span></div>
+															<div class="wuxFeatureHeaderInfoEffect"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span name="attr_act-techflavortext_max"></span></span></div>
 														</div>
 
 														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillbreakeffect" value="0">
 														<div class="wuxHiddenField">
 															<div class="wuxFeatureHeaderInfoEffect-WillBreak">
 																<input type="hidden" class="wuxFeatureHeader-flag" value="WillBreak">
-																<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillbreakeffect_info" value="0">
+																<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillbreakeffect_max" value="0">
 																		<span class="wuxHiddenInlineField">
 																			<span class="wuxTooltip">
 																				<span class="wuxTooltipText"><strong>Will Break Effects</strong></span>
 																				<div class="wuxTooltipContent">
 																					<div class="wuxHeader2">Will Break Effects</div>
-																					<span class="wuxDescription" name="attr_act-techwillbreakeffect_info"></span>
+																					<span class="wuxDescription" name="attr_act-techwillbreakeffect_max"></span>
 																				</div>
 																			</span>
 																		</span>
 
-																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillbreakeffect_info" value="0">
+																		<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techwillbreakeffect_max" value="0">
 																		<span class="wuxHiddenInlineAuxField">
 																			Will Break Effects
 																		</span>
@@ -16312,7 +16312,7 @@
 															</div>
 														</div>
 
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techenhanceeffect" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techonenter_max" value="0">
 														<div class="wuxHiddenField">
 															<div class="wuxFeatureHeaderInfoEffect-Enhance">
 																<input type="hidden" class="wuxFeatureHeader-flag" value="Enhance">
@@ -16323,7 +16323,7 @@
 																				<span class="wuxDescription">You may increase the rank of this technique so that it becomes more powerful. Each time you increase the rank you spend 1 additional EN to gain the effects listed below.</span>
 																			</div>
 																		</span></span></div>
-																<div class="wuxFeatureHeaderInfoContents"><span name="attr_act-techenhanceeffect"></span></div>
+																<div class="wuxFeatureHeaderInfoContents"><span name="attr_act-techonenter_max"></span></div>
 															</div>
 															<div class="wuxFeatureHeaderInfoEffect-EnhanceButtons"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-techrankdown" value="0">
 																<span class="wuxHiddenInlineField">
@@ -16566,10 +16566,10 @@
 								</div>
 
 							</div>
-							<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techisvisible0" value="0">
+							<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactiontype_max0" value="0">
 							<div class="wuxHiddenField">
 								<div class="wuxHeader">Technique</div>
-								<div><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techisvisible0" value="0">
+								<div><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactiontype_max0" value="0">
 									<div class="wuxHiddenField">
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techheader0" value="0">
 										<div class="wuxHiddenField">
@@ -16582,18 +16582,18 @@
 														<input type="hidden" name="attr_popup-techtruename0">
 														<div class="wuxFeatureHeaderName"><span name="attr_popup-techname0"></span></div>
 														<input type="hidden" class="wuxFeatureHeader-flag" name="attr_popup-techactiontype0">
-														<div class="wuxFeatureHeaderDisplayInfoActionType"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactiontooltip0" value="0">
+														<div class="wuxFeatureHeaderDisplayInfoActionType"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactionname_max0" value="0">
 															<span class="wuxHiddenInlineField">
 																<span class="wuxTooltip">
 																	<span class="wuxTooltipText"><strong><span name="attr_popup-techactionname0"></span></strong></span>
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Action</div>
-																		<span class="wuxDescription" name="attr_popup-techactiontooltip0"></span>
+																		<span class="wuxDescription" name="attr_popup-techactionname_max0"></span>
 																	</div>
 																</span>
 															</span>
 
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactiontooltip0" value="0">
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactionname_max0" value="0">
 															<span class="wuxHiddenInlineAuxField">
 																<span name="attr_popup-techactionname0"></span>
 															</span>
@@ -16602,18 +16602,18 @@
 													<div class="wuxFeatureHeaderDisplayInfoBlock">
 														<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techrange0" value="0">
 														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderDisplayInfoRange"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtargetdesc0" value="0">
+															<div class="wuxFeatureHeaderDisplayInfoRange"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtargettype_max0" value="0">
 																<span class="wuxHiddenInlineField">
 																	<span class="wuxTooltip">
 																		<span class="wuxTooltipText"><strong><span name="attr_popup-techrange0"></span></strong></span>
 																		<div class="wuxTooltipContent">
 																			<div class="wuxHeader2">Range</div>
-																			<span class="wuxDescription" name="attr_popup-techtargetdesc0"></span>
+																			<span class="wuxDescription" name="attr_popup-techtargettype_max0"></span>
 																		</div>
 																	</span>
 																</span>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtargetdesc0" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtargettype_max0" value="0">
 																<span class="wuxHiddenInlineAuxField">
 																	<span name="attr_popup-techrange0"></span>
 																</span>
@@ -16632,34 +16632,34 @@
 															<div class="wuxFeatureHeaderDisplayInfoEnCost"><span name="attr_popup-techencost0"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> EN</span></div>
 														</div>
 
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillcost0" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techencost_max0" value="0">
 														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderDisplayInfoWillCost"><span name="attr_popup-techwillcost0"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>
+															<div class="wuxFeatureHeaderDisplayInfoWillCost"><span name="attr_popup-techencost_max0"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>
 														</div>
 
 													</div>
 												</div>
 											</div>
 											<div class="wuxFeatureInfoDisplayBlock">
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtrigger0" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techrange_max0" value="0">
 												<div class="wuxHiddenField">
-													<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> <span name="attr_popup-techtrigger0"></span></div>
+													<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> <span name="attr_popup-techrange_max0"></span></div>
 												</div>
 
 												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraits0" value="0">
 												<div class="wuxHiddenField">
-													<div class="wuxFeatureHeaderInfoTraits"><strong><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraitsdesc0" value="0">
+													<div class="wuxFeatureHeaderInfoTraits"><strong><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraits_max0" value="0">
 															<span class="wuxHiddenInlineField">
 																<span class="wuxTooltip">
 																	<span class="wuxTooltipText"><strong>Traits</strong></span>
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Traits</div>
-																		<span class="wuxDescription" name="attr_popup-techtraitsdesc0"></span>
+																		<span class="wuxDescription" name="attr_popup-techtraits_max0"></span>
 																	</div>
 																</span>
 															</span>
 
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraitsdesc0" value="0">
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraits_max0" value="0">
 															<span class="wuxHiddenInlineAuxField">
 																Traits
 															</span>
@@ -16675,18 +16675,18 @@
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeaderInfoEffect-Core">
 														<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcoreeffect_info0" value="0">
+														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcoreeffect_max0" value="0">
 																<span class="wuxHiddenInlineField">
 																	<span class="wuxTooltip">
 																		<span class="wuxTooltipText"><strong>Effects</strong></span>
 																		<div class="wuxTooltipContent">
 																			<div class="wuxHeader2">Core Effects</div>
-																			<span class="wuxDescription" name="attr_popup-techcoreeffect_info0"></span>
+																			<span class="wuxDescription" name="attr_popup-techcoreeffect_max0"></span>
 																		</div>
 																	</span>
 																</span>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcoreeffect_info0" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcoreeffect_max0" value="0">
 																<span class="wuxHiddenInlineAuxField">
 																	Effects
 																</span>
@@ -16710,47 +16710,47 @@
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeaderInfoEffect-Check">
 														<input type="hidden" class="wuxFeatureHeader-flag" name="attr_popup-techcoredef0">
-														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcheckeffect_info0" value="0">
+														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcheckeffect_max0" value="0">
 																<span class="wuxHiddenInlineField">
 																	<span class="wuxTooltip">
-																		<span class="wuxTooltipText"><strong><span name="attr_popup-techchecktitle0"></span></strong></span>
+																		<span class="wuxTooltipText"><strong><span name="attr_popup-techcoredef_max0"></span></strong></span>
 																		<div class="wuxTooltipContent">
 																			<div class="wuxHeader2">Skill Check Effects</div>
-																			<span class="wuxDescription" name="attr_popup-techcheckeffect_info0"></span>
+																			<span class="wuxDescription" name="attr_popup-techcheckeffect_max0"></span>
 																		</div>
 																	</span>
 																</span>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcheckeffect_info0" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcheckeffect_max0" value="0">
 																<span class="wuxHiddenInlineAuxField">
-																	<span name="attr_popup-techchecktitle0"></span>
+																	<span name="attr_popup-techcoredef_max0"></span>
 																</span>
 															</span></div>
 														<div class="wuxFeatureHeaderInfoContents"><span name="attr_popup-techcheckeffect0"></span></div>
 													</div>
 												</div>
 
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techendeffect0" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techflavortext_max0" value="0">
 												<div class="wuxHiddenField">
-													<div class="wuxFeatureHeaderInfoEffect"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span name="attr_popup-techendeffect0"></span></span></div>
+													<div class="wuxFeatureHeaderInfoEffect"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span name="attr_popup-techflavortext_max0"></span></span></div>
 												</div>
 
 												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect0" value="0">
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeaderInfoEffect-WillBreak">
 														<input type="hidden" class="wuxFeatureHeader-flag" value="WillBreak">
-														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect_info0" value="0">
+														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect_max0" value="0">
 																<span class="wuxHiddenInlineField">
 																	<span class="wuxTooltip">
 																		<span class="wuxTooltipText"><strong>Will Break Effects</strong></span>
 																		<div class="wuxTooltipContent">
 																			<div class="wuxHeader2">Will Break Effects</div>
-																			<span class="wuxDescription" name="attr_popup-techwillbreakeffect_info0"></span>
+																			<span class="wuxDescription" name="attr_popup-techwillbreakeffect_max0"></span>
 																		</div>
 																	</span>
 																</span>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect_info0" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect_max0" value="0">
 																<span class="wuxHiddenInlineAuxField">
 																	Will Break Effects
 																</span>
@@ -16759,7 +16759,7 @@
 													</div>
 												</div>
 
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techenhanceeffect0" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techonenter_max0" value="0">
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeaderInfoEffect-Enhance">
 														<input type="hidden" class="wuxFeatureHeader-flag" value="Enhance">
@@ -16770,7 +16770,7 @@
 																		<span class="wuxDescription">You may increase the rank of this technique so that it becomes more powerful. Each time you increase the rank you spend 1 additional EN to gain the effects listed below.</span>
 																	</div>
 																</span></span></div>
-														<div class="wuxFeatureHeaderInfoContents"><span name="attr_popup-techenhanceeffect0"></span></div>
+														<div class="wuxFeatureHeaderInfoContents"><span name="attr_popup-techonenter_max0"></span></div>
 													</div>
 												</div>
 
@@ -16779,7 +16779,7 @@
 
 									</div>
 								</div>
-								<div><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techisvisible1" value="0">
+								<div><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactiontype_max1" value="0">
 									<div class="wuxHiddenField">
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techheader1" value="0">
 										<div class="wuxHiddenField">
@@ -16792,18 +16792,18 @@
 														<input type="hidden" name="attr_popup-techtruename1">
 														<div class="wuxFeatureHeaderName"><span name="attr_popup-techname1"></span></div>
 														<input type="hidden" class="wuxFeatureHeader-flag" name="attr_popup-techactiontype1">
-														<div class="wuxFeatureHeaderDisplayInfoActionType"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactiontooltip1" value="0">
+														<div class="wuxFeatureHeaderDisplayInfoActionType"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactionname_max1" value="0">
 															<span class="wuxHiddenInlineField">
 																<span class="wuxTooltip">
 																	<span class="wuxTooltipText"><strong><span name="attr_popup-techactionname1"></span></strong></span>
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Action</div>
-																		<span class="wuxDescription" name="attr_popup-techactiontooltip1"></span>
+																		<span class="wuxDescription" name="attr_popup-techactionname_max1"></span>
 																	</div>
 																</span>
 															</span>
 
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactiontooltip1" value="0">
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactionname_max1" value="0">
 															<span class="wuxHiddenInlineAuxField">
 																<span name="attr_popup-techactionname1"></span>
 															</span>
@@ -16812,18 +16812,18 @@
 													<div class="wuxFeatureHeaderDisplayInfoBlock">
 														<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techrange1" value="0">
 														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderDisplayInfoRange"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtargetdesc1" value="0">
+															<div class="wuxFeatureHeaderDisplayInfoRange"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtargettype_max1" value="0">
 																<span class="wuxHiddenInlineField">
 																	<span class="wuxTooltip">
 																		<span class="wuxTooltipText"><strong><span name="attr_popup-techrange1"></span></strong></span>
 																		<div class="wuxTooltipContent">
 																			<div class="wuxHeader2">Range</div>
-																			<span class="wuxDescription" name="attr_popup-techtargetdesc1"></span>
+																			<span class="wuxDescription" name="attr_popup-techtargettype_max1"></span>
 																		</div>
 																	</span>
 																</span>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtargetdesc1" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtargettype_max1" value="0">
 																<span class="wuxHiddenInlineAuxField">
 																	<span name="attr_popup-techrange1"></span>
 																</span>
@@ -16842,34 +16842,34 @@
 															<div class="wuxFeatureHeaderDisplayInfoEnCost"><span name="attr_popup-techencost1"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> EN</span></div>
 														</div>
 
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillcost1" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techencost_max1" value="0">
 														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderDisplayInfoWillCost"><span name="attr_popup-techwillcost1"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>
+															<div class="wuxFeatureHeaderDisplayInfoWillCost"><span name="attr_popup-techencost_max1"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>
 														</div>
 
 													</div>
 												</div>
 											</div>
 											<div class="wuxFeatureInfoDisplayBlock">
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtrigger1" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techrange_max1" value="0">
 												<div class="wuxHiddenField">
-													<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> <span name="attr_popup-techtrigger1"></span></div>
+													<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> <span name="attr_popup-techrange_max1"></span></div>
 												</div>
 
 												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraits1" value="0">
 												<div class="wuxHiddenField">
-													<div class="wuxFeatureHeaderInfoTraits"><strong><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraitsdesc1" value="0">
+													<div class="wuxFeatureHeaderInfoTraits"><strong><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraits_max1" value="0">
 															<span class="wuxHiddenInlineField">
 																<span class="wuxTooltip">
 																	<span class="wuxTooltipText"><strong>Traits</strong></span>
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Traits</div>
-																		<span class="wuxDescription" name="attr_popup-techtraitsdesc1"></span>
+																		<span class="wuxDescription" name="attr_popup-techtraits_max1"></span>
 																	</div>
 																</span>
 															</span>
 
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraitsdesc1" value="0">
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraits_max1" value="0">
 															<span class="wuxHiddenInlineAuxField">
 																Traits
 															</span>
@@ -16885,18 +16885,18 @@
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeaderInfoEffect-Core">
 														<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcoreeffect_info1" value="0">
+														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcoreeffect_max1" value="0">
 																<span class="wuxHiddenInlineField">
 																	<span class="wuxTooltip">
 																		<span class="wuxTooltipText"><strong>Effects</strong></span>
 																		<div class="wuxTooltipContent">
 																			<div class="wuxHeader2">Core Effects</div>
-																			<span class="wuxDescription" name="attr_popup-techcoreeffect_info1"></span>
+																			<span class="wuxDescription" name="attr_popup-techcoreeffect_max1"></span>
 																		</div>
 																	</span>
 																</span>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcoreeffect_info1" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcoreeffect_max1" value="0">
 																<span class="wuxHiddenInlineAuxField">
 																	Effects
 																</span>
@@ -16920,47 +16920,47 @@
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeaderInfoEffect-Check">
 														<input type="hidden" class="wuxFeatureHeader-flag" name="attr_popup-techcoredef1">
-														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcheckeffect_info1" value="0">
+														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcheckeffect_max1" value="0">
 																<span class="wuxHiddenInlineField">
 																	<span class="wuxTooltip">
-																		<span class="wuxTooltipText"><strong><span name="attr_popup-techchecktitle1"></span></strong></span>
+																		<span class="wuxTooltipText"><strong><span name="attr_popup-techcoredef_max1"></span></strong></span>
 																		<div class="wuxTooltipContent">
 																			<div class="wuxHeader2">Skill Check Effects</div>
-																			<span class="wuxDescription" name="attr_popup-techcheckeffect_info1"></span>
+																			<span class="wuxDescription" name="attr_popup-techcheckeffect_max1"></span>
 																		</div>
 																	</span>
 																</span>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcheckeffect_info1" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcheckeffect_max1" value="0">
 																<span class="wuxHiddenInlineAuxField">
-																	<span name="attr_popup-techchecktitle1"></span>
+																	<span name="attr_popup-techcoredef_max1"></span>
 																</span>
 															</span></div>
 														<div class="wuxFeatureHeaderInfoContents"><span name="attr_popup-techcheckeffect1"></span></div>
 													</div>
 												</div>
 
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techendeffect1" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techflavortext_max1" value="0">
 												<div class="wuxHiddenField">
-													<div class="wuxFeatureHeaderInfoEffect"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span name="attr_popup-techendeffect1"></span></span></div>
+													<div class="wuxFeatureHeaderInfoEffect"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span name="attr_popup-techflavortext_max1"></span></span></div>
 												</div>
 
 												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect1" value="0">
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeaderInfoEffect-WillBreak">
 														<input type="hidden" class="wuxFeatureHeader-flag" value="WillBreak">
-														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect_info1" value="0">
+														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect_max1" value="0">
 																<span class="wuxHiddenInlineField">
 																	<span class="wuxTooltip">
 																		<span class="wuxTooltipText"><strong>Will Break Effects</strong></span>
 																		<div class="wuxTooltipContent">
 																			<div class="wuxHeader2">Will Break Effects</div>
-																			<span class="wuxDescription" name="attr_popup-techwillbreakeffect_info1"></span>
+																			<span class="wuxDescription" name="attr_popup-techwillbreakeffect_max1"></span>
 																		</div>
 																	</span>
 																</span>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect_info1" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect_max1" value="0">
 																<span class="wuxHiddenInlineAuxField">
 																	Will Break Effects
 																</span>
@@ -16969,7 +16969,7 @@
 													</div>
 												</div>
 
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techenhanceeffect1" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techonenter_max1" value="0">
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeaderInfoEffect-Enhance">
 														<input type="hidden" class="wuxFeatureHeader-flag" value="Enhance">
@@ -16980,7 +16980,7 @@
 																		<span class="wuxDescription">You may increase the rank of this technique so that it becomes more powerful. Each time you increase the rank you spend 1 additional EN to gain the effects listed below.</span>
 																	</div>
 																</span></span></div>
-														<div class="wuxFeatureHeaderInfoContents"><span name="attr_popup-techenhanceeffect1"></span></div>
+														<div class="wuxFeatureHeaderInfoContents"><span name="attr_popup-techonenter_max1"></span></div>
 													</div>
 												</div>
 
@@ -16989,7 +16989,7 @@
 
 									</div>
 								</div>
-								<div><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techisvisible2" value="0">
+								<div><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactiontype_max2" value="0">
 									<div class="wuxHiddenField">
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techheader2" value="0">
 										<div class="wuxHiddenField">
@@ -17002,18 +17002,18 @@
 														<input type="hidden" name="attr_popup-techtruename2">
 														<div class="wuxFeatureHeaderName"><span name="attr_popup-techname2"></span></div>
 														<input type="hidden" class="wuxFeatureHeader-flag" name="attr_popup-techactiontype2">
-														<div class="wuxFeatureHeaderDisplayInfoActionType"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactiontooltip2" value="0">
+														<div class="wuxFeatureHeaderDisplayInfoActionType"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactionname_max2" value="0">
 															<span class="wuxHiddenInlineField">
 																<span class="wuxTooltip">
 																	<span class="wuxTooltipText"><strong><span name="attr_popup-techactionname2"></span></strong></span>
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Action</div>
-																		<span class="wuxDescription" name="attr_popup-techactiontooltip2"></span>
+																		<span class="wuxDescription" name="attr_popup-techactionname_max2"></span>
 																	</div>
 																</span>
 															</span>
 
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactiontooltip2" value="0">
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactionname_max2" value="0">
 															<span class="wuxHiddenInlineAuxField">
 																<span name="attr_popup-techactionname2"></span>
 															</span>
@@ -17022,18 +17022,18 @@
 													<div class="wuxFeatureHeaderDisplayInfoBlock">
 														<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techrange2" value="0">
 														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderDisplayInfoRange"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtargetdesc2" value="0">
+															<div class="wuxFeatureHeaderDisplayInfoRange"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtargettype_max2" value="0">
 																<span class="wuxHiddenInlineField">
 																	<span class="wuxTooltip">
 																		<span class="wuxTooltipText"><strong><span name="attr_popup-techrange2"></span></strong></span>
 																		<div class="wuxTooltipContent">
 																			<div class="wuxHeader2">Range</div>
-																			<span class="wuxDescription" name="attr_popup-techtargetdesc2"></span>
+																			<span class="wuxDescription" name="attr_popup-techtargettype_max2"></span>
 																		</div>
 																	</span>
 																</span>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtargetdesc2" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtargettype_max2" value="0">
 																<span class="wuxHiddenInlineAuxField">
 																	<span name="attr_popup-techrange2"></span>
 																</span>
@@ -17052,34 +17052,34 @@
 															<div class="wuxFeatureHeaderDisplayInfoEnCost"><span name="attr_popup-techencost2"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> EN</span></div>
 														</div>
 
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillcost2" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techencost_max2" value="0">
 														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderDisplayInfoWillCost"><span name="attr_popup-techwillcost2"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>
+															<div class="wuxFeatureHeaderDisplayInfoWillCost"><span name="attr_popup-techencost_max2"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>
 														</div>
 
 													</div>
 												</div>
 											</div>
 											<div class="wuxFeatureInfoDisplayBlock">
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtrigger2" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techrange_max2" value="0">
 												<div class="wuxHiddenField">
-													<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> <span name="attr_popup-techtrigger2"></span></div>
+													<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> <span name="attr_popup-techrange_max2"></span></div>
 												</div>
 
 												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraits2" value="0">
 												<div class="wuxHiddenField">
-													<div class="wuxFeatureHeaderInfoTraits"><strong><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraitsdesc2" value="0">
+													<div class="wuxFeatureHeaderInfoTraits"><strong><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraits_max2" value="0">
 															<span class="wuxHiddenInlineField">
 																<span class="wuxTooltip">
 																	<span class="wuxTooltipText"><strong>Traits</strong></span>
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Traits</div>
-																		<span class="wuxDescription" name="attr_popup-techtraitsdesc2"></span>
+																		<span class="wuxDescription" name="attr_popup-techtraits_max2"></span>
 																	</div>
 																</span>
 															</span>
 
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraitsdesc2" value="0">
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraits_max2" value="0">
 															<span class="wuxHiddenInlineAuxField">
 																Traits
 															</span>
@@ -17095,18 +17095,18 @@
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeaderInfoEffect-Core">
 														<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcoreeffect_info2" value="0">
+														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcoreeffect_max2" value="0">
 																<span class="wuxHiddenInlineField">
 																	<span class="wuxTooltip">
 																		<span class="wuxTooltipText"><strong>Effects</strong></span>
 																		<div class="wuxTooltipContent">
 																			<div class="wuxHeader2">Core Effects</div>
-																			<span class="wuxDescription" name="attr_popup-techcoreeffect_info2"></span>
+																			<span class="wuxDescription" name="attr_popup-techcoreeffect_max2"></span>
 																		</div>
 																	</span>
 																</span>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcoreeffect_info2" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcoreeffect_max2" value="0">
 																<span class="wuxHiddenInlineAuxField">
 																	Effects
 																</span>
@@ -17130,47 +17130,47 @@
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeaderInfoEffect-Check">
 														<input type="hidden" class="wuxFeatureHeader-flag" name="attr_popup-techcoredef2">
-														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcheckeffect_info2" value="0">
+														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcheckeffect_max2" value="0">
 																<span class="wuxHiddenInlineField">
 																	<span class="wuxTooltip">
-																		<span class="wuxTooltipText"><strong><span name="attr_popup-techchecktitle2"></span></strong></span>
+																		<span class="wuxTooltipText"><strong><span name="attr_popup-techcoredef_max2"></span></strong></span>
 																		<div class="wuxTooltipContent">
 																			<div class="wuxHeader2">Skill Check Effects</div>
-																			<span class="wuxDescription" name="attr_popup-techcheckeffect_info2"></span>
+																			<span class="wuxDescription" name="attr_popup-techcheckeffect_max2"></span>
 																		</div>
 																	</span>
 																</span>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcheckeffect_info2" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcheckeffect_max2" value="0">
 																<span class="wuxHiddenInlineAuxField">
-																	<span name="attr_popup-techchecktitle2"></span>
+																	<span name="attr_popup-techcoredef_max2"></span>
 																</span>
 															</span></div>
 														<div class="wuxFeatureHeaderInfoContents"><span name="attr_popup-techcheckeffect2"></span></div>
 													</div>
 												</div>
 
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techendeffect2" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techflavortext_max2" value="0">
 												<div class="wuxHiddenField">
-													<div class="wuxFeatureHeaderInfoEffect"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span name="attr_popup-techendeffect2"></span></span></div>
+													<div class="wuxFeatureHeaderInfoEffect"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span name="attr_popup-techflavortext_max2"></span></span></div>
 												</div>
 
 												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect2" value="0">
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeaderInfoEffect-WillBreak">
 														<input type="hidden" class="wuxFeatureHeader-flag" value="WillBreak">
-														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect_info2" value="0">
+														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect_max2" value="0">
 																<span class="wuxHiddenInlineField">
 																	<span class="wuxTooltip">
 																		<span class="wuxTooltipText"><strong>Will Break Effects</strong></span>
 																		<div class="wuxTooltipContent">
 																			<div class="wuxHeader2">Will Break Effects</div>
-																			<span class="wuxDescription" name="attr_popup-techwillbreakeffect_info2"></span>
+																			<span class="wuxDescription" name="attr_popup-techwillbreakeffect_max2"></span>
 																		</div>
 																	</span>
 																</span>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect_info2" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect_max2" value="0">
 																<span class="wuxHiddenInlineAuxField">
 																	Will Break Effects
 																</span>
@@ -17179,7 +17179,7 @@
 													</div>
 												</div>
 
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techenhanceeffect2" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techonenter_max2" value="0">
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeaderInfoEffect-Enhance">
 														<input type="hidden" class="wuxFeatureHeader-flag" value="Enhance">
@@ -17190,7 +17190,7 @@
 																		<span class="wuxDescription">You may increase the rank of this technique so that it becomes more powerful. Each time you increase the rank you spend 1 additional EN to gain the effects listed below.</span>
 																	</div>
 																</span></span></div>
-														<div class="wuxFeatureHeaderInfoContents"><span name="attr_popup-techenhanceeffect2"></span></div>
+														<div class="wuxFeatureHeaderInfoContents"><span name="attr_popup-techonenter_max2"></span></div>
 													</div>
 												</div>
 
@@ -17199,7 +17199,7 @@
 
 									</div>
 								</div>
-								<div><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techisvisible3" value="0">
+								<div><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactiontype_max3" value="0">
 									<div class="wuxHiddenField">
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techheader3" value="0">
 										<div class="wuxHiddenField">
@@ -17212,18 +17212,18 @@
 														<input type="hidden" name="attr_popup-techtruename3">
 														<div class="wuxFeatureHeaderName"><span name="attr_popup-techname3"></span></div>
 														<input type="hidden" class="wuxFeatureHeader-flag" name="attr_popup-techactiontype3">
-														<div class="wuxFeatureHeaderDisplayInfoActionType"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactiontooltip3" value="0">
+														<div class="wuxFeatureHeaderDisplayInfoActionType"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactionname_max3" value="0">
 															<span class="wuxHiddenInlineField">
 																<span class="wuxTooltip">
 																	<span class="wuxTooltipText"><strong><span name="attr_popup-techactionname3"></span></strong></span>
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Action</div>
-																		<span class="wuxDescription" name="attr_popup-techactiontooltip3"></span>
+																		<span class="wuxDescription" name="attr_popup-techactionname_max3"></span>
 																	</div>
 																</span>
 															</span>
 
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactiontooltip3" value="0">
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techactionname_max3" value="0">
 															<span class="wuxHiddenInlineAuxField">
 																<span name="attr_popup-techactionname3"></span>
 															</span>
@@ -17232,18 +17232,18 @@
 													<div class="wuxFeatureHeaderDisplayInfoBlock">
 														<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techrange3" value="0">
 														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderDisplayInfoRange"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtargetdesc3" value="0">
+															<div class="wuxFeatureHeaderDisplayInfoRange"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtargettype_max3" value="0">
 																<span class="wuxHiddenInlineField">
 																	<span class="wuxTooltip">
 																		<span class="wuxTooltipText"><strong><span name="attr_popup-techrange3"></span></strong></span>
 																		<div class="wuxTooltipContent">
 																			<div class="wuxHeader2">Range</div>
-																			<span class="wuxDescription" name="attr_popup-techtargetdesc3"></span>
+																			<span class="wuxDescription" name="attr_popup-techtargettype_max3"></span>
 																		</div>
 																	</span>
 																</span>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtargetdesc3" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtargettype_max3" value="0">
 																<span class="wuxHiddenInlineAuxField">
 																	<span name="attr_popup-techrange3"></span>
 																</span>
@@ -17262,34 +17262,34 @@
 															<div class="wuxFeatureHeaderDisplayInfoEnCost"><span name="attr_popup-techencost3"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> EN</span></div>
 														</div>
 
-														<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillcost3" value="0">
+														<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techencost_max3" value="0">
 														<div class="wuxHiddenField">
-															<div class="wuxFeatureHeaderDisplayInfoWillCost"><span name="attr_popup-techwillcost3"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>
+															<div class="wuxFeatureHeaderDisplayInfoWillCost"><span name="attr_popup-techencost_max3"></span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>
 														</div>
 
 													</div>
 												</div>
 											</div>
 											<div class="wuxFeatureInfoDisplayBlock">
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtrigger3" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techrange_max3" value="0">
 												<div class="wuxHiddenField">
-													<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> <span name="attr_popup-techtrigger3"></span></div>
+													<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> <span name="attr_popup-techrange_max3"></span></div>
 												</div>
 
 												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraits3" value="0">
 												<div class="wuxHiddenField">
-													<div class="wuxFeatureHeaderInfoTraits"><strong><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraitsdesc3" value="0">
+													<div class="wuxFeatureHeaderInfoTraits"><strong><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraits_max3" value="0">
 															<span class="wuxHiddenInlineField">
 																<span class="wuxTooltip">
 																	<span class="wuxTooltipText"><strong>Traits</strong></span>
 																	<div class="wuxTooltipContent">
 																		<div class="wuxHeader2">Traits</div>
-																		<span class="wuxDescription" name="attr_popup-techtraitsdesc3"></span>
+																		<span class="wuxDescription" name="attr_popup-techtraits_max3"></span>
 																	</div>
 																</span>
 															</span>
 
-															<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraitsdesc3" value="0">
+															<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techtraits_max3" value="0">
 															<span class="wuxHiddenInlineAuxField">
 																Traits
 															</span>
@@ -17305,18 +17305,18 @@
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeaderInfoEffect-Core">
 														<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcoreeffect_info3" value="0">
+														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcoreeffect_max3" value="0">
 																<span class="wuxHiddenInlineField">
 																	<span class="wuxTooltip">
 																		<span class="wuxTooltipText"><strong>Effects</strong></span>
 																		<div class="wuxTooltipContent">
 																			<div class="wuxHeader2">Core Effects</div>
-																			<span class="wuxDescription" name="attr_popup-techcoreeffect_info3"></span>
+																			<span class="wuxDescription" name="attr_popup-techcoreeffect_max3"></span>
 																		</div>
 																	</span>
 																</span>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcoreeffect_info3" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcoreeffect_max3" value="0">
 																<span class="wuxHiddenInlineAuxField">
 																	Effects
 																</span>
@@ -17340,47 +17340,47 @@
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeaderInfoEffect-Check">
 														<input type="hidden" class="wuxFeatureHeader-flag" name="attr_popup-techcoredef3">
-														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcheckeffect_info3" value="0">
+														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcheckeffect_max3" value="0">
 																<span class="wuxHiddenInlineField">
 																	<span class="wuxTooltip">
-																		<span class="wuxTooltipText"><strong><span name="attr_popup-techchecktitle3"></span></strong></span>
+																		<span class="wuxTooltipText"><strong><span name="attr_popup-techcoredef_max3"></span></strong></span>
 																		<div class="wuxTooltipContent">
 																			<div class="wuxHeader2">Skill Check Effects</div>
-																			<span class="wuxDescription" name="attr_popup-techcheckeffect_info3"></span>
+																			<span class="wuxDescription" name="attr_popup-techcheckeffect_max3"></span>
 																		</div>
 																	</span>
 																</span>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcheckeffect_info3" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techcheckeffect_max3" value="0">
 																<span class="wuxHiddenInlineAuxField">
-																	<span name="attr_popup-techchecktitle3"></span>
+																	<span name="attr_popup-techcoredef_max3"></span>
 																</span>
 															</span></div>
 														<div class="wuxFeatureHeaderInfoContents"><span name="attr_popup-techcheckeffect3"></span></div>
 													</div>
 												</div>
 
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techendeffect3" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techflavortext_max3" value="0">
 												<div class="wuxHiddenField">
-													<div class="wuxFeatureHeaderInfoEffect"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span name="attr_popup-techendeffect3"></span></span></div>
+													<div class="wuxFeatureHeaderInfoEffect"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span name="attr_popup-techflavortext_max3"></span></span></div>
 												</div>
 
 												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect3" value="0">
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeaderInfoEffect-WillBreak">
 														<input type="hidden" class="wuxFeatureHeader-flag" value="WillBreak">
-														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect_info3" value="0">
+														<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect_max3" value="0">
 																<span class="wuxHiddenInlineField">
 																	<span class="wuxTooltip">
 																		<span class="wuxTooltipText"><strong>Will Break Effects</strong></span>
 																		<div class="wuxTooltipContent">
 																			<div class="wuxHeader2">Will Break Effects</div>
-																			<span class="wuxDescription" name="attr_popup-techwillbreakeffect_info3"></span>
+																			<span class="wuxDescription" name="attr_popup-techwillbreakeffect_max3"></span>
 																		</div>
 																	</span>
 																</span>
 
-																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect_info3" value="0">
+																<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techwillbreakeffect_max3" value="0">
 																<span class="wuxHiddenInlineAuxField">
 																	Will Break Effects
 																</span>
@@ -17389,7 +17389,7 @@
 													</div>
 												</div>
 
-												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techenhanceeffect3" value="0">
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-techonenter_max3" value="0">
 												<div class="wuxHiddenField">
 													<div class="wuxFeatureHeaderInfoEffect-Enhance">
 														<input type="hidden" class="wuxFeatureHeader-flag" value="Enhance">
@@ -17400,7 +17400,7 @@
 																		<span class="wuxDescription">You may increase the rank of this technique so that it becomes more powerful. Each time you increase the rank you spend 1 additional EN to gain the effects listed below.</span>
 																	</div>
 																</span></span></div>
-														<div class="wuxFeatureHeaderInfoContents"><span name="attr_popup-techenhanceeffect3"></span></div>
+														<div class="wuxFeatureHeaderInfoContents"><span name="attr_popup-techonenter_max3"></span></div>
 													</div>
 												</div>
 

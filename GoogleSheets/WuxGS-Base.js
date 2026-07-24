@@ -1159,7 +1159,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let header = getFormeSectionHeader(
                         `<span>${sectionDefinition.getTitle()}</span>`, refreshField, filterField, removeFilterField);
 
-                    let actionDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible"),
+                    // IsVisible is piggybacked onto TechActionType's max slot.
+                    let actionDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("TechActionType", WuxDef._max),
                         printFormTechniqueFullActionDisplay());
                     let displayTechniquesContents = buildRepeater(repeatingVariable, actionDisplay, "wuxFormeTechRepeater");
 
@@ -1211,13 +1212,14 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 printFormTechniqueFullActionDisplay = function () {
                     let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilderUsable(WuxDef.Get("Action"));
-                    let techDisplayTypeField = getActionTypeAttribute("TechDisplayType");
+                    // Display-type header flag is piggybacked onto TechTrueName's max slot.
+                    let techDisplayTypeField = getActionTypeAttribute("TechTrueName", WuxDef._max);
                     let headerContent = `<div class="wuxFeatureSectionHeader">
                         ${WuxSheetMain.Header2(`<span name="${getActionTypeAttribute("TechName")}"></span>`)}
                     </div>`;
 
                     return `<input type="hidden" name="${WuxDef.GetAttribute("Action_Use")}" value="" />
-                    <input type="hidden" name="${getActionTypeAttribute("TechVersion")}" value="" />
+                    <input type="hidden" name="${getActionTypeAttribute("TechName", WuxDef._max)}" value="" />
                     ${WuxSheetMain.HiddenFieldToggle(techDisplayTypeField, headerContent, techniqueDisplayBuilder.print())}`;
                 },
 
@@ -1448,7 +1450,8 @@ var DisplayPopups = DisplayPopups || (function () {
                     let popupDef = WuxDef.Get("Popup");
                     let output = "";
                     for (let i = 0; i < 4; i++) {
-                        let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechIsVisible")}${i}`);
+                        // IsVisible is piggybacked onto TechActionType's max slot (see WJS-Service.js).
+                        let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechActionType", WuxDef._max)}${i}`);
                         let techHeaderAttr = popupDef.getAttribute(`-${WuxDef.GetVariable("TechHeader")}${i}`);
                         let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilder(popupDef, i);
                         output += `<div>${WuxSheetMain.HiddenField(fieldName,
@@ -1456,7 +1459,7 @@ var DisplayPopups = DisplayPopups || (function () {
                             techniqueDisplayBuilder.print())}</div>`;
                     }
 
-                    let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechIsVisible")}0`);
+                    let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechActionType", WuxDef._max)}0`);
                     return WuxSheetMain.HiddenField(fieldName,
                         `${WuxSheetMain.Header("Technique")}
                         ${output}`);

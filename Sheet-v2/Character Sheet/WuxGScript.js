@@ -12616,7 +12616,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let header = getFormeSectionHeader(
                         `<span>${sectionDefinition.getTitle()}</span>`, refreshField, filterField, removeFilterField);
 
-                    let actionDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("TechIsVisible"),
+                    // IsVisible is piggybacked onto TechActionType's max slot.
+                    let actionDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("TechActionType", WuxDef._max),
                         printFormTechniqueFullActionDisplay());
                     let displayTechniquesContents = buildRepeater(repeatingVariable, actionDisplay, "wuxFormeTechRepeater");
 
@@ -12668,13 +12669,14 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 printFormTechniqueFullActionDisplay = function () {
                     let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilderUsable(WuxDef.Get("Action"));
-                    let techDisplayTypeField = getActionTypeAttribute("TechDisplayType");
+                    // Display-type header flag is piggybacked onto TechTrueName's max slot.
+                    let techDisplayTypeField = getActionTypeAttribute("TechTrueName", WuxDef._max);
                     let headerContent = `<div class="wuxFeatureSectionHeader">
                         ${WuxSheetMain.Header2(`<span name="${getActionTypeAttribute("TechName")}"></span>`)}
                     </div>`;
 
                     return `<input type="hidden" name="${WuxDef.GetAttribute("Action_Use")}" value="" />
-                    <input type="hidden" name="${getActionTypeAttribute("TechVersion")}" value="" />
+                    <input type="hidden" name="${getActionTypeAttribute("TechName", WuxDef._max)}" value="" />
                     ${WuxSheetMain.HiddenFieldToggle(techDisplayTypeField, headerContent, techniqueDisplayBuilder.print())}`;
                 },
 
@@ -12905,7 +12907,8 @@ var DisplayPopups = DisplayPopups || (function () {
                     let popupDef = WuxDef.Get("Popup");
                     let output = "";
                     for (let i = 0; i < 4; i++) {
-                        let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechIsVisible")}${i}`);
+                        // IsVisible is piggybacked onto TechActionType's max slot (see WJS-Service.js).
+                        let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechActionType", WuxDef._max)}${i}`);
                         let techHeaderAttr = popupDef.getAttribute(`-${WuxDef.GetVariable("TechHeader")}${i}`);
                         let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilder(popupDef, i);
                         output += `<div>${WuxSheetMain.HiddenField(fieldName,
@@ -12913,7 +12916,7 @@ var DisplayPopups = DisplayPopups || (function () {
                             techniqueDisplayBuilder.print())}</div>`;
                     }
 
-                    let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechIsVisible")}0`);
+                    let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechActionType", WuxDef._max)}0`);
                     return WuxSheetMain.HiddenField(fieldName,
                         `${WuxSheetMain.Header("Technique")}
                         ${output}`);
@@ -16171,14 +16174,15 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         return this.printActionTypeField(
             `<input type="hidden" class="wuxFeatureHeader-flag" name="${this.getActionTypeAttribute("TechActionType")}">`,
             this.printAttributeTooltip(`<span name="${this.getActionTypeAttribute("TechActionName")}"></span>`,
-                "Action", this.getActionTypeAttribute("TechActionTooltip"))
+                "Action", this.getActionTypeAttribute("TechActionName", WuxDef._max))
         )
     }
     printRange() {
         let fieldName = this.getActionTypeAttribute("TechRange");
         return WuxSheetMain.HiddenField(fieldName,
             this.printRangeField(
-                this.printAttributeTooltip(`<span name="${fieldName}"></span>`, "Range", this.getActionTypeAttribute("TechTargetDesc"))
+                // Target description is piggybacked onto TechTargetType's max slot.
+                this.printAttributeTooltip(`<span name="${fieldName}"></span>`, "Range", this.getActionTypeAttribute("TechTargetType", WuxDef._max))
             )
         );
     }
@@ -16191,18 +16195,20 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         return WuxSheetMain.HiddenField(fieldName, this.printEnCostField(this.printSpan(fieldName)));
     }
     printWillCost() {
-        let fieldName = this.getActionTypeAttribute("TechWillCost");
+        // Piggybacks on TechEnCost's max slot instead of its own attribute - see WJS-Service.js.
+        let fieldName = this.getActionTypeAttribute("TechEnCost", WuxDef._max);
         return WuxSheetMain.HiddenField(fieldName, this.printWillCostField(this.printSpan(fieldName)));
     }
     printTrigger() {
-        let fieldName = this.getActionTypeAttribute("TechTrigger");
+        // Trigger text is piggybacked onto TechRange's max slot.
+        let fieldName = this.getActionTypeAttribute("TechRange", WuxDef._max);
         return WuxSheetMain.HiddenField(fieldName, this.printTriggerField(this.printSpan(fieldName)));
     }
     printTraits() {
         let fieldName = this.getActionTypeAttribute("TechTraits");
         return WuxSheetMain.HiddenField(fieldName,
             this.printTraitsField(
-                this.printAttributeTooltip("Traits", "Traits", this.getActionTypeAttribute("TechTraitsDesc")),
+                this.printAttributeTooltip("Traits", "Traits", this.getActionTypeAttribute("TechTraits", WuxDef._max)),
                 this.printSpan(fieldName)
             )
         );
@@ -16216,7 +16222,7 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         return WuxSheetMain.HiddenField(fieldName,
             this.printCoreEffectsField(
                 this.printAttributeTooltip("Effects", "Core Effects",
-                    this.getActionTypeAttribute("TechCoreEffect", WuxDef._info)),
+                    this.getActionTypeAttribute("TechCoreEffect", WuxDef._max)),
                 this.printSpan(fieldName)
             )
         );
@@ -16233,14 +16239,16 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         return WuxSheetMain.HiddenField(fieldName,
             this.printCheckEffectsField(
                 `<input type="hidden" class="wuxFeatureHeader-flag" name="${this.getActionTypeAttribute("TechCoreDefense")}">`,
-                this.printAttributeTooltip(this.printSpanActionTypeAttribute("TechCheckTitle"), "Skill Check Effects",
-                    this.getActionTypeAttribute("TechCheckEffect", WuxDef._info)),
+                // Check title text is piggybacked onto TechCoreDefense's max slot.
+                this.printAttributeTooltip(this.printSpanActionTypeAttribute("TechCoreDefense", WuxDef._max), "Skill Check Effects",
+                    this.getActionTypeAttribute("TechCheckEffect", WuxDef._max)),
                 this.printSpan(fieldName)
             )
         );
     }
     printEndEffects() {
-        let fieldName = this.getActionTypeAttribute("TechEndEffect");
+        // End effect text is piggybacked onto TechFlavorText's max slot.
+        let fieldName = this.getActionTypeAttribute("TechFlavorText", WuxDef._max);
         return WuxSheetMain.HiddenField(fieldName, this.printEndEffectsField(this.printSpan(fieldName)));
     }
     printWillBreakEffects() {
@@ -16248,13 +16256,14 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         return WuxSheetMain.HiddenField(fieldName,
             this.printWillBreakEffectsField(
                 this.printAttributeTooltip("Will Break Effects", "Will Break Effects",
-                    this.getActionTypeAttribute("TechWillBreakEffect", WuxDef._info)),
+                    this.getActionTypeAttribute("TechWillBreakEffect", WuxDef._max)),
                 this.printSpan(fieldName)
             )
         );
     }
     printEnhancementEffects() {
-        let fieldName = this.getActionTypeAttribute("TechEnhanceEffect");
+        // Enhance effect text is piggybacked onto TechOnEnter's max slot.
+        let fieldName = this.getActionTypeAttribute("TechOnEnter", WuxDef._max);
         return WuxSheetMain.HiddenField(fieldName,
             this.printEnhancementEffectsField(
                 this.printSpan(fieldName)
@@ -16271,14 +16280,16 @@ class TechniqueRepeaterDisplayBuilderUsable extends TechniqueRepeaterDisplayBuil
         return this.printNameField(contents);
     }
     printEnhancementEffects() {
-        let fieldName = this.getActionTypeAttribute("TechEnhanceEffect");
+        // Enhance effect text is piggybacked onto TechOnEnter's max slot.
+        let fieldName = this.getActionTypeAttribute("TechOnEnter", WuxDef._max);
 
+        // Enabled flags are piggybacked onto the rank buttons' own max slots.
         let rankUpField = this.getActionTypeAttribute("TechRankUp");
-        let rankUpButton = WuxSheetMain.HiddenSpanFieldToggle(this.getActionTypeAttribute("TechRankUp", WuxDef._info),
+        let rankUpButton = WuxSheetMain.HiddenSpanFieldToggle(this.getActionTypeAttribute("TechRankUp", WuxDef._max),
             WuxSheetMain.Button(rankUpField, "<span class='wuxFeatureButtonIcon'>&#43;</span> Increase Rank", "wuxFeatureButton"),
             WuxSheetMain.Button(rankUpField, "<span class='wuxFeatureButtonIcon'>&#43;</span> Increase Rank", "wuxFeatureButtonDisabled"));
         let rankDownField = this.getActionTypeAttribute("TechRankDown");
-        let rankDownButton = WuxSheetMain.HiddenSpanFieldToggle(this.getActionTypeAttribute("TechRankDown", WuxDef._info),
+        let rankDownButton = WuxSheetMain.HiddenSpanFieldToggle(this.getActionTypeAttribute("TechRankDown", WuxDef._max),
             WuxSheetMain.Button(rankDownField, "<span class='wuxFeatureButtonIcon'>&#8722;</span> Decrease Rank", "wuxFeatureButton"),
             WuxSheetMain.Button(rankDownField, "<span class='wuxFeatureButtonIcon'>&#8722;</span> Decrease Rank", "wuxFeatureButtonDisabled"));
         let contents = `<div class="wuxFeatureHeaderInfoEffect-EnhanceButtons">${rankDownButton}${rankUpButton}</div>`;

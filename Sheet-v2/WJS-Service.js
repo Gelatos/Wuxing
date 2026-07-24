@@ -1092,45 +1092,50 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.getVariable("TechTrueName"), technique.name);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechName"), displayData.name);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechVersion"), technique.version);
+		// Version is piggybacked onto TechName's max slot instead of its own attribute,
+		// to cut down the variable count per repeater row (same trick as TechEnCost/Will above).
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechName", WuxDef._max), technique.version);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechActionType"), displayData.actionType);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechActionName"), displayData.actionName);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechActionTooltip"), displayData.getActionsDescriptions("\n"));
+			this.getVariable("TechActionName", WuxDef._max), displayData.getActionsDescriptions("\n"));
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechEnCost"), displayData.enCost);
+		// Will cost is piggybacked onto TechEnCost's max slot (Roll20 allocates a max value
+		// for every attribute regardless of whether it's used) instead of its own attribute,
+		// to cut down the variable count per repeater row.
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechWillCost"), displayData.willCost);
+			this.getVariable("TechEnCost", WuxDef._max), displayData.willCost);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechTargetType"), displayData.targetType);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechTargetDesc"), displayData.getTargetDescriptions("\n"));
+			this.getVariable("TechTargetType", WuxDef._max), displayData.getTargetDescriptions("\n"));
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechRange"), displayData.range);
 		if (displayData.trigger != "") {
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechTrigger"), displayData.trigger);
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechRange", WuxDef._max), displayData.trigger);
 		}
 		if (displayData.traits != "") {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 				this.getVariable("TechTraits"), displayData.traits);
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-				this.getVariable("TechTraitsDesc"), displayData.getTraitsDescriptions("\n"));
+				this.getVariable("TechTraits", WuxDef._max), displayData.getTraitsDescriptions("\n"));
 		}
 	}
 	setTechniqueEffectsInfo(technique, displayData) {
 		if (displayData.flavorText != "") {
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechFlavorText"), displayData.flavorText);
 		}
 		if (displayData.coreEffect != "") {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 				this.getVariable("TechCoreEffect"), displayData.getCoreEffects("\n"));
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-				this.getVariable("TechCoreEffect", WuxDef._info), displayData.getCoreEffectTooltips("\n"));
+				this.getVariable("TechCoreEffect", WuxDef._max), displayData.getCoreEffectTooltips("\n"));
 		}
 		if (displayData.isOnEnter) {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
@@ -1139,35 +1144,39 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		if (displayData.checkEffect != "") {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 				this.getVariable("TechCoreDefense"), displayData.coreDefense);
+			// Check title text is piggybacked onto TechCoreDefense's max slot.
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-				this.getVariable("TechCheckTitle"), displayData.checkType);
+				this.getVariable("TechCoreDefense", WuxDef._max), displayData.checkType);
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 				this.getVariable("TechCheckEffect"), displayData.getCheckEffects("\n"));
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-				this.getVariable("TechCheckEffect", WuxDef._info), displayData.getCheckEffectTooltips("\n"));
+				this.getVariable("TechCheckEffect", WuxDef._max), displayData.getCheckEffectTooltips("\n"));
 		}
 		if (displayData.endEffectDesc != "") {
+			// End effect text is piggybacked onto TechFlavorText's max slot.
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-				this.getVariable("TechEndEffect"), displayData.endEffectDesc);
+				this.getVariable("TechFlavorText", WuxDef._max), displayData.endEffectDesc);
 		}
 		if (displayData.willBreakEffect != "") {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 				this.getVariable("TechWillBreakEffect"), displayData.getWillBreakEffects("\n"));
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-				this.getVariable("TechWillBreakEffect", WuxDef._info), displayData.getWillBreakEffectTooltips("\n"));
+				this.getVariable("TechWillBreakEffect", WuxDef._max), displayData.getWillBreakEffectTooltips("\n"));
 		}
 		if (displayData.enhanceEffect != "") {
+			// Enhance effect text is piggybacked onto TechOnEnter's max slot.
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-				this.getVariable("TechEnhanceEffect"), displayData.getEnhanceEffects("\n"));
+				this.getVariable("TechOnEnter", WuxDef._max), displayData.getEnhanceEffects("\n"));
 			this.setTechniqueRankButtons(technique);
 		}
 	}
 	setTechniqueRankButtons(technique) {
 		let cr = this.attrHandler.parseInt(WuxDef.GetVariable("CR"), 1);
+		// Enabled flags are piggybacked onto the rank buttons' own max slots.
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechRankUp", WuxDef._info), (technique.rank < technique.getMaxRank(cr) ? "1" : "0"));
+			this.getVariable("TechRankUp", WuxDef._max), (technique.rank < technique.getMaxRank(cr) ? "1" : "0"));
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechRankDown", WuxDef._info), (technique.rank > 1 ? "1" : "0"));
+			this.getVariable("TechRankDown", WuxDef._max), (technique.rank > 1 ? "1" : "0"));
 	}
 	setTechniqueUseRollTemplate(technique, displayData) {
 		displayData.displayname = `@{${WuxDef.GetVariable("DisplayName")}}`;
@@ -1186,76 +1195,84 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 	}
 	clearTechniqueInfo () {
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechTrueName"), 0);
+		// Display-type header flag is piggybacked onto TechTrueName's max slot.
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechTrueName", WuxDef._max), "0");
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechName"), 0);
+		// Version is piggybacked onto TechName's max slot.
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechName", WuxDef._max), "");
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechActionType"), "");
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechActionName"), "");
+		// Action tooltip is piggybacked onto TechActionName's max slot.
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechActionTooltip"), "");
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechTrueName"), 0);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechName"), 0);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechVersion"), "");
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechDisplayName"), "");
+			this.getVariable("TechActionName", WuxDef._max), "");
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechEnCost"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechWillCost"), 0);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechTargetDesc"), "");
+			this.getVariable("TechEnCost", WuxDef._max), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechTargetType"), 0);
+		// Target description is piggybacked onto TechTargetType's max slot.
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechTargetType", WuxDef._max), "");
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechRange"), 0);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
-			this.getVariable("TechTrigger"), 0);
+		// Trigger text is piggybacked onto TechRange's max slot.
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechRange", WuxDef._max), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechTraits"), 0);
+		// Traits description is piggybacked onto TechTraits's max slot.
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechTraitsDesc"), 0);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId, 
+			this.getVariable("TechTraits", WuxDef._max), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechFlavorText"), 0);
+		// End effect text is piggybacked onto TechFlavorText's max slot.
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechFlavorText", WuxDef._max), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechCoreEffect"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechCoreEffect", WuxDef._info), 0);
+			this.getVariable("TechCoreEffect", WuxDef._max), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechOnEnter"), 0);
+		// Enhance effect text is piggybacked onto TechOnEnter's max slot.
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechOnEnter", WuxDef._max), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechCoreDefense"), 0);
+		// Check title text is piggybacked onto TechCoreDefense's max slot.
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechCheckTitle"), 0);
+			this.getVariable("TechCoreDefense", WuxDef._max), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechCheckEffect"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechCheckEffect", WuxDef._info), 0);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechEndEffect"), 0);
+			this.getVariable("TechCheckEffect", WuxDef._max), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechWillBreakEffect"), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechWillBreakEffect", WuxDef._info), 0);
+			this.getVariable("TechWillBreakEffect", WuxDef._max), 0);
+		// Rank up/down enabled flags are piggybacked onto the rank buttons' own max slots.
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechEnhanceEffect"), 0);
+			this.getVariable("TechRankUp", WuxDef._max), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechRankUp", WuxDef._info), 0);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechRankDown", WuxDef._info), 0);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechDisplayType"), "0");
+			this.getVariable("TechRankDown", WuxDef._max), 0);
 	}
 	setHeaderInfo(headerKey, headerText) {
 		this.clearTechniqueInfo();
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechTrueName"), headerKey);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechVersion"), "1.0");
+			this.getVariable("TechTrueName", WuxDef._max), "1");
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechName"), headerText);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechDisplayType"), "1");
+			this.getVariable("TechName", WuxDef._max), "1.0");
 	}
 	
 	calcAndSetVisibility(affinities, maxTier, cr) {
@@ -1286,7 +1303,8 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		return true;
 	}
 	setVisibilityAttribute (isVisible) {
-		let fieldName = this.getVariable("TechIsVisible");
+		// IsVisible is piggybacked onto TechActionType's max slot.
+		let fieldName = this.getVariable("TechActionType", WuxDef._max);
 		let visibilityValue = isVisible ? "1" : "0";
 		if (this.repeater == undefined) {
 			this.attrHandler.addUpdate(fieldName, visibilityValue);
@@ -1300,7 +1318,7 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		return this.attrHandler.parseString(this.getVariable("TechTrueName"));
 	}
 	getTechniqueVersion() {
-		let version = this.attrHandler.parseString(this.getVariable("TechVersion"), "undefined");
+		let version = this.attrHandler.parseString(this.getVariable("TechName", WuxDef._max), "undefined");
 		if (version == "undefined") {
 			return undefined;
 		}
