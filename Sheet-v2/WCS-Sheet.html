@@ -16566,7 +16566,7 @@
 						<input type="hidden" class="wuxInput" name="attr_popup-inspectselectid" value="" />
 						<div class="wuxInspectionPopupContentData">
 							<div class="wuxNoRepControl wuxRepeatingFlexSection wuxFormeTechRepeater wuxCatalogRepeater">
-								<fieldset class="repeating_itempopupvalues">
+								<fieldset class="repeating_techpopupvalues">
 									<input type="hidden" class="wuxHiddenField-flag" name="attr_act-techactiontype_max" value="0">
 									<div class="wuxHiddenField">
 										<input type="hidden" name="attr_act-techname_max" value="" />
@@ -19943,10 +19943,13 @@ WuxWorkerGeneral.CloseSubMenu()
 on("change:popup-popupactive", function (eventinfo) {
 WuxWorkerGeneral.ClosePopup()
 });
-on("change:repeating_itempopupvalues:popup-itemselectison change:repeating_itempopupvalues:act-techrequirement_max", function (eventinfo) {
+on("change:repeating_itempopupvalues:popup-itemselectison", function (eventinfo) {
 WuxWorkerInspectPopup.SelectInspectionItemFromActiveGroup(eventinfo)
 });
-on("change:repeating_itempopupvalues:act-techvariant3", function (eventinfo) {
+on("change:repeating_techpopupvalues:act-techrequirement_max", function (eventinfo) {
+WuxWorkerInspectPopup.SelectInspectionItemFromActiveGroup(eventinfo)
+});
+on("change:repeating_techpopupvalues:act-techvariant3", function (eventinfo) {
 WuxWorkerInspectPopup.SwapCatalogTechniqueVariant(eventinfo)
 });
 on("change:popup-loadmore", function (eventinfo) {

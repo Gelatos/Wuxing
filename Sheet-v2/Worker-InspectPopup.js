@@ -151,9 +151,13 @@ class ItemListInventoryItemHandler extends InspectionInventoryItemHandler {
 }
 
 class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
-    constructor(attrHandler) {
+    // repeaterId defaults to the shared "ItemPopupValues" (every popup type except
+    // the technique catalog) - TechniqueInspectPopupAttributeHandler overrides this
+    // to "TechPopupValues", its own dedicated repeater carrying only technique
+    // fields, so its rows never need defensive item-field clearing.
+    constructor(attrHandler, repeaterId) {
         super(attrHandler);
-        this.repeater = attrHandler.getRepeatingSection("ItemPopupValues");
+        this.repeater = attrHandler.getRepeatingSection(repeaterId ?? "ItemPopupValues");
         this.titleDefinitionName = "";
         this.itemDataAttributeHandler = new ItemDataAttributeHandler(this.attrHandler, "Popup");
         this.techniqueAttributeHandler = new TechniqueDataAttributeHandler(this.attrHandler, "Popup");
@@ -327,19 +331,22 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
     setSelectedItemData(selectedItemName) {}
 }
 class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
+    // Uses its own dedicated "TechPopupValues" repeater (not the shared
+    // "ItemPopupValues" every other popup type uses) - a technique-only catalog
+    // row never needs item fields at all, so there's nothing to defensively clear
+    // between populations (see setInventoryItemData/setInventoryItemVisibility
+    // below, which used to also clear an item attribute handler on every row).
     constructor(attributeHandler) {
-        super(attributeHandler);
+        super(attributeHandler, "TechPopupValues");
         this.titleDefinitionName = "Popup_TechniqueInspectionName";
 
-        // Catalog rows carry full technique+item data directly (baseDefinitionName
+        // Catalog rows carry full technique data directly (baseDefinitionName
         // "Action", matching the catalog card display in WuxGS-Base.js) - separate
-        // from the inherited "Popup"-based techniqueAttributeHandler/
-        // itemDataAttributeHandler above, which back the old single-preview-slot
-        // fields (no longer rendered - see setSelectedItemData below).
+        // from the inherited "Popup"-based techniqueAttributeHandler above, which
+        // backs the old single-preview-slot fields (no longer rendered - see
+        // setSelectedItemData below).
         this.catalogTechniqueAttributeHandler = new TechniqueDataAttributeHandler(this.attrHandler, "Action");
         this.catalogTechniqueAttributeHandler.setRepeaterData(this.repeater);
-        this.catalogItemAttributeHandler = new ItemDataAttributeHandler(this.attrHandler, "Action");
-        this.catalogItemAttributeHandler.setRepeaterData(this.repeater);
     }
 
     // Splits a flat InspectionInventoryItem list (headers + techniques) at the
@@ -435,15 +442,8 @@ class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler
             this.attrHandler.parseString(worker.attrBuildDraft));
     }
 
-    // Every catalog row can carry both item and technique info (see the fused
-    // item+technique card, WuxGS-Base.js) - explicitly clear whichever this row
-    // ISN'T using, so a row reused from a previous population (different
-    // technique, or previously an item-catalog row) can't leak stale data into
-    // this one.
     setInventoryItemData(id, itemData) {
         this.setInventoryItemVisibility(id, true);
-        this.catalogItemAttributeHandler.setId(id);
-        this.catalogItemAttributeHandler.clearItemInfo();
         this.catalogTechniqueAttributeHandler.setId(id);
 
         // Reset every row's selected state on population (base class's original
@@ -502,8 +502,6 @@ class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler
         this.catalogTechniqueAttributeHandler.setVisibilityAttribute(isVisible);
         if (!isVisible) {
             this.catalogTechniqueAttributeHandler.clearTechniqueInfo();
-            this.catalogItemAttributeHandler.setId(id);
-            this.catalogItemAttributeHandler.clearItemInfo();
             this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectName")), "");
             this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "0");
         }
@@ -829,6 +827,15 @@ class PerkTechniqueInspectionPopup extends InspectionPopup {
 }
 
 class TechniqueInspectionPopup extends InspectionPopup {
+    // Its own dedicated repeater ("TechPopupValues", never "ItemPopupValues") -
+    // selectItem/addItem/open below all key off this.inspectPopupInventoryId
+    // already, so overriding it here is enough to redirect them without touching
+    // their bodies.
+    constructor(attributeHandler) {
+        super(attributeHandler);
+        this.inspectPopupInventoryId = "TechPopupValues";
+    }
+
     setup(attrHandler) {
         this.inspectPopupAttrHandler = new TechniqueInspectPopupAttributeHandler(attrHandler);
     }
@@ -2031,7 +2038,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         swapCatalogTechniqueVariant = function (eventinfo) {
             let attributeHandler = new WorkerAttributeHandler();
 
-            let repeater = new WorkerRepeatingSectionHandler("ItemPopupValues");
+            let repeater = new WorkerRepeatingSectionHandler("TechPopupValues");
             let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
 
             let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attributeHandler, "Action");
@@ -2096,7 +2103,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         // while the technique catalog is actually showing it.
         loadMoreCatalogTechniques = function () {
             let attributeHandler = new WorkerAttributeHandler();
-            attributeHandler.addRepeatingSection("ItemPopupValues");
+            attributeHandler.addRepeatingSection("TechPopupValues");
 
             let queueField = WuxDef.GetVariable("Popup_LoadMore", WuxDef._max);
             let showAddField = WuxDef.GetVariable("Popup_InspectShowAdd");
@@ -2119,7 +2126,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 inspectPopupAttrHandler.catalogUserAffinities = showElementRestricted ? undefined : getUserAffinities(attrHandler);
 
                 let { visibleItems, remainingItems } = inspectPopupAttrHandler.splitAtTechniqueCap(queuedItems, 10);
-                let repeater = attrHandler.getRepeatingSection("ItemPopupValues");
+                let repeater = attrHandler.getRepeatingSection("TechPopupValues");
                 visibleItems.forEach(function (itemData) {
                     let id = repeater.generateRowId();
                     inspectPopupAttrHandler.setInventoryItemData(id, itemData);

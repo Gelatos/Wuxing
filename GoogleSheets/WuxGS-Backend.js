@@ -977,6 +977,7 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerCloseSubMenu();
             output += listenerClosePopup();
             output += listenerUpdateRepeatingItemInspectPopupItems();
+            output += listenerCatalogTechniqueSelectButton();
             output += listenerSwapCatalogTechniqueVariant();
             output += listenerLoadMoreCatalogTechniques();
             output += listenerInspectPopupButtons();
@@ -1055,19 +1056,28 @@ var PopupBuilder = PopupBuilder || (function () {
                 ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Popup_InspectAddClick", "2")}`],
                 `WuxWorkerInspectPopup.AddSelectedInspectElement2()`, false)}`;
         },
+        // Old select-list flow only (every popup type except the technique catalog,
+        // which has its own repeater/select button below) - "ItemPopupValues".
         listenerUpdateRepeatingItemInspectPopupItems = function () {
             let repeatingSection = WuxDef.GetVariable("ItemPopupValues");
-            // Catalog cards' Select button (TechRequirement's max slot - see
-            // printCatalogRequirementSection, WuxGS-Base.js) triggers the same
-            // handler as the old select-list's click container - both just need
-            // eventinfo.sourceAttribute to find the row id (selectInspectionItemFromActiveGroup,
-            // Worker-InspectPopup.js), so one shared listener covers both.
+            let groupVariableNames = [
+                `${repeatingSection}:${WuxDef.GetVariable("Popup_ItemSelectIsOn")}`
+            ];
+            let output = `WuxWorkerInspectPopup.SelectInspectionItemFromActiveGroup(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        // Catalog cards' Select button (TechRequirement's max slot - see
+        // printCatalogSelectSection, WuxGS-Base.js), scoped to the technique
+        // catalog's own dedicated "TechPopupValues" repeater. Reuses the same
+        // handler as the old select-list's click container above - both just need
+        // eventinfo.sourceAttribute to find the row id (selectInspectionItemFromActiveGroup,
+        // Worker-InspectPopup.js).
+        listenerCatalogTechniqueSelectButton = function () {
+            let repeatingSection = WuxDef.GetVariable("TechPopupValues");
             let baseDef = WuxDef.Get("Action");
             let catalogSelectVar = baseDef.getVariable(`-${WuxDef.GetVariable("TechRequirement", WuxDef._max)}`);
-            let groupVariableNames = [
-                `${repeatingSection}:${WuxDef.GetVariable("Popup_ItemSelectIsOn")}`,
-                `${repeatingSection}:${catalogSelectVar}`
-            ];
+            let groupVariableNames = [`${repeatingSection}:${catalogSelectVar}`];
             let output = `WuxWorkerInspectPopup.SelectInspectionItemFromActiveGroup(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
@@ -1076,12 +1086,12 @@ var PopupBuilder = PopupBuilder || (function () {
         // shared click trigger every slot submits its own index to - see
         // TechniqueDataAttributeHandler.getVariantSelectFieldName, WJS-Service.js)
         // reuse the exact same field shape as the live Actions tab's own variant
-        // buttons (listenerSwapTechniqueVariant above), just scoped to the
-        // "ItemPopupValues" repeater instead of "RepeatingFormeTech".
+        // buttons (listenerSwapTechniqueVariant above), scoped to the technique
+        // catalog's own "TechPopupValues" repeater instead of "RepeatingFormeTech".
         listenerSwapCatalogTechniqueVariant = function () {
             let baseDef = WuxDef.Get("Action");
             let variantSelectVar = baseDef.getVariable(`-${WuxDef.GetVariable("TechVariant", "3")}`);
-            let repeaterVar = WuxDef.GetVariable("ItemPopupValues");
+            let repeaterVar = WuxDef.GetVariable("TechPopupValues");
 
             return WuxSheetBackend.OnChange([`${repeaterVar}:${variantSelectVar}`],
                 `WuxWorkerInspectPopup.SwapCatalogTechniqueVariant(eventinfo)`, true);
