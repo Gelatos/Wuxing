@@ -648,10 +648,7 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
                     inventoryItems.unshift(selectedItem);
                 }
 
-                let attributeHandler2 = new WorkerAttributeHandler();
-                WuxWorkerInspectPopup.OpenTechniqueInspection(attributeHandler2, "Styles", inventoryItems, ["Add Style"]);
-                let loader = new LoadingScreenHandler(attributeHandler2);
-                loader.run();
+                WuxWorkerInspectPopup.OpenTechniqueInspectionWithLoadingScreen("Styles", inventoryItems, ["Add Style"]);
             });
 
             attributeHandler.run();

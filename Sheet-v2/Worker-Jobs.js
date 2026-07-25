@@ -91,8 +91,6 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
         seeTechniques = function (eventinfo) {
             let jobName = eventinfo.newValue;
             Debug.Log(`See Techniques for ${jobName}`);
-            let attributeHandler = new WorkerAttributeHandler();
-            attributeHandler.addUpdate(eventinfo.sourceAttribute, "0");
             let inventoryTitle = `${jobName} Techniques`;
             let inventoryItems = new FilteredTechniquesInventoryItemHandler(
                 new DatabaseFilterData("style", jobName),
@@ -100,16 +98,20 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
                     if (tier > 1) {
                         let level = Format.GetLevelPrerequisites(tier);
                         return new InspectionInventoryItem(`Level ${level}`,
-                            `These techniques are automatically gained upon reaching Level ${level}`, 
+                            `These techniques are automatically gained upon reaching Level ${level}`,
                             true);
                     }
                 });
             if (inventoryItems.items.length == 0) {
                 return;
             }
-            WuxWorkerInspectPopup.OpenTechniqueInspection(attributeHandler, inventoryTitle, inventoryItems.items);
-            let loader = new LoadingScreenHandler(attributeHandler);
-            loader.run();
+            // Resetting the clicked field back to "0" is its own quick, separate
+            // round trip - openTechniqueInspectionWithLoadingScreen owns its own
+            // attributeHandler internally, so it can't be batched into that one.
+            let resetAttributeHandler = new WorkerAttributeHandler();
+            resetAttributeHandler.addUpdate(eventinfo.sourceAttribute, "0");
+            resetAttributeHandler.run();
+            WuxWorkerInspectPopup.OpenTechniqueInspectionWithLoadingScreen(inventoryTitle, inventoryItems.items);
         },
     
         equipJobFromEvent = function (eventinfo) {

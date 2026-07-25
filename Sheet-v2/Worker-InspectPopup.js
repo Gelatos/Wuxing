@@ -159,11 +159,14 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
         this.techniqueAttributeHandler = new TechniqueDataAttributeHandler(this.attrHandler, "Popup");
     }
 
-    show(inventoryTitle, inventoryItems, addType) {
+    // Split out of show() so TechniqueInspectionPopup can populate everything
+    // (including the potentially-slow catalog rows) WITHOUT yet flipping
+    // Popup_InspectPopupActive - see show() below and
+    // openTechniqueInspectionWithLoadingScreen for why.
+    showWithoutReveal(inventoryTitle, inventoryItems, addType) {
         super.show(this.titleDefinitionName);
         this.resetInspectionVariables();
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_FilterPopupActive"), "0");
-        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupActive"), "on");
 
         this.setPopupType(this.titleDefinitionName);
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), inventoryTitle);
@@ -178,6 +181,10 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
         this.initializePopup();
         this.iterateAndSetItems(inventoryItems);
         this.setAddType(addType);
+    }
+    show(inventoryTitle, inventoryItems, addType) {
+        this.showWithoutReveal(inventoryTitle, inventoryItems, addType);
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupActive"), "on");
     }
     hide() {
         super.hide();
@@ -827,7 +834,13 @@ class TechniqueInspectionPopup extends InspectionPopup {
     // snapshot the current draft (Popup_InspectDraftSnapshot) - see
     // toggleSelectedItem, TechniqueInspectPopupAttributeHandler, for why this
     // needs to be the actual current draft rather than attrBuildFinal.
+    // Doesn't call super.open() - that registers a callback calling .show(), which
+    // flips Popup_InspectPopupActive on immediately alongside the (potentially
+    // slow, up-to-16-card) catalog population. Calling .showWithoutReveal()
+    // instead defers that flag to openTechniqueInspectionWithLoadingScreen's own
+    // later, separate cycle, so the popup can't ever appear before its rows do.
     open(inventoryTitle, inventoryItems, addType) {
+        let inspectPopup = this;
         let worker = new WuxStyleWorkerBuild();
         this.attributeHandler.addMod([
             WuxDef.GetVariable("Affinity"),
@@ -836,7 +849,12 @@ class TechniqueInspectionPopup extends InspectionPopup {
             WuxDef.GetVariable("Forme_ShowFromNonElement"),
             worker.attrBuildDraft
         ]);
-        super.open(inventoryTitle, inventoryItems, addType);
+        this.attributeHandler.addRepeatingSection(this.inspectPopupInventoryId);
+        this.attributeHandler.addMod([WuxDef.GetVariable("Popup_InspectSelectId")]);
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            inspectPopup.setup(attrHandler);
+            inspectPopup.inspectPopupAttrHandler.showWithoutReveal(inventoryTitle, inventoryItems, addType);
+        });
     }
 
     // Overrides the base class's single-select selectItem - this popup supports
@@ -1863,6 +1881,28 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             inspectPopup.open(inventoryTitle, inventoryItems, addType);
         },
 
+        // Every technique-catalog entry point (performStyleFilterInspection,
+        // openRecommendedStylesInspection below, plus Worker-Styles.js's
+        // inspectListStyle and Worker-Jobs.js's seeTechniques) needs the same
+        // "populate through a loading screen, then reveal" choreography - centralized
+        // here instead of duplicated at each call site. TechniqueInspectionPopup.open
+        // uses showWithoutReveal (not show), so Popup_InspectPopupActive isn't written
+        // as part of THIS cycle - loader.run() resolves only once its own
+        // attributeHandler.run() (both the regular-attr AND repeating-section-row
+        // flushes) and hideLoadingScreen() have completed, so the reveal cycle below
+        // is guaranteed to run strictly after the catalog rows are already there.
+        openTechniqueInspectionWithLoadingScreen = function (inventoryTitle, inventoryItems, addType) {
+            let attributeHandler = new WorkerAttributeHandler();
+            let inspectPopup = new TechniqueInspectionPopup(attributeHandler);
+            inspectPopup.open(inventoryTitle, inventoryItems, addType);
+            let loader = new LoadingScreenHandler(attributeHandler);
+            loader.run().then(function () {
+                let revealAttributeHandler = new WorkerAttributeHandler();
+                revealAttributeHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupActive"), "on");
+                revealAttributeHandler.run();
+            });
+        },
+
         openPerkTechniqueInspection = function (attributeHandler, inventoryTitle, inventoryItems, addType) {
             Debug.Log("Open Perk Technique Popup");
             let inspectPopup = new PerkTechniqueInspectionPopup(attributeHandler);
@@ -2240,14 +2280,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 }
             }
 
-            let attributeHandler2 = new WorkerAttributeHandler();
-            openTechniqueInspection(attributeHandler2, title, inventoryItemHandler.items, ["Add Style"]);
-            // Populating the catalog (iterateAndSetItems, up to 16 cards plus each
-            // one's variant computation) can take a moment - same LoadingScreenHandler
-            // convention used elsewhere (e.g. Worker-Actions.js's updateAllActionsFromMenu)
-            // for a second, heavier round trip.
-            let loader = new LoadingScreenHandler(attributeHandler2);
-            loader.run();
+            openTechniqueInspectionWithLoadingScreen(title, inventoryItemHandler.items, ["Add Style"]);
         });
 
         attributeHandler.run();
@@ -2534,10 +2567,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 }
             }
 
-            let attributeHandler2 = new WorkerAttributeHandler();
-            openTechniqueInspection(attributeHandler2, "Recommended Styles", inventoryItemHandler.items, ["Add Style"]);
-            let loader = new LoadingScreenHandler(attributeHandler2);
-            loader.run();
+            openTechniqueInspectionWithLoadingScreen("Recommended Styles", inventoryItemHandler.items, ["Add Style"]);
         });
 
         attributeHandler.run();
@@ -2895,6 +2925,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         OpenItemFilterInspection: openItemFilterInspection,
         OpenItemListInspection: openItemListInspection,
         OpenTechniqueInspection: openTechniqueInspection,
+        OpenTechniqueInspectionWithLoadingScreen: openTechniqueInspectionWithLoadingScreen,
         OpenPerkTechniqueInspection: openPerkTechniqueInspection,
         OpenStyleFilterTechniqueInspection: openStyleFilterTechniqueInspection,
         OpenPerkFilterTechniqueInspection: openPerkFilterTechniqueInspection,
