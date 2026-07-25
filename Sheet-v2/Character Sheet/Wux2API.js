@@ -17879,7 +17879,7 @@ var WuxDef = WuxDef || (function() {
                 "linkedGroups":[],
                 "isResource":""},
             "Popup_LoadMore":{"name":"Popup_LoadMore","fieldName":"loadmore","group":"Popup","descriptions":[""],
-                "variable":"popup-loadmore{0}{1}","title":"Load {0} Items","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
+                "variable":"popup-loadmore{0}{1}","title":"Load {0} More Items","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
             "TechPopupValues":{"name":"TechPopupValues","fieldName":"techpopupvalues","group":"Untyped","descriptions":[""],

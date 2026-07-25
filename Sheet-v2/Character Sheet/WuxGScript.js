@@ -12792,17 +12792,27 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     </div>`;
                 },
 
-                // Load More button (Popup_LoadMore) for a catalog repeater - appearance
-                // only, no click handler wired yet (that's later "functionality" work).
-                // Visibility is piggybacked onto its own max slot so it can be hidden
-                // once all rows are loaded. suffix distinguishes the technique catalog's
+                // Load More button (Popup_LoadMore) for a catalog repeater. Visibility
+                // is piggybacked onto its own max slot so it can be hidden once no
+                // items remain queued - suffix distinguishes the technique catalog's
                 // button (no suffix) from the item catalog's (suffix "1") since both
-                // reuse the same Popup_LoadMore definition.
+                // reuse the same Popup_LoadMore definition. For the technique catalog,
+                // that same max slot also holds the queued-items JSON blob
+                // (writeRemainingQueue, Worker-InspectPopup.js). The button's entire
+                // label is one bound span (suffix "2") that the worker overwrites with
+                // the full text each time it loads a batch - a span nested inside the
+                // title template (substituted at build time) rendered with a stray gap
+                // around the number, so the whole label is written live instead. The
+                // item catalog's button (suffix "1") isn't wired up to any
+                // population/pagination logic yet, so it keeps the static "More" text.
                 printCatalogLoadMoreButton = function (suffix) {
                     let loadMoreField = WuxDef.GetAttribute("Popup_LoadMore", suffix);
                     let loadMoreVisibleField = WuxDef.GetAttribute("Popup_LoadMore", `${suffix != undefined ? suffix : ""}${WuxDef._max}`);
+                    let buttonText = suffix == undefined
+                        ? `<span name="${WuxDef.GetAttribute("Popup_LoadMore", "2")}">${WuxDef.Get("Popup_LoadMore").getTitle("10")}</span>`
+                        : WuxDef.Get("Popup_LoadMore").getTitle("More");
                     return WuxSheetMain.HiddenField(loadMoreVisibleField,
-                        WuxSheetMain.Row(WuxSheetMain.Button(loadMoreField, WuxDef.Get("Popup_LoadMore").getTitle("More"), "wuxCatalogLoadMoreButton")));
+                        WuxSheetMain.Row(WuxSheetMain.Button(loadMoreField, buttonText, "wuxCatalogLoadMoreButton")));
                 },
 
                 // New item catalog (appearance stage only, same status as the technique
@@ -14184,6 +14194,7 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerClosePopup();
             output += listenerUpdateRepeatingItemInspectPopupItems();
             output += listenerSwapCatalogTechniqueVariant();
+            output += listenerLoadMoreCatalogTechniques();
             output += listenerInspectPopupButtons();
             output += listenerFilterPopupButtons();
             return output;
@@ -14290,6 +14301,16 @@ var PopupBuilder = PopupBuilder || (function () {
 
             return WuxSheetBackend.OnChange([`${repeaterVar}:${variantSelectVar}`],
                 `WuxWorkerInspectPopup.SwapCatalogTechniqueVariant(eventinfo)`, true);
+        },
+        // The technique catalog's Load More button (Popup_LoadMore, no suffix) -
+        // lives outside the repeater's own fieldset (see printCatalogLoadMoreButton/
+        // repeatingCatalogTechSection, WuxGS-Base.js), so this is a plain page-level
+        // click, not scoped to a repeating row.
+        listenerLoadMoreCatalogTechniques = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Popup_LoadMore")}`];
+            let output = `WuxWorkerInspectPopup.LoadMoreCatalogTechniques()`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
         listenerFilterPopupButtons = function () {
             return `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Popup_ApplyFilter")}`],

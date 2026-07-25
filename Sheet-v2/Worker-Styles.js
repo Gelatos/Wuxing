@@ -650,7 +650,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
 
                 let attributeHandler2 = new WorkerAttributeHandler();
                 WuxWorkerInspectPopup.OpenTechniqueInspection(attributeHandler2, "Styles", inventoryItems, ["Add Style"]);
-                attributeHandler2.run();
+                let loader = new LoadingScreenHandler(attributeHandler2);
+                loader.run();
             });
 
             attributeHandler.run();

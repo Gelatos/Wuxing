@@ -14101,6 +14101,13 @@
 								</div>
 								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_ttl-debug">
 								<div class="wuxInteractiveExpandingAuxContent">
+									<input type="hidden" class="wuxDebugNotCore-flag" name="attr_pgs" value="Core">
+									<div class="wuxDebugNotCoreField">
+										<div class="wuxButton wuxSizePercent">
+											<input type="checkbox" name="attr_forme-deleteallstyles">
+											<span>Delete All Styles</span>
+										</div>
+									</div>
 									<div class="wuxButton wuxSizePercent">
 										<input type="checkbox" name="attr_refresh_all_techniques">
 										<span>Delete All Techniques</span>
@@ -14108,12 +14115,6 @@
 									<div class="wuxButton wuxSizePercent">
 										<input type="checkbox" name="attr_act-formetechniques_refresh">
 										<span>Update Techniques</span>
-									</div><input type="hidden" class="wuxDebugNotCore-flag" name="attr_pgs" value="Core">
-									<div class="wuxDebugNotCoreField">
-										<div class="wuxButton wuxSizePercent">
-											<input type="checkbox" name="attr_forme-deleteallstyles">
-											<span>Delete All Styles</span>
-										</div>
 									</div>
 								</div>
 							</div>
@@ -14145,6 +14146,13 @@
 								</div>
 								<input class="wuxInteractiveExpandingContent-flag" type="hidden" name="attr_ttl-debug">
 								<div class="wuxInteractiveExpandingAuxContent">
+									<input type="hidden" class="wuxDebugNotCore-flag" name="attr_pgs" value="Core">
+									<div class="wuxDebugNotCoreField">
+										<div class="wuxButton wuxSizePercent">
+											<input type="checkbox" name="attr_forme-deleteallstyles">
+											<span>Delete All Styles</span>
+										</div>
+									</div>
 									<div class="wuxButton wuxSizePercent">
 										<input type="checkbox" name="attr_refresh_all_techniques">
 										<span>Delete All Techniques</span>
@@ -14152,12 +14160,6 @@
 									<div class="wuxButton wuxSizePercent">
 										<input type="checkbox" name="attr_act-formetechniques_refresh">
 										<span>Update Techniques</span>
-									</div><input type="hidden" class="wuxDebugNotCore-flag" name="attr_pgs" value="Core">
-									<div class="wuxDebugNotCoreField">
-										<div class="wuxButton wuxSizePercent">
-											<input type="checkbox" name="attr_forme-deleteallstyles">
-											<span>Delete All Styles</span>
-										</div>
 									</div>
 								</div>
 							</div>
@@ -16826,7 +16828,7 @@
 								<div class="wuxRow">
 									<div class="wuxButton wuxCatalogLoadMoreButton">
 										<input type="checkbox" name="attr_popup-loadmore">
-										<span>Load More Items</span>
+										<span><span name="attr_popup-loadmore2">Load 10 More Items</span></span>
 									</div>
 								</div>
 							</div>
@@ -19946,6 +19948,9 @@ WuxWorkerInspectPopup.SelectInspectionItemFromActiveGroup(eventinfo)
 });
 on("change:repeating_itempopupvalues:act-techvariant3", function (eventinfo) {
 WuxWorkerInspectPopup.SwapCatalogTechniqueVariant(eventinfo)
+});
+on("change:popup-loadmore", function (eventinfo) {
+WuxWorkerInspectPopup.LoadMoreCatalogTechniques()
 });
 on("change:popup-inspectaddclick", function (eventinfo) {
 WuxWorkerInspectPopup.AddSelectedInspectElement()

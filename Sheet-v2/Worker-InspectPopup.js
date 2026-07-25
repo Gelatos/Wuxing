@@ -335,6 +335,66 @@ class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler
         this.catalogItemAttributeHandler.setRepeaterData(this.repeater);
     }
 
+    // Splits a flat InspectionInventoryItem list (headers + techniques) at the
+    // point where maxCount techniques have been included - headers don't count
+    // toward the cap and always pass through free, EXCEPT if the cutoff would
+    // land right after a header with none of its own techniques included (i.e.
+    // stopping on a fresh group's first technique), in which case the cutoff
+    // rolls back to before that header so an empty group title never renders.
+    // Relies on performStyleFilterInspection's ordering guarantee that a header
+    // is always immediately followed by its own group's techniques. Shared by
+    // the initial population (cap 16, see iterateAndSetItems below) and each
+    // Load More click (cap 10, see loadMoreCatalogTechniques).
+    splitAtTechniqueCap(itemData, maxCount) {
+        let techniqueCount = 0;
+        let splitIndex = itemData.length;
+        let lastHeaderIndex = -1;
+        for (let i = 0; i < itemData.length; i++) {
+            if (itemData[i].isTitle) {
+                lastHeaderIndex = i;
+                continue;
+            }
+            if (techniqueCount >= maxCount) {
+                splitIndex = (lastHeaderIndex == i - 1) ? lastHeaderIndex : i;
+                break;
+            }
+            techniqueCount++;
+        }
+        return { visibleItems: itemData.slice(0, splitIndex), remainingItems: itemData.slice(splitIndex) };
+    }
+
+    // Popup_LoadMore's own _max slot doubles as both the queued-but-not-yet-shown
+    // items (serialized JSON, InspectionInventoryItem's plain {display, name,
+    // isTitle, affinity, tier, iconAffinities} shape) and the button's visibility
+    // flag, via the existing .wuxHiddenField-flag:not([value="0"]) CSS rule - "0"
+    // means both "no queue" and "hidden", anything else means both "queue
+    // present" and "visible", so one write covers both. The suffix "2" slot
+    // holds the button's whole label text (the entire button is one bound span -
+    // see printCatalogLoadMoreButton, WuxGS-Base.js - rather than a span nested
+    // inside a title template, which rendered with a stray gap around the
+    // number), built from Popup_LoadMore's own title template so the wording
+    // stays spreadsheet-driven instead of duplicated here.
+    writeRemainingQueue(remainingItems) {
+        let remainingTechniqueCount = remainingItems.filter(item => !item.isTitle).length;
+        let queueField = WuxDef.GetVariable("Popup_LoadMore", WuxDef._max);
+        if (remainingTechniqueCount === 0) {
+            this.attrHandler.addUpdate(queueField, "0");
+            return;
+        }
+        this.attrHandler.addUpdate(queueField, JSON.stringify(remainingItems));
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_LoadMore", "2"),
+            WuxDef.Get("Popup_LoadMore").getTitle(Math.min(remainingTechniqueCount, 10)));
+    }
+
+    // Caps the initial population at 16 techniques (headers don't count),
+    // queueing whatever's left for the Load More button (loadMoreCatalogTechniques
+    // below) to pick up 10 at a time.
+    iterateAndSetItems(itemData) {
+        let { visibleItems, remainingItems } = this.splitAtTechniqueCap(itemData, 16);
+        this.writeRemainingQueue(remainingItems);
+        super.iterateAndSetItems(visibleItems);
+    }
+
     initializePopup() {
         super.initializePopup();
         this.itemDataAttributeHandler.clearItemInfo();
@@ -1969,6 +2029,51 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             attributeHandler.run();
         },
 
+        // Loads the next batch (up to 10) of techniques queued by
+        // TechniqueInspectPopupAttributeHandler's initial 16-cap
+        // (Popup_LoadMore's _max slot - see writeRemainingQueue,
+        // splitAtTechniqueCap), appending new rows to the same catalog
+        // repeater. Doesn't call initializePopup - that would reset the
+        // player's current multi-select, which a Load More click must leave
+        // untouched. No popup-type gating, same precedent as
+        // swapCatalogTechniqueVariant above - the button is only interactable
+        // while the technique catalog is actually showing it.
+        loadMoreCatalogTechniques = function () {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("ItemPopupValues");
+
+            let queueField = WuxDef.GetVariable("Popup_LoadMore", WuxDef._max);
+            let showAddField = WuxDef.GetVariable("Popup_InspectShowAdd");
+            attributeHandler.addMod([
+                queueField, showAddField,
+                WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"),
+                WuxDef.GetVariable("Ancestry"), WuxDef.GetVariable("Forme_ShowFromNonElement")
+            ]);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let queuedItems = [];
+                try {
+                    let parsed = JSON.parse(attrHandler.parseString(queueField));
+                    if (Array.isArray(parsed)) queuedItems = parsed;
+                } catch (e) { /* not JSON (e.g. "0") - nothing queued */ }
+
+                let inspectPopupAttrHandler = new TechniqueInspectPopupAttributeHandler(attrHandler);
+                inspectPopupAttrHandler.canSelectForAdd = attrHandler.parseString(showAddField) == "on";
+                let showElementRestricted = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement")) != "0";
+                inspectPopupAttrHandler.catalogUserAffinities = showElementRestricted ? undefined : getUserAffinities(attrHandler);
+
+                let { visibleItems, remainingItems } = inspectPopupAttrHandler.splitAtTechniqueCap(queuedItems, 10);
+                let repeater = attrHandler.getRepeatingSection("ItemPopupValues");
+                visibleItems.forEach(function (itemData) {
+                    let id = repeater.generateRowId();
+                    inspectPopupAttrHandler.setInventoryItemData(id, itemData);
+                });
+                inspectPopupAttrHandler.writeRemainingQueue(remainingItems);
+            });
+            let loader = new LoadingScreenHandler(attributeHandler);
+            loader.run();
+        },
+
         addSelectedInspectElement = function () {
             Debug.Log("Add SelectedInspection");
             getOpenInspectionPopup((inspectPopup) => {
@@ -2137,7 +2242,12 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
 
             let attributeHandler2 = new WorkerAttributeHandler();
             openTechniqueInspection(attributeHandler2, title, inventoryItemHandler.items, ["Add Style"]);
-            attributeHandler2.run();
+            // Populating the catalog (iterateAndSetItems, up to 16 cards plus each
+            // one's variant computation) can take a moment - same LoadingScreenHandler
+            // convention used elsewhere (e.g. Worker-Actions.js's updateAllActionsFromMenu)
+            // for a second, heavier round trip.
+            let loader = new LoadingScreenHandler(attributeHandler2);
+            loader.run();
         });
 
         attributeHandler.run();
@@ -2426,7 +2536,8 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
 
             let attributeHandler2 = new WorkerAttributeHandler();
             openTechniqueInspection(attributeHandler2, "Recommended Styles", inventoryItemHandler.items, ["Add Style"]);
-            attributeHandler2.run();
+            let loader = new LoadingScreenHandler(attributeHandler2);
+            loader.run();
         });
 
         attributeHandler.run();
@@ -2803,6 +2914,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         OpenRecommendedStylesInspection: openRecommendedStylesInspection,
         SelectInspectionItemFromActiveGroup: selectInspectionItemFromActiveGroup,
         SwapCatalogTechniqueVariant: swapCatalogTechniqueVariant,
+        LoadMoreCatalogTechniques: loadMoreCatalogTechniques,
         Close: close,
         AddSelectedInspectElement: addSelectedInspectElement,
         AddSelectedInspectElement2: addSelectedInspectElement2

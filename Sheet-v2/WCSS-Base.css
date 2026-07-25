@@ -153,6 +153,17 @@ input[type=number]::-webkit-inner-spin-button {
     gap: 5px;
 }
 
+/* Load More button (printCatalogLoadMoreButton, WuxGS-Base.js) - spans the
+   full width of its row instead of the default .wuxButton inline-block/auto
+   width, with room above it from the card grid. Compound selector (not just
+   .wuxCatalogLoadMoreButton) needed to beat .wuxButton's own display/width on
+   specificity, since .wuxButton's rule comes later in this file. */
+.wuxButton.wuxCatalogLoadMoreButton {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+}
+
 /* Same 240px card grid as .wuxFormeTechRepeater, for the Inspect Popup's all-items
    list (each row can be a group header, or an item's requirement bar + item card +
    technique card stacked together - the whole row is one grid cell). */

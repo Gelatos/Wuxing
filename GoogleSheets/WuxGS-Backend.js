@@ -978,6 +978,7 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerClosePopup();
             output += listenerUpdateRepeatingItemInspectPopupItems();
             output += listenerSwapCatalogTechniqueVariant();
+            output += listenerLoadMoreCatalogTechniques();
             output += listenerInspectPopupButtons();
             output += listenerFilterPopupButtons();
             return output;
@@ -1084,6 +1085,16 @@ var PopupBuilder = PopupBuilder || (function () {
 
             return WuxSheetBackend.OnChange([`${repeaterVar}:${variantSelectVar}`],
                 `WuxWorkerInspectPopup.SwapCatalogTechniqueVariant(eventinfo)`, true);
+        },
+        // The technique catalog's Load More button (Popup_LoadMore, no suffix) -
+        // lives outside the repeater's own fieldset (see printCatalogLoadMoreButton/
+        // repeatingCatalogTechSection, WuxGS-Base.js), so this is a plain page-level
+        // click, not scoped to a repeating row.
+        listenerLoadMoreCatalogTechniques = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Popup_LoadMore")}`];
+            let output = `WuxWorkerInspectPopup.LoadMoreCatalogTechniques()`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
         listenerFilterPopupButtons = function () {
             return `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Popup_ApplyFilter")}`],

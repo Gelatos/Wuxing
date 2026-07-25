@@ -108,7 +108,8 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
                 return;
             }
             WuxWorkerInspectPopup.OpenTechniqueInspection(attributeHandler, inventoryTitle, inventoryItems.items);
-            attributeHandler.run();
+            let loader = new LoadingScreenHandler(attributeHandler);
+            loader.run();
         },
     
         equipJobFromEvent = function (eventinfo) {
