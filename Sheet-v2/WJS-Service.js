@@ -93,7 +93,14 @@ class WorkerAttributeHandler extends AttributeHandler {
 				attributeHandler.repeatingSections[key].ids = await getSectionIDsAsync(attributeHandler.repeatingSections[key].repeatingSection);
 				attributeHandler.repeatingSections[key].addAttributeMods(attributeHandler);
 			}
-			attributeHandler.current = await getAttrsAsync(attributeHandler.mods);
+			// getAttrsAsync/setAttrsAsync are independent, self-contained wrappers
+			// (each does its own active-character-id save/restore around the
+			// underlying Roll20 call) - skipping the fetch entirely when nothing was
+			// requested (e.g. a cycle that only writes an attribute, like the Inspect
+			// Popup's "reveal" step) is safe and avoids a pure-waste round trip.
+			attributeHandler.current = attributeHandler.mods.length > 0
+				? await getAttrsAsync(attributeHandler.mods)
+				: {};
 
 			attributeHandler.getCallbacks.forEach((callback) => {
 				callback(attributeHandler);
@@ -1150,8 +1157,15 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 	// variantOptions (only passed by the FormeTechniques repeater's own callers - see
 	// Worker-Actions.js - so other contexts like the Inspect Popup keep showing every
 	// variant unfiltered):
-	//   excludeCurrent  - drop the technique currently on display from its own button row.
-	//   userAffinities  - drop variants the character can't use for lacking the affinity.
+	//   excludeCurrent        - drop the technique currently on display from its own button row.
+	//   userAffinities        - drop variants the character can't use for lacking the affinity.
+	//   precomputedCandidates - the technique's sibling variants, if the caller already
+	//                           fetched them (WuxTechs.Filter(style=technique.name)) a
+	//                           moment ago and doesn't want this method re-fetching an
+	//                           identical result (see TechniqueInspectionPopup.open's
+	//                           variantsByName, Worker-InspectPopup.js). Only used when
+	//                           technique is already its own root - WuxTechs.Get/Filter
+	//                           never cache, so every call reconstructs fresh objects.
 	setTechniqueVariants(technique, variantOptions) {
 		// Fixed per-element slot index rather than packing candidates sequentially from
 		// 0: with only 2 members in a family, "the other one" would always land in slot
@@ -1174,8 +1188,14 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		// the field's current value, so a coincidental index match made that
 		// direction's click silently do nothing.
 		let rootName = technique.getRootName();
-		let root = WuxTechs.Get(rootName);
-		let candidates = [root].concat(WuxTechs.Filter(new DatabaseFilterData("style", rootName)));
+		// technique is already the object WuxTechs.Get(rootName) would reconstruct
+		// whenever it's already its own root (the common case for base styles) -
+		// WuxTechs.Get/Filter never cache, so reusing the instance already in hand
+		// avoids rebuilding an identical TechniqueData for no reason.
+		let root = rootName === technique.name ? technique : WuxTechs.Get(rootName);
+		let candidates = (variantOptions?.precomputedCandidates != undefined && rootName === technique.name)
+			? [root].concat(variantOptions.precomputedCandidates)
+			: [root].concat(WuxTechs.Filter(new DatabaseFilterData("style", rootName)));
 		if (variantOptions?.userAffinities != undefined) {
 			candidates = candidates.filter(tech => tech.hasRequiredAffinity(variantOptions.userAffinities));
 		}

@@ -476,8 +476,15 @@ class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler
         // slot is empty) evaluates against the fully-filtered result, not a
         // pre-filter one - a technique whose only siblings are all filtered out
         // correctly shows as having no variants.
+        // precomputedCandidates (see TechniqueInspectionPopup.open/variantsByName) lets
+        // setTechniqueVariants (WJS-Service.js) skip re-fetching the exact same
+        // WuxTechs.Filter(style=technique.name) call performStyleFilterInspection's
+        // displayCallback already made moments ago for this same technique -
+        // undefined here (e.g. Load More batches, which don't carry a variantsByName)
+        // just falls back to its normal fetch-it-yourself behavior.
         this.catalogTechniqueAttributeHandler.setTechniqueCatalogInfo(technique,
-            {excludeCurrent: true, userAffinities: this.catalogUserAffinities}, this.canSelectForAdd);
+            {excludeCurrent: true, userAffinities: this.catalogUserAffinities, precomputedCandidates: this.variantsByName?.get(technique.name)},
+            this.canSelectForAdd);
         // Selecting this row still goes through the existing shared select/add
         // mechanism (InspectionPopup.selectItem/addItem, below), which looks
         // the item up by this field regardless of popup type.
@@ -839,7 +846,11 @@ class TechniqueInspectionPopup extends InspectionPopup {
     // slow, up-to-16-card) catalog population. Calling .showWithoutReveal()
     // instead defers that flag to openTechniqueInspectionWithLoadingScreen's own
     // later, separate cycle, so the popup can't ever appear before its rows do.
-    open(inventoryTitle, inventoryItems, addType) {
+    // variantsByName (optional): Map<techniqueName, TechniqueData[]> the caller
+    // already fetched while building inventoryItems - stashed onto the attribute
+    // handler so setInventoryItemData (below) can pass it through to
+    // setTechniqueVariants and skip an otherwise-identical re-fetch.
+    open(inventoryTitle, inventoryItems, addType, variantsByName) {
         let inspectPopup = this;
         let worker = new WuxStyleWorkerBuild();
         this.attributeHandler.addMod([
@@ -853,6 +864,7 @@ class TechniqueInspectionPopup extends InspectionPopup {
         this.attributeHandler.addMod([WuxDef.GetVariable("Popup_InspectSelectId")]);
         this.attributeHandler.addGetAttrCallback(function (attrHandler) {
             inspectPopup.setup(attrHandler);
+            inspectPopup.inspectPopupAttrHandler.variantsByName = variantsByName;
             inspectPopup.inspectPopupAttrHandler.showWithoutReveal(inventoryTitle, inventoryItems, addType);
         });
     }
@@ -1891,10 +1903,14 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         // attributeHandler.run() (both the regular-attr AND repeating-section-row
         // flushes) and hideLoadingScreen() have completed, so the reveal cycle below
         // is guaranteed to run strictly after the catalog rows are already there.
-        openTechniqueInspectionWithLoadingScreen = function (inventoryTitle, inventoryItems, addType) {
+        // variantsByName (optional): Map<techniqueName, TechniqueData[]> the caller
+        // already built while computing the tier-grouped list (performStyleFilterInspection/
+        // openRecommendedStylesInspection) - passed through so catalog population can
+        // skip re-fetching the same variants (see TechniqueInspectionPopup.open below).
+        openTechniqueInspectionWithLoadingScreen = function (inventoryTitle, inventoryItems, addType, variantsByName) {
             let attributeHandler = new WorkerAttributeHandler();
             let inspectPopup = new TechniqueInspectionPopup(attributeHandler);
-            inspectPopup.open(inventoryTitle, inventoryItems, addType);
+            inspectPopup.open(inventoryTitle, inventoryItems, addType, variantsByName);
             let loader = new LoadingScreenHandler(attributeHandler);
             loader.run().then(function () {
                 let revealAttributeHandler = new WorkerAttributeHandler();
@@ -2188,6 +2204,14 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
     };
 
     const performStyleFilterInspection = function (filters, title) {
+        // Also returns the variants list it already fetched (not just display/
+        // iconAffinities) - addTierGroup below collects these into variantsByName
+        // so the catalog card population step (TechniqueInspectPopupAttributeHandler.
+        // setInventoryItemData -> setTechniqueVariants, WJS-Service.js) doesn't have
+        // to call WuxTechs.Filter(style=name) a second time for the same technique
+        // moments later. WuxTechs.Get/Filter never cache (WJS-TechDef.js) - every
+        // call reconstructs a fresh TechniqueData + effects/formulas, so avoiding a
+        // second identical call per rendered card is a real, measurable saving.
         let displayCallback = function (technique) {
             let iconAffinities = technique.getAffinityParts();
             let variants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
@@ -2201,7 +2225,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                     }
                 }
             }
-            return { display: technique.name, iconAffinities: iconAffinities };
+            return { display: technique.name, iconAffinities: iconAffinities, variants: variants };
         };
 
         let attributeHandler = new WorkerAttributeHandler();
@@ -2238,6 +2262,10 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             let inventoryItemHandler = new InspectionInventoryItemHandler();
             let sortedStyles = WuxTechs.SortFilteredTechniquesByRequirement(learnableStyles.concat(unlearnableStyles));
             let maxTier = 9;
+            // Populated by displayCallback below (variants list it already fetched
+            // per technique) - threaded into openTechniqueInspectionWithLoadingScreen
+            // so catalog population can skip re-fetching the same variants.
+            let variantsByName = new Map();
 
             let addTierGroup = function (tier, isLearnable) {
                 let tierData = sortedStyles.get(tier);
@@ -2266,6 +2294,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
 
                     techsByAffinity.forEach(function (technique) {
                         let result = displayCallback(technique);
+                        variantsByName.set(technique.name, result.variants);
                         inventoryItemHandler.addItem(new InspectionInventoryItem(result.display, technique.name, false, undefined, undefined, result.iconAffinities));
                     });
                 });
@@ -2280,7 +2309,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 }
             }
 
-            openTechniqueInspectionWithLoadingScreen(title, inventoryItemHandler.items, ["Add Style"]);
+            openTechniqueInspectionWithLoadingScreen(title, inventoryItemHandler.items, ["Add Style"], variantsByName);
         });
 
         attributeHandler.run();
@@ -2516,6 +2545,10 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             let inventoryItemHandler = new InspectionInventoryItemHandler();
             let sortedStyles = WuxTechs.SortFilteredTechniquesByRequirement(learnableStyles.concat(unlearnableStyles));
             let maxTier = 9;
+            // Populated below (variants list already fetched per technique) -
+            // threaded into openTechniqueInspectionWithLoadingScreen so catalog
+            // population doesn't re-fetch the same variants a second time.
+            let variantsByName = new Map();
 
             let addTierGroup = function (tier, isLearnable) {
                 let tierData = sortedStyles.get(tier);
@@ -2545,6 +2578,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                     techsByAffinity.forEach(function (technique) {
                         let iconAffinities = technique.getAffinityParts();
                         let variants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
+                        variantsByName.set(technique.name, variants);
                         for (let i = 0; i < variants.length; i++) {
                             let variantParts = variants[i].getAffinityParts();
                             for (let j = 0; j < variantParts.length; j++) {
@@ -2567,7 +2601,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 }
             }
 
-            openTechniqueInspectionWithLoadingScreen("Recommended Styles", inventoryItemHandler.items, ["Add Style"]);
+            openTechniqueInspectionWithLoadingScreen("Recommended Styles", inventoryItemHandler.items, ["Add Style"], variantsByName);
         });
 
         attributeHandler.run();
