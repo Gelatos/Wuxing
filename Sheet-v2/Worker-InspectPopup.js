@@ -347,6 +347,25 @@ class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler
         // Forme_ShowFromNonElement are fetched by TechniqueInspectionPopup.open.
         let showElementRestricted = this.attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement")) != "0";
         this.catalogUserAffinities = showElementRestricted ? undefined : getUserAffinities(this.attrHandler);
+
+        // Nothing is selected by default (see setSelectedItem below) - the style
+        // adding system starts from a clean slate every time the popup opens,
+        // rather than the old single-preview flow's "auto-select the first item."
+        // setAddType (base class, called after this from show()) already resets
+        // Popup_InspectAddType to the singular "Add Style" from the addType param.
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectedList"), "0");
+
+        // Snapshot of the build-stats draft as it stands right now, before any
+        // selections in this popup session - toggleSelectedItem builds its live
+        // points preview on top of THIS instead of attrBuildFinal, since final is
+        // only ever updated by the Advancement tab's commit flow and can be
+        // stale relative to draft-only changes made elsewhere (e.g. deleting a
+        // style, Worker-Styles.js's deleteListStyle, only ever touches draft).
+        // Rebuilding the preview from a stale final would silently undo any such
+        // pending change the moment this popup's selection buttons are used.
+        let worker = new WuxStyleWorkerBuild();
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectDraftSnapshot"),
+            this.attrHandler.parseString(worker.attrBuildDraft));
     }
 
     // Every catalog row can carry both item and technique info (see the fused
@@ -420,6 +439,67 @@ class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler
     // nothing left to populate on select. Selecting just marks which row Add
     // will use (handled by the inherited setSelectedItem, InspectPopupAttributeHandler).
     setSelectedItemData(selectedItemName) {}
+
+    // The base class's setSelectedItem is a single-select toggle (exclusively
+    // selects one row, clearing whatever was selected before) - the style adding
+    // system supports selecting multiple techniques at once instead, via
+    // toggleSelectedItem below (called from TechniqueInspectionPopup.selectItem,
+    // which overrides the base class's own selectItem for the same reason). This
+    // override also means iterateAndSetItems' "auto-select the first item"
+    // behavior becomes a no-op, since it calls this same method - nothing is
+    // selected by default when the popup opens.
+    setSelectedItem(selectedItemId, itemName) {}
+
+    // currentListRaw is the semicolon-delimited Popup_InspectSelectedList value
+    // as it stood before this click, and learnedStyleNames the character's
+    // already-learned style names (both fetched by
+    // TechniqueInspectionPopup.selectItem, since reading them here would
+    // require them to already be fetched onto attrHandler - simpler for the
+    // caller, which already fetches per-click data, to pass them in).
+    toggleSelectedItem(selectedItemId, itemName, currentListRaw, learnedStyleNames) {
+        let selectedNames = currentListRaw.split(";").map(s => s.trim()).filter(s => s !== "" && s !== "0");
+        let alreadySelected = selectedNames.includes(itemName);
+        if (alreadySelected) {
+            selectedNames = selectedNames.filter(name => name !== itemName);
+        } else {
+            selectedNames.push(itemName);
+        }
+
+        this.attrHandler.addUpdate(this.repeater.getFieldName(selectedItemId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), alreadySelected ? "0" : "on");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectedList"), selectedNames.length > 0 ? selectedNames.join(";") : "0");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), selectedNames.length > 1 ? "Add Styles" : "Add Style");
+
+        // Live style-points preview: recompute the draft from the snapshot taken
+        // when this popup opened (Popup_InspectDraftSnapshot, initializePopup
+        // above) plus every currently-selected, not-yet-learned style, so the
+        // popup's Style Points row (and the sidebar's own points widget, which
+        // reads the same attribute) reflects what confirming Add right now would
+        // actually cost. Built from the snapshot rather than attrBuildFinal,
+        // which is only updated by the Advancement tab's commit flow and can be
+        // stale relative to other draft-only changes (deleting a style, for
+        // instance) - rebuilding from a stale final would silently undo those.
+        // Recomputed fresh from the snapshot each time (never incrementally
+        // patching the existing draft) so repeated toggles can't double-count -
+        // this IS actually spending the points as a draft, not a separate
+        // read-only preview (TechniqueInspectionPopup's close() reverts it back
+        // to the snapshot if the popup exits without confirming).
+        let worker = new WuxStyleWorkerBuild();
+        worker.setBuildStats(WuxDef.GetVariable("Popup_InspectDraftSnapshot"), this.attrHandler);
+        selectedNames.forEach(name => {
+            if (learnedStyleNames.has(name)) {
+                return;
+            }
+            let baseTechnique = WuxTechs.Get(name);
+            if (baseTechnique == undefined) {
+                return;
+            }
+            worker.updateBuildStats(this.attrHandler, baseTechnique.name, {value: 1, group: "Style"});
+            WuxTechs.Filter(new DatabaseFilterData("style", name)).forEach(technique => {
+                worker.updateBuildStats(this.attrHandler, technique.name, {value: 1, group: technique.techSet});
+            });
+        });
+        worker.updatePoints(this.attrHandler);
+    }
 }
 class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
     constructor(attributeHandler) {
@@ -683,23 +763,85 @@ class TechniqueInspectionPopup extends InspectionPopup {
     // needs the same affinity/toggle fields performStyleFilterInspection already
     // gathers for the top-level style list - fetched again here since this
     // popup's own attributeHandler/callback cycle is a separate round-trip from
-    // that one's.
+    // that one's. worker.attrBuildDraft is fetched so initializePopup can
+    // snapshot the current draft (Popup_InspectDraftSnapshot) - see
+    // toggleSelectedItem, TechniqueInspectPopupAttributeHandler, for why this
+    // needs to be the actual current draft rather than attrBuildFinal.
     open(inventoryTitle, inventoryItems, addType) {
+        let worker = new WuxStyleWorkerBuild();
         this.attributeHandler.addMod([
             WuxDef.GetVariable("Affinity"),
             WuxDef.GetVariable("AdvancedAffinity"),
             WuxDef.GetVariable("Ancestry"),
-            WuxDef.GetVariable("Forme_ShowFromNonElement")
+            WuxDef.GetVariable("Forme_ShowFromNonElement"),
+            worker.attrBuildDraft
         ]);
         super.open(inventoryTitle, inventoryItems, addType);
     }
 
-    addItem() {
+    // Overrides the base class's single-select selectItem - this popup supports
+    // selecting multiple techniques at once (toggleSelectedItem,
+    // TechniqueInspectPopupAttributeHandler), so the current selected-list value
+    // needs fetching here too (not just the clicked row's own name), plus enough
+    // style-points build-stats data for toggleSelectedItem to update the live
+    // points preview.
+    selectItem(selectedId) {
+        let inspectPopup = this;
+        this.attributeHandler.addRepeatingSection(this.inspectPopupInventoryId);
+        let repeater = this.attributeHandler.getRepeatingSection(this.inspectPopupInventoryId);
+        let inventoryItemNameVar = repeater.getFieldName(selectedId, WuxDef.GetVariable("Popup_ItemSelectName"));
+        let selectedListVar = WuxDef.GetVariable("Popup_InspectSelectedList");
+
         let worker = new WuxStyleWorkerBuild();
         let styleRepeaterId = "RepeatingStyles";
-        this.attributeHandler.addMod([worker.attrMax, worker.attrBuildDraft]);
         this.attributeHandler.addRepeatingSection(styleRepeaterId);
-        super.addItem();
+        let formeNameVar = WuxDef.GetVariable("Forme_Name");
+        this.attributeHandler.getRepeatingSection(styleRepeaterId).addFieldNames([formeNameVar]);
+
+        this.attributeHandler.addMod([inventoryItemNameVar, selectedListVar, worker.attrMax, WuxDef.GetVariable("Popup_InspectDraftSnapshot")]);
+
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            inspectPopup.setup(attrHandler);
+            let styleRepeater = attrHandler.getRepeatingSection(styleRepeaterId);
+            let learnedStyleNames = new Set(styleRepeater.ids.map(id =>
+                attrHandler.parseString(styleRepeater.getFieldName(id, formeNameVar))));
+            inspectPopup.inspectPopupAttrHandler.toggleSelectedItem(selectedId,
+                attrHandler.parseString(inventoryItemNameVar), attrHandler.parseString(selectedListVar), learnedStyleNames);
+        });
+    }
+
+    // Overrides the base class's single-item addItem - processes every technique
+    // in Popup_InspectSelectedList instead of just Popup_InspectSelectId, and
+    // skips any style the character already has learned (RepeatingStyles' own
+    // Forme_Name list) rather than adding a duplicate entry.
+    addItem() {
+        let inspectPopup = this;
+        let worker = new WuxStyleWorkerBuild();
+        let styleRepeaterId = "RepeatingStyles";
+        this.attributeHandler.addRepeatingSection(styleRepeaterId);
+        let formeNameVar = WuxDef.GetVariable("Forme_Name");
+        this.attributeHandler.getRepeatingSection(styleRepeaterId).addFieldNames([formeNameVar]);
+        this.attributeHandler.addMod([worker.attrMax, worker.attrBuildDraft, WuxDef.GetVariable("Popup_InspectSelectedList")]);
+
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            inspectPopup.setup(attrHandler);
+
+            let selectedListRaw = attrHandler.parseString(WuxDef.GetVariable("Popup_InspectSelectedList"));
+            let selectedNames = selectedListRaw.split(";").map(s => s.trim()).filter(s => s !== "" && s !== "0");
+
+            let styleRepeater = attrHandler.getRepeatingSection(styleRepeaterId);
+            let learnedStyleNames = new Set(styleRepeater.ids.map(id =>
+                attrHandler.parseString(styleRepeater.getFieldName(id, formeNameVar))));
+
+            selectedNames.forEach(itemName => {
+                if (learnedStyleNames.has(itemName)) {
+                    Debug.Log(`Skipping ${itemName} - already learned`);
+                    return;
+                }
+                inspectPopup.performAddItem(attrHandler, itemName);
+                learnedStyleNames.add(itemName);
+            });
+        });
         WuxWorkerSkills.UpdateKeySkills(this.attributeHandler);
         WuxWorkerActions.UpdateAllActionsFromMenu(this.attributeHandler);
     }
@@ -1669,8 +1811,51 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         
         close = function () {
             let attributeHandler = new WorkerAttributeHandler();
-            let inspectPopup = new InspectionPopup(attributeHandler);
-            inspectPopup.close();
+            let selectTypeVariable = WuxDef.GetVariable("Popup_InspectSelectType");
+            attributeHandler.addMod(selectTypeVariable);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let selectType = attrHandler.parseString(selectTypeVariable);
+
+                let attributeHandler2 = new WorkerAttributeHandler();
+                let inspectPopup = new InspectionPopup(attributeHandler2);
+                inspectPopup.close();
+                attributeHandler2.run();
+
+                // The style adding system spends points live as a preview while
+                // techniques are selected (toggleSelectedItem,
+                // TechniqueInspectPopupAttributeHandler) - if the popup is closing
+                // without confirming via Add (that flow uses InspectionPopup.close()
+                // directly via addSelectedInspectElement, not this function), discard
+                // that unconfirmed draft. This needs its own separate
+                // attributeHandler/run() cycle, not nested inside attributeHandler2's
+                // own callback - addMod calls made from within an already-running
+                // getAttrs pass are registered too late to actually get fetched.
+                if (selectType == "Popup_TechniqueInspectionName") {
+                    let attributeHandler3 = new WorkerAttributeHandler();
+                    let worker = new WuxStyleWorkerBuild();
+                    let snapshotVar = WuxDef.GetVariable("Popup_InspectDraftSnapshot");
+                    attributeHandler3.addMod([worker.attrMax, snapshotVar]);
+                    attributeHandler3.addGetAttrCallback(function (attrHandler) {
+                        // Mirrors WuxWorkerBuild.resetChanges exactly, but reverting
+                        // draft to the snapshot taken when this popup opened
+                        // (initializePopup, TechniqueInspectPopupAttributeHandler)
+                        // instead of attrBuildFinal - final is only ever updated by
+                        // the Advancement tab's commit flow, so it can be stale
+                        // relative to other draft-only changes (deleting a style,
+                        // for instance, Worker-Styles.js's deleteListStyle) made
+                        // outside this popup - reverting to it would silently undo
+                        // those. updatePoints is also called explicitly here since
+                        // resetChanges never recomputes the displayed
+                        // remaining-points value on its own.
+                        worker.setBuildStats(snapshotVar, attrHandler);
+                        worker.cleanBuildStats();
+                        worker.setBuildStatVariables(attrHandler);
+                        worker.revertBuildStatsDraft(attrHandler);
+                        worker.updatePoints(attrHandler);
+                    });
+                    attributeHandler3.run();
+                }
+            });
             attributeHandler.run();
         },
 

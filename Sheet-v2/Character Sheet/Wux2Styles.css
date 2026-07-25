@@ -8338,3 +8338,16 @@ button.wuxSubMenuOptionButton[type=roll]:hover span {
 
     color: #000;
 }
+
+/* Debug-only sidebar options that should disappear once the character has
+   left the Builder pageset and moved into normal play (buildTechDebugSection,
+   WuxGS-MainSheet.js). PageSet isn't a "0"/blank boolean like the standard
+   wuxHiddenField-flag convention, so this checks its actual string value
+   directly instead of reusing that shared flag class. */
+.wuxDebugNotCoreField {
+    display: none;
+}
+
+input[type=hidden].wuxDebugNotCore-flag:not([value="Core"]) + .wuxDebugNotCoreField {
+    display: inherit;
+}

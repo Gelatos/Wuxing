@@ -688,6 +688,54 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             WuxWorkerSkills.UpdateKeySkills(attributeHandler);
             WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
             attributeHandler.run();
+        },
+
+        // Debug-only (buildTechDebugSection, WuxGS-MainSheet.js, hidden once
+        // PageSet is "Core"). Deliberately does NOT derive which build stats to
+        // remove from RepeatingStyles' own rows (unlike deleteListStyle above) -
+        // a row can end up deleted (e.g. by an earlier, buggy run of this same
+        // function) without its matching build stat ever being cleaned up, and
+        // once the row is gone there's nothing left to iterate to find it. This
+        // instead clears every non-Basic build-stat entry directly (same
+        // Basic-vs-styled distinction WuxStyleWorkerBuild.initializeData already
+        // draws), so it can't be left out of sync with RepeatingStyles.
+        deleteAllLearnedStyles = function () {
+            let worker = new WuxStyleWorkerBuild();
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("RepeatingStyles");
+            let repeater = attributeHandler.getRepeatingSection("RepeatingStyles");
+            attributeHandler.addMod([worker.attrMax, worker.attrBuildDraft]);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                worker.setBuildStatsDraft(attrHandler);
+                Debug.Log(`[DeleteAllLearnedStyles] rows found: ${repeater.ids.length}, draft keys before: ${JSON.stringify(worker.buildStats.keys)}`);
+
+                let keysToRemove = worker.buildStats.keys.filter(function (key) {
+                    let technique = WuxTechs.Get(key);
+                    return technique == undefined || technique.techSet != "Basic";
+                });
+                keysToRemove.forEach(function (key) {
+                    Debug.Log(`Deleting Style ${key}`);
+                    worker.removeBuildStat(key);
+                });
+
+                // Clear out whatever RepeatingStyles rows still exist too - copy
+                // first since removeId splices the real repeater.ids array, and
+                // mutating it while forEach is still walking it would shift
+                // indices and silently skip every other row.
+                repeater.ids.slice().forEach(function (id) {
+                    repeater.removeId(id);
+                });
+
+                Debug.Log(`[DeleteAllLearnedStyles] draft keys after removal: ${JSON.stringify(worker.buildStats.keys)}`);
+                worker.updatePoints(attrHandler);
+                Debug.Log(`[DeleteAllLearnedStyles] points total after removal: ${worker.buildStats.getPointsTotal()}, max: ${attrHandler.parseInt(worker.attrMax)}`);
+                worker.revertBuildStatsDraft(attrHandler);
+                attrHandler.addUpdate(WuxDef.GetVariable("Action_StyleIsVisible"), "0");
+            });
+            WuxWorkerSkills.UpdateKeySkills(attributeHandler);
+            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+            attributeHandler.run();
         }
 
     ;
@@ -706,7 +754,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         InspectSetJobStyle: inspectSetJobStyle,
         InspectSetStyle: inspectSetStyle,
         InspectListStyle: inspectListStyle,
-        DeleteListStyle: deleteListStyle
+        DeleteListStyle: deleteListStyle,
+        DeleteAllLearnedStyles: deleteAllLearnedStyles
     };
 }());
 

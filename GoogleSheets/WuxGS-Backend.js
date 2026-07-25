@@ -476,6 +476,7 @@ var FormeBuilder = FormeBuilder || (function () {
             output += listenerJobSelect();
             output += listenerInspectListStyle();
             output += listenerDeleteListStyle();
+            output += listenerDeleteAllLearnedStyles();
             output += listenerInspectListPerk();
             output += listenerDeleteListPerk();
             return output;
@@ -534,6 +535,11 @@ var FormeBuilder = FormeBuilder || (function () {
             return WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingStyles")}:${WuxDef.GetVariable("Forme_Delete")}`],
                 `WuxWorkerStyles.DeleteListStyle(eventinfo)`, true);
+        },
+        listenerDeleteAllLearnedStyles = function () {
+            return WuxSheetBackend.OnChange(
+                [`${WuxDef.GetVariable("Forme_DeleteAllStyles")}`],
+                `WuxWorkerStyles.DeleteAllLearnedStyles()`, false);
         },
         listenerInspectListPerk = function () {
             return WuxSheetBackend.OnChange(

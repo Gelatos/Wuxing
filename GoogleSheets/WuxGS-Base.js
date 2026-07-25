@@ -1593,10 +1593,32 @@ var DisplayPopups = DisplayPopups || (function () {
                     let disabledPurchaseButton = `<div class="wuxButton wuxButtonDisabled"><span name="${addType2Attr}"></span></div>`;
 
                     let costDef = WuxDef.Get("Title_InspectionItemCost");
-                    let jinAndCost = `<div style="display:flex;flex-direction:column;">` +
+                    let jinAndCost = WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd", "2"),
                         `<div class="wuxSlotSection"><span class="wuxSlotLabel">${WuxDef.GetTitle("Title_YourJin")}</span><span class="wuxSlotData"><span name="${WuxDef.GetAttribute("Jin")}"></span><span> J</span></span></div>` +
-                        `<div class="wuxSlotSection"><span class="wuxSlotLabel">${costDef.getTitle()}</span><span class="wuxSlotData"><span name="${costDef.getAttribute()}"></span></span></div>` +
-                        `</div>`;
+                        `<div class="wuxSlotSection"><span class="wuxSlotLabel">${costDef.getTitle()}</span><span class="wuxSlotData"><span name="${costDef.getAttribute()}"></span></span></div>`);
+
+                    // Style Points - same wealth-display section as Jin/Cost above, but
+                    // for the style adding system (performStyleFilterInspection,
+                    // Worker-InspectPopup.js, always opens with the base add-type slot).
+                    // Reuses the "Technique" WuxDef the sidebar's own points widget
+                    // already tracks (WuxWorkerBuild.updatePoints, WJS-Service.js), via
+                    // the same SlotDisplay widget used for Advancement/Perk points and
+                    // gear slots (WuxGS-Advancement.js, WuxGS-Base.js) - its
+                    // wuxSlotStateFlag reads _error's existing -1/0/1 over/exact/under
+                    // value and colors wuxSlotData's background accordingly
+                    // (WCSS-Specialized.css), matching that same pattern exactly.
+                    let stylePointsDef = WuxDef.Get("Technique");
+                    let stylePoints = WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd"),
+                        WuxSheetMain.SlotDisplay("Style Points", stylePointsDef.getAttribute(WuxDef._error),
+                            stylePointsDef.getAttribute(), stylePointsDef.getAttribute(WuxDef._max)));
+
+                    let wealthSection = `<div style="display:flex;flex-direction:column;">${jinAndCost}${stylePoints}</div>`;
+
+                    // Base add-type slot's button is only clickable once at least one
+                    // item is selected (Popup_InspectSelectedList, toggled per row by
+                    // TechniqueInspectPopupAttributeHandler.toggleSelectedItem) - nothing
+                    // is selected by default anymore, so the button starts disabled.
+                    let disabledAddButton = `<div class="wuxButton wuxButtonDisabled"><span name="${WuxDef.GetAttribute("Popup_InspectAddType")}"></span></div>`;
                     let buttons = `<div style="display:flex;flex-direction:column;gap:4px;">` +
                         WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd", "2"),
                             WuxSheetMain.HiddenFieldToggle(WuxDef.GetAttribute("Popup_InspectPurchaseAffordable"),
@@ -1604,11 +1626,12 @@ var DisplayPopups = DisplayPopups || (function () {
                                     `<span name="${addType2Attr}"></span>`, "wuxPopupActionButton"),
                                 disabledPurchaseButton)) +
                         WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd"),
-                            WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick"),
-                                `<span name="${WuxDef.GetAttribute("Popup_InspectAddType")}">Add</span>`, "wuxPopupActionButton")) +
+                            WuxSheetMain.HiddenFieldToggle(WuxDef.GetAttribute("Popup_InspectSelectedList"),
+                                WuxSheetMain.Button(WuxDef.GetAttribute("Popup_InspectAddClick"),
+                                    `<span name="${WuxDef.GetAttribute("Popup_InspectAddType")}">Add</span>`, "wuxPopupActionButton"),
+                                disabledAddButton)) +
                         `</div>`;
-                    return WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd", "2"),
-                        jinAndCost) + buttons;
+                    return wealthSection + buttons;
                 }
 
             return {

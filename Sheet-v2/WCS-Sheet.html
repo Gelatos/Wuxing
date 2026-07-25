@@ -14108,6 +14108,12 @@
 									<div class="wuxButton wuxSizePercent">
 										<input type="checkbox" name="attr_act-formetechniques_refresh">
 										<span>Update Techniques</span>
+									</div><input type="hidden" class="wuxDebugNotCore-flag" name="attr_pgs" value="Core">
+									<div class="wuxDebugNotCoreField">
+										<div class="wuxButton wuxSizePercent">
+											<input type="checkbox" name="attr_forme-deleteallstyles">
+											<span>Delete All Styles</span>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -14146,6 +14152,12 @@
 									<div class="wuxButton wuxSizePercent">
 										<input type="checkbox" name="attr_act-formetechniques_refresh">
 										<span>Update Techniques</span>
+									</div><input type="hidden" class="wuxDebugNotCore-flag" name="attr_pgs" value="Core">
+									<div class="wuxDebugNotCoreField">
+										<div class="wuxButton wuxSizePercent">
+											<input type="checkbox" name="attr_forme-deleteallstyles">
+											<span>Delete All Styles</span>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -16500,11 +16512,14 @@
 				<div class="wuxPopup">
 					<div class="wuxPopupHeader">
 						<span class="wuxPopupInnerHeader" name="attr_popup-popupname">Name</span>
-						<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-inspectshowadd2" value="0">
-						<div class="wuxHiddenField">
-							<div style="display:flex;flex-direction:column;">
+						<div style="display:flex;flex-direction:column;"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-inspectshowadd2" value="0">
+							<div class="wuxHiddenField">
 								<div class="wuxSlotSection"><span class="wuxSlotLabel">Your Wealth</span><span class="wuxSlotData"><span name="attr_jin"></span><span> J</span></span></div>
 								<div class="wuxSlotSection"><span class="wuxSlotLabel">Item Cost</span><span class="wuxSlotData"><span name="attr_ttl-inspectionitemcost"></span></span></div>
+							</div>
+							<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-inspectshowadd" value="0">
+							<div class="wuxHiddenField">
+								<div class="wuxSlotSection"><span class="wuxSlotLabel">Style Points</span><input type="hidden" class="wuxSlotStateFlag" name="attr_tch_error" value="0"><span class="wuxSlotData"><span name="attr_tch" value="0">0</span> / <span name="attr_tch_max">0</span></span></div>
 							</div>
 						</div>
 						<div style="display:flex;flex-direction:column;gap:4px;"><input type="hidden" class="wuxHiddenField-flag" name="attr_popup-inspectshowadd2" value="0">
@@ -16525,10 +16540,19 @@
 							</div>
 							<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-inspectshowadd" value="0">
 							<div class="wuxHiddenField">
-								<div class="wuxButton wuxPopupActionButton">
-									<input type="checkbox" name="attr_popup-inspectaddclick">
-									<span><span name="attr_popup-inspectaddtype">Add</span></span>
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-inspectselectedlist" value="0">
+								<div class="wuxHiddenField">
+									<div class="wuxButton wuxPopupActionButton">
+										<input type="checkbox" name="attr_popup-inspectaddclick">
+										<span><span name="attr_popup-inspectaddtype">Add</span></span>
+									</div>
 								</div>
+
+								<input type="hidden" class="wuxHiddenField-flag" name="attr_popup-inspectselectedlist" value="0">
+								<div class="wuxHiddenAuxField">
+									<div class="wuxButton wuxButtonDisabled"><span name="attr_popup-inspectaddtype"></span></div>
+								</div>
+
 							</div>
 						</div>
 						<div class="wuxButton wuxPopupClose">
@@ -19636,6 +19660,9 @@ WuxWorkerStyles.InspectListStyle(eventinfo)
 });
 on("change:repeating_styles:forme-delete", function (eventinfo) {
 WuxWorkerStyles.DeleteListStyle(eventinfo)
+});
+on("change:forme-deleteallstyles", function (eventinfo) {
+WuxWorkerStyles.DeleteAllLearnedStyles()
 });
 on("change:repeating_perks:forme-inspect", function (eventinfo) {
 WuxWorkerPerks.InspectListPerk(eventinfo)

@@ -1148,6 +1148,10 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
 
         buildTechDebugSection = function () {
             let contents = "";
+            let deleteAllStylesDef = WuxDef.Get("Forme_DeleteAllStyles");
+            let deleteAllStylesButton = WuxSheetMain.Button(deleteAllStylesDef.getAttribute(), deleteAllStylesDef.getTitle(), "wuxSizePercent");
+            contents += `<input type="hidden" class="wuxDebugNotCore-flag" name="${WuxDef.GetAttribute("PageSet")}" value="Core">
+                <div class="wuxDebugNotCoreField">${deleteAllStylesButton}</div>`;
             let refreshTechDef = WuxDef.Get("RefreshTech");
             contents += WuxSheetMain.Button(refreshTechDef.getAttribute(), refreshTechDef.getTitle(), "wuxSizePercent");
             let sectionDefinition = WuxDef.Get("Action_FormeTechniques");
