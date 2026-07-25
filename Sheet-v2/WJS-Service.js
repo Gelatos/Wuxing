@@ -1099,6 +1099,27 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.setTechniqueUseRollTemplate(technique, displayData);
 		}
 	}
+	// Entry point for the new technique catalog (Worker-InspectPopup.js's
+	// TechniqueCatalogDatabase) - layers the requirements+select section on top of the
+	// same technique info every other context uses, without touching setTechniqueInfo
+	// itself so the live Actions tab and the existing popup are unaffected.
+	setTechniqueCatalogInfo(technique) {
+		this.setTechniqueInfo(technique, false);
+		this.setTechniqueRequirement(technique);
+	}
+	// TechRequirement is a new, catalog-only field (not part of the shared
+	// clearTechniqueInfo reset, since that would touch the live Actions tab too) -
+	// always written fresh here, so no separate clear step is needed. Its max slot
+	// is piggybacked as the select button's click target, same base+max pairing
+	// convention used by every other paired Tech* field.
+	setTechniqueRequirement(technique) {
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechRequirement"), technique.getRequirementText());
+		// Select button click target is inert for now (no listener registered yet) -
+		// reset it so a reused/regenerated row doesn't carry over stale state.
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechRequirement", WuxDef._max), "0");
+	}
 	// Up to 6 variant slots (5 elements + Neutral) are packed two-per-attribute using
 	// base+max, so only the single "TechVariant" definition is needed: pair 0 is the
 	// plain attribute, pairs 1/2 use "1"/"2" as an extra suffix ahead of _max. Pair 3
@@ -1432,11 +1453,13 @@ class ItemDataAttributeHandler extends DatabaseItemAttributeHandler {
 		}
 		if (displayData.traits != "") {
 			this.attrHandler.addUpdate(this.getVariable("ItemTrait"), displayData.traits);
-			this.attrHandler.addUpdate(this.getVariable("ItemTrait", WuxDef._info), displayData.getTraitsDescriptions("\n"));
+			// Tooltip text is piggybacked onto ItemTrait's max slot instead of a separate attribute.
+			this.attrHandler.addUpdate(this.getVariable("ItemTrait", WuxDef._max), displayData.getTraitsDescriptions("\n"));
 		}
 		if (displayData.craftData.length > 0) {
 			this.attrHandler.addUpdate(this.getVariable("ItemCraft"), displayData.getCraftingDescriptions("\n"));
-			this.attrHandler.addUpdate(this.getVariable("ItemCraft", WuxDef._info), displayData.getCraftingTooltip("\n"));
+			// Tooltip text is piggybacked onto ItemCraft's max slot instead of a separate attribute.
+			this.attrHandler.addUpdate(this.getVariable("ItemCraft", WuxDef._max), displayData.getCraftingTooltip("\n"));
 		}
 	}
 	clearItemInfo () {
@@ -1446,9 +1469,9 @@ class ItemDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addUpdate(this.getVariable("ItemBaseValue"), "");
 		this.attrHandler.addUpdate(this.getVariable("ItemDescription"), 0);
 		this.attrHandler.addUpdate(this.getVariable("ItemTrait"), 0);
-		this.attrHandler.addUpdate(this.getVariable("ItemTrait", WuxDef._info), 0);
+		this.attrHandler.addUpdate(this.getVariable("ItemTrait", WuxDef._max), 0);
 		this.attrHandler.addUpdate(this.getVariable("ItemCraft"), 0);
-		this.attrHandler.addUpdate(this.getVariable("ItemCraft", WuxDef._info), 0);
+		this.attrHandler.addUpdate(this.getVariable("ItemCraft", WuxDef._max), 0);
 		this.attrHandler.addUpdate(this.getVariable("ItemPerFive"), "0");
 	}
 }

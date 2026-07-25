@@ -688,6 +688,21 @@ input[type=hidden].wuxHiddenSingleCount-flag[value="1"] + .wuxDescription
     cursor: pointer;
 }
 
+/* The rule above's "background" shorthand resets background-image/position/size/
+   repeat to their defaults for any .wuxButton inside the inspection popup - harmless
+   for plain buttons, but .wuxTechVariantButton (WCSS-Specialized.css) needs its own
+   background-image (the affinity icon) and matching size/position/repeat to actually
+   show. Variant-swap buttons only started appearing inside this popup with the
+   all-items redesign; restore their icon sizing here. */
+.wuxInspectionPopupContentData .wuxTechVariantButton
+{
+    margin: 0;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14px 14px;
+}
+
 input[type=hidden].wuxInspectionPopupSelectContainer-flag[value="on"] + .wuxInspectionPopupSelectContainer,
 input[type=hidden].wuxFilterPopupSelectContainer-flag[value="on"] + .wuxFilterPopupSelectContainer
 {
@@ -751,6 +766,7 @@ input[type=hidden].wuxFilterPopupSelectContainer-flag[value="on"] + .wuxFilterPo
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
+    max-width: 200px;
 }
 
 /* Name span: natural width, not a full-width block */

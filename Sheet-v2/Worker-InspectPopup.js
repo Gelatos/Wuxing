@@ -117,6 +117,60 @@ const getTechHeader = function (affinity) {
     return `Requires ${list} affinity`;
 };
 
+// New "catalog" popup (appearance stage only - see plan): shows every available
+// technique as a full card at once, mirroring RepeatingFormeTech (Worker-Actions.js's
+// FormeTechniqueDatabase) instead of the select-then-preview InspectPopupAttributeHandler
+// flow above. Not yet invoked from any button/UI - exists so the generated HTML/JS can
+// be reviewed directly. Reuses the existing popup's own "ItemPopupValues" repeater
+// (same registration pattern as InspectPopupAttributeHandler.iterateAndSetItems, below)
+// rather than a brand-new repeating section, so no new WuxDef repeater definition needs
+// to be flagged. Populated via TechniqueDataAttributeHandler's normal
+// setRepeaterData/setId/setTechniqueCatalogInfo loop, same way
+// FormeTechniqueDatabaseBase.addMissingTechniques does for the live Actions tab.
+class TechniqueCatalogDatabase {
+    constructor(attributeHandler) {
+        this.catalogRepeaterId = "ItemPopupValues";
+        attributeHandler.addRepeatingSection(this.catalogRepeaterId);
+    }
+
+    // Gathers every technique matching the given style filters, grouped by tier into
+    // header rows. Reuses the same gathering helpers performStyleFilterInspection uses
+    // (getFilteredBaseStyles + WuxTechs.SortFilteredTechniquesByRequirement) but skips
+    // the learnable/unlearnable split and InspectionInventoryItem list-building, since
+    // this writes full catalog cards directly instead of select-list rows - "every
+    // available technique" for this stage means every technique for the style, not
+    // gated by whether the character currently qualifies (that's a functionality
+    // concern for a later step, not appearance).
+    populate(attrHandler, filters) {
+        let repeater = attrHandler.getRepeatingSection(this.catalogRepeaterId);
+        let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");
+        techniqueAttributeHandler.setRepeaterData(repeater);
+
+        let baseStyles = getFilteredBaseStyles(filters);
+        let sortedStyles = WuxTechs.SortFilteredTechniquesByRequirement(baseStyles);
+
+        for (let tier = 9; tier >= 1; tier--) {
+            let techniques = [];
+            sortedStyles.get(tier).iterate(function (techsByAffinity) {
+                techniques = techniques.concat(techsByAffinity);
+            });
+            if (techniques.length === 0) {
+                continue;
+            }
+
+            let headerId = repeater.generateRowId();
+            techniqueAttributeHandler.setId(headerId);
+            techniqueAttributeHandler.setHeaderInfo(`Tier ${tier}`, `Tier ${tier}`);
+
+            techniques.forEach(function (technique) {
+                let id = repeater.generateRowId();
+                techniqueAttributeHandler.setId(id);
+                techniqueAttributeHandler.setTechniqueCatalogInfo(technique);
+            });
+        }
+    }
+}
+
 class FilteredItemsInventoryItemHandler extends InspectionInventoryItemHandler {
     constructor(filters) {
         super();

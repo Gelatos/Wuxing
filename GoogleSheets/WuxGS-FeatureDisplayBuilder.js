@@ -530,8 +530,7 @@ class BaseItemDisplayBuilder extends BaseFeatureDisplayBuilder {
     printInfoBlock() {
         return this.printInfoBlockField(
             `${this.printFlavorText()}
-            ${this.printTraits()}
-            ${this.printCrafting()}`);
+            ${this.printTraits()}`);
     }
 
     printBulk() {}
@@ -551,15 +550,6 @@ class BaseItemDisplayBuilder extends BaseFeatureDisplayBuilder {
     printTraits() {}
     printTraitsField (title, contents) {
         return `<div class="wuxFeatureHeaderInfoTraits"><strong>${title}.</strong> ${contents}</div>`;
-    }
-
-    printCrafting() {}
-    printCraftingField (title, contents) {
-        return `<div class="wuxFeatureHeaderInfoEffect-Core">
-            <input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-            <div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${title}</span></div>
-            <div class="wuxFeatureHeaderInfoContents">${contents}</div>
-        </div>`;
     }
 }
 
@@ -597,7 +587,7 @@ class ItemRepeaterDisplayBuilder extends BaseItemDisplayBuilder {
         let fieldName = this.getActionTypeAttribute("ItemGroup");
         return this.printActionTypeField(
             `<input type="hidden" class="wuxFeatureHeader-flag" value="Item">`,
-            this.printSpan(fieldName));
+            this.printCraftingTooltip(this.printSpan(fieldName)));
     }
     printBulk() {
         let fieldName = this.getActionTypeAttribute("ItemBulk");
@@ -615,20 +605,22 @@ class ItemRepeaterDisplayBuilder extends BaseItemDisplayBuilder {
         let fieldName = this.getActionTypeAttribute("ItemTrait");
         return WuxSheetMain.HiddenField(fieldName,
             this.printTraitsField(
-                this.printAttributeTooltip("Traits", "Traits", this.getActionTypeAttribute("ItemTrait", WuxDef._info)),
+                // Tooltip text is piggybacked onto ItemTrait's max slot.
+                this.printAttributeTooltip("Traits", "Traits", this.getActionTypeAttribute("ItemTrait", WuxDef._max)),
                 this.printSpan(fieldName)
             )
         );
     }
-    printCrafting() {
+    // Crafting rules are hidden inside a tooltip on the item's category label
+    // instead of their own always-visible section - only becomes hoverable when
+    // the item actually has crafting data (ItemCraft's base slot).
+    printCraftingTooltip (categoryContents) {
         let fieldName = this.getActionTypeAttribute("ItemCraft");
-        return WuxSheetMain.HiddenField(fieldName,
-            this.printCraftingField(
-                this.printAttributeTooltip("Crafting", "Crafting",
-                    this.getActionTypeAttribute("ItemCraft", WuxDef._info)),
-                this.printSpan(fieldName)
-            )
-        );
+        let descriptionData = `<span class="wuxDescription" name="${fieldName}"></span>
+            <span class="wuxDescription" name="${this.getActionTypeAttribute("ItemCraft", WuxDef._max)}"></span>`;
+        return WuxSheetMain.HiddenSpanFieldToggle(fieldName,
+            this.printTooltipField(categoryContents, "Crafting", descriptionData),
+            categoryContents);
     }
 }
 

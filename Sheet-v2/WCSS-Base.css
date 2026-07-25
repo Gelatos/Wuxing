@@ -146,6 +146,31 @@ input[type=number]::-webkit-inner-spin-button {
     overflow: hidden;
 }
 
+/* Same 240px card grid as .wuxFormeTechRepeater, for the Inspect Popup's all-items
+   list (each row can be a group header, or an item's requirement bar + item card +
+   technique card stacked together - the whole row is one grid cell). */
+.wuxItemPopupRepeater .repcontainer > .repitem {
+    flex: 0 0 auto !important;
+    width: 240px !important;
+    min-width: 240px !important;
+    max-width: 240px !important;
+    box-sizing: border-box !important;
+}
+
+.wuxItemPopupRepeater .wuxFeature {
+    box-sizing: border-box;
+}
+
+/* Group-divider rows (itemselecttype="0") span the full list width instead of being
+   squeezed into a 240px card, same idea as the techtruename_max full-width case above. */
+.wuxItemPopupRepeater .repcontainer > .repitem:has(input[name*="itemselecttype"][value="0"]) {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
 
 /*========================================
   Master Layout
