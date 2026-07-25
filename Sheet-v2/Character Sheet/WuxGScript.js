@@ -12711,6 +12711,150 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     ${WuxSheetMain.HiddenFieldToggle(techDisplayTypeField, headerContent, techniqueDisplayBuilder.print())}`;
                 },
 
+                // New technique catalog (appearance stage only - not called from the
+                // page build yet, see plan). Mirrors repeatingFormeSection/
+                // printFormTechniqueFullActionDisplay above but: (1) reuses the existing
+                // popup's own "ItemPopupValues" repeater instead of a new one, (2) uses
+                // the plain (non-clickable, no rank buttons) TechniqueRepeaterDisplayBuilder
+                // instead of the "Usable" clickable subclass, (3) adds a new requirements
+                // + select-button section above each card.
+                repeatingCatalogTechSection = function () {
+                    let repeaterDefinition = WuxDef.Get("ItemPopupValues");
+                    let repeatingVariable = repeaterDefinition.getVariable();
+
+                    // IsVisible is piggybacked onto TechActionType's max slot, same
+                    // mechanism as the live Actions tab.
+                    let actionDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("TechActionType", WuxDef._max),
+                        printCatalogTechniqueFullDisplay());
+                    // wuxCatalogRepeater adds catalog-only spacing (WCSS-Base.css) on top
+                    // of wuxFormeTechRepeater's shared 240px card grid, without touching
+                    // the live Actions tab's own use of that class.
+                    let displayTechniquesContents = buildRepeater(repeatingVariable, actionDisplay, "wuxFormeTechRepeater wuxCatalogRepeater");
+
+                    return `${displayTechniquesContents}
+                    ${printCatalogLoadMoreButton()}
+                    ${WuxSheetMain.Row("&nbsp;")}`;
+                },
+                printCatalogTechniqueFullDisplay = function () {
+                    let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilder(WuxDef.Get("Action"));
+                    // Display-type header flag is piggybacked onto TechTrueName's max slot.
+                    let techDisplayTypeField = getActionTypeAttribute("TechTrueName", WuxDef._max);
+                    let headerContent = `<div class="wuxFeatureSectionHeader">
+                        ${WuxSheetMain.Header2(`<span name="${getActionTypeAttribute("TechName")}"></span>`)}
+                    </div>`;
+
+                    // Selected-state styling (WCSS-Specialized.css) reads this flag via a
+                    // sibling selector on the wuxFeature frame below - the same field the
+                    // existing select/add mechanism already toggles
+                    // (InspectPopupAttributeHandler.setSelectedItem/clearLastSelectedItem,
+                    // Worker-InspectPopup.js), no new wiring needed here. Built manually
+                    // instead of techniqueDisplayBuilder.print() so the Select button can
+                    // sit inside the frame, below the technique's own content, instead of
+                    // as its own section above it.
+                    // No Action_Use field here - catalog techniques never get a roll
+                    // template set (setTechniqueCatalogInfo calls setTechniqueInfo with
+                    // setUse=false), so there's nothing for it to hold.
+                    let cardContent = `<input type="hidden" class="wuxCatalogCard-selected-flag" name="${WuxDef.GetAttribute("Popup_ItemSelectIsOn")}" value="0">
+                    <div class="wuxFeature">
+                        ${techniqueDisplayBuilder.printHeaderBlock()}
+                        ${techniqueDisplayBuilder.printInfoBlock()}
+                        ${printCatalogSelectSection()}
+                    </div>`;
+
+                    return `<input type="hidden" name="${getActionTypeAttribute("TechName", WuxDef._max)}" value="" />
+                    ${WuxSheetMain.HiddenFieldToggle(techDisplayTypeField, headerContent, cardContent)}`;
+                },
+                // Sits at the bottom of the card, inside the wuxFeature frame (see
+                // printCatalogTechniqueFullDisplay above). Requirement text itself
+                // isn't shown per-card - the tier-group header above each group of
+                // cards (performStyleFilterInspection, Worker-InspectPopup.js) already
+                // states it once per group, so a second copy per card would just be
+                // redundant - this section is just the Select button now.
+                printCatalogSelectSection = function () {
+                    let selectField = getActionTypeAttribute("TechRequirement", WuxDef._max);
+                    // The select button only makes sense while browsing to add a new
+                    // style. Can't gate this on Popup_InspectShowAdd directly - Roll20
+                    // silently rescopes any field name referenced inside a <fieldset
+                    // class="repeating_x"> to a per-row attribute, even ones meant to be
+                    // global, so a bare global reference here never reflects the real
+                    // value. TechRequirement's base slot carries a row-scoped "can
+                    // select" flag instead, computed once outside the HTML and written
+                    // per row (setTechniqueRequirement, WJS-Service.js).
+                    let canSelectField = getActionTypeAttribute("TechRequirement");
+                    let selectButton = WuxSheetMain.HiddenField(canSelectField,
+                        WuxSheetMain.Button(selectField, "Select", "wuxCatalogSelectButton"));
+                    return `<div class="wuxCatalogSelectSection">
+                        ${selectButton}
+                    </div>`;
+                },
+
+                // Load More button (Popup_LoadMore) for a catalog repeater - appearance
+                // only, no click handler wired yet (that's later "functionality" work).
+                // Visibility is piggybacked onto its own max slot so it can be hidden
+                // once all rows are loaded. suffix distinguishes the technique catalog's
+                // button (no suffix) from the item catalog's (suffix "1") since both
+                // reuse the same Popup_LoadMore definition.
+                printCatalogLoadMoreButton = function (suffix) {
+                    let loadMoreField = WuxDef.GetAttribute("Popup_LoadMore", suffix);
+                    let loadMoreVisibleField = WuxDef.GetAttribute("Popup_LoadMore", `${suffix != undefined ? suffix : ""}${WuxDef._max}`);
+                    return WuxSheetMain.HiddenField(loadMoreVisibleField,
+                        WuxSheetMain.Row(WuxSheetMain.Button(loadMoreField, WuxDef.Get("Popup_LoadMore").getTitle("More"), "wuxCatalogLoadMoreButton")));
+                },
+
+                // New item catalog (appearance stage only, same status as the technique
+                // catalog above - not called from the page build yet, see plan). Reuses
+                // the same "ItemPopupValues" repeater as its own, independent fieldset
+                // over the same rows, alongside the technique catalog's own fieldset
+                // above and the old select-list flow this repeater still also backs
+                // in Worker-InspectPopup.js.
+                repeatingCatalogItemSection = function () {
+                    let repeaterDefinition = WuxDef.Get("ItemPopupValues");
+                    let repeatingVariable = repeaterDefinition.getVariable();
+
+                    let header = `<span>Item Catalog</span>`;
+
+                    // IsVisible is piggybacked onto ItemGroup's max slot - unused
+                    // elsewhere, same "repurpose an unused max slot as a catalog row
+                    // flag" convention as TechActionType's max slot above.
+                    let itemDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("ItemGroup", WuxDef._max),
+                        printCatalogItemFullDisplay());
+                    let displayItemsContents = buildRepeater(repeatingVariable, itemDisplay, "wuxFormeTechRepeater wuxCatalogRepeater");
+
+                    return `${WuxSheetMain.Header(header)}
+                    ${displayItemsContents}
+                    ${printCatalogLoadMoreButton("1")}
+                    ${WuxSheetMain.Row("&nbsp;")}`;
+                },
+                printCatalogItemFullDisplay = function () {
+                    let itemDisplayBuilder = new ItemRepeaterDisplayBuilder(WuxDef.Get("Action"));
+                    // Display-type header flag is piggybacked onto ItemName's max slot,
+                    // mirroring the technique catalog's TechName/TechTrueName pairing.
+                    let itemDisplayTypeField = getActionTypeAttribute("ItemName", WuxDef._max);
+                    let headerContent = `<div class="wuxFeatureSectionHeader">
+                        ${WuxSheetMain.Header2(`<span name="${getActionTypeAttribute("ItemName")}"></span>`)}
+                    </div>`;
+
+                    // Item goes on top, with its granted technique (if any) fused in
+                    // below via printCatalogGrantedTechniqueSection.
+                    let cardContent = `${itemDisplayBuilder.print()}
+                    ${printCatalogGrantedTechniqueSection()}`;
+
+                    return `<input type="hidden" name="${getActionTypeAttribute("ItemName", WuxDef._max)}" value="" />
+                    ${WuxSheetMain.HiddenFieldToggle(itemDisplayTypeField, headerContent, cardContent)}`;
+                },
+                printCatalogGrantedTechniqueSection = function () {
+                    // TechTrueName is explicitly reset to "0" whenever no technique is
+                    // set (clearTechniqueInfo, WJS-Service.js) and set to the technique's
+                    // real name otherwise - a reliable non-blank gate, unlike
+                    // TechActionType's max slot (never written outside
+                    // setVisibilityAttribute, which the catalog path doesn't call).
+                    let hasTechniqueField = getActionTypeAttribute("TechTrueName");
+                    let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilder(WuxDef.Get("Action"));
+                    return WuxSheetMain.HiddenField(hasTechniqueField,
+                        `<div class="wuxCatalogGrantedTechniqueHeader">This item grants the following technique</div>
+                        ${techniqueDisplayBuilder.print()}`);
+                },
+
                 getActionTypeAttribute = function (attribute, suffix) {
                     let baseDefinition = WuxDef.Get("Action");
                     return baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
@@ -12845,12 +12989,14 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 }
 
             return {
-                Print: print
+                Print: print,
+                RepeatingCatalogTechSection: repeatingCatalogTechSection
             }
         }());
 
     return {
-        Print: print
+        Print: print,
+        RepeatingCatalogTechSection: MainContentData.RepeatingCatalogTechSection
     };
 }());
 
@@ -12908,49 +13054,26 @@ var DisplayPopups = DisplayPopups || (function () {
             'use strict';
 
             var
+                // The old select-then-preview item/technique display (buildItemTemplate,
+                // buildTechniqueTemplate, buildItemRepeater's select list) has been
+                // removed - superseded by the new fused item+technique catalog. Only the
+                // technique catalog is wired in so far (item catalog is a later pass) -
+                // see DisplayActionSheet.RepeatingCatalogTechSection, which lives in a
+                // different top-level module (DisplayActionSheet's MainContentData) and
+                // is re-exposed through that module's own public interface to be
+                // reachable here.
                 print = function () {
                     let contents = "";
                     contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Popup_InspectSelectType"), "") + "\n";
                     contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Popup_InspectSelectId"), "") + "\n";
-                    contents += buildInspectionPopupContentData(buildItemTemplate() + buildTechniqueTemplate());
-                    contents += buildInspectionPopupContentData(buildItemRepeater());
+                    // .wuxInspectionPopupContentData isn't just a layout wrapper - WCSS-Footer.css
+                    // has popup-specific overrides (header color/border, width) keyed off this
+                    // class, so catalog content needs it too, same as the old display did.
+                    contents += `<div class="wuxInspectionPopupContentData">${DisplayActionSheet.RepeatingCatalogTechSection()}</div>`;
                     return `<div class="wuxInspectionPopupContents">${contents}</div>`;
                 },
                 printHeader = function () {
                     return printAddButton();
-                },
-
-                buildInspectionPopupContentData = function (contents) {
-                    return `<div class="wuxInspectionPopupContentData">${contents}</div>`;
-                },
-
-                buildItemTemplate = function () {
-                    let popupDef = WuxDef.Get("Popup");
-                    let itemRepeaterDisplayBuilder = new ItemRepeaterDisplayBuilder(popupDef);
-
-                    let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("ItemName")}`);
-                    return WuxSheetMain.HiddenField(fieldName,
-                        `${WuxSheetMain.Header("Item Data")}
-                        ${itemRepeaterDisplayBuilder.print()}`);
-                },
-
-                buildTechniqueTemplate = function () {
-                    let popupDef = WuxDef.Get("Popup");
-                    let output = "";
-                    for (let i = 0; i < 4; i++) {
-                        // IsVisible is piggybacked onto TechActionType's max slot (see WJS-Service.js).
-                        let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechActionType", WuxDef._max)}${i}`);
-                        let techHeaderAttr = popupDef.getAttribute(`-${WuxDef.GetVariable("TechHeader")}${i}`);
-                        let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilder(popupDef, i);
-                        output += `<div>${WuxSheetMain.HiddenField(fieldName,
-                            WuxSheetMain.HiddenField(techHeaderAttr, WuxSheetMain.Header2(WuxSheetMain.Span(techHeaderAttr))) +
-                            techniqueDisplayBuilder.print())}</div>`;
-                    }
-
-                    let fieldName = popupDef.getAttribute(`-${WuxDef.GetVariable("TechActionType", WuxDef._max)}0`);
-                    return WuxSheetMain.HiddenField(fieldName,
-                        `${WuxSheetMain.Header("Technique")}
-                        ${output}`);
                 },
 
                 printAddButton = function () {
@@ -12974,41 +13097,6 @@ var DisplayPopups = DisplayPopups || (function () {
                         `</div>`;
                     return WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd", "2"),
                         jinAndCost) + buttons;
-                },
-
-                buildItemRepeater = function () {
-                    let itemSelectNameAttr = WuxDef.GetAttribute("Popup_ItemSelectName");
-                    let itemSelectTypeAttr = WuxDef.GetAttribute("Popup_ItemSelectType");
-                    let itemSelectDisplayAttr = WuxDef.GetAttribute("Popup_ItemSelectDisplay");
-                    let itemSelectIsOnAttr = WuxDef.GetAttribute("Popup_ItemSelectIsOn");
-                    let itemSelectVisibleAttr = WuxDef.GetAttribute("Popup_ItemSelectVisible");
-                    let affinityIcons =
-                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayNeutral"), `<img class="wuxAffinityIcon wuxAffinityIconNeutral" src="https://i.imgur.com/5hQ5Bun.png">`) +
-                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayWood"), `<img class="wuxAffinityIcon wuxAffinityIconWood"    src="https://i.imgur.com/pjMuXYy.png">`) +
-                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayFire"), `<img class="wuxAffinityIcon wuxAffinityIconFire"    src="https://i.imgur.com/aD41Ap4.png">`) +
-                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayEarth"), `<img class="wuxAffinityIcon wuxAffinityIconEarth"   src="https://i.imgur.com/1efdxRx.png">`) +
-                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayMetal"), `<img class="wuxAffinityIcon wuxAffinityIconMetal"   src="https://i.imgur.com/CFQ9LJx.png">`) +
-                        WuxSheetMain.HiddenAuxSpanField(WuxDef.GetAttribute("Popup_ItemSelectDisplayWater"), `<img class="wuxAffinityIcon wuxAffinityIconWater"   src="https://i.imgur.com/KAcJG5h.png">`);
-                    let itemData = WuxSheetMain.HiddenField(itemSelectVisibleAttr,
-                        WuxSheetMain.HiddenFieldToggle(itemSelectTypeAttr,
-                            `${WuxSheetMain.Input("hidden", itemSelectNameAttr)}
-                        <input type="hidden" class="wuxInspectionPopupSelectContainer-flag" name="${itemSelectIsOnAttr}">
-                        ${WuxSheetMain.Button(itemSelectIsOnAttr, WuxSheetMain.Span(itemSelectDisplayAttr) + affinityIcons, "wuxInspectionPopupSelectContainer")}`,
-                            `${WuxSheetMain.Header2(WuxSheetMain.Span(itemSelectDisplayAttr))}
-                        ${WuxSheetMain.HiddenField(itemSelectNameAttr, WuxSheetMain.Desc(WuxSheetMain.Span(itemSelectNameAttr)))}`)
-                    );
-
-                    let groupDef = WuxDef.Get("Popup_InspectSelectGroup")
-                    return `${WuxSheetMain.Header(`<span name="${groupDef.getAttribute()}">${groupDef.getTitle()}</span>`)}
-                    ${buildRepeater(WuxDef.GetVariable("ItemPopupValues"), itemData)}`;
-                },
-
-                buildRepeater = function (repeaterName, repeaterData) {
-                    return `<div class="wuxNoRepControl">
-                        <fieldset class="${repeaterName}">
-                            ${repeaterData}
-                        </fieldset>
-                    </div>`;
                 }
 
             return {
@@ -14062,6 +14150,7 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerCloseSubMenu();
             output += listenerClosePopup();
             output += listenerUpdateRepeatingItemInspectPopupItems();
+            output += listenerSwapCatalogTechniqueVariant();
             output += listenerInspectPopupButtons();
             output += listenerFilterPopupButtons();
             return output;
@@ -14140,10 +14229,34 @@ var PopupBuilder = PopupBuilder || (function () {
         },
         listenerUpdateRepeatingItemInspectPopupItems = function () {
             let repeatingSection = WuxDef.GetVariable("ItemPopupValues");
-            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Popup_ItemSelectIsOn")}`];
+            // Catalog cards' Select button (TechRequirement's max slot - see
+            // printCatalogRequirementSection, WuxGS-Base.js) triggers the same
+            // handler as the old select-list's click container - both just need
+            // eventinfo.sourceAttribute to find the row id (selectInspectionItemFromActiveGroup,
+            // Worker-InspectPopup.js), so one shared listener covers both.
+            let baseDef = WuxDef.Get("Action");
+            let catalogSelectVar = baseDef.getVariable(`-${WuxDef.GetVariable("TechRequirement", WuxDef._max)}`);
+            let groupVariableNames = [
+                `${repeatingSection}:${WuxDef.GetVariable("Popup_ItemSelectIsOn")}`,
+                `${repeatingSection}:${catalogSelectVar}`
+            ];
             let output = `WuxWorkerInspectPopup.SelectInspectionItemFromActiveGroup(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        // Catalog cards' variant quick-switch buttons (TechVariant pair 3, the
+        // shared click trigger every slot submits its own index to - see
+        // TechniqueDataAttributeHandler.getVariantSelectFieldName, WJS-Service.js)
+        // reuse the exact same field shape as the live Actions tab's own variant
+        // buttons (listenerSwapTechniqueVariant above), just scoped to the
+        // "ItemPopupValues" repeater instead of "RepeatingFormeTech".
+        listenerSwapCatalogTechniqueVariant = function () {
+            let baseDef = WuxDef.Get("Action");
+            let variantSelectVar = baseDef.getVariable(`-${WuxDef.GetVariable("TechVariant", "3")}`);
+            let repeaterVar = WuxDef.GetVariable("ItemPopupValues");
+
+            return WuxSheetBackend.OnChange([`${repeaterVar}:${variantSelectVar}`],
+                `WuxWorkerInspectPopup.SwapCatalogTechniqueVariant(eventinfo)`, true);
         },
         listenerFilterPopupButtons = function () {
             return `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Popup_ApplyFilter")}`],
@@ -16224,8 +16337,14 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         // 6 slots (2 per attribute pair, base+max - see WJS-Service.js) each hold
         // "ElementName:TechniqueName". CSS matches the ElementName prefix to pick each
         // button's icon (WCSS-Specialized.css). Clicking a button submits its own slot
-        // index (0-5) to the shared select field (pair 3), which Worker-Actions.js reads
-        // to find that slot's TechniqueName and swap the display to it.
+        // index to the shared select field (pair 3), which Worker-Actions.js /
+        // Worker-InspectPopup.js read to find that slot's TechniqueName and swap the
+        // display to it. Submitted as i+1 (1-6), not the raw 0-5 index - slot 0's
+        // button would otherwise submit "0", the same sentinel this codebase uses
+        // everywhere for "off/unset", so if the field's current value was already
+        // "0" (its normal resting state), clicking that one button was a no-op:
+        // Roll20 only fires change on an actual value transition. Both swap handlers
+        // subtract 1 back off before indexing into their own 0-based slot arrays.
         let selectField = this.getActionTypeAttribute("TechVariant", "3");
         let buttons = "";
         for (let i = 0; i < 6; i++) {
@@ -16235,7 +16354,7 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
                 ? this.getActionTypeAttribute("TechVariant", `${pairSuffix}${WuxDef._max}`)
                 : this.getActionTypeAttribute("TechVariant", pairSuffix);
             buttons += `<input type="hidden" class="wuxTechVariant-flag" name="${fieldName}" value="0">
-            ${WuxSheetMain.Button(selectField, "", "wuxTechVariantButton", `${i}`)}`;
+            ${WuxSheetMain.Button(selectField, "", "wuxTechVariantButton", `${i + 1}`)}`;
         }
         // Each slot is a fixed element index (see WJS-Service.js), not sequentially
         // packed, so no single slot reliably indicates "nothing to show" - the whole
@@ -16389,8 +16508,7 @@ class BaseItemDisplayBuilder extends BaseFeatureDisplayBuilder {
     printInfoBlock() {
         return this.printInfoBlockField(
             `${this.printFlavorText()}
-            ${this.printTraits()}
-            ${this.printCrafting()}`);
+            ${this.printTraits()}`);
     }
 
     printBulk() {}
@@ -16410,15 +16528,6 @@ class BaseItemDisplayBuilder extends BaseFeatureDisplayBuilder {
     printTraits() {}
     printTraitsField (title, contents) {
         return `<div class="wuxFeatureHeaderInfoTraits"><strong>${title}.</strong> ${contents}</div>`;
-    }
-
-    printCrafting() {}
-    printCraftingField (title, contents) {
-        return `<div class="wuxFeatureHeaderInfoEffect-Core">
-            <input type="hidden" class="wuxFeatureHeader-flag" value="Core">
-            <div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${title}</span></div>
-            <div class="wuxFeatureHeaderInfoContents">${contents}</div>
-        </div>`;
     }
 }
 
@@ -16456,7 +16565,7 @@ class ItemRepeaterDisplayBuilder extends BaseItemDisplayBuilder {
         let fieldName = this.getActionTypeAttribute("ItemGroup");
         return this.printActionTypeField(
             `<input type="hidden" class="wuxFeatureHeader-flag" value="Item">`,
-            this.printSpan(fieldName));
+            this.printCraftingTooltip(this.printSpan(fieldName)));
     }
     printBulk() {
         let fieldName = this.getActionTypeAttribute("ItemBulk");
@@ -16474,20 +16583,22 @@ class ItemRepeaterDisplayBuilder extends BaseItemDisplayBuilder {
         let fieldName = this.getActionTypeAttribute("ItemTrait");
         return WuxSheetMain.HiddenField(fieldName,
             this.printTraitsField(
-                this.printAttributeTooltip("Traits", "Traits", this.getActionTypeAttribute("ItemTrait", WuxDef._info)),
+                // Tooltip text is piggybacked onto ItemTrait's max slot.
+                this.printAttributeTooltip("Traits", "Traits", this.getActionTypeAttribute("ItemTrait", WuxDef._max)),
                 this.printSpan(fieldName)
             )
         );
     }
-    printCrafting() {
+    // Crafting rules are hidden inside a tooltip on the item's category label
+    // instead of their own always-visible section - only becomes hoverable when
+    // the item actually has crafting data (ItemCraft's base slot).
+    printCraftingTooltip (categoryContents) {
         let fieldName = this.getActionTypeAttribute("ItemCraft");
-        return WuxSheetMain.HiddenField(fieldName,
-            this.printCraftingField(
-                this.printAttributeTooltip("Crafting", "Crafting",
-                    this.getActionTypeAttribute("ItemCraft", WuxDef._info)),
-                this.printSpan(fieldName)
-            )
-        );
+        let descriptionData = `<span class="wuxDescription" name="${fieldName}"></span>
+            <span class="wuxDescription" name="${this.getActionTypeAttribute("ItemCraft", WuxDef._max)}"></span>`;
+        return WuxSheetMain.HiddenSpanFieldToggle(fieldName,
+            this.printTooltipField(categoryContents, "Crafting", descriptionData),
+            categoryContents);
     }
 }
 

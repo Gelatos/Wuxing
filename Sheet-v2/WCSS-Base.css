@@ -146,6 +146,13 @@ input[type=number]::-webkit-inner-spin-button {
     overflow: hidden;
 }
 
+/* Catalog-only spacing between cards - added alongside wuxFormeTechRepeater
+   (WuxGS-Base.js) rather than changing that shared rule, so the live Actions
+   tab's own card grid is unaffected. */
+.wuxCatalogRepeater .repcontainer {
+    gap: 5px;
+}
+
 /* Same 240px card grid as .wuxFormeTechRepeater, for the Inspect Popup's all-items
    list (each row can be a group header, or an item's requirement bar + item card +
    technique card stacked together - the whole row is one grid cell). */

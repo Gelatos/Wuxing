@@ -365,8 +365,14 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         // 6 slots (2 per attribute pair, base+max - see WJS-Service.js) each hold
         // "ElementName:TechniqueName". CSS matches the ElementName prefix to pick each
         // button's icon (WCSS-Specialized.css). Clicking a button submits its own slot
-        // index (0-5) to the shared select field (pair 3), which Worker-Actions.js reads
-        // to find that slot's TechniqueName and swap the display to it.
+        // index to the shared select field (pair 3), which Worker-Actions.js /
+        // Worker-InspectPopup.js read to find that slot's TechniqueName and swap the
+        // display to it. Submitted as i+1 (1-6), not the raw 0-5 index - slot 0's
+        // button would otherwise submit "0", the same sentinel this codebase uses
+        // everywhere for "off/unset", so if the field's current value was already
+        // "0" (its normal resting state), clicking that one button was a no-op:
+        // Roll20 only fires change on an actual value transition. Both swap handlers
+        // subtract 1 back off before indexing into their own 0-based slot arrays.
         let selectField = this.getActionTypeAttribute("TechVariant", "3");
         let buttons = "";
         for (let i = 0; i < 6; i++) {
@@ -376,7 +382,7 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
                 ? this.getActionTypeAttribute("TechVariant", `${pairSuffix}${WuxDef._max}`)
                 : this.getActionTypeAttribute("TechVariant", pairSuffix);
             buttons += `<input type="hidden" class="wuxTechVariant-flag" name="${fieldName}" value="0">
-            ${WuxSheetMain.Button(selectField, "", "wuxTechVariantButton", `${i}`)}`;
+            ${WuxSheetMain.Button(selectField, "", "wuxTechVariantButton", `${i + 1}`)}`;
         }
         // Each slot is a fixed element index (see WJS-Service.js), not sequentially
         // packed, so no single slot reliably indicates "nothing to show" - the whole

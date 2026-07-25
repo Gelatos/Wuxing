@@ -102,6 +102,18 @@ const getFilteredBaseStyles = function (filters) {
     return newFilteredTechniquesList;
 };
 
+// Same computation performStyleFilterInspection and swapCatalogTechniqueVariant
+// both need for affinity-based filtering - Affinity/AdvancedAffinity/Ancestry
+// must already be fetched on attrHandler (addMod) before calling this.
+const getUserAffinities = function (attrHandler) {
+    let advancedAffinities = attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")).split(";").map(s => s.trim()).filter(s => s !== "");
+    return [
+        attrHandler.parseString(WuxDef.GetVariable("Affinity")),
+        ...advancedAffinities,
+        attrHandler.parseString(WuxDef.GetVariable("Ancestry"))
+    ];
+};
+
 const getTechHeader = function (affinity) {
     if (affinity === "") return "0";
     let parts = affinity.split(";").map(s => s.trim()).filter(s => s !== "");
@@ -116,60 +128,6 @@ const getTechHeader = function (affinity) {
     }
     return `Requires ${list} affinity`;
 };
-
-// New "catalog" popup (appearance stage only - see plan): shows every available
-// technique as a full card at once, mirroring RepeatingFormeTech (Worker-Actions.js's
-// FormeTechniqueDatabase) instead of the select-then-preview InspectPopupAttributeHandler
-// flow above. Not yet invoked from any button/UI - exists so the generated HTML/JS can
-// be reviewed directly. Reuses the existing popup's own "ItemPopupValues" repeater
-// (same registration pattern as InspectPopupAttributeHandler.iterateAndSetItems, below)
-// rather than a brand-new repeating section, so no new WuxDef repeater definition needs
-// to be flagged. Populated via TechniqueDataAttributeHandler's normal
-// setRepeaterData/setId/setTechniqueCatalogInfo loop, same way
-// FormeTechniqueDatabaseBase.addMissingTechniques does for the live Actions tab.
-class TechniqueCatalogDatabase {
-    constructor(attributeHandler) {
-        this.catalogRepeaterId = "ItemPopupValues";
-        attributeHandler.addRepeatingSection(this.catalogRepeaterId);
-    }
-
-    // Gathers every technique matching the given style filters, grouped by tier into
-    // header rows. Reuses the same gathering helpers performStyleFilterInspection uses
-    // (getFilteredBaseStyles + WuxTechs.SortFilteredTechniquesByRequirement) but skips
-    // the learnable/unlearnable split and InspectionInventoryItem list-building, since
-    // this writes full catalog cards directly instead of select-list rows - "every
-    // available technique" for this stage means every technique for the style, not
-    // gated by whether the character currently qualifies (that's a functionality
-    // concern for a later step, not appearance).
-    populate(attrHandler, filters) {
-        let repeater = attrHandler.getRepeatingSection(this.catalogRepeaterId);
-        let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");
-        techniqueAttributeHandler.setRepeaterData(repeater);
-
-        let baseStyles = getFilteredBaseStyles(filters);
-        let sortedStyles = WuxTechs.SortFilteredTechniquesByRequirement(baseStyles);
-
-        for (let tier = 9; tier >= 1; tier--) {
-            let techniques = [];
-            sortedStyles.get(tier).iterate(function (techsByAffinity) {
-                techniques = techniques.concat(techsByAffinity);
-            });
-            if (techniques.length === 0) {
-                continue;
-            }
-
-            let headerId = repeater.generateRowId();
-            techniqueAttributeHandler.setId(headerId);
-            techniqueAttributeHandler.setHeaderInfo(`Tier ${tier}`, `Tier ${tier}`);
-
-            techniques.forEach(function (technique) {
-                let id = repeater.generateRowId();
-                techniqueAttributeHandler.setId(id);
-                techniqueAttributeHandler.setTechniqueCatalogInfo(technique);
-            });
-        }
-    }
-}
 
 class FilteredItemsInventoryItemHandler extends InspectionInventoryItemHandler {
     constructor(filters) {
@@ -206,9 +164,17 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
         this.resetInspectionVariables();
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_FilterPopupActive"), "0");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupActive"), "on");
-        
+
         this.setPopupType(this.titleDefinitionName);
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectGroup"), inventoryTitle);
+        // Computed from the raw addType param (available synchronously here) rather
+        // than read back from Popup_InspectShowAdd - a plain WuxDef.GetAttribute
+        // reference to that global field wouldn't resolve correctly from inside a
+        // repeating section's HTML anyway (Roll20 silently rescopes any field name
+        // referenced inside a <fieldset class="repeating_x"> to a per-row attribute,
+        // even ones meant to be global), so subclasses needing per-row "can this be
+        // added" gating (see TechniqueInspectPopupAttributeHandler) read this instead.
+        this.canSelectForAdd = Array.isArray(addType) && addType.length > 0;
         this.initializePopup();
         this.iterateAndSetItems(inventoryItems);
         this.setAddType(addType);
@@ -357,53 +323,103 @@ class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler
     constructor(attributeHandler) {
         super(attributeHandler);
         this.titleDefinitionName = "Popup_TechniqueInspectionName";
+
+        // Catalog rows carry full technique+item data directly (baseDefinitionName
+        // "Action", matching the catalog card display in WuxGS-Base.js) - separate
+        // from the inherited "Popup"-based techniqueAttributeHandler/
+        // itemDataAttributeHandler above, which back the old single-preview-slot
+        // fields (no longer rendered - see setSelectedItemData below).
+        this.catalogTechniqueAttributeHandler = new TechniqueDataAttributeHandler(this.attrHandler, "Action");
+        this.catalogTechniqueAttributeHandler.setRepeaterData(this.repeater);
+        this.catalogItemAttributeHandler = new ItemDataAttributeHandler(this.attrHandler, "Action");
+        this.catalogItemAttributeHandler.setRepeaterData(this.repeater);
     }
 
     initializePopup() {
         super.initializePopup();
         this.itemDataAttributeHandler.clearItemInfo();
+
+        // Unless the player has "Show Element-Restricted Techniques" on, variant
+        // buttons should only offer variants the player can actually use - see
+        // setInventoryItemData below, which passes this into setTechniqueVariants'
+        // own userAffinities filter (undefined here means "don't filter", matching
+        // that method's existing convention). Affinity/AdvancedAffinity/Ancestry/
+        // Forme_ShowFromNonElement are fetched by TechniqueInspectionPopup.open.
+        let showElementRestricted = this.attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement")) != "0";
+        this.catalogUserAffinities = showElementRestricted ? undefined : getUserAffinities(this.attrHandler);
     }
-    setSelectedItemData(selectedItemName) {
-        let technique = WuxTechs.Get(selectedItemName);
-        if (technique == undefined) {
-            this.hideTechnique(0);
+
+    // Every catalog row can carry both item and technique info (see the fused
+    // item+technique card, WuxGS-Base.js) - explicitly clear whichever this row
+    // ISN'T using, so a row reused from a previous population (different
+    // technique, or previously an item-catalog row) can't leak stale data into
+    // this one.
+    setInventoryItemData(id, itemData) {
+        this.setInventoryItemVisibility(id, true);
+        this.catalogItemAttributeHandler.setId(id);
+        this.catalogItemAttributeHandler.clearItemInfo();
+        this.catalogTechniqueAttributeHandler.setId(id);
+
+        // Reset every row's selected state on population (base class's original
+        // setInventoryItemData did this too) - a row reused from a previous
+        // population could otherwise carry over a stale "on" from whatever was
+        // selected last time, and the catalog card's selected-state styling
+        // (WCSS-Specialized.css) reads this field directly.
+        this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "0");
+
+        let selectNameField = this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectName"));
+        if (itemData.isTitle) {
+            this.catalogTechniqueAttributeHandler.setHeaderInfo(itemData.display, itemData.display);
+            this.attrHandler.addUpdate(selectNameField, "");
             return;
         }
-        this.techniqueAttributeHandler.setBaseSuffix(0);
-        this.techniqueAttributeHandler.setTechniqueInfo(technique);
-        this.techniqueAttributeHandler.setVisibilityAttribute(true);
-        this.attrHandler.addRepeatingSectionRowUpdate(
-            this.techniqueAttributeHandler.repeater?.definitionId,
-            this.techniqueAttributeHandler.getVariable("TechHeader"),
-            getTechHeader(technique.affinity)
-        );
 
-        // get the variants
-        let techniqueVariants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
-        for (let i = 0; i < 3; i++) {
-            let index = parseInt(i) + 1;
-            if (techniqueVariants.length > i) {
-                this.techniqueAttributeHandler.setBaseSuffix(index);
-                this.techniqueAttributeHandler.setTechniqueInfo(techniqueVariants[i]);
-                this.techniqueAttributeHandler.setVisibilityAttribute(true);
-                this.attrHandler.addRepeatingSectionRowUpdate(
-                    this.techniqueAttributeHandler.repeater?.definitionId,
-                    this.techniqueAttributeHandler.getVariable("TechHeader"),
-                    getTechHeader(techniqueVariants[i].affinity)
-                );
-            }
-            else {
-                this.hideTechnique(index);
-            }
+        let technique = WuxTechs.Get(itemData.name);
+        if (technique == undefined) {
+            this.catalogTechniqueAttributeHandler.clearTechniqueInfo();
+            this.catalogTechniqueAttributeHandler.setVisibilityAttribute(false);
+            this.attrHandler.addUpdate(selectNameField, "");
+            return;
+        }
+        // excludeCurrent drops the technique already on display from its own variant
+        // row, and userAffinities (see initializePopup above) drops variants the
+        // player can't use unless "Show Element-Restricted Techniques" is on -
+        // both are applied inside setTechniqueVariants (WJS-Service.js) before any
+        // of the 6 slots get written, so WCSS-Specialized.css's
+        // .wuxTechVariantButtons :has() rule (which hides the whole row once every
+        // slot is empty) evaluates against the fully-filtered result, not a
+        // pre-filter one - a technique whose only siblings are all filtered out
+        // correctly shows as having no variants.
+        this.catalogTechniqueAttributeHandler.setTechniqueCatalogInfo(technique,
+            {excludeCurrent: true, userAffinities: this.catalogUserAffinities}, this.canSelectForAdd);
+        // Selecting this row still goes through the existing shared select/add
+        // mechanism (InspectionPopup.selectItem/addItem, below), which looks
+        // the item up by this field regardless of popup type.
+        this.attrHandler.addUpdate(selectNameField, itemData.name);
+    }
+
+    // Hides/shows the actual catalog card, not just the old select-list flag
+    // above (setInventoryItemVisibility, InspectPopupAttributeHandler) - the
+    // catalog gates each row on TechActionType's max slot instead (see
+    // TechniqueDataAttributeHandler.setVisibilityAttribute, WJS-Service.js, and
+    // repeatingCatalogTechSection, WuxGS-Base.js).
+    setInventoryItemVisibility(id, isVisible) {
+        super.setInventoryItemVisibility(id, isVisible);
+        this.catalogTechniqueAttributeHandler.setId(id);
+        this.catalogTechniqueAttributeHandler.setVisibilityAttribute(isVisible);
+        if (!isVisible) {
+            this.catalogTechniqueAttributeHandler.clearTechniqueInfo();
+            this.catalogItemAttributeHandler.setId(id);
+            this.catalogItemAttributeHandler.clearItemInfo();
+            this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectName")), "");
+            this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "0");
         }
     }
 
-    onNoItems() {
-        super.onNoItems();
-        for (let i = 0; i <= 3; i++) {
-            this.hideTechnique(i);
-        }
-    }
+    // Catalog cards already show every technique's full stats up front - there's
+    // nothing left to populate on select. Selecting just marks which row Add
+    // will use (handled by the inherited setSelectedItem, InspectPopupAttributeHandler).
+    setSelectedItemData(selectedItemName) {}
 }
 class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
     constructor(attributeHandler) {
@@ -661,6 +677,21 @@ class PerkTechniqueInspectionPopup extends InspectionPopup {
 class TechniqueInspectionPopup extends InspectionPopup {
     setup(attrHandler) {
         this.inspectPopupAttrHandler = new TechniqueInspectPopupAttributeHandler(attrHandler);
+    }
+
+    // Variant filtering (TechniqueInspectPopupAttributeHandler.initializePopup)
+    // needs the same affinity/toggle fields performStyleFilterInspection already
+    // gathers for the top-level style list - fetched again here since this
+    // popup's own attributeHandler/callback cycle is a separate round-trip from
+    // that one's.
+    open(inventoryTitle, inventoryItems, addType) {
+        this.attributeHandler.addMod([
+            WuxDef.GetVariable("Affinity"),
+            WuxDef.GetVariable("AdvancedAffinity"),
+            WuxDef.GetVariable("Ancestry"),
+            WuxDef.GetVariable("Forme_ShowFromNonElement")
+        ]);
+        super.open(inventoryTitle, inventoryItems, addType);
     }
 
     addItem() {
@@ -1691,6 +1722,68 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             attributeHandler.run();
         },
 
+        // Swaps a technique catalog card in place to show one of its variants,
+        // mirroring Worker-Actions.js's swapTechniqueVariant (the live Actions tab's
+        // own variant swap) but without the build-stats rank carry-over that only
+        // makes sense for a learned, ranked technique - catalog entries are unlearned
+        // browsing cards.
+        swapCatalogTechniqueVariant = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+
+            let repeater = new WorkerRepeatingSectionHandler("ItemPopupValues");
+            let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+
+            let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attributeHandler, "Action");
+            techniqueAttributeHandler.setRepeaterData(repeater, selectedId);
+
+            let selectField = techniqueAttributeHandler.getVariantSelectFieldName();
+            let slotFields = [];
+            for (let i = 0; i < 6; i++) {
+                slotFields.push(techniqueAttributeHandler.getVariantFieldName(i));
+            }
+            // setTechniqueRankButtons (run via setTechniqueInfo below) needs CR fetched
+            // ahead of time too, or it silently falls back to a default of 1 - see
+            // Worker-Actions.js's swapTechniqueVariant for the same caution.
+            // Popup_InspectShowAdd is read here as a plain worker attribute fetch, not
+            // an HTML field reference, so it's unaffected by the repeating-section
+            // rescoping issue that ruled out reading it directly in the popup HTML
+            // (see printCatalogRequirementSection, WuxGS-Base.js) - the row's own
+            // "can select" flag (piggybacked on TechRequirement's base slot) needs to
+            // be re-derived here too, since setTechniqueCatalogInfo rewrites it. Same
+            // for the affinity/element-restriction fields (see initializePopup,
+            // TechniqueInspectPopupAttributeHandler above) - swapping needs to
+            // re-apply the same variant filtering the initial population used.
+            attributeHandler.addMod([
+                selectField, WuxDef.GetVariable("CR"), WuxDef.GetVariable("Popup_InspectShowAdd"),
+                WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("Ancestry"),
+                WuxDef.GetVariable("Forme_ShowFromNonElement")
+            ].concat(slotFields));
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                // Submitted as i+1 (1-6), not the raw 0-5 slot index - see printVariants,
+                // WuxGS-FeatureDisplayBuilder.js, for why.
+                let slotIndex = attrHandler.parseInt(selectField) - 1;
+                if (isNaN(slotIndex) || slotIndex < 0 || slotIndex >= slotFields.length) {
+                    return;
+                }
+                let slotValue = attrHandler.parseString(slotFields[slotIndex]);
+                let separatorIndex = slotValue.indexOf(":");
+                if (separatorIndex == -1) {
+                    return;
+                }
+                let technique = WuxTechs.Get(slotValue.substring(separatorIndex + 1));
+                if (technique == undefined) {
+                    return;
+                }
+                let canSelectForAdd = attrHandler.parseString(WuxDef.GetVariable("Popup_InspectShowAdd")) == "on";
+                let showElementRestricted = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement")) != "0";
+                let userAffinities = showElementRestricted ? undefined : getUserAffinities(attrHandler);
+                techniqueAttributeHandler.setTechniqueCatalogInfo(technique,
+                    {excludeCurrent: true, userAffinities: userAffinities}, canSelectForAdd);
+            });
+            attributeHandler.run();
+        },
+
         addSelectedInspectElement = function () {
             Debug.Log("Add SelectedInspection");
             getOpenInspectionPopup((inspectPopup) => {
@@ -1794,13 +1887,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         attributeHandler.addGetAttrCallback(function (attrHandler) {
             let showFromNonElement = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement"));
             let showLevelRestricted = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowLevelRestricted"));
-            let advancedAffinityRaw = attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity"));
-            let advancedAffinities = advancedAffinityRaw.split(";").map(s => s.trim()).filter(s => s !== "");
-            let userAffinities = [
-                attrHandler.parseString(WuxDef.GetVariable("Affinity")),
-                ...advancedAffinities,
-                attrHandler.parseString(WuxDef.GetVariable("Ancestry"))
-            ];
+            let userAffinities = getUserAffinities(attrHandler);
             let userCr = attrHandler.parseInt(WuxDef.GetVariable("CR", WuxDef._max));
 
             let matchesAffinity = function (style) {
@@ -2014,13 +2101,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             }
 
             // User affinity data for restrictions (always applied)
-            let advancedAffinityRaw = attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity"));
-            let advancedAffinities = advancedAffinityRaw.split(";").map(function (s) { return s.trim(); }).filter(function (s) { return s !== ""; });
-            let userAffinities = [
-                attrHandler.parseString(WuxDef.GetVariable("Affinity")),
-                ...advancedAffinities,
-                attrHandler.parseString(WuxDef.GetVariable("Ancestry"))
-            ];
+            let userAffinities = getUserAffinities(attrHandler);
             let userCr = attrHandler.parseInt(WuxDef.GetVariable("CR", WuxDef._max));
 
             // Learned style names to exclude
@@ -2253,13 +2334,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         attributeHandler.addGetAttrCallback(function (attrHandler) {
             let showFromNonElement = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement"));
             let showLevelRestricted = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowLevelRestricted"));
-            let advancedAffinityRaw = attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity"));
-            let advancedAffinities = advancedAffinityRaw.split(";").map(s => s.trim()).filter(s => s !== "");
-            let userAffinities = [
-                attrHandler.parseString(WuxDef.GetVariable("Affinity")),
-                ...advancedAffinities,
-                attrHandler.parseString(WuxDef.GetVariable("Ancestry"))
-            ];
+            let userAffinities = getUserAffinities(attrHandler);
             let userCr = attrHandler.parseInt(WuxDef.GetVariable("CR", WuxDef._max));
 
             let filteredTechniques = techniques.filter(function (technique) {
@@ -2542,6 +2617,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         OpenIngsFilterInspection: openIngsFilterInspection,
         OpenRecommendedStylesInspection: openRecommendedStylesInspection,
         SelectInspectionItemFromActiveGroup: selectInspectionItemFromActiveGroup,
+        SwapCatalogTechniqueVariant: swapCatalogTechniqueVariant,
         Close: close,
         AddSelectedInspectElement: addSelectedInspectElement,
         AddSelectedInspectElement2: addSelectedInspectElement2

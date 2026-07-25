@@ -273,7 +273,9 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 styleWorker.setBuildStatsDraft(attrHandler);
-                let slotIndex = attrHandler.parseInt(selectField);
+                // Submitted as i+1 (1-6), not the raw 0-5 slot index - see printVariants,
+                // WuxGS-FeatureDisplayBuilder.js, for why.
+                let slotIndex = attrHandler.parseInt(selectField) - 1;
                 if (isNaN(slotIndex) || slotIndex < 0 || slotIndex >= slotFields.length) {
                     return;
                 }

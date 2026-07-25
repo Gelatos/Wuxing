@@ -479,8 +479,8 @@ input[type=hidden].wuxHiddenSingleCount-flag[value="1"] + .wuxDescription
     z-index: 100000;
 
     min-width: 200px;
-    width: 80%;
-    max-width:720px;
+    width: 88%;
+    max-width:780px;
     height: 80%;
     overflow: auto;
     display: flex;
@@ -593,10 +593,13 @@ input[type=hidden].wuxHiddenSingleCount-flag[value="1"] + .wuxDescription
 
 .wuxInspectionPopupContents
 {
-    flex-flow: row-reverse nowrap;
+    /* Single catalog column now instead of the old select-list + preview pair,
+       so this no longer needs its own row layout/clipping - the whole popup
+       scrolls as one unit instead (.wuxPopup's own overflow:auto above). */
+    flex-flow: column nowrap;
     flex: 1 1 auto;
     min-height: 0;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .wuxInspectionPopupContentData,
@@ -608,12 +611,15 @@ input[type=hidden].wuxHiddenSingleCount-flag[value="1"] + .wuxDescription
 
 .wuxInspectionPopupContentData
 {
+    /* Only one of these divs now (the catalog) instead of two side-by-side
+       columns, so it takes the full width and grows to its natural height
+       instead of clipping/scrolling on its own - see .wuxInspectionPopupContents
+       above. FilterPopup keeps its original two-column scroll behavior
+       (.wuxFilterPopupContentData isn't included in this selector). */
     display: block;
-    min-width: 220px;
-    width: 45%;
-    height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
+    width: 100%;
+    height: auto;
+    overflow: visible;
 }
 
 /* Below this width the two columns can no longer sit side by side at a
@@ -647,9 +653,13 @@ input[type=hidden].wuxHiddenSingleCount-flag[value="1"] + .wuxDescription
     width: calc(80% - 20px);
 
     color: #3e3e3e;
-    
+
     border-bottom: 1px solid #d0d0d0;
     border-image: linear-gradient(to right, #A0A0A0 0%, #A0A0A0 50%, #A0A0A0 100%) 1;
+}
+
+.wuxInspectionPopupContentData .wuxHeader2 {
+    color: #000000;
 }
 
 .wuxInspectionPopupContentData .wuxDescription,

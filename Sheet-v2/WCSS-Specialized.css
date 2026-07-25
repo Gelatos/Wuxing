@@ -922,6 +922,16 @@ input[type=hidden].wuxFeature-flag[value="on"] + .wuxFeature
     border: 3px solid #ba7417;
 }
 
+/* Catalog card selected state (WuxGS-Base.js's printCatalogTechniqueFullDisplay)
+   - reads the same Popup_ItemSelectIsOn flag the existing select/add mechanism
+   already toggles (InspectPopupAttributeHandler.setSelectedItem/
+   clearLastSelectedItem, Worker-InspectPopup.js). */
+input[type=hidden].wuxCatalogCard-selected-flag:not([value="0"]) + .wuxFeature
+{
+    border-color: #7ec8e3;
+    box-shadow: 0 0 8px 2px rgba(126, 200, 227, 0.7);
+}
+
 input[type=hidden].wuxFilterFeature-flag + .wuxFeature
 {
     display: block;
@@ -1317,6 +1327,62 @@ button[type=roll].wuxFeatureHeaderNameButton span,
     filter: brightness(0) saturate(100%) invert(52%) sepia(97%) saturate(500%) hue-rotate(200deg) brightness(105%);
 }
 
+/* Stage2/Stage3: a technique variant with no affinity or all 5 affinities is
+   conceptually "neutral" too (see setTechniqueVariants, WJS-Service.js) but the
+   root already occupies the plain Neutral slot, so these use the same icon,
+   progressively darkened, with a small roman numeral badge to tell them apart.
+   The icon lives on ::before (not the button element itself) specifically so its
+   grey filter doesn't apply to the ::after badge too - CSS filter rasterizes
+   everything painted inside the filtered element, pseudo-content included, so a
+   filter on .wuxTechVariantButton itself would have also greyed out the badge's
+   "white" text. ::before and ::after are independent pseudo-elements, so putting
+   the filter on ::before alone keeps ::after unaffected. */
+.wuxTechVariant-flag[value^="Stage2:"] + .wuxTechVariantButton,
+.wuxTechVariant-flag[value^="Stage3:"] + .wuxTechVariantButton
+{
+    position: relative;
+}
+.wuxTechVariant-flag[value^="Stage2:"] + .wuxTechVariantButton::before,
+.wuxTechVariant-flag[value^="Stage3:"] + .wuxTechVariantButton::before
+{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(https://i.imgur.com/5hQ5Bun.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14px 14px;
+}
+.wuxTechVariant-flag[value^="Stage2:"] + .wuxTechVariantButton::before
+{
+    filter: brightness(0) saturate(0%) invert(45%);
+}
+.wuxTechVariant-flag[value^="Stage3:"] + .wuxTechVariantButton::before
+{
+    filter: brightness(0) saturate(0%) invert(25%);
+}
+.wuxTechVariant-flag[value^="Stage2:"] + .wuxTechVariantButton::after,
+.wuxTechVariant-flag[value^="Stage3:"] + .wuxTechVariantButton::after
+{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 9px;
+    font-weight: bold;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 0 2px #000, 0 0 2px #000;
+    z-index: 1;
+}
+.wuxTechVariant-flag[value^="Stage2:"] + .wuxTechVariantButton::after
+{
+    content: "II";
+}
+.wuxTechVariant-flag[value^="Stage3:"] + .wuxTechVariantButton::after
+{
+    content: "III";
+}
+
 /* Same filters as above with the trailing brightness reduced ~20% - keeps each
    element's color but darkens it slightly on hover. background-image/-size/-position/
    -repeat are all repeated here (not just filter) since .wuxButton:hover's own
@@ -1371,6 +1437,22 @@ button[type=roll].wuxFeatureHeaderNameButton span,
     background-position: center;
     background-size: 14px 14px;
     filter: brightness(0) saturate(100%) invert(52%) sepia(97%) saturate(500%) hue-rotate(200deg) brightness(84%);
+}
+.wuxTechVariant-flag[value^="Stage2:"] + .wuxTechVariantButton:hover::before
+{
+    background-image: url(https://i.imgur.com/5hQ5Bun.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14px 14px;
+    filter: brightness(0) saturate(0%) invert(45%) brightness(80%);
+}
+.wuxTechVariant-flag[value^="Stage3:"] + .wuxTechVariantButton:hover::before
+{
+    background-image: url(https://i.imgur.com/5hQ5Bun.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14px 14px;
+    filter: brightness(0) saturate(0%) invert(25%) brightness(80%);
 }
 
 button[type=roll].wuxFeatureHeaderNameButton:hover

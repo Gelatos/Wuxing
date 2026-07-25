@@ -1099,24 +1099,36 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.setTechniqueUseRollTemplate(technique, displayData);
 		}
 	}
-	// Entry point for the new technique catalog (Worker-InspectPopup.js's
-	// TechniqueCatalogDatabase) - layers the requirements+select section on top of the
-	// same technique info every other context uses, without touching setTechniqueInfo
-	// itself so the live Actions tab and the existing popup are unaffected.
-	setTechniqueCatalogInfo(technique) {
-		this.setTechniqueInfo(technique, false);
-		this.setTechniqueRequirement(technique);
+	// Entry point for the technique catalog (Worker-InspectPopup.js's
+	// TechniqueInspectPopupAttributeHandler.setInventoryItemData and
+	// swapCatalogTechniqueVariant) - layers the select section on top of the same
+	// technique info every other context uses, without touching setTechniqueInfo
+	// itself so the live Actions tab is unaffected. variantOptions is passed
+	// straight through to setTechniqueInfo's own variant list rebuild - used by
+	// swapCatalogTechniqueVariant with {excludeCurrent: true} so the variant just
+	// swapped to drops out of its own button row. canSelect is whether the select
+	// button should be shown for this row at all (see setTechniqueRequirement).
+	setTechniqueCatalogInfo(technique, variantOptions, canSelect) {
+		this.setTechniqueInfo(technique, false, variantOptions);
+		this.setTechniqueRequirement(canSelect);
 	}
-	// TechRequirement is a new, catalog-only field (not part of the shared
+	// TechRequirement is a catalog-only field (not part of the shared
 	// clearTechniqueInfo reset, since that would touch the live Actions tab too) -
-	// always written fresh here, so no separate clear step is needed. Its max slot
-	// is piggybacked as the select button's click target, same base+max pairing
-	// convention used by every other paired Tech* field.
-	setTechniqueRequirement(technique) {
+	// always written fresh here, so no separate clear step is needed. Its base
+	// slot carries a row-scoped "can select" flag (not requirement text - that's
+	// no longer shown per-card, see printCatalogRequirementSection, WuxGS-Base.js)
+	// because Popup_InspectShowAdd can't be read directly from inside a repeating
+	// section's HTML (Roll20 silently rescopes any field name referenced inside a
+	// <fieldset class="repeating_x"> to a per-row attribute, even ones meant to be
+	// global), so the caller (which CAN read it normally, outside any HTML
+	// binding) computes and passes it in instead. The max slot remains the select
+	// button's click target, same base+max pairing convention used by every other
+	// paired Tech* field.
+	setTechniqueRequirement(canSelect) {
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechRequirement"), technique.getRequirementText());
-		// Select button click target is inert for now (no listener registered yet) -
-		// reset it so a reused/regenerated row doesn't carry over stale state.
+			this.getVariable("TechRequirement"), canSelect ? "1" : "0");
+		// Select button click target - reset so a reused/regenerated row doesn't
+		// carry over a stale selection from a previous technique.
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechRequirement", WuxDef._max), "0");
 	}
@@ -1152,22 +1164,70 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		// the ElementName prefix to pick the button's icon, and clicking a button reads
 		// the TechniqueName half to switch which variant is being displayed. The slots
 		// always represent the base technique plus every one of its sibling variants,
-		// regardless of which of them is the one currently on display.
+		// regardless of which of them is the one currently on display. excludeCurrent
+		// is deliberately NOT applied here (see below, after slots are built) -
+		// filtering the candidate pool before computing slots let Stage2/Stage3's
+		// dynamic "first free slot" placement land on a different index depending on
+		// which technique was excluded, so the same technique pair could end up
+		// sharing an index from one viewing direction but not the other. Roll20 only
+		// fires a change event when a button's submitted index actually differs from
+		// the field's current value, so a coincidental index match made that
+		// direction's click silently do nothing.
 		let rootName = technique.getRootName();
 		let root = WuxTechs.Get(rootName);
 		let candidates = [root].concat(WuxTechs.Filter(new DatabaseFilterData("style", rootName)));
-		if (variantOptions?.excludeCurrent) {
-			candidates = candidates.filter(tech => tech.name != technique.name);
-		}
 		if (variantOptions?.userAffinities != undefined) {
 			candidates = candidates.filter(tech => tech.hasRequiredAffinity(variantOptions.userAffinities));
 		}
+		let realElements = ["Wood", "Fire", "Earth", "Metal", "Water"];
 		let slots = [0, 0, 0, 0, 0, 0];
+		// A variant with no affinity or all 5 affinities is conceptually "neutral"
+		// too (usable with anything), but only one candidate can occupy the actual
+		// Neutral slot - the root always claims it (see below), so any other such
+		// candidate is queued here and placed into a leftover slot afterward as
+		// Stage2, then Stage3 (WCSS-Specialized.css renders these as a
+		// progressively darker Neutral icon with a "II"/"III" badge).
+		let universalCandidates = [];
 		candidates.forEach(tech => {
-			tech.getAffinityParts().forEach(part => {
+			// The root's own affinity states what's required to USE it, not which
+			// slot it occupies as a variant - some root techniques list every
+			// element to mean "usable with any of them" (not 5 separate variant
+			// forms), which would otherwise fill every element slot with the root
+			// itself. The root always represents the neutral/base slot in the
+			// switcher regardless of its own affinity requirement.
+			if (tech.name == rootName) {
+				slots[elementSlotIndex["Neutral"]] = `Neutral:${tech.name}`;
+				return;
+			}
+			let affinityParts = tech.getAffinityParts();
+			let isUniversal = (affinityParts.length === 1 && affinityParts[0] === "Neutral")
+				|| realElements.every(element => affinityParts.includes(element));
+			if (isUniversal) {
+				universalCandidates.push(tech);
+				return;
+			}
+			affinityParts.forEach(part => {
 				slots[elementSlotIndex[part]] = `${part}:${tech.name}`;
 			});
 		});
+		let stageNames = ["Stage2", "Stage3"];
+		let stageIndex = 0;
+		for (let i = 0; i < slots.length && stageIndex < universalCandidates.length && stageIndex < stageNames.length; i++) {
+			if (slots[i] === 0) {
+				slots[i] = `${stageNames[stageIndex]}:${universalCandidates[stageIndex].name}`;
+				stageIndex++;
+			}
+		}
+
+		// Now that every OTHER slot's position is settled, drop the technique
+		// already on display from its own slot (see the comment above candidates)
+		// without disturbing where anything else landed.
+		if (variantOptions?.excludeCurrent) {
+			let currentIndex = slots.findIndex(slot => slot !== 0 && slot.substring(slot.indexOf(":") + 1) == technique.name);
+			if (currentIndex !== -1) {
+				slots[currentIndex] = 0;
+			}
+		}
 
 		for (let i = 0; i < 6; i++) {
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,

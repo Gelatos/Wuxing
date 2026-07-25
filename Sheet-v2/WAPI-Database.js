@@ -1146,27 +1146,6 @@ class TechniqueData extends WuxDatabaseData {
         return this.getAffinityParts().some(part => part == "Neutral" || userAffinities.includes(part));
     }
 
-    // Combines the level and affinity requirements into one reader-friendly string
-    // (e.g. "Min. Level 3, Requires Fire or Water affinity"), matching the wording
-    // already used ad hoc by the tier-group builders in Worker-InspectPopup.js -
-    // consolidated here as a single, reusable implementation rather than adding a
-    // fifth copy of the same logic.
-    getRequirementText() {
-        let requirementParts = [];
-        let level = Format.GetLevelPrerequisites(this.tier);
-        if (level > 0) {
-            requirementParts.push(`Min. Level ${level}`);
-        }
-        if (this.affinity !== "") {
-            let affinityParts = this.getAffinityParts();
-            let affinityList = affinityParts.length === 1 ? affinityParts[0]
-                : affinityParts.length === 2 ? `${affinityParts[0]} or ${affinityParts[1]}`
-                : `${affinityParts.slice(0, -1).join(", ")}, or ${affinityParts[affinityParts.length - 1]}`;
-            requirementParts.push(`Requires ${affinityList} affinity`);
-        }
-        return requirementParts.length > 0 ? requirementParts.join(", ") : "Level 1";
-    }
-
     // A variant's techSet holds its base technique's name (common techniques can
     // themselves be a base with variants, e.g. "Quick Aid" has "Dress Wound"/"Surge
     // Healing" under techSet "Quick Aid"). A true base's own techSet is a general

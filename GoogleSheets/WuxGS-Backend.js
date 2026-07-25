@@ -971,6 +971,7 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerCloseSubMenu();
             output += listenerClosePopup();
             output += listenerUpdateRepeatingItemInspectPopupItems();
+            output += listenerSwapCatalogTechniqueVariant();
             output += listenerInspectPopupButtons();
             output += listenerFilterPopupButtons();
             return output;
@@ -1049,10 +1050,34 @@ var PopupBuilder = PopupBuilder || (function () {
         },
         listenerUpdateRepeatingItemInspectPopupItems = function () {
             let repeatingSection = WuxDef.GetVariable("ItemPopupValues");
-            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Popup_ItemSelectIsOn")}`];
+            // Catalog cards' Select button (TechRequirement's max slot - see
+            // printCatalogRequirementSection, WuxGS-Base.js) triggers the same
+            // handler as the old select-list's click container - both just need
+            // eventinfo.sourceAttribute to find the row id (selectInspectionItemFromActiveGroup,
+            // Worker-InspectPopup.js), so one shared listener covers both.
+            let baseDef = WuxDef.Get("Action");
+            let catalogSelectVar = baseDef.getVariable(`-${WuxDef.GetVariable("TechRequirement", WuxDef._max)}`);
+            let groupVariableNames = [
+                `${repeatingSection}:${WuxDef.GetVariable("Popup_ItemSelectIsOn")}`,
+                `${repeatingSection}:${catalogSelectVar}`
+            ];
             let output = `WuxWorkerInspectPopup.SelectInspectionItemFromActiveGroup(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        // Catalog cards' variant quick-switch buttons (TechVariant pair 3, the
+        // shared click trigger every slot submits its own index to - see
+        // TechniqueDataAttributeHandler.getVariantSelectFieldName, WJS-Service.js)
+        // reuse the exact same field shape as the live Actions tab's own variant
+        // buttons (listenerSwapTechniqueVariant above), just scoped to the
+        // "ItemPopupValues" repeater instead of "RepeatingFormeTech".
+        listenerSwapCatalogTechniqueVariant = function () {
+            let baseDef = WuxDef.Get("Action");
+            let variantSelectVar = baseDef.getVariable(`-${WuxDef.GetVariable("TechVariant", "3")}`);
+            let repeaterVar = WuxDef.GetVariable("ItemPopupValues");
+
+            return WuxSheetBackend.OnChange([`${repeaterVar}:${variantSelectVar}`],
+                `WuxWorkerInspectPopup.SwapCatalogTechniqueVariant(eventinfo)`, true);
         },
         listenerFilterPopupButtons = function () {
             return `${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Popup_ApplyFilter")}`],
