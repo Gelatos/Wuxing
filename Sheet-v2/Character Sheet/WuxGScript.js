@@ -6391,10 +6391,10 @@ var Format = Format || (function () {
         // Pass allowBelowAverage = false to clamp negative results to 0 (e.g. Skills should never read as below average).
         evaluateAgainstAverage = function (value, average, allowBelowAverage, aboveThreshold, greatThreshold) {
             if (aboveThreshold == undefined) {
-                aboveThreshold = 2;
+                aboveThreshold = 1;
             }
             if (greatThreshold == undefined) {
-                greatThreshold = 4;
+                greatThreshold = 3;
             }
             let diff = value - average;
             let evaluation;

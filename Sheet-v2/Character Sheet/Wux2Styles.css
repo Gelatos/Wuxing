@@ -2038,7 +2038,7 @@ input[type=hidden].wuxIsPlayerSelection-flag:not([value="1"]) + .wuxIsPlayerSele
 
 input[type=hidden].wuxStatSummary-flag[value="n2"] + .wuxStatSummary-value
 {
-    color: #ff7300;
+    color: #ff8e2e;
     font-size: 11px;
 }
 
