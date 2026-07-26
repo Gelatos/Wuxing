@@ -918,7 +918,14 @@ class TechniqueInspectionPopup extends InspectionPopup {
         this.attributeHandler.addRepeatingSection(styleRepeaterId);
         let formeNameVar = WuxDef.GetVariable("Forme_Name");
         this.attributeHandler.getRepeatingSection(styleRepeaterId).addFieldNames([formeNameVar]);
-        this.attributeHandler.addMod([worker.attrMax, worker.attrBuildDraft, WuxDef.GetVariable("Popup_InspectSelectedList")]);
+        this.attributeHandler.addMod([
+            worker.attrMax, worker.attrBuildDraft, WuxDef.GetVariable("Popup_InspectSelectedList"),
+            // Needed so performAddItem can populate the new full-card display
+            // (WuxWorkerStyles.PopulateStyleTechniqueDisplay) with correctly
+            // filtered variant buttons, same as the catalog/live tab.
+            WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("Ancestry"),
+            WuxDef.GetVariable("Forme_ShowFromNonElement")
+        ]);
 
         this.attributeHandler.addGetAttrCallback(function (attrHandler) {
             inspectPopup.setup(attrHandler);
@@ -950,16 +957,27 @@ class TechniqueInspectionPopup extends InspectionPopup {
         if (baseTechnique == undefined) {
             return;
         }
-        
+
         let worker = new WuxStyleWorkerBuild();
         let styleRepeaterId = "RepeatingStyles";
-        
+
         // only the base technique gets add to the styles list
         let repeater = attrHandler.getRepeatingSection(styleRepeaterId);
-        attrHandler.addUpdate(
-            repeater.getFieldName(repeater.generateRowId(), WuxDef.GetVariable("Forme_Name")), 
-            baseTechnique.name);
-        
+        let newRowId = repeater.generateRowId();
+        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Name")), baseTechnique.name);
+
+        // Populates the row's full technique card (header/effects/variants) -
+        // same "Action"-prefixed fields and helper the one-time backfill
+        // (WuxWorkerStyles.RefreshStyleListDisplay) uses for pre-existing rows.
+        let showElementRestricted = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement")) != "0";
+        let advancedAffinities = attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")).split(";").map(s => s.trim()).filter(s => s !== "");
+        let userAffinities = showElementRestricted ? undefined : [
+            attrHandler.parseString(WuxDef.GetVariable("Affinity")),
+            ...advancedAffinities,
+            attrHandler.parseString(WuxDef.GetVariable("Ancestry"))
+        ];
+        WuxWorkerStyles.PopulateStyleTechniqueDisplay(attrHandler, repeater, newRowId, baseTechnique.name, userAffinities);
+
         // add all the techniques to the style worker as this is how we track styles tracked and their level
         worker.setBuildStatsDraft(attrHandler);
         worker.updateBuildStats(attrHandler, baseTechnique.name, {value: 1, group: "Style"});
@@ -1901,9 +1919,8 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         },
 
         // Every technique-catalog entry point (performStyleFilterInspection,
-        // openRecommendedStylesInspection below, plus Worker-Styles.js's
-        // inspectListStyle and Worker-Jobs.js's seeTechniques) needs the same
-        // "populate through a loading screen, then reveal" choreography - centralized
+        // openRecommendedStylesInspection below, plus Worker-Jobs.js's seeTechniques)
+        // needs the same "populate through a loading screen, then reveal" choreography - centralized
         // here instead of duplicated at each call site. TechniqueInspectionPopup.open
         // uses showWithoutReveal (not show), so Popup_InspectPopupActive isn't written
         // as part of THIS cycle - loader.run() resolves only once its own
@@ -2030,15 +2047,22 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             attributeHandler.run();
         },
 
-        // Swaps a technique catalog card in place to show one of its variants,
-        // mirroring Worker-Actions.js's swapTechniqueVariant (the live Actions tab's
-        // own variant swap) but without the build-stats rank carry-over that only
-        // makes sense for a learned, ranked technique - catalog entries are unlearned
-        // browsing cards.
-        swapCatalogTechniqueVariant = function (eventinfo) {
+        // Swaps a technique card in place to show one of its variants, mirroring
+        // Worker-Actions.js's swapTechniqueVariant (the live Actions tab's own
+        // variant swap) but without the build-stats rank carry-over that only
+        // makes sense for a learned, ranked technique. repeaterId defaults to the
+        // technique catalog's "TechPopupValues" (unlearned browsing cards, with the
+        // catalog-only Select-button gating); passing "RepeatingStyles" instead
+        // reuses this same logic for the Learned Styles section's full-card
+        // display, which has no Select button/Popup_InspectShowAdd concept at all,
+        // so that branch just calls setTechniqueInfo directly.
+        swapCatalogTechniqueVariant = function (eventinfo, repeaterId) {
+            if (repeaterId == undefined) {
+                repeaterId = "TechPopupValues";
+            }
             let attributeHandler = new WorkerAttributeHandler();
 
-            let repeater = new WorkerRepeatingSectionHandler("TechPopupValues");
+            let repeater = new WorkerRepeatingSectionHandler(repeaterId);
             let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
 
             let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attributeHandler, "Action");
@@ -2061,11 +2085,16 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             // for the affinity/element-restriction fields (see initializePopup,
             // TechniqueInspectPopupAttributeHandler above) - swapping needs to
             // re-apply the same variant filtering the initial population used.
-            attributeHandler.addMod([
-                selectField, WuxDef.GetVariable("CR"), WuxDef.GetVariable("Popup_InspectShowAdd"),
+            let isCatalog = repeaterId === "TechPopupValues";
+            let mods = [
+                selectField, WuxDef.GetVariable("CR"),
                 WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("Ancestry"),
                 WuxDef.GetVariable("Forme_ShowFromNonElement")
-            ].concat(slotFields));
+            ].concat(slotFields);
+            if (isCatalog) {
+                mods.push(WuxDef.GetVariable("Popup_InspectShowAdd"));
+            }
+            attributeHandler.addMod(mods);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 // Submitted as i+1 (1-6), not the raw 0-5 slot index - see printVariants,
@@ -2083,11 +2112,19 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 if (technique == undefined) {
                     return;
                 }
-                let canSelectForAdd = attrHandler.parseString(WuxDef.GetVariable("Popup_InspectShowAdd")) == "on";
                 let showElementRestricted = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement")) != "0";
                 let userAffinities = showElementRestricted ? undefined : getUserAffinities(attrHandler);
-                techniqueAttributeHandler.setTechniqueCatalogInfo(technique,
-                    {excludeCurrent: true, userAffinities: userAffinities}, canSelectForAdd);
+                if (isCatalog) {
+                    let canSelectForAdd = attrHandler.parseString(WuxDef.GetVariable("Popup_InspectShowAdd")) == "on";
+                    techniqueAttributeHandler.setTechniqueCatalogInfo(technique,
+                        {excludeCurrent: true, userAffinities: userAffinities}, canSelectForAdd);
+                } else {
+                    // Learned Styles' full-card display has no Select button/
+                    // Popup_InspectShowAdd concept at all (the style is already
+                    // learned) - just re-render the technique itself.
+                    techniqueAttributeHandler.setTechniqueInfo(technique, false,
+                        {excludeCurrent: true, userAffinities: userAffinities});
+                }
             });
             attributeHandler.run();
         },

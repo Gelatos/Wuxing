@@ -474,8 +474,8 @@ var FormeBuilder = FormeBuilder || (function () {
             output += listenerInspectRepeatingForme();
             output += listenerSetFormeOptions();
             output += listenerJobSelect();
-            output += listenerInspectListStyle();
             output += listenerDeleteListStyle();
+            output += listenerSwapStyleListTechniqueVariant();
             output += listenerDeleteAllLearnedStyles();
             output += listenerInspectListPerk();
             output += listenerDeleteListPerk();
@@ -526,15 +526,24 @@ var FormeBuilder = FormeBuilder || (function () {
             return `${WuxSheetBackend.OnChange([WuxDef.GetVariable("Forme_SelectJob")],
                 `WuxWorkerJobs.EquipJobFromEvent(eventinfo)`, true)}`;
         },
-        listenerInspectListStyle = function () {
-            return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingStyles")}:${WuxDef.GetVariable("Forme_Inspect")}`],
-                `WuxWorkerStyles.InspectListStyle(eventinfo)`, true);
-        },
         listenerDeleteListStyle = function () {
             return WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingStyles")}:${WuxDef.GetVariable("Forme_Delete")}`],
                 `WuxWorkerStyles.DeleteListStyle(eventinfo)`, true);
+        },
+        // Learned Styles' full-card display's variant quick-switch buttons
+        // (TechVariant pair 3, same shared click trigger as the catalog/live tab -
+        // see TechniqueDataAttributeHandler.getVariantSelectFieldName, WJS-Service.js),
+        // scoped to "RepeatingStyles". SwapCatalogTechniqueVariant's second param
+        // picks the non-catalog branch (no Select button/Popup_InspectShowAdd
+        // concept for an already-learned style).
+        listenerSwapStyleListTechniqueVariant = function () {
+            let baseDef = WuxDef.Get("Action");
+            let variantSelectVar = baseDef.getVariable(`-${WuxDef.GetVariable("TechVariant", "3")}`);
+            let repeaterVar = WuxDef.GetVariable("RepeatingStyles");
+
+            return WuxSheetBackend.OnChange([`${repeaterVar}:${variantSelectVar}`],
+                `WuxWorkerInspectPopup.SwapCatalogTechniqueVariant(eventinfo, "RepeatingStyles")`, true);
         },
         listenerDeleteAllLearnedStyles = function () {
             return WuxSheetBackend.OnChange(

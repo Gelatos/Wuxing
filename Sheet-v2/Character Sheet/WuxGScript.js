@@ -12840,28 +12840,65 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 styleListSection = function (repeatingSectionName) {
                     let repeatingDef = WuxDef.Get(repeatingSectionName);
                     let styleIsVisibleAttr = WuxDef.GetAttribute("Action_StyleIsVisible");
-                    let repeaterContent = buildRepeater(repeatingDef.getVariable(), addStyleListRepeaterContents());
+                    // wuxFormeTechRepeater is the same 240px card grid the live Actions
+                    // tab and technique catalog already use, since each row is now a
+                    // full technique card instead of a plain name+buttons row.
+                    let repeaterContent = buildRepeater(repeatingDef.getVariable(), addStyleListRepeaterContents(), "wuxFormeTechRepeater");
                     let contents = `${WuxSheetMain.Header(repeatingDef.getTitle())}
                         ${WuxSheetMain.HiddenFieldToggle(styleIsVisibleAttr, `<div>${repeaterContent}${WuxSheetMain.Row("&nbsp;")}</div>`, WuxSheetMain.Row(WuxSheetMain.Desc("None")))}`;
                     return WuxSheetMain.Table.FlexTableGroup(contents);
                 },
 
+                // Full technique card for each learned style, mirroring the technique
+                // catalog's card (printCatalogTechniqueFullDisplay) but: (1) built
+                // directly rather than the catalog's HiddenFieldToggle header/action-type
+                // gate, since every RepeatingStyles row is always a technique (no header
+                // rows, no item-catalog fusion); (2) effects (everything below flavor
+                // text - Core/OnEnter/Check/End/WillBreak/Enhancement effects) start
+                // hidden behind a TechShowEffects toggle instead of always showing, since
+                // a full page of already-learned styles would otherwise be very long;
+                // (3) no Select button (there's nothing to select - it's already
+                // learned) - Delete replaces the old Inspect button, moved below the
+                // effects section. Variant buttons work the same as the catalog
+                // (listenerSwapStyleListTechniqueVariant, WuxGS-Backend.js).
+                // TechniqueDataAttributeHandler.setTechniqueInfo populates every field
+                // read here (performAddItem, Worker-InspectPopup.js, for newly-learned
+                // styles; WuxWorkerStyles.RefreshStyleListDisplay backfills existing
+                // rows) - Roll20 auto-scopes them to "RepeatingStyles" from the
+                // surrounding fieldset, same as the catalog's own fields do for
+                // "TechPopupValues".
                 addStyleListRepeaterContents = function () {
-                    let nameDef = WuxDef.Get("Forme_Name");
-                    let inspectDef = WuxDef.Get("Forme_Inspect");
+                    let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilder(WuxDef.Get("Action"));
+                    let showEffectsAttr = techniqueDisplayBuilder.getActionTypeAttribute("TechShowEffects");
                     let deleteDef = WuxDef.Get("Forme_Delete");
-                    let tierOutput = "";
 
-                    return `<div class="wuxMultiRow" style="min-width: 300px;">
-                        ${tierOutput}
-                        <div class="wuxEquipableRow">
-                            <div class="wuxEquipableBody">
-                                <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>
-                                <div class="wuxEquipableButtonRow">
-                                    ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
-                                </div>
-                            </div>
+                    let effectsContent = `${techniqueDisplayBuilder.printCoreEffects()}
+                        ${techniqueDisplayBuilder.printOnEnter()}
+                        ${techniqueDisplayBuilder.printCheckEffects()}
+                        ${techniqueDisplayBuilder.printEndEffects()}
+                        ${techniqueDisplayBuilder.printWillBreakEffects()}
+                        ${techniqueDisplayBuilder.printEnhancementEffects()}`;
+
+                    let toggleButton = WuxSheetMain.HiddenFieldToggle(showEffectsAttr,
+                        WuxSheetMain.Button(showEffectsAttr, "&#9656; Hide Effects", "wuxShowEffectsButton"),
+                        WuxSheetMain.Button(showEffectsAttr, "&#9662; Show Effects", "wuxShowEffectsButton"));
+
+                    let deleteButton = WuxSheetMain.Button(deleteDef.getAttribute(),
+                        `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxCatalogSelectButton");
+
+                    return `<div class="wuxFeature">
+                        ${techniqueDisplayBuilder.printHeaderBlock()}
+                        <div class="wuxFeatureInfoDisplayBlock">
+                            ${techniqueDisplayBuilder.printTrigger()}
+                            ${techniqueDisplayBuilder.printTraits()}
+                            ${techniqueDisplayBuilder.printFlavorText()}
+                        </div>
+                        <div class="wuxCatalogSelectSection">
+                            ${toggleButton}
+                        </div>
+                        ${WuxSheetMain.HiddenField(showEffectsAttr, `<div class="wuxFeatureInfoDisplayBlock">${effectsContent}</div>`)}
+                        <div class="wuxCatalogSelectSection">
+                            ${deleteButton}
                         </div>
                     </div>`;
                 },
@@ -13638,8 +13675,8 @@ var FormeBuilder = FormeBuilder || (function () {
             output += listenerInspectRepeatingForme();
             output += listenerSetFormeOptions();
             output += listenerJobSelect();
-            output += listenerInspectListStyle();
             output += listenerDeleteListStyle();
+            output += listenerSwapStyleListTechniqueVariant();
             output += listenerDeleteAllLearnedStyles();
             output += listenerInspectListPerk();
             output += listenerDeleteListPerk();
@@ -13690,15 +13727,24 @@ var FormeBuilder = FormeBuilder || (function () {
             return `${WuxSheetBackend.OnChange([WuxDef.GetVariable("Forme_SelectJob")],
                 `WuxWorkerJobs.EquipJobFromEvent(eventinfo)`, true)}`;
         },
-        listenerInspectListStyle = function () {
-            return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingStyles")}:${WuxDef.GetVariable("Forme_Inspect")}`],
-                `WuxWorkerStyles.InspectListStyle(eventinfo)`, true);
-        },
         listenerDeleteListStyle = function () {
             return WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingStyles")}:${WuxDef.GetVariable("Forme_Delete")}`],
                 `WuxWorkerStyles.DeleteListStyle(eventinfo)`, true);
+        },
+        // Learned Styles' full-card display's variant quick-switch buttons
+        // (TechVariant pair 3, same shared click trigger as the catalog/live tab -
+        // see TechniqueDataAttributeHandler.getVariantSelectFieldName, WJS-Service.js),
+        // scoped to "RepeatingStyles". SwapCatalogTechniqueVariant's second param
+        // picks the non-catalog branch (no Select button/Popup_InspectShowAdd
+        // concept for an already-learned style).
+        listenerSwapStyleListTechniqueVariant = function () {
+            let baseDef = WuxDef.Get("Action");
+            let variantSelectVar = baseDef.getVariable(`-${WuxDef.GetVariable("TechVariant", "3")}`);
+            let repeaterVar = WuxDef.GetVariable("RepeatingStyles");
+
+            return WuxSheetBackend.OnChange([`${repeaterVar}:${variantSelectVar}`],
+                `WuxWorkerInspectPopup.SwapCatalogTechniqueVariant(eventinfo, "RepeatingStyles")`, true);
         },
         listenerDeleteAllLearnedStyles = function () {
             return WuxSheetBackend.OnChange(

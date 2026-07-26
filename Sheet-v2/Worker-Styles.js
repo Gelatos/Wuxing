@@ -603,57 +603,6 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             seeSetFormeTechniques(eventinfo, "RepeatingStyles", equipSlotFieldName);
         },
 
-        inspectListStyle = function (eventinfo) {
-            let worker = new WuxStyleWorkerBuild();
-            let attributeHandler = new WorkerAttributeHandler();
-            attributeHandler.addRepeatingSection("RepeatingStyles");
-            let repeater = attributeHandler.getRepeatingSection("RepeatingStyles");
-            let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
-            let nameFieldName = repeater.getFieldName(selectedId, WuxDef.GetVariable("Forme_Name"));
-            attributeHandler.addMod([nameFieldName, worker.attrMax, worker.attrBuildDraft]);
-
-            attributeHandler.addGetAttrCallback(function (attrHandler) {
-                let selectedStyleName = attrHandler.parseString(nameFieldName);
-
-                worker.setBuildStatsDraft(attrHandler);
-
-                let inventoryItems = [];
-                let selectedItem = undefined;
-
-                worker.iterateBuildStats(function (buildStat) {
-                    if (buildStat.group !== "Style") return;
-
-                    let technique = WuxTechs.Get(buildStat.name);
-                    if (technique == undefined) return;
-
-                    let iconAffinities = technique.getAffinityParts();
-                    let variants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
-                    for (let variant of variants) {
-                        let variantParts = variant.getAffinityParts();
-                        for (let part of variantParts) {
-                            if (!iconAffinities.includes(part)) iconAffinities.push(part);
-                        }
-                    }
-
-                    let item = new InspectionInventoryItem(buildStat.name, buildStat.name, false, undefined, undefined, iconAffinities);
-
-                    if (buildStat.name === selectedStyleName) {
-                        selectedItem = item;
-                    } else {
-                        inventoryItems.push(item);
-                    }
-                });
-
-                if (selectedItem !== undefined) {
-                    inventoryItems.unshift(selectedItem);
-                }
-
-                WuxWorkerInspectPopup.OpenTechniqueInspectionWithLoadingScreen("Styles", inventoryItems, ["Add Style"]);
-            });
-
-            attributeHandler.run();
-        },
-
         deleteListStyle = function (eventinfo) {
             let worker = new WuxStyleWorkerBuild();
             let attributeHandler = new WorkerAttributeHandler();
@@ -781,6 +730,63 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
             WuxWorkerSkills.UpdateKeySkills(attributeHandler);
             WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
             attributeHandler.run();
+        },
+
+        // Writes the full technique display (header/effects/variants) for one
+        // RepeatingStyles row, using the same "Action"-prefixed fields and
+        // TechniqueDataAttributeHandler.setTechniqueInfo the live Actions tab and
+        // technique catalog already use - Roll20 auto-scopes these to whichever
+        // repeater's fieldset they're rendered inside (printLearnedStyleFullDisplay,
+        // WuxGS-Base.js), so no new fields were needed. excludeCurrent drops the
+        // style's own variant button from its own row (same reasoning as the
+        // catalog); userAffinities restricts variant buttons to what the character
+        // can actually use, matching the live tab's own variant-button convention -
+        // undefined (no filtering) when "Show Element-Restricted Techniques" is on.
+        // TechShowEffects is deliberately left untouched here - it's a per-row user
+        // toggle (WuxGS-Base.js), and the compiled HTML's own default ("0", hidden)
+        // already covers a freshly-created or never-touched row correctly, so
+        // writing it here would just risk stomping a state the player already set.
+        populateStyleTechniqueDisplay = function (attrHandler, repeater, id, styleName, userAffinities) {
+            let technique = WuxTechs.Get(styleName);
+            if (technique == undefined) {
+                return;
+            }
+            let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");
+            techniqueAttributeHandler.setRepeaterData(repeater, id);
+            techniqueAttributeHandler.setTechniqueInfo(technique, false, {excludeCurrent: true, userAffinities: userAffinities});
+        },
+
+        // One-time backfill for styles learned before this display existed - not
+        // wired to any button, run once from the browser console as
+        // WuxWorkerStyles.RefreshStyleListDisplay() after adding the full-card
+        // display. Styles learned after that point populate immediately via
+        // performAddItem (Worker-InspectPopup.js), which calls
+        // populateStyleTechniqueDisplay directly.
+        refreshStyleListDisplay = function () {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("RepeatingStyles");
+            let repeater = attributeHandler.getRepeatingSection("RepeatingStyles");
+            let formeNameVar = WuxDef.GetVariable("Forme_Name");
+            repeater.addFieldNames([formeNameVar]);
+            attributeHandler.addMod([
+                WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("Ancestry"),
+                WuxDef.GetVariable("Forme_ShowFromNonElement")
+            ]);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let showElementRestricted = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement")) != "0";
+                let advancedAffinities = attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")).split(";").map(s => s.trim()).filter(s => s !== "");
+                let userAffinities = showElementRestricted ? undefined : [
+                    attrHandler.parseString(WuxDef.GetVariable("Affinity")),
+                    ...advancedAffinities,
+                    attrHandler.parseString(WuxDef.GetVariable("Ancestry"))
+                ];
+                repeater.ids.forEach(function (id) {
+                    let styleName = attrHandler.parseString(repeater.getFieldName(id, formeNameVar));
+                    populateStyleTechniqueDisplay(attrHandler, repeater, id, styleName, userAffinities);
+                });
+            });
+            attributeHandler.run();
         }
 
     ;
@@ -798,10 +804,11 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         SeeStyleTechniques: seeStyleTechniques,
         InspectSetJobStyle: inspectSetJobStyle,
         InspectSetStyle: inspectSetStyle,
-        InspectListStyle: inspectListStyle,
         DeleteListStyle: deleteListStyle,
         DeleteAllLearnedStyles: deleteAllLearnedStyles,
-        RepairStyleBuildStatsFromRows: repairStyleBuildStatsFromRows
+        RepairStyleBuildStatsFromRows: repairStyleBuildStatsFromRows,
+        PopulateStyleTechniqueDisplay: populateStyleTechniqueDisplay,
+        RefreshStyleListDisplay: refreshStyleListDisplay
     };
 }());
 
