@@ -525,6 +525,13 @@ class BaseItemDisplayBuilder extends BaseFeatureDisplayBuilder {
         super();
     }
 
+    // Items have no variants concept - overrides the inherited stub (which
+    // returns undefined, printed literally as the string "undefined" by
+    // printHeaderBlockField's template) with an explicit empty string.
+    printVariants() {
+        return "";
+    }
+
     printHeaderBlock() {
         return this.printHeaderBlockField(
             `<div class="wuxFeatureHeaderDisplayInfoBlock">
@@ -617,13 +624,17 @@ class ItemRepeaterDisplayBuilder extends BaseItemDisplayBuilder {
             )
         );
     }
-    // Crafting rules are hidden inside a tooltip on the item's category label
-    // instead of their own always-visible section - only becomes hoverable when
-    // the item actually has crafting data (ItemCraft's base slot).
+    // The item's actual crafting recipe (DC/skill check, time, components - see
+    // ItemDisplayData.setCrafting, WAPI-Database.js) is hidden inside a tooltip
+    // on the item's category label instead of its own always-visible section -
+    // only becomes hoverable when the item actually has crafting data
+    // (ItemCraft's base slot). Only that base slot is shown here - ItemCraft's
+    // max slot holds the generic crafting RULES text (System_CraftingRecipe/
+    // System_CraftSkillCheck/etc plus each component's own description), which
+    // is a different concern from this item's specific recipe.
     printCraftingTooltip (categoryContents) {
         let fieldName = this.getActionTypeAttribute("ItemCraft");
-        let descriptionData = `<span class="wuxDescription" name="${fieldName}"></span>
-            <span class="wuxDescription" name="${this.getActionTypeAttribute("ItemCraft", WuxDef._max)}"></span>`;
+        let descriptionData = `<span class="wuxDescription" name="${fieldName}"></span>`;
         return WuxSheetMain.HiddenSpanFieldToggle(fieldName,
             this.printTooltipField(categoryContents, "Crafting", descriptionData),
             categoryContents);

@@ -197,6 +197,8 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
     }
     resetInspectionVariables() {
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), "");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType", WuxDef._max), "0");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType", "2"), "0");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectId"), "");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), "");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
@@ -206,6 +208,17 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
     };
     setPopupType(popupType) {
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), popupType);
+
+        // Boolean piggybacks on this same field (max slot = technique/style catalog,
+        // suffix "2" = item catalog) so the markup (printAddButton/InspectionPopup.print,
+        // WuxGS-Base.js) can gate the Style Points widget and the tech/item catalog
+        // switch with the plain, already-proven WuxSheetMain.HiddenField toggle
+        // (every other element in this popup's header already uses it) instead of a
+        // multi-value CSS attribute-selector match against the raw title string.
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType", WuxDef._max),
+            popupType === "Popup_TechniqueInspectionName" ? "on" : "0");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType", "2"),
+            popupType === "Popup_ItemInspectionName" ? "on" : "0");
     }
     setAddType(addTypes) {
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
@@ -577,6 +590,70 @@ class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
     constructor(attributeHandler) {
         super(attributeHandler);
         this.titleDefinitionName = "Popup_ItemInspectionName";
+
+        // Catalog rows carry full item data directly (baseDefinitionName "Action",
+        // matching the technique catalog's own catalogTechniqueAttributeHandler) -
+        // separate from the inherited "Popup"-based itemDataAttributeHandler above,
+        // which still backs the old single-preview-slot fields (setSelectedItemData
+        // below) until selection/adding is redone for the new full-card catalog.
+        this.catalogItemAttributeHandler = new ItemDataAttributeHandler(this.attrHandler, "Action");
+        this.catalogItemAttributeHandler.setRepeaterData(this.repeater);
+    }
+
+    // Full item card per row, mirroring TechniqueInspectPopupAttributeHandler's
+    // setInventoryItemData - selectNameField is still written (Popup_ItemSelectName)
+    // even though selection isn't wired up to this new display yet, since it's
+    // the same field the old select/add flow already depends on. A group header
+    // (performItemFilterInspection, this file, groups items by category) is a
+    // divider row, not a real item - marked via Popup_ItemSelectType == "0" and
+    // Popup_ItemSelectDisplay carrying the divider's label text, matching the
+    // base class's own convention (this is exactly what the inherited
+    // setInventoryItemData already did) so printCatalogItemFullDisplay
+    // (WuxGS-Base.js) and its pre-existing .wuxItemPopupRepeater CSS
+    // (WCSS-Base.css) can toggle between the plain divider and the full card.
+    setInventoryItemData(id, itemData) {
+        this.setInventoryItemVisibility(id, true);
+        this.catalogItemAttributeHandler.setId(id);
+
+        this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "0");
+
+        let itemSelectTypeField = this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectType"));
+        let itemSelectDisplayField = this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectDisplay"));
+        let selectNameField = this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectName"));
+        if (itemData.isTitle) {
+            this.catalogItemAttributeHandler.clearItemInfo();
+            this.attrHandler.addUpdate(itemSelectTypeField, "0");
+            this.attrHandler.addUpdate(itemSelectDisplayField, itemData.display);
+            this.attrHandler.addUpdate(selectNameField, "");
+            return;
+        }
+
+        let item = WuxItems.Get(itemData.name);
+        if (item == undefined) {
+            this.catalogItemAttributeHandler.clearItemInfo();
+            this.attrHandler.addUpdate(itemSelectTypeField, "on");
+            this.attrHandler.addUpdate(selectNameField, "");
+            return;
+        }
+        this.catalogItemAttributeHandler.setItemInfo(item);
+        this.attrHandler.addUpdate(itemSelectTypeField, "on");
+        this.attrHandler.addUpdate(selectNameField, itemData.name);
+    }
+
+    // Hides/shows the actual catalog card via ItemIsVisible (a real, dedicated
+    // attribute - unlike the technique catalog, which piggybacks onto
+    // TechActionType's max slot since every technique field is itself piggybacked
+    // onto some other slot already).
+    setInventoryItemVisibility(id, isVisible) {
+        super.setInventoryItemVisibility(id, isVisible);
+        this.catalogItemAttributeHandler.setId(id);
+        this.attrHandler.addUpdate(this.catalogItemAttributeHandler.getVariable("ItemIsVisible"), isVisible ? "on" : "0");
+        if (!isVisible) {
+            this.catalogItemAttributeHandler.clearItemInfo();
+            this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectType")), "0");
+            this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectName")), "");
+            this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "0");
+        }
     }
 
     initializePopup() {
@@ -1386,19 +1463,19 @@ class GoodsInspectPopupAttributeHandler extends ItemInspectPopupAttributeHandler
 
 class GoodsForGearInspectPopupAttributeHandler extends GoodsInspectPopupAttributeHandler {
     setPopupType(popupType) {
-        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), "Popup_GoodsForGearInspectionName");
+        super.setPopupType("Popup_GoodsForGearInspectionName");
     }
 }
 
 class FoodsInspectPopupAttributeHandler extends GearInspectPopupAttributeHandler {
     setPopupType(popupType) {
-        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), "Popup_FoodsInspectionName");
+        super.setPopupType("Popup_FoodsInspectionName");
     }
 }
 
 class IngsInspectPopupAttributeHandler extends GoodsInspectPopupAttributeHandler {
     setPopupType(popupType) {
-        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), "Popup_IngsInspectionName");
+        super.setPopupType("Popup_IngsInspectionName");
     }
 }
 

@@ -12817,6 +12817,51 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         WuxSheetMain.Row(WuxSheetMain.Button(loadMoreField, buttonText, "wuxCatalogLoadMoreButton")));
                 },
 
+                // Item catalog for the Inspect Popup's "browse and add an item" flow.
+                // Mirrors repeatingCatalogTechSection above but: (1) uses the shared
+                // "ItemPopupValues" repeater (see ItemInspectPopupAttributeHandler,
+                // Worker-InspectPopup.js), (2) gates each card's visibility on the real
+                // ItemIsVisible attribute instead of a piggybacked slot, since items have
+                // no other field that already needed piggybacking, (3) no tier-group
+                // headers or Select button yet - selection/adding for the new full-card
+                // display is a later pass (see printCatalogItemFullDisplay below).
+                repeatingCatalogItemSection = function () {
+                    let repeaterDefinition = WuxDef.Get("ItemPopupValues");
+                    let repeatingVariable = repeaterDefinition.getVariable();
+
+                    let actionDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("ItemIsVisible"), printCatalogItemFullDisplay());
+                    // wuxItemPopupRepeater (not wuxFormeTechRepeater) - its own pre-built
+                    // 240px card grid + full-width group-divider rule already exists
+                    // (WCSS-Base.css), keyed to Popup_ItemSelectType's value - see
+                    // printCatalogItemFullDisplay below.
+                    let displayItemsContents = buildRepeater(repeatingVariable, actionDisplay, "wuxItemPopupRepeater wuxCatalogRepeater");
+
+                    return `${displayItemsContents}
+                    ${printCatalogLoadMoreButton("1")}
+                    ${WuxSheetMain.Row("&nbsp;")}`;
+                },
+                printCatalogItemFullDisplay = function () {
+                    let itemDisplayBuilder = new ItemRepeaterDisplayBuilder(WuxDef.Get("Action"));
+                    // Group-divider rows are marked via Popup_ItemSelectType == "0" - the
+                    // shared inventory-popup convention every InspectPopupAttributeHandler
+                    // subclass's base setInventoryItemData already writes (isTitle ? "0" :
+                    // "on") - and Popup_ItemSelectDisplay carries the divider's label text
+                    // (also already written by that same base method). Matches the
+                    // existing .wuxItemPopupRepeater CSS (WCSS-Base.css) built for this
+                    // exact toggle, instead of inventing a new piggyback field.
+                    let itemSelectTypeField = WuxDef.GetAttribute("Popup_ItemSelectType");
+                    let headerContent = `<div class="wuxFeatureSectionHeader">
+                        ${WuxSheetMain.Header2(`<span name="${WuxDef.GetAttribute("Popup_ItemSelectDisplay")}"></span>`)}
+                    </div>`;
+                    let cardContent = `<div class="wuxFeature">
+                        ${itemDisplayBuilder.printHeaderBlock()}
+                        ${itemDisplayBuilder.printInfoBlock()}
+                    </div>`;
+                    // HiddenFieldToggle shows param2 when the field is non-"0" ("on" for a
+                    // real item) and param3 when "0" (a divider row).
+                    return WuxSheetMain.HiddenFieldToggle(itemSelectTypeField, cardContent, headerContent);
+                },
+
                 getActionTypeAttribute = function (attribute, suffix) {
                     let baseDefinition = WuxDef.Get("Action");
                     return baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
@@ -12989,13 +13034,15 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
             return {
                 Print: print,
-                RepeatingCatalogTechSection: repeatingCatalogTechSection
+                RepeatingCatalogTechSection: repeatingCatalogTechSection,
+                RepeatingCatalogItemSection: repeatingCatalogItemSection
             }
         }());
 
     return {
         Print: print,
-        RepeatingCatalogTechSection: MainContentData.RepeatingCatalogTechSection
+        RepeatingCatalogTechSection: MainContentData.RepeatingCatalogTechSection,
+        RepeatingCatalogItemSection: MainContentData.RepeatingCatalogItemSection
     };
 }());
 
@@ -13068,7 +13115,15 @@ var DisplayPopups = DisplayPopups || (function () {
                     // .wuxInspectionPopupContentData isn't just a layout wrapper - WCSS-Footer.css
                     // has popup-specific overrides (header color/border, width) keyed off this
                     // class, so catalog content needs it too, same as the old display did.
-                    contents += `<div class="wuxInspectionPopupContentData">${DisplayActionSheet.RepeatingCatalogTechSection()}</div>`;
+                    // Only the catalog matching the popup currently open renders - gated on
+                    // the boolean piggybacks setPopupType (Worker-InspectPopup.js) writes onto
+                    // Popup_InspectSelectType's own max/"2" slots, via the same
+                    // WuxSheetMain.HiddenField toggle already used throughout this popup
+                    // (Jin/Cost, Style Points, the Add buttons below).
+                    contents += `<div class="wuxInspectionPopupContentData">
+                        ${WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectSelectType", WuxDef._max), DisplayActionSheet.RepeatingCatalogTechSection())}
+                        ${WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectSelectType", "2"), DisplayActionSheet.RepeatingCatalogItemSection())}
+                    </div>`;
                     return `<div class="wuxInspectionPopupContents">${contents}</div>`;
                 },
                 printHeader = function () {
@@ -13099,7 +13154,22 @@ var DisplayPopups = DisplayPopups || (function () {
                         WuxSheetMain.SlotDisplay("Style Points", stylePointsDef.getAttribute(WuxDef._error),
                             stylePointsDef.getAttribute(), stylePointsDef.getAttribute(WuxDef._max)));
 
-                    let wealthSection = `<div style="display:flex;flex-direction:column;">${jinAndCost}${stylePoints}</div>`;
+                    // Only the style/technique catalog spends style points - the item
+                    // catalog also opens with Popup_InspectShowAdd "on" (its own
+                    // Add Equipment/Add Consumable addType), so gating on that flag alone
+                    // isn't enough. Gated on Popup_InspectSelectType's own max slot instead
+                    // (set by setPopupType, Worker-InspectPopup.js) via the same
+                    // WuxSheetMain.HiddenField toggle Jin/Cost above already uses.
+                    let stylePointsSection = WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectSelectType", WuxDef._max), stylePoints);
+
+                    // wuxPopupWealthSection (not an inline flex style) - .wuxHiddenField's
+                    // shared CSS sets "display: inherit" when shown, so nested inside a
+                    // plain flex-column div it becomes a flex container itself (default
+                    // row direction), sitting Jin/Cost side by side instead of stacked.
+                    // The dedicated class forces .wuxHiddenField back to block here
+                    // (WCSS-Footer.css) without touching that generic rule everywhere
+                    // else it's used.
+                    let wealthSection = `<div class="wuxPopupWealthSection">${jinAndCost}${stylePointsSection}</div>`;
 
                     // Base add-type slot's button is only clickable once at least one
                     // item is selected (Popup_InspectSelectedList, toggled per row by
@@ -16555,6 +16625,13 @@ class BaseItemDisplayBuilder extends BaseFeatureDisplayBuilder {
         super();
     }
 
+    // Items have no variants concept - overrides the inherited stub (which
+    // returns undefined, printed literally as the string "undefined" by
+    // printHeaderBlockField's template) with an explicit empty string.
+    printVariants() {
+        return "";
+    }
+
     printHeaderBlock() {
         return this.printHeaderBlockField(
             `<div class="wuxFeatureHeaderDisplayInfoBlock">
@@ -16647,13 +16724,17 @@ class ItemRepeaterDisplayBuilder extends BaseItemDisplayBuilder {
             )
         );
     }
-    // Crafting rules are hidden inside a tooltip on the item's category label
-    // instead of their own always-visible section - only becomes hoverable when
-    // the item actually has crafting data (ItemCraft's base slot).
+    // The item's actual crafting recipe (DC/skill check, time, components - see
+    // ItemDisplayData.setCrafting, WAPI-Database.js) is hidden inside a tooltip
+    // on the item's category label instead of its own always-visible section -
+    // only becomes hoverable when the item actually has crafting data
+    // (ItemCraft's base slot). Only that base slot is shown here - ItemCraft's
+    // max slot holds the generic crafting RULES text (System_CraftingRecipe/
+    // System_CraftSkillCheck/etc plus each component's own description), which
+    // is a different concern from this item's specific recipe.
     printCraftingTooltip (categoryContents) {
         let fieldName = this.getActionTypeAttribute("ItemCraft");
-        let descriptionData = `<span class="wuxDescription" name="${fieldName}"></span>
-            <span class="wuxDescription" name="${this.getActionTypeAttribute("ItemCraft", WuxDef._max)}"></span>`;
+        let descriptionData = `<span class="wuxDescription" name="${fieldName}"></span>`;
         return WuxSheetMain.HiddenSpanFieldToggle(fieldName,
             this.printTooltipField(categoryContents, "Crafting", descriptionData),
             categoryContents);

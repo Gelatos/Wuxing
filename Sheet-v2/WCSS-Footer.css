@@ -503,7 +503,10 @@ input[type=hidden].wuxHiddenSingleCount-flag[value="1"] + .wuxDescription
     left: 0;
     top: 0;
     display: flex;
+    flex-wrap: wrap;
+    flex-shrink: 0;
     align-items: center;
+    row-gap: 8px;
     margin-bottom: 15px;
     width: calc(100% - 30px);
     min-height: 22px;
@@ -557,6 +560,20 @@ input[type=hidden].wuxHiddenSingleCount-flag[value="1"] + .wuxDescription
     opacity: 0.6;
     cursor: not-allowed;
     pointer-events: none;
+}
+
+/* Wealth/Cost/Style Points column in the popup header (printAddButton,
+   WuxGS-Base.js). .wuxHiddenField's own CSS sets "display: inherit" when
+   shown, so nested directly in this flex-column wrapper it becomes a flex
+   container itself (default row direction) instead of stacking its own
+   .wuxSlotSection children - forced back to block here so each row (Jin,
+   Cost, Style Points) stacks in a single column as intended. */
+.wuxPopupWealthSection {
+    display: flex;
+    flex-direction: column;
+}
+.wuxPopupWealthSection > input[type=hidden].wuxHiddenField-flag:not([value="0"]) + .wuxHiddenField {
+    display: block;
 }
 
 .wuxPopupHeader .wuxButton.wuxButtonDisabled span {
