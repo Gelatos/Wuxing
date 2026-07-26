@@ -42,9 +42,25 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             }
 
             let perkDefName = WuxDef.Get("Perk").name;
+            // Build-point-pool definitions (Skill/Job/Knowledge/Attribute/Perk/Technique)
+            // all have formulas referencing CR (e.g. Technique's is "2;CR:_max;
+            // AdvancementTechnique"), so they match the formulaMods=CR filter above and
+            // land in formulaDefinitions alongside true stat fields like HP/EN. Their
+            // base slot isn't a plain formula output though - it's "remaining points"
+            // (max minus spent), maintained separately by each definition's own
+            // WuxWorkerBuild.updatePoints()/setPointsMax() (see refreshStats in
+            // Worker-Jobs.js/Worker-Styles.js/etc). Blindly overwriting it here with the
+            // raw formula result (which computes the MAX, not the remainder) reset it to
+            // "full" every time this ran - confirmed via diagnostic logging, this is what
+            // was resetting the Style Points display after a job change (refreshStatEvaluations,
+            // Worker-Jobs.js, calls this on every job equip). The existing perkDefName check
+            // only ever excluded individual perks (whose own group is "Perk"), not this
+            // whole class of definition, so it's extended here to name-match all of them.
+            let buildPointPoolNames = ["Skill", "Job", "Knowledge", "Attribute", "Perk", "Technique"];
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 for (let i = 0; i < formulaDefinitions.length; i++) {
                     if (formulaDefinitions[i].group === perkDefName) { continue; }
+                    if (buildPointPoolNames.includes(formulaDefinitions[i].name)) { continue; }
                     if (formulaDefinitions[i].isResource) {
                         attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
                         attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].formula.getValue(attrHandler));

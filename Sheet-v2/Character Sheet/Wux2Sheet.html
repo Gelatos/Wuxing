@@ -36806,9 +36806,25 @@ class BasePopupAttributeHandler {
             }
 
             let perkDefName = WuxDef.Get("Perk").name;
+            // Build-point-pool definitions (Skill/Job/Knowledge/Attribute/Perk/Technique)
+            // all have formulas referencing CR (e.g. Technique's is "2;CR:_max;
+            // AdvancementTechnique"), so they match the formulaMods=CR filter above and
+            // land in formulaDefinitions alongside true stat fields like HP/EN. Their
+            // base slot isn't a plain formula output though - it's "remaining points"
+            // (max minus spent), maintained separately by each definition's own
+            // WuxWorkerBuild.updatePoints()/setPointsMax() (see refreshStats in
+            // Worker-Jobs.js/Worker-Styles.js/etc). Blindly overwriting it here with the
+            // raw formula result (which computes the MAX, not the remainder) reset it to
+            // "full" every time this ran - confirmed via diagnostic logging, this is what
+            // was resetting the Style Points display after a job change (refreshStatEvaluations,
+            // Worker-Jobs.js, calls this on every job equip). The existing perkDefName check
+            // only ever excluded individual perks (whose own group is "Perk"), not this
+            // whole class of definition, so it's extended here to name-match all of them.
+            let buildPointPoolNames = ["Skill", "Job", "Knowledge", "Attribute", "Perk", "Technique"];
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 for (let i = 0; i < formulaDefinitions.length; i++) {
                     if (formulaDefinitions[i].group === perkDefName) { continue; }
+                    if (buildPointPoolNames.includes(formulaDefinitions[i].name)) { continue; }
                     if (formulaDefinitions[i].isResource) {
                         attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
                         attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].formula.getValue(attrHandler));
@@ -37985,6 +38001,53 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         // instead clears every non-Basic build-stat entry directly (same
         // Basic-vs-styled distinction WuxStyleWorkerBuild.initializeData already
         // draws), so it can't be left out of sync with RepeatingStyles.
+        // One-time repair: rebuilds the "Technique" build-stats draft
+        // (attrBuildDraft) from RepeatingStyles' own rows, for characters where
+        // the two have drifted out of sync (confirmed via diagnostic logging on
+        // 2026 test data: attrBuildDraft read back completely empty -
+        // {"keys":[],"values":{}} - despite RepeatingStyles still correctly
+        // listing several learned styles). Mirrors performAddItem's exact write
+        // shape (TechniqueInspectionPopup, Worker-InspectPopup.js) for each row:
+        // the base style at {value:1, group:"Style"} plus every one of its
+        // variants at {value:1, group:technique.techSet}. Not wired to any
+        // button - run once from the browser console as
+        // WuxWorkerStyles.RepairStyleBuildStatsFromRows() after confirming (as
+        // here) that RepeatingStyles itself is still intact.
+        repairStyleBuildStatsFromRows = function () {
+            let worker = new WuxStyleWorkerBuild();
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("RepeatingStyles");
+            let repeater = attributeHandler.getRepeatingSection("RepeatingStyles");
+            let formeNameVar = WuxDef.GetVariable("Forme_Name");
+            attributeHandler.getRepeatingSection("RepeatingStyles").addFieldNames([formeNameVar]);
+            attributeHandler.addMod([worker.attrMax, worker.attrBuildDraft]);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                worker.setBuildStatsDraft(attrHandler);
+                Debug.Log(`[RepairStyleBuildStatsFromRows] rows found: ${repeater.ids.length}, draft keys before: ${JSON.stringify(worker.buildStats.keys)}`);
+
+                repeater.ids.forEach(function (id) {
+                    let styleName = attrHandler.parseString(repeater.getFieldName(id, formeNameVar));
+                    let baseTechnique = WuxTechs.Get(styleName);
+                    if (baseTechnique == undefined) {
+                        Debug.Log(`[RepairStyleBuildStatsFromRows] could not find technique "${styleName}" - skipping`);
+                        return;
+                    }
+                    worker.updateBuildStats(attrHandler, baseTechnique.name, {value: 1, group: "Style"});
+                    WuxTechs.Filter(new DatabaseFilterData("style", styleName)).forEach(function (technique) {
+                        worker.updateBuildStats(attrHandler, technique.name, {value: 1, group: technique.techSet});
+                    });
+                });
+
+                Debug.Log(`[RepairStyleBuildStatsFromRows] draft keys after rebuild: ${JSON.stringify(worker.buildStats.keys)}`);
+                worker.updatePoints(attrHandler);
+                Debug.Log(`[RepairStyleBuildStatsFromRows] points total: ${worker.buildStats.getPointsTotal()}, max: ${attrHandler.parseInt(worker.attrMax)}`);
+            });
+            WuxWorkerSkills.UpdateKeySkills(attributeHandler);
+            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+            attributeHandler.run();
+        },
+
         deleteAllLearnedStyles = function () {
             let worker = new WuxStyleWorkerBuild();
             let attributeHandler = new WorkerAttributeHandler();
@@ -38041,7 +38104,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         InspectSetStyle: inspectSetStyle,
         InspectListStyle: inspectListStyle,
         DeleteListStyle: deleteListStyle,
-        DeleteAllLearnedStyles: deleteAllLearnedStyles
+        DeleteAllLearnedStyles: deleteAllLearnedStyles,
+        RepairStyleBuildStatsFromRows: repairStyleBuildStatsFromRows
     };
 }());
 
@@ -40252,7 +40316,11 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 let attributeHandler2 = new WorkerAttributeHandler();
                 let filter = attrHandler.parseJSON(formeTechniqueFilterVariable);
                 updateVisibilityAllActions(attributeHandler2, filter);
-                attributeHandler2.run();
+                // Not also calling attributeHandler2.run() directly here - handing the
+                // same instance to LoadingScreenHandler, which calls .run() on it
+                // internally, was firing every getAttrCallback/finishCallback registered
+                // on attributeHandler2 (updateVisibilityAllActions' whole callback,
+                // including formeTech.setSortOrder()) twice per equip/unequip.
                 let loader = new LoadingScreenHandler(attributeHandler2);
                 loader.run();
             });
@@ -42078,7 +42146,6 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
                 for (let i = 0; i < skills.length; i++) {
                     let skill = skills[i].trim();
                     if (skill) {
-                        Debug.Log(`Adding ${skill} to key skills`);
                         keySkillTitles.add(skill);
                     }
                 }
@@ -42088,7 +42155,6 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
             for (let i = 0; i < techniques.length; i++) {
                 let skill = techniques[i].skill.trim();
                 if (skill) {
-                    Debug.Log(`Adding ${skill} to key skills`);
                     keySkillTitles.add(skill);
                 }
             }
@@ -42110,9 +42176,6 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
                 let skillDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
                 for (let i = 0; i < skillDefinitions.length; i++) {
                     let isKeySkill = keySkillTitles.has(skillDefinitions[i].title);
-                    if (isKeySkill) {
-                        Debug.Log(`Found ${skillDefinitions[i].title} as a skill in key skills`);
-                    }
                     attrHandler.addUpdate(
                         skillDefinitions[i].getVariable(WuxDef._learn),
                         isKeySkill ? "on" : "0");
@@ -42660,7 +42723,6 @@ class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler
     // require them to already be fetched onto attrHandler - simpler for the
     // caller, which already fetches per-click data, to pass them in).
     toggleSelectedItem(selectedItemId, itemName, currentListRaw, learnedStyleNames) {
-        Debug.Log(`[toggleSelectedItem] selectedItemId=${selectedItemId}, itemName="${itemName}", currentListRaw="${currentListRaw}", learnedStyleNames=${JSON.stringify([...learnedStyleNames])}`);
         let selectedNames = currentListRaw.split(";").map(s => s.trim()).filter(s => s !== "" && s !== "0");
         let alreadySelected = selectedNames.includes(itemName);
         if (alreadySelected) {
@@ -42668,7 +42730,6 @@ class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler
         } else {
             selectedNames.push(itemName);
         }
-        Debug.Log(`[toggleSelectedItem] selectedNames after toggle=${JSON.stringify(selectedNames)}`);
 
         this.attrHandler.addUpdate(this.repeater.getFieldName(selectedItemId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), alreadySelected ? "0" : "on");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectedList"), selectedNames.length > 0 ? selectedNames.join(";") : "0");
@@ -42690,25 +42751,20 @@ class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler
         // to the snapshot if the popup exits without confirming).
         let worker = new WuxStyleWorkerBuild();
         worker.setBuildStats(WuxDef.GetVariable("Popup_InspectDraftSnapshot"), this.attrHandler);
-        Debug.Log(`[toggleSelectedItem] snapshot raw=${this.attrHandler.parseString(WuxDef.GetVariable("Popup_InspectDraftSnapshot"))}`);
         selectedNames.forEach(name => {
             if (learnedStyleNames.has(name)) {
-                Debug.Log(`[toggleSelectedItem] skipping "${name}" - already learned`);
                 return;
             }
             let baseTechnique = WuxTechs.Get(name);
             if (baseTechnique == undefined) {
-                Debug.Log(`[toggleSelectedItem] "${name}" not found in WuxTechs`);
                 return;
             }
-            Debug.Log(`[toggleSelectedItem] adding build stat for "${baseTechnique.name}"`);
             worker.updateBuildStats(this.attrHandler, baseTechnique.name, {value: 1, group: "Style"});
             WuxTechs.Filter(new DatabaseFilterData("style", name)).forEach(technique => {
                 worker.updateBuildStats(this.attrHandler, technique.name, {value: 1, group: technique.techSet});
             });
         });
         worker.updatePoints(this.attrHandler);
-        Debug.Log(`[toggleSelectedItem] done, points update queued=${JSON.stringify(this.attrHandler.update)}`);
     }
 }
 class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
@@ -44374,6 +44430,9 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         };
 
         let attributeHandler = new WorkerAttributeHandler();
+        attributeHandler.addRepeatingSection("RepeatingStyles");
+        let formeNameVar = WuxDef.GetVariable("Forme_Name");
+        attributeHandler.getRepeatingSection("RepeatingStyles").addFieldNames([formeNameVar]);
         attributeHandler.addMod([
             WuxDef.GetVariable("Forme_ShowFromNonElement"),
             WuxDef.GetVariable("Forme_ShowLevelRestricted"),
@@ -44389,6 +44448,21 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             let userAffinities = getUserAffinities(attrHandler);
             let userCr = attrHandler.parseInt(WuxDef.GetVariable("CR", WuxDef._max));
 
+            // Styles the character already has learned should never show up in the
+            // catalog at all - previously they were still listed (relying on
+            // toggleSelectedItem to skip charging points for them again), which was
+            // confusing since selecting one visibly did nothing. Read directly from
+            // RepeatingStyles (the same source selectItem/addItem already use for
+            // this exact purpose) rather than the "Technique" build-stats draft
+            // (WuxStyleWorkerBuild.getStyles()) - that draft is a derived/cached
+            // blob that can drift out of sync with the actual learned-style rows
+            // (confirmed via diagnostic logging: it read back completely empty on
+            // a character with several learned styles still present in
+            // RepeatingStyles), so it's not a reliable source for this check.
+            let styleRepeater = attrHandler.getRepeatingSection("RepeatingStyles");
+            let learnedStyleNames = new Set(styleRepeater.ids.map(id =>
+                attrHandler.parseString(styleRepeater.getFieldName(id, formeNameVar))));
+
             let matchesAffinity = function (style) {
                 if (showFromNonElement !== "0") return true;
                 if (style.affinity === "") return true;
@@ -44396,7 +44470,9 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 return affinityParts.some(part => userAffinities.includes(part));
             };
 
-            let baseStyles = getFilteredBaseStyles(filters);
+            let baseStyles = getFilteredBaseStyles(filters).filter(function (style) {
+                return !learnedStyleNames.has(style.name);
+            });
             let learnableStyles = baseStyles.filter(function (style) {
                 return matchesAffinity(style) && style.tier <= userCr;
             });
@@ -44551,6 +44627,9 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         let styleWorker = new WuxStyleWorkerBuild();
 
         let attributeHandler = new WorkerAttributeHandler();
+        attributeHandler.addRepeatingSection("RepeatingStyles");
+        let formeNameVar = WuxDef.GetVariable("Forme_Name");
+        attributeHandler.getRepeatingSection("RepeatingStyles").addFieldNames([formeNameVar]);
         attributeHandler.addMod([
             skillWorker.attrBuildDraft,
             jobWorker.attrBuildDraft,
@@ -44606,8 +44685,16 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             let userAffinities = getUserAffinities(attrHandler);
             let userCr = attrHandler.parseInt(WuxDef.GetVariable("CR", WuxDef._max));
 
-            // Learned style names to exclude
-            let learnedStyleNames = new Set(styleWorker.getStyles().map(function (s) { return s.name; }));
+            // Learned style names to exclude - read directly from RepeatingStyles
+            // (the same source selectItem/addItem already use for this exact
+            // purpose) rather than the "Technique" build-stats draft
+            // (styleWorker.getStyles()), which is a derived/cached blob that can
+            // drift out of sync with the actual learned-style rows (confirmed via
+            // diagnostic logging: it read back completely empty on a character
+            // with several learned styles still present in RepeatingStyles).
+            let styleRepeater = attrHandler.getRepeatingSection("RepeatingStyles");
+            let learnedStyleNames = new Set(styleRepeater.ids.map(id =>
+                attrHandler.parseString(styleRepeater.getFieldName(id, formeNameVar))));
 
             // All base style techniques (techSet == "Style")
             let allStyleNames = [...WuxTechs.GetSortedGroup("style", "Style"), "Style"];

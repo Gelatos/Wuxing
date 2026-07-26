@@ -697,6 +697,53 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         // instead clears every non-Basic build-stat entry directly (same
         // Basic-vs-styled distinction WuxStyleWorkerBuild.initializeData already
         // draws), so it can't be left out of sync with RepeatingStyles.
+        // One-time repair: rebuilds the "Technique" build-stats draft
+        // (attrBuildDraft) from RepeatingStyles' own rows, for characters where
+        // the two have drifted out of sync (confirmed via diagnostic logging on
+        // 2026 test data: attrBuildDraft read back completely empty -
+        // {"keys":[],"values":{}} - despite RepeatingStyles still correctly
+        // listing several learned styles). Mirrors performAddItem's exact write
+        // shape (TechniqueInspectionPopup, Worker-InspectPopup.js) for each row:
+        // the base style at {value:1, group:"Style"} plus every one of its
+        // variants at {value:1, group:technique.techSet}. Not wired to any
+        // button - run once from the browser console as
+        // WuxWorkerStyles.RepairStyleBuildStatsFromRows() after confirming (as
+        // here) that RepeatingStyles itself is still intact.
+        repairStyleBuildStatsFromRows = function () {
+            let worker = new WuxStyleWorkerBuild();
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("RepeatingStyles");
+            let repeater = attributeHandler.getRepeatingSection("RepeatingStyles");
+            let formeNameVar = WuxDef.GetVariable("Forme_Name");
+            attributeHandler.getRepeatingSection("RepeatingStyles").addFieldNames([formeNameVar]);
+            attributeHandler.addMod([worker.attrMax, worker.attrBuildDraft]);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                worker.setBuildStatsDraft(attrHandler);
+                Debug.Log(`[RepairStyleBuildStatsFromRows] rows found: ${repeater.ids.length}, draft keys before: ${JSON.stringify(worker.buildStats.keys)}`);
+
+                repeater.ids.forEach(function (id) {
+                    let styleName = attrHandler.parseString(repeater.getFieldName(id, formeNameVar));
+                    let baseTechnique = WuxTechs.Get(styleName);
+                    if (baseTechnique == undefined) {
+                        Debug.Log(`[RepairStyleBuildStatsFromRows] could not find technique "${styleName}" - skipping`);
+                        return;
+                    }
+                    worker.updateBuildStats(attrHandler, baseTechnique.name, {value: 1, group: "Style"});
+                    WuxTechs.Filter(new DatabaseFilterData("style", styleName)).forEach(function (technique) {
+                        worker.updateBuildStats(attrHandler, technique.name, {value: 1, group: technique.techSet});
+                    });
+                });
+
+                Debug.Log(`[RepairStyleBuildStatsFromRows] draft keys after rebuild: ${JSON.stringify(worker.buildStats.keys)}`);
+                worker.updatePoints(attrHandler);
+                Debug.Log(`[RepairStyleBuildStatsFromRows] points total: ${worker.buildStats.getPointsTotal()}, max: ${attrHandler.parseInt(worker.attrMax)}`);
+            });
+            WuxWorkerSkills.UpdateKeySkills(attributeHandler);
+            WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+            attributeHandler.run();
+        },
+
         deleteAllLearnedStyles = function () {
             let worker = new WuxStyleWorkerBuild();
             let attributeHandler = new WorkerAttributeHandler();
@@ -753,7 +800,8 @@ var WuxWorkerStyles = WuxWorkerStyles || (function () {
         InspectSetStyle: inspectSetStyle,
         InspectListStyle: inspectListStyle,
         DeleteListStyle: deleteListStyle,
-        DeleteAllLearnedStyles: deleteAllLearnedStyles
+        DeleteAllLearnedStyles: deleteAllLearnedStyles,
+        RepairStyleBuildStatsFromRows: repairStyleBuildStatsFromRows
     };
 }());
 

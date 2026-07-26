@@ -2236,6 +2236,9 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         };
 
         let attributeHandler = new WorkerAttributeHandler();
+        attributeHandler.addRepeatingSection("RepeatingStyles");
+        let formeNameVar = WuxDef.GetVariable("Forme_Name");
+        attributeHandler.getRepeatingSection("RepeatingStyles").addFieldNames([formeNameVar]);
         attributeHandler.addMod([
             WuxDef.GetVariable("Forme_ShowFromNonElement"),
             WuxDef.GetVariable("Forme_ShowLevelRestricted"),
@@ -2251,6 +2254,21 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             let userAffinities = getUserAffinities(attrHandler);
             let userCr = attrHandler.parseInt(WuxDef.GetVariable("CR", WuxDef._max));
 
+            // Styles the character already has learned should never show up in the
+            // catalog at all - previously they were still listed (relying on
+            // toggleSelectedItem to skip charging points for them again), which was
+            // confusing since selecting one visibly did nothing. Read directly from
+            // RepeatingStyles (the same source selectItem/addItem already use for
+            // this exact purpose) rather than the "Technique" build-stats draft
+            // (WuxStyleWorkerBuild.getStyles()) - that draft is a derived/cached
+            // blob that can drift out of sync with the actual learned-style rows
+            // (confirmed via diagnostic logging: it read back completely empty on
+            // a character with several learned styles still present in
+            // RepeatingStyles), so it's not a reliable source for this check.
+            let styleRepeater = attrHandler.getRepeatingSection("RepeatingStyles");
+            let learnedStyleNames = new Set(styleRepeater.ids.map(id =>
+                attrHandler.parseString(styleRepeater.getFieldName(id, formeNameVar))));
+
             let matchesAffinity = function (style) {
                 if (showFromNonElement !== "0") return true;
                 if (style.affinity === "") return true;
@@ -2258,7 +2276,9 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 return affinityParts.some(part => userAffinities.includes(part));
             };
 
-            let baseStyles = getFilteredBaseStyles(filters);
+            let baseStyles = getFilteredBaseStyles(filters).filter(function (style) {
+                return !learnedStyleNames.has(style.name);
+            });
             let learnableStyles = baseStyles.filter(function (style) {
                 return matchesAffinity(style) && style.tier <= userCr;
             });
@@ -2413,6 +2433,9 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         let styleWorker = new WuxStyleWorkerBuild();
 
         let attributeHandler = new WorkerAttributeHandler();
+        attributeHandler.addRepeatingSection("RepeatingStyles");
+        let formeNameVar = WuxDef.GetVariable("Forme_Name");
+        attributeHandler.getRepeatingSection("RepeatingStyles").addFieldNames([formeNameVar]);
         attributeHandler.addMod([
             skillWorker.attrBuildDraft,
             jobWorker.attrBuildDraft,
@@ -2468,8 +2491,16 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             let userAffinities = getUserAffinities(attrHandler);
             let userCr = attrHandler.parseInt(WuxDef.GetVariable("CR", WuxDef._max));
 
-            // Learned style names to exclude
-            let learnedStyleNames = new Set(styleWorker.getStyles().map(function (s) { return s.name; }));
+            // Learned style names to exclude - read directly from RepeatingStyles
+            // (the same source selectItem/addItem already use for this exact
+            // purpose) rather than the "Technique" build-stats draft
+            // (styleWorker.getStyles()), which is a derived/cached blob that can
+            // drift out of sync with the actual learned-style rows (confirmed via
+            // diagnostic logging: it read back completely empty on a character
+            // with several learned styles still present in RepeatingStyles).
+            let styleRepeater = attrHandler.getRepeatingSection("RepeatingStyles");
+            let learnedStyleNames = new Set(styleRepeater.ids.map(id =>
+                attrHandler.parseString(styleRepeater.getFieldName(id, formeNameVar))));
 
             // All base style techniques (techSet == "Style")
             let allStyleNames = [...WuxTechs.GetSortedGroup("style", "Style"), "Style"];

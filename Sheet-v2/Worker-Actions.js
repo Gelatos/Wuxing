@@ -220,7 +220,11 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 let attributeHandler2 = new WorkerAttributeHandler();
                 let filter = attrHandler.parseJSON(formeTechniqueFilterVariable);
                 updateVisibilityAllActions(attributeHandler2, filter);
-                attributeHandler2.run();
+                // Not also calling attributeHandler2.run() directly here - handing the
+                // same instance to LoadingScreenHandler, which calls .run() on it
+                // internally, was firing every getAttrCallback/finishCallback registered
+                // on attributeHandler2 (updateVisibilityAllActions' whole callback,
+                // including formeTech.setSortOrder()) twice per equip/unequip.
                 let loader = new LoadingScreenHandler(attributeHandler2);
                 loader.run();
             });

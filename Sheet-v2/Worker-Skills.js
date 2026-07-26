@@ -101,7 +101,6 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
                 for (let i = 0; i < skills.length; i++) {
                     let skill = skills[i].trim();
                     if (skill) {
-                        Debug.Log(`Adding ${skill} to key skills`);
                         keySkillTitles.add(skill);
                     }
                 }
@@ -111,7 +110,6 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
             for (let i = 0; i < techniques.length; i++) {
                 let skill = techniques[i].skill.trim();
                 if (skill) {
-                    Debug.Log(`Adding ${skill} to key skills`);
                     keySkillTitles.add(skill);
                 }
             }
@@ -133,9 +131,6 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
                 let skillDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
                 for (let i = 0; i < skillDefinitions.length; i++) {
                     let isKeySkill = keySkillTitles.has(skillDefinitions[i].title);
-                    if (isKeySkill) {
-                        Debug.Log(`Found ${skillDefinitions[i].title} as a skill in key skills`);
-                    }
                     attrHandler.addUpdate(
                         skillDefinitions[i].getVariable(WuxDef._learn),
                         isKeySkill ? "on" : "0");

@@ -878,7 +878,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             ${buildStatSummary()}`;
                             let contents = WuxSheetMain.TabBlock(pageContents);
 
-                            let definition = WuxDef.Get("Page_AffectedStats");
+                            let definition = WuxDef.Get("Title_StatSummary");
                             return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
                         },
                         buildJobSelection = function () {
