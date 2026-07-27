@@ -248,6 +248,35 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
         );
     }
 
+    // Splits a flat InspectionInventoryItem list (headers + real rows) at the
+    // point where maxCount non-header rows have been included - headers don't
+    // count toward the cap and always pass through free, EXCEPT if the cutoff
+    // would land right after a header with none of its own rows included (i.e.
+    // stopping on a fresh group's first row), in which case the cutoff rolls
+    // back to before that header so an empty group title never renders. Relies
+    // on the caller's ordering guarantee that a header is always immediately
+    // followed by its own group's rows (performStyleFilterInspection for
+    // techniques, performItemFilterInspection for items). Shared by both
+    // TechniqueInspectPopupAttributeHandler and ItemInspectPopupAttributeHandler
+    // for their own initial-population cap (16) and each Load More click (10).
+    splitAtTechniqueCap(itemData, maxCount) {
+        let itemCount = 0;
+        let splitIndex = itemData.length;
+        let lastHeaderIndex = -1;
+        for (let i = 0; i < itemData.length; i++) {
+            if (itemData[i].isTitle) {
+                lastHeaderIndex = i;
+                continue;
+            }
+            if (itemCount >= maxCount) {
+                splitIndex = (lastHeaderIndex == i - 1) ? lastHeaderIndex : i;
+                break;
+            }
+            itemCount++;
+        }
+        return { visibleItems: itemData.slice(0, splitIndex), remainingItems: itemData.slice(splitIndex) };
+    }
+
     iterateAndSetItems(itemData) {
         if (itemData.length === 0) {
             this.repeater.ids.forEach(id => this.setInventoryItemVisibility(id, false));
@@ -360,34 +389,6 @@ class TechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler
         // setSelectedItemData below).
         this.catalogTechniqueAttributeHandler = new TechniqueDataAttributeHandler(this.attrHandler, "Action");
         this.catalogTechniqueAttributeHandler.setRepeaterData(this.repeater);
-    }
-
-    // Splits a flat InspectionInventoryItem list (headers + techniques) at the
-    // point where maxCount techniques have been included - headers don't count
-    // toward the cap and always pass through free, EXCEPT if the cutoff would
-    // land right after a header with none of its own techniques included (i.e.
-    // stopping on a fresh group's first technique), in which case the cutoff
-    // rolls back to before that header so an empty group title never renders.
-    // Relies on performStyleFilterInspection's ordering guarantee that a header
-    // is always immediately followed by its own group's techniques. Shared by
-    // the initial population (cap 16, see iterateAndSetItems below) and each
-    // Load More click (cap 10, see loadMoreCatalogTechniques).
-    splitAtTechniqueCap(itemData, maxCount) {
-        let techniqueCount = 0;
-        let splitIndex = itemData.length;
-        let lastHeaderIndex = -1;
-        for (let i = 0; i < itemData.length; i++) {
-            if (itemData[i].isTitle) {
-                lastHeaderIndex = i;
-                continue;
-            }
-            if (techniqueCount >= maxCount) {
-                splitIndex = (lastHeaderIndex == i - 1) ? lastHeaderIndex : i;
-                break;
-            }
-            techniqueCount++;
-        }
-        return { visibleItems: itemData.slice(0, splitIndex), remainingItems: itemData.slice(splitIndex) };
     }
 
     // Popup_LoadMore's own _max slot doubles as both the queued-but-not-yet-shown
@@ -598,6 +599,38 @@ class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
         // below) until selection/adding is redone for the new full-card catalog.
         this.catalogItemAttributeHandler = new ItemDataAttributeHandler(this.attrHandler, "Action");
         this.catalogItemAttributeHandler.setRepeaterData(this.repeater);
+
+        // Backs the item's associated technique, shown eagerly (no Show/Hide
+        // Effects button, unlike the Gear tab's owned-item repeaters) - see
+        // setInventoryItemData below.
+        this.catalogTechniqueAttributeHandler = new TechniqueDataAttributeHandler(this.attrHandler, "Action");
+        this.catalogTechniqueAttributeHandler.setRepeaterData(this.repeater);
+    }
+
+    // Same pagination as the technique catalog (TechniqueInspectPopupAttributeHandler
+    // below) - suffix "1" throughout (queue/visibility on Popup_LoadMore's "1_max"
+    // slot, count text on "12") since Popup_LoadMore is shared between both
+    // catalogs' buttons (printCatalogLoadMoreButton, WuxGS-Base.js: suffix
+    // undefined for the technique catalog's button, "1" for the item catalog's).
+    writeRemainingQueue(remainingItems) {
+        let remainingItemCount = remainingItems.filter(item => !item.isTitle).length;
+        let queueField = WuxDef.GetVariable("Popup_LoadMore", "1" + WuxDef._max);
+        if (remainingItemCount === 0) {
+            this.attrHandler.addUpdate(queueField, "0");
+            return;
+        }
+        this.attrHandler.addUpdate(queueField, JSON.stringify(remainingItems));
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_LoadMore", "12"),
+            WuxDef.Get("Popup_LoadMore").getTitle(Math.min(remainingItemCount, 10)));
+    }
+
+    // Caps the initial population at 16 items (headers don't count), queueing
+    // whatever's left for the Load More button (loadMoreCatalogItems below) to
+    // pick up 10 at a time.
+    iterateAndSetItems(itemData) {
+        let { visibleItems, remainingItems } = this.splitAtTechniqueCap(itemData, 16);
+        this.writeRemainingQueue(remainingItems);
+        super.iterateAndSetItems(visibleItems);
     }
 
     // Full item card per row, mirroring TechniqueInspectPopupAttributeHandler's
@@ -614,31 +647,73 @@ class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
     setInventoryItemData(id, itemData) {
         this.setInventoryItemVisibility(id, true);
         this.catalogItemAttributeHandler.setId(id);
+        this.catalogTechniqueAttributeHandler.setId(id);
 
         this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "0");
+        // Quantity always resets to 0 on (re)population - a reused row could
+        // otherwise carry over a stale count from whatever item it held last
+        // (updateItemSelectedQuantity, this file, is the only other writer).
+        this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectCount")), "0");
 
         let itemSelectTypeField = this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectType"));
         let itemSelectDisplayField = this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectDisplay"));
         let selectNameField = this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectName"));
+        // Section visibility only (does this item have a technique at all) -
+        // piggybacked onto ItemName's (otherwise-unused) max slot. Unlike the
+        // Gear tab's owned-item repeaters, the technique itself is populated
+        // right here, eagerly, for every row - no Show/Hide Effects button.
+        let hasTechniqueField = this.catalogItemAttributeHandler.getVariable("ItemName", WuxDef._max);
         if (itemData.isTitle) {
             this.catalogItemAttributeHandler.clearItemInfo();
+            this.catalogTechniqueAttributeHandler.clearTechniqueInfo();
             this.attrHandler.addUpdate(itemSelectTypeField, "0");
             this.attrHandler.addUpdate(itemSelectDisplayField, itemData.display);
             this.attrHandler.addUpdate(selectNameField, "");
+            this.attrHandler.addUpdate(hasTechniqueField, "0");
             return;
         }
 
         let item = WuxItems.Get(itemData.name);
         if (item == undefined) {
             this.catalogItemAttributeHandler.clearItemInfo();
+            this.catalogTechniqueAttributeHandler.clearTechniqueInfo();
             this.attrHandler.addUpdate(itemSelectTypeField, "on");
+            this.attrHandler.addUpdate(itemSelectDisplayField, "0");
             this.attrHandler.addUpdate(selectNameField, "");
+            this.attrHandler.addUpdate(hasTechniqueField, "0");
             return;
         }
         this.catalogItemAttributeHandler.setItemInfo(item);
         this.attrHandler.addUpdate(itemSelectTypeField, "on");
+        // Cost display (Popup_ItemSelectDisplay's base slot, otherwise unused for
+        // a real row - see updateItemSelectedQuantity) starts at 0, matching the
+        // quantity it's reset to above.
+        this.attrHandler.addUpdate(itemSelectDisplayField, "0");
         this.attrHandler.addUpdate(selectNameField, itemData.name);
+
+        let technique = (item.itemType == "UsableItem" && item.hasTechnique) ? item.technique
+            : (item.getCommonTechniques ? item.getCommonTechniques()[0] : undefined);
+        if (technique == undefined) {
+            this.catalogTechniqueAttributeHandler.clearTechniqueInfo();
+            this.attrHandler.addUpdate(hasTechniqueField, "0");
+            return;
+        }
+        this.catalogTechniqueAttributeHandler.setTechniqueInfo(technique, false,
+            {excludeCurrent: true, userAffinities: this.catalogUserAffinities});
+        this.attrHandler.addUpdate(hasTechniqueField, "on");
     }
+
+    // The old single-select mechanism (Popup_ItemSelectIsOn as an exclusive
+    // toggle) is superseded by the quantity field's own selected-state write
+    // (updateItemSelectedQuantity, this file) - overridden to no-ops so the
+    // stale listenerUpdateRepeatingItemInspectPopupItems/selectItem cascade
+    // (which still fires whenever Popup_ItemSelectIsOn changes, since that
+    // listener has no popup-type gating) can't clobber the grand-total-based
+    // Title_InspectionItemCost/Popup_InspectPurchaseAffordable those write, the
+    // same reasoning TechniqueInspectPopupAttributeHandler applies to its own
+    // multi-select override.
+    setSelectedItem(selectedItemId, itemName) {}
+    setSelectedItemData(selectedItemName) {}
 
     // Hides/shows the actual catalog card via ItemIsVisible (a real, dedicated
     // attribute - unlike the technique catalog, which piggybacks onto
@@ -650,9 +725,14 @@ class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
         this.attrHandler.addUpdate(this.catalogItemAttributeHandler.getVariable("ItemIsVisible"), isVisible ? "on" : "0");
         if (!isVisible) {
             this.catalogItemAttributeHandler.clearItemInfo();
+            this.catalogTechniqueAttributeHandler.setId(id);
+            this.catalogTechniqueAttributeHandler.clearTechniqueInfo();
+            this.attrHandler.addUpdate(this.catalogItemAttributeHandler.getVariable("ItemName", WuxDef._max), "0");
             this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectType")), "0");
             this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectName")), "");
             this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "0");
+            this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectCount")), "0");
+            this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectDisplay")), "0");
         }
     }
 
@@ -664,6 +744,19 @@ class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
         }
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPurchaseAffordable"), "0");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Title_InspectionItemCost"), "");
+        // Every row's quantity resets to 0 on fresh population (setInventoryItemData
+        // below) - reset this too (the Add button's own enabled-state flag,
+        // updateItemSelectedQuantity) so a stale "on" from a previous session
+        // doesn't leave the Add button enabled before anything's been touched.
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectedList"), "0");
+
+        // Unless "Show Element-Restricted Techniques" is on, each row's eager
+        // technique display (setInventoryItemData below) should only offer
+        // variants the player can actually use - same convention
+        // TechniqueInspectPopupAttributeHandler.initializePopup uses for the
+        // technique catalog's own variant filtering.
+        let showElementRestricted = this.attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement")) != "0";
+        this.catalogUserAffinities = showElementRestricted ? undefined : getUserAffinities(this.attrHandler);
     }
 
     setSelectedItemData(selectedItemName) {
@@ -1072,8 +1165,17 @@ class ItemInspectionPopup extends InspectionPopup {
         this.inspectPopupAttrHandler = new ItemInspectPopupAttributeHandler(attrHandler);
     }
 
+    // Affinity/AdvancedAffinity/Ancestry/Forme_ShowFromNonElement are fetched
+    // here so ItemInspectPopupAttributeHandler.initializePopup can compute
+    // catalogUserAffinities for the eager technique display each row's
+    // setInventoryItemData writes (unlike the technique catalog, the item
+    // catalog shows its technique immediately, no Show/Hide Effects button).
     open(inventoryTitle, inventoryItems, addType) {
-        this.attributeHandler.addMod(WuxDef.GetVariable("Jin"));
+        this.attributeHandler.addMod([
+            WuxDef.GetVariable("Jin"),
+            WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("Ancestry"),
+            WuxDef.GetVariable("Forme_ShowFromNonElement")
+        ]);
         super.open(inventoryTitle, inventoryItems, addType);
     }
 
@@ -1094,7 +1196,11 @@ class ItemInspectionPopup extends InspectionPopup {
         this.attributeHandler.addRepeatingSection("RepeatingSyncedEquipment");
         this.attributeHandler.getRepeatingSection("RepeatingSyncedEquipment").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
         WuxWorkerActions.UpdateAllActionsFromMenu(this.attributeHandler);
-        super.addItem();
+        this.forEachSelectedItem((attrHandler, itemName, count) => {
+            for (let i = 0; i < count; i++) {
+                this.performAddItem(attrHandler, itemName);
+            }
+        });
     }
 
     addItem2() {
@@ -1110,7 +1216,41 @@ class ItemInspectionPopup extends InspectionPopup {
         this.attributeHandler.addRepeatingSection("RepeatingSyncedEquipment");
         this.attributeHandler.getRepeatingSection("RepeatingSyncedEquipment").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
         WuxWorkerActions.UpdateAllActionsFromMenu(this.attributeHandler);
-        super.addItem2();
+        this.forEachSelectedItem((attrHandler, itemName, count) => {
+            for (let i = 0; i < count; i++) {
+                this.performAddItem2(attrHandler, itemName);
+            }
+        });
+    }
+
+    // Multi-quantity replacement for the base class's single-item addItem/addItem2
+    // (which read a single Popup_InspectSelectId) - every ItemPopupValues row
+    // with Popup_ItemSelectCount > 0 is processed at its own quantity, calling
+    // back once per unit (not once per row with a count param) so each unit
+    // independently re-checks equip-slot availability via the existing
+    // performAddSelectedInspectElementEquipment/CanAutoEquipGear/AutoEquipGear
+    // cycle - which already sees each earlier unit's pending writes within this
+    // same attrHandler, so looping naturally equips in order until slots fill
+    // and leaves the rest in storage, with no extra bookkeeping needed here.
+    forEachSelectedItem(callback) {
+        let inspectPopup = this;
+        this.attributeHandler.addRepeatingSection(this.inspectPopupInventoryId);
+        let itemNameVar = WuxDef.GetVariable("Popup_ItemSelectName");
+        let itemCountVar = WuxDef.GetVariable("Popup_ItemSelectCount");
+        this.attributeHandler.getRepeatingSection(this.inspectPopupInventoryId).addFieldNames([itemNameVar, itemCountVar]);
+
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            inspectPopup.setup(attrHandler);
+            let repeater = attrHandler.getRepeatingSection(inspectPopup.inspectPopupInventoryId);
+            repeater.ids.forEach(function (id) {
+                let itemName = attrHandler.parseString(repeater.getFieldName(id, itemNameVar));
+                let count = attrHandler.parseInt(repeater.getFieldName(id, itemCountVar)) || 0;
+                if (itemName === "" || count <= 0) {
+                    return;
+                }
+                callback(attrHandler, itemName, count);
+            });
+        });
     }
 
     performAddItem(attrHandler, itemName) {
@@ -1183,6 +1323,12 @@ class ItemInspectionPopup extends InspectionPopup {
             let repeater = new WorkerRepeatingSectionHandler("RepeatingEquipment");
             let newRowId = repeater.generateRowId();
             this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
+            // Makes this row visible to existingRepeater's own iterate()/ids for
+            // the rest of THIS cycle - needed when this function is called
+            // multiple times in a row for the same item (adding several units at
+            // once), so the 2nd+ call's duplicate check above actually finds it
+            // instead of creating a separate row per unit.
+            existingRepeater.ids.push(newRowId);
             attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquipmentIsVisible"), "on");
 
             let equipBuildVar = WuxDef.GetVariable("Equipment", WuxDef._build);
@@ -1210,6 +1356,10 @@ class ItemInspectionPopup extends InspectionPopup {
             let syncedRepeater = new WorkerRepeatingSectionHandler("RepeatingSyncedEquipment");
             let syncedRowId = syncedRepeater.generateRowId();
             this.performAddSelectedInspectElementItem(attrHandler, syncedRepeater, syncedRowId, item);
+            // Same reasoning as existingRepeater.ids.push above - keeps repeated
+            // calls for the same item (multiple units) incrementing this same row
+            // instead of creating a duplicate.
+            existingSyncedRepeater.ids.push(syncedRowId);
             attrHandler.addUpdate(syncedRepeater.getFieldName(syncedRowId, this.getGearVariable("ItemIsVisible")), willAutoEquip ? "on" : "0");
             attrHandler.addUpdate(syncedRepeater.getFieldName(syncedRowId, itemCountVar), willAutoEquip ? 1 : 0);
         } else if (willAutoEquip) {
@@ -1269,6 +1419,12 @@ class ItemInspectionPopup extends InspectionPopup {
         let newRowId = repeater.generateRowId();
         this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
         this.performAddSelectedInspectElementTechnique(attrHandler, repeater, newRowId, item.technique);
+        // Makes this row visible to existingRepeater's own iterate()/ids for the
+        // rest of THIS cycle - needed when this function is called multiple times
+        // in a row for the same item (adding several units at once), so the 2nd+
+        // call's duplicate check above actually finds it instead of creating a
+        // separate row per unit.
+        existingRepeater.ids.push(newRowId);
         attrHandler.addUpdate(repeater.getFieldName(newRowId, buyInfoVar), buyDef.getTitle(`1 (${itemValue}J)`));
         attrHandler.addUpdate(repeater.getFieldName(newRowId, buyMaxInfoVar), buyBulkDef.getTitle(`10 (${itemValue * 10}J)`));
 
@@ -1310,18 +1466,33 @@ class ItemInspectionPopup extends InspectionPopup {
         let baseDefinition = WuxDef.Get("Gear");
         return baseDefinition.getVariable(`-${WuxDef.GetVariable(variable, suffix)}`);
     };
+    // Populates the full item card (name/group/bulk/value/description/traits(+tooltip)/
+    // craft(+tooltip) - ItemDataAttributeHandler.setSharedItemInfo, WJS-Service.js)
+    // for a newly-added row in any of the "owned item" repeaters (Equipment,
+    // SyncedEquipment, Gear, Consumables, Foods, Goods) - baseDefinition "Gear"
+    // (not "Action") matches what these repeaters' rows have always used.
+    // setSharedItemInfo (not setItemInfo) deliberately - setItemInfo would also
+    // eagerly write the item's own embedded technique under this same "Gear"
+    // prefix, which the new Show/Hide Effects display (printCatalogItemTechniqueSection,
+    // WuxGS-Base.js) doesn't read - that technique is instead populated lazily,
+    // under the universal "Action" prefix, by populateItemAssociatedTechnique
+    // only once its row's Show Effects button is clicked.
     performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item) {
-        let displayData = new ItemDisplayData(item);
-        const field = (name) => repeater.getFieldName(newRowId, this.getGearVariable(name));
+        const field = (name, suffix) => repeater.getFieldName(newRowId, this.getGearVariable(name, suffix));
 
         attrHandler.addUpdate(field("ItemIsVisible"), "on");
-        attrHandler.addUpdate(field("ItemName"),      displayData.name);
-        attrHandler.addUpdate(field("ItemGroup"),      displayData.group);
-        attrHandler.addUpdate(field("ItemBulk"),      displayData.bulk);
-        attrHandler.addUpdate(
-            repeater.getFieldName(newRowId, this.getGearVariable("ItemSubGroup")),
-            item.group === "Apparel" ? (item.category || "") : ""
-        );
+        attrHandler.addUpdate(field("ItemSubGroup"), item.group === "Apparel" ? (item.category || "") : "");
+
+        let itemDataAttributeHandler = new ItemDataAttributeHandler(attrHandler, "Gear");
+        itemDataAttributeHandler.setRepeaterData(repeater, newRowId);
+        itemDataAttributeHandler.setSharedItemInfo(item);
+
+        // Show/Hide Effects button visibility only - piggybacked onto ItemName's
+        // (otherwise-unused) max slot, same convention as the item catalog
+        // (ItemInspectPopupAttributeHandler.setInventoryItemData, this file).
+        let hasAssociatedTechnique = item.itemType == "UsableItem" &&
+            (item.hasTechnique || (item.getCommonTechniques && item.getCommonTechniques().length > 0));
+        attrHandler.addUpdate(field("ItemName", WuxDef._max), hasAssociatedTechnique ? "on" : "0");
     };
     performAddSelectedInspectElementTechnique(attrHandler, repeater, newRowId, technique) {
         let techniqueItemAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");
@@ -2020,6 +2191,38 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             });
         },
 
+        // Same "populate through a loading screen, then reveal" choreography as
+        // openTechniqueInspectionWithLoadingScreen above, for the item catalog's
+        // own entry point (performItemFilterInspection below). Built as its own
+        // self-contained flow (repeating section + mods + showWithoutReveal,
+        // rather than routing through ItemInspectionPopup.open/show) instead of
+        // changing that shared method's behavior, since openItemInspection/
+        // OpenItemInspection (this same class's other, plain entry point) has
+        // other callers (Worker-Gear.js) that depend on it revealing immediately.
+        openItemInspectionWithLoadingScreen = function (inventoryTitle, inventoryItems, addType) {
+            let attributeHandler = new WorkerAttributeHandler();
+            let inspectPopup = new ItemInspectionPopup(attributeHandler);
+
+            attributeHandler.addMod([
+                WuxDef.GetVariable("Jin"),
+                WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("Ancestry"),
+                WuxDef.GetVariable("Forme_ShowFromNonElement")
+            ]);
+            attributeHandler.addRepeatingSection(inspectPopup.inspectPopupInventoryId);
+            attributeHandler.addMod([WuxDef.GetVariable("Popup_InspectSelectId")]);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                inspectPopup.setup(attrHandler);
+                inspectPopup.inspectPopupAttrHandler.showWithoutReveal(inventoryTitle, inventoryItems, addType);
+            });
+
+            let loader = new LoadingScreenHandler(attributeHandler);
+            loader.run().then(function () {
+                let revealAttributeHandler = new WorkerAttributeHandler();
+                revealAttributeHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPopupActive"), "on");
+                revealAttributeHandler.run();
+            });
+        },
+
         openPerkTechniqueInspection = function (attributeHandler, inventoryTitle, inventoryItems, addType) {
             Debug.Log("Open Perk Technique Popup");
             let inspectPopup = new PerkTechniqueInspectionPopup(attributeHandler);
@@ -2206,6 +2409,183 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             attributeHandler.run();
         },
 
+        // Lazily populates the technique card associated with an item catalog
+        // row (Show/Hide Effects button, printCatalogItemFullDisplay,
+        // WuxGS-Base.js) - bound to that row's TechShowEffects checkbox toggling,
+        // rather than at catalog-load time (ItemInspectPopupAttributeHandler.
+        // setInventoryItemData only writes the "has a technique at all" flag
+        // gating whether the button shows, never the technique fields
+        // themselves). Only fires on the transition to visible - toggling back
+        // off doesn't need to touch anything, the fields already written stay
+        // put for next time. An item's associated technique is its own embedded
+        // UsableItem technique when it has one, else the first of its shared
+        // "common" techniques (item.getCommonTechniques - e.g. every bow-type
+        // weapon's shared "Bow" technique); mirrors the ordering
+        // ItemInspectPopupAttributeHandler's has-technique check uses.
+        // repeaterId defaults to the item catalog's "ItemPopupValues" (identifies
+        // the item via Popup_ItemSelectName, the catalog-only select-list field);
+        // passing one of the "owned item" repeaters (RepeatingEquipment,
+        // RepeatingSyncedEquipment, RepeatingGear, RepeatingConsumables,
+        // RepeatingFoods) instead reads the item's name directly from that row's
+        // own "Gear"-prefixed ItemName field (performAddSelectedInspectElementItem
+        // above always populates it) - a Goods-tagged row resolves to undefined
+        // here (WuxItems has no goods), which the item==undefined guard below
+        // already handles as a no-op, matching goods items never getting an
+        // associated-technique flag in the first place.
+        populateItemAssociatedTechnique = function (eventinfo, repeaterId) {
+            if (eventinfo.newValue !== "on") {
+                return;
+            }
+            if (repeaterId == undefined) {
+                repeaterId = "ItemPopupValues";
+            }
+            let isCatalog = repeaterId === "ItemPopupValues";
+            let attributeHandler = new WorkerAttributeHandler();
+            let repeater = new WorkerRepeatingSectionHandler(repeaterId);
+            let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+
+            let itemNameField = repeater.getFieldName(selectedId, isCatalog
+                ? WuxDef.GetVariable("Popup_ItemSelectName")
+                : WuxDef.Get("Gear").getVariable(`-${WuxDef.GetVariable("ItemName")}`));
+            attributeHandler.addMod([
+                itemNameField,
+                WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("Ancestry"),
+                WuxDef.GetVariable("Forme_ShowFromNonElement")
+            ]);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let item = WuxItems.Get(attrHandler.parseString(itemNameField));
+                if (item == undefined) {
+                    return;
+                }
+                let technique = (item.itemType == "UsableItem" && item.hasTechnique) ? item.technique
+                    : (item.getCommonTechniques ? item.getCommonTechniques()[0] : undefined);
+                if (technique == undefined) {
+                    return;
+                }
+
+                let showElementRestricted = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement")) != "0";
+                let userAffinities = showElementRestricted ? undefined : getUserAffinities(attrHandler);
+
+                let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");
+                techniqueAttributeHandler.setRepeaterData(repeater, selectedId);
+                techniqueAttributeHandler.setTechniqueInfo(technique, false, {excludeCurrent: true, userAffinities: userAffinities});
+            });
+            attributeHandler.run();
+        },
+
+        // Item catalog's quantity field (Popup_ItemSelectCount, printCatalogItemFullDisplay
+        // in WuxGS-Base.js) - fires on every edit. Clamps the value to a
+        // non-negative integer (writing the corrected value back if the raw
+        // input wasn't one - the input's own type="number" min="0" only
+        // constrains entry via the browser's native UI, not what a worker
+        // actually receives), recomputes this row's own cost display and
+        // selected-state flag, then walks every row to recompute the grand
+        // total shown in the popup header and whether the Purchase button
+        // should be enabled.
+        // Shared by updateItemSelectedQuantity (typed edits) and
+        // adjustItemSelectedQuantity (+/- stepper buttons) below - given the
+        // row's already-clamped newCount, writes its cost/selected-highlight and
+        // recomputes the popup-wide grand total and Add/Purchase gating.
+        // WorkerAttributeHandler.run() flushes writes with {silent:true}, so a
+        // stepper click's own write to the count field would NOT retrigger
+        // updateItemSelectedQuantity on its own - both entry points call this
+        // directly instead of relying on that.
+        recomputeItemSelection = function (attrHandler, repeater, selectedId, newCount) {
+            let itemNameVar = WuxDef.GetVariable("Popup_ItemSelectName");
+            let itemCountVar = WuxDef.GetVariable("Popup_ItemSelectCount");
+            let itemDisplayVar = WuxDef.GetVariable("Popup_ItemSelectDisplay");
+            let itemIsOnVar = WuxDef.GetVariable("Popup_ItemSelectIsOn");
+
+            let selectedItem = WuxItems.Get(attrHandler.parseString(repeater.getFieldName(selectedId, itemNameVar)));
+            let selectedCost = selectedItem != undefined ? (parseInt(selectedItem.value) || 0) * newCount : 0;
+            attrHandler.addUpdate(repeater.getFieldName(selectedId, itemDisplayVar), selectedCost.toString());
+            attrHandler.addUpdate(repeater.getFieldName(selectedId, itemIsOnVar), newCount > 0 ? "on" : "0");
+
+            // This row's own field hasn't been flushed to "current" yet this
+            // cycle, so use the just-clamped newCount for it specifically and
+            // each other row's own stored value for the rest.
+            let grandTotal = 0;
+            let anySelected = false;
+            repeater.ids.forEach(function (id) {
+                let rowCount = id === selectedId ? newCount : (attrHandler.parseInt(repeater.getFieldName(id, itemCountVar)) || 0);
+                if (rowCount <= 0) {
+                    return;
+                }
+                let rowItem = WuxItems.Get(attrHandler.parseString(repeater.getFieldName(id, itemNameVar)));
+                if (rowItem == undefined) {
+                    return;
+                }
+                anySelected = true;
+                grandTotal += (parseInt(rowItem.value) || 0) * rowCount;
+            });
+
+            attrHandler.addUpdate(WuxDef.GetVariable("Title_InspectionItemCost"), grandTotal > 0 ? `${grandTotal} J` : "");
+            let jin = attrHandler.parseInt(WuxDef.GetVariable("Jin"));
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPurchaseAffordable"), (grandTotal > 0 && jin >= grandTotal) ? "on" : "0");
+            // Popup_InspectSelectedList is the technique catalog's own
+            // multi-select tracking field, but the "Add" button's
+            // HiddenFieldToggle (printAddButton, WuxGS-Base.js) just checks
+            // whether it's non-"0" to enable itself - reused here as a plain
+            // boolean (no semicolon list needed, since forEachSelectedItem
+            // above reads quantities straight from the repeater rows) so the
+            // item catalog's Add button enables once anything has a count > 0.
+            attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectedList"), anySelected ? "on" : "0");
+        },
+
+        updateItemSelectedQuantity = function (eventinfo) {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("ItemPopupValues");
+
+            let itemCountVar = WuxDef.GetVariable("Popup_ItemSelectCount");
+            attributeHandler.getRepeatingSection("ItemPopupValues").addFieldNames([WuxDef.GetVariable("Popup_ItemSelectName"), itemCountVar]);
+            attributeHandler.addMod(WuxDef.GetVariable("Jin"));
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let repeater = attrHandler.getRepeatingSection("ItemPopupValues");
+                let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+
+                let rawValue = eventinfo.newValue;
+                let newCount = parseInt(rawValue);
+                if (isNaN(newCount) || newCount < 0) {
+                    newCount = 0;
+                }
+                let countField = repeater.getFieldName(selectedId, itemCountVar);
+                if (`${newCount}` !== rawValue) {
+                    attrHandler.addUpdate(countField, newCount);
+                }
+
+                recomputeItemSelection(attrHandler, repeater, selectedId, newCount);
+            });
+            attributeHandler.run();
+        },
+
+        // +/- stepper buttons (wuxQuantityStepButton, printCatalogItemFullDisplay
+        // in WuxGS-Base.js) - piggybacked onto Popup_ItemSelectCount's own max
+        // slot (decrement) and "2" suffix (increment), since both are otherwise
+        // unused for this field. delta is +1 or -1.
+        adjustItemSelectedQuantity = function (eventinfo, delta) {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("ItemPopupValues");
+
+            let itemCountVar = WuxDef.GetVariable("Popup_ItemSelectCount");
+            attributeHandler.getRepeatingSection("ItemPopupValues").addFieldNames([WuxDef.GetVariable("Popup_ItemSelectName"), itemCountVar]);
+            attributeHandler.addMod(WuxDef.GetVariable("Jin"));
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let repeater = attrHandler.getRepeatingSection("ItemPopupValues");
+                let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+
+                let countField = repeater.getFieldName(selectedId, itemCountVar);
+                let currentCount = attrHandler.parseInt(countField) || 0;
+                let newCount = Math.max(0, currentCount + delta);
+                attrHandler.addUpdate(countField, newCount);
+
+                recomputeItemSelection(attrHandler, repeater, selectedId, newCount);
+            });
+            attributeHandler.run();
+        },
+
         // Loads the next batch (up to 10) of techniques queued by
         // TechniqueInspectPopupAttributeHandler's initial 16-cap
         // (Popup_LoadMore's _max slot - see writeRemainingQueue,
@@ -2241,6 +2621,46 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
 
                 let { visibleItems, remainingItems } = inspectPopupAttrHandler.splitAtTechniqueCap(queuedItems, 10);
                 let repeater = attrHandler.getRepeatingSection("TechPopupValues");
+                visibleItems.forEach(function (itemData) {
+                    let id = repeater.generateRowId();
+                    inspectPopupAttrHandler.setInventoryItemData(id, itemData);
+                });
+                inspectPopupAttrHandler.writeRemainingQueue(remainingItems);
+            });
+            let loader = new LoadingScreenHandler(attributeHandler);
+            loader.run();
+        },
+
+        // Item catalog's own Load More (see loadMoreCatalogTechniques above,
+        // which this mirrors) - suffix "1" throughout, matching
+        // ItemInspectPopupAttributeHandler.writeRemainingQueue. No canSelectForAdd/
+        // Popup_InspectShowAdd gating here - the item catalog has no Select button
+        // yet (selection/adding is a later pass, same scoping as when the catalog
+        // display itself was first built).
+        loadMoreCatalogItems = function () {
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addRepeatingSection("ItemPopupValues");
+
+            let queueField = WuxDef.GetVariable("Popup_LoadMore", "1" + WuxDef._max);
+            attributeHandler.addMod([
+                queueField,
+                WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"),
+                WuxDef.GetVariable("Ancestry"), WuxDef.GetVariable("Forme_ShowFromNonElement")
+            ]);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let queuedItems = [];
+                try {
+                    let parsed = JSON.parse(attrHandler.parseString(queueField));
+                    if (Array.isArray(parsed)) queuedItems = parsed;
+                } catch (e) { /* not JSON (e.g. "0") - nothing queued */ }
+
+                let inspectPopupAttrHandler = new ItemInspectPopupAttributeHandler(attrHandler);
+                let showElementRestricted = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement")) != "0";
+                inspectPopupAttrHandler.catalogUserAffinities = showElementRestricted ? undefined : getUserAffinities(attrHandler);
+
+                let { visibleItems, remainingItems } = inspectPopupAttrHandler.splitAtTechniqueCap(queuedItems, 10);
+                let repeater = attrHandler.getRepeatingSection("ItemPopupValues");
                 visibleItems.forEach(function (itemData) {
                     let id = repeater.generateRowId();
                     inspectPopupAttrHandler.setInventoryItemData(id, itemData);
@@ -2287,9 +2707,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             inventoryItems.push(new InspectionInventoryItem(groups[key].title, "", true));
             inventoryItems = inventoryItems.concat(groups[key].items);
         }
-        let attributeHandler = new WorkerAttributeHandler();
-        openItemInspection(attributeHandler, title, inventoryItems, addType);
-        attributeHandler.run();
+        openItemInspectionWithLoadingScreen(title, inventoryItems, addType);
     };
 
     const openItemFilterInspection = function (filters, title, addType) {
@@ -2314,9 +2732,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
 
     const performItemListInspection = function (items, title, addType) {
         let inventoryItems = new ItemListInventoryItemHandler(items);
-        let attributeHandler = new WorkerAttributeHandler();
-        openItemInspection(attributeHandler, title, inventoryItems.items, addType);
-        attributeHandler.run();
+        openItemInspectionWithLoadingScreen(title, inventoryItems.items, addType);
     };
 
     const openItemListInspection = function (items, title, addType) {
@@ -3112,6 +3528,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         OpenItemListInspection: openItemListInspection,
         OpenTechniqueInspection: openTechniqueInspection,
         OpenTechniqueInspectionWithLoadingScreen: openTechniqueInspectionWithLoadingScreen,
+        OpenItemInspectionWithLoadingScreen: openItemInspectionWithLoadingScreen,
         OpenPerkTechniqueInspection: openPerkTechniqueInspection,
         OpenStyleFilterTechniqueInspection: openStyleFilterTechniqueInspection,
         OpenPerkFilterTechniqueInspection: openPerkFilterTechniqueInspection,
@@ -3131,7 +3548,11 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         OpenRecommendedStylesInspection: openRecommendedStylesInspection,
         SelectInspectionItemFromActiveGroup: selectInspectionItemFromActiveGroup,
         SwapCatalogTechniqueVariant: swapCatalogTechniqueVariant,
+        PopulateItemAssociatedTechnique: populateItemAssociatedTechnique,
+        UpdateItemSelectedQuantity: updateItemSelectedQuantity,
+        AdjustItemSelectedQuantity: adjustItemSelectedQuantity,
         LoadMoreCatalogTechniques: loadMoreCatalogTechniques,
+        LoadMoreCatalogItems: loadMoreCatalogItems,
         Close: close,
         AddSelectedInspectElement: addSelectedInspectElement,
         AddSelectedInspectElement2: addSelectedInspectElement2

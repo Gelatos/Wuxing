@@ -1521,7 +1521,6 @@ class ItemDataAttributeHandler extends DatabaseItemAttributeHandler {
 	}
 	setSharedItemInfo (item) {
 		let displayData = new ItemDisplayData(item);
-		Debug.Log(`Setting item info for ${displayData.name}`);
 
 		this.attrHandler.addUpdate(this.getVariable("ItemName"), displayData.name);
 		this.attrHandler.addUpdate(this.getVariable("ItemGroup"), displayData.group);

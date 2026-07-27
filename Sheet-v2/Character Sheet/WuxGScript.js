@@ -12014,8 +12014,12 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let buyDef = WuxDef.Get("Gear_Buy");
                     let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
                     let equipDef = WuxDef.Get("Gear_Equip");
-                    let inspectDef = WuxDef.Get("Gear_Inspect");
                     let deleteDef = WuxDef.Get("Gear_Delete");
+
+                    let buttons = `${WuxSheetMain.Button(buyDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
+                        ${WuxSheetMain.Button(buyBulkDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyBulkDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
+                        ${WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                        ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}`;
 
                     let rowContents = WuxSheetMain.MultiRow(`
                         <div class="wuxEquipableRow">
@@ -12023,17 +12027,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                 <input type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
                             </div>
                             <div class="wuxEquipableBody">
-                                <div class="wuxEquipableName">
-                                    <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
-                                    <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
-                                </div>
-                                <div class="wuxEquipableButtonRow">
-                                    ${WuxSheetMain.Button(buyDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.Button(buyBulkDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyBulkDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.Button(equipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${equipDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                                </div>
+                                ${buildOwnedItemCard(buttons)}
                             </div>
                         </div>`);
 
@@ -12044,7 +12038,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let syncedDef = WuxDef.Get("Title_EquippedInstantConsumables");
                     let buyDef = WuxDef.Get("Gear_Buy");
                     let unequipDef = WuxDef.Get("Gear_Unequip");
-                    let inspectDef = WuxDef.Get("Gear_Inspect");
                     let equippedIsVisibleAttr = WuxDef.GetAttribute("Gear_ConsumableIsVisible", WuxDef._gear);
 
                     let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
@@ -12063,18 +12056,16 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             displayData.technique.displayname = displayData.displayname;
                             displayData.sheetname = `@{${WuxDef.GetVariable("SheetName")}}`;
                             displayData.itemName = item.name;
+
                             let rowContents = WuxSheetMain.MultiRow(`
                             <div class="wuxEquipableRow">
                                 <div class="wuxEquipableBody">
-                                    <div class="wuxEquipableName">
-                                        <span class="wuxDescription" name="${countAttribute}" value="0">${item.name}</span>
-                                        <span class="wuxDescription">${item.name}</span>
-                                    </div>
+                                    <span class="wuxDescription" name="${countAttribute}" value="0">${item.name}</span>
+                                    ${buildStaticConsumableCard(item, countMod, displayData)}
                                     <div class="wuxEquipableButtonRow">
                                         <button class="wuxRepeatingTechActionButton" type="roll" value="${displayData.getSheetRollTemplate(true)}"><span style="color:#4caf50;">&#9654;</span><span> Use</span></button>
                                         ${WuxSheetMain.Button(buyDef.getAttribute(countMod), `<span style="color:#5bc0de;">&#9670;</span> ${buyDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                         ${WuxSheetMain.Button(unequipDef.getAttribute(countMod), `<span style="color:#c8a020;">&#9881;</span> ${unequipDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                                        ${WuxSheetMain.Button(inspectDef.getAttribute(countMod), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
                                     </div>
                                 </div>
                             </div>`);
@@ -12097,8 +12088,11 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let repeatingDef = WuxDef.Get("RepeatingGear");
                     let buyDef = WuxDef.Get("Gear_Buy");
                     let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
-                    let inspectDef = WuxDef.Get("Gear_Inspect");
                     let deleteDef = WuxDef.Get("Gear_Delete");
+
+                    let buttons = `${WuxSheetMain.Button(buyDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
+                        ${WuxSheetMain.Button(buyBulkDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyBulkDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
+                        ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}`;
 
                     let rowContents = WuxSheetMain.MultiRow(`
                         <div class="wuxEquipableRow">
@@ -12106,16 +12100,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                 <input type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
                             </div>
                             <div class="wuxEquipableBody">
-                                <div class="wuxEquipableName">
-                                    <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
-                                    <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
-                                </div>
-                                <div class="wuxEquipableButtonRow">
-                                    ${WuxSheetMain.Button(buyDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.Button(buyBulkDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyBulkDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                                </div>
+                                ${buildOwnedItemCard(buttons)}
                             </div>
                         </div>`);
 
@@ -12155,7 +12140,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let repeatingDef = WuxDef.Get("RepeatingFoods");
                     let buyDef = WuxDef.Get("Gear_Buy");
                     let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
-                    let inspectDef = WuxDef.Get("Gear_Inspect");
                     let deleteDef = WuxDef.Get("Gear_Delete");
                     let cookDef = WuxDef.Get("Gear_Cook");
 
@@ -12164,6 +12148,11 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let itemCountVar = gearDef.getVariable(`-${WuxDef.GetVariable("ItemCount")}`);
                     let cookButtonValue = `!addingredient @{${itemNameVar}}|||@{${itemCountVar}}|||@{character_name}`;
 
+                    let buttons = `${WuxSheetMain.Button(buyDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
+                        ${WuxSheetMain.Button(buyBulkDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyBulkDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
+                        ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                        <button class="wuxRepeatingTechActionButton" type="roll" value="${cookButtonValue}"><span style="color:#4caf50;">&#9874;</span> ${cookDef.getTitle("")}</button>`;
+
                     let rowContents = WuxSheetMain.MultiRow(`
                         <div class="wuxEquipableRow">
                             <input type="hidden" name="${getGearAttribute("ItemName")}">
@@ -12171,17 +12160,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                 <input type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
                             </div>
                             <div class="wuxEquipableBody">
-                                <div class="wuxEquipableName">
-                                    <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
-                                    <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
-                                </div>
-                                <div class="wuxEquipableButtonRow">
-                                    ${WuxSheetMain.Button(buyDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.Button(buyBulkDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyBulkDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                                    <button class="wuxRepeatingTechActionButton" type="roll" value="${cookButtonValue}"><span style="color:#4caf50;">&#9874;</span> ${cookDef.getTitle("")}</button>
-                                </div>
+                                ${buildOwnedItemCard(buttons)}
                             </div>
                         </div>`);
 
@@ -12347,10 +12326,12 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
                 addRepeaterContentsEquipment = function () {
                     let equipDef = WuxDef.Get("Gear_Equip");
-                    let inspectDef = WuxDef.Get("Gear_Inspect");
                     let deleteDef = WuxDef.Get("Gear_Delete");
                     let subGroupAttr = getGearAttribute("ItemSubGroup");
                     let equipButtonContent = '<span style="color:#c8a020;">&#9881;</span> ' + equipDef.getTitle('<span name="' + subGroupAttr + '"></span>');
+
+                    let buttons = `${WuxSheetMain.Button(equipDef.getAttribute(), equipButtonContent, "wuxRepeatingTechActionButton")}
+                        ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}`;
 
                     let rowContents = WuxSheetMain.MultiRow(`
                         <div class="wuxEquipableRow">
@@ -12358,15 +12339,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                 <input type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
                             </div>
                             <div class="wuxEquipableBody">
-                                <div class="wuxEquipableName">
-                                    <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
-                                    <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
-                                </div>
-                                <div class="wuxEquipableButtonRow">
-                                    ${WuxSheetMain.Button(equipDef.getAttribute(), equipButtonContent, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                                    ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                                </div>
+                                ${buildOwnedItemCard(buttons)}
                             </div>
                         </div>`);
 
@@ -12376,21 +12349,18 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 equippedEquipment = function () {
                     let repeatingDef = WuxDef.Get("RepeatingSyncedEquipment");
                     let unequipDef = WuxDef.Get("Gear_Unequip");
-                    let inspectDef = WuxDef.Get("Gear_Inspect");
                     let equippedIsVisibleAttr = WuxDef.GetAttribute("Gear_EquipmentIsVisible", WuxDef._gear);
+
+                    let buttons = WuxSheetMain.Button(unequipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${unequipDef.getTitle("")}`, "wuxRepeatingTechActionButton");
 
                     let rowContents = WuxSheetMain.MultiRow(`
                     <div class="wuxEquipableRow">
+                        <input type="hidden" class="wuxHiddenSingleCount-flag" name="${getGearAttribute("ItemCount")}" value="0">
+                        <span class="wuxDescription" name="${getGearAttribute("ItemCount")}" value="0"></span>
                         <div class="wuxEquipableBody">
-                            <div class="wuxEquipableName">
-                                <input type="hidden" class="wuxHiddenSingleCount-flag" name="${getGearAttribute("ItemCount")}" value="0">
-                                <span class="wuxDescription" name="${getGearAttribute("ItemCount")}" value="0"></span>
-                                <span class="wuxDescription" name="${getGearAttribute("ItemName")}"></span>
-                                <span class="wuxSubHeader" name="${getGearAttribute("ItemGroup")}"></span>
-                            </div>
+                                ${buildOwnedItemCard()}
                             <div class="wuxEquipableButtonRow">
-                                ${WuxSheetMain.Button(unequipDef.getAttribute(), `<span style="color:#c8a020;">&#9881;</span> ${unequipDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                                ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
+                                ${buttons}
                             </div>
                         </div>
                     </div>`);
@@ -12419,6 +12389,58 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 getGearAttribute = function (attribute, suffix) {
                     let baseDefinition = WuxDef.Get("Gear");
                     return baseDefinition.getAttribute(`-${WuxDef.GetVariable(attribute, suffix)}`);
+                },
+
+                // Full item card (name/bulk/value/category+craft tooltip/traits/flavor,
+                // plus the lazy Show/Hide Effects technique reveal) for a row in any of
+                // the Gear tab's "owned item" repeaters - same display the Inspect
+                // Popup's item catalog uses (ItemRepeaterDisplayBuilder,
+                // WuxGS-FeatureDisplayBuilder.js), but baseDefinition "Gear" (these
+                // repeaters' own established item-field prefix) instead of "Action".
+                buildOwnedItemCard = function () {
+                    let itemDisplayBuilder = new ItemRepeaterDisplayBuilder(WuxDef.Get("Gear"));
+                    return `<div class="wuxFeature">
+                        ${itemDisplayBuilder.printHeaderBlock()}
+                        ${itemDisplayBuilder.printInfoBlock()}
+                        ${DisplayActionSheet.PrintCatalogItemTechniqueSection("Gear")}
+                    </div>`;
+                },
+
+                // Equipped Consumables (slottedConsumables) has no backing repeater -
+                // it iterates a fixed catalog list at HTML-generation time, keyed by a
+                // per-item static suffix (countMod, derived from the item's own
+                // technique field name) rather than a repeater row id. Both the item's
+                // own display and its associated technique are fully known at build
+                // time here, so they're printed with literal values (ItemDisplayBuilder/
+                // TechniqueDisplayBuilder) instead of the dynamic, name-bound fields
+                // buildOwnedItemCard uses - only the Show/Hide Effects toggle state
+                // itself needs a real per-item attribute (TechShowEffects, suffixed
+                // with the same countMod already used for this item's Buy/Unequip
+                // buttons), since that's the one thing a player actually changes.
+                // Consumables in this list are all usable-items whose own technique is
+                // what the Use button already rolls unconditionally (item.technique,
+                // via techniqueDisplayData below) - so unlike buildOwnedItemCard's
+                // has-a-technique-at-all check (needed since Equipment/Gear items may
+                // not have one), the technique section here always shows.
+                buildStaticConsumableCard = function (item, countMod, techniqueDisplayData) {
+                    let itemDisplayBuilder = new ItemDisplayBuilder(new ItemDisplayData(item));
+
+                    let showEffectsAttr = WuxDef.GetAttribute("TechShowEffects", countMod);
+                    let toggleButton = WuxSheetMain.HiddenFieldToggle(showEffectsAttr,
+                        WuxSheetMain.Button(showEffectsAttr, "&#9656; Hide Effects", "wuxShowEffectsButton"),
+                        WuxSheetMain.Button(showEffectsAttr, "&#9662; Show Effects", "wuxShowEffectsButton"));
+                    let techniqueDisplayBuilder = new TechniqueDisplayBuilder(techniqueDisplayData);
+                    let techniqueContent = `<div class="wuxFeatureInfoDisplayBlock">
+                        ${techniqueDisplayBuilder.printHeaderBlock()}
+                        ${techniqueDisplayBuilder.printInfoBlock()}
+                    </div>`;
+
+                    return `<div class="wuxFeature">
+                        ${itemDisplayBuilder.printHeaderBlock()}
+                        ${itemDisplayBuilder.printInfoBlock()}
+                        <div class="wuxCatalogSelectSection">${toggleButton}</div>
+                        ${WuxSheetMain.HiddenField(showEffectsAttr, techniqueContent)}
+                    </div>`;
                 },
 
                 buildRepeater = function (repeaterName, repeaterData) {
@@ -12798,21 +12820,20 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 // is piggybacked onto its own max slot so it can be hidden once no
                 // items remain queued - suffix distinguishes the technique catalog's
                 // button (no suffix) from the item catalog's (suffix "1") since both
-                // reuse the same Popup_LoadMore definition. For the technique catalog,
-                // that same max slot also holds the queued-items JSON blob
-                // (writeRemainingQueue, Worker-InspectPopup.js). The button's entire
-                // label is one bound span (suffix "2") that the worker overwrites with
-                // the full text each time it loads a batch - a span nested inside the
-                // title template (substituted at build time) rendered with a stray gap
-                // around the number, so the whole label is written live instead. The
-                // item catalog's button (suffix "1") isn't wired up to any
-                // population/pagination logic yet, so it keeps the static "More" text.
+                // reuse the same Popup_LoadMore definition. That same max slot (with
+                // the same suffix) also holds the queued-items JSON blob for whichever
+                // catalog it belongs to (writeRemainingQueue,
+                // ItemInspectPopupAttributeHandler/TechniqueInspectPopupAttributeHandler,
+                // Worker-InspectPopup.js). The button's entire label is one bound span
+                // (suffix + "2") that the worker overwrites with the full text each time
+                // it loads a batch - a span nested inside the title template
+                // (substituted at build time) rendered with a stray gap around the
+                // number, so the whole label is written live instead.
                 printCatalogLoadMoreButton = function (suffix) {
                     let loadMoreField = WuxDef.GetAttribute("Popup_LoadMore", suffix);
                     let loadMoreVisibleField = WuxDef.GetAttribute("Popup_LoadMore", `${suffix != undefined ? suffix : ""}${WuxDef._max}`);
-                    let buttonText = suffix == undefined
-                        ? `<span name="${WuxDef.GetAttribute("Popup_LoadMore", "2")}">${WuxDef.Get("Popup_LoadMore").getTitle("10")}</span>`
-                        : WuxDef.Get("Popup_LoadMore").getTitle("More");
+                    let countField = WuxDef.GetAttribute("Popup_LoadMore", `${suffix != undefined ? suffix : ""}2`);
+                    let buttonText = `<span name="${countField}">${WuxDef.Get("Popup_LoadMore").getTitle("10")}</span>`;
                     return WuxSheetMain.HiddenField(loadMoreVisibleField,
                         WuxSheetMain.Row(WuxSheetMain.Button(loadMoreField, buttonText, "wuxCatalogLoadMoreButton")));
                 },
@@ -12853,13 +12874,100 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let headerContent = `<div class="wuxFeatureSectionHeader">
                         ${WuxSheetMain.Header2(`<span name="${WuxDef.GetAttribute("Popup_ItemSelectDisplay")}"></span>`)}
                     </div>`;
-                    let cardContent = `<div class="wuxFeature">
+                    // Selected-state styling (WCSS-Specialized.css) reads this flag via a
+                    // sibling selector, same as the technique catalog's own card
+                    // (printCatalogTechniqueFullDisplay) - set by updateItemSelectedQuantity
+                    // (Worker-InspectPopup.js) whenever the quantity field below goes
+                    // above/back to 0.
+                    let selectedFlag = `<input type="hidden" class="wuxCatalogCard-selected-flag" name="${WuxDef.GetAttribute("Popup_ItemSelectIsOn")}" value="0">`;
+                    // Quantity stepper - a labeled, bordered number input flanked by
+                    // -/+ buttons (piggybacked onto Popup_ItemSelectCount's own max slot
+                    // and "2" suffix, both otherwise unused for this field - see
+                    // adjustItemSelectedQuantity, Worker-InspectPopup.js) so it reads as
+                    // an editable control instead of plain text. The cost badge reuses
+                    // .wuxFeatureHeaderDisplayInfoCoin - the exact same styling as this
+                    // item's own value badge above - right-aligned opposite the
+                    // stepper. Its value (this item's cost at the current quantity) is
+                    // computed and written by updateItemSelectedQuantity/
+                    // adjustItemSelectedQuantity into Popup_ItemSelectDisplay's base
+                    // slot - unused for a real item row otherwise (only title/divider
+                    // rows write it, and a row is always either a divider or a real
+                    // item, never both, so there's no collision reusing it here).
+                    let quantitySection = `<div class="wuxCatalogSelectSection wuxQuantityRow">
+                        <div class="wuxQuantityStepper">
+                            <span class="wuxQuantityLabel">Qty</span>
+                            <div class="wuxQuantityControls">
+                                ${WuxSheetMain.Button(WuxDef.GetAttribute("Popup_ItemSelectCount", WuxDef._max), "&minus;", "wuxQuantityStepButton")}
+                                <input type="number" min="0" step="1" class="wuxQuantityInput" name="${WuxDef.GetAttribute("Popup_ItemSelectCount")}" value="0">
+                                ${WuxSheetMain.Button(WuxDef.GetAttribute("Popup_ItemSelectCount", "2"), "&plus;", "wuxQuantityStepButton")}
+                            </div>
+                        </div>
+                        <div class="wuxFeatureHeaderDisplayInfoCoin wuxQuantityCost">
+                            <span name="${WuxDef.GetAttribute("Popup_ItemSelectDisplay")}">0</span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> J</span>
+                        </div>
+                    </div>`;
+                    let cardContent = `${selectedFlag}
+                    <div class="wuxFeature">
                         ${itemDisplayBuilder.printHeaderBlock()}
                         ${itemDisplayBuilder.printInfoBlock()}
+                        ${quantitySection}
+                        ${printCatalogItemTechniqueSection(undefined, true)}
                     </div>`;
                     // HiddenFieldToggle shows param2 when the field is non-"0" ("on" for a
                     // real item) and param3 when "0" (a divider row).
                     return WuxSheetMain.HiddenFieldToggle(itemSelectTypeField, cardContent, headerContent);
+                },
+                // Show/Hide Effects button - same button used for Learned Styles
+                // (addStyleListRepeaterContents). For the Gear tab's owned-item
+                // repeaters (showEager falsy/omitted - their existing behavior,
+                // unchanged), the underlying data isn't populated up front: the
+                // item's own population step only writes whether it HAS an
+                // associated technique at all (piggybacked onto ItemName's max slot
+                // under itemBaseDefName - see performAddSelectedInspectElementItem,
+                // Worker-InspectPopup.js) - the technique's own fields stay empty
+                // until this button is clicked, at which point
+                // listenerPopulateItemAssociatedTechnique (WuxGS-Backend.js) fetches
+                // and writes them for the first time. The item catalog instead
+                // passes showEager=true - its own population step
+                // (ItemInspectPopupAttributeHandler.setInventoryItemData,
+                // Worker-InspectPopup.js) writes the technique fields directly for
+                // every row up front, so there's no button/toggle here at all, just
+                // the content, gated only on whether this item has a technique.
+                // Variant buttons (inside techniqueDisplayBuilder.printHeaderBlock)
+                // are wired to listenerSwapItemTechniqueVariant either way.
+                // itemBaseDefName defaults to "Action" (the item catalog's own item
+                // fields); the Gear tab's owned-item repeaters pass "Gear" instead,
+                // matching their own item fields' baseDefinition - the technique
+                // fields themselves always stay "Action"-prefixed regardless (the
+                // universal technique-display convention every other context in
+                // this codebase already uses).
+                printCatalogItemTechniqueSection = function (itemBaseDefName, showEager) {
+                    let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilder(WuxDef.Get("Action"));
+                    let hasTechniqueField = WuxDef.Get(itemBaseDefName ?? "Action").getAttribute(`-${WuxDef.GetVariable("ItemName", WuxDef._max)}`);
+
+                    // Divider between the item's own info and its associated technique -
+                    // part of the same hasTechniqueField gate as the rest of this section,
+                    // so it never shows for an item with no technique.
+                    let divider = `<div class="wuxItemTechniqueDivider">This item grants the following technique</div>`;
+
+                    let techniqueContent = `<div class="wuxFeatureInfoDisplayBlock">
+                        ${techniqueDisplayBuilder.printHeaderBlock()}
+                        ${techniqueDisplayBuilder.printInfoBlock()}
+                    </div>`;
+
+                    if (showEager) {
+                        return WuxSheetMain.HiddenField(hasTechniqueField, divider + techniqueContent);
+                    }
+
+                    let showEffectsAttr = techniqueDisplayBuilder.getActionTypeAttribute("TechShowEffects");
+                    let toggleButton = WuxSheetMain.HiddenFieldToggle(showEffectsAttr,
+                        WuxSheetMain.Button(showEffectsAttr, "&#9656; Hide Effects", "wuxShowEffectsButton"),
+                        WuxSheetMain.Button(showEffectsAttr, "&#9662; Show Effects", "wuxShowEffectsButton"));
+
+                    return WuxSheetMain.HiddenField(hasTechniqueField,
+                        `${divider}
+                        <div class="wuxCatalogSelectSection">${toggleButton}</div>
+                        ${WuxSheetMain.HiddenField(showEffectsAttr, techniqueContent)}`);
                 },
 
                 getActionTypeAttribute = function (attribute, suffix) {
@@ -13035,14 +13143,16 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
             return {
                 Print: print,
                 RepeatingCatalogTechSection: repeatingCatalogTechSection,
-                RepeatingCatalogItemSection: repeatingCatalogItemSection
+                RepeatingCatalogItemSection: repeatingCatalogItemSection,
+                PrintCatalogItemTechniqueSection: printCatalogItemTechniqueSection
             }
         }());
 
     return {
         Print: print,
         RepeatingCatalogTechSection: MainContentData.RepeatingCatalogTechSection,
-        RepeatingCatalogItemSection: MainContentData.RepeatingCatalogItemSection
+        RepeatingCatalogItemSection: MainContentData.RepeatingCatalogItemSection,
+        PrintCatalogItemTechniqueSection: MainContentData.PrintCatalogItemTechniqueSection
     };
 }());
 
@@ -13849,11 +13959,9 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerFindIngButtons();
             output += listenerBuyGearItem();
             output += listenerBuyGearItemBulk();
-            output += listenerInspectGearItem();
             output += listenerDeleteGearItem();
             output += listenerBuyFoodsItem();
             output += listenerBuyFoodsItemBulk();
-            output += listenerInspectFoodsItem();
             output += listenerDeleteFoodsItem();
             output += listenerFindConsumablesButtons();
             output += listenerBuyConsumable();
@@ -13861,16 +13969,12 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerEquipConsumable();
             output += listenerUnequipConsumable();
             output += listenerDeleteRepeatingConsumable();
-            output += listenerInspectRepeatingConsumable();
-            output += listenerInspectSyncedConsumable();
             output += listenerBuySyncedConsumable();
             output += listenerPurchaseRepeatingEquipment();
             output += listenerEquipRepeatingEquipment();
             output += listenerEquipGearItem();
             output += listenerUnequipGearItem();
             output += listenerDeleteRepeatingEquipment();
-            output += listenerInspectRepeatingEquipment();
-            output += listenerInspectSyncedEquipment();
             output += listenerUpdateEquipment();
             output += listenerRemoveAllEquipment();
             output += listenerUnequipAllGear();
@@ -13918,11 +14022,6 @@ var GearBuilder = GearBuilder || (function () {
                 [`repeating_gear:${WuxDef.GetVariable("Gear_BuyBulk")}`],
                 `WuxWorkerGear.BuyGearItemBulk(eventinfo)`, true);
         },
-        listenerInspectGearItem = function () {
-            return WuxSheetBackend.OnChange(
-                [`repeating_gear:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectGearItem(eventinfo)`, true);
-        },
         listenerDeleteGearItem = function () {
             return WuxSheetBackend.OnChange(
                 [`repeating_gear:${WuxDef.GetVariable("Gear_Delete")}`],
@@ -13937,11 +14036,6 @@ var GearBuilder = GearBuilder || (function () {
             return WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingFoods")}:${WuxDef.GetVariable("Gear_BuyBulk")}`],
                 `WuxWorkerGear.BuyFoodsItemBulk(eventinfo)`, true);
-        },
-        listenerInspectFoodsItem = function () {
-            return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingFoods")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectFoodsItem(eventinfo)`, true);
         },
         listenerDeleteFoodsItem = function () {
             return WuxSheetBackend.OnChange(
@@ -13989,28 +14083,6 @@ var GearBuilder = GearBuilder || (function () {
                 [`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Gear_Delete")}`],
                 `WuxWorkerGear.DeleteConsumable(eventinfo)`, true);
         },
-        listenerInspectRepeatingConsumable = function () {
-            return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectConsumable(eventinfo, "RepeatingConsumables")`, true);
-        },
-        listenerInspectSyncedConsumable = function () {
-            let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
-            let output = "";
-            for (let i = 0; i < consuTypes.length; i++) {
-                let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].getTitle()));
-                for (let j = 0; j < itemKeys.length; j++) {
-                    let item = itemKeys[j];
-                    if (item == undefined) continue;
-                    let countMod = item.technique.fieldName.replace(/_/g, "");
-                    output += WuxSheetBackend.OnChange(
-                        [WuxDef.GetVariable("Gear_Inspect", countMod)],
-                        `WuxWorkerGear.InspectSyncedConsumable(eventinfo, "${item.name}")`, true);
-                }
-            }
-            return output;
-        },
-
         listenerBuySyncedConsumable = function () {
             let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
             let output = "";
@@ -14055,16 +14127,6 @@ var GearBuilder = GearBuilder || (function () {
             return `${WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_Delete")}`],
                 `WuxWorkerGear.DeleteGear(eventinfo, "RepeatingEquipment")`, true)}`;
-        },
-        listenerInspectRepeatingEquipment = function () {
-            return `${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectGear(eventinfo, "RepeatingEquipment")`, true)}`;
-        },
-        listenerInspectSyncedEquipment = function () {
-            return `${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingSyncedEquipment")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectGear(eventinfo, "RepeatingSyncedEquipment")`, true)}`;
         },
         listenerUpdateEquipment = function () {
             return `${WuxSheetBackend.OnChange(
@@ -14259,7 +14321,11 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerUpdateRepeatingItemInspectPopupItems();
             output += listenerCatalogTechniqueSelectButton();
             output += listenerSwapCatalogTechniqueVariant();
+            output += listenerItemTechniqueSections();
+            output += listenerUpdateItemSelectedQuantity();
+            output += listenerAdjustItemSelectedQuantity();
             output += listenerLoadMoreCatalogTechniques();
+            output += listenerLoadMoreCatalogItems();
             output += listenerInspectPopupButtons();
             output += listenerFilterPopupButtons();
             return output;
@@ -14376,6 +14442,81 @@ var PopupBuilder = PopupBuilder || (function () {
             return WuxSheetBackend.OnChange([`${repeaterVar}:${variantSelectVar}`],
                 `WuxWorkerInspectPopup.SwapCatalogTechniqueVariant(eventinfo)`, true);
         },
+        // Every item card's technique display (printCatalogItemTechniqueSection,
+        // WuxGS-Base.js) reuses the same variant quick-switch mechanism -
+        // SwapCatalogTechniqueVariant's second param picks the non-catalog branch
+        // (no Select button/Popup_InspectShowAdd concept here, same as Learned
+        // Styles' own use of this) for every repeaterId except "ItemPopupValues"
+        // itself (its default param) - see registerItemTechniqueListeners below
+        // for the full list of repeaters this is bound to.
+        listenerSwapItemTechniqueVariant = function (repeaterId) {
+            let baseDef = WuxDef.Get("Action");
+            let variantSelectVar = baseDef.getVariable(`-${WuxDef.GetVariable("TechVariant", "3")}`);
+            let repeaterVar = WuxDef.GetVariable(repeaterId);
+
+            return WuxSheetBackend.OnChange([`${repeaterVar}:${variantSelectVar}`],
+                `WuxWorkerInspectPopup.SwapCatalogTechniqueVariant(eventinfo, "${repeaterId}")`, true);
+        },
+        // Lazily populates an item card's associated technique the first time its
+        // Show/Hide Effects button reveals it (populateItemAssociatedTechnique,
+        // Worker-InspectPopup.js) - bound to TechShowEffects toggling within the
+        // given repeater, same field/toggle Learned Styles uses, but here the
+        // toggle ALSO drives a worker fetch instead of being purely CSS-driven.
+        listenerPopulateItemAssociatedTechnique = function (repeaterId) {
+            let baseDef = WuxDef.Get("Action");
+            let showEffectsVar = baseDef.getVariable(`-${WuxDef.GetVariable("TechShowEffects")}`);
+            let repeaterVar = WuxDef.GetVariable(repeaterId);
+            let repeaterIdArg = repeaterId != undefined ? `, "${repeaterId}"` : "";
+
+            return WuxSheetBackend.OnChange([`${repeaterVar}:${showEffectsVar}`],
+                `WuxWorkerInspectPopup.PopulateItemAssociatedTechnique(eventinfo${repeaterIdArg})`, true);
+        },
+        // Item catalog's quantity field (Popup_ItemSelectCount, printCatalogItemFullDisplay,
+        // WuxGS-Base.js) - drives the selected-highlight, per-item cost display,
+        // and the popup header's grand total/Purchase affordability
+        // (updateItemSelectedQuantity, Worker-InspectPopup.js).
+        listenerUpdateItemSelectedQuantity = function () {
+            let repeaterVar = WuxDef.GetVariable("ItemPopupValues");
+            let countVar = WuxDef.GetVariable("Popup_ItemSelectCount");
+
+            return WuxSheetBackend.OnChange([`${repeaterVar}:${countVar}`],
+                `WuxWorkerInspectPopup.UpdateItemSelectedQuantity(eventinfo)`, true);
+        },
+        // Quantity stepper's -/+ buttons (wuxQuantityStepButton,
+        // printCatalogItemFullDisplay, WuxGS-Base.js) - piggybacked onto
+        // Popup_ItemSelectCount's own max slot (decrement) and "2" suffix
+        // (increment), matching adjustItemSelectedQuantity's own convention.
+        listenerAdjustItemSelectedQuantity = function () {
+            let repeaterVar = WuxDef.GetVariable("ItemPopupValues");
+            let decrementVar = WuxDef.GetVariable("Popup_ItemSelectCount", WuxDef._max);
+            let incrementVar = WuxDef.GetVariable("Popup_ItemSelectCount", "2");
+
+            return `${WuxSheetBackend.OnChange([`${repeaterVar}:${decrementVar}`],
+                `WuxWorkerInspectPopup.AdjustItemSelectedQuantity(eventinfo, -1)`, true)}
+                ${WuxSheetBackend.OnChange([`${repeaterVar}:${incrementVar}`],
+                `WuxWorkerInspectPopup.AdjustItemSelectedQuantity(eventinfo, 1)`, true)}`;
+        },
+        // Every repeater that carries an item card with a technique reveal
+        // (printCatalogItemTechniqueSection, WuxGS-Base.js) - the item catalog
+        // itself plus the five "owned item" repeaters on the Gear tab. Variant
+        // buttons work the same way in all of them.
+        itemTechniqueRepeaterIds = ["ItemPopupValues", "RepeatingEquipment", "RepeatingSyncedEquipment",
+            "RepeatingGear", "RepeatingConsumables", "RepeatingFoods"],
+        // The item catalog shows its technique eagerly (setInventoryItemData,
+        // Worker-InspectPopup.js) - no Show/Hide Effects button, so no click to
+        // populate on. Only the five Gear tab repeaters still need this listener.
+        lazyPopulateItemTechniqueRepeaterIds = ["RepeatingEquipment", "RepeatingSyncedEquipment",
+            "RepeatingGear", "RepeatingConsumables", "RepeatingFoods"],
+        listenerItemTechniqueSections = function () {
+            let output = "";
+            for (let repeaterId of itemTechniqueRepeaterIds) {
+                output += listenerSwapItemTechniqueVariant(repeaterId);
+            }
+            for (let repeaterId of lazyPopulateItemTechniqueRepeaterIds) {
+                output += listenerPopulateItemAssociatedTechnique(repeaterId);
+            }
+            return output;
+        },
         // The technique catalog's Load More button (Popup_LoadMore, no suffix) -
         // lives outside the repeater's own fieldset (see printCatalogLoadMoreButton/
         // repeatingCatalogTechSection, WuxGS-Base.js), so this is a plain page-level
@@ -14383,6 +14524,14 @@ var PopupBuilder = PopupBuilder || (function () {
         listenerLoadMoreCatalogTechniques = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Popup_LoadMore")}`];
             let output = `WuxWorkerInspectPopup.LoadMoreCatalogTechniques()`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+        },
+        // The item catalog's own Load More button (Popup_LoadMore, suffix "1") -
+        // same page-level, non-repeater-scoped click as the technique catalog's.
+        listenerLoadMoreCatalogItems = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Popup_LoadMore", "1")}`];
+            let output = `WuxWorkerInspectPopup.LoadMoreCatalogItems()`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
@@ -16642,8 +16791,8 @@ class BaseItemDisplayBuilder extends BaseFeatureDisplayBuilder {
 
     printInfoBlock() {
         return this.printInfoBlockField(
-            `${this.printFlavorText()}
-            ${this.printTraits()}`);
+            `${this.printTraits()}
+            ${this.printFlavorText()}`);
     }
 
     printBulk() {}
@@ -16663,6 +16812,64 @@ class BaseItemDisplayBuilder extends BaseFeatureDisplayBuilder {
     printTraits() {}
     printTraitsField (title, contents) {
         return `<div class="wuxFeatureHeaderInfoTraits"><strong>${title}.</strong> ${contents}</div>`;
+    }
+}
+
+// Static counterpart to ItemRepeaterDisplayBuilder (below) - mirrors how
+// TechniqueDisplayBuilder relates to TechniqueRepeaterDisplayBuilder. Takes an
+// ItemDisplayData directly and prints literal values instead of name-bound
+// spans, for contexts where the item is fixed at HTML-generation time rather
+// than driven by a repeating row (e.g. slottedConsumables, WuxGS-Base.js, which
+// iterates a fixed catalog list, not user-owned repeater rows).
+class ItemDisplayBuilder extends BaseItemDisplayBuilder {
+    constructor(displayData) {
+        super();
+        this.displayData = displayData;
+    }
+    printSpan (contents) {
+        return `<span>${contents}</span>`;
+    }
+    printName() {
+        return this.printNameField(this.printSpan(this.displayData.name));
+    }
+    printActionType () {
+        let actionTypeFlag = `<input type="hidden" class="wuxFeatureHeader-flag" value="Item">`;
+        let categoryContents = this.printSpan(this.displayData.group);
+        // Tooltip shows the item's actual crafting recipe (DC/skill check, time,
+        // components - craftData) not the generic crafting rules text (craftDesc) -
+        // matching printCraftingTooltip's own fix (ItemRepeaterDisplayBuilder below).
+        if (this.displayData.craftData.length === 0) {
+            return this.printActionTypeField(actionTypeFlag, categoryContents);
+        }
+        return this.printActionTypeField(actionTypeFlag,
+            this.printTooltip(this.displayData.group, "Crafting", this.displayData.craftData));
+    }
+    // Overrides (not just printBulk/printBaseValue) - the inherited field
+    // formatters (BaseItemDisplayBuilder) reference this.getActionTypeAttribute
+    // for the "sold in fives" (ItemPerFive) sub-label, a method only
+    // ItemRepeaterDisplayBuilder (the field-bound version) implements. Dropped
+    // here rather than stubbed out, since this static builder is only ever used
+    // for usable-item consumables (slottedConsumables, WuxGS-Base.js), which are
+    // never Goods and so never have that sub-label to show anyway.
+    printBulk() {
+        return `<div class="wuxFeatureHeaderDisplayInfoBulk">${this.printSpan(this.displayData.bulk)}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> Bulk</span></div>`;
+    }
+    printBaseValue() {
+        return `<div class="wuxFeatureHeaderDisplayInfoCoin">${this.printSpan(this.displayData.baseValue)}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> J</span></div>`;
+    }
+    printFlavorText() {
+        if (this.displayData.description == "") {
+            return "";
+        }
+        return this.printFlavorTextField(this.printSpan(this.displayData.description));
+    }
+    printTraits() {
+        if (this.displayData.traits == "") {
+            return "";
+        }
+        return this.printTraitsField(
+            this.printTooltip("Traits", "Traits", this.displayData.traitsDesc),
+            this.printSpan(this.displayData.traits));
     }
 }
 

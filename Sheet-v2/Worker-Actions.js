@@ -1361,6 +1361,9 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
     // its base's own entry rather than getting a row of its own.
     tryAddGearTechniqueToTechDictionary(technique, isEquipped) {
         let rootTechnique = WuxTechs.Get(technique.getRootName());
+        if (rootTechnique == undefined) {
+            return;
+        }
         if (!this.techDictionary.has(rootTechnique.name)) {
             let isVisible = isEquipped && this.checkTechniqueIsVisibleInFilter(rootTechnique) && this.checkTechniqueItemTraits(rootTechnique);
             this.techDictionary.add(rootTechnique.name, {

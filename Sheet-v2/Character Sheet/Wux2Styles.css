@@ -189,6 +189,21 @@ input[type=number]::-webkit-inner-spin-button {
     box-sizing: border-box !important;
 }
 
+/* A hidden row (itemisvisible="0" - a leftover from a previous, larger
+   population; iterateAndSetItems reuses rows up to the new item count and just
+   hides any extra ones, it never deletes them) removes the whole repitem from
+   the flex layout instead of shrinking it to a 240px/zero-height box. Without
+   this, every leftover hidden row still counted as a flex item for
+   .wuxCatalogRepeater's own row gap (and, since setInventoryItemVisibility's
+   hide branch also resets itemselecttype to "0" - the same value the
+   group-divider rule above matches - many of them were being force-expanded to
+   a full-width, forced-new-line shape on top of that) - accumulating into a
+   large empty gap at the bottom of the list after the first load once enough
+   hidden rows built up. */
+.wuxItemPopupRepeater .repcontainer > .repitem:has(input[name*="itemisvisible"][value="0"]) {
+    display: none !important;
+}
+
 
 /*========================================
   Master Layout
@@ -2930,12 +2945,90 @@ button[type=roll].wuxFeatureHeaderNameButton span,
     display: block;
     width: 100%;
     height: 20px;
-    
+
     background: #FFF;
     border-left: none;
     border-right: none;
     border-top: 1px solid black;
     border-bottom: 1px solid black;
+}
+
+/* Divider between an item's own info and its associated technique
+   (printCatalogItemTechniqueSection, WuxGS-Base.js) - only rendered at all when
+   the item has a technique (same hasTechniqueField gate as the rest of that
+   section), so no extra visibility logic is needed here. */
+.wuxItemTechniqueDivider {
+    display: block;
+    width: 100%;
+    height: 36px;
+    line-height: 24px;
+
+    background: #FFF;
+    color: #000;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Quantity stepper row (printCatalogItemFullDisplay, WuxGS-Base.js) - the
+   stepper sits on the left, the cost badge (styled identically to the item's
+   own value badge - .wuxFeatureHeaderDisplayInfoCoin) is pushed to the right. */
+.wuxQuantityRow {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* "Qty" label stacked above the button/input controls, both left-aligned. */
+.wuxQuantityStepper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 0;
+}
+
+.wuxQuantityLabel {
+    font-size: 11px;
+    font-weight: bold;
+    color: #000;
+}
+
+/* Buttons pulled tight against the input - no gap. */
+.wuxQuantityControls {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.wuxQuantityInput {
+    width: 32px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Compound selector needed to beat .wuxButton's own display/width (it comes
+   later in the cascade) - same pattern as .wuxCatalogLoadMoreButton/
+   .wuxShowEffectsButton (WCSS-Base.css). */
+.wuxButton.wuxQuantityStepButton {
+    display: inline-block;
+    width: 20px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0;
+    line-height: 18px;
+    text-align: center;
+}
+
+/* flex-shrink:0 keeps the cost badge at its fixed width; margin-left:auto
+   plus the stepper's min-width:0 keeps it pinned inside the row's right
+   edge instead of overflowing past the card border. */
+.wuxQuantityCost {
+    flex-shrink: 0;
+    margin-left: auto;
 }
 
 /*========================================

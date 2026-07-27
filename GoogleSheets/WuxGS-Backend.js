@@ -578,11 +578,9 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerFindIngButtons();
             output += listenerBuyGearItem();
             output += listenerBuyGearItemBulk();
-            output += listenerInspectGearItem();
             output += listenerDeleteGearItem();
             output += listenerBuyFoodsItem();
             output += listenerBuyFoodsItemBulk();
-            output += listenerInspectFoodsItem();
             output += listenerDeleteFoodsItem();
             output += listenerFindConsumablesButtons();
             output += listenerBuyConsumable();
@@ -590,16 +588,12 @@ var GearBuilder = GearBuilder || (function () {
             output += listenerEquipConsumable();
             output += listenerUnequipConsumable();
             output += listenerDeleteRepeatingConsumable();
-            output += listenerInspectRepeatingConsumable();
-            output += listenerInspectSyncedConsumable();
             output += listenerBuySyncedConsumable();
             output += listenerPurchaseRepeatingEquipment();
             output += listenerEquipRepeatingEquipment();
             output += listenerEquipGearItem();
             output += listenerUnequipGearItem();
             output += listenerDeleteRepeatingEquipment();
-            output += listenerInspectRepeatingEquipment();
-            output += listenerInspectSyncedEquipment();
             output += listenerUpdateEquipment();
             output += listenerRemoveAllEquipment();
             output += listenerUnequipAllGear();
@@ -647,11 +641,6 @@ var GearBuilder = GearBuilder || (function () {
                 [`repeating_gear:${WuxDef.GetVariable("Gear_BuyBulk")}`],
                 `WuxWorkerGear.BuyGearItemBulk(eventinfo)`, true);
         },
-        listenerInspectGearItem = function () {
-            return WuxSheetBackend.OnChange(
-                [`repeating_gear:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectGearItem(eventinfo)`, true);
-        },
         listenerDeleteGearItem = function () {
             return WuxSheetBackend.OnChange(
                 [`repeating_gear:${WuxDef.GetVariable("Gear_Delete")}`],
@@ -666,11 +655,6 @@ var GearBuilder = GearBuilder || (function () {
             return WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingFoods")}:${WuxDef.GetVariable("Gear_BuyBulk")}`],
                 `WuxWorkerGear.BuyFoodsItemBulk(eventinfo)`, true);
-        },
-        listenerInspectFoodsItem = function () {
-            return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingFoods")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectFoodsItem(eventinfo)`, true);
         },
         listenerDeleteFoodsItem = function () {
             return WuxSheetBackend.OnChange(
@@ -718,28 +702,6 @@ var GearBuilder = GearBuilder || (function () {
                 [`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Gear_Delete")}`],
                 `WuxWorkerGear.DeleteConsumable(eventinfo)`, true);
         },
-        listenerInspectRepeatingConsumable = function () {
-            return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingConsumables")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectConsumable(eventinfo, "RepeatingConsumables")`, true);
-        },
-        listenerInspectSyncedConsumable = function () {
-            let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
-            let output = "";
-            for (let i = 0; i < consuTypes.length; i++) {
-                let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].getTitle()));
-                for (let j = 0; j < itemKeys.length; j++) {
-                    let item = itemKeys[j];
-                    if (item == undefined) continue;
-                    let countMod = item.technique.fieldName.replace(/_/g, "");
-                    output += WuxSheetBackend.OnChange(
-                        [WuxDef.GetVariable("Gear_Inspect", countMod)],
-                        `WuxWorkerGear.InspectSyncedConsumable(eventinfo, "${item.name}")`, true);
-                }
-            }
-            return output;
-        },
-
         listenerBuySyncedConsumable = function () {
             let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
             let output = "";
@@ -784,16 +746,6 @@ var GearBuilder = GearBuilder || (function () {
             return `${WuxSheetBackend.OnChange(
                 [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_Delete")}`],
                 `WuxWorkerGear.DeleteGear(eventinfo, "RepeatingEquipment")`, true)}`;
-        },
-        listenerInspectRepeatingEquipment = function () {
-            return `${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingEquipment")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectGear(eventinfo, "RepeatingEquipment")`, true)}`;
-        },
-        listenerInspectSyncedEquipment = function () {
-            return `${WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingSyncedEquipment")}:${WuxDef.GetVariable("Gear_Inspect")}`],
-                `WuxWorkerGear.InspectGear(eventinfo, "RepeatingSyncedEquipment")`, true)}`;
         },
         listenerUpdateEquipment = function () {
             return `${WuxSheetBackend.OnChange(
@@ -988,7 +940,11 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerUpdateRepeatingItemInspectPopupItems();
             output += listenerCatalogTechniqueSelectButton();
             output += listenerSwapCatalogTechniqueVariant();
+            output += listenerItemTechniqueSections();
+            output += listenerUpdateItemSelectedQuantity();
+            output += listenerAdjustItemSelectedQuantity();
             output += listenerLoadMoreCatalogTechniques();
+            output += listenerLoadMoreCatalogItems();
             output += listenerInspectPopupButtons();
             output += listenerFilterPopupButtons();
             return output;
@@ -1105,6 +1061,81 @@ var PopupBuilder = PopupBuilder || (function () {
             return WuxSheetBackend.OnChange([`${repeaterVar}:${variantSelectVar}`],
                 `WuxWorkerInspectPopup.SwapCatalogTechniqueVariant(eventinfo)`, true);
         },
+        // Every item card's technique display (printCatalogItemTechniqueSection,
+        // WuxGS-Base.js) reuses the same variant quick-switch mechanism -
+        // SwapCatalogTechniqueVariant's second param picks the non-catalog branch
+        // (no Select button/Popup_InspectShowAdd concept here, same as Learned
+        // Styles' own use of this) for every repeaterId except "ItemPopupValues"
+        // itself (its default param) - see registerItemTechniqueListeners below
+        // for the full list of repeaters this is bound to.
+        listenerSwapItemTechniqueVariant = function (repeaterId) {
+            let baseDef = WuxDef.Get("Action");
+            let variantSelectVar = baseDef.getVariable(`-${WuxDef.GetVariable("TechVariant", "3")}`);
+            let repeaterVar = WuxDef.GetVariable(repeaterId);
+
+            return WuxSheetBackend.OnChange([`${repeaterVar}:${variantSelectVar}`],
+                `WuxWorkerInspectPopup.SwapCatalogTechniqueVariant(eventinfo, "${repeaterId}")`, true);
+        },
+        // Lazily populates an item card's associated technique the first time its
+        // Show/Hide Effects button reveals it (populateItemAssociatedTechnique,
+        // Worker-InspectPopup.js) - bound to TechShowEffects toggling within the
+        // given repeater, same field/toggle Learned Styles uses, but here the
+        // toggle ALSO drives a worker fetch instead of being purely CSS-driven.
+        listenerPopulateItemAssociatedTechnique = function (repeaterId) {
+            let baseDef = WuxDef.Get("Action");
+            let showEffectsVar = baseDef.getVariable(`-${WuxDef.GetVariable("TechShowEffects")}`);
+            let repeaterVar = WuxDef.GetVariable(repeaterId);
+            let repeaterIdArg = repeaterId != undefined ? `, "${repeaterId}"` : "";
+
+            return WuxSheetBackend.OnChange([`${repeaterVar}:${showEffectsVar}`],
+                `WuxWorkerInspectPopup.PopulateItemAssociatedTechnique(eventinfo${repeaterIdArg})`, true);
+        },
+        // Item catalog's quantity field (Popup_ItemSelectCount, printCatalogItemFullDisplay,
+        // WuxGS-Base.js) - drives the selected-highlight, per-item cost display,
+        // and the popup header's grand total/Purchase affordability
+        // (updateItemSelectedQuantity, Worker-InspectPopup.js).
+        listenerUpdateItemSelectedQuantity = function () {
+            let repeaterVar = WuxDef.GetVariable("ItemPopupValues");
+            let countVar = WuxDef.GetVariable("Popup_ItemSelectCount");
+
+            return WuxSheetBackend.OnChange([`${repeaterVar}:${countVar}`],
+                `WuxWorkerInspectPopup.UpdateItemSelectedQuantity(eventinfo)`, true);
+        },
+        // Quantity stepper's -/+ buttons (wuxQuantityStepButton,
+        // printCatalogItemFullDisplay, WuxGS-Base.js) - piggybacked onto
+        // Popup_ItemSelectCount's own max slot (decrement) and "2" suffix
+        // (increment), matching adjustItemSelectedQuantity's own convention.
+        listenerAdjustItemSelectedQuantity = function () {
+            let repeaterVar = WuxDef.GetVariable("ItemPopupValues");
+            let decrementVar = WuxDef.GetVariable("Popup_ItemSelectCount", WuxDef._max);
+            let incrementVar = WuxDef.GetVariable("Popup_ItemSelectCount", "2");
+
+            return `${WuxSheetBackend.OnChange([`${repeaterVar}:${decrementVar}`],
+                `WuxWorkerInspectPopup.AdjustItemSelectedQuantity(eventinfo, -1)`, true)}
+                ${WuxSheetBackend.OnChange([`${repeaterVar}:${incrementVar}`],
+                `WuxWorkerInspectPopup.AdjustItemSelectedQuantity(eventinfo, 1)`, true)}`;
+        },
+        // Every repeater that carries an item card with a technique reveal
+        // (printCatalogItemTechniqueSection, WuxGS-Base.js) - the item catalog
+        // itself plus the five "owned item" repeaters on the Gear tab. Variant
+        // buttons work the same way in all of them.
+        itemTechniqueRepeaterIds = ["ItemPopupValues", "RepeatingEquipment", "RepeatingSyncedEquipment",
+            "RepeatingGear", "RepeatingConsumables", "RepeatingFoods"],
+        // The item catalog shows its technique eagerly (setInventoryItemData,
+        // Worker-InspectPopup.js) - no Show/Hide Effects button, so no click to
+        // populate on. Only the five Gear tab repeaters still need this listener.
+        lazyPopulateItemTechniqueRepeaterIds = ["RepeatingEquipment", "RepeatingSyncedEquipment",
+            "RepeatingGear", "RepeatingConsumables", "RepeatingFoods"],
+        listenerItemTechniqueSections = function () {
+            let output = "";
+            for (let repeaterId of itemTechniqueRepeaterIds) {
+                output += listenerSwapItemTechniqueVariant(repeaterId);
+            }
+            for (let repeaterId of lazyPopulateItemTechniqueRepeaterIds) {
+                output += listenerPopulateItemAssociatedTechnique(repeaterId);
+            }
+            return output;
+        },
         // The technique catalog's Load More button (Popup_LoadMore, no suffix) -
         // lives outside the repeater's own fieldset (see printCatalogLoadMoreButton/
         // repeatingCatalogTechSection, WuxGS-Base.js), so this is a plain page-level
@@ -1112,6 +1143,14 @@ var PopupBuilder = PopupBuilder || (function () {
         listenerLoadMoreCatalogTechniques = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Popup_LoadMore")}`];
             let output = `WuxWorkerInspectPopup.LoadMoreCatalogTechniques()`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+        },
+        // The item catalog's own Load More button (Popup_LoadMore, suffix "1") -
+        // same page-level, non-repeater-scoped click as the technique catalog's.
+        listenerLoadMoreCatalogItems = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Popup_LoadMore", "1")}`];
+            let output = `WuxWorkerInspectPopup.LoadMoreCatalogItems()`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
