@@ -648,7 +648,6 @@ var WuxWorkerActionsService = WuxWorkerActionsService || (function () {
             let logicVar = WuxDef.GetVariable("Def_Logic");
 
             let healValueVar = WuxDef.GetVariable("Cmb_HV");
-            let armorDefVar = WuxDef.GetVariable("Cmb_Armor");
             let burnResVar = WuxDef.GetVariable("Cmb_BurnResist");
             let coldResVar = WuxDef.GetVariable("Cmb_ColdResist");
             let energyResVar = WuxDef.GetVariable("Cmb_EnergyResist");
@@ -661,7 +660,7 @@ var WuxWorkerActionsService = WuxWorkerActionsService || (function () {
             let vitalityDef = WuxDef.Get("Cmb_Vitality");
 
             let attributeHandler = new WorkerAttributeHandler();
-            attributeHandler.addMod([healValueVar, armorDefVar,
+            attributeHandler.addMod([healValueVar,
                 burnResVar, coldResVar, energyResVar, forceResVar, piercingResVar, psycheResVar,
                 mvVar, mvDashVar, surgeDef.getVariable(), surgeDef.getVariable(WuxDef._max),
                 vitalityDef.getVariable(), vitalityDef.getVariable(WuxDef._max)]);
@@ -776,7 +775,6 @@ var WuxWorkerActionsService = WuxWorkerActionsService || (function () {
                 combatDetailsHandler.onUpdateMaxSurges(attrHandler, attrHandler.parseInt(surgeDef.getVariable(WuxDef._max)));
                 combatDetailsHandler.onUpdateVitality(attrHandler, attrHandler.parseInt(vitalityDef.getVariable()));
                 combatDetailsHandler.onUpdateMaxVitality(attrHandler, attrHandler.parseInt(vitalityDef.getVariable(WuxDef._max)));
-                combatDetailsHandler.onUpdateArmorValue(attrHandler, attrHandler.parseInt(armorDefVar));
                 combatDetailsHandler.onUpdateResistanceValues(attrHandler, attrHandler.parseInt(burnResVar),
                     attrHandler.parseInt(coldResVar), attrHandler.parseInt(energyResVar),
                     attrHandler.parseInt(forceResVar), attrHandler.parseInt(piercingResVar),

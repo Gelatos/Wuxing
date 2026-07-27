@@ -19,7 +19,6 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             formulaDefinitions = formulaDefinitions.concat(newFilter);
 
             let healValueVar = WuxDef.GetVariable("Cmb_HV");
-            let armorDefVar = WuxDef.GetVariable("Cmb_Armor");
             let mvSpeedVar = WuxDef.GetVariable("Cmb_Mv");
             let mvDashVar = WuxDef.GetVariable("Cmb_MvDash");
             let surgeDef = WuxDef.Get("Surge");
@@ -29,11 +28,10 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             let startEnDef = WuxDef.Get("StartEN");
             let roundEnDef = WuxDef.Get("RoundEN");
             let cmbHvDef = WuxDef.Get("Cmb_HV");
-            let cmbArmorDef = WuxDef.Get("Cmb_Armor");
             let cmbMvDef = WuxDef.Get("Cmb_Mv");
             let cmbMvDashDef = WuxDef.Get("Cmb_MvDash");
             let crVar = WuxDef.GetVariable("CR");
-            attributeHandler.addMod([healValueVar, armorDefVar, mvSpeedVar, mvDashVar, crVar,
+            attributeHandler.addMod([healValueVar, mvSpeedVar, mvDashVar, crVar,
                 surgeDef.getVariable(), surgeDef.getVariable(WuxDef._max),
                 vitalityDef.getVariable(), vitalityDef.getVariable(WuxDef._max)]);
 
@@ -93,11 +91,6 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                 let healEvaluation = Format.EvaluateAgainstAverage(healValue, 15 + crValue * 10, true, 5 + crValue * 5, 5 + crValue * 10);
                 attrHandler.addUpdate(cmbHvDef.getVariable(WuxDef._evaluation), Format.EvaluationToAttrValue(healEvaluation));
 
-                // Armor: average CR, never below average, above at +CR, great at +CR*2.
-                let armorValue = attrHandler.parseInt(armorDefVar);
-                let armorEvaluation = Format.EvaluateAgainstAverage(armorValue, crValue, false, crValue, crValue * 2);
-                attrHandler.addUpdate(cmbArmorDef.getVariable(WuxDef._evaluation), Format.EvaluationToAttrValue(armorEvaluation));
-
                 // HP: average 35 + CR*30, above/below at a difference of 10 + CR*10, great at 15 + CR*20.
                 let hpValue = attrHandler.parseInt(hpDef.getVariable());
                 let hpEvaluation = Format.EvaluateAgainstAverage(hpValue, 25 + crValue * 25, true, crValue * 10, 10 + crValue * 20);
@@ -120,7 +113,6 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
 
                 if (combatDetailsHandler != undefined) {
                     combatDetailsHandler.onUpdateHealValue(attrHandler, attrHandler.parseInt(healValueVar));
-                    combatDetailsHandler.onUpdateArmorValue(attrHandler, attrHandler.parseInt(armorDefVar));
                     combatDetailsHandler.onUpdateMoveSpeedValue(attrHandler, attrHandler.parseInt(mvSpeedVar));
                     combatDetailsHandler.onUpdateDashSpeedValue(attrHandler, attrHandler.parseInt(mvDashVar));
                     combatDetailsHandler.onUpdateSurges(attrHandler, attrHandler.parseInt(surgeDef.getVariable()));

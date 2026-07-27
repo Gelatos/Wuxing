@@ -537,7 +537,6 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 				let mvSpeedVar = WuxDef.GetVariable("Cmb_Mv", WuxDef._affinity);
 				let dashSpeedVar = WuxDef.GetVariable("Cmb_MvDash", WuxDef._affinity);
 				let hvVar = WuxDef.GetVariable("Cmb_HV", WuxDef._affinity);
-				let armorVar = WuxDef.GetVariable("Cmb_Armor", WuxDef._affinity);
 				let burnResVar = WuxDef.GetVariable("Cmb_BurnResist", WuxDef._affinity);
 				let coldResVar = WuxDef.GetVariable("Cmb_ColdResist", WuxDef._affinity);
 				let energyResVar = WuxDef.GetVariable("Cmb_EnergyResist", WuxDef._affinity);
@@ -551,7 +550,6 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 				attrHandler.addUpdate(surgeVar, 0);
 				attrHandler.addUpdate(mvSpeedVar, 0);
 				attrHandler.addUpdate(dashSpeedVar, 0);
-				attrHandler.addUpdate(armorVar, 0);
 				attrHandler.addUpdate(burnResVar, 0);
 				attrHandler.addUpdate(coldResVar, 0);
 				attrHandler.addUpdate(energyResVar, 0);
@@ -578,7 +576,6 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 						break;
 					case "Metal":
 						attrHandler.addUpdate(startEnVar, 1);
-						attrHandler.addUpdate(armorVar, crValue * 2);
 						attrHandler.addUpdate(piercingResVar, crValue * 3);
 						break;
 					case "Water":

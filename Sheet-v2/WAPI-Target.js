@@ -1055,7 +1055,6 @@ class TokenTargetEffectsData {
         let damageReductionTotal = 0;
         let damageReductionModifiers = "";
         if (!damageRoll.traits.includes("AP")) {
-            damageReductionTotal = this.tokenTargetData.combatDetails.getArmor();
             let ironPlates = this.tokenTargetData.getStatusRank(attrSetter, "Stat_Iron Plates");
             if (ironPlates > 0) {
                 damageReductionTotal += ironPlates;
@@ -2265,7 +2264,6 @@ var TargetReference = TargetReference || (function () {
                 let surgeVar = WuxDef.GetVariable("Surge");
                 let vitalityVar = WuxDef.GetVariable("Cmb_Vitality");
                 let hvVar = WuxDef.GetVariable("Cmb_HV");
-                let armorVar = WuxDef.GetVariable("Cmb_Armor");
                 let burnResVar = WuxDef.GetVariable("Cmb_BurnResist");
                 let coldResVar = WuxDef.GetVariable("Cmb_ColdResist");
                 let energyResVar = WuxDef.GetVariable("Cmb_EnergyResist");
@@ -2275,9 +2273,9 @@ var TargetReference = TargetReference || (function () {
                 let speedVar = WuxDef.GetVariable("Cmb_Mv");
                 let dashVar = WuxDef.GetVariable("Cmb_MvDash");
                 let weaponDamageVar = WuxDef.GetVariable("WeaponDamageVal");
-                attributeHandler.addAttribute([affinityVar, crVar, jobVar, 
+                attributeHandler.addAttribute([affinityVar, crVar, jobVar,
                     braceVar, wardingVar, reflexVar, evasionVar, resolveVar, insightVar, logicVar,
-                    surgeVar, vitalityVar, hvVar, armorVar, speedVar, dashVar, weaponDamageVar,
+                    surgeVar, vitalityVar, hvVar, speedVar, dashVar, weaponDamageVar,
                     burnResVar, coldResVar, energyResVar, forceResVar, piercingResVar, psycheResVar]);
                 attributeHandler.addGetAttrCallback(function (attrHandler) {
                     tokenTargetData.combatDetails.onUpdateAffinity(attrHandler, attrHandler.parseString(affinityVar, 0, false));
@@ -2297,7 +2295,6 @@ var TargetReference = TargetReference || (function () {
                     tokenTargetData.combatDetails.onUpdateVitality(attrHandler, attrHandler.parseInt(vitalityVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateMaxVitality(attrHandler, attrHandler.parseInt(vitalityVar, 0, true));
                     tokenTargetData.combatDetails.onUpdateHealValue(attrHandler, attrHandler.parseInt(hvVar, 0, false));
-                    tokenTargetData.combatDetails.onUpdateArmorValue(attrHandler, attrHandler.parseInt(armorVar, 0, false));
                     tokenTargetData.combatDetails.onUpdateResistanceValues(attrHandler, attrHandler.parseInt(burnResVar, 0, false),
                         attrHandler.parseInt(coldResVar, 0, false), attrHandler.parseInt(energyResVar, 0, false),
                         attrHandler.parseInt(forceResVar, 0, false), attrHandler.parseInt(piercingResVar, 0, false),

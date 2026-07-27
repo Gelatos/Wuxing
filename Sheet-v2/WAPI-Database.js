@@ -3412,9 +3412,6 @@ class BaseTechniqueEffectDisplayData {
             case "HP":
                 this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("HP")}. `;
                 return;
-            case "Armor":
-                this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("Cmb_Armor")}. `;
-                return;
             default:
                 this.effectDescription += effect.effect;
         }
@@ -5039,7 +5036,6 @@ class CombatDetails {
         this.vitality = 1;
         this.maxvitality = 1;
         this.healvalue = 0;
-        this.armorvalue = 0;
         this.burnResist = 0;
         this.coldResist = 0;
         this.energyResist = 0;
@@ -5073,7 +5069,6 @@ class CombatDetails {
         this.vitality = json.vitality != undefined ? json.vitality : 1;
         this.maxvitality = json.maxvitality != undefined ? json.maxvitality : 1;
         this.healvalue = json.healvalue;
-        this.armorvalue = json.armorvalue;
         this.burnResist = json.burnResist != undefined ? json.burnResist : 0;
         this.coldResist = json.coldResist != undefined ? json.coldResist : 0;
         this.energyResist = json.energyResist != undefined ? json.energyResist : 0;
@@ -5095,7 +5090,6 @@ class CombatDetails {
             case "Battle":
                 output += this.printVitality();
                 output += `.${this.printSurges()}`;
-                output += ` Armor:${this.armorvalue}`;
                 output += `;.Regen:${this.healvalue}`;
                 output += `;.Mv:${this.mvSpeed}`;
                 output += `;.Dash:${this.dashSpeed}`;
@@ -5211,9 +5205,6 @@ class CombatDetailsHandler {
     
     getCr() {
         return this.combatDetails.cr;
-    }
-    getArmor() {
-        return this.combatDetails.armorvalue;
     }
     getSurge() {
         return this.combatDetails.surges;
@@ -5334,11 +5325,6 @@ class CombatDetailsHandler {
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
     
-    onUpdateArmorValue(attrHandler, armorValue) {
-        this.setData(attrHandler);
-        this.combatDetails.armorvalue = armorValue;
-        attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
-    }
     onUpdateResistanceValues(attrHandler, burn, cold, energy, force, piercing, psyche) {
         this.setData(attrHandler);
         this.combatDetails.burnResist = burn;
