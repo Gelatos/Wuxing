@@ -118,6 +118,34 @@ const getUserAffinities = function (attrHandler) {
     ];
 };
 
+// Resolves a catalog row's underlying item across both WuxItems and WuxGoods -
+// checks the "Goods:" name prefix first (Gear/Foods' own convention for
+// mixing goods into an otherwise item-only catalog - see _addGearItem/
+// _addFoodsItem), then falls back to a plain WuxItems.Has lookup, treating
+// anything WuxItems doesn't recognize as a good instead (covers the dedicated
+// Goods/GoodsForGear/Ings catalogs, whose row names carry no prefix at all
+// since every row there is already a good).
+const resolveCatalogItemForCost = function (name) {
+    let isGoods = name.startsWith("Goods:");
+    let actualName = isGoods ? name.slice(6) : name;
+    if (!isGoods && !WuxItems.Has(actualName)) {
+        isGoods = true;
+    }
+    return { item: isGoods ? WuxGoods.Get(actualName) : WuxItems.Get(actualName), isGoods: isGoods };
+};
+
+// Goods are always sold in per-5 price buckets, rounded up (WAPI-Database.js's
+// setGoodsInfo unconditionally sets the "sold in fives" ItemPerFive flag for
+// them) - e.g. an item costing 3J per 5 costs 3J for 1-5 units, 6J for 6-10,
+// and so on. Regular items are priced linearly, one unit at a time.
+const computeCatalogItemCost = function (item, isGoods, count) {
+    if (item == undefined || count <= 0) {
+        return 0;
+    }
+    let unitValue = parseInt(item.value) || 0;
+    return isGoods ? unitValue * Math.ceil(count / 5) : unitValue * count;
+};
+
 const getTechHeader = function (affinity) {
     if (affinity === "") return "0";
     let parts = affinity.split(";").map(s => s.trim()).filter(s => s !== "");
@@ -1856,23 +1884,39 @@ class GearInspectionPopup extends InspectionPopup {
         this._addGearItem(attrHandler, itemName);
     }
 
+    // Goods (a "Goods:"-prefixed name mixed into this otherwise item-only
+    // catalog) are priced per-5, rounded up (see computeCatalogItemCost) -
+    // forEachSelectedItem's per-unit loop calls this once per unit requested,
+    // so charging the full per-5 price on every call (as the old always-
+    // add-5-per-click flow did) would overcharge by up to 5x. Add exactly one
+    // unit and only deduct Jin when this unit pushes the item's running total
+    // into a new bucket of 5 - regular (non-goods) items still charge every
+    // single unit, since ceil(n/1) always exceeds ceil((n-1)/1).
     performAddItem2(attrHandler, itemName) {
         if (attrHandler.parseString(WuxDef.GetVariable("Popup_InspectAddType", "2")) !== "Purchase Gear") return;
         let isGoods = itemName.startsWith("Goods:");
         let actualName = isGoods ? itemName.slice(6) : itemName;
         let item = isGoods ? WuxGoods.Get(actualName) : WuxItems.Get(actualName);
         if (item == undefined) return;
-        this._addGearItem(attrHandler, itemName, isGoods ? 5 : 1);
+        let newCount = this._addGearItem(attrHandler, itemName, 1);
+        let previousCount = newCount - 1;
+        let bucketSize = isGoods ? 5 : 1;
+        if (Math.ceil(newCount / bucketSize) <= Math.ceil(previousCount / bucketSize)) {
+            return;
+        }
         let cost = parseInt(item.value) || 0;
         let jinVar = WuxDef.GetVariable("Jin");
         attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost).toString());
     }
 
+    // Returns the item's new total owned count after adding effectiveCount
+    // units, so callers (performAddItem2 above) can tell which per-5 bucket(s)
+    // this call crossed into.
     _addGearItem(attrHandler, itemName, count) {
         let isGoods = itemName.startsWith("Goods:");
         let actualName = isGoods ? itemName.slice(6) : itemName;
         let item = isGoods ? WuxGoods.Get(actualName) : WuxItems.Get(actualName);
-        if (item == undefined) return;
+        if (item == undefined) return 0;
         let effectiveCount = count != undefined ? count : 1;
         let repeater = new WorkerRepeatingSectionHandler("RepeatingGear");
         let itemNameVar = this.getGearVariable("ItemName");
@@ -1887,9 +1931,12 @@ class GearInspectionPopup extends InspectionPopup {
                 }
             }
         }
+        attrHandler.addUpdate(WuxDef.GetVariable("Gear_GearIsVisible"), "on");
         if (existingRowId != null) {
             let countFieldName = repeater.getFieldName(existingRowId, itemCountVar);
-            attrHandler.addUpdate(countFieldName, attrHandler.parseInt(countFieldName) + effectiveCount);
+            let newTotal = (attrHandler.parseInt(countFieldName) || 0) + effectiveCount;
+            attrHandler.addUpdate(countFieldName, newTotal);
+            return newTotal;
         } else {
             let newRowId = repeater.generateRowId();
             this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
@@ -1904,8 +1951,16 @@ class GearInspectionPopup extends InspectionPopup {
             if (isGoods) {
                 attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemMainGroup")), "Goods");
             }
+            // Makes this row visible to existingRepeater's own iterate()/ids
+            // for the rest of THIS cycle - needed since this function runs
+            // once per unit for a multi-unit purchase, so the 2nd+ call's
+            // duplicate check above must find it instead of creating a
+            // separate row per unit.
+            if (existingRepeater) {
+                existingRepeater.ids.push(newRowId);
+            }
+            return effectiveCount;
         }
-        attrHandler.addUpdate(WuxDef.GetVariable("Gear_GearIsVisible"), "on");
     }
 
     getGearVariable(variable, suffix) {
@@ -1970,19 +2025,34 @@ class GoodsInspectionPopup extends InspectionPopup {
         this._addGoodsItem(attrHandler, itemName);
     }
 
+    // Goods are priced per-5, rounded up (see computeCatalogItemCost) -
+    // forEachSelectedItem's per-unit loop calls this once per unit requested,
+    // so charging the full per-5 price on every single call (as the old
+    // always-add-5-per-click flow did) would overcharge by up to 5x. Instead
+    // add exactly one unit and only deduct Jin when this unit pushes the
+    // item's running total into a new bucket of 5 (the 1st, 6th, 11th, ...
+    // unit of THIS item within the current purchase) - units 2-5, 7-10, etc.
+    // are already covered by the bucket they just joined.
     performAddItem2(attrHandler, itemName) {
         if (attrHandler.parseString(WuxDef.GetVariable("Popup_InspectAddType", "2")) !== "Purchase Good") return;
         let item = WuxGoods.Get(itemName);
         if (item == undefined) return;
-        this._addGoodsItem(attrHandler, itemName, 5);
+        let newCount = this._addGoodsItem(attrHandler, itemName, 1);
+        let previousCount = newCount - 1;
+        if (Math.ceil(newCount / 5) <= Math.ceil(previousCount / 5)) {
+            return;
+        }
         let cost = parseInt(item.value) || 0;
         let jinVar = WuxDef.GetVariable("Jin");
         attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost).toString());
     }
 
+    // Returns the item's new total owned count after adding effectiveCount
+    // units, so callers (performAddItem2 above) can tell which per-5 bucket(s)
+    // this call crossed into.
     _addGoodsItem(attrHandler, itemName, count) {
         let item = WuxGoods.Get(itemName);
-        if (item == undefined) return;
+        if (item == undefined) return 0;
         let effectiveCount = count != undefined ? count : 1;
         let repeater = new WorkerRepeatingSectionHandler("RepeatingGoods");
         let itemNameVar = this.getGearVariable("ItemName");
@@ -1999,7 +2069,9 @@ class GoodsInspectionPopup extends InspectionPopup {
         }
         if (existingRowId != null) {
             let countFieldName = repeater.getFieldName(existingRowId, itemCountVar);
-            attrHandler.addUpdate(countFieldName, attrHandler.parseInt(countFieldName) + effectiveCount);
+            let newTotal = (attrHandler.parseInt(countFieldName) || 0) + effectiveCount;
+            attrHandler.addUpdate(countFieldName, newTotal);
+            return newTotal;
         } else {
             let newRowId = repeater.generateRowId();
             this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
@@ -2011,6 +2083,15 @@ class GoodsInspectionPopup extends InspectionPopup {
             let buyBulkDef = WuxDef.Get("Gear_BuyBulk");
             attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_Buy", WuxDef._info)), buyDef.getTitle(`5 (${itemValue}J)`));
             attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info)), buyBulkDef.getTitle(`50 (${itemValue * 10}J)`));
+            // Makes this row visible to existingRepeater's own iterate()/ids
+            // for the rest of THIS cycle - needed since this function runs
+            // once per unit for a multi-unit purchase, so the 2nd+ call's
+            // duplicate check above must find it instead of creating a
+            // separate row per unit (same fix as performAddSelectedInspectElementEquipment/Consumable).
+            if (existingRepeater) {
+                existingRepeater.ids.push(newRowId);
+            }
+            return effectiveCount;
         }
     }
 
@@ -2076,19 +2157,32 @@ class GoodsForGearInspectionPopup extends InspectionPopup {
         this._addGoodsForGearItem(attrHandler, itemName);
     }
 
+    // Goods are priced per-5, rounded up (see computeCatalogItemCost) -
+    // forEachSelectedItem's per-unit loop calls this once per unit requested,
+    // so charging the full per-5 price on every call (as the old always-
+    // add-5-per-click flow did) would overcharge by up to 5x. Add exactly one
+    // unit and only deduct Jin when this unit pushes the item's running total
+    // into a new bucket of 5.
     performAddItem2(attrHandler, itemName) {
         if (attrHandler.parseString(WuxDef.GetVariable("Popup_InspectAddType", "2")) !== "Purchase Gear") return;
         let item = WuxGoods.Get(itemName);
         if (item == undefined) return;
-        this._addGoodsForGearItem(attrHandler, itemName, 5);
+        let newCount = this._addGoodsForGearItem(attrHandler, itemName, 1);
+        let previousCount = newCount - 1;
+        if (Math.ceil(newCount / 5) <= Math.ceil(previousCount / 5)) {
+            return;
+        }
         let cost = parseInt(item.value) || 0;
         let jinVar = WuxDef.GetVariable("Jin");
         attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost).toString());
     }
 
+    // Returns the item's new total owned count after adding effectiveCount
+    // units, so callers (performAddItem2 above) can tell which per-5 bucket(s)
+    // this call crossed into.
     _addGoodsForGearItem(attrHandler, itemName, count) {
         let item = WuxGoods.Get(itemName);
-        if (item == undefined) return;
+        if (item == undefined) return 0;
         let effectiveCount = count != undefined ? count : 1;
         let repeater = new WorkerRepeatingSectionHandler("RepeatingGear");
         let itemNameVar = this.getGearVariable("ItemName");
@@ -2103,9 +2197,12 @@ class GoodsForGearInspectionPopup extends InspectionPopup {
                 }
             }
         }
+        attrHandler.addUpdate(WuxDef.GetVariable("Gear_GearIsVisible"), "on");
         if (existingRowId != null) {
             let countFieldName = repeater.getFieldName(existingRowId, itemCountVar);
-            attrHandler.addUpdate(countFieldName, attrHandler.parseInt(countFieldName) + effectiveCount);
+            let newTotal = (attrHandler.parseInt(countFieldName) || 0) + effectiveCount;
+            attrHandler.addUpdate(countFieldName, newTotal);
+            return newTotal;
         } else {
             let newRowId = repeater.generateRowId();
             this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
@@ -2118,8 +2215,16 @@ class GoodsForGearInspectionPopup extends InspectionPopup {
             attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_Buy", WuxDef._info)), buyDef.getTitle(`5 (${itemValue}J)`));
             attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info)), buyBulkDef.getTitle(`50 (${itemValue * 10}J)`));
             attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemMainGroup")), "Goods");
+            // Makes this row visible to existingRepeater's own iterate()/ids
+            // for the rest of THIS cycle - needed since this function runs
+            // once per unit for a multi-unit purchase, so the 2nd+ call's
+            // duplicate check above must find it instead of creating a
+            // separate row per unit.
+            if (existingRepeater) {
+                existingRepeater.ids.push(newRowId);
+            }
+            return effectiveCount;
         }
-        attrHandler.addUpdate(WuxDef.GetVariable("Gear_GearIsVisible"), "on");
     }
 
     getGearVariable(variable, suffix) {
@@ -2184,23 +2289,39 @@ class FoodsInspectionPopup extends InspectionPopup {
         this._addFoodsItem(attrHandler, itemName);
     }
 
+    // Goods (a "Goods:"-prefixed name mixed into this otherwise item-only
+    // catalog) are priced per-5, rounded up (see computeCatalogItemCost) -
+    // forEachSelectedItem's per-unit loop calls this once per unit requested,
+    // so charging the full per-5 price on every call (as the old always-
+    // add-5-per-click flow did) would overcharge by up to 5x. Add exactly one
+    // unit and only deduct Jin when this unit pushes the item's running total
+    // into a new bucket of 5 - regular (non-goods) items still charge every
+    // single unit, since ceil(n/1) always exceeds ceil((n-1)/1).
     performAddItem2(attrHandler, itemName) {
         if (attrHandler.parseString(WuxDef.GetVariable("Popup_InspectAddType", "2")) !== "Purchase Food") return;
         let isGoods = itemName.startsWith("Goods:");
         let actualName = isGoods ? itemName.slice(6) : itemName;
         let item = isGoods ? WuxGoods.Get(actualName) : WuxItems.Get(actualName);
         if (item == undefined) return;
-        this._addFoodsItem(attrHandler, itemName, isGoods ? 5 : 1);
+        let newCount = this._addFoodsItem(attrHandler, itemName, 1);
+        let previousCount = newCount - 1;
+        let bucketSize = isGoods ? 5 : 1;
+        if (Math.ceil(newCount / bucketSize) <= Math.ceil(previousCount / bucketSize)) {
+            return;
+        }
         let cost = parseInt(item.value) || 0;
         let jinVar = WuxDef.GetVariable("Jin");
         attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost).toString());
     }
 
+    // Returns the item's new total owned count after adding effectiveCount
+    // units, so callers (performAddItem2 above) can tell which per-5 bucket(s)
+    // this call crossed into.
     _addFoodsItem(attrHandler, itemName, count) {
         let isGoods = itemName.startsWith("Goods:");
         let actualName = isGoods ? itemName.slice(6) : itemName;
         let item = isGoods ? WuxGoods.Get(actualName) : WuxItems.Get(actualName);
-        if (item == undefined) return;
+        if (item == undefined) return 0;
         let effectiveCount = count != undefined ? count : 1;
         let repeater = new WorkerRepeatingSectionHandler("RepeatingFoods");
         let itemNameVar = this.getGearVariable("ItemName");
@@ -2215,9 +2336,12 @@ class FoodsInspectionPopup extends InspectionPopup {
                 }
             }
         }
+        attrHandler.addUpdate(WuxDef.GetVariable("Gear_FoodIsVisible"), "on");
         if (existingRowId != null) {
             let countFieldName = repeater.getFieldName(existingRowId, itemCountVar);
-            attrHandler.addUpdate(countFieldName, attrHandler.parseInt(countFieldName) + effectiveCount);
+            let newTotal = (attrHandler.parseInt(countFieldName) || 0) + effectiveCount;
+            attrHandler.addUpdate(countFieldName, newTotal);
+            return newTotal;
         } else {
             let newRowId = repeater.generateRowId();
             this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
@@ -2230,8 +2354,16 @@ class FoodsInspectionPopup extends InspectionPopup {
             attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_Buy", WuxDef._info)), buyDef.getTitle(isGoods ? `5 (${itemValue}J)` : `1 (${itemValue}J)`));
             attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info)), buyBulkDef.getTitle(isGoods ? `50 (${itemValue * 10}J)` : `10 (${itemValue * 10}J)`));
             attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemMainGroup")), isGoods ? "Goods" : "Item");
+            // Makes this row visible to existingRepeater's own iterate()/ids
+            // for the rest of THIS cycle - needed since this function runs
+            // once per unit for a multi-unit purchase, so the 2nd+ call's
+            // duplicate check above must find it instead of creating a
+            // separate row per unit.
+            if (existingRepeater) {
+                existingRepeater.ids.push(newRowId);
+            }
+            return effectiveCount;
         }
-        attrHandler.addUpdate(WuxDef.GetVariable("Gear_FoodIsVisible"), "on");
     }
 
     getGearVariable(variable, suffix) {
@@ -2296,19 +2428,32 @@ class IngsInspectionPopup extends InspectionPopup {
         this._addIngsItem(attrHandler, itemName);
     }
 
+    // Goods are priced per-5, rounded up (see computeCatalogItemCost) -
+    // forEachSelectedItem's per-unit loop calls this once per unit requested,
+    // so charging the full per-5 price on every call (as the old always-
+    // add-5-per-click flow did) would overcharge by up to 5x. Add exactly one
+    // unit and only deduct Jin when this unit pushes the item's running total
+    // into a new bucket of 5.
     performAddItem2(attrHandler, itemName) {
         if (attrHandler.parseString(WuxDef.GetVariable("Popup_InspectAddType", "2")) !== "Purchase Ingredient") return;
         let item = WuxGoods.Get(itemName);
         if (item == undefined) return;
-        this._addIngsItem(attrHandler, itemName, 5);
+        let newCount = this._addIngsItem(attrHandler, itemName, 1);
+        let previousCount = newCount - 1;
+        if (Math.ceil(newCount / 5) <= Math.ceil(previousCount / 5)) {
+            return;
+        }
         let cost = parseInt(item.value) || 0;
         let jinVar = WuxDef.GetVariable("Jin");
         attrHandler.addUpdate(jinVar, (attrHandler.parseInt(jinVar) - cost).toString());
     }
 
+    // Returns the item's new total owned count after adding effectiveCount
+    // units, so callers (performAddItem2 above) can tell which per-5 bucket(s)
+    // this call crossed into.
     _addIngsItem(attrHandler, itemName, count) {
         let item = WuxGoods.Get(itemName);
-        if (item == undefined) return;
+        if (item == undefined) return 0;
         let effectiveCount = count != undefined ? count : 1;
         let repeater = new WorkerRepeatingSectionHandler("RepeatingFoods");
         let itemNameVar = this.getGearVariable("ItemName");
@@ -2323,9 +2468,12 @@ class IngsInspectionPopup extends InspectionPopup {
                 }
             }
         }
+        attrHandler.addUpdate(WuxDef.GetVariable("Gear_FoodIsVisible"), "on");
         if (existingRowId != null) {
             let countFieldName = repeater.getFieldName(existingRowId, itemCountVar);
-            attrHandler.addUpdate(countFieldName, attrHandler.parseInt(countFieldName) + effectiveCount);
+            let newTotal = (attrHandler.parseInt(countFieldName) || 0) + effectiveCount;
+            attrHandler.addUpdate(countFieldName, newTotal);
+            return newTotal;
         } else {
             let newRowId = repeater.generateRowId();
             this.performAddSelectedInspectElementItem(attrHandler, repeater, newRowId, item);
@@ -2338,8 +2486,16 @@ class IngsInspectionPopup extends InspectionPopup {
             attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_Buy", WuxDef._info)), buyDef.getTitle(`5 (${itemValue}J)`));
             attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Gear_BuyBulk", WuxDef._info)), buyBulkDef.getTitle(`50 (${itemValue * 10}J)`));
             attrHandler.addUpdate(repeater.getFieldName(newRowId, this.getGearVariable("ItemMainGroup")), "Goods");
+            // Makes this row visible to existingRepeater's own iterate()/ids
+            // for the rest of THIS cycle - needed since this function runs
+            // once per unit for a multi-unit purchase, so the 2nd+ call's
+            // duplicate check above must find it instead of creating a
+            // separate row per unit.
+            if (existingRepeater) {
+                existingRepeater.ids.push(newRowId);
+            }
+            return effectiveCount;
         }
-        attrHandler.addUpdate(WuxDef.GetVariable("Gear_FoodIsVisible"), "on");
     }
 
     getGearVariable(variable, suffix) {
@@ -2760,8 +2916,8 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             let itemDisplayVar = WuxDef.GetVariable("Popup_ItemSelectDisplay");
             let itemIsOnVar = WuxDef.GetVariable("Popup_ItemSelectIsOn");
 
-            let selectedItem = WuxItems.Get(attrHandler.parseString(repeater.getFieldName(selectedId, itemNameVar)));
-            let selectedCost = selectedItem != undefined ? (parseInt(selectedItem.value) || 0) * newCount : 0;
+            let { item: selectedItem, isGoods: selectedIsGoods } = resolveCatalogItemForCost(attrHandler.parseString(repeater.getFieldName(selectedId, itemNameVar)));
+            let selectedCost = computeCatalogItemCost(selectedItem, selectedIsGoods, newCount);
             attrHandler.addUpdate(repeater.getFieldName(selectedId, itemDisplayVar), selectedCost.toString());
             attrHandler.addUpdate(repeater.getFieldName(selectedId, itemIsOnVar), newCount > 0 ? "on" : "0");
 
@@ -2775,12 +2931,12 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 if (rowCount <= 0) {
                     return;
                 }
-                let rowItem = WuxItems.Get(attrHandler.parseString(repeater.getFieldName(id, itemNameVar)));
+                let { item: rowItem, isGoods: rowIsGoods } = resolveCatalogItemForCost(attrHandler.parseString(repeater.getFieldName(id, itemNameVar)));
                 if (rowItem == undefined) {
                     return;
                 }
                 anySelected = true;
-                grandTotal += (parseInt(rowItem.value) || 0) * rowCount;
+                grandTotal += computeCatalogItemCost(rowItem, rowIsGoods, rowCount);
             });
 
             attrHandler.addUpdate(WuxDef.GetVariable("Title_InspectionItemCost"), grandTotal > 0 ? `${grandTotal} J` : "");
