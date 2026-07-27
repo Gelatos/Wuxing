@@ -1,5 +1,9 @@
 // noinspection ES6ConvertVarToLetConst
 
+// Cap on rows retained in a catalog popup's repeater (ItemPopupValues/
+// TechPopupValues) once its popup closes - see InspectionPopup.close below.
+const INSPECTION_POPUP_MAX_RETAINED_ROWS = 20;
+
 class InspectionInventoryItem {
     constructor(displayString, databaseName, isTitle, affinity, tier, iconAffinities) {
         this.display = displayString;
@@ -143,8 +147,16 @@ class FilteredItemsInventoryItemHandler extends InspectionInventoryItemHandler {
 class ItemListInventoryItemHandler extends InspectionInventoryItemHandler {
     constructor(items) {
         super();
+        // Caches the already-constructed item objects the caller passed in (see
+        // itemCache, performItemFilterInspection) so ItemInspectPopupAttributeHandler.
+        // setInventoryItemData doesn't call WuxItems.Get()/WuxGoods.Get() a second
+        // time for the same name - WuxItems.Get never caches (WJS-TechDef.js), so
+        // every call reconstructs a full item, including its own embedded
+        // TechniqueData, from scratch.
+        this.itemCache = new Map();
         for (let item of items) {
             if (item == undefined) continue;
+            this.itemCache.set(item.name, item);
             this.addItem(new InspectionInventoryItem(item.name, item.name, false, "", 0, []));
         }
     }
@@ -673,7 +685,14 @@ class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
             return;
         }
 
-        let item = WuxItems.Get(itemData.name);
+        // itemCache (see openItemInspectionWithLoadingScreen) lets the initial
+        // population reuse the item object the caller already built while
+        // filtering/grouping, instead of paying for a second full reconstruction
+        // (including its own embedded TechniqueData) of the same item -
+        // undefined for Load More batches (loadMoreCatalogItems, a separate
+        // worker invocation with no shared cache), which just falls back to
+        // fetching it fresh as before.
+        let item = this.itemCache?.get(itemData.name) ?? WuxItems.Get(itemData.name);
         if (item == undefined) {
             this.catalogItemAttributeHandler.clearItemInfo();
             this.catalogTechniqueAttributeHandler.clearTechniqueInfo();
@@ -683,7 +702,12 @@ class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
             this.attrHandler.addUpdate(hasTechniqueField, "0");
             return;
         }
-        this.catalogItemAttributeHandler.setItemInfo(item);
+        // setItemInfoWithoutTechnique (not setItemInfo) - the technique block
+        // below (catalogTechniqueAttributeHandler.setTechniqueInfo) is populated
+        // explicitly with excludeCurrent/userAffinities, so letting setItemInfo
+        // also do its own internal, unfiltered technique write here would just
+        // be discarded work (see setItemInfoWithoutTechnique, WJS-Service.js).
+        this.catalogItemAttributeHandler.setItemInfoWithoutTechnique(item);
         this.attrHandler.addUpdate(itemSelectTypeField, "on");
         // Cost display (Popup_ItemSelectDisplay's base slot, otherwise unused for
         // a real row - see updateItemSelectedQuantity) starts at 0, matching the
@@ -842,11 +866,30 @@ class InspectionPopup {
             inspectPopup.inspectPopupAttrHandler.show(inventoryTitle, inventoryItems, addType);
         });
     }
+    // Rows in this popup's catalog repeater (ItemPopupValues/TechPopupValues)
+    // are only ever reused/hidden as the popup gets repopulated (setInventoryItemVisibility),
+    // never deleted - across a character's lifetime of browsing different
+    // filters/categories, the repeater's row count only ever grows to whatever
+    // the single largest population ever needed, and stays there forever. That
+    // permanently inflates both the worker's per-population write volume and
+    // the sheet's on-open row count for every popup type sharing this repeater
+    // (a fresh character loads fast; a heavily-browsed one doesn't). Trimming
+    // down to the first INSPECTION_POPUP_MAX_RETAINED_ROWS rows on close - not
+    // on every population, which would break Load More's reuse-existing-rows
+    // pagination scheme - keeps that growth bounded without touching the
+    // pagination logic at all.
     close() {
         let inspectPopup = this;
+        this.attributeHandler.addRepeatingSection(this.inspectPopupInventoryId);
         this.attributeHandler.addGetAttrCallback(function (attrHandler) {
             inspectPopup.setup(attrHandler);
             inspectPopup.inspectPopupAttrHandler.hide();
+
+            let repeater = attrHandler.getRepeatingSection(inspectPopup.inspectPopupInventoryId);
+            if (repeater.ids.length > INSPECTION_POPUP_MAX_RETAINED_ROWS) {
+                repeater.iteratorIndex = INSPECTION_POPUP_MAX_RETAINED_ROWS;
+                repeater.removeAllIdsAfterIteratorIndex();
+            }
         });
     }
     selectItem(selectedId) {
@@ -2199,7 +2242,16 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         // changing that shared method's behavior, since openItemInspection/
         // OpenItemInspection (this same class's other, plain entry point) has
         // other callers (Worker-Gear.js) that depend on it revealing immediately.
-        openItemInspectionWithLoadingScreen = function (inventoryTitle, inventoryItems, addType) {
+        // itemCache (optional): Map<itemName, ItemData> the caller already built
+        // while filtering/grouping (performItemFilterInspection/performItemListInspection,
+        // both via a name->item map the caller/handler populated from objects it
+        // already constructed) - threaded through so the catalog population step
+        // (ItemInspectPopupAttributeHandler.setInventoryItemData) can skip calling
+        // WuxItems.Get() a second time for the same name. WuxItems.Get never
+        // caches (WJS-TechDef.js), so every call reconstructs a full item -
+        // including its own embedded TechniqueData - from scratch; mirrors the
+        // technique catalog's own variantsByName precompute-and-thread pattern.
+        openItemInspectionWithLoadingScreen = function (inventoryTitle, inventoryItems, addType, itemCache) {
             let attributeHandler = new WorkerAttributeHandler();
             let inspectPopup = new ItemInspectionPopup(attributeHandler);
 
@@ -2212,6 +2264,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             attributeHandler.addMod([WuxDef.GetVariable("Popup_InspectSelectId")]);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 inspectPopup.setup(attrHandler);
+                inspectPopup.inspectPopupAttrHandler.itemCache = itemCache;
                 inspectPopup.inspectPopupAttrHandler.showWithoutReveal(inventoryTitle, inventoryItems, addType);
             });
 
@@ -2236,8 +2289,18 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let selectType = attrHandler.parseString(selectTypeVariable);
 
+                // Only the technique/style catalog uses its own dedicated
+                // repeater (TechPopupValues, TechniqueInspectionPopup's
+                // constructor) instead of the shared ItemPopupValues every
+                // other popup type defaults to - picking the right subclass
+                // here (instead of always the base InspectionPopup) means
+                // close()'s row-trimming (InspectionPopup.close, above) trims
+                // whichever repeater this popup actually used, not always
+                // ItemPopupValues regardless of which popup was open.
                 let attributeHandler2 = new WorkerAttributeHandler();
-                let inspectPopup = new InspectionPopup(attributeHandler2);
+                let inspectPopup = selectType == "Popup_TechniqueInspectionName"
+                    ? new TechniqueInspectionPopup(attributeHandler2)
+                    : new InspectionPopup(attributeHandler2);
                 inspectPopup.close();
                 attributeHandler2.run();
 
@@ -2692,8 +2755,18 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
     const performItemFilterInspection = function (filters, title, addType) {
         let filteredItems = WuxItems.Filter(filters);
         let groups = {};
+        // WuxItems.Filter already constructs a full item (including its own
+        // embedded TechniqueData) for every match, just to read .category/.group
+        // here - cache those instances so the catalog population step (below,
+        // ItemInspectPopupAttributeHandler.setInventoryItemData) doesn't call
+        // WuxItems.Get() a second time for the up-to-16 items it actually renders.
+        // WuxItems.Get never caches (WJS-TechDef.js), so every call reconstructs
+        // a fresh object from scratch - this mirrors the technique catalog's own
+        // variantsByName precompute-and-thread pattern (performStyleFilterInspection).
+        let itemCache = new Map();
         for (let item of filteredItems) {
             if (item == undefined) continue;
+            itemCache.set(item.name, item);
             let subGroupKey = item.category;
             if (!groups[subGroupKey]) {
                 let subGroupTitle = item.category !== "" ? `${item.group} (${item.category})` : item.group;
@@ -2707,7 +2780,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             inventoryItems.push(new InspectionInventoryItem(groups[key].title, "", true));
             inventoryItems = inventoryItems.concat(groups[key].items);
         }
-        openItemInspectionWithLoadingScreen(title, inventoryItems, addType);
+        openItemInspectionWithLoadingScreen(title, inventoryItems, addType, itemCache);
     };
 
     const openItemFilterInspection = function (filters, title, addType) {
@@ -2732,7 +2805,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
 
     const performItemListInspection = function (items, title, addType) {
         let inventoryItems = new ItemListInventoryItemHandler(items);
-        openItemInspectionWithLoadingScreen(title, inventoryItems.items, addType);
+        openItemInspectionWithLoadingScreen(title, inventoryItems.items, addType, inventoryItems.itemCache);
     };
 
     const openItemListInspection = function (items, title, addType) {

@@ -1512,6 +1512,19 @@ class ItemDataAttributeHandler extends DatabaseItemAttributeHandler {
 			techData.clearTechniqueInfo();
 		}
 	}
+	// Same item-field population as setItemInfo, but skips its internal
+	// technique write entirely - for callers (ItemInspectPopupAttributeHandler.
+	// setInventoryItemData, Worker-InspectPopup.js) that populate the technique
+	// block themselves via their own TechniqueDataAttributeHandler call right
+	// after, with excludeCurrent/userAffinities options setItemInfo's internal
+	// call never passes. Without this, every technique-bearing item paid for
+	// the full technique computation (header/effects writes plus a
+	// WuxTechs.Filter() variant lookup) TWICE per row - once here, unfiltered
+	// and immediately discarded, then again correctly by the caller.
+	setItemInfoWithoutTechnique (item) {
+		this.clearItemInfo();
+		this.setSharedItemInfo(item);
+	}
 	setGoodsInfo (item) {
 		this.clearItemInfo();
 		this.setSharedItemInfo(item);
