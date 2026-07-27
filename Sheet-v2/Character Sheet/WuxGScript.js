@@ -12060,7 +12060,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             let rowContents = WuxSheetMain.MultiRow(`
                             <div class="wuxEquipableRow">
                                 <div class="wuxEquipableBody">
-                                    <span class="wuxDescription" name="${countAttribute}" value="0">${item.name}</span>
                                     ${buildStaticConsumableCard(item, countMod, displayData)}
                                     <div class="wuxEquipableButtonRow">
                                         <button class="wuxRepeatingTechActionButton" type="roll" value="${displayData.getSheetRollTemplate(true)}"><span style="color:#4caf50;">&#9654;</span><span> Use</span></button>
@@ -12409,38 +12408,20 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 // Equipped Consumables (slottedConsumables) has no backing repeater -
                 // it iterates a fixed catalog list at HTML-generation time, keyed by a
                 // per-item static suffix (countMod, derived from the item's own
-                // technique field name) rather than a repeater row id. Both the item's
-                // own display and its associated technique are fully known at build
-                // time here, so they're printed with literal values (ItemDisplayBuilder/
-                // TechniqueDisplayBuilder) instead of the dynamic, name-bound fields
-                // buildOwnedItemCard uses - only the Show/Hide Effects toggle state
-                // itself needs a real per-item attribute (TechShowEffects, suffixed
-                // with the same countMod already used for this item's Buy/Unequip
-                // buttons), since that's the one thing a player actually changes.
-                // Consumables in this list are all usable-items whose own technique is
-                // what the Use button already rolls unconditionally (item.technique,
-                // via techniqueDisplayData below) - so unlike buildOwnedItemCard's
-                // has-a-technique-at-all check (needed since Equipment/Gear items may
-                // not have one), the technique section here always shows.
+                // technique field name) rather than a repeater row id. Shows the item's
+                // technique only (no item name/bulk/cost/traits/flavor, no Show/Hide
+                // Effects toggle) - matches the Actions tab's own Instant Consumables
+                // display (buildItemTechniqueDisplay, this file) exactly: same
+                // TechniqueDisplayBuilderUsableWithCount + wuxActionFeature styling,
+                // with the item's count folded into the technique's own name
+                // (TechniqueDisplayBuilderUsableWithCount.printName, WuxGS-
+                // FeatureDisplayBuilder.js) instead of a separate line above the card.
                 buildStaticConsumableCard = function (item, countMod, techniqueDisplayData) {
-                    let itemDisplayBuilder = new ItemDisplayBuilder(new ItemDisplayData(item));
-
-                    let showEffectsAttr = WuxDef.GetAttribute("TechShowEffects", countMod);
-                    let toggleButton = WuxSheetMain.HiddenFieldToggle(showEffectsAttr,
-                        WuxSheetMain.Button(showEffectsAttr, "&#9656; Hide Effects", "wuxShowEffectsButton"),
-                        WuxSheetMain.Button(showEffectsAttr, "&#9662; Show Effects", "wuxShowEffectsButton"));
-                    let techniqueDisplayBuilder = new TechniqueDisplayBuilder(techniqueDisplayData);
-                    let techniqueContent = `<div class="wuxFeatureInfoDisplayBlock">
-                        ${techniqueDisplayBuilder.printHeaderBlock()}
-                        ${techniqueDisplayBuilder.printInfoBlock()}
-                    </div>`;
-
-                    return `<div class="wuxFeature">
-                        ${itemDisplayBuilder.printHeaderBlock()}
-                        ${itemDisplayBuilder.printInfoBlock()}
-                        <div class="wuxCatalogSelectSection">${toggleButton}</div>
-                        ${WuxSheetMain.HiddenField(showEffectsAttr, techniqueContent)}
-                    </div>`;
+                    let countAttribute = WuxDef.GetAttribute("ItemCount", countMod);
+                    let techniqueDisplayBuilder = new TechniqueDisplayBuilderUsableWithCount(techniqueDisplayData);
+                    techniqueDisplayBuilder.setFeatureBonusClasses("wuxActionFeature");
+                    techniqueDisplayBuilder.setCountAttribute(countAttribute);
+                    return techniqueDisplayBuilder.print();
                 },
 
                 buildRepeater = function (repeaterName, repeaterData) {
@@ -16336,6 +16317,16 @@ class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
         super();
     }
 
+    // BaseFeatureDisplayBuilder's own printVariants() stub returns undefined
+    // (no return statement), which prints literally as the string "undefined" -
+    // TechniqueRepeaterDisplayBuilder (real variant-switcher buttons) overrides
+    // this with actual content, but every static/non-repeater technique builder
+    // (TechniqueDisplayBuilder and its subclasses) never did, matching the same
+    // bug already fixed for BaseItemDisplayBuilder.
+    printVariants() {
+        return "";
+    }
+
     printHeaderBlock() {
         return this.printHeaderBlockField(
             `<div class="wuxFeatureHeaderDisplayInfoBlock">
@@ -16812,64 +16803,6 @@ class BaseItemDisplayBuilder extends BaseFeatureDisplayBuilder {
     printTraits() {}
     printTraitsField (title, contents) {
         return `<div class="wuxFeatureHeaderInfoTraits"><strong>${title}.</strong> ${contents}</div>`;
-    }
-}
-
-// Static counterpart to ItemRepeaterDisplayBuilder (below) - mirrors how
-// TechniqueDisplayBuilder relates to TechniqueRepeaterDisplayBuilder. Takes an
-// ItemDisplayData directly and prints literal values instead of name-bound
-// spans, for contexts where the item is fixed at HTML-generation time rather
-// than driven by a repeating row (e.g. slottedConsumables, WuxGS-Base.js, which
-// iterates a fixed catalog list, not user-owned repeater rows).
-class ItemDisplayBuilder extends BaseItemDisplayBuilder {
-    constructor(displayData) {
-        super();
-        this.displayData = displayData;
-    }
-    printSpan (contents) {
-        return `<span>${contents}</span>`;
-    }
-    printName() {
-        return this.printNameField(this.printSpan(this.displayData.name));
-    }
-    printActionType () {
-        let actionTypeFlag = `<input type="hidden" class="wuxFeatureHeader-flag" value="Item">`;
-        let categoryContents = this.printSpan(this.displayData.group);
-        // Tooltip shows the item's actual crafting recipe (DC/skill check, time,
-        // components - craftData) not the generic crafting rules text (craftDesc) -
-        // matching printCraftingTooltip's own fix (ItemRepeaterDisplayBuilder below).
-        if (this.displayData.craftData.length === 0) {
-            return this.printActionTypeField(actionTypeFlag, categoryContents);
-        }
-        return this.printActionTypeField(actionTypeFlag,
-            this.printTooltip(this.displayData.group, "Crafting", this.displayData.craftData));
-    }
-    // Overrides (not just printBulk/printBaseValue) - the inherited field
-    // formatters (BaseItemDisplayBuilder) reference this.getActionTypeAttribute
-    // for the "sold in fives" (ItemPerFive) sub-label, a method only
-    // ItemRepeaterDisplayBuilder (the field-bound version) implements. Dropped
-    // here rather than stubbed out, since this static builder is only ever used
-    // for usable-item consumables (slottedConsumables, WuxGS-Base.js), which are
-    // never Goods and so never have that sub-label to show anyway.
-    printBulk() {
-        return `<div class="wuxFeatureHeaderDisplayInfoBulk">${this.printSpan(this.displayData.bulk)}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> Bulk</span></div>`;
-    }
-    printBaseValue() {
-        return `<div class="wuxFeatureHeaderDisplayInfoCoin">${this.printSpan(this.displayData.baseValue)}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> J</span></div>`;
-    }
-    printFlavorText() {
-        if (this.displayData.description == "") {
-            return "";
-        }
-        return this.printFlavorTextField(this.printSpan(this.displayData.description));
-    }
-    printTraits() {
-        if (this.displayData.traits == "") {
-            return "";
-        }
-        return this.printTraitsField(
-            this.printTooltip("Traits", "Traits", this.displayData.traitsDesc),
-            this.printSpan(this.displayData.traits));
     }
 }
 

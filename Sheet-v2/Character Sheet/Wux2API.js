@@ -17771,7 +17771,7 @@ var WuxDef = WuxDef || (function() {
                 "linkedGroups":[],
                 "isResource":""},
             "Title_InspectionItemCost":{"name":"Title_InspectionItemCost","fieldName":"inspectionitemcost","group":"Title","descriptions":[""],
-                "variable":"ttl-inspectionitemcost{0}{1}","title":"Item Cost","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
+                "variable":"ttl-inspectionitemcost{0}{1}","title":"Cost","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
             "Title_JobsByDifficulty":{"name":"Title_JobsByDifficulty","fieldName":"jobsbydifficulty","group":"Title","descriptions":["A job represents a character's role and set a baseline for how they perform in the game. When learning a job you immediately gain a set of techniques the job grants. These jobs will always include techniques that set the base statistics for many of your core stats such as HP, defenses, and movement speed.","A character is capable of learning multiple jobs but only one can ever be active at one time. If you learn multiple jobs you are abile to swap between them by spending energy.","On this page you can spend a job point by selecting one of these jobs. The job will then automatically be equipped."],

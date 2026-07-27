@@ -2370,6 +2370,22 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
     padding-top: 3px;
 }
 
+/* Gear page item cards (buildOwnedItemCard, WuxGS-Base.js - stored/equipped
+   equipment, gear, consumables, food) otherwise inherit .wuxFeature's generic
+   width: calc(100% - 10px)/max-width: 500px (WCSS-Specialized.css, below),
+   growing to fill whatever space .wuxEquipableBody has - fixed at 240px to
+   match the Actions tab/Inspect Popup catalog card width instead. Higher
+   specificity than the plain .wuxFeature rule wins without !important; scoped
+   to .wuxEquipableBody rather than .wuxEquipableRow so it doesn't affect the
+   Advancement tab's Perks list row (WuxGS-Advancement.js), which reuses
+   .wuxEquipableRow/.wuxEquipableBody but never nests a .wuxFeature inside. */
+.wuxEquipableBody .wuxFeature
+{
+    width: 240px;
+    min-width: 240px;
+    max-width: 240px;
+}
+
 .wuxEquipableBody .wuxEquipableName
 {
     display: block;

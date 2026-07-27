@@ -568,7 +568,6 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                             let rowContents = WuxSheetMain.MultiRow(`
                             <div class="wuxEquipableRow">
                                 <div class="wuxEquipableBody">
-                                    <span class="wuxDescription" name="${countAttribute}" value="0">${item.name}</span>
                                     ${buildStaticConsumableCard(item, countMod, displayData)}
                                     <div class="wuxEquipableButtonRow">
                                         <button class="wuxRepeatingTechActionButton" type="roll" value="${displayData.getSheetRollTemplate(true)}"><span style="color:#4caf50;">&#9654;</span><span> Use</span></button>
@@ -917,38 +916,20 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 // Equipped Consumables (slottedConsumables) has no backing repeater -
                 // it iterates a fixed catalog list at HTML-generation time, keyed by a
                 // per-item static suffix (countMod, derived from the item's own
-                // technique field name) rather than a repeater row id. Both the item's
-                // own display and its associated technique are fully known at build
-                // time here, so they're printed with literal values (ItemDisplayBuilder/
-                // TechniqueDisplayBuilder) instead of the dynamic, name-bound fields
-                // buildOwnedItemCard uses - only the Show/Hide Effects toggle state
-                // itself needs a real per-item attribute (TechShowEffects, suffixed
-                // with the same countMod already used for this item's Buy/Unequip
-                // buttons), since that's the one thing a player actually changes.
-                // Consumables in this list are all usable-items whose own technique is
-                // what the Use button already rolls unconditionally (item.technique,
-                // via techniqueDisplayData below) - so unlike buildOwnedItemCard's
-                // has-a-technique-at-all check (needed since Equipment/Gear items may
-                // not have one), the technique section here always shows.
+                // technique field name) rather than a repeater row id. Shows the item's
+                // technique only (no item name/bulk/cost/traits/flavor, no Show/Hide
+                // Effects toggle) - matches the Actions tab's own Instant Consumables
+                // display (buildItemTechniqueDisplay, this file) exactly: same
+                // TechniqueDisplayBuilderUsableWithCount + wuxActionFeature styling,
+                // with the item's count folded into the technique's own name
+                // (TechniqueDisplayBuilderUsableWithCount.printName, WuxGS-
+                // FeatureDisplayBuilder.js) instead of a separate line above the card.
                 buildStaticConsumableCard = function (item, countMod, techniqueDisplayData) {
-                    let itemDisplayBuilder = new ItemDisplayBuilder(new ItemDisplayData(item));
-
-                    let showEffectsAttr = WuxDef.GetAttribute("TechShowEffects", countMod);
-                    let toggleButton = WuxSheetMain.HiddenFieldToggle(showEffectsAttr,
-                        WuxSheetMain.Button(showEffectsAttr, "&#9656; Hide Effects", "wuxShowEffectsButton"),
-                        WuxSheetMain.Button(showEffectsAttr, "&#9662; Show Effects", "wuxShowEffectsButton"));
-                    let techniqueDisplayBuilder = new TechniqueDisplayBuilder(techniqueDisplayData);
-                    let techniqueContent = `<div class="wuxFeatureInfoDisplayBlock">
-                        ${techniqueDisplayBuilder.printHeaderBlock()}
-                        ${techniqueDisplayBuilder.printInfoBlock()}
-                    </div>`;
-
-                    return `<div class="wuxFeature">
-                        ${itemDisplayBuilder.printHeaderBlock()}
-                        ${itemDisplayBuilder.printInfoBlock()}
-                        <div class="wuxCatalogSelectSection">${toggleButton}</div>
-                        ${WuxSheetMain.HiddenField(showEffectsAttr, techniqueContent)}
-                    </div>`;
+                    let countAttribute = WuxDef.GetAttribute("ItemCount", countMod);
+                    let techniqueDisplayBuilder = new TechniqueDisplayBuilderUsableWithCount(techniqueDisplayData);
+                    techniqueDisplayBuilder.setFeatureBonusClasses("wuxActionFeature");
+                    techniqueDisplayBuilder.setCountAttribute(countAttribute);
+                    return techniqueDisplayBuilder.print();
                 },
 
                 buildRepeater = function (repeaterName, repeaterData) {
