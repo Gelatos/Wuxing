@@ -767,7 +767,11 @@ class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
             this.hideTechnique(i);
         }
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectPurchaseAffordable"), "0");
-        this.attrHandler.addUpdate(WuxDef.GetVariable("Title_InspectionItemCost"), "");
+        // "0 J" (not blank) - matches the format recomputeItemSelection/every
+        // other write to this field uses once a real cost exists (`${cost} J`),
+        // so the header shows a cost from the moment the popup opens instead of
+        // sitting empty until the first quantity change.
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Title_InspectionItemCost"), "0 J");
         // Every row's quantity resets to 0 on fresh population (setInventoryItemData
         // below) - reset this too (the Add button's own enabled-state flag,
         // updateItemSelectedQuantity) so a stale "on" from a previous session
