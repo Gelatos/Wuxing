@@ -2651,13 +2651,33 @@ class TechniqueDisplayData {
         this.traitsDesc = [];
 
         if (technique.forms.indexOf("Social") >= 0) {
-            this.traits += `This is a Social technique. `;
+            // Soc-<Element> forms (Trait_Soc-Wood/Fire/Earth/Metal/Water) describe
+            // an approach a Social technique can be performed with - each has its
+            // own trait definition/description, layered on top of (not replacing)
+            // the base Trait_Social one below.
+            let socialElementMessages = {
+                "Soc-Wood": "This Social technique may be performed earnestly (Wood)",
+                "Soc-Fire": "This Social technique may be performed boldly (Fire)",
+                "Soc-Earth": "This Social technique may be performed empathetically (Earth)",
+                "Soc-Metal": "This Social technique may be performed methodically (Metal)",
+                "Soc-Water": "This Social technique may be performed subtly (Water)"
+            };
+            let matchedSocialElement = Object.keys(socialElementMessages).find(form => technique.forms.indexOf(form) >= 0);
+            this.traits += matchedSocialElement ? `${socialElementMessages[matchedSocialElement]}. ` : `This is a Social technique. `;
+
             let socialDefinition = WuxDef.Get("Trait_Social");
             if (this.traitsDesc.length > 0) {
                 this.traitsDesc.push("");
             }
             this.traitsDesc.push(`[${socialDefinition.getTitle()}]`);
             this.traitsDesc = this.traitsDesc.concat(socialDefinition.descriptions);
+
+            if (matchedSocialElement != undefined) {
+                let socialElementDefinition = WuxDef.Get(`Trait_${matchedSocialElement}`);
+                this.traitsDesc.push("");
+                this.traitsDesc.push(`[${socialElementDefinition.getTitle()}]`);
+                this.traitsDesc = this.traitsDesc.concat(socialElementDefinition.descriptions);
+            }
         }
         
         if (technique.boon > 0) {
