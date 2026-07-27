@@ -428,7 +428,7 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     opacity: 0;
 }
 
-input[type=hidden].wuxHiddenSingleCount-flag[value="1"] + .wuxDescription
+input[type=hidden].wuxHiddenSingleCount-flag[value="1"] + .wuxFeatureHeaderNameCount
 {
     display: none;
 }

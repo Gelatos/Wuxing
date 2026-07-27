@@ -10089,9 +10089,16 @@ class TechniqueDisplayData {
             else if (technique.limits.indexOf("/Conflict") > 0) {
                 limitDefinition = WuxDef.Get("Trait_PerConflict");
             }
-            this.actionsDesc.push("");
-            this.actionsDesc.push(`[${limitDefinition.getTitle()}]`);
-            this.actionsDesc = this.actionsDesc.concat(limitDefinition.descriptions);
+            // A limits string that doesn't match any of the patterns above
+            // (e.g. unexpected spacing like "1/ Round" instead of "1/Round")
+            // otherwise left limitDefinition undefined here, crashing on
+            // .getTitle() below - skip the extra descriptor instead, same as
+            // technique.limits == "" already does.
+            if (limitDefinition != undefined) {
+                this.actionsDesc.push("");
+                this.actionsDesc.push(`[${limitDefinition.getTitle()}]`);
+                this.actionsDesc = this.actionsDesc.concat(limitDefinition.descriptions);
+            }
         }
     }
 

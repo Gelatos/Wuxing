@@ -227,10 +227,20 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
         // switch with the plain, already-proven WuxSheetMain.HiddenField toggle
         // (every other element in this popup's header already uses it) instead of a
         // multi-value CSS attribute-selector match against the raw title string.
+        // repeatingCatalogItemSection (WuxGS-Base.js) is the ONLY place ItemPopupValues
+        // ever renders, and every popup type except the technique/style catalog shares
+        // that same repeater (ItemInspectPopupAttributeHandler and its subclasses -
+        // Consumables/Gear/Goods/GoodsForGear/Foods/Ings - plus Perk, which uses the
+        // base InspectPopupAttributeHandler's default "ItemPopupValues" too) - an exact
+        // match against "Popup_ItemInspectionName" only left every one of those other
+        // types with suffix "2" stuck at "0", hiding the whole item section and leaving
+        // their popups blank. Suffix "2" is "on" for anything that isn't the technique
+        // catalog instead, so it stays correct as new popup types are added.
+        let isTechniqueCatalog = popupType === "Popup_TechniqueInspectionName";
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType", WuxDef._max),
-            popupType === "Popup_TechniqueInspectionName" ? "on" : "0");
+            isTechniqueCatalog ? "on" : "0");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType", "2"),
-            popupType === "Popup_ItemInspectionName" ? "on" : "0");
+            isTechniqueCatalog ? "0" : "on");
     }
     setAddType(addTypes) {
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
@@ -656,6 +666,29 @@ class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
     // setInventoryItemData already did) so printCatalogItemFullDisplay
     // (WuxGS-Base.js) and its pre-existing .wuxItemPopupRepeater CSS
     // (WCSS-Base.css) can toggle between the plain divider and the full card.
+    // Overridden by GoodsInspectPopupAttributeHandler (and its subclasses -
+    // GoodsForGear/Ings, dedicated goods-only catalogs) to fetch from WuxGoods
+    // unconditionally instead, and by GearInspectPopupAttributeHandler (and
+    // FoodsInspectPopupAttributeHandler, which extends it) to route through
+    // WuxGoods only for names carrying the "Goods:" prefix those two catalogs
+    // mix in alongside regular items (see _addGearItem/_addFoodsItem's own
+    // isGoods handling, this file) - see setInventoryItemData.
+    getCatalogItem(name) {
+        return WuxItems.Get(name);
+    }
+    // item.itemType is "Goods" for anything getCatalogItem resolved through
+    // WuxGoods (GoodsData.createEmpty sets this) regardless of which catalog/
+    // override fetched it - setGoodsInfo skips the technique write entirely
+    // (goods never have one) and sets the "sold in fives" ItemPerFive flag
+    // goods are always sold under, matching setSelectedItemData
+    // (GoodsInspectPopupAttributeHandler) below.
+    populateCatalogItemInfo(item) {
+        if (item.itemType === "Goods") {
+            this.catalogItemAttributeHandler.setGoodsInfo(item);
+        } else {
+            this.catalogItemAttributeHandler.setItemInfoWithoutTechnique(item);
+        }
+    }
     setInventoryItemData(id, itemData) {
         this.setInventoryItemVisibility(id, true);
         this.catalogItemAttributeHandler.setId(id);
@@ -691,8 +724,11 @@ class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
         // (including its own embedded TechniqueData) of the same item -
         // undefined for Load More batches (loadMoreCatalogItems, a separate
         // worker invocation with no shared cache), which just falls back to
-        // fetching it fresh as before.
-        let item = this.itemCache?.get(itemData.name) ?? WuxItems.Get(itemData.name);
+        // fetching it fresh as before. getCatalogItem is overridden by
+        // GoodsInspectPopupAttributeHandler (and its subclasses) to fetch from
+        // WuxGoods instead - these popups' rows are crafting materials/goods,
+        // which only exist in that database, not WuxItems.
+        let item = this.itemCache?.get(itemData.name) ?? this.getCatalogItem(itemData.name);
         if (item == undefined) {
             this.catalogItemAttributeHandler.clearItemInfo();
             this.catalogTechniqueAttributeHandler.clearTechniqueInfo();
@@ -702,12 +738,15 @@ class ItemInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
             this.attrHandler.addUpdate(hasTechniqueField, "0");
             return;
         }
-        // setItemInfoWithoutTechnique (not setItemInfo) - the technique block
-        // below (catalogTechniqueAttributeHandler.setTechniqueInfo) is populated
-        // explicitly with excludeCurrent/userAffinities, so letting setItemInfo
-        // also do its own internal, unfiltered technique write here would just
-        // be discarded work (see setItemInfoWithoutTechnique, WJS-Service.js).
-        this.catalogItemAttributeHandler.setItemInfoWithoutTechnique(item);
+        // populateCatalogItemInfo (not setItemInfo directly) - the technique
+        // block below (catalogTechniqueAttributeHandler.setTechniqueInfo) is
+        // populated explicitly with excludeCurrent/userAffinities, so letting
+        // setItemInfo also do its own internal, unfiltered technique write here
+        // would just be discarded work (see setItemInfoWithoutTechnique,
+        // WJS-Service.js) - overridden by GoodsInspectPopupAttributeHandler to
+        // use setGoodsInfo instead (also sets the "sold in fives" ItemPerFive
+        // flag setItemInfoWithoutTechnique doesn't).
+        this.populateCatalogItemInfo(item);
         this.attrHandler.addUpdate(itemSelectTypeField, "on");
         // Cost display (Popup_ItemSelectDisplay's base slot, otherwise unused for
         // a real row - see updateItemSelectedQuantity) starts at 0, matching the
@@ -884,7 +923,20 @@ class InspectionPopup {
     // pagination logic at all.
     close() {
         let inspectPopup = this;
-        this.attributeHandler.addRepeatingSection(this.inspectPopupInventoryId);
+        // Only register if not already registered on this same attributeHandler -
+        // addSelectedInspectElement/addSelectedInspectElement2 (WuxWorkerInspectPopup,
+        // this file) call addItem()/addItem2() and close() back-to-back on the
+        // SAME attributeHandler before running it once. addItem()'s own
+        // forEachSelectedItem already registers this exact repeater and adds the
+        // Popup_ItemSelectName/Popup_ItemSelectCount fields it needs to fetch -
+        // WorkerAttributeHandler.addRepeatingSection (WJS-Service.js) unconditionally
+        // overwrites any existing registration with a fresh, field-name-less one,
+        // so calling it again here would silently wipe that field registration,
+        // making every row's item name read back empty and skip being added -
+        // exactly the bug this guard prevents.
+        if (this.attributeHandler.getRepeatingSection(this.inspectPopupInventoryId) == undefined) {
+            this.attributeHandler.addRepeatingSection(this.inspectPopupInventoryId);
+        }
         this.attributeHandler.addGetAttrCallback(function (attrHandler) {
             inspectPopup.setup(attrHandler);
             inspectPopup.inspectPopupAttrHandler.hide();
@@ -906,6 +958,41 @@ class InspectionPopup {
         this.attributeHandler.addGetAttrCallback(function (attrHandler) {
             inspectPopup.setup(attrHandler);
             inspectPopup.inspectPopupAttrHandler.setSelectedItem(selectedId, attrHandler.parseString(inventoryItemNameVar));
+        });
+    }
+
+    // Multi-quantity replacement for this class's own single-item addItem/addItem2
+    // below (which read a single Popup_InspectSelectId) - every row in this
+    // popup's catalog repeater with Popup_ItemSelectCount > 0 is processed at its
+    // own quantity, calling back once per unit (not once per row with a count
+    // param) so each unit independently re-checks equip-slot availability via
+    // the existing performAddSelectedInspectElementEquipment/CanAutoEquipGear/
+    // AutoEquipGear cycle - which already sees each earlier unit's pending
+    // writes within this same attrHandler, so looping naturally equips in order
+    // until slots fill and leaves the rest in storage, with no extra bookkeeping
+    // needed here. Lives on the base class (not just ItemInspectionPopup) since
+    // every popup type sharing ItemInspectPopupAttributeHandler's quantity-based
+    // selection - Consumables/Gear/Goods/GoodsForGear/Foods/Ings, several of
+    // which extend this class directly rather than ItemInspectionPopup - needs
+    // it too, not just the item catalog itself.
+    forEachSelectedItem(callback) {
+        let inspectPopup = this;
+        this.attributeHandler.addRepeatingSection(this.inspectPopupInventoryId);
+        let itemNameVar = WuxDef.GetVariable("Popup_ItemSelectName");
+        let itemCountVar = WuxDef.GetVariable("Popup_ItemSelectCount");
+        this.attributeHandler.getRepeatingSection(this.inspectPopupInventoryId).addFieldNames([itemNameVar, itemCountVar]);
+
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            inspectPopup.setup(attrHandler);
+            let repeater = attrHandler.getRepeatingSection(inspectPopup.inspectPopupInventoryId);
+            repeater.ids.forEach(function (id) {
+                let itemName = attrHandler.parseString(repeater.getFieldName(id, itemNameVar));
+                let count = attrHandler.parseInt(repeater.getFieldName(id, itemCountVar)) || 0;
+                if (itemName === "" || count <= 0) {
+                    return;
+                }
+                callback(attrHandler, itemName, count);
+            });
         });
     }
 
@@ -1270,36 +1357,6 @@ class ItemInspectionPopup extends InspectionPopup {
         });
     }
 
-    // Multi-quantity replacement for the base class's single-item addItem/addItem2
-    // (which read a single Popup_InspectSelectId) - every ItemPopupValues row
-    // with Popup_ItemSelectCount > 0 is processed at its own quantity, calling
-    // back once per unit (not once per row with a count param) so each unit
-    // independently re-checks equip-slot availability via the existing
-    // performAddSelectedInspectElementEquipment/CanAutoEquipGear/AutoEquipGear
-    // cycle - which already sees each earlier unit's pending writes within this
-    // same attrHandler, so looping naturally equips in order until slots fill
-    // and leaves the rest in storage, with no extra bookkeeping needed here.
-    forEachSelectedItem(callback) {
-        let inspectPopup = this;
-        this.attributeHandler.addRepeatingSection(this.inspectPopupInventoryId);
-        let itemNameVar = WuxDef.GetVariable("Popup_ItemSelectName");
-        let itemCountVar = WuxDef.GetVariable("Popup_ItemSelectCount");
-        this.attributeHandler.getRepeatingSection(this.inspectPopupInventoryId).addFieldNames([itemNameVar, itemCountVar]);
-
-        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
-            inspectPopup.setup(attrHandler);
-            let repeater = attrHandler.getRepeatingSection(inspectPopup.inspectPopupInventoryId);
-            repeater.ids.forEach(function (id) {
-                let itemName = attrHandler.parseString(repeater.getFieldName(id, itemNameVar));
-                let count = attrHandler.parseInt(repeater.getFieldName(id, itemCountVar)) || 0;
-                if (itemName === "" || count <= 0) {
-                    return;
-                }
-                callback(attrHandler, itemName, count);
-            });
-        });
-    }
-
     performAddItem(attrHandler, itemName) {
         Debug.Log(`Adding Inspect Element ${itemName}`);
         switch (attrHandler.parseString(WuxDef.GetVariable("Popup_InspectAddType"))) {
@@ -1542,6 +1599,14 @@ class ItemInspectionPopup extends InspectionPopup {
         attrHandler.addUpdate(field("ItemName", WuxDef._max), hasAssociatedTechnique ? "on" : "0");
     };
     performAddSelectedInspectElementTechnique(attrHandler, repeater, newRowId, technique) {
+        // Defensive - a caller passing item.technique for something that isn't
+        // actually a UsableItemData (e.g. WuxItems.Get's "not found" fallback,
+        // which is a plain ItemData with no .technique property at all) would
+        // otherwise crash inside setTechniqueInfo/setTechniqueHeaderInfo trying
+        // to read technique.name.
+        if (technique == undefined) {
+            return;
+        }
         let techniqueItemAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");
         techniqueItemAttributeHandler.setRepeaterData(repeater);
         techniqueItemAttributeHandler.setId(newRowId);
@@ -1589,7 +1654,19 @@ class ConsumablesInspectionPopup extends ItemInspectionPopup {
         this.consuItemCountAttrMap = WuxWorkerGear.BuildConsuItemCountMap(this.attributeHandler);
         this.attributeHandler.addRepeatingSection("RepeatingConsumables");
         this.attributeHandler.getRepeatingSection("RepeatingConsumables").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
-        InspectionPopup.prototype.addItem.call(this);
+        // forEachSelectedItem (ItemInspectionPopup, not the base class's single-
+        // select InspectionPopup.prototype.addItem) - this popup type's attribute
+        // handler shares ItemInspectPopupAttributeHandler's quantity-based
+        // selection (Popup_ItemSelectCount), which never sets Popup_InspectSelectId
+        // (setSelectedItem/setSelectedItemData are no-ops there) - the old
+        // single-select base method would read an empty selectedIdVar, resolve to
+        // a garbage itemName, and crash trying to add whatever WuxItems.Get's
+        // "not found" fallback returns (it has no .technique).
+        this.forEachSelectedItem((attrHandler, itemName, count) => {
+            for (let i = 0; i < count; i++) {
+                this.performAddItem(attrHandler, itemName);
+            }
+        });
     }
 
     addItem2() {
@@ -1602,7 +1679,13 @@ class ConsumablesInspectionPopup extends ItemInspectionPopup {
         this.consuItemCountAttrMap = WuxWorkerGear.BuildConsuItemCountMap(this.attributeHandler);
         this.attributeHandler.addRepeatingSection("RepeatingConsumables");
         this.attributeHandler.getRepeatingSection("RepeatingConsumables").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
-        InspectionPopup.prototype.addItem2.call(this);
+        // forEachSelectedItem - see addItem above for why the old single-select
+        // InspectionPopup.prototype.addItem2 is unsafe here.
+        this.forEachSelectedItem((attrHandler, itemName, count) => {
+            for (let i = 0; i < count; i++) {
+                this.performAddItem2(attrHandler, itemName);
+            }
+        });
     }
 
     performAddItem2(attrHandler, itemName) {
@@ -1621,6 +1704,20 @@ class GearInspectPopupAttributeHandler extends ItemInspectPopupAttributeHandler 
     constructor(attributeHandler) {
         super(attributeHandler);
         this.titleDefinitionName = "Popup_GearInspectionName";
+    }
+
+    // This catalog mixes regular WuxItems entries with crafting goods, the
+    // latter carrying a "Goods:" name prefix (same convention _addGearItem/
+    // performAddItem2's own isGoods check already relies on) - route those
+    // through WuxGoods instead of WuxItems, which would otherwise return its
+    // "not found" placeholder (WJS-TechDef.js) for every goods name.
+    // FoodsInspectPopupAttributeHandler inherits this unchanged, since it mixes
+    // goods into its own catalog the same way (see _addFoodsItem).
+    getCatalogItem(name) {
+        if (name.startsWith("Goods:")) {
+            return WuxGoods.Get(name.slice(6));
+        }
+        return super.getCatalogItem(name);
     }
 
     setSelectedItemData(selectedItemName) {
@@ -1651,6 +1748,15 @@ class GoodsInspectPopupAttributeHandler extends ItemInspectPopupAttributeHandler
     constructor(attributeHandler) {
         super(attributeHandler);
         this.titleDefinitionName = "Popup_GoodsInspectionName";
+    }
+
+    // This catalog's rows are crafting materials/goods (WuxGoods), not WuxItems
+    // - no "Goods:" prefix needed here (unlike GearInspectPopupAttributeHandler)
+    // since every row is a good. populateCatalogItemInfo (base class) already
+    // routes to setGoodsInfo once it sees item.itemType === "Goods", so no
+    // override needed for that half.
+    getCatalogItem(name) {
+        return WuxGoods.Get(name);
     }
 
     setSelectedItemData(selectedItemName) {
@@ -1716,7 +1822,19 @@ class GearInspectionPopup extends InspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("Popup_InspectAddType"));
         this.attributeHandler.addRepeatingSection("RepeatingGear");
         this.attributeHandler.getRepeatingSection("RepeatingGear").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
-        InspectionPopup.prototype.addItem.call(this);
+        // forEachSelectedItem (ItemInspectionPopup, not the base class's single-
+        // select InspectionPopup.prototype.addItem) - this popup type's attribute
+        // handler shares ItemInspectPopupAttributeHandler's quantity-based
+        // selection (Popup_ItemSelectCount), which never sets Popup_InspectSelectId
+        // (setSelectedItem/setSelectedItemData are no-ops there) - the old
+        // single-select base method would read an empty selectedIdVar, resolve to
+        // a garbage itemName, and crash trying to add whatever WuxItems.Get's
+        // "not found" fallback returns (it has no .technique).
+        this.forEachSelectedItem((attrHandler, itemName, count) => {
+            for (let i = 0; i < count; i++) {
+                this.performAddItem(attrHandler, itemName);
+            }
+        });
     }
 
     addItem2() {
@@ -1724,7 +1842,13 @@ class GearInspectionPopup extends InspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("Jin"));
         this.attributeHandler.addRepeatingSection("RepeatingGear");
         this.attributeHandler.getRepeatingSection("RepeatingGear").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
-        InspectionPopup.prototype.addItem2.call(this);
+        // forEachSelectedItem - see addItem above for why the old single-select
+        // InspectionPopup.prototype.addItem2 is unsafe here.
+        this.forEachSelectedItem((attrHandler, itemName, count) => {
+            for (let i = 0; i < count; i++) {
+                this.performAddItem2(attrHandler, itemName);
+            }
+        });
     }
 
     performAddItem(attrHandler, itemName) {
@@ -1812,7 +1936,19 @@ class GoodsInspectionPopup extends InspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("Popup_InspectAddType"));
         this.attributeHandler.addRepeatingSection("RepeatingGoods");
         this.attributeHandler.getRepeatingSection("RepeatingGoods").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
-        InspectionPopup.prototype.addItem.call(this);
+        // forEachSelectedItem (ItemInspectionPopup, not the base class's single-
+        // select InspectionPopup.prototype.addItem) - this popup type's attribute
+        // handler shares ItemInspectPopupAttributeHandler's quantity-based
+        // selection (Popup_ItemSelectCount), which never sets Popup_InspectSelectId
+        // (setSelectedItem/setSelectedItemData are no-ops there) - the old
+        // single-select base method would read an empty selectedIdVar, resolve to
+        // a garbage itemName, and crash trying to add whatever WuxItems.Get's
+        // "not found" fallback returns (it has no .technique).
+        this.forEachSelectedItem((attrHandler, itemName, count) => {
+            for (let i = 0; i < count; i++) {
+                this.performAddItem(attrHandler, itemName);
+            }
+        });
     }
 
     addItem2() {
@@ -1820,7 +1956,13 @@ class GoodsInspectionPopup extends InspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("Jin"));
         this.attributeHandler.addRepeatingSection("RepeatingGoods");
         this.attributeHandler.getRepeatingSection("RepeatingGoods").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
-        InspectionPopup.prototype.addItem2.call(this);
+        // forEachSelectedItem - see addItem above for why the old single-select
+        // InspectionPopup.prototype.addItem2 is unsafe here.
+        this.forEachSelectedItem((attrHandler, itemName, count) => {
+            for (let i = 0; i < count; i++) {
+                this.performAddItem2(attrHandler, itemName);
+            }
+        });
     }
 
     performAddItem(attrHandler, itemName) {
@@ -1900,7 +2042,19 @@ class GoodsForGearInspectionPopup extends InspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("Popup_InspectAddType"));
         this.attributeHandler.addRepeatingSection("RepeatingGear");
         this.attributeHandler.getRepeatingSection("RepeatingGear").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
-        InspectionPopup.prototype.addItem.call(this);
+        // forEachSelectedItem (ItemInspectionPopup, not the base class's single-
+        // select InspectionPopup.prototype.addItem) - this popup type's attribute
+        // handler shares ItemInspectPopupAttributeHandler's quantity-based
+        // selection (Popup_ItemSelectCount), which never sets Popup_InspectSelectId
+        // (setSelectedItem/setSelectedItemData are no-ops there) - the old
+        // single-select base method would read an empty selectedIdVar, resolve to
+        // a garbage itemName, and crash trying to add whatever WuxItems.Get's
+        // "not found" fallback returns (it has no .technique).
+        this.forEachSelectedItem((attrHandler, itemName, count) => {
+            for (let i = 0; i < count; i++) {
+                this.performAddItem(attrHandler, itemName);
+            }
+        });
     }
 
     addItem2() {
@@ -1908,7 +2062,13 @@ class GoodsForGearInspectionPopup extends InspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("Jin"));
         this.attributeHandler.addRepeatingSection("RepeatingGear");
         this.attributeHandler.getRepeatingSection("RepeatingGear").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
-        InspectionPopup.prototype.addItem2.call(this);
+        // forEachSelectedItem - see addItem above for why the old single-select
+        // InspectionPopup.prototype.addItem2 is unsafe here.
+        this.forEachSelectedItem((attrHandler, itemName, count) => {
+            for (let i = 0; i < count; i++) {
+                this.performAddItem2(attrHandler, itemName);
+            }
+        });
     }
 
     performAddItem(attrHandler, itemName) {
@@ -1990,7 +2150,19 @@ class FoodsInspectionPopup extends InspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("Popup_InspectAddType"));
         this.attributeHandler.addRepeatingSection("RepeatingFoods");
         this.attributeHandler.getRepeatingSection("RepeatingFoods").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
-        InspectionPopup.prototype.addItem.call(this);
+        // forEachSelectedItem (ItemInspectionPopup, not the base class's single-
+        // select InspectionPopup.prototype.addItem) - this popup type's attribute
+        // handler shares ItemInspectPopupAttributeHandler's quantity-based
+        // selection (Popup_ItemSelectCount), which never sets Popup_InspectSelectId
+        // (setSelectedItem/setSelectedItemData are no-ops there) - the old
+        // single-select base method would read an empty selectedIdVar, resolve to
+        // a garbage itemName, and crash trying to add whatever WuxItems.Get's
+        // "not found" fallback returns (it has no .technique).
+        this.forEachSelectedItem((attrHandler, itemName, count) => {
+            for (let i = 0; i < count; i++) {
+                this.performAddItem(attrHandler, itemName);
+            }
+        });
     }
 
     addItem2() {
@@ -1998,7 +2170,13 @@ class FoodsInspectionPopup extends InspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("Jin"));
         this.attributeHandler.addRepeatingSection("RepeatingFoods");
         this.attributeHandler.getRepeatingSection("RepeatingFoods").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
-        InspectionPopup.prototype.addItem2.call(this);
+        // forEachSelectedItem - see addItem above for why the old single-select
+        // InspectionPopup.prototype.addItem2 is unsafe here.
+        this.forEachSelectedItem((attrHandler, itemName, count) => {
+            for (let i = 0; i < count; i++) {
+                this.performAddItem2(attrHandler, itemName);
+            }
+        });
     }
 
     performAddItem(attrHandler, itemName) {
@@ -2084,7 +2262,19 @@ class IngsInspectionPopup extends InspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("Popup_InspectAddType"));
         this.attributeHandler.addRepeatingSection("RepeatingFoods");
         this.attributeHandler.getRepeatingSection("RepeatingFoods").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
-        InspectionPopup.prototype.addItem.call(this);
+        // forEachSelectedItem (ItemInspectionPopup, not the base class's single-
+        // select InspectionPopup.prototype.addItem) - this popup type's attribute
+        // handler shares ItemInspectPopupAttributeHandler's quantity-based
+        // selection (Popup_ItemSelectCount), which never sets Popup_InspectSelectId
+        // (setSelectedItem/setSelectedItemData are no-ops there) - the old
+        // single-select base method would read an empty selectedIdVar, resolve to
+        // a garbage itemName, and crash trying to add whatever WuxItems.Get's
+        // "not found" fallback returns (it has no .technique).
+        this.forEachSelectedItem((attrHandler, itemName, count) => {
+            for (let i = 0; i < count; i++) {
+                this.performAddItem(attrHandler, itemName);
+            }
+        });
     }
 
     addItem2() {
@@ -2092,7 +2282,13 @@ class IngsInspectionPopup extends InspectionPopup {
         this.attributeHandler.addMod(WuxDef.GetVariable("Jin"));
         this.attributeHandler.addRepeatingSection("RepeatingFoods");
         this.attributeHandler.getRepeatingSection("RepeatingFoods").addFieldNames([this.getGearVariable("ItemName"), this.getGearVariable("ItemIsVisible"), this.getGearVariable("ItemCount")]);
-        InspectionPopup.prototype.addItem2.call(this);
+        // forEachSelectedItem - see addItem above for why the old single-select
+        // InspectionPopup.prototype.addItem2 is unsafe here.
+        this.forEachSelectedItem((attrHandler, itemName, count) => {
+            for (let i = 0; i < count; i++) {
+                this.performAddItem2(attrHandler, itemName);
+            }
+        });
     }
 
     performAddItem(attrHandler, itemName) {

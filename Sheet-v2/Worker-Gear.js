@@ -580,6 +580,25 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
                     attrHandler.addUpdate(newRepeater.getFieldName(newRowId, itemIsVisibleVar), "on");
                     attrHandler.addUpdate(newRepeater.getFieldName(newRowId, itemCountVar), 1);
                     attrHandler.addUpdate(newRepeater.getFieldName(newRowId, getGearVariable("ItemSubGroup")), item != undefined && item.group === "Apparel" ? (item.category || "") : "");
+                    // This row never existed in storage (the item was auto-equipped
+                    // straight from the catalog, so performAddSelectedInspectElementItem's
+                    // full item write - WAPI-Database.js's ItemDataAttributeHandler,
+                    // "Gear" prefix - never ran for it) - without this, the row above
+                    // only ever gets name/visibility/count/subgroup, leaving bulk/cost/
+                    // traits/flavor text blank once it's back in storage. Mirrors
+                    // ItemInspectionPopup.performAddSelectedInspectElementItem
+                    // (Worker-InspectPopup.js) exactly, including the Show/Hide
+                    // Effects button's own has-a-technique flag (piggybacked onto
+                    // ItemName's max slot).
+                    if (item != undefined) {
+                        let itemDataAttributeHandler = new ItemDataAttributeHandler(attrHandler, "Gear");
+                        itemDataAttributeHandler.setRepeaterData(newRepeater, newRowId);
+                        itemDataAttributeHandler.setSharedItemInfo(item);
+
+                        let hasAssociatedTechnique = item.itemType == "UsableItem" &&
+                            (item.hasTechnique || (item.getCommonTechniques && item.getCommonTechniques().length > 0));
+                        attrHandler.addUpdate(newRepeater.getFieldName(newRowId, getGearVariable("ItemName", WuxDef._max)), hasAssociatedTechnique ? "on" : "0");
+                    }
                 }
                 attrHandler.addUpdate(WuxDef.GetVariable("Gear_EquipmentIsVisible"), "on");
             });

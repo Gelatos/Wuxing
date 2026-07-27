@@ -2346,7 +2346,7 @@ input[type=hidden].wuxEmoteDisplayStyleField-flag[value="Recast"] + .wuxEmoteDis
 .wuxEquipableCountCol
 {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     flex-shrink: 0;
     width: 44px;
@@ -2950,6 +2950,7 @@ button[type=roll].wuxFeatureHeaderNameButton span,
     max-width: 20px;
     text-align: center;
     margin-left: 5px;
+    margin-right: 4px;
 }
 
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderName {
@@ -7814,7 +7815,7 @@ input[type=hidden].wuxHiddenBlankField-flag:not([value=""]) + .wuxHiddenFlexFiel
     opacity: 0;
 }
 
-input[type=hidden].wuxHiddenSingleCount-flag[value="1"] + .wuxDescription
+input[type=hidden].wuxHiddenSingleCount-flag[value="1"] + .wuxFeatureHeaderNameCount
 {
     display: none;
 }

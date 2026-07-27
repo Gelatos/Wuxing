@@ -535,7 +535,10 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                 <input type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
                             </div>
                             <div class="wuxEquipableBody">
-                                ${buildOwnedItemCard(buttons)}
+                                ${buildOwnedItemCard()}
+                                <div class="wuxEquipableButtonRow">
+                                    ${buttons}
+                                </div>
                             </div>
                         </div>`);
 
@@ -607,7 +610,10 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                 <input type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
                             </div>
                             <div class="wuxEquipableBody">
-                                ${buildOwnedItemCard(buttons)}
+                                ${buildOwnedItemCard()}
+                                <div class="wuxEquipableButtonRow">
+                                    ${buttons}
+                                </div>
                             </div>
                         </div>`);
 
@@ -658,7 +664,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let buttons = `${WuxSheetMain.Button(buyDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
                         ${WuxSheetMain.Button(buyBulkDef.getAttribute(), `<span style="color:#5bc0de;">&#9670;</span> <span name="${buyBulkDef.getAttribute(WuxDef._info)}"></span>`, "wuxRepeatingTechActionButton")}
                         ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle("")}`, "wuxRepeatingTechActionButton")}
-                        <button class="wuxRepeatingTechActionButton" type="roll" value="${cookButtonValue}"><span style="color:#4caf50;">&#9874;</span> ${cookDef.getTitle("")}</button>`;
+                        <button class="wuxRepeatingTechActionButton" type="roll" value="${cookButtonValue}"><span style="color:#4caf50;">&#9874;</span> <span>${cookDef.getTitle("")}</span></button>`;
 
                     let rowContents = WuxSheetMain.MultiRow(`
                         <div class="wuxEquipableRow">
@@ -667,7 +673,10 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                 <input type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
                             </div>
                             <div class="wuxEquipableBody">
-                                ${buildOwnedItemCard(buttons)}
+                                ${buildOwnedItemCard()}
+                                <div class="wuxEquipableButtonRow">
+                                    ${buttons}
+                                </div>
                             </div>
                         </div>`);
 
@@ -846,7 +855,10 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                                 <input type="number" name="${getGearAttribute("ItemCount")}" value="1" min="0">
                             </div>
                             <div class="wuxEquipableBody">
-                                ${buildOwnedItemCard(buttons)}
+                                ${buildOwnedItemCard()}
+                                <div class="wuxEquipableButtonRow">
+                                    ${buttons}
+                                </div>
                             </div>
                         </div>`);
 
@@ -862,10 +874,8 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
                     let rowContents = WuxSheetMain.MultiRow(`
                     <div class="wuxEquipableRow">
-                        <input type="hidden" class="wuxHiddenSingleCount-flag" name="${getGearAttribute("ItemCount")}" value="0">
-                        <span class="wuxDescription" name="${getGearAttribute("ItemCount")}" value="0"></span>
                         <div class="wuxEquipableBody">
-                                ${buildOwnedItemCard()}
+                                ${buildOwnedItemCard(getGearAttribute("ItemCount"))}
                             <div class="wuxEquipableButtonRow">
                                 ${buttons}
                             </div>
@@ -904,8 +914,14 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                 // Popup's item catalog uses (ItemRepeaterDisplayBuilder,
                 // WuxGS-FeatureDisplayBuilder.js), but baseDefinition "Gear" (these
                 // repeaters' own established item-field prefix) instead of "Action".
-                buildOwnedItemCard = function () {
+                // countAttribute (optional): folds a quantity prefix into the item's
+                // own name (equippedEquipment only - the stored-item repeaters already
+                // show their own count via a separate, editable input column).
+                buildOwnedItemCard = function (countAttribute) {
                     let itemDisplayBuilder = new ItemRepeaterDisplayBuilder(WuxDef.Get("Gear"));
+                    if (countAttribute) {
+                        itemDisplayBuilder.setCountAttribute(countAttribute);
+                    }
                     return `<div class="wuxFeature">
                         ${itemDisplayBuilder.printHeaderBlock()}
                         ${itemDisplayBuilder.printInfoBlock()}
@@ -1435,17 +1451,24 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let hasTechniqueField = WuxDef.Get(itemBaseDefName ?? "Action").getAttribute(`-${WuxDef.GetVariable("ItemName", WuxDef._max)}`);
 
                     // Divider between the item's own info and its associated technique -
-                    // part of the same hasTechniqueField gate as the rest of this section,
-                    // so it never shows for an item with no technique.
+                    // part of techniqueContent (not a separate always-visible element)
+                    // so that in lazy/button mode (showEager falsy - every Gear tab
+                    // repeater: stored equipment/gear/consumables/food, plus equipped
+                    // items) it only appears once Show Effects is actually toggled on,
+                    // inside that same hidden div, rather than sitting above the button
+                    // regardless of whether the technique is shown. Eager mode (the item
+                    // catalog) shows it immediately either way, since hasTechniqueField
+                    // already gates techniqueContent as a whole there.
                     let divider = `<div class="wuxItemTechniqueDivider">This item grants the following technique</div>`;
 
                     let techniqueContent = `<div class="wuxFeatureInfoDisplayBlock">
+                        ${divider}
                         ${techniqueDisplayBuilder.printHeaderBlock()}
                         ${techniqueDisplayBuilder.printInfoBlock()}
                     </div>`;
 
                     if (showEager) {
-                        return WuxSheetMain.HiddenField(hasTechniqueField, divider + techniqueContent);
+                        return WuxSheetMain.HiddenField(hasTechniqueField, techniqueContent);
                     }
 
                     let showEffectsAttr = techniqueDisplayBuilder.getActionTypeAttribute("TechShowEffects");
@@ -1454,8 +1477,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         WuxSheetMain.Button(showEffectsAttr, "&#9662; Show Effects", "wuxShowEffectsButton"));
 
                     return WuxSheetMain.HiddenField(hasTechniqueField,
-                        `${divider}
-                        <div class="wuxCatalogSelectSection">${toggleButton}</div>
+                        `<div class="wuxCatalogSelectSection">${toggleButton}</div>
                         ${WuxSheetMain.HiddenField(showEffectsAttr, techniqueContent)}`);
                 },
 
