@@ -293,7 +293,7 @@ class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
     printKnowledges() {
         const loreRepeaterIds = [
             "RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
-            "RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+            "RepeaterGeography", "RepeaterHistory", "RepeaterCulture"
         ];
         let loreCategoryDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "LoreCategory"));
         let recallDef = WuxDef.Get("Recall");

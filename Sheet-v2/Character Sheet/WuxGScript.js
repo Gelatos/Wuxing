@@ -13516,6 +13516,8 @@ var TrainingBackend = TrainingBackend || (function () {
             output += listenerUpdateKnowledgeBuildPoints();
             output += listenerRemoveLoreSpecialization();
             output += listenerUpdateLoreDescription();
+            output += listenerAddLoreSpecialization();
+            output += listenerDeleteLoreSpecialization();
             return output;
 
         },
@@ -13564,7 +13566,7 @@ var TrainingBackend = TrainingBackend || (function () {
         listenerUpdateKnowledgeBuildPoints = function () {
             let loreRepeaterIds = [
                 "RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
-                "RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+                "RepeaterGeography", "RepeaterHistory", "RepeaterCulture"
             ];
             let groupVariableNames = WuxDef.GetGroupVariables(new DatabaseFilterData("group", "Language"), WuxDef._rank);
             groupVariableNames = groupVariableNames.concat(WuxDef.GetGroupVariables(new DatabaseFilterData("group", "LoreCategory"), WuxDef._rank));
@@ -13579,7 +13581,7 @@ var TrainingBackend = TrainingBackend || (function () {
         listenerRemoveLoreSpecialization = function () {
             const loreRepeaterIds = [
                 "RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
-                "RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+                "RepeaterGeography", "RepeaterHistory", "RepeaterCulture"
             ];
             let repeaterVarNames = loreRepeaterIds.map(id => WuxDef.GetVariable(id));
             let output = `WuxWorkerKnowledges.UpdateBuildPoints(eventinfo)`;
@@ -13589,7 +13591,7 @@ var TrainingBackend = TrainingBackend || (function () {
         listenerUpdateLoreDescription = function () {
             const loreRepeaterIds = [
                 "RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
-                "RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+                "RepeaterGeography", "RepeaterHistory", "RepeaterCulture"
             ];
             let groupVariableNames = [];
             for (let i = 0; i < loreRepeaterIds.length; i++) {
@@ -13597,6 +13599,37 @@ var TrainingBackend = TrainingBackend || (function () {
             }
             let output = `WuxWorkerKnowledges.SetLoreDescription(eventinfo)`;
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+
+        listenerAddLoreSpecialization = function () {
+            const loreRepeaterIds = [
+                "RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
+                "RepeaterGeography", "RepeaterHistory", "RepeaterCulture"
+            ];
+            let addSpecializationDef = WuxDef.Get("Title_AddSpecialization");
+            let output = "";
+            for (let i = 0; i < loreRepeaterIds.length; i++) {
+                let groupName = loreRepeaterIds[i].replace("Repeater", "");
+                output += WuxSheetBackend.OnChange(
+                    [addSpecializationDef.getVariable(groupName)],
+                    `WuxWorkerKnowledges.AddLoreSpecialization(eventinfo, "${loreRepeaterIds[i]}")`, true);
+            }
+            return output;
+        },
+
+        listenerDeleteLoreSpecialization = function () {
+            const loreRepeaterIds = [
+                "RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
+                "RepeaterGeography", "RepeaterHistory", "RepeaterCulture"
+            ];
+            let deleteDef = WuxDef.Get("Delete");
+            let output = "";
+            for (let i = 0; i < loreRepeaterIds.length; i++) {
+                output += WuxSheetBackend.OnChange(
+                    [`${WuxDef.GetVariable(loreRepeaterIds[i])}:${deleteDef.getVariable()}`],
+                    `WuxWorkerKnowledges.DeleteLoreSpecialization(eventinfo, "${loreRepeaterIds[i]}")`, true);
+            }
+            return output;
         }
     return {
         Print: print
@@ -15804,16 +15837,26 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             repeaterContents += `<span class="wuxLoreDescriptionArea" name="${WuxDef.GetAttribute("Lore_Description")}"></span>`;
                             repeaterContents += WuxSheetMain.Textarea(
                                 WuxDef.GetAttribute("Lore_Description"), "wuxInput wuxHeight30 wuxLoreDescriptionArea", WuxDef.GetTitle("Lore_Description"));
+
+                            let deleteDef = WuxDef.Get("Delete");
+                            repeaterContents += `<div class="wuxEquipableButtonRow">
+                                ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                            </div>`;
                             repeaterContents += WuxSheetMain.Row("&nbsp;");
 
                             let specializedLoreDef = WuxDef.Get("Title_SpecializedLore");
+                            let addSpecializationDef = WuxDef.Get("Title_AddSpecialization");
+                            let addButton = WuxSheetMain.Button(addSpecializationDef.getAttribute(groupName),
+                                `<span style="color:#4CAF50;">&#43;</span> ${addSpecializationDef.getTitle()}`, "wuxRepeatingTechActionButton");
+
                             return `<div class="wuxMarginLeft50">
                                 ${WuxSheetMain.Header2(specializedLoreDef.getTitle(groupName))}
-                                <div>
+                                <div class="wuxNoRepControl">
                                     <fieldset class="${WuxDef.GetVariable("Repeater" + groupName)}">
                                         ${repeaterContents}
                                     </fieldset>
                                 </div>
+                                <div>${addButton}</div>
                             </div>`;
                         },
 
@@ -17226,7 +17269,7 @@ class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
     printKnowledges() {
         const loreRepeaterIds = [
             "RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
-            "RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+            "RepeaterGeography", "RepeaterHistory", "RepeaterCulture"
         ];
         let loreCategoryDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "LoreCategory"));
         let recallDef = WuxDef.Get("Recall");

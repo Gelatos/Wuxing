@@ -1075,16 +1075,26 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             repeaterContents += `<span class="wuxLoreDescriptionArea" name="${WuxDef.GetAttribute("Lore_Description")}"></span>`;
                             repeaterContents += WuxSheetMain.Textarea(
                                 WuxDef.GetAttribute("Lore_Description"), "wuxInput wuxHeight30 wuxLoreDescriptionArea", WuxDef.GetTitle("Lore_Description"));
+
+                            let deleteDef = WuxDef.Get("Delete");
+                            repeaterContents += `<div class="wuxEquipableButtonRow">
+                                ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                            </div>`;
                             repeaterContents += WuxSheetMain.Row("&nbsp;");
 
                             let specializedLoreDef = WuxDef.Get("Title_SpecializedLore");
+                            let addSpecializationDef = WuxDef.Get("Title_AddSpecialization");
+                            let addButton = WuxSheetMain.Button(addSpecializationDef.getAttribute(groupName),
+                                `<span style="color:#4CAF50;">&#43;</span> ${addSpecializationDef.getTitle()}`, "wuxRepeatingTechActionButton");
+
                             return `<div class="wuxMarginLeft50">
                                 ${WuxSheetMain.Header2(specializedLoreDef.getTitle(groupName))}
-                                <div>
+                                <div class="wuxNoRepControl">
                                     <fieldset class="${WuxDef.GetVariable("Repeater" + groupName)}">
                                         ${repeaterContents}
                                     </fieldset>
                                 </div>
+                                <div>${addButton}</div>
                             </div>`;
                         },
 

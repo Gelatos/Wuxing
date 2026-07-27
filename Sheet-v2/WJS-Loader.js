@@ -102,7 +102,7 @@ var upgrade_to_2_0_0 = function (currentVersion) {
 	const loreNameVar = WuxDef.GetVariable("Lore_Name");
 	const loreRepeaterIds = [
 		"RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
-		"RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+		"RepeaterGeography", "RepeaterHistory", "RepeaterCulture"
 	];
 	const loreCategoryDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "LoreCategory"));
 

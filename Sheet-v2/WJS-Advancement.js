@@ -988,7 +988,7 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 
 	const loreRepeaterIds = [
 		"RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
-		"RepeaterGeography", "RepeaterHistory", "RepeaterCulture", "RepeaterReligion"
+		"RepeaterGeography", "RepeaterHistory", "RepeaterCulture"
 	];
 
 	const loreTierVar = WuxDef.GetVariable("Lore_Tier");
@@ -1165,6 +1165,27 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 			});
 		},
 
+		addLoreSpecialization = function (eventinfo, repeaterId) {
+			Debug.Log(`Adding Lore Specialization to ${repeaterId}`);
+			let attributeHandler = new WorkerAttributeHandler();
+			let repeater = new WorkerRepeatingSectionHandler(repeaterId);
+			let newId = repeater.generateRowId();
+			attributeHandler.addUpdate(repeater.getFieldName(newId, loreTierVar), "0");
+			attributeHandler.run();
+		},
+
+		deleteLoreSpecialization = function (eventinfo, repeaterId) {
+			Debug.Log(`Deleting Lore Specialization from ${repeaterId}`);
+			let repeater = new WorkerRepeatingSectionHandler(repeaterId);
+			let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+			repeater.removeId(selectedId);
+
+			// removeId() calls Roll20's native row removal directly (not through an
+			// attributeHandler run cycle), so explicitly recompute build points here
+			// rather than relying solely on the separate "remove" event listener.
+			updateBuildPoints(eventinfo);
+		},
+
 		setLoreDescription = function (eventinfo) {
 			let subType = eventinfo.newValue;
 			let descAttr = eventinfo.sourceAttribute.replace(loreSubTypeVar, WuxDef.GetVariable("Lore_Description"));
@@ -1191,6 +1212,8 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 		UpdateBuildPoints: updateBuildPoints,
 		RefreshStats: refreshStats,
 		UpdateStats: updateStats,
-		SetLoreDescription: setLoreDescription
+		SetLoreDescription: setLoreDescription,
+		AddLoreSpecialization: addLoreSpecialization,
+		DeleteLoreSpecialization: deleteLoreSpecialization
 	};
 }());
