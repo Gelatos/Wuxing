@@ -2774,7 +2774,7 @@ class TechniqueDisplayData {
         }
         if (technique.endEffectConditionName != "") {
             let def = WuxDef.Get(`Title_${technique.endEffectConditionName}`);
-            techDisplayData.endEffectDesc = def.getDescriptions().join("") + technique.endEffectConditionEffect;
+            techDisplayData.endEffectDesc = def.descriptions.join("") + technique.endEffectConditionEffect;
         }
         if (technique.willBreakEffect != undefined) {
             let checkDef = WuxDef.Get("WillBreak");

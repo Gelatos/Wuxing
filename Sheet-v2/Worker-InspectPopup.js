@@ -3055,14 +3055,22 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         // ItemInspectPopupAttributeHandler.writeRemainingQueue. No canSelectForAdd/
         // Popup_InspectShowAdd gating here - the item catalog has no Select button
         // yet (selection/adding is a later pass, same scoping as when the catalog
-        // display itself was first built).
+        // display itself was first built). Popup_InspectSelectType (read below)
+        // picks the right ItemInspectPopupAttributeHandler subclass for whichever
+        // popup is actually open - every one of them (Item/Consumables/Gear/Goods/
+        // GoodsForGear/Foods/Ings) shares this same "ItemPopupValues" repeater and
+        // Load More button, but only the correct subclass's getCatalogItem
+        // resolves goods-type rows through WuxGoods instead of WuxItems - always
+        // constructing the base class here (as this used to) meant Load More on
+        // any of those popups showed "not found" placeholders for goods rows.
         loadMoreCatalogItems = function () {
             let attributeHandler = new WorkerAttributeHandler();
             attributeHandler.addRepeatingSection("ItemPopupValues");
 
             let queueField = WuxDef.GetVariable("Popup_LoadMore", "1" + WuxDef._max);
+            let selectTypeVariable = WuxDef.GetVariable("Popup_InspectSelectType");
             attributeHandler.addMod([
-                queueField,
+                queueField, selectTypeVariable,
                 WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"),
                 WuxDef.GetVariable("Ancestry"), WuxDef.GetVariable("Forme_ShowFromNonElement")
             ]);
@@ -3074,7 +3082,29 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                     if (Array.isArray(parsed)) queuedItems = parsed;
                 } catch (e) { /* not JSON (e.g. "0") - nothing queued */ }
 
-                let inspectPopupAttrHandler = new ItemInspectPopupAttributeHandler(attrHandler);
+                let inspectPopupAttrHandler;
+                switch (attrHandler.parseString(selectTypeVariable)) {
+                    case "Popup_ConsumablesInspectionName":
+                        inspectPopupAttrHandler = new ConsumablesInspectPopupAttributeHandler(attrHandler);
+                        break;
+                    case "Popup_GearInspectionName":
+                        inspectPopupAttrHandler = new GearInspectPopupAttributeHandler(attrHandler);
+                        break;
+                    case "Popup_GoodsInspectionName":
+                        inspectPopupAttrHandler = new GoodsInspectPopupAttributeHandler(attrHandler);
+                        break;
+                    case "Popup_GoodsForGearInspectionName":
+                        inspectPopupAttrHandler = new GoodsForGearInspectPopupAttributeHandler(attrHandler);
+                        break;
+                    case "Popup_FoodsInspectionName":
+                        inspectPopupAttrHandler = new FoodsInspectPopupAttributeHandler(attrHandler);
+                        break;
+                    case "Popup_IngsInspectionName":
+                        inspectPopupAttrHandler = new IngsInspectPopupAttributeHandler(attrHandler);
+                        break;
+                    default:
+                        inspectPopupAttrHandler = new ItemInspectPopupAttributeHandler(attrHandler);
+                }
                 let showElementRestricted = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement")) != "0";
                 inspectPopupAttrHandler.catalogUserAffinities = showElementRestricted ? undefined : getUserAffinities(attrHandler);
 

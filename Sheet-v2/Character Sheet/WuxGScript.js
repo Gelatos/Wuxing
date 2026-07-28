@@ -2774,7 +2774,7 @@ class TechniqueDisplayData {
         }
         if (technique.endEffectConditionName != "") {
             let def = WuxDef.Get(`Title_${technique.endEffectConditionName}`);
-            techDisplayData.endEffectDesc = def.getDescriptions().join("") + technique.endEffectConditionEffect;
+            techDisplayData.endEffectDesc = def.descriptions.join("") + technique.endEffectConditionEffect;
         }
         if (technique.willBreakEffect != undefined) {
             let checkDef = WuxDef.Get("WillBreak");
@@ -12891,10 +12891,16 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     // above/back to 0.
                     let selectedFlag = `<input type="hidden" class="wuxCatalogCard-selected-flag" name="${WuxDef.GetAttribute("Popup_ItemSelectIsOn")}" value="0">`;
                     // Quantity stepper - a labeled, bordered number input flanked by
-                    // -/+ buttons (piggybacked onto Popup_ItemSelectCount's own max slot
-                    // and "2" suffix, both otherwise unused for this field - see
-                    // adjustItemSelectedQuantity, Worker-InspectPopup.js) so it reads as
-                    // an editable control instead of plain text. The cost badge reuses
+                    // -/+ buttons (piggybacked onto Popup_ItemSelectCount's "3" and "2"
+                    // suffixes, both otherwise unused for this field - see
+                    // adjustItemSelectedQuantity, Worker-InspectPopup.js). Deliberately
+                    // NOT the field's own max slot - that's Roll20's native max-value
+                    // slot for this same attribute, and piggybacking it while the base
+                    // slot is a live, user-typed number input caused typed values to
+                    // come back off by one (Roll20 appears to treat any attribute with
+                    // an active max slot as bar-like). Plain numeric suffixes have no
+                    // such native meaning. So it reads as an editable control instead
+                    // of plain text. The cost badge reuses
                     // .wuxFeatureHeaderDisplayInfoCoin - the exact same styling as this
                     // item's own value badge above - right-aligned opposite the
                     // stepper. Its value (this item's cost at the current quantity) is
@@ -12907,7 +12913,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         <div class="wuxQuantityStepper">
                             <span class="wuxQuantityLabel">Qty</span>
                             <div class="wuxQuantityControls">
-                                ${WuxSheetMain.Button(WuxDef.GetAttribute("Popup_ItemSelectCount", WuxDef._max), "&minus;", "wuxQuantityStepButton")}
+                                ${WuxSheetMain.Button(WuxDef.GetAttribute("Popup_ItemSelectCount", "3"), "&minus;", "wuxQuantityStepButton")}
                                 <input type="number" min="0" step="1" class="wuxQuantityInput" name="${WuxDef.GetAttribute("Popup_ItemSelectCount")}" value="0">
                                 ${WuxSheetMain.Button(WuxDef.GetAttribute("Popup_ItemSelectCount", "2"), "&plus;", "wuxQuantityStepButton")}
                             </div>
@@ -14533,11 +14539,14 @@ var PopupBuilder = PopupBuilder || (function () {
         },
         // Quantity stepper's -/+ buttons (wuxQuantityStepButton,
         // printCatalogItemFullDisplay, WuxGS-Base.js) - piggybacked onto
-        // Popup_ItemSelectCount's own max slot (decrement) and "2" suffix
+        // Popup_ItemSelectCount's "3" suffix (decrement) and "2" suffix
         // (increment), matching adjustItemSelectedQuantity's own convention.
+        // Not the max slot - that's Roll20's own native max-value field for
+        // this attribute, and piggybacking it while the base slot is a live
+        // number input caused typed values to come back off by one.
         listenerAdjustItemSelectedQuantity = function () {
             let repeaterVar = WuxDef.GetVariable("ItemPopupValues");
-            let decrementVar = WuxDef.GetVariable("Popup_ItemSelectCount", WuxDef._max);
+            let decrementVar = WuxDef.GetVariable("Popup_ItemSelectCount", "3");
             let incrementVar = WuxDef.GetVariable("Popup_ItemSelectCount", "2");
 
             return `${WuxSheetBackend.OnChange([`${repeaterVar}:${decrementVar}`],

@@ -1136,11 +1136,14 @@ var PopupBuilder = PopupBuilder || (function () {
         },
         // Quantity stepper's -/+ buttons (wuxQuantityStepButton,
         // printCatalogItemFullDisplay, WuxGS-Base.js) - piggybacked onto
-        // Popup_ItemSelectCount's own max slot (decrement) and "2" suffix
+        // Popup_ItemSelectCount's "3" suffix (decrement) and "2" suffix
         // (increment), matching adjustItemSelectedQuantity's own convention.
+        // Not the max slot - that's Roll20's own native max-value field for
+        // this attribute, and piggybacking it while the base slot is a live
+        // number input caused typed values to come back off by one.
         listenerAdjustItemSelectedQuantity = function () {
             let repeaterVar = WuxDef.GetVariable("ItemPopupValues");
-            let decrementVar = WuxDef.GetVariable("Popup_ItemSelectCount", WuxDef._max);
+            let decrementVar = WuxDef.GetVariable("Popup_ItemSelectCount", "3");
             let incrementVar = WuxDef.GetVariable("Popup_ItemSelectCount", "2");
 
             return `${WuxSheetBackend.OnChange([`${repeaterVar}:${decrementVar}`],
