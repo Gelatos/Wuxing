@@ -571,32 +571,63 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             ];
                             let filterCheckboxes = `${WuxSheetMain.Header2(WuxDef.GetTitle("Title_StyleFilterOption"))}
                                 ${WuxSheetMain.MultiRowGroup(filterCheckboxItems, WuxSheetMain.Table.FlexTable, 1)}`;
-                            let perkFilterDefs = WuxDef.Filter([new DatabaseFilterData("group", "PerkAutoFilter")]);
-                            let perkFilterButtons = perkFilterDefs.map(def =>
-                                WuxSheetMain.Table.FlexTableGroup(
-                                    WuxSheetMain.Button(def.getAttribute(), def.getTitle(), "wuxWidth160")));
+                            let seeTechniquesDef = WuxDef.Get("Forme_SeeTechniques");
+                            let seePerksButton = WuxSheetMain.Table.FlexTableGroup(
+                                WuxSheetMain.Button(seeTechniquesDef.getAttribute(), seeTechniquesDef.getTitle(), "wuxWidth160", "Perks"));
                             let filterPanel = WuxSheetMain.Table.FlexTableGroup(
-                                filterCheckboxes + 
-                                WuxSheetMain.Header2(WuxDef.GetTitle("Title_PerkStyleFilter")) + 
-                                WuxSheetMain.MultiRowGroup(perkFilterButtons, WuxSheetMain.Table.FlexTable, 1),
+                                filterCheckboxes +
+                                WuxSheetMain.Header2(WuxDef.GetTitle("Title_PerkStyleFilter")) +
+                                seePerksButton,
                                 " wuxMinWidth350 wuxFlexTableItemGroup2");
 
-                            let nameDef = WuxDef.Get("Forme_Name");
-                            let inspectDef = WuxDef.Get("Forme_Inspect");
+                            // Full technique card per learned perk technique, mirroring
+                            // the Learned Styles list (addStyleListRepeaterContents,
+                            // WuxGS-Base.js) exactly: header/trigger/traits/flavor text
+                            // shown eagerly, Core/OnEnter/Check/End/WillBreak/Enhancement
+                            // effects hidden behind a Show/Hide Effects toggle, no
+                            // separate Inspect button (the technique data is already
+                            // shown inline) - Delete is the only action left.
+                            // TechniqueDataAttributeHandler.setTechniqueInfo populates
+                            // every field read here (PerkTechniqueInspectionPopup.performAddItem,
+                            // Worker-InspectPopup.js, via WuxWorkerStyles.PopulateStyleTechniqueDisplay)
+                            // - Roll20 auto-scopes them to "RepeatingPerks" from the
+                            // surrounding fieldset, same as Styles' own fields do for
+                            // "RepeatingStyles".
                             let deleteDef = WuxDef.Get("Forme_Delete");
-                            let rowContents = `<div class="wuxMultiRow" style="min-width: 300px;">
-                                <div class="wuxEquipableRow">
-                                    <div class="wuxEquipableBody">
-                                        <div class="wuxEquipableName"><span class="wuxDescription" name="${nameDef.getAttribute()}"></span></div>
-                                        <div class="wuxEquipableButtonRow">
-                                            ${WuxSheetMain.Button(inspectDef.getAttribute(), `&#9673; ${inspectDef.getTitle()}`, "wuxRepeatingTechActionButton")}
-                                            ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
-                                        </div>
-                                    </div>
+                            let techniqueDisplayBuilder = new TechniqueRepeaterDisplayBuilder(WuxDef.Get("Action"));
+                            let showEffectsAttr = techniqueDisplayBuilder.getActionTypeAttribute("TechShowEffects");
+
+                            let effectsContent = `${techniqueDisplayBuilder.printCoreEffects()}
+                                ${techniqueDisplayBuilder.printOnEnter()}
+                                ${techniqueDisplayBuilder.printCheckEffects()}
+                                ${techniqueDisplayBuilder.printEndEffects()}
+                                ${techniqueDisplayBuilder.printWillBreakEffects()}
+                                ${techniqueDisplayBuilder.printEnhancementEffects()}`;
+
+                            let toggleButton = WuxSheetMain.HiddenFieldToggle(showEffectsAttr,
+                                WuxSheetMain.Button(showEffectsAttr, "&#9656; Hide Effects", "wuxShowEffectsButton"),
+                                WuxSheetMain.Button(showEffectsAttr, "&#9662; Show Effects", "wuxShowEffectsButton"));
+
+                            let deleteButton = WuxSheetMain.Button(deleteDef.getAttribute(),
+                                `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxCatalogSelectButton");
+
+                            let rowContents = `<div class="wuxFeature">
+                                ${techniqueDisplayBuilder.printHeaderBlock()}
+                                <div class="wuxFeatureInfoDisplayBlock">
+                                    ${techniqueDisplayBuilder.printTrigger()}
+                                    ${techniqueDisplayBuilder.printTraits()}
+                                    ${techniqueDisplayBuilder.printFlavorText()}
+                                </div>
+                                <div class="wuxCatalogSelectSection">
+                                    ${toggleButton}
+                                </div>
+                                ${WuxSheetMain.HiddenField(showEffectsAttr, `<div class="wuxFeatureInfoDisplayBlock">${effectsContent}</div>`)}
+                                <div class="wuxCatalogSelectSection">
+                                    ${deleteButton}
                                 </div>
                             </div>`;
                             let perkIsVisibleAttr = WuxDef.GetAttribute("Action_PerkIsVisible");
-                            let repeaterContent = `<div class="wuxNoRepControl wuxRepeatingFlexSection">
+                            let repeaterContent = `<div class="wuxNoRepControl wuxRepeatingFlexSection wuxFormeTechRepeater">
                                         <fieldset class="${repeatingDef.getVariable()}">
                                             ${rowContents}
                                         </fieldset>

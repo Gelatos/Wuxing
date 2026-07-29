@@ -1784,10 +1784,26 @@ var DisplayPopups = DisplayPopups || (function () {
                     // Only the style/technique catalog spends style points - the item
                     // catalog also opens with Popup_InspectShowAdd "on" (its own
                     // Add Equipment/Add Consumable addType), so gating on that flag alone
-                    // isn't enough. Gated on Popup_InspectSelectType's own max slot instead
-                    // (set by setPopupType, Worker-InspectPopup.js) via the same
-                    // WuxSheetMain.HiddenField toggle Jin/Cost above already uses.
-                    let stylePointsSection = WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectSelectType", WuxDef._max), stylePoints);
+                    // isn't enough. Gated on Popup_InspectSelectType's own suffix "4"
+                    // instead (set by setPopupType, Worker-InspectPopup.js) - the max
+                    // slot now also covers the Perk Technique catalog (both render
+                    // TechPopupValues cards), so Style Points needs its own dedicated
+                    // flag to stay limited to the actual style catalog.
+                    let stylePointsSection = WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectSelectType", "4"), stylePoints);
+
+                    // Perk Points - same pattern as Style Points above, but for the
+                    // Perk Technique catalog (performAllPerkTechniqueInspection,
+                    // Worker-InspectPopup.js), which spends Perk Points instead of
+                    // Style Points. That popup renders the same TechPopupValues cards
+                    // as the style catalog (suffix "_max" on Popup_InspectSelectType
+                    // covers both), so it needs its own dedicated flag - suffix "3",
+                    // set "on" only for "Popup_PerkInspectionName" - to show Perk
+                    // Points without also showing it for the style catalog.
+                    let perkPointsDef = WuxDef.Get("Perk");
+                    let perkPoints = WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectShowAdd"),
+                        WuxSheetMain.SlotDisplay("Perk Pts", perkPointsDef.getAttribute(WuxDef._error),
+                            perkPointsDef.getAttribute(), perkPointsDef.getAttribute(WuxDef._max)));
+                    let perkPointsSection = WuxSheetMain.HiddenField(WuxDef.GetAttribute("Popup_InspectSelectType", "3"), perkPoints);
 
                     // wuxPopupWealthSection (not an inline flex style) - .wuxHiddenField's
                     // shared CSS sets "display: inherit" when shown, so nested inside a
@@ -1796,7 +1812,7 @@ var DisplayPopups = DisplayPopups || (function () {
                     // The dedicated class forces .wuxHiddenField back to block here
                     // (WCSS-Footer.css) without touching that generic rule everywhere
                     // else it's used.
-                    let wealthSection = `<div class="wuxPopupWealthSection">${jinAndCost}${stylePointsSection}</div>`;
+                    let wealthSection = `<div class="wuxPopupWealthSection">${jinAndCost}${stylePointsSection}${perkPointsSection}</div>`;
 
                     // Base add-type slot's button is only clickable once at least one
                     // item is selected (Popup_InspectSelectedList, toggled per row by

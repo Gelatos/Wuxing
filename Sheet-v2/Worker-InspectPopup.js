@@ -239,6 +239,8 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), "");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType", WuxDef._max), "0");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType", "2"), "0");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType", "3"), "0");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType", "4"), "0");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectId"), "");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), "");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
@@ -249,26 +251,44 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
     setPopupType(popupType) {
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType"), popupType);
 
-        // Boolean piggybacks on this same field (max slot = technique/style catalog,
-        // suffix "2" = item catalog) so the markup (printAddButton/InspectionPopup.print,
-        // WuxGS-Base.js) can gate the Style Points widget and the tech/item catalog
-        // switch with the plain, already-proven WuxSheetMain.HiddenField toggle
-        // (every other element in this popup's header already uses it) instead of a
-        // multi-value CSS attribute-selector match against the raw title string.
-        // repeatingCatalogItemSection (WuxGS-Base.js) is the ONLY place ItemPopupValues
-        // ever renders, and every popup type except the technique/style catalog shares
-        // that same repeater (ItemInspectPopupAttributeHandler and its subclasses -
-        // Consumables/Gear/Goods/GoodsForGear/Foods/Ings - plus Perk, which uses the
-        // base InspectPopupAttributeHandler's default "ItemPopupValues" too) - an exact
-        // match against "Popup_ItemInspectionName" only left every one of those other
-        // types with suffix "2" stuck at "0", hiding the whole item section and leaving
-        // their popups blank. Suffix "2" is "on" for anything that isn't the technique
-        // catalog instead, so it stays correct as new popup types are added.
+        // Boolean piggybacks on this same field (max slot = TechPopupValues card
+        // section, suffix "2" = ItemPopupValues card section) so the markup
+        // (printAddButton/InspectionPopup.print, WuxGS-Base.js) can gate the tech/item
+        // catalog switch with the plain, already-proven WuxSheetMain.HiddenField
+        // toggle (every other element in this popup's header already uses it)
+        // instead of a multi-value CSS attribute-selector match against the raw
+        // title string. repeatingCatalogItemSection (WuxGS-Base.js) is the ONLY
+        // place ItemPopupValues ever renders, and every popup type except the
+        // technique/style catalog AND the Perk Technique catalog (which also
+        // renders TechPopupValues cards - PerkTechniqueInspectPopupAttributeHandler,
+        // this file) shares that same repeater (ItemInspectPopupAttributeHandler
+        // and its subclasses - Consumables/Gear/Goods/GoodsForGear/Foods/Ings) - an
+        // exact match against "Popup_ItemInspectionName" only left every one of
+        // those other types with suffix "2" stuck at "0", hiding the whole item
+        // section and leaving their popups blank. Suffix "2" is "on" for anything
+        // that isn't a TechPopupValues-based catalog instead, so it stays correct
+        // as new popup types are added.
         let isTechniqueCatalog = popupType === "Popup_TechniqueInspectionName";
+        let isPerkCatalog = popupType === "Popup_PerkInspectionName";
+        let usesTechCardSection = isTechniqueCatalog || isPerkCatalog;
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType", WuxDef._max),
-            isTechniqueCatalog ? "on" : "0");
+            usesTechCardSection ? "on" : "0");
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType", "2"),
-            isTechniqueCatalog ? "0" : "on");
+            usesTechCardSection ? "0" : "on");
+
+        // Suffix "3" singles out the Perk Technique popup specifically (not "is
+        // this the one exception among several shared types" like suffix "2"
+        // above), so printAddButton (WuxGS-Base.js) can show Perk Points there
+        // without also showing it for Goods/Gear/etc.
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType", "3"),
+            isPerkCatalog ? "on" : "0");
+
+        // Suffix "4" singles out the plain technique/style catalog specifically,
+        // now that suffix "_max" above also covers the Perk catalog - Style Points
+        // (printAddButton, WuxGS-Base.js) still needs to show only for the actual
+        // style-point-spending catalog, not the perk-point-spending one.
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectType", "4"),
+            isTechniqueCatalog ? "on" : "0");
     }
     setAddType(addTypes) {
         this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectShowAdd"), "0");
@@ -1071,81 +1091,272 @@ class InspectionPopup {
     performAddItem2(attrHandler, itemName) {}
 }
 class PerkTechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHandler {
+    // Own dedicated repeater ("TechPopupValues", not the shared "ItemPopupValues"
+    // every item-catalog type populates) - this used to default to "ItemPopupValues"
+    // via the base class, which left stale full item-card fields (ItemBulk,
+    // ItemBaseValue, Qty) written by a previous Consumables/Gear/etc browse
+    // session sitting untouched on reused rows, since this class's own row
+    // population never wrote or cleared those fields. Matches
+    // TechniqueInspectPopupAttributeHandler's own reasoning for the same switch.
     constructor(attributeHandler) {
-        super(attributeHandler);
+        super(attributeHandler, "TechPopupValues");
         this.titleDefinitionName = "Popup_PerkInspectionName";
+
+        // Catalog rows carry full technique data directly (baseDefinitionName
+        // "Action", matching the style catalog's own card display) - mirrors
+        // TechniqueInspectPopupAttributeHandler's catalogTechniqueAttributeHandler.
+        this.catalogTechniqueAttributeHandler = new TechniqueDataAttributeHandler(this.attrHandler, "Action");
+        this.catalogTechniqueAttributeHandler.setRepeaterData(this.repeater);
     }
 
     initializePopup() {
         super.initializePopup();
         this.itemDataAttributeHandler.clearItemInfo();
-        for (let i = 0; i <= 3; i++) {
-            this.hideTechnique(i);
-        }
+
+        // Same variant-filtering convention as TechniqueInspectPopupAttributeHandler -
+        // undefined means "don't filter" (Forme_ShowFromNonElement is "on").
+        let showElementRestricted = this.attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement")) != "0";
+        this.catalogUserAffinities = showElementRestricted ? undefined : getUserAffinities(this.attrHandler);
+
+        // Nothing is selected by default (see setSelectedItem below) - matches
+        // TechniqueInspectPopupAttributeHandler's own multi-select reset.
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectedList"), "0");
+
+        // Snapshot of the perk-points build-stats draft as it stands right now,
+        // before any selections in this popup session - toggleSelectedItem below
+        // builds its live points preview on top of THIS instead of attrBuildFinal,
+        // matching TechniqueInspectPopupAttributeHandler's exact reasoning (final
+        // is only updated by the Advancement tab's own commit flow and can be
+        // stale relative to other draft-only changes made elsewhere).
+        let worker = new WuxPerkWorkerBuild();
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectDraftSnapshot"),
+            this.attrHandler.parseString(worker.attrBuildDraft));
     }
 
-    setSelectedItemData(selectedItemName) {
-        let technique = WuxTechs.Get(selectedItemName);
-        if (technique == undefined) {
-            this.hideTechnique(0);
+    // Catalog cards already show every technique's full stats up front - nothing
+    // to populate on select, and iterateAndSetItems' "auto-select the first
+    // item" behavior becomes a no-op since it calls this same method - nothing
+    // is selected by default when the popup opens. Matches
+    // TechniqueInspectPopupAttributeHandler's identical override; real selection
+    // goes through toggleSelectedItem below instead (called from
+    // PerkTechniqueInspectionPopup.selectItem, which overrides the base class's
+    // own selectItem for the same reason).
+    setSelectedItem(selectedItemId, itemName) {}
+
+    // currentListRaw is the semicolon-delimited Popup_InspectSelectedList value
+    // as it stood before this click, and learnedPerkTechniqueNames the character's
+    // already-learned perk technique names (RepeatingPerks' own Forme_Name list) -
+    // both fetched by PerkTechniqueInspectionPopup.selectItem, mirroring
+    // TechniqueInspectPopupAttributeHandler.toggleSelectedItem exactly, but
+    // spending Perk Points (WuxPerkWorkerBuild) instead of Style Points.
+    toggleSelectedItem(selectedItemId, itemName, currentListRaw, learnedPerkTechniqueNames) {
+        let selectedNames = currentListRaw.split(";").map(s => s.trim()).filter(s => s !== "" && s !== "0");
+        let alreadySelected = selectedNames.includes(itemName);
+        if (alreadySelected) {
+            selectedNames = selectedNames.filter(name => name !== itemName);
+        } else {
+            selectedNames.push(itemName);
+        }
+
+        this.attrHandler.addUpdate(this.repeater.getFieldName(selectedItemId, WuxDef.GetVariable("Popup_ItemSelectIsOn")), alreadySelected ? "0" : "on");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectSelectedList"), selectedNames.length > 0 ? selectedNames.join(";") : "0");
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_InspectAddType"), selectedNames.length > 1 ? "Add Perk Techniques" : "Add Perk Technique");
+
+        // Live perk-points preview: recompute the draft from the snapshot taken
+        // when this popup opened (Popup_InspectDraftSnapshot, initializePopup
+        // above) plus every currently-selected, not-yet-learned perk technique,
+        // so the popup's Perk Points row (and the sidebar's own points widget,
+        // which reads the same attribute) reflects what confirming Add right now
+        // would actually cost. Recomputed fresh from the snapshot each time
+        // (never incrementally patching the existing draft) so repeated toggles
+        // can't double-count - this IS actually spending the points as a draft,
+        // not a read-only preview (PerkTechniqueInspectionPopup's close handling,
+        // WuxWorkerInspectPopup.Close, reverts it back to the snapshot if the
+        // popup exits without confirming).
+        let worker = new WuxPerkWorkerBuild();
+        worker.setBuildStats(WuxDef.GetVariable("Popup_InspectDraftSnapshot"), this.attrHandler);
+        selectedNames.forEach(name => {
+            if (learnedPerkTechniqueNames.has(name)) {
+                return;
+            }
+            let perk = WuxPerks.Get(name);
+            if (perk == undefined) {
+                return;
+            }
+            let perkAttr = perk.createDefinition(WuxDef.Get("Perk")).getVariable();
+            worker.updateBuildStats(this.attrHandler, perkAttr, perk.cost);
+        });
+        worker.updatePoints(this.attrHandler);
+    }
+
+    // Full technique card per row, mirroring TechniqueInspectPopupAttributeHandler's
+    // own setInventoryItemData - a divider row is marked via Popup_ItemSelectType
+    // == "0" with Popup_ItemSelectDisplay carrying the divider's label text.
+    setInventoryItemData(id, itemData) {
+        this.setInventoryItemVisibility(id, true);
+        this.catalogTechniqueAttributeHandler.setId(id);
+        this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "0");
+
+        let selectNameField = this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectName"));
+        if (itemData.isTitle) {
+            this.catalogTechniqueAttributeHandler.setHeaderInfo(itemData.display, itemData.display);
+            this.attrHandler.addUpdate(selectNameField, "");
             return;
         }
-        this.techniqueAttributeHandler.setBaseSuffix(0);
-        this.techniqueAttributeHandler.setTechniqueInfo(technique);
-        this.techniqueAttributeHandler.setVisibilityAttribute(true);
-        this.attrHandler.addRepeatingSectionRowUpdate(
-            this.techniqueAttributeHandler.repeater?.definitionId,
-            this.techniqueAttributeHandler.getVariable("TechHeader"),
-            getTechHeader(technique.affinity)
-        );
 
-        let techniqueVariants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
-        for (let i = 0; i < 3; i++) {
-            let index = parseInt(i) + 1;
-            if (techniqueVariants.length > i) {
-                this.techniqueAttributeHandler.setBaseSuffix(index);
-                this.techniqueAttributeHandler.setTechniqueInfo(techniqueVariants[i]);
-                this.techniqueAttributeHandler.setVisibilityAttribute(true);
-                this.attrHandler.addRepeatingSectionRowUpdate(
-                    this.techniqueAttributeHandler.repeater?.definitionId,
-                    this.techniqueAttributeHandler.getVariable("TechHeader"),
-                    getTechHeader(techniqueVariants[i].affinity)
-                );
-            } else {
-                this.hideTechnique(index);
-            }
+        let technique = WuxTechs.Get(itemData.name);
+        if (technique == undefined) {
+            this.catalogTechniqueAttributeHandler.clearTechniqueInfo();
+            this.catalogTechniqueAttributeHandler.setVisibilityAttribute(false);
+            this.attrHandler.addUpdate(selectNameField, "");
+            return;
+        }
+        this.catalogTechniqueAttributeHandler.setTechniqueCatalogInfo(technique,
+            {excludeCurrent: true, userAffinities: this.catalogUserAffinities},
+            this.canSelectForAdd);
+        this.attrHandler.addUpdate(selectNameField, itemData.name);
+    }
+
+    setInventoryItemVisibility(id, isVisible) {
+        super.setInventoryItemVisibility(id, isVisible);
+        this.catalogTechniqueAttributeHandler.setId(id);
+        this.catalogTechniqueAttributeHandler.setVisibilityAttribute(isVisible);
+        if (!isVisible) {
+            this.catalogTechniqueAttributeHandler.clearTechniqueInfo();
+            this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectName")), "");
+            this.attrHandler.addUpdate(this.repeater.getFieldName(id, WuxDef.GetVariable("Popup_ItemSelectIsOn")), "0");
         }
     }
 
-    onNoItems() {
-        super.onNoItems();
-        for (let i = 0; i <= 3; i++) {
-            this.hideTechnique(i);
-        }
-    }
+    // Catalog cards already show every technique's full stats up front - there's
+    // nothing left to populate on select (matches TechniqueInspectPopupAttributeHandler).
+    setSelectedItemData(selectedItemName) {}
 }
 
 class PerkTechniqueInspectionPopup extends InspectionPopup {
+    // Own dedicated repeater - selectItem/addItem/open (InspectionPopup) all key
+    // off this.inspectPopupInventoryId already, matching TechniqueInspectionPopup's
+    // own override for the same reason.
+    constructor(attributeHandler) {
+        super(attributeHandler);
+        this.inspectPopupInventoryId = "TechPopupValues";
+    }
+
     setup(attrHandler) {
         this.inspectPopupAttrHandler = new PerkTechniqueInspectPopupAttributeHandler(attrHandler);
     }
 
-    addItem() {
+    // Affinity/AdvancedAffinity/Ancestry/Forme_ShowFromNonElement are needed by
+    // PerkTechniqueInspectPopupAttributeHandler.initializePopup for variant
+    // filtering, and worker.attrBuildDraft for its points-draft snapshot -
+    // fetched here since this popup's own attributeHandler/callback cycle is a
+    // separate round-trip from performAllPerkTechniqueInspection's own (mirrors
+    // TechniqueInspectionPopup.open exactly).
+    open(inventoryTitle, inventoryItems, addType) {
         let worker = new WuxPerkWorkerBuild();
-        this.attributeHandler.addMod([worker.attrMax, worker.attrBuildDraft]);
-        this.attributeHandler.addRepeatingSection("RepeatingPerks");
-        super.addItem();
+        this.attributeHandler.addMod([
+            WuxDef.GetVariable("Affinity"),
+            WuxDef.GetVariable("AdvancedAffinity"),
+            WuxDef.GetVariable("Ancestry"),
+            WuxDef.GetVariable("Forme_ShowFromNonElement"),
+            worker.attrBuildDraft
+        ]);
+        super.open(inventoryTitle, inventoryItems, addType);
+    }
+
+    // Overrides the base class's single-select selectItem - this popup supports
+    // selecting multiple perk techniques at once (toggleSelectedItem,
+    // PerkTechniqueInspectPopupAttributeHandler), so the current selected-list
+    // value needs fetching here too (not just the clicked row's own name), plus
+    // enough perk-points build-stats data for toggleSelectedItem to update the
+    // live points preview. Mirrors TechniqueInspectionPopup.selectItem.
+    selectItem(selectedId) {
+        let inspectPopup = this;
+        this.attributeHandler.addRepeatingSection(this.inspectPopupInventoryId);
+        let repeater = this.attributeHandler.getRepeatingSection(this.inspectPopupInventoryId);
+        let inventoryItemNameVar = repeater.getFieldName(selectedId, WuxDef.GetVariable("Popup_ItemSelectName"));
+        let selectedListVar = WuxDef.GetVariable("Popup_InspectSelectedList");
+
+        let worker = new WuxPerkWorkerBuild();
+        let perkRepeaterId = "RepeatingPerks";
+        this.attributeHandler.addRepeatingSection(perkRepeaterId);
+        let formeNameVar = WuxDef.GetVariable("Forme_Name");
+        this.attributeHandler.getRepeatingSection(perkRepeaterId).addFieldNames([formeNameVar]);
+
+        this.attributeHandler.addMod([inventoryItemNameVar, selectedListVar, worker.attrMax, WuxDef.GetVariable("Popup_InspectDraftSnapshot")]);
+
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            inspectPopup.setup(attrHandler);
+            let perkRepeater = attrHandler.getRepeatingSection(perkRepeaterId);
+            let learnedPerkTechniqueNames = new Set(perkRepeater.ids.map(id =>
+                attrHandler.parseString(perkRepeater.getFieldName(id, formeNameVar))));
+            inspectPopup.inspectPopupAttrHandler.toggleSelectedItem(selectedId,
+                attrHandler.parseString(inventoryItemNameVar), attrHandler.parseString(selectedListVar), learnedPerkTechniqueNames);
+        });
+    }
+
+    // Overrides the base class's single-item addItem - processes every technique
+    // in Popup_InspectSelectedList instead of just Popup_InspectSelectId, and
+    // skips any perk technique already learned (RepeatingPerks' own Forme_Name
+    // list) rather than adding a duplicate entry. Mirrors TechniqueInspectionPopup.addItem.
+    addItem() {
+        let inspectPopup = this;
+        let worker = new WuxPerkWorkerBuild();
+        let perkRepeaterId = "RepeatingPerks";
+        this.attributeHandler.addRepeatingSection(perkRepeaterId);
+        let formeNameVar = WuxDef.GetVariable("Forme_Name");
+        this.attributeHandler.getRepeatingSection(perkRepeaterId).addFieldNames([formeNameVar]);
+        this.attributeHandler.addMod([
+            worker.attrMax, worker.attrBuildDraft, WuxDef.GetVariable("Popup_InspectSelectedList"),
+            // Needed so performAddItem can populate the new full-card display
+            // (WuxWorkerStyles.PopulateStyleTechniqueDisplay) with correctly
+            // filtered variant buttons, same as the Learned Styles list.
+            WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("Ancestry"),
+            WuxDef.GetVariable("Forme_ShowFromNonElement")
+        ]);
+
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            inspectPopup.setup(attrHandler);
+
+            let selectedListRaw = attrHandler.parseString(WuxDef.GetVariable("Popup_InspectSelectedList"));
+            let selectedNames = selectedListRaw.split(";").map(s => s.trim()).filter(s => s !== "" && s !== "0");
+
+            let perkRepeater = attrHandler.getRepeatingSection(perkRepeaterId);
+            let learnedPerkTechniqueNames = new Set(perkRepeater.ids.map(id =>
+                attrHandler.parseString(perkRepeater.getFieldName(id, formeNameVar))));
+
+            let showElementRestricted = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement")) != "0";
+            let advancedAffinities = attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")).split(";").map(s => s.trim()).filter(s => s !== "");
+            let userAffinities = showElementRestricted ? undefined : [
+                attrHandler.parseString(WuxDef.GetVariable("Affinity")),
+                ...advancedAffinities,
+                attrHandler.parseString(WuxDef.GetVariable("Ancestry"))
+            ];
+
+            selectedNames.forEach(itemName => {
+                if (learnedPerkTechniqueNames.has(itemName)) {
+                    Debug.Log(`Skipping ${itemName} - already learned`);
+                    return;
+                }
+                inspectPopup.performAddItem(attrHandler, itemName, userAffinities);
+                learnedPerkTechniqueNames.add(itemName);
+            });
+        });
         WuxWorkerActions.UpdateAllActionsFromMenu(this.attributeHandler);
     }
 
-    performAddItem(attrHandler, itemName) {
+    performAddItem(attrHandler, itemName, userAffinities) {
         Debug.Log(`Adding Perk Technique ${itemName}`);
         let technique = WuxTechs.Get(itemName);
         if (technique == undefined) return;
         let repeater = attrHandler.getRepeatingSection("RepeatingPerks");
-        attrHandler.addUpdate(
-            repeater.getFieldName(repeater.generateRowId(), WuxDef.GetVariable("Forme_Name")),
-            technique.name);
+        let newRowId = repeater.generateRowId();
+        attrHandler.addUpdate(repeater.getFieldName(newRowId, WuxDef.GetVariable("Forme_Name")), technique.name);
+
+        // Populates the row's full technique card (header/effects/variants) -
+        // same shared helper (and "Action"-prefixed fields) the Learned Styles
+        // list uses for its own newly-learned rows.
+        WuxWorkerStyles.PopulateStyleTechniqueDisplay(attrHandler, repeater, newRowId, technique.name, userAffinities);
 
         let perk = WuxPerks.Get(itemName);
         if (perk == undefined) return;
@@ -2645,41 +2856,52 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let selectType = attrHandler.parseString(selectTypeVariable);
 
-                // Only the technique/style catalog uses its own dedicated
-                // repeater (TechPopupValues, TechniqueInspectionPopup's
-                // constructor) instead of the shared ItemPopupValues every
-                // other popup type defaults to - picking the right subclass
-                // here (instead of always the base InspectionPopup) means
-                // close()'s row-trimming (InspectionPopup.close, above) trims
-                // whichever repeater this popup actually used, not always
-                // ItemPopupValues regardless of which popup was open.
+                // Only the technique/style catalog and the Perk Technique catalog
+                // use their own dedicated repeater (TechPopupValues,
+                // TechniqueInspectionPopup/PerkTechniqueInspectionPopup's own
+                // constructors) instead of the shared ItemPopupValues every other
+                // popup type defaults to - picking the right subclass here
+                // (instead of always the base InspectionPopup) means close()'s
+                // row-trimming (InspectionPopup.close, above) trims whichever
+                // repeater this popup actually used, not always ItemPopupValues
+                // regardless of which popup was open.
                 let attributeHandler2 = new WorkerAttributeHandler();
-                let inspectPopup = selectType == "Popup_TechniqueInspectionName"
-                    ? new TechniqueInspectionPopup(attributeHandler2)
-                    : new InspectionPopup(attributeHandler2);
+                let inspectPopup;
+                switch (selectType) {
+                    case "Popup_TechniqueInspectionName":
+                        inspectPopup = new TechniqueInspectionPopup(attributeHandler2);
+                        break;
+                    case "Popup_PerkInspectionName":
+                        inspectPopup = new PerkTechniqueInspectionPopup(attributeHandler2);
+                        break;
+                    default:
+                        inspectPopup = new InspectionPopup(attributeHandler2);
+                }
                 inspectPopup.close();
                 attributeHandler2.run();
 
-                // The style adding system spends points live as a preview while
-                // techniques are selected (toggleSelectedItem,
-                // TechniqueInspectPopupAttributeHandler) - if the popup is closing
-                // without confirming via Add (that flow uses InspectionPopup.close()
-                // directly via addSelectedInspectElement, not this function), discard
-                // that unconfirmed draft. This needs its own separate
-                // attributeHandler/run() cycle, not nested inside attributeHandler2's
-                // own callback - addMod calls made from within an already-running
-                // getAttrs pass are registered too late to actually get fetched.
-                if (selectType == "Popup_TechniqueInspectionName") {
+                // The style/perk adding systems both spend points live as a preview
+                // while techniques are selected (toggleSelectedItem,
+                // TechniqueInspectPopupAttributeHandler/PerkTechniqueInspectPopupAttributeHandler) -
+                // if the popup is closing without confirming via Add (that flow
+                // uses InspectionPopup.close() directly via addSelectedInspectElement,
+                // not this function), discard that unconfirmed draft. This needs
+                // its own separate attributeHandler/run() cycle, not nested inside
+                // attributeHandler2's own callback - addMod calls made from within
+                // an already-running getAttrs pass are registered too late to
+                // actually get fetched.
+                if (selectType == "Popup_TechniqueInspectionName" || selectType == "Popup_PerkInspectionName") {
                     let attributeHandler3 = new WorkerAttributeHandler();
-                    let worker = new WuxStyleWorkerBuild();
+                    let worker = selectType == "Popup_TechniqueInspectionName" ? new WuxStyleWorkerBuild() : new WuxPerkWorkerBuild();
                     let snapshotVar = WuxDef.GetVariable("Popup_InspectDraftSnapshot");
                     attributeHandler3.addMod([worker.attrMax, snapshotVar]);
                     attributeHandler3.addGetAttrCallback(function (attrHandler) {
                         // Mirrors WuxWorkerBuild.resetChanges exactly, but reverting
                         // draft to the snapshot taken when this popup opened
-                        // (initializePopup, TechniqueInspectPopupAttributeHandler)
-                        // instead of attrBuildFinal - final is only ever updated by
-                        // the Advancement tab's commit flow, so it can be stale
+                        // (initializePopup, TechniqueInspectPopupAttributeHandler/
+                        // PerkTechniqueInspectPopupAttributeHandler) instead of
+                        // attrBuildFinal - final is only ever updated by the
+                        // Advancement tab's commit flow, so it can be stale
                         // relative to other draft-only changes (deleting a style,
                         // for instance, Worker-Styles.js's deleteListStyle) made
                         // outside this popup - reverting to it would silently undo
@@ -3686,10 +3908,11 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         performStyleFilterInspection(filters, pressedDef.getTitle());
     };
 
-    const performPerkFilterInspection = function (filters, title) {
-        let matchingPerks = WuxPerks.Filter(filters);
+    const performAllPerkTechniqueInspection = function (title) {
+        let matchingPerks = WuxPerks.Filter([new DatabaseFilterData("group", "Perk Technique")]);
         let techniques = [];
         let techniqueIconAffinities = {};
+        let techniquePerkCost = {};
         for (let perk of matchingPerks) {
             Debug.Log(`Found Perk ${perk.name}`);
             let technique = WuxTechs.Get(perk.name);
@@ -3705,6 +3928,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 }
             }
             techniqueIconAffinities[technique.name] = iconAffinities;
+            techniquePerkCost[technique.name] = perk.cost;
             techniques.push(technique);
         }
 
@@ -3745,16 +3969,38 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                 let tierData = sortedTechniques.get(tier);
                 tierData.iterate(function (techsByAffinity, affinity) {
                     if (techsByAffinity.length == 0) return;
-                    let level = Format.GetLevelPrerequisites(tier);
-                    let itemTitle = level > 0 ? `Level ${level}` : "";
-                    if (affinity !== "") {
-                        itemTitle = itemTitle !== "" ? `${affinity} - ${itemTitle}` : affinity;
-                    }
-                    if (itemTitle === "") itemTitle = "Level 1";
-                    sortedItems.push(new InspectionInventoryItem(itemTitle, "", true, affinity, tier));
+
+                    // Perks at the same tier/affinity can still cost different amounts
+                    // of Perk Points, so each divider needs its own cost subgroup on
+                    // top of SortFilteredTechniquesByRequirement's tier/affinity split.
+                    let techsByCost = {};
                     techsByAffinity.forEach(function (technique) {
-                        let iconAffinities = techniqueIconAffinities[technique.name] || [];
-                        sortedItems.push(new InspectionInventoryItem(technique.name, technique.name, false, technique.affinity, technique.tier, iconAffinities));
+                        let cost = techniquePerkCost[technique.name] || 0;
+                        if (techsByCost[cost] == undefined) techsByCost[cost] = [];
+                        techsByCost[cost].push(technique);
+                    });
+
+                    Object.keys(techsByCost).map(Number).sort((a, b) => a - b).forEach(function (cost) {
+                        // Matches the Style catalog's own "Requirements: Min. Level X,
+                        // [affinity] affinity" divider format (performStyleFilterInspection,
+                        // this file), with the Perk Point cost appended.
+                        let level = Format.GetLevelPrerequisites(tier);
+                        let requirementParts = [`Min. Level ${level > 0 ? level : 1}`];
+                        if (affinity !== "") {
+                            let affinityParts = affinity.split(";").map(s => s.trim()).filter(s => s !== "");
+                            let coreElements = ["Wood", "Fire", "Earth", "Metal", "Water"];
+                            if (coreElements.every(element => affinityParts.includes(element))) {
+                                requirementParts.push("Able to cast magic");
+                            } else {
+                                requirementParts.push(`${formatListWithOr(affinityParts)} affinity`);
+                            }
+                        }
+                        let itemTitle = `Requirements: ${requirementParts.join(", ")} - Cost: ${cost} Point${cost === 1 ? "" : "s"}`;
+                        sortedItems.push(new InspectionInventoryItem(itemTitle, "", true, affinity, tier));
+                        techsByCost[cost].forEach(function (technique) {
+                            let iconAffinities = techniqueIconAffinities[technique.name] || [];
+                            sortedItems.push(new InspectionInventoryItem(technique.name, technique.name, false, technique.affinity, technique.tier, iconAffinities));
+                        });
                     });
                 });
             }
@@ -3768,47 +4014,9 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         attributeHandler.run();
     };
 
-    const openPerkFilterTechniqueInspection = function (eventinfo) {
-        Debug.Log("Open Perk Filter Technique Inspection");
-
-        let allPerkFilters = WuxDef.Filter([new DatabaseFilterData("group", "PerkAutoFilter")]);
-        let pressedDef = null;
-        for (let i = 0; i < allPerkFilters.length; i++) {
-            if (allPerkFilters[i].getVariable() === eventinfo.sourceAttribute) {
-                pressedDef = allPerkFilters[i];
-                break;
-            }
-        }
-        if (pressedDef == null) {
-            Debug.Log(`No PerkAutoFilter definition found for attribute: ${eventinfo.sourceAttribute}`);
-            return;
-        }
-
-        let description = pressedDef.getDescription();
-        if (description === "") {
-            Debug.Log(`No filter rules defined for "${pressedDef.getTitle()}"`);
-            return;
-        }
-
-        let filters = [];
-        let rules = description.split("\n").flatMap(line => line.split(";"));
-        for (let rule of rules) {
-            rule = rule.trim();
-            if (rule === "") continue;
-            let colonIndex = rule.indexOf(":");
-            if (colonIndex === -1) continue;
-            let key = rule.substring(0, colonIndex).trim();
-            let values = rule.substring(colonIndex + 1).split(",").map(v => v.trim()).filter(v => v !== "");
-            if (values.length === 0) continue;
-            filters.push(new DatabaseFilterData(key, values.length === 1 ? values[0] : values));
-        }
-
-        if (filters.length === 0) {
-            Debug.Log(`No valid filter rules found for "${pressedDef.getTitle()}"`);
-            return;
-        }
-
-        performPerkFilterInspection(filters, pressedDef.getTitle());
+    const openAllPerkTechniqueInspection = function (eventinfo) {
+        Debug.Log("Open All Perk Technique Inspection");
+        performAllPerkTechniqueInspection(WuxDef.GetTitle("Title_PerkTechniques"));
     };
 
     const openGearInspection = function (attributeHandler, inventoryTitle, inventoryItems, addType) {
@@ -3990,7 +4198,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
         OpenItemInspectionWithLoadingScreen: openItemInspectionWithLoadingScreen,
         OpenPerkTechniqueInspection: openPerkTechniqueInspection,
         OpenStyleFilterTechniqueInspection: openStyleFilterTechniqueInspection,
-        OpenPerkFilterTechniqueInspection: openPerkFilterTechniqueInspection,
+        OpenAllPerkTechniqueInspection: openAllPerkTechniqueInspection,
         OpenCustomStyleFilterInspection: openCustomStyleFilterInspection,
         OpenConsumableInspection: openConsumableInspection,
         OpenConsumableFilterInspection: openConsumableFilterInspection,

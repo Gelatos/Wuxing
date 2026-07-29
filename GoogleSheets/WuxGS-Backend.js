@@ -261,7 +261,7 @@ var AdvancementBackend = AdvancementBackend || (function () {
             output += listenerSetAdvancementJobSkillPerkPoints();
             output += listenerUpdatePerkPoints();
             output += listenerUpdateSecondAffinityBranch();
-            output += listenerPerkAutoFilterButtons();
+            output += listenerSeeAllPerkTechniques();
             output += listenerSetIsPlayer();
             output += listenerUpdateJobBuildPoints();
             output += listenerSeeJobTechniques();
@@ -336,10 +336,9 @@ var AdvancementBackend = AdvancementBackend || (function () {
                 true
             );
         },
-        listenerPerkAutoFilterButtons = function () {
-            let perkFilters = WuxDef.Filter([new DatabaseFilterData("group", "PerkAutoFilter")]);
-            let groupVariableNames = perkFilters.map(def => def.getVariable());
-            return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerInspectPopup.OpenPerkFilterTechniqueInspection(eventinfo)`, true);
+        listenerSeeAllPerkTechniques = function () {
+            let groupVariableNames = [WuxDef.GetVariable("Forme_SeeTechniques")];
+            return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerInspectPopup.OpenAllPerkTechniqueInspection(eventinfo)`, true);
         },
         listenerSetIsPlayer = function () {
             return WuxSheetBackend.OnChange([WuxDef.GetVariable("Title_IsPlayer")], `WuxWorkerPerks.SetIsPlayer(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`, true);
@@ -510,7 +509,7 @@ var FormeBuilder = FormeBuilder || (function () {
             output += listenerDeleteListStyle();
             output += listenerSwapStyleListTechniqueVariant();
             output += listenerDeleteAllLearnedStyles();
-            output += listenerInspectListPerk();
+            output += listenerSwapPerkListTechniqueVariant();
             output += listenerDeleteListPerk();
             return output;
         },
@@ -583,10 +582,19 @@ var FormeBuilder = FormeBuilder || (function () {
                 [`${WuxDef.GetVariable("Forme_DeleteAllStyles")}`],
                 `WuxWorkerStyles.DeleteAllLearnedStyles()`, false);
         },
-        listenerInspectListPerk = function () {
-            return WuxSheetBackend.OnChange(
-                [`${WuxDef.GetVariable("RepeatingPerks")}:${WuxDef.GetVariable("Forme_Inspect")}`],
-                `WuxWorkerPerks.InspectListPerk(eventinfo)`, true);
+        // Learned Perk Techniques' full-card display's variant quick-switch
+        // buttons (TechVariant pair 3, same shared click trigger as the catalog/
+        // Learned Styles list - see TechniqueDataAttributeHandler.getVariantSelectFieldName,
+        // WJS-Service.js), scoped to "RepeatingPerks". SwapCatalogTechniqueVariant's
+        // second param picks the non-catalog branch (no Select button/
+        // Popup_InspectShowAdd concept for an already-learned perk technique).
+        listenerSwapPerkListTechniqueVariant = function () {
+            let baseDef = WuxDef.Get("Action");
+            let variantSelectVar = baseDef.getVariable(`-${WuxDef.GetVariable("TechVariant", "3")}`);
+            let repeaterVar = WuxDef.GetVariable("RepeatingPerks");
+
+            return WuxSheetBackend.OnChange([`${repeaterVar}:${variantSelectVar}`],
+                `WuxWorkerInspectPopup.SwapCatalogTechniqueVariant(eventinfo, "RepeatingPerks")`, true);
         },
         listenerDeleteListPerk = function () {
             return WuxSheetBackend.OnChange(

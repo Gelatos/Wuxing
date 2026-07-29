@@ -373,7 +373,7 @@ input[type=hidden].wuxStatSummary-flag[value="1"] + .wuxStatSummary-value
 
 input[type=hidden].wuxStatSummary-flag[value="2"] + .wuxStatSummary-value
 {
-    color: #155dfa;
+    color: #4781ff;
     font-size: 14px;
 }
 

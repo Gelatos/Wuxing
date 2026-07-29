@@ -774,58 +774,37 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 			attributeHandler.run();
 		},
 
-		inspectListPerk = function (eventinfo) {
-			let worker = new WuxPerkWorkerBuild();
+		// One-time backfill for perk techniques learned before the full-card
+		// display existed - not wired to any button, run once from the browser
+		// console as WuxWorkerPerks.RefreshPerkListDisplay() after deploying it.
+		// Perk techniques learned after that point populate immediately via
+		// PerkTechniqueInspectionPopup.performAddItem (Worker-InspectPopup.js),
+		// which calls WuxWorkerStyles.PopulateStyleTechniqueDisplay directly.
+		// Mirrors WuxWorkerStyles.RefreshStyleListDisplay exactly.
+		refreshPerkListDisplay = function () {
 			let attributeHandler = new WorkerAttributeHandler();
 			attributeHandler.addRepeatingSection("RepeatingPerks");
 			let repeater = attributeHandler.getRepeatingSection("RepeatingPerks");
-			let selectedId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
-			let nameFieldName = repeater.getFieldName(selectedId, WuxDef.GetVariable("Forme_Name"));
-			attributeHandler.addMod([nameFieldName, worker.attrBuildDraft]);
+			let formeNameVar = WuxDef.GetVariable("Forme_Name");
+			repeater.addFieldNames([formeNameVar]);
+			attributeHandler.addMod([
+				WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"), WuxDef.GetVariable("Ancestry"),
+				WuxDef.GetVariable("Forme_ShowFromNonElement")
+			]);
 
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
-				let selectedPerkName = attrHandler.parseString(nameFieldName);
-
-				worker.setBuildStatsDraft(attrHandler);
-
-				let inventoryItems = [];
-				let selectedItem = undefined;
-
-				worker.iterateBuildStats(function (buildStat) {
-					let perk = WuxPerks.GetByVariableName(buildStat.name);
-					if (perk == undefined) return;
-					if (perk.group !== "Perk Technique") return;
-					if (buildStat.value == "0" || buildStat.value == 0) return;
-
-					let technique = WuxTechs.Get(perk.name);
-					if (technique == undefined) return;
-
-					let iconAffinities = technique.getAffinityParts();
-					let variants = WuxTechs.Filter(new DatabaseFilterData("style", technique.name));
-					for (let variant of variants) {
-						let variantParts = variant.getAffinityParts();
-						for (let part of variantParts) {
-							if (!iconAffinities.includes(part)) iconAffinities.push(part);
-						}
-					}
-
-					let item = new InspectionInventoryItem(perk.name, perk.name, false, undefined, undefined, iconAffinities);
-					if (perk.name === selectedPerkName) {
-						selectedItem = item;
-					} else {
-						inventoryItems.push(item);
-					}
+				let showElementRestricted = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement")) != "0";
+				let advancedAffinities = attrHandler.parseString(WuxDef.GetVariable("AdvancedAffinity")).split(";").map(s => s.trim()).filter(s => s !== "");
+				let userAffinities = showElementRestricted ? undefined : [
+					attrHandler.parseString(WuxDef.GetVariable("Affinity")),
+					...advancedAffinities,
+					attrHandler.parseString(WuxDef.GetVariable("Ancestry"))
+				];
+				repeater.ids.forEach(function (id) {
+					let perkTechniqueName = attrHandler.parseString(repeater.getFieldName(id, formeNameVar));
+					WuxWorkerStyles.PopulateStyleTechniqueDisplay(attrHandler, repeater, id, perkTechniqueName, userAffinities);
 				});
-
-				if (selectedItem !== undefined) {
-					inventoryItems.unshift(selectedItem);
-				}
-
-				let attributeHandler2 = new WorkerAttributeHandler();
-				WuxWorkerInspectPopup.OpenPerkTechniqueInspection(attributeHandler2, "Perk Techniques", inventoryItems, ["Add Perk Technique"]);
-				attributeHandler2.run();
 			});
-
 			attributeHandler.run();
 		},
 
@@ -891,7 +870,7 @@ var WuxWorkerPerks = WuxWorkerPerks || (function () {
 		SetJobSkillPerkPoints: setJobSkillPerkPoints,
 		RefreshStats: refreshStats,
 		UpdateStats: updateStats,
-		InspectListPerk: inspectListPerk,
+		RefreshPerkListDisplay: refreshPerkListDisplay,
 		DeleteListPerk: deleteListPerk,
 		SetIsPlayer: setIsPlayer
 	};
