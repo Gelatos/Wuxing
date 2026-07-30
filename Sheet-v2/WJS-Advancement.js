@@ -1014,6 +1014,7 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 
 			addLoreRepeaters(attributeHandler);
 
+			attributeHandler.addFormulaMods(knowledgeWorker.definition);
 			attributeHandler.addMod([WuxDef.GetVariable("CR"), WuxDef.GetVariable("Recall"), knowledgeWorker.attrMax]);
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				let skillPointValue = 0;
@@ -1127,6 +1128,10 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 					});
 				}
 				attrHandler.addUpdate(knowledgeWorker.attrBuildDraft, JSON.stringify(knowledgeWorker.buildStats));
+				// Recompute the max fresh (3 + CR:_max + TrainingKnowledge) rather than
+				// trusting whatever knw_max was last persisted as - otherwise advancement
+				// points invested in Knowledge can go stale and show as unaccounted-for.
+				knowledgeWorker.setPointsMax(attrHandler);
 				knowledgeWorker.updatePoints(attrHandler);
 
 				let languages = [];
