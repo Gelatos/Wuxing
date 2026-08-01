@@ -16800,9 +16800,15 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         // row hides in CSS instead, based on whether any of the 6 flags is non-empty.
         return `<div class="wuxTechVariantButtons"><span class="wuxTechVariantButtonsLabel">Variants: </span>${buttons}</div>`;
     }
+    // The hidden flag input and the visible span both bind to TechActionName -
+    // its value is always the action type name optionally followed by
+    // " - <limit>" (TechniqueDisplayData.setActionName, WAPI-Database.js), so
+    // the flag's live-synced "value" attribute lets CSS pick styling with a
+    // prefix match (WCSS-Specialized.css) instead of needing a second,
+    // type-only attribute (TechActionType) written just for that.
     printActionType () {
         return this.printActionTypeField(
-            `<input type="hidden" class="wuxFeatureHeader-flag" name="${this.getActionTypeAttribute("TechActionType")}">`,
+            `<input type="hidden" class="wuxFeatureHeader-flag" name="${this.getActionTypeAttribute("TechActionName")}">`,
             this.printAttributeTooltip(`<span name="${this.getActionTypeAttribute("TechActionName")}"></span>`,
                 "Action", this.getActionTypeAttribute("TechActionName", WuxDef._max))
         )
@@ -16864,12 +16870,19 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
             this.printOnEnterField(this.printTooltip("On Enter Effects", "On Enter Effects", onEnterDef.descriptions)));
     }
 
+    // The hidden flag input and the visible title span both bind to
+    // TechCoreDefense's max slot (the check title text - "{skill} vs.
+    // {defense}", or "DC {n} {skill}" for a flat DC - TechniqueDisplayData,
+    // WAPI-Database.js) instead of the flag using the base slot for a
+    // separate, type-only value. WCSS-Specialized.css matches the defense
+    // name as a substring (" vs. Brace" etc.) since it sits mid-string, and
+    // the flat-DC case as a "DC " prefix, rather than needing a second
+    // attribute written just for styling.
     printCheckEffects() {
         let fieldName = this.getActionTypeAttribute("TechCheckEffect");
         return WuxSheetMain.HiddenField(fieldName,
             this.printCheckEffectsField(
-                `<input type="hidden" class="wuxFeatureHeader-flag" name="${this.getActionTypeAttribute("TechCoreDefense")}">`,
-                // Check title text is piggybacked onto TechCoreDefense's max slot.
+                `<input type="hidden" class="wuxFeatureHeader-flag" name="${this.getActionTypeAttribute("TechCoreDefense", WuxDef._max)}">`,
                 this.printAttributeTooltip(this.printSpanActionTypeAttribute("TechCoreDefense", WuxDef._max), "Skill Check Effects",
                     this.getActionTypeAttribute("TechCheckEffect", WuxDef._max)),
                 this.printSpan(fieldName)
@@ -17023,10 +17036,16 @@ class ItemRepeaterDisplayBuilder extends BaseItemDisplayBuilder {
         let contents = `${countInput}${this.printSpanActionTypeAttribute("ItemName")}`;
         return this.printNameField(contents);
     }
+    // The hidden flag input binds to ItemGroup directly (same field the visible
+    // badge already reads) instead of a hardcoded "Item" literal - its value is
+    // the item's own group name, optionally followed by " (<category>)"
+    // (ItemDisplayData.importItem, WAPI-Database.js), so CSS can style each
+    // item type (gear/consumable/goods group) with a prefix match
+    // (WCSS-Specialized.css) instead of every item sharing one generic style.
     printActionType () {
         let fieldName = this.getActionTypeAttribute("ItemGroup");
         return this.printActionTypeField(
-            `<input type="hidden" class="wuxFeatureHeader-flag" value="Item">`,
+            `<input type="hidden" class="wuxFeatureHeader-flag" name="${fieldName}">`,
             this.printCraftingTooltip(this.printSpan(fieldName)));
     }
     printBulk() {

@@ -1604,16 +1604,82 @@ button[type=roll].wuxFeatureHeaderNameButton::before
     padding: 3px 0 3px 10px;
 }
 
-input.wuxFeatureHeader-flag[value="Item"] + .wuxFeatureHeaderDisplayInfoActionType,
+/* Equipment groups (ItemData.group, WuxItems catalog) */
+input.wuxFeatureHeader-flag[value^="Weapon"] + .wuxFeatureHeaderDisplayInfoActionType
+{
+    background: linear-gradient(to right,
+    #ff7e7e 80%,
+    #6f02a600);
+}
+input.wuxFeatureHeader-flag[value^="Apparel"] + .wuxFeatureHeaderDisplayInfoActionType
+{
+    background: linear-gradient(to right,
+    #81b7ff 80%,
+    #6f02a600);
+}
+input.wuxFeatureHeader-flag[value^="Tool"] + .wuxFeatureHeaderDisplayInfoActionType
+{
+    background: linear-gradient(to right,
+    #ffae83 80%,
+    #6f02a600);
+}
+/* Consumable groups (ItemData.group, WuxItems catalog) */
+input.wuxFeatureHeader-flag[value^="Recovery"] + .wuxFeatureHeaderDisplayInfoActionType
+{
+    background: linear-gradient(to right,
+    #faff61 80%,
+    #6f02a600);
+}
+input.wuxFeatureHeader-flag[value^="Tonic"] + .wuxFeatureHeaderDisplayInfoActionType
+{
+    background: linear-gradient(to right,
+    #8eff61 80%,
+    #6f02a600);
+}
+input.wuxFeatureHeader-flag[value^="Bomb"] + .wuxFeatureHeaderDisplayInfoActionType
+{
+    background: linear-gradient(to right,
+    #ffbb61 80%,
+    #6f02a600);
+}
+/* Goods groups (GoodsData.group, WuxGoods catalog) */
+input.wuxFeatureHeader-flag[value^="Compound"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Supplement"] + .wuxFeatureHeaderDisplayInfoActionType
+{
+    background: linear-gradient(to right,
+    #ff61f7 80%,
+    #6f02a600);
+}
+input.wuxFeatureHeader-flag[value^="Protein"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Starch"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Sugar"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Fruit"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Vegetable"] + .wuxFeatureHeaderDisplayInfoActionType
+{
+    background: linear-gradient(to right,
+    #53cf2d 80%,
+    #6f02a600);
+}
+/* Gear groups (ItemData.group, WuxItems catalog) */
+input.wuxFeatureHeader-flag[value^="Supplies"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Implements"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Records"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Material"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Animal Good"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Goods"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Beverage"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Basic Meal"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Meal"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Drug"] + .wuxFeatureHeaderDisplayInfoActionType,
 .wuxFeatureHeader-Item,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Item
 {
     background: linear-gradient(to right,
-    #c761ff 80%,
+    #83ffcf 80%,
     #6f02a600);
 }
 
-input.wuxFeatureHeader-flag[value="Swift"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Swift"] + .wuxFeatureHeaderDisplayInfoActionType,
 .wuxFeatureHeader-Swift,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Swift
 {
@@ -1622,7 +1688,7 @@ input.wuxFeatureHeader-flag[value="Swift"] + .wuxFeatureHeaderDisplayInfoActionT
     #cfaf0400);
 }
 
-input.wuxFeatureHeader-flag[value="Quick"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Quick"] + .wuxFeatureHeaderDisplayInfoActionType,
 .wuxFeatureHeader-Quick,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Quick
 {
@@ -1631,7 +1697,7 @@ input.wuxFeatureHeader-flag[value="Quick"] + .wuxFeatureHeaderDisplayInfoActionT
     #5cd39c00);
 }
 
-input.wuxFeatureHeader-flag[value="Full"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Full"] + .wuxFeatureHeaderDisplayInfoActionType,
 .wuxFeatureHeader-Full,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Full
 {
@@ -1640,7 +1706,7 @@ input.wuxFeatureHeader-flag[value="Full"] + .wuxFeatureHeaderDisplayInfoActionTy
     #2cb12800);
 }
 
-input.wuxFeatureHeader-flag[value="Assist"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Assist"] + .wuxFeatureHeaderDisplayInfoActionType,
 .wuxFeatureHeader-Assist,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Assist
 {
@@ -1649,7 +1715,7 @@ input.wuxFeatureHeader-flag[value="Assist"] + .wuxFeatureHeaderDisplayInfoAction
     #ff80ee00);
 }
 
-input.wuxFeatureHeader-flag[value="Reaction"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Reaction"] + .wuxFeatureHeaderDisplayInfoActionType,
 .wuxFeatureHeader-Reaction,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Reaction
 {
@@ -1658,7 +1724,7 @@ input.wuxFeatureHeader-flag[value="Reaction"] + .wuxFeatureHeaderDisplayInfoActi
     #ff808000);
 }
 
-input.wuxFeatureHeader-flag[value="Passive"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Passive"] + .wuxFeatureHeaderDisplayInfoActionType,
 .wuxFeatureHeader-Passive,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Passive
 {
@@ -1667,9 +1733,9 @@ input.wuxFeatureHeader-flag[value="Passive"] + .wuxFeatureHeaderDisplayInfoActio
     #9f9f9f00);
 }
 
-input.wuxFeatureHeader-flag[value="Brief"] + .wuxFeatureHeaderDisplayInfoActionType,
-input.wuxFeatureHeader-flag[value="Short"] + .wuxFeatureHeaderDisplayInfoActionType,
-input.wuxFeatureHeader-flag[value="Long"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Brief"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Short"] + .wuxFeatureHeaderDisplayInfoActionType,
+input.wuxFeatureHeader-flag[value^="Long"] + .wuxFeatureHeaderDisplayInfoActionType,
 .wuxFeatureHeader-Brief,
 .wuxFeatureHeader-Short,
 .wuxFeatureHeader-Long,
@@ -1678,17 +1744,8 @@ input.wuxFeatureHeader-flag[value="Long"] + .wuxFeatureHeaderDisplayInfoActionTy
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Long
 {
     background: linear-gradient(to right,
-    #0e3070,
+    #5a7dba,
     #0E307033);
-}
-
-input.wuxFeatureHeader-flag[value="Augment"] + .wuxFeatureHeaderDisplayInfoActionType,
-.wuxFeatureHeader-Augment,
-.sheet-rolltemplate-technique .sheet-wuxFeatureHeader-Augment
-{
-    background: linear-gradient(to right,
-    #2c2929,
-    #2c292933);
 }
 
 .wuxFeatureHeaderDisplayInfoRange,
@@ -1970,7 +2027,13 @@ input.wuxFeatureHeader-flag[value="Core"] + .wuxFeatureHeaderInfoEffectTitle,
     #faeaea 10%);
 }
 
-input.wuxFeatureHeader-flag[value="0"] + .wuxFeatureHeaderInfoEffectTitle,
+/* TechCoreDefense's max slot now carries the full check title text ("{skill}
+   vs. {defense}", or "DC {n} {skill}" for a flat DC - TechniqueDisplayData,
+   WAPI-Database.js), so the flag reads it directly instead of a separate
+   type-only base-slot value. The defense name sits mid-string (after "vs. "),
+   so it's matched as a substring rather than a prefix; the flat-DC case is
+   matched by its "DC " prefix instead of the old literal "0". */
+input.wuxFeatureHeader-flag[value^="DC "] + .wuxFeatureHeaderInfoEffectTitle,
 .wuxFeatureHeaderInfoEffectTitle-0,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-0
 {
@@ -1979,7 +2042,7 @@ input.wuxFeatureHeader-flag[value="0"] + .wuxFeatureHeaderInfoEffectTitle,
     #faeaea 10%);
 }
 
-input.wuxFeatureHeader-flag[value="Brace"] + .wuxFeatureHeaderInfoEffectTitle,
+input.wuxFeatureHeader-flag[value*=" vs. Brace"] + .wuxFeatureHeaderInfoEffectTitle,
 .wuxFeatureHeaderInfoEffectTitle-Brace,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Brace
 {
@@ -1990,7 +2053,7 @@ input.wuxFeatureHeader-flag[value="Brace"] + .wuxFeatureHeaderInfoEffectTitle,
             #faeaea 10%);
 }
 
-input.wuxFeatureHeader-flag[value="Warding"] + .wuxFeatureHeaderInfoEffectTitle,
+input.wuxFeatureHeader-flag[value*=" vs. Warding"] + .wuxFeatureHeaderInfoEffectTitle,
 .wuxFeatureHeaderInfoEffectTitle-Warding,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Warding
 {
@@ -2001,7 +2064,7 @@ input.wuxFeatureHeader-flag[value="Warding"] + .wuxFeatureHeaderInfoEffectTitle,
             #faeaea 10%);
 }
 
-input.wuxFeatureHeader-flag[value="Evasion"] + .wuxFeatureHeaderInfoEffectTitle,
+input.wuxFeatureHeader-flag[value*=" vs. Evasion"] + .wuxFeatureHeaderInfoEffectTitle,
 .wuxFeatureHeaderInfoEffectTitle-Evasion,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Evasion
 {
@@ -2012,7 +2075,7 @@ input.wuxFeatureHeader-flag[value="Evasion"] + .wuxFeatureHeaderInfoEffectTitle,
             #faeaea 10%);
 }
 
-input.wuxFeatureHeader-flag[value="Resolve"] + .wuxFeatureHeaderInfoEffectTitle,
+input.wuxFeatureHeader-flag[value*=" vs. Resolve"] + .wuxFeatureHeaderInfoEffectTitle,
 .wuxFeatureHeaderInfoEffectTitle-Resolve,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Resolve
 {
@@ -2023,7 +2086,7 @@ input.wuxFeatureHeader-flag[value="Resolve"] + .wuxFeatureHeaderInfoEffectTitle,
             #faeaea 10%);
 }
 
-input.wuxFeatureHeader-flag[value="Insight"] + .wuxFeatureHeaderInfoEffectTitle,
+input.wuxFeatureHeader-flag[value*=" vs. Insight"] + .wuxFeatureHeaderInfoEffectTitle,
 .wuxFeatureHeaderInfoEffectTitle-Insight,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Insight
 {
@@ -2034,7 +2097,7 @@ input.wuxFeatureHeader-flag[value="Insight"] + .wuxFeatureHeaderInfoEffectTitle,
             #faeaea 10%);
 }
 
-input.wuxFeatureHeader-flag[value="Logic"] + .wuxFeatureHeaderInfoEffectTitle,
+input.wuxFeatureHeader-flag[value*=" vs. Logic"] + .wuxFeatureHeaderInfoEffectTitle,
 .wuxFeatureHeaderInfoEffectTitle-Logic,
 .sheet-rolltemplate-technique .sheet-wuxFeatureHeaderInfoEffectTitle-Logic
 {

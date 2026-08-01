@@ -1264,8 +1264,6 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechName", WuxDef._max), technique.version);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechActionType"), displayData.actionType);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechActionName"), displayData.actionName);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechActionName", WuxDef._max), displayData.getActionsDescriptions("\n"));
@@ -1309,9 +1307,10 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 				this.getVariable("TechOnEnter"), "1");
 		}
 		if (displayData.checkEffect != "") {
-			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-				this.getVariable("TechCoreDefense"), displayData.coreDefense);
-			// Check title text is piggybacked onto TechCoreDefense's max slot.
+			// Check title text is piggybacked onto TechCoreDefense's max slot -
+			// the flag input (TechniqueRepeaterDisplayBuilder.printCheckEffects,
+			// WuxGS-FeatureDisplayBuilder.js) binds to this same slot for styling
+			// instead of TechCoreDefense's base slot needing its own write.
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 				this.getVariable("TechCoreDefense", WuxDef._max), displayData.checkType);
 			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
@@ -1376,8 +1375,6 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 				this.getVariantFieldName(i), 0);
 		}
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechActionType"), "");
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechActionName"), "");
 		// Action tooltip is piggybacked onto TechActionName's max slot.
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
@@ -1415,8 +1412,6 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		// Enhance effect text is piggybacked onto TechOnEnter's max slot.
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechOnEnter", WuxDef._max), 0);
-		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
-			this.getVariable("TechCoreDefense"), 0);
 		// Check title text is piggybacked onto TechCoreDefense's max slot.
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechCoreDefense", WuxDef._max), 0);
