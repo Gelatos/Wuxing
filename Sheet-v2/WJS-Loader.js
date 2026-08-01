@@ -1,4 +1,11 @@
-var wuxCurrentVersion = "2.0.4";
+var wuxCurrentVersion = "2.0.5";
+
+var upgrade_to_2_0_5 = function (currentVersion) {
+	let attributeHandler = loaderAttrubuteHandler(currentVersion, "2.0.5");
+	attributeHandler.run();
+
+	WuxWorkerGeneral.ExportBackgroundData();
+};
 
 var upgrade_to_2_0_4 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "2.0.4");
@@ -296,6 +303,9 @@ var versioning = function () {
 		switch(v["version"]) {
 			case wuxCurrentVersion:
 				console.log(`Wuxing Sheet modified from 5th Edition OGL by Roll20 v${wuxCurrentVersion}`);
+				break;
+			case "2.0.4":
+				upgrade_to_2_0_5(v["version"]);
 				break;
 			case "2.0.3":
 				upgrade_to_2_0_4(v["version"]);

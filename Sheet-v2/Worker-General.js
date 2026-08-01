@@ -59,6 +59,16 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                 for (let i = 0; i < formulaDefinitions.length; i++) {
                     if (formulaDefinitions[i].group === perkDefName) { continue; }
                     if (buildPointPoolNames.includes(formulaDefinitions[i].name)) { continue; }
+                    // Plain player-set fields with no formula at all (e.g. Soc_Personality/
+                    // Soc_Motivation - selects the player picks once, not computed stats)
+                    // still match the formulaMods=CR/Level or group=General/Combat/Social
+                    // filters above if they merely happen to live in one of those groups.
+                    // formula.getValue() on an empty formula returns 0, so leaving them in
+                    // this loop silently reset every such field back to blank on every
+                    // recompute (Level/Job/Attribute change, etc) - same class of bug as
+                    // the buildPointPoolNames case above, just for fields with no formula
+                    // at all rather than the wrong kind of formula.
+                    if (!formulaDefinitions[i].formula.hasFormula()) { continue; }
                     if (formulaDefinitions[i].isResource) {
                         attrHandler.addUpdate(formulaDefinitions[i].getVariable(), formulaDefinitions[i].formula.getValue(attrHandler));
                         attrHandler.addUpdate(formulaDefinitions[i].getVariable(WuxDef._max), formulaDefinitions[i].formula.getValue(attrHandler));
@@ -280,6 +290,219 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             });
             attributeHandler.run();
         },
+        backgroundExportFields = [
+            "Title_IsPlayer", "CharSheetName", "SheetName", "DisplayName", "FullName", "Ancestry", "Ethnicity",
+            "AffinityAspect", "QuickDescription", "Title", "Age", "Gender", "HomeRegion", "Backstory",
+            "Level", "Potency", "Jin",
+            "Note_GenName", "Note_GenFullName", "Note_GenGender", "Note_GenHomeRegion", "Note_GenRace",
+            "Note_GenPersonality", "Note_GenMotivation"
+        ],
+
+        // Temporary bulk-data tool: snapshots this character's background/origin fields,
+        // core Attribute scores, selected Skills, and each Outfit's already-computed emote
+        // JSON into the (otherwise unused) base Backstory attribute, so it can be
+        // copied out and pasted into another character's Backstory field to bulk-
+        // apply the same data (see importBackgroundData).
+        exportBackgroundData = function () {
+            let attributeHandler = new WorkerAttributeHandler();
+
+            let backgroundVars = backgroundExportFields.map(name => WuxDef.GetVariable(name));
+            let crMaxVar = WuxDef.GetVariable("CR", WuxDef._max);
+            attributeHandler.addMod(backgroundVars);
+            attributeHandler.addMod(crMaxVar);
+
+            let attributeDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Attribute"));
+            attributeHandler.addMod(attributeDefinitions.map(definition => definition.getVariable()));
+
+            let skillDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
+            for (let skillDefinition of skillDefinitions) {
+                attributeHandler.addMod([skillDefinition.getVariable(WuxDef._rank), skillDefinition.getVariable(WuxDef._expertise)]);
+            }
+
+            let outfitEmotesVar = WuxDef.GetVariable("Chat_OutfitEmotes", WuxDef._true);
+            attributeHandler.addRepeatingSection("RepeatingOutfits");
+            let outfitRepeater = attributeHandler.getRepeatingSection("RepeatingOutfits");
+            outfitRepeater.addFieldNames([outfitEmotesVar]);
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let backgroundData = {};
+                for (let i = 0; i < backgroundExportFields.length; i++) {
+                    backgroundData[backgroundExportFields[i]] = attrHandler.parseString(backgroundVars[i]);
+                }
+                backgroundData["CR_max"] = attrHandler.parseString(crMaxVar);
+
+                let attributeData = {};
+                for (let definition of attributeDefinitions) {
+                    attributeData[definition.name] = attrHandler.parseString(definition.getVariable());
+                }
+
+                let skillData = [];
+                for (let skillDefinition of skillDefinitions) {
+                    if (attrHandler.parseString(skillDefinition.getVariable(WuxDef._rank)) === "on") {
+                        skillData.push({
+                            name: skillDefinition.name,
+                            expertise: attrHandler.parseString(skillDefinition.getVariable(WuxDef._expertise)) === "on"
+                        });
+                    }
+                }
+
+                let outfitData = [];
+                outfitRepeater.iterate(function (id) {
+                    let raw = attrHandler.parseString(outfitRepeater.getFieldName(id, outfitEmotesVar));
+                    if (raw !== "") {
+                        try { outfitData.push(JSON.parse(raw)); } catch (e) { /* skip malformed row */ }
+                    }
+                });
+
+                let exportData = {
+                    background: backgroundData,
+                    attributes: attributeData,
+                    skills: skillData,
+                    outfits: outfitData
+                };
+                attrHandler.addUpdate(WuxDef.GetVariable("Backstory"), JSON.stringify(exportData));
+            });
+
+            attributeHandler.run();
+        },
+
+        // Fires when Backstory is set by hand (e.g. pasting a snapshot copied from
+        // exportBackgroundData on another character). Silent worker writes never trigger
+        // this listener, so it only reacts to a genuine manual paste, not the export itself.
+        importBackgroundData = async function (eventinfo) {
+            let importData;
+            try {
+                importData = JSON.parse(eventinfo.newValue);
+            } catch (e) {
+                return;
+            }
+            if (importData == null || typeof importData !== "object") {
+                return;
+            }
+
+            let attributeHandler = new WorkerAttributeHandler();
+
+            if (importData.background != undefined) {
+                for (let key of backgroundExportFields) {
+                    if (importData.background[key] != undefined) {
+                        attributeHandler.addUpdate(WuxDef.GetVariable(key), importData.background[key]);
+                    }
+                }
+                if (importData.background["CR_max"] != undefined) {
+                    attributeHandler.addUpdate(WuxDef.GetVariable("CR", WuxDef._max), importData.background["CR_max"]);
+                }
+            }
+
+            // Besides writing the raw scores/ranks directly (below), also fold the same
+            // changes into the Attribute/Skill build workers' own draft bookkeeping, the
+            // same way changeWorkerAttribute() would per-field on a normal edit - otherwise
+            // their "points spent vs max" tracking goes stale against the imported values.
+            let attributeWorker = new WuxAttributeWorkerBuild();
+            let skillWorker = new WuxSkillWorkerBuild();
+            attributeHandler.addMod([attributeWorker.attrMax, attributeWorker.attrBuildDraft,
+                skillWorker.attrMax, skillWorker.attrBuildDraft]);
+
+            if (importData.attributes != undefined) {
+                for (let key of Object.keys(importData.attributes)) {
+                    let definition = WuxDef.Get(key);
+                    if (definition != undefined) {
+                        attributeHandler.addUpdate(definition.getVariable(), importData.attributes[key]);
+                    }
+                }
+            }
+
+            if (Array.isArray(importData.skills)) {
+                let skillDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
+                for (let skillDefinition of skillDefinitions) {
+                    attributeHandler.addUpdate(skillDefinition.getVariable(WuxDef._rank), "0");
+                    attributeHandler.addUpdate(skillDefinition.getVariable(WuxDef._expertise), "0");
+                }
+                for (let skillEntry of importData.skills) {
+                    let skillDefinition = WuxDef.Get(skillEntry.name);
+                    if (skillDefinition != undefined) {
+                        attributeHandler.addUpdate(skillDefinition.getVariable(WuxDef._rank), "on");
+                        if (skillEntry.expertise) {
+                            attributeHandler.addUpdate(skillDefinition.getVariable(WuxDef._expertise), "on");
+                        }
+                    }
+                }
+            }
+
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                if (importData.attributes != undefined) {
+                    attributeWorker.setBuildStatsDraft(attrHandler);
+                    for (let key of Object.keys(importData.attributes)) {
+                        let definition = WuxDef.Get(key);
+                        if (definition != undefined) {
+                            attributeWorker.addBuildStat(attrHandler, definition.getVariable(), importData.attributes[key]);
+                        }
+                    }
+                    attrHandler.addUpdate(attributeWorker.attrBuildDraft, JSON.stringify(attributeWorker.buildStats));
+                    attributeWorker.updatePoints(attrHandler);
+                }
+
+                if (Array.isArray(importData.skills)) {
+                    let skillDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
+                    skillWorker.setBuildStatsDraft(attrHandler);
+                    for (let skillDefinition of skillDefinitions) {
+                        skillWorker.addBuildStat(attrHandler, skillDefinition.getVariable(WuxDef._rank), "0");
+                        skillWorker.addBuildStat(attrHandler, skillDefinition.getVariable(WuxDef._expertise), "0");
+                    }
+                    for (let skillEntry of importData.skills) {
+                        let skillDefinition = WuxDef.Get(skillEntry.name);
+                        if (skillDefinition != undefined) {
+                            skillWorker.addBuildStat(attrHandler, skillDefinition.getVariable(WuxDef._rank), "on");
+                            if (skillEntry.expertise) {
+                                skillWorker.addBuildStat(attrHandler, skillDefinition.getVariable(WuxDef._expertise), "on");
+                            }
+                        }
+                    }
+                    attrHandler.addUpdate(skillWorker.attrBuildDraft, JSON.stringify(skillWorker.buildStats));
+                    skillWorker.updatePoints(attrHandler);
+                }
+            });
+
+            let firstImportedOutfitId;
+            let firstImportedOutfitEmotes;
+            if (Array.isArray(importData.outfits)) {
+                let outfitRepeater = new WorkerRepeatingSectionHandler("RepeatingOutfits");
+                for (let outfitEmotes of importData.outfits) {
+                    let rowId = outfitRepeater.generateRowId();
+                    if (firstImportedOutfitId == undefined) {
+                        firstImportedOutfitId = rowId;
+                        firstImportedOutfitEmotes = outfitEmotes;
+                    }
+                    attributeHandler.addUpdate(outfitRepeater.getFieldName(rowId, WuxDef.GetVariable("Chat_OutfitName")), outfitEmotes.name || "");
+                    attributeHandler.addUpdate(outfitRepeater.getFieldName(rowId, WuxDef.GetVariable("Chat_OutfitEmotes")), JSON.stringify(outfitEmotes));
+                    attributeHandler.addUpdate(outfitRepeater.getFieldName(rowId, WuxDef.GetVariable("Chat_OutfitEmotes", WuxDef._true)), JSON.stringify(outfitEmotes));
+                }
+            }
+
+            WuxWorkerSkills.UpdateStats(attributeHandler);
+            WuxWorkerAttributes.UpdateStats(attributeHandler);
+            await attributeHandler.run();
+
+            // Level and Affinity each have their own derived side effects (CR/Training
+            // draft, combat details, magic auto-filters) that a plain attribute write
+            // wouldn't trigger - run their direct variants now that the base import above
+            // has landed, then refresh the action list once everything has settled.
+            if (importData.background != undefined) {
+                if (importData.background["Level"] != undefined) {
+                    await WuxWorkerAdvancement.SetLevelDirect(importData.background["Level"]);
+                }
+                if (importData.background["AffinityAspect"] != undefined) {
+                    WuxWorkerCharacterCreation.SetAffinityValueDirect(importData.background["AffinityAspect"]);
+                }
+            }
+            if (firstImportedOutfitId != undefined) {
+                // Use the outfit data already in hand rather than SelectOutfitDirect,
+                // which would re-read it back from RepeatingOutfits - a brand new
+                // repeating row (just created above) is not guaranteed to be visible
+                // to a freshly issued getSectionIDs() call yet.
+                await WuxWorkerChat.SelectOutfitWithData(firstImportedOutfitId, new EmoteSetData(firstImportedOutfitEmotes));
+            }
+            WuxWorkerActions.TriggerBuilderActionUpdate();
+        },
         updatePerkMaxRanks = function (attributeHandler) {
             Debug.Log(`Updating Perk Max Ranks`);
             let perkEntries = [];
@@ -388,6 +611,8 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
         GenerateCharacter: generateCharacter,
         UseGeneration: useGeneration,
         ClearBackground: clearBackground,
+        ExportBackgroundData: exportBackgroundData,
+        ImportBackgroundData: importBackgroundData,
         UpdateCR: updateCR,
         UpdateSurge: updateSurge,
         UpdateVitality: updateVitality,

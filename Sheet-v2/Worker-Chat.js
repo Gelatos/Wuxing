@@ -255,44 +255,77 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
     };
     'use strict';
 
-    const selectOutfit = function (eventinfo) {
-            Debug.Log(`Selecting outfit`);
+    const selectOutfitWithData = function (newSelectionId, outfitEmotes) {
+            // Core of "equip an outfit," parameterized on already-known outfit data so
+            // it never needs to look up newSelectionId through RepeatingOutfits'
+            // getSectionIDs() - important right after creating that row (e.g. import),
+            // since a brand new repeating row is not guaranteed to be visible to a
+            // freshly issued getSectionIDs() call yet. Only the two active-emote button
+            // repeaters (unrelated, pre-existing sections) still need discovering.
+            // Returns a Promise resolved once everything has actually landed.
+            return new Promise(function (resolve) {
+                Debug.Log(`Selecting outfit ${newSelectionId}`);
 
-            let outfitRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingOutfits");
-            outfitRepeatingSection.getIds(function (outfitRepeater) {
                 let emoteButtonRepeaterSection = new WorkerRepeatingSectionHandler("RepeatingActiveEmotes");
                 emoteButtonRepeaterSection.getIds(function (emoteButtonRepeater) {
-                    
+
                     let emoteNoteButtonRepeaterSection = new WorkerRepeatingSectionHandler("RepeatingActiveEmotesNotes");
                     emoteNoteButtonRepeaterSection.getIds(function (emoteNoteButtonRepeater) {
 
+                        let outfitRepeater = new WorkerRepeatingSectionHandler("RepeatingOutfits");
                         let attributeHandler = new WorkerAttributeHandler();
                         let setIdVar = WuxDef.GetVariable("Chat_SetId");
-                        let outfitEmotesVar = WuxDef.GetVariable("Chat_OutfitEmotes", WuxDef._true);
                         let outfitSelectVar = WuxDef.GetVariable("Chat_OutfitName", WuxDef._learn);
                         attributeHandler.addMod(setIdVar);
-                        outfitRepeater.addAttributeMods(attributeHandler, [outfitEmotesVar]);
-    
+
                         attributeHandler.addGetAttrCallback(function (attrHandler) {
                             let setId = attrHandler.parseString(setIdVar);
-                            let newSelectionId = outfitRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
-    
-                            outfitRepeater.iterate(function (id) {
-                                if (setId == id) {
-                                    attrHandler.addUpdate(outfitRepeater.getFieldName(id, outfitSelectVar), "0");
-                                }
-                            });
+                            if (setId !== "" && setId !== "0" && setId != newSelectionId) {
+                                attrHandler.addUpdate(outfitRepeater.getFieldName(setId, outfitSelectVar), "0");
+                            }
                             attrHandler.addUpdate(outfitRepeater.getFieldName(newSelectionId, outfitSelectVar), "on");
                             attrHandler.addUpdate(setIdVar, newSelectionId);
-                            let emotesString = attrHandler.parseString(outfitRepeater.getFieldName(newSelectionId, outfitEmotesVar));
-                            let outfitEmotes = new EmoteSetData(JSON.parse(emotesString));
+
                             updateActiveEmoteSet(emoteButtonRepeater, attrHandler, outfitEmotes);
                             updateActiveEmoteSet(emoteNoteButtonRepeater, attrHandler, outfitEmotes);
                         });
-                        attributeHandler.run();
+                        attributeHandler.run().then(resolve);
                     });
                 });
             });
+        },
+        selectOutfitDirect = function (newSelectionId) {
+            // Looks up newSelectionId's own emote JSON from RepeatingOutfits (safe for
+            // an outfit that's been on the sheet for at least one prior run cycle,
+            // e.g. a real click on an existing row) then hands off to
+            // selectOutfitWithData. Callers that already have the outfit data in hand
+            // (e.g. import, which just generated this very row) should call
+            // selectOutfitWithData directly instead of round-tripping through here.
+            return new Promise(function (resolve) {
+                let outfitRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingOutfits");
+                outfitRepeatingSection.getIds(function (outfitRepeater) {
+                    let outfitEmotesVar = WuxDef.GetVariable("Chat_OutfitEmotes", WuxDef._true);
+                    let attributeHandler = new WorkerAttributeHandler();
+                    outfitRepeater.addAttributeMods(attributeHandler, [outfitEmotesVar]);
+
+                    let outfitEmotes;
+                    attributeHandler.addGetAttrCallback(function (attrHandler) {
+                        let emotesString = attrHandler.parseString(outfitRepeater.getFieldName(newSelectionId, outfitEmotesVar));
+                        try {
+                            outfitEmotes = new EmoteSetData(JSON.parse(emotesString));
+                        } catch (e) {
+                            outfitEmotes = new EmoteSetData();
+                        }
+                    });
+                    attributeHandler.run().then(function () {
+                        selectOutfitWithData(newSelectionId, outfitEmotes).then(resolve);
+                    });
+                });
+            });
+        },
+        selectOutfit = function (eventinfo) {
+            let outfitRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingOutfits");
+            return selectOutfitDirect(outfitRepeatingSection.getIdFromFieldName(eventinfo.sourceAttribute));
         },
 
         updatePostContent = function (eventinfo) {
@@ -340,15 +373,28 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
         },
         updateNameOutfit = function (eventinfo) {
             Debug.Log(`Renaming outfit ${eventinfo.previousValue} to ${eventinfo.newValue}`);
+            let outfitRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingOutfits");
+            let updateId = outfitRepeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
+            let isNewOutfit = (eventinfo.previousValue == undefined || eventinfo.previousValue === "");
+
             let attributeHandler = new WorkerAttributeHandler();
             let setIdVar = WuxDef.GetVariable("Chat_SetId");
-            let updateId = outfitRepeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
+            let shouldEquip = false;
 
             attributeHandler.addMod(setIdVar);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let setId = attrHandler.parseString(setIdVar);
                 if (setId == updateId) {
                     attrHandler.addUpdate(setIdVar, eventinfo.newValue);
+                }
+                // Gaining an outfit with none currently equipped auto-equips it.
+                if (isNewOutfit && (setId === "" || setId === "0")) {
+                    shouldEquip = true;
+                }
+            });
+            attributeHandler.addFinishCallback(function () {
+                if (shouldEquip) {
+                    selectOutfitDirect(updateId);
                 }
             });
             attributeHandler.run();
@@ -555,6 +601,8 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
         };
     return {
         SelectOutfit: selectOutfit,
+        SelectOutfitDirect: selectOutfitDirect,
+        SelectOutfitWithData: selectOutfitWithData,
         UpdatePostContent: updatePostContent,
         UpdatePostType: updatePostType,
         UpdateSelectedLanguage: updateSelectedLanguage,

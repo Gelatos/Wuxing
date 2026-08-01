@@ -994,6 +994,12 @@ class InspectionPopup {
                 repeater.iteratorIndex = INSPECTION_POPUP_MAX_RETAINED_ROWS;
                 repeater.removeAllIdsAfterIteratorIndex();
             }
+
+            // The rows kept after trimming are reused as-is by the next population
+            // (iterateAndSetItems, InspectPopupAttributeHandler above) - unset them
+            // now rather than leaving whatever item data/visibility they last held
+            // sitting there until that next population happens to overwrite them.
+            repeater.ids.forEach(id => inspectPopup.inspectPopupAttrHandler.setInventoryItemVisibility(id, false));
         });
     }
     selectItem(selectedId) {
@@ -1107,6 +1113,36 @@ class PerkTechniqueInspectPopupAttributeHandler extends InspectPopupAttributeHan
         // TechniqueInspectPopupAttributeHandler's catalogTechniqueAttributeHandler.
         this.catalogTechniqueAttributeHandler = new TechniqueDataAttributeHandler(this.attrHandler, "Action");
         this.catalogTechniqueAttributeHandler.setRepeaterData(this.repeater);
+    }
+
+    // Shares TechniqueInspectPopupAttributeHandler's exact Popup_LoadMore fields
+    // (no suffix of its own) - repeatingCatalogTechSection (WuxGS-Base.js) renders
+    // the same Load More button for both catalogs' shared "TechPopupValues" card
+    // section, with no popup-type-specific suffix. That's safe as long as every
+    // catalog sharing it refreshes the queue on its own population (only one
+    // catalog popup is ever open at a time) - skipping this override left the
+    // field holding whatever the OTHER catalog (Style) last wrote there, so
+    // opening Perk after browsing Styles showed (and Load More loaded) leftover
+    // Style techniques instead of Perk ones.
+    writeRemainingQueue(remainingItems) {
+        let remainingTechniqueCount = remainingItems.filter(item => !item.isTitle).length;
+        let queueField = WuxDef.GetVariable("Popup_LoadMore", WuxDef._max);
+        if (remainingTechniqueCount === 0) {
+            this.attrHandler.addUpdate(queueField, "0");
+            return;
+        }
+        this.attrHandler.addUpdate(queueField, JSON.stringify(remainingItems));
+        this.attrHandler.addUpdate(WuxDef.GetVariable("Popup_LoadMore", "2"),
+            WuxDef.Get("Popup_LoadMore").getTitle(Math.min(remainingTechniqueCount, 10)));
+    }
+
+    // Caps the initial population at 16 techniques (headers don't count),
+    // queueing whatever's left for the Load More button (loadMoreCatalogTechniques,
+    // this file) to pick up 10 at a time - same cap as the style catalog.
+    iterateAndSetItems(itemData) {
+        let { visibleItems, remainingItems } = this.splitAtTechniqueCap(itemData, 16);
+        this.writeRemainingQueue(remainingItems);
+        super.iterateAndSetItems(visibleItems);
     }
 
     initializePopup() {
@@ -3242,8 +3278,9 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
 
             let queueField = WuxDef.GetVariable("Popup_LoadMore", WuxDef._max);
             let showAddField = WuxDef.GetVariable("Popup_InspectShowAdd");
+            let selectTypeVariable = WuxDef.GetVariable("Popup_InspectSelectType");
             attributeHandler.addMod([
-                queueField, showAddField,
+                queueField, showAddField, selectTypeVariable,
                 WuxDef.GetVariable("Affinity"), WuxDef.GetVariable("AdvancedAffinity"),
                 WuxDef.GetVariable("Ancestry"), WuxDef.GetVariable("Forme_ShowFromNonElement")
             ]);
@@ -3255,7 +3292,18 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                     if (Array.isArray(parsed)) queuedItems = parsed;
                 } catch (e) { /* not JSON (e.g. "0") - nothing queued */ }
 
-                let inspectPopupAttrHandler = new TechniqueInspectPopupAttributeHandler(attrHandler);
+                // The style/technique catalog and the Perk Technique catalog share
+                // this same "TechPopupValues" card grid and Popup_LoadMore queue
+                // (PerkTechniqueInspectPopupAttributeHandler.writeRemainingQueue) -
+                // pick the matching attribute handler so a Load More click while
+                // the Perk popup is open populates rows through Perk's own handler
+                // (variant filtering/points system) instead of always the style
+                // catalog's, which previously left Load More showing/loading
+                // whichever catalog had been browsed most recently.
+                let selectType = attrHandler.parseString(selectTypeVariable);
+                let inspectPopupAttrHandler = selectType == "Popup_PerkInspectionName"
+                    ? new PerkTechniqueInspectPopupAttributeHandler(attrHandler)
+                    : new TechniqueInspectPopupAttributeHandler(attrHandler);
                 inspectPopupAttrHandler.canSelectForAdd = attrHandler.parseString(showAddField) == "on";
                 let showElementRestricted = attrHandler.parseString(WuxDef.GetVariable("Forme_ShowFromNonElement")) != "0";
                 inspectPopupAttrHandler.catalogUserAffinities = showElementRestricted ? undefined : getUserAffinities(attrHandler);

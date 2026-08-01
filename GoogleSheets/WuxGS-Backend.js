@@ -386,6 +386,7 @@ var OverviewBuilder = OverviewBuilder || (function () {
             output += listenerGenerateCharacter();
             output += listenerUseGeneration();
             output += listenerClearBackground();
+            output += listenerImportBackgroundData();
             output += listenerUpdateCR();
             output += listenerUpdateSurge();
             output += listenerUpdateVitality();
@@ -435,6 +436,14 @@ var OverviewBuilder = OverviewBuilder || (function () {
             let output = `WuxWorkerGeneral.ClearBackground();\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+        },
+        listenerImportBackgroundData = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Backstory")}`];
+            // ImportBackgroundData triggers the action-list refresh itself, once its
+            // own (async) Level/Affinity side effects have finished settling.
+            let output = `WuxWorkerGeneral.ImportBackgroundData(eventinfo);\n`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
         listenerUpdateCR = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("CR")}`];

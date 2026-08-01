@@ -760,7 +760,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
             let itemCountAttrMap = {};
             for (let i = 0; i < consuTypes.length; i++) {
-                let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].getTitle()));
+                let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].descriptions[0].split(":")[1]));
                 for (let j = 0; j < itemKeys.length; j++) {
                     let item = itemKeys[j];
                     if (item == undefined) continue;
@@ -1848,7 +1848,7 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
         let itemCountAttrMap = {};
         for (let i = 0; i < consuTypes.length; i++) {
-            let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].getTitle()));
+            let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].descriptions[0].split(":")[1]));
             for (let j = 0; j < itemKeys.length; j++) {
                 let item = itemKeys[j];
                 if (item == undefined) continue;

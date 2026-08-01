@@ -554,7 +554,7 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
                     let rows = "";
                     for (let i = 0; i < consuTypes.length; i++) {
-                        let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].getTitle()));
+                        let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].descriptions[0].split(":")[1]));
                         for (let j = 0; j < itemKeys.length; j++) {
                             let item = itemKeys[j];
                             if (item == undefined) {
@@ -1153,7 +1153,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
                     let output = "";
                     for (let i = 0; i < consuTypes.length; i++) {
-                        let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].getTitle()));
+                        let itemKeys = WuxItems.Filter(new DatabaseFilterData("group", consuTypes[i].descriptions[0].split(":")[1]));
                         for (let j = 0; j < itemKeys.length; j++) {
                             output += buildItemTechniqueDisplay(itemKeys[j]);
                         }

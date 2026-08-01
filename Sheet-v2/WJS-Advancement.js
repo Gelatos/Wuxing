@@ -65,28 +65,34 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 			attributeHandler.run();
 		},
 		setAffinityValue = function (eventinfo) {
-			Debug.Log(`Setting ${eventinfo.sourceAttribute}`);
+			return setAffinityValueForField(eventinfo.sourceAttribute, eventinfo.newValue, eventinfo.previousValue);
+		},
+		setAffinityValueDirect = function (newValue) {
+			return setAffinityValueForField(WuxDef.GetVariable("AffinityAspect"), newValue);
+		},
+		setAffinityValueForField = function (sourceAttribute, newValue, previousValue) {
+			Debug.Log(`Setting ${sourceAttribute}`);
 
 			let primaryAffinityVariable = WuxDef.GetVariable("Affinity");
 			let affinityAspectVariable = WuxDef.GetVariable("AffinityAspect");
 			let advancedAffinityVariable = WuxDef.GetVariable("AdvancedAffinity");
-			let isPrimary = (eventinfo.sourceAttribute == primaryAffinityVariable || eventinfo.sourceAttribute == affinityAspectVariable);
+			let isPrimary = (sourceAttribute == primaryAffinityVariable || sourceAttribute == affinityAspectVariable);
 			let attributeHandler = new WorkerAttributeHandler();
-			let affinityVariable = eventinfo.sourceAttribute;
+			let affinityVariable = sourceAttribute;
 
 			let combatDetailsHandler = new CombatDetailsHandler(attributeHandler);
 
 			attributeHandler.addMod(affinityVariable);
 			attributeHandler.addGetAttrCallback(function (attrHandler) {
 				let variable = `${affinityVariable}${WuxDef._learn}`;
-				let desc = WuxDef.GetDescription(`${WuxDef.GetAbbreviation()}${eventinfo.newValue}`);
+				let desc = WuxDef.GetDescription(`${WuxDef.GetAbbreviation()}${newValue}`);
 				if (isPrimary) {
-					attrHandler.addUpdate(primaryAffinityVariable, eventinfo.newValue);
-					combatDetailsHandler.onUpdateAffinity(attrHandler, eventinfo.newValue);
+					attrHandler.addUpdate(primaryAffinityVariable, newValue);
+					combatDetailsHandler.onUpdateAffinity(attrHandler, newValue);
 
 					// Open the matching Magic filter category (and Special Magic, which always
 					// opens alongside any elemental affinity) on the Actions page.
-					if (eventinfo.newValue && eventinfo.newValue !== "") {
+					if (newValue && newValue !== "") {
 						let affinityMagicAutoFilterCategories = {
 							Wood: "AutoFilter_WoodMagic",
 							Fire: "AutoFilter_FireMagic",
@@ -95,8 +101,8 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 							Water: "AutoFilter_WaterMagic"
 						};
 						attrHandler.addUpdate(WuxDef.Get("AutoFilter_SpecialMagic").getVariable(WuxDef._expand), "1");
-						if (affinityMagicAutoFilterCategories.hasOwnProperty(eventinfo.newValue)) {
-							attrHandler.addUpdate(WuxDef.Get(affinityMagicAutoFilterCategories[eventinfo.newValue]).getVariable(WuxDef._expand), "1");
+						if (affinityMagicAutoFilterCategories.hasOwnProperty(newValue)) {
+							attrHandler.addUpdate(WuxDef.Get(affinityMagicAutoFilterCategories[newValue]).getVariable(WuxDef._expand), "1");
 						}
 					}
 				} else {
@@ -105,16 +111,16 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 					// entries (e.g. advanced branch names) from the previous array and
 					// replace only the AffinityType slot.
 					let allAffinityTitles = WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")]).map(d => d.getTitle());
-					let previousEntries = (eventinfo.previousValue || "").split(";").map(s => s.trim()).filter(s => s !== "" && !allAffinityTitles.includes(s));
-					if (eventinfo.newValue && eventinfo.newValue !== "") {
-						previousEntries.push(eventinfo.newValue);
+					let previousEntries = (previousValue || "").split(";").map(s => s.trim()).filter(s => s !== "" && !allAffinityTitles.includes(s));
+					if (newValue && newValue !== "") {
+						previousEntries.push(newValue);
 					}
 					attrHandler.addUpdate(advancedAffinityVariable, previousEntries.join(";"));
 				}
 				attrHandler.addUpdate(variable, desc);
 
 			});
-			if (eventinfo.sourceAttribute == primaryAffinityVariable) {
+			if (sourceAttribute == primaryAffinityVariable) {
 				WuxWorkerActions.UpdateVisibilityOfFormeActions(attributeHandler);
 			}
 			attributeHandler.run();
@@ -237,6 +243,7 @@ var WuxWorkerCharacterCreation = WuxWorkerCharacterCreation || (function () {
 		FinishBuild: finishBuild,
 		GoToNextSection: goToNextSection,
 		SetAffinityValue: setAffinityValue,
+		SetAffinityValueDirect: setAffinityValueDirect,
 		SetBonusAttributes: setBonusAttributes,
 		SetInnateDefense: setInnateDefense,
 		SetInnateSense: setInnateSense
@@ -472,13 +479,17 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 			worker.convertXp(attributeHandler);
 			attributeHandler.run();
 		},
-		setLevel = async function (eventinfo) {
+		setLevel = function (eventinfo) {
+			return setLevelDirect(eventinfo.newValue);
+		},
+		setLevelDirect = async function (level) {
 			Debug.Log("Setting Level");
+			let fieldName = WuxDef.GetVariable("Level");
 			let attributeHandler = new WorkerAttributeHandler();
 			let advWorker = new WuxAdvancementWorkerBuild();
-			advWorker.updateLevel(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			advWorker.updateLevel(attributeHandler, fieldName, level);
 			let trnWorker = new WuxTrainingWorkerBuild();
-			trnWorker.updateLevel(attributeHandler, eventinfo.sourceAttribute, eventinfo.newValue);
+			trnWorker.updateLevel(attributeHandler, fieldName, level);
 
 			// CR may change as part of a level update. Since attribute writes are always
 			// silent, the sheet's native CR-change listeners never fire on their own -
@@ -618,6 +629,7 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 		ExitBuild: exitBuild,
 		ConvertXp: convertXp,
 		SetLevel: setLevel,
+		SetLevelDirect: setLevelDirect,
 		SetBonusTrainingAdvancementPoints: setBonusTrainingAdvancementPoints,
 		SetAdvancementPointsUpdate: setAdvancementPointsUpdate,
 		SetAdvancementPerkTransferPointsUpdate: setAdvancementPerkTransferPointsUpdate,
@@ -985,6 +997,24 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 			let attributeHandler = new WorkerAttributeHandler();
 			updateStats(attributeHandler);
 			WuxWorkerActions.TriggerBuilderActionUpdate();
+
+			// Learning a language with none currently equipped auto-equips it, so the
+			// player always has a language ready to speak in rather than a blank one.
+			if (eventinfo.newValue === "on") {
+				let languageDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Language"));
+				let learnedLanguage = languageDefinitions.find(definition => definition.getVariable(WuxDef._rank) === eventinfo.sourceAttribute);
+				if (learnedLanguage != undefined) {
+					let chatLanguageVar = WuxDef.GetVariable("Chat_Language");
+					attributeHandler.addMod(chatLanguageVar);
+					attributeHandler.addGetAttrCallback(function (attrHandler) {
+						let currentLanguage = attrHandler.parseString(chatLanguageVar);
+						if (currentLanguage === "" || currentLanguage === "0") {
+							attrHandler.addUpdate(chatLanguageVar, learnedLanguage.title);
+						}
+					});
+				}
+			}
+
 			attributeHandler.run();
 		},
 
