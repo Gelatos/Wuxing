@@ -399,6 +399,79 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
             });
             attributeHandler.run();
         },
+        addOutfit = async function () {
+            Debug.Log("Adding Outfit");
+            let outfitRepeater = new WorkerRepeatingSectionHandler("RepeatingOutfits");
+            let newId = outfitRepeater.generateRowId();
+
+            let attributeHandler = new WorkerAttributeHandler();
+            let setIdVar = WuxDef.GetVariable("Chat_SetId");
+            attributeHandler.addMod(setIdVar);
+            attributeHandler.addUpdate(outfitRepeater.getFieldName(newId, WuxDef.GetVariable("Chat_OutfitName")), "");
+
+            let shouldEquip = false;
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let setId = attrHandler.parseString(setIdVar);
+                shouldEquip = (setId === "" || setId === "0");
+            });
+            await attributeHandler.run();
+
+            // Mirrors updateNameOutfit's auto-equip: since this row is created via a
+            // silent worker write (no real "change" event for Chat_OutfitName fires),
+            // that listener never sees this new row, so gaining-with-none-equipped
+            // needs to be handled here directly instead.
+            if (shouldEquip) {
+                await selectOutfitWithData(newId, new EmoteSetData());
+            }
+        },
+        deleteOutfit = function (eventinfo) {
+            Debug.Log("Deleting Outfit");
+            let outfitRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingOutfits");
+            let selectedId = outfitRepeatingSection.getIdFromFieldName(eventinfo.sourceAttribute);
+
+            // Need the current row list (before removing) to know what, if anything,
+            // remains afterward - a bare handler's .ids is always empty, so removeId
+            // alone can't tell us that.
+            outfitRepeatingSection.getIds(function (outfitRepeater) {
+                outfitRepeater.removeId(selectedId);
+                let remainingId = outfitRepeater.ids.length > 0 ? outfitRepeater.ids[0] : undefined;
+
+                let attributeHandler = new WorkerAttributeHandler();
+                let setIdVar = WuxDef.GetVariable("Chat_SetId");
+                attributeHandler.addMod(setIdVar);
+
+                let wasEquipped = false;
+                attributeHandler.addGetAttrCallback(function (attrHandler) {
+                    let setId = attrHandler.parseString(setIdVar);
+                    wasEquipped = (setId == selectedId);
+                    if (wasEquipped && remainingId == undefined) {
+                        attrHandler.addUpdate(setIdVar, "");
+                    }
+                });
+                attributeHandler.run().then(function () {
+                    if (!wasEquipped) {
+                        return;
+                    }
+                    if (remainingId != undefined) {
+                        // The deleted outfit was equipped - default to the next one.
+                        selectOutfitDirect(remainingId);
+                        return;
+                    }
+                    // No outfits left at all - clear the now-stale active emote state.
+                    let emoteButtonRepeaterSection = new WorkerRepeatingSectionHandler("RepeatingActiveEmotes");
+                    emoteButtonRepeaterSection.getIds(function (emoteButtonRepeater) {
+                        let emoteNoteButtonRepeaterSection = new WorkerRepeatingSectionHandler("RepeatingActiveEmotesNotes");
+                        emoteNoteButtonRepeaterSection.getIds(function (emoteNoteButtonRepeater) {
+                            emoteButtonRepeater.removeAllIds();
+                            emoteNoteButtonRepeater.removeAllIds();
+                            let clearAttributeHandler = new WorkerAttributeHandler();
+                            clearAttributeHandler.addUpdate(WuxDef.GetVariable("Chat_Emotes"), JSON.stringify(new EmoteSetData()));
+                            clearAttributeHandler.run();
+                        });
+                    });
+                });
+            });
+        },
         updateOutfitEmotesGroup = function (eventinfo) {
             Debug.Log(`Setting outfit emotes through a json submission`);
             let outfitRepeatingSection = new WorkerRepeatingSectionHandler("RepeatingOutfits");
@@ -603,6 +676,8 @@ var WuxWorkerChat = WuxWorkerChat || (function () {
         SelectOutfit: selectOutfit,
         SelectOutfitDirect: selectOutfitDirect,
         SelectOutfitWithData: selectOutfitWithData,
+        AddOutfit: addOutfit,
+        DeleteOutfit: deleteOutfit,
         UpdatePostContent: updatePostContent,
         UpdatePostType: updatePostType,
         UpdateSelectedLanguage: updateSelectedLanguage,

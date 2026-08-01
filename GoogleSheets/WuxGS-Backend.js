@@ -1227,6 +1227,8 @@ var ChatBuilder = ChatBuilder || (function () {
             output += listenerUpdatePostContent();
             output += listenerUpdatePostType();
             output += listenerUpdateLanguage();
+            output += listenerAddOutfit();
+            output += listenerDeleteOutfit();
             output += listenerUpdateRepeatingChatSelection();
             output += listenerUpdateRepeatingChatEmoteSetName();
             output += listenerUpdateRepeatingChatEmoteSetInput();
@@ -1259,6 +1261,19 @@ var ChatBuilder = ChatBuilder || (function () {
         listenerUpdateLanguage = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Chat_Language")}`];
             let output = `WuxWorkerChat.UpdateSelectedLanguage(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerAddOutfit = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Title_AddOutfit")}`];
+            let output = `WuxWorkerChat.AddOutfit(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerDeleteOutfit = function () {
+            let repeatingSection = WuxDef.GetVariable("RepeatingOutfits");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Delete")}`];
+            let output = `WuxWorkerChat.DeleteOutfit(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },

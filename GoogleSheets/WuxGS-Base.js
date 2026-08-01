@@ -1642,8 +1642,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         let items = [];
                         for (let j = 0; j < groupButtons.length; j++) {
                             items.push(WuxSheetMain.Table.FlexTableGroup(
-                                WuxSheetMain.Button(groupButtons[j].getAttribute(), groupButtons[j].getTitle(), "wuxWidth90")
-                            ));
+                                WuxSheetMain.Button(groupButtons[j].getAttribute(), groupButtons[j].getTitle(), "wuxWidth90"),
+                                " wuxTechBaseFilterButtonGroup"));
                         }
 
                         let expandField = groupDef.getAttribute(WuxDef._expand);

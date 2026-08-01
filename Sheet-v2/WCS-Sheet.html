@@ -621,7 +621,7 @@
 											</div>
 										</div>
 										<input type="hidden" class="wuxInput" name="attr_chat-emoteset_id" /><input type="hidden" class="wuxInput" name="attr_chat-emoteset" /><input type="hidden" class="wuxInput" name="attr_chat-post_name" /><input type="hidden" class="wuxInput" name="attr_chat-post_url" />
-										<div class="wuxRepeatingFlexSection">
+										<div class="wuxRepeatingFlexSection wuxNoRepControl">
 											<fieldset class="repeating_emotes">
 												<div class="wuxSectionBlock wuxMinWidth200 wuxMaxWidth220">
 													<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
@@ -648,6 +648,13 @@
 														<div class="wuxInteractiveExpandingContent">
 															<div class="wuxSectionContent">
 																<input type="hidden" class="wuxInput" name="attr_chat-outfit_emotes_true" />
+																<div class="wuxRow">&nbsp;</div>
+																<div class="wuxEquipableButtonRow">
+																	<div class="wuxButton wuxRepeatingTechActionButton">
+																		<input type="checkbox" name="attr_delete">
+																		<span><span style="color:#cc3333;">&#10008;</span> Delete</span>
+																	</div>
+																</div>
 																<div class="wuxHeader2">Outfit Name</div>
 																<input type="text" class="wuxInput" name="attr_chat-outfit_name" value="New Outfit" />
 																<div class="wuxHeader2">Outfit Emotes</div>
@@ -779,6 +786,12 @@
 													</div>
 												</div>
 											</fieldset>
+										</div>
+										<div>
+											<div class="wuxButton wuxRepeatingTechActionButton">
+												<input type="checkbox" name="attr_ttl-addoutfit">
+												<span><span style="color:#4CAF50;">&#43;</span> Add Outfit</span>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -11845,7 +11858,7 @@
 												</div>
 											</div>
 											<input type="hidden" class="wuxInput" name="attr_chat-emoteset_id" /><input type="hidden" class="wuxInput" name="attr_chat-emoteset" /><input type="hidden" class="wuxInput" name="attr_chat-post_name" /><input type="hidden" class="wuxInput" name="attr_chat-post_url" />
-											<div class="wuxRepeatingFlexSection">
+											<div class="wuxRepeatingFlexSection wuxNoRepControl">
 												<fieldset class="repeating_emotes">
 													<div class="wuxSectionBlock wuxMinWidth200 wuxMaxWidth220">
 														<div class="wuxInteractiveBlock wuxInteractiveExpandingBlock">
@@ -11872,6 +11885,13 @@
 															<div class="wuxInteractiveExpandingContent">
 																<div class="wuxSectionContent">
 																	<input type="hidden" class="wuxInput" name="attr_chat-outfit_emotes_true" />
+																	<div class="wuxRow">&nbsp;</div>
+																	<div class="wuxEquipableButtonRow">
+																		<div class="wuxButton wuxRepeatingTechActionButton">
+																			<input type="checkbox" name="attr_delete">
+																			<span><span style="color:#cc3333;">&#10008;</span> Delete</span>
+																		</div>
+																	</div>
 																	<div class="wuxHeader2">Outfit Name</div>
 																	<input type="text" class="wuxInput" name="attr_chat-outfit_name" value="New Outfit" />
 																	<div class="wuxHeader2">Outfit Emotes</div>
@@ -12003,6 +12023,12 @@
 														</div>
 													</div>
 												</fieldset>
+											</div>
+											<div>
+												<div class="wuxButton wuxRepeatingTechActionButton">
+													<input type="checkbox" name="attr_ttl-addoutfit">
+													<span><span style="color:#4CAF50;">&#43;</span> Add Outfit</span>
+												</div>
 											</div>
 										</div>
 										<div class="wuxFlexTableItemGroup wuxMinWidth150">
@@ -16948,7 +16974,7 @@
 							<div class="wuxInfoContent">
 								<div class="wuxHeader2">Styles</div>
 
-								<span class="wuxDescription">A Style is a collection of techniques. You may learn a number of styles equal to your Style Points. A Style Point is gained every time your Character Rank is raised.</span><span class="wuxDescription">Styles are divided into categories based on theming and how they are used. You can open pages containing styles you may wish to learn by opening one of these categories. </span><span class="wuxDescription">You may also choose to allow the system to recommend styles for you to use by using the Recommended Styles button.</span>
+								<span class="wuxDescription">A Style is a collection of techniques. You may learn a number of styles equal to your Style Points. A Style Point is gained every time your Character Rank is raised.</span><span class="wuxDescription">Styles are divided into categories based on theming and how they are used. You can open pages containing styles you may wish to learn by opening one of these categories. You may also choose to allow the system to recommend styles for you to use by using the Recommended Styles button. This will curate a small selection of styles that match the skills you've selected in the Attributes page.</span><span class="wuxDescription">Each style you select costs one style point. You start with three style points and gain an additional one every time you gain CR. You may purchase more points in the Advancement section by spending Advancement points.</span>
 							</div>
 						</div>
 
@@ -17321,31 +17347,31 @@
 														</span><span>Melee Weapon Technique Filters</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_autofilter-meleeweapons_expand" value="0">
 													<div class="wuxHiddenField">
 														<div class="wuxFlexTable">
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-lightblade">
 																	<span>Light Blade Styles</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-heavyblade">
 																	<span>Heavy Blade Styles</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-hammer">
 																	<span>Hammer Styles</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-polearm">
 																	<span>Polearm Styles</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-whip">
 																	<span>Whip Styles</span>
@@ -17379,25 +17405,25 @@
 														</span><span>Ranged Weapon Technique Filters</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_autofilter-rangedweapons_expand" value="0">
 													<div class="wuxHiddenField">
 														<div class="wuxFlexTable">
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-bow">
 																	<span>Bow Styles</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-handgun">
 																	<span>Handgun Styles</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-longshot">
 																	<span>Longshot Styles</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-thrownblade">
 																	<span>Thrown Blade Styles</span>
@@ -17431,37 +17457,37 @@
 														</span><span>Athletics Technique Filters</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_autofilter-athletics_expand" value="0">
 													<div class="wuxHiddenField">
 														<div class="wuxFlexTable">
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-forcefulfist">
 																	<span>Forceful Fist Style</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-grappler">
 																	<span>Grappler Style</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-swiftform">
 																	<span>Swiftform Arts</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-mobility">
 																	<span>Mobility</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-acrobatics">
 																	<span>Acrobatics</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-stealth">
 																	<span>Stealth</span>
@@ -17495,25 +17521,25 @@
 														</span><span>Negotiation Technique Filters</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_autofilter-social_expand" value="0">
 													<div class="wuxHiddenField">
 														<div class="wuxFlexTable">
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-favorbuilding">
 																	<span>Favor Building</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-request">
 																	<span>Request Actions</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-influence">
 																	<span>Influence Modifying</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-emotion">
 																	<span>Emotion Manipulation</span>
@@ -17547,49 +17573,49 @@
 														</span><span>Wood Magic Technique Filters</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_autofilter-woodmagic_expand" value="0">
 													<div class="wuxHiddenField">
 														<div class="wuxFlexTable">
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-plantmartial">
 																	<span>Martial Plants</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-plants">
 																	<span>Plants</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-wood">
 																	<span>Wood Material</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-wind">
 																	<span>Wind Flux</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-mana">
 																	<span>Mana</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-woodsound">
 																	<span>Sound</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-woodhealing">
 																	<span>Healing</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-woodempowering">
 																	<span>Empowerment</span>
@@ -17623,37 +17649,37 @@
 														</span><span>Fire Magic Technique Filters</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_autofilter-firemagic_expand" value="0">
 													<div class="wuxHiddenField">
 														<div class="wuxFlexTable">
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-flamemartial">
 																	<span>Martial Flames</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-flames">
 																	<span>Flame Energy</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-glass">
 																	<span>Glass Material</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-smoke">
 																	<span>Smoke Materialization</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-firehealing">
 																	<span>Healing</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-fireempowering">
 																	<span>Empowerment</span>
@@ -17687,31 +17713,31 @@
 														</span><span>Earth Magic Technique Filters</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_autofilter-earthmagic_expand" value="0">
 													<div class="wuxHiddenField">
 														<div class="wuxFlexTable">
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-sandmartial">
 																	<span>Martial Sand</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-rock">
 																	<span>Rock Material</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-terrain">
 																	<span>Terrain Transmutation</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-gravity">
 																	<span>Gravity Flux</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-earthempowering">
 																	<span>Empowerment</span>
@@ -17745,37 +17771,37 @@
 														</span><span>Metal Magic Technique Filters</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_autofilter-metalmagic_expand" value="0">
 													<div class="wuxHiddenField">
 														<div class="wuxFlexTable">
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-lightningmartial">
 																	<span>Martial Lightning</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-ironsand">
 																	<span>Ironsand Martial</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-metal">
 																	<span>Metal Material</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-lightning">
 																	<span>Lightning Energy</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-stasis">
 																	<span>Stasis Flux</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-metalempowering">
 																	<span>Empowerment</span>
@@ -17809,43 +17835,43 @@
 														</span><span>Water Magic Technique Filters</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_autofilter-watermagic_expand" value="0">
 													<div class="wuxHiddenField">
 														<div class="wuxFlexTable">
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-icemartial">
 																	<span>Martial Ice</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-water">
 																	<span>Water</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-cold">
 																	<span>Cold Energy</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-ice">
 																	<span>Ice Material</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-waterhealing">
 																	<span>Healing</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-watersound">
 																	<span>Sound</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-waterempowering">
 																	<span>Empowerment</span>
@@ -17879,37 +17905,37 @@
 														</span><span>Special Magic Technique Filters</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_autofilter-specialmagic_expand" value="0">
 													<div class="wuxHiddenField">
 														<div class="wuxFlexTable">
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-ether">
 																	<span>Ether</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-corrosion">
 																	<span>Corrosion</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-light">
 																	<span>Light</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-shadow">
 																	<span>Shadow</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-blood">
 																	<span>Blood</span>
 																</div>
 															</div>
-															<div class="wuxFlexTableItemGroup">
+															<div class="wuxFlexTableItemGroup wuxTechBaseFilterButtonGroup">
 																<div class="wuxButton wuxWidth90">
 																	<input type="checkbox" name="attr_autofilter-time">
 																	<span>Time</span>
@@ -24049,6 +24075,16 @@ WuxWorkerChat.UpdatePostType(eventinfo)
 });
 on("change:chat-language", function (eventinfo) {
 WuxWorkerChat.UpdateSelectedLanguage(eventinfo);
+WuxWorkerActions.TriggerBuilderActionUpdate();
+
+});
+on("change:ttl-addoutfit", function (eventinfo) {
+WuxWorkerChat.AddOutfit(eventinfo);
+WuxWorkerActions.TriggerBuilderActionUpdate();
+
+});
+on("change:repeating_emotes:delete", function (eventinfo) {
+WuxWorkerChat.DeleteOutfit(eventinfo);
 WuxWorkerActions.TriggerBuilderActionUpdate();
 
 });

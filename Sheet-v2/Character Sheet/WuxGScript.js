@@ -13147,8 +13147,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         let items = [];
                         for (let j = 0; j < groupButtons.length; j++) {
                             items.push(WuxSheetMain.Table.FlexTableGroup(
-                                WuxSheetMain.Button(groupButtons[j].getAttribute(), groupButtons[j].getTitle(), "wuxWidth90")
-                            ));
+                                WuxSheetMain.Button(groupButtons[j].getAttribute(), groupButtons[j].getTitle(), "wuxWidth90"),
+                                " wuxTechBaseFilterButtonGroup"));
                         }
 
                         let expandField = groupDef.getAttribute(WuxDef._expand);
@@ -14646,6 +14646,8 @@ var ChatBuilder = ChatBuilder || (function () {
             output += listenerUpdatePostContent();
             output += listenerUpdatePostType();
             output += listenerUpdateLanguage();
+            output += listenerAddOutfit();
+            output += listenerDeleteOutfit();
             output += listenerUpdateRepeatingChatSelection();
             output += listenerUpdateRepeatingChatEmoteSetName();
             output += listenerUpdateRepeatingChatEmoteSetInput();
@@ -14678,6 +14680,19 @@ var ChatBuilder = ChatBuilder || (function () {
         listenerUpdateLanguage = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Chat_Language")}`];
             let output = `WuxWorkerChat.UpdateSelectedLanguage(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerAddOutfit = function () {
+            let groupVariableNames = [`${WuxDef.GetVariable("Title_AddOutfit")}`];
+            let output = `WuxWorkerChat.AddOutfit(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        listenerDeleteOutfit = function () {
+            let repeatingSection = WuxDef.GetVariable("RepeatingOutfits");
+            let groupVariableNames = [`${repeatingSection}:${WuxDef.GetVariable("Delete")}`];
+            let output = `WuxWorkerChat.DeleteOutfit(eventinfo);\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
@@ -17465,17 +17480,27 @@ class ChatDisplayBuilder {
             ${WuxSheetMain.InteractionElement.Build(true, emoteContents)}
         </div>`;
 
-        contents += `<div class="wuxRepeatingFlexSection">
+        contents += `<div class="wuxRepeatingFlexSection wuxNoRepControl">
             <fieldset class="${WuxDef.GetVariable("RepeatingOutfits")}">
                 ${emoteContents}
             </fieldset>
         </div>`;
+
+        let addOutfitDef = WuxDef.Get("Title_AddOutfit");
+        contents += `<div>${WuxSheetMain.Button(addOutfitDef.getAttribute(),
+            `<span style="color:#4CAF50;">&#43;</span> ${addOutfitDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>`;
+
         return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150 wuxFlexTableItemGroup2");
     }
 
     buildOutfitContents() {
         let contents = "";
         contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_OutfitEmotes", WuxDef._true));
+
+        let deleteDef = WuxDef.Get("Delete");
+        contents += `<div class="wuxEquipableButtonRow">
+            ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+        </div>`;
 
         let outfitNameDefinition = WuxDef.Get("Chat_OutfitName");
         contents += WuxSheetMain.Header2(outfitNameDefinition.title) + "\n" +

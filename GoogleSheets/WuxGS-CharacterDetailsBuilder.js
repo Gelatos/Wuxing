@@ -410,17 +410,27 @@ class ChatDisplayBuilder {
             ${WuxSheetMain.InteractionElement.Build(true, emoteContents)}
         </div>`;
 
-        contents += `<div class="wuxRepeatingFlexSection">
+        contents += `<div class="wuxRepeatingFlexSection wuxNoRepControl">
             <fieldset class="${WuxDef.GetVariable("RepeatingOutfits")}">
                 ${emoteContents}
             </fieldset>
         </div>`;
+
+        let addOutfitDef = WuxDef.Get("Title_AddOutfit");
+        contents += `<div>${WuxSheetMain.Button(addOutfitDef.getAttribute(),
+            `<span style="color:#4CAF50;">&#43;</span> ${addOutfitDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>`;
+
         return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150 wuxFlexTableItemGroup2");
     }
 
     buildOutfitContents() {
         let contents = "";
         contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_OutfitEmotes", WuxDef._true));
+
+        let deleteDef = WuxDef.Get("Delete");
+        contents += `<div class="wuxEquipableButtonRow">
+            ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+        </div>`;
 
         let outfitNameDefinition = WuxDef.Get("Chat_OutfitName");
         contents += WuxSheetMain.Header2(outfitNameDefinition.title) + "\n" +

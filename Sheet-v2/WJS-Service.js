@@ -1199,14 +1199,15 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		if (variantOptions?.userAffinities != undefined) {
 			candidates = candidates.filter(tech => tech.hasRequiredAffinity(variantOptions.userAffinities));
 		}
-		let realElements = ["Wood", "Fire", "Earth", "Metal", "Water"];
 		let slots = [0, 0, 0, 0, 0, 0];
-		// A variant with no affinity or all 5 affinities is conceptually "neutral"
-		// too (usable with anything), but only one candidate can occupy the actual
-		// Neutral slot - the root always claims it (see below), so any other such
-		// candidate is queued here and placed into a leftover slot afterward as
-		// Stage2, then Stage3 (WCSS-Specialized.css renders these as a
-		// progressively darker Neutral icon with a "II"/"III" badge).
+		// A variant with no affinity, or with more than one element, doesn't get
+		// a single element's icon - only one candidate can occupy the actual
+		// Neutral slot (the root always claims it, see below), and a multi-element
+		// variant would otherwise show up under every one of its elements' slots
+		// at once instead of once. Either case is queued here and placed into a
+		// leftover slot afterward as Stage2, then Stage3 (WCSS-Specialized.css
+		// renders these as a progressively darker Neutral icon with a "II"/"III"
+		// badge) rather than setting an element icon per affinity part.
 		let universalCandidates = [];
 		candidates.forEach(tech => {
 			// The root's own affinity states what's required to USE it, not which
@@ -1220,8 +1221,7 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 				return;
 			}
 			let affinityParts = tech.getAffinityParts();
-			let isUniversal = (affinityParts.length === 1 && affinityParts[0] === "Neutral")
-				|| realElements.every(element => affinityParts.includes(element));
+			let isUniversal = affinityParts.length !== 1 || affinityParts[0] === "Neutral";
 			if (isUniversal) {
 				universalCandidates.push(tech);
 				return;
