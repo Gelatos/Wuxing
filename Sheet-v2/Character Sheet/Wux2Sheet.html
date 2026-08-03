@@ -25726,7 +25726,15 @@ class TechniqueData extends WuxDatabaseData {
                     if (!this.damageTypes.includes(effect.effect)) {
                         this.damageTypes.push(effect.effect);
                     }
-                    if (effect.effect == "Dmg_Psyche") {
+                    // Only fall back to the default willbreak if nothing explicit
+                    // has been set yet - an explicit "WillBreak"-defense effect
+                    // (case above) always wins regardless of which effect row
+                    // gets processed first, so a technique with both a Dmg_Psyche
+                    // effect and its own custom willbreak (e.g. Hindering T.
+                    // Bladecast's Stat_Flustered) doesn't have that custom
+                    // willbreak silently clobbered by this auto-default whenever
+                    // the Psyche damage row happens to be processed after it.
+                    if (effect.effect == "Dmg_Psyche" && this.willBreakEffect == undefined) {
                         this.willBreakEffect = this.effects.getDefaultWillbreak();
                     }
                 }
@@ -25960,6 +25968,7 @@ class TechniqueUseEffect extends dbObj {
         this.forms = json.forms ?? "";
         this.traits = undefined;
         this.effects = new TechniqueEffectDatabase(json.effects);
+        this.willBreakEffect = json.willBreakEffect == undefined ? undefined : new TechniqueEffect(json.willBreakEffect);
     }
 
     importSheets(dataArray) {
@@ -25978,10 +25987,10 @@ class TechniqueUseEffect extends dbObj {
     }
 
     importFromTechnique(technique) {
-        this.import(technique.name, technique.rank, technique.skill, technique.coreDefense, technique.impacts, technique.getEffects(), technique.forms);
+        this.import(technique.name, technique.rank, technique.skill, technique.coreDefense, technique.impacts, technique.getEffects(), technique.forms, technique.willBreakEffect);
     }
 
-    import(name, rank, skill, coreDefense, impacts, effects, forms) {
+    import(name, rank, skill, coreDefense, impacts, effects, forms, willBreakEffect) {
         this.name = name;
         this.rank = rank;
         this.skill = skill;
@@ -25993,6 +26002,7 @@ class TechniqueUseEffect extends dbObj {
         } else {
             this.effects = new TechniqueEffectDatabase();
         }
+        this.willBreakEffect = willBreakEffect;
     }
 
     createEmpty() {
@@ -26005,6 +26015,7 @@ class TechniqueUseEffect extends dbObj {
         this.forms = "";
         this.traits = undefined;
         this.effects = new TechniqueEffectDatabase();
+        this.willBreakEffect = undefined;
     }
     
     setup() {
@@ -41155,6 +41166,14 @@ class BasePopupAttributeHandler {
             outfitRepeater.addFieldNames([outfitEmotesVar]);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
+                // Without a Full Name, an exported snapshot pasted into another
+                // character would be indistinguishable from that character's own
+                // (never-exported) blank state - skip the export entirely rather
+                // than write a Backstory payload that looks like a real snapshot.
+                if (attrHandler.parseString(WuxDef.GetVariable("FullName")) === "") {
+                    return;
+                }
+
                 let backgroundData = {};
                 for (let i = 0; i < backgroundExportFields.length; i++) {
                     backgroundData[backgroundExportFields[i]] = attrHandler.parseString(backgroundVars[i]);
@@ -46971,6 +46990,14 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
             }
             itemCount++;
         }
+        // If cutting here would leave fewer than 10 techniques for the next
+        // Load More click to pick up, just include them in this batch instead -
+        // avoids a Load More button (or a second click) that only ever surfaces
+        // a handful of leftover cards.
+        let remainingCount = itemData.slice(splitIndex).filter(item => !item.isTitle).length;
+        if (remainingCount > 0 && remainingCount < 10) {
+            splitIndex = itemData.length;
+        }
         return { visibleItems: itemData.slice(0, splitIndex), remainingItems: itemData.slice(splitIndex) };
     }
 
@@ -50459,7 +50486,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             let learnableStyles = allBaseStyles.filter(function (style) {
                 return matchesBaseCriteria(style) && style.tier <= userCr;
             });
-            learnableStyles = selectTopRecommendedStyles(learnableStyles, styleNameToSkills, 12);
+            learnableStyles = selectTopRecommendedStyles(learnableStyles, styleNameToSkills, 16);
 
             let unlearnableStyles = showLevelRestricted !== "0"
                 ? allBaseStyles.filter(function (style) { return matchesBaseCriteria(style) && style.tier > userCr; })

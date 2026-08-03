@@ -344,6 +344,14 @@ class InspectPopupAttributeHandler extends BasePopupAttributeHandler {
             }
             itemCount++;
         }
+        // If cutting here would leave fewer than 10 techniques for the next
+        // Load More click to pick up, just include them in this batch instead -
+        // avoids a Load More button (or a second click) that only ever surfaces
+        // a handful of leftover cards.
+        let remainingCount = itemData.slice(splitIndex).filter(item => !item.isTitle).length;
+        if (remainingCount > 0 && remainingCount < 10) {
+            splitIndex = itemData.length;
+        }
         return { visibleItems: itemData.slice(0, splitIndex), remainingItems: itemData.slice(splitIndex) };
     }
 
@@ -3832,7 +3840,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
             let learnableStyles = allBaseStyles.filter(function (style) {
                 return matchesBaseCriteria(style) && style.tier <= userCr;
             });
-            learnableStyles = selectTopRecommendedStyles(learnableStyles, styleNameToSkills, 12);
+            learnableStyles = selectTopRecommendedStyles(learnableStyles, styleNameToSkills, 16);
 
             let unlearnableStyles = showLevelRestricted !== "0"
                 ? allBaseStyles.filter(function (style) { return matchesBaseCriteria(style) && style.tier > userCr; })

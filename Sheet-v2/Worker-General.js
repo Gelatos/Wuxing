@@ -325,6 +325,14 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             outfitRepeater.addFieldNames([outfitEmotesVar]);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
+                // Without a Full Name, an exported snapshot pasted into another
+                // character would be indistinguishable from that character's own
+                // (never-exported) blank state - skip the export entirely rather
+                // than write a Backstory payload that looks like a real snapshot.
+                if (attrHandler.parseString(WuxDef.GetVariable("FullName")) === "") {
+                    return;
+                }
+
                 let backgroundData = {};
                 for (let i = 0; i < backgroundExportFields.length; i++) {
                     backgroundData[backgroundExportFields[i]] = attrHandler.parseString(backgroundVars[i]);

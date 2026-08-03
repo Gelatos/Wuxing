@@ -913,14 +913,22 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             this.technique.setup();
         }
         catch {
-            data = data.split("-");
-            let techniqueData = WuxTechs.Get(data[0]);
+            // Split on the LAST "-" only, not every "-" - technique names can
+            // contain their own hyphens (e.g. "Follow-Up Strike"), and naively
+            // splitting on all of them broke the name apart (["Follow", "Up
+            // Strike", "1"]) so WuxTechs.Get/WuxItems.Get never found a match,
+            // silently leaving this.technique empty (no skill, no effects) for
+            // the rest of the resolver.
+            let lastDashIndex = data.lastIndexOf("-");
+            let techniqueName = lastDashIndex === -1 ? data : data.substring(0, lastDashIndex);
+            let rank = lastDashIndex === -1 ? undefined : data.substring(lastDashIndex + 1);
+            let techniqueData = WuxTechs.Get(techniqueName);
             if (techniqueData != undefined) {
-                techniqueData.rank = parseInt(data[1]);
+                techniqueData.rank = parseInt(rank);
                 Debug.Log("Setting rank to " + techniqueData.rank);
             }
             else {
-                let item = WuxItems.Get(data[0]);
+                let item = WuxItems.Get(techniqueName);
                 if (item == undefined) {
                     return;
                 }
@@ -1339,7 +1347,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                 new SandboxAttributeHandler(techUseResolver.targetTokenEffect.tokenTargetData.charId));
 
             techUseResolver.rollSkillCheck(attrSetters);
-            techUseResolver.checkDc(attrSetters);
+            techUseResolver.checkDc(attrSetters.target);
             
             if (techUseResolver.technique.willBreakEffect != undefined) {
                 willBreakEffect.add(techUseResolver.technique.willBreakEffect);

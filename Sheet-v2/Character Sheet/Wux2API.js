@@ -966,14 +966,22 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
             this.technique.setup();
         }
         catch {
-            data = data.split("-");
-            let techniqueData = WuxTechs.Get(data[0]);
+            // Split on the LAST "-" only, not every "-" - technique names can
+            // contain their own hyphens (e.g. "Follow-Up Strike"), and naively
+            // splitting on all of them broke the name apart (["Follow", "Up
+            // Strike", "1"]) so WuxTechs.Get/WuxItems.Get never found a match,
+            // silently leaving this.technique empty (no skill, no effects) for
+            // the rest of the resolver.
+            let lastDashIndex = data.lastIndexOf("-");
+            let techniqueName = lastDashIndex === -1 ? data : data.substring(0, lastDashIndex);
+            let rank = lastDashIndex === -1 ? undefined : data.substring(lastDashIndex + 1);
+            let techniqueData = WuxTechs.Get(techniqueName);
             if (techniqueData != undefined) {
-                techniqueData.rank = parseInt(data[1]);
+                techniqueData.rank = parseInt(rank);
                 Debug.Log("Setting rank to " + techniqueData.rank);
             }
             else {
-                let item = WuxItems.Get(data[0]);
+                let item = WuxItems.Get(techniqueName);
                 if (item == undefined) {
                     return;
                 }
@@ -1392,7 +1400,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                 new SandboxAttributeHandler(techUseResolver.targetTokenEffect.tokenTargetData.charId));
 
             techUseResolver.rollSkillCheck(attrSetters);
-            techUseResolver.checkDc(attrSetters);
+            techUseResolver.checkDc(attrSetters.target);
             
             if (techUseResolver.technique.willBreakEffect != undefined) {
                 willBreakEffect.add(techUseResolver.technique.willBreakEffect);
@@ -8600,7 +8608,15 @@ class TechniqueData extends WuxDatabaseData {
                     if (!this.damageTypes.includes(effect.effect)) {
                         this.damageTypes.push(effect.effect);
                     }
-                    if (effect.effect == "Dmg_Psyche") {
+                    // Only fall back to the default willbreak if nothing explicit
+                    // has been set yet - an explicit "WillBreak"-defense effect
+                    // (case above) always wins regardless of which effect row
+                    // gets processed first, so a technique with both a Dmg_Psyche
+                    // effect and its own custom willbreak (e.g. Hindering T.
+                    // Bladecast's Stat_Flustered) doesn't have that custom
+                    // willbreak silently clobbered by this auto-default whenever
+                    // the Psyche damage row happens to be processed after it.
+                    if (effect.effect == "Dmg_Psyche" && this.willBreakEffect == undefined) {
                         this.willBreakEffect = this.effects.getDefaultWillbreak();
                     }
                 }
@@ -8834,6 +8850,7 @@ class TechniqueUseEffect extends dbObj {
         this.forms = json.forms ?? "";
         this.traits = undefined;
         this.effects = new TechniqueEffectDatabase(json.effects);
+        this.willBreakEffect = json.willBreakEffect == undefined ? undefined : new TechniqueEffect(json.willBreakEffect);
     }
 
     importSheets(dataArray) {
@@ -8852,10 +8869,10 @@ class TechniqueUseEffect extends dbObj {
     }
 
     importFromTechnique(technique) {
-        this.import(technique.name, technique.rank, technique.skill, technique.coreDefense, technique.impacts, technique.getEffects(), technique.forms);
+        this.import(technique.name, technique.rank, technique.skill, technique.coreDefense, technique.impacts, technique.getEffects(), technique.forms, technique.willBreakEffect);
     }
 
-    import(name, rank, skill, coreDefense, impacts, effects, forms) {
+    import(name, rank, skill, coreDefense, impacts, effects, forms, willBreakEffect) {
         this.name = name;
         this.rank = rank;
         this.skill = skill;
@@ -8867,6 +8884,7 @@ class TechniqueUseEffect extends dbObj {
         } else {
             this.effects = new TechniqueEffectDatabase();
         }
+        this.willBreakEffect = willBreakEffect;
     }
 
     createEmpty() {
@@ -8879,6 +8897,7 @@ class TechniqueUseEffect extends dbObj {
         this.forms = "";
         this.traits = undefined;
         this.effects = new TechniqueEffectDatabase();
+        this.willBreakEffect = undefined;
     }
     
     setup() {

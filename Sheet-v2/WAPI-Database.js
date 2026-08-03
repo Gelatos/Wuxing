@@ -1107,7 +1107,15 @@ class TechniqueData extends WuxDatabaseData {
                     if (!this.damageTypes.includes(effect.effect)) {
                         this.damageTypes.push(effect.effect);
                     }
-                    if (effect.effect == "Dmg_Psyche") {
+                    // Only fall back to the default willbreak if nothing explicit
+                    // has been set yet - an explicit "WillBreak"-defense effect
+                    // (case above) always wins regardless of which effect row
+                    // gets processed first, so a technique with both a Dmg_Psyche
+                    // effect and its own custom willbreak (e.g. Hindering T.
+                    // Bladecast's Stat_Flustered) doesn't have that custom
+                    // willbreak silently clobbered by this auto-default whenever
+                    // the Psyche damage row happens to be processed after it.
+                    if (effect.effect == "Dmg_Psyche" && this.willBreakEffect == undefined) {
                         this.willBreakEffect = this.effects.getDefaultWillbreak();
                     }
                 }
@@ -1341,6 +1349,7 @@ class TechniqueUseEffect extends dbObj {
         this.forms = json.forms ?? "";
         this.traits = undefined;
         this.effects = new TechniqueEffectDatabase(json.effects);
+        this.willBreakEffect = json.willBreakEffect == undefined ? undefined : new TechniqueEffect(json.willBreakEffect);
     }
 
     importSheets(dataArray) {
@@ -1359,10 +1368,10 @@ class TechniqueUseEffect extends dbObj {
     }
 
     importFromTechnique(technique) {
-        this.import(technique.name, technique.rank, technique.skill, technique.coreDefense, technique.impacts, technique.getEffects(), technique.forms);
+        this.import(technique.name, technique.rank, technique.skill, technique.coreDefense, technique.impacts, technique.getEffects(), technique.forms, technique.willBreakEffect);
     }
 
-    import(name, rank, skill, coreDefense, impacts, effects, forms) {
+    import(name, rank, skill, coreDefense, impacts, effects, forms, willBreakEffect) {
         this.name = name;
         this.rank = rank;
         this.skill = skill;
@@ -1374,6 +1383,7 @@ class TechniqueUseEffect extends dbObj {
         } else {
             this.effects = new TechniqueEffectDatabase();
         }
+        this.willBreakEffect = willBreakEffect;
     }
 
     createEmpty() {
@@ -1386,6 +1396,7 @@ class TechniqueUseEffect extends dbObj {
         this.forms = "";
         this.traits = undefined;
         this.effects = new TechniqueEffectDatabase();
+        this.willBreakEffect = undefined;
     }
     
     setup() {
