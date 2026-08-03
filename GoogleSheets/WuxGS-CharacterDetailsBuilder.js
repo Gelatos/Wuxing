@@ -354,39 +354,12 @@ class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
 }
 
 class ChatDisplayBuilder {
-    constructor(showLanguageSelect = true) {
-        this.showLanguageSelect = showLanguageSelect;
-    }
     print() {
-        let sections = [this.outfitCollection()];
-        if (this.showLanguageSelect) sections.push(this.languageSelect());
-        let contents = WuxSheetMain.MultiRowGroup(sections, WuxSheetMain.Table.FlexTable, 2);
+        let contents = WuxSheetMain.MultiRowGroup([this.outfitCollection()], WuxSheetMain.Table.FlexTable, 2);
         contents = WuxSheetMain.TabBlock(contents);
 
         let definition = WuxDef.Get("Title_Emotes");
         return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
-    }
-
-    languageSelect() {
-        let contents = "";
-        let titleDefinition = WuxDef.Get("Title_LanguageSelect");
-        contents += WuxDefinition.InfoHeader(titleDefinition);
-        contents += WuxSheetMain.Input("hidden", WuxDef.GetAttribute("Chat_LanguageTag"), "wuxInput");
-
-        let languageFilters = WuxDef.Filter([new DatabaseFilterData("group", "Language")]);
-        for (let i = 0; i < languageFilters.length; i++) {
-            contents += WuxSheetMain.HiddenField(languageFilters[i].getAttribute(WuxDef._filter),
-                WuxSheetMain.InteractionElement.BuildTooltipRadioInput(WuxDef.GetAttribute("Chat_Language"), WuxDef.GetAttribute("Chat_Language", WuxDef._info),
-                    languageFilters[i].title,
-                    this.languageTitle(languageFilters[i]), WuxDefinition.TooltipDescription(languageFilters[i]))
-            );
-        }
-
-        return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
-    }
-
-    languageTitle(languageDef) {
-        return `<span class="wuxHeader2">${languageDef.title}</span><span class="wuxSubheader"> - ${languageDef.location}</span>`;
     }
 
     outfitCollection() {

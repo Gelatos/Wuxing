@@ -164,6 +164,28 @@ input[type=number]::-webkit-inner-spin-button {
     margin-top: 15px;
 }
 
+/* Generic "stretch to fill this row" modifier, applied throughout the sidebar (Roll Skill,
+   Debug section buttons) - this class was already in use everywhere it was meant to matter
+   but had no actual CSS rule backing it, so none of these buttons were stretching. Compound
+   selector (not just .wuxSizePercent) needed to beat .wuxButton's own inline-block/auto width
+   on specificity, since .wuxButton's rule comes later in this file - same trick as
+   .wuxButton.wuxCatalogLoadMoreButton above. */
+.wuxButton.wuxSizePercent {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin-right: 0;
+}
+
+/* button[type=roll].wuxButton shifts 5px right via position:relative (see rule below) for
+   small buttons' visual alignment - that shift would leave the gap on the left instead of
+   the right once the button is full-width, so cancel it here and keep the same 5px of
+   slack, just moved to the right edge instead. */
+button[type=roll].wuxButton.wuxSizePercent {
+    left: 0;
+    width: calc(100% - 5px);
+}
+
 /* Same 240px card grid as .wuxFormeTechRepeater, for the Inspect Popup's all-items
    list (each row can be a group header, or an item's requirement bar + item card +
    technique card stacked together - the whole row is one grid cell). */
@@ -420,6 +442,24 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment {
 
 input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar {
     width: 240px;
+}
+
+/* General-purpose pair for anything in the sidebar that needs different content/markup
+   depending on whether the sidebar is expanded or collapsed (e.g. a section title too wide
+   to fit collapsed, or a whole content block that's unusable at the collapsed width and
+   should show a placeholder message instead). Default state (no flag present, or
+   value != "on") is collapsed. */
+.wuxSidebarExpandedOnly {
+    display: none;
+}
+.wuxSidebarCollapsedOnly {
+    display: inline-block;
+}
+input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxSidebarExpandedOnly {
+    display: inline-block;
+}
+input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxSidebarCollapsedOnly {
+    display: none;
 }
 
 .wuxSideBarExtend {
@@ -949,6 +989,19 @@ div.wuxDescription .wuxTitle {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
     background: #cacbcf;
+}
+
+/* Chat's type (Speak/Think/etc) and post-target (Post To Chat/etc) selects, side by side
+   instead of stacked - each .wuxInput select otherwise claims 95% width on its own line, so
+   this overrides that per-select width in favor of splitting the row evenly. */
+.wuxChatSelectRow {
+    display: flex;
+    gap: 5px;
+}
+.wuxChatSelectRow > select.wuxInput {
+    flex: 1 1 0;
+    width: 0;
+    margin: 0;
 }
 
 textarea.wuxInput {

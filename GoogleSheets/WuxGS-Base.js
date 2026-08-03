@@ -14,44 +14,16 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
         },
 
         printOverview = function () {
-            let output = WuxSheetNavigation.BuildOverviewPageNavigation("Overview") +
-                SideBarData.PrintSidebar() +
-                MainContentData.PrintOverview();
-            return WuxSheet.PageDisplay("Overview", output);
+            return WuxSheet.PageDisplay("Overview", MainContentData.PrintOverview());
         },
 
         printDetails = function () {
-            let output = WuxSheetNavigation.BuildOverviewPageNavigation("Details") +
-                SideBarData.PrintSidebar() +
-                MainContentData.PrintDetails();
-            return WuxSheet.PageDisplay("Details", output);
+            return WuxSheet.PageDisplay("Details", MainContentData.PrintDetails());
         },
 
         printPost = function () {
-            let output = WuxSheetNavigation.BuildOverviewPageNavigation("Post") +
-                SideBarData.PrintSidebar() +
-                MainContentData.PrintPost();
-            return WuxSheet.PageDisplay("Post", output);
+            return WuxSheet.PageDisplay("Post", MainContentData.PrintPost());
         },
-
-        SideBarData = SideBarData || (function () {
-            'use strict';
-
-            var
-                printSidebar = function () {
-                    let contents = "";
-                    contents += WuxSheetSidebar.BuildChatSection();
-                    contents += WuxSheetSidebar.BuildChecksSection();
-                    contents += WuxSheetSidebar.BuildBoonSection();
-                    // contents += WuxSheetSidebar.BuildLanguageSection();
-                    return WuxSheetSidebar.Build("", contents);
-                }
-
-            return {
-                PrintSidebar: printSidebar
-            };
-
-        }()),
 
         MainContentData = MainContentData || (function () {
             'use strict';
@@ -431,33 +403,8 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
 
     var
         print = function () {
-            let output = WuxSheetNavigation.BuildGearPageNavigation("Gear") +
-                SideBarData.PrintEquipment() +
-                MainContentData.Print();
-            return WuxSheet.PageDisplay("Gear", output);
+            return WuxSheet.PageDisplay("Gear", MainContentData.Print());
         },
-
-        SideBarData = SideBarData || (function () {
-            'use strict';
-
-            var
-                printEquipment = function () {
-                    let coreContents = `${WuxSheetSidebar.BuildChatSection()}
-                        ${WuxSheetSidebar.BuildChecksSection()}
-                        ${WuxSheetSidebar.BuildBoonSection()}
-                        ${WuxSheetSidebar.BuildGearDebugSection()}`;
-                    let builderContents = WuxSheetSidebar.BuildGearDebugSection();
-                    let contents = `${WuxSheet.PageSetPageDisplayInput()}
-                        ${WuxSheet.PageDisplay("Core", coreContents)}
-                        ${WuxSheet.PageDisplay("Builder", builderContents)}`;
-                    return WuxSheetSidebar.Build("", contents);
-                }
-
-            return {
-                PrintEquipment: printEquipment
-            };
-
-        }()),
 
         MainContentData = MainContentData || (function () {
             'use strict';
@@ -971,38 +918,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
     var
         print = function () {
-            let output = WuxSheetNavigation.BuildActionsPageNavigation("Actions") +
-                SideBarData.Print() +
-                MainContentData.Print();
-            return WuxSheet.PageDisplay("Actions", output);
+            return WuxSheet.PageDisplay("Actions", MainContentData.Print());
         },
-
-        SideBarData = SideBarData || (function () {
-            'use strict';
-
-            var
-                print = function () {
-                    let coreContents = `${WuxSheetSidebar.BuildChatSection()}
-                        ${WuxSheetSidebar.BuildChecksSection()}
-                        ${WuxSheetSidebar.BuildBoonSection()}
-                        ${WuxSheetSidebar.BuildTechDebugSection()}`;
-                    let stylesContents = buildTechPointsSection(WuxDef.GetAttribute("Technique"));
-                    let contents = `${WuxSheet.MainPageDisplayInput()}
-                        ${WuxSheet.PageDisplay("ActionsData", coreContents)}
-                        ${WuxSheet.PageDisplay("StylesData", stylesContents)}`;
-                    return WuxSheetSidebar.Build("", contents);
-                },
-
-                buildTechPointsSection = function (fieldName, header) {
-                    return `<div class="wuxPointsRow">${WuxSheetSidebar.BuildPointsSection(fieldName, header)}</div>
-                    ${WuxSheetSidebar.BuildTechDebugSection()}`;
-                }
-
-            return {
-                Print: print
-            };
-
-        }()),
 
         MainContentData = MainContentData || (function () {
             'use strict';

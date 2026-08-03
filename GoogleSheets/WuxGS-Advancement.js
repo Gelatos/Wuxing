@@ -26,6 +26,8 @@ var BuildCharacterSheet = BuildCharacterSheet || (function () {
 
         buildCharacterSheetBaseHtml = function (sheetsDb) {
             let output = "";
+            output += WuxSheetNavigation.BuildAll();
+            output += WuxSheetSidebar.BuildAll();
             output += DisplayOriginSheet.Print();
             output += DisplayTrainingSheet.Print(sheetsDb);
             output += DisplayAdvancementSheet.Print(sheetsDb);
@@ -97,30 +99,8 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
 
     var
         print = function () {
-            let definition = WuxDef.Get("Page_Origin");
-            let output = WuxSheetNavigation.BuildOriginPageNavigation(definition) +
-                SideBarData.Print() +
-                MainContentData.Print();
-            return WuxSheet.PageDisplay("Origin", output);
+            return WuxSheet.PageDisplay("Origin", MainContentData.Print());
         },
-
-        SideBarData = SideBarData || (function () {
-            'use strict';
-
-            var
-                print = function () {
-                    return WuxSheetSidebar.Build("", "");
-                },
-
-                buildTechPointsSection = function (fieldName, headerText) {
-                    return WuxSheetSidebar.BuildPointsSection(fieldName, headerText);
-                }
-
-            return {
-                Print: print
-            };
-
-        }()),
 
         MainContentData = MainContentData || (function () {
             'use strict';
@@ -149,7 +129,7 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             let backgroundBuilder = new CharacterBackgroundBuilder();
                             contents += `${WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title,
                                 WuxSheetMain.TabBlock(backgroundBuilder.print()), definition)}`;
-                            contents += new ChatDisplayBuilder(false).print();
+                            contents += new ChatDisplayBuilder().print();
                             return contents;
                         }
 
@@ -178,30 +158,8 @@ var DisplayTrainingSheet = DisplayTrainingSheet || (function () {
         },
 
         printTraining = function () {
-            let definition = WuxDef.Get("Page_Training");
-            let output = WuxSheetNavigation.BuildTrainingPageNavigation(definition) +
-                SideBarData.PrintTraining() +
-                MainContentData.PrintTraining();
-            return WuxSheet.PageDisplay("Training", output);
+            return WuxSheet.PageDisplay("Training", MainContentData.PrintTraining());
         },
-
-        SideBarData = SideBarData || (function () {
-            'use strict';
-
-            var
-                printTraining = function () {
-                    return WuxSheetSidebar.Build("", `<div class="wuxPointsRow">${buildTechPointsSection(WuxDef.GetAttribute("Training"))}</div>`);
-                },
-
-                buildTechPointsSection = function (fieldName) {
-                    return WuxSheetSidebar.BuildPointsSection(fieldName);
-                }
-
-            return {
-                PrintTraining: printTraining
-            };
-
-        }()),
 
         MainContentData = MainContentData || (function () {
             'use strict';
@@ -275,77 +233,20 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
         },
 
         printAdvancement = function () {
-            let definition = WuxDef.Get("Page_Advancement");
-            let output = WuxSheetNavigation.BuildAdvancementPageNavigation(definition) +
-                SideBarData.PrintAdvancement() +
-                MainContentData.PrintAdvancement();
-            return WuxSheet.PageDisplay("Advancement", output);
+            return WuxSheet.PageDisplay("Advancement", MainContentData.PrintAdvancement());
         },
 
         printJobs = function (sheetsDb) {
-            let definition = WuxDef.Get("Page_Jobs");
-            let output = WuxSheetNavigation.BuildAdvancementPageNavigation(definition) +
-                SideBarData.PrintJobs() +
-                MainContentData.PrintJobs(sheetsDb.job);
-            return WuxSheet.PageDisplay("Jobs", output);
+            return WuxSheet.PageDisplay("Jobs", MainContentData.PrintJobs(sheetsDb.job));
         },
 
         printAttributes = function (sheetsDb) {
-            let definition = WuxDef.Get("Page_Attributes");
-            let output = WuxSheetNavigation.BuildAdvancementPageNavigation(definition) +
-                SideBarData.PrintAttributes() +
-                MainContentData.PrintAttributes(sheetsDb.skills);
-            return WuxSheet.PageDisplay("Attributes", output);
+            return WuxSheet.PageDisplay("Attributes", MainContentData.PrintAttributes(sheetsDb.skills));
         },
 
         printKnowledge = function (sheetsDb) {
-            let definition = WuxDef.Get("Page_Knowledge");
-            let output = WuxSheetNavigation.BuildAdvancementPageNavigation(definition) +
-                SideBarData.PrintKnowledge() +
-                MainContentData.PrintKnowledge(sheetsDb.language, sheetsDb.lore);
-            return WuxSheet.PageDisplay("Knowledge", output);
+            return WuxSheet.PageDisplay("Knowledge", MainContentData.PrintKnowledge(sheetsDb.language, sheetsDb.lore));
         },
-
-        SideBarData = SideBarData || (function () {
-            'use strict';
-
-            var
-                printAdvancement = function () {
-                    let contents = `<div class="wuxPointsRow">
-                        ${buildTechPointsSection(WuxDef.GetAttribute("Advancement"), "Adv. Pts")}
-                        ${buildTechPointsSection(WuxDef.GetAttribute("Perk"), "Perk Pts")}
-                    </div>`;
-                    return WuxSheetSidebar.Build("", contents);
-                },
-
-                printJobs = function () {
-                    return WuxSheetSidebar.Build("", `<div class="wuxPointsRow">${buildTechPointsSection(WuxDef.GetAttribute("Job"))}</div>`);
-                },
-
-                printAttributes = function () {
-                    let contents = `<div class="wuxPointsRow">
-                        ${buildTechPointsSection(WuxDef.GetAttribute("Attribute"), "Attr. Pts")}
-                        ${buildTechPointsSection(WuxDef.GetAttribute("Skill"), "Skill Pts")}
-                    </div>`;
-                    return WuxSheetSidebar.Build("", contents);
-                },
-                
-                printKnowledge = function () {
-                    return WuxSheetSidebar.Build("", `<div class="wuxPointsRow">${buildTechPointsSection(WuxDef.GetAttribute("Knowledge"))}</div>`);
-                },
-
-                buildTechPointsSection = function (fieldName, headerText) {
-                    return WuxSheetSidebar.BuildPointsSection(fieldName, headerText);
-                }
-
-            return {
-                PrintAdvancement: printAdvancement,
-                PrintJobs: printJobs,
-                PrintAttributes: printAttributes,
-                PrintKnowledge: printKnowledge
-            };
-
-        }()),
 
         MainContentData = MainContentData || (function () {
             'use strict';
@@ -1163,10 +1064,7 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
 
     var
         print = function (sheetsDb) {
-            let output = WuxSheetNavigation.BuildStylesNavigation("Page_LearnTechniques") +
-                SideBarData.Print() +
-                MainContentData.Print(sheetsDb.styles);
-            return WuxSheet.PageDisplay("Styles", output);
+            return WuxSheet.PageDisplay("Styles", MainContentData.Print(sheetsDb.styles));
         },
 
         printTest = function (stylesDatabase) {
@@ -1179,24 +1077,6 @@ var DisplayStylesSheet = DisplayStylesSheet || (function () {
             }
             return output;
         },
-
-        SideBarData = SideBarData || (function () {
-            'use strict';
-
-            var
-                print = function () {
-                    return WuxSheetSidebar.Build("", `<div class="wuxPointsRow">${buildTechPointsSection(WuxDef.GetAttribute("Technique"))}</div>`);
-                },
-
-                buildTechPointsSection = function (fieldName, header) {
-                    return WuxSheetSidebar.BuildPointsSection(fieldName, header);
-                }
-
-            return {
-                Print: print
-            };
-
-        }()),
 
         MainContentData = MainContentData || (function () {
             'use strict';
