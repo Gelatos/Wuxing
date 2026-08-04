@@ -271,9 +271,9 @@ button[type=roll].wuxButton.wuxSizePercent {
     /* .wuxMainContent is a flex container (a BFC), so it can't overlap the sidebar's float box
        even with an explicit width - if that width leaves no room for the float, the browser
        pushes the whole thing below the sidebar instead of beside it. Collapsed sidebar is a
-       15px sliver + 10px margin, so that's the minimum gutter to reserve here; the
+       10px sliver + 3px margin, so that's the minimum gutter to reserve here; the
        [value="on"] override below narrows it further while the sidebar is actually expanded. */
-    width: calc(100% - 25px);
+    width: calc(100% - 13px);
 
     position: sticky;
     top: 80px;
@@ -392,12 +392,12 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment {
 }
 
 .wuxFloatSidebar {
-    /* Collapsed = a thin 15px sliver rather than fully gone - its own header
+    /* Collapsed = a thin 10px sliver rather than fully gone - its own header
        (.wuxFloatSidebarHeader below) stays visible as a pull-out handle, on top of the nav
        header's own hamburger toggle. The rest of the sidebar's contents are hidden while
-       collapsed (see .wuxTab rule below) rather than left to render cut-off at 15px wide. */
+       collapsed (see .wuxTab rule below) rather than left to render cut-off at 10px wide. */
     display: block;
-    width: 15px;
+    width: 10px;
 
     float: left;
     flex: 1;
@@ -405,7 +405,7 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment {
 
     height: calc(100vh - 150px);
     max-height: calc(100vh - 150px);
-    margin-right: 10px;
+    margin-right: 3px;
     padding: 0px;
 
     background: #1d1e1f;
@@ -682,6 +682,20 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxSidebarCollapsedOnly 
   Tab Buttons
 ========================================*/
 
+/* Wraps .wuxSidebarToggleButton alongside (not inside) .wuxTabButtonRow, so the toggle stays
+   fixed in place - min-width:0 lets the tab row actually shrink/scroll within the remaining
+   space instead of forcing .wuxNavRow itself wider (the usual flex-item min-width:auto
+   default would otherwise prevent that). */
+.wuxNavRow {
+    display: flex;
+    align-items: stretch;
+}
+
+.wuxNavRow .wuxTabButtonRow {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
 .wuxTabButtonRow {
     display: flex;
     flex-flow: nowrap row-reverse;
@@ -700,9 +714,9 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxSidebarCollapsedOnly 
    checkbox-plus-styled-span convention as .wuxTabButton below, but a small fixed-size square
    (flex:0, not flex:2) so it doesn't grow/shrink like the page tabs, and its own bright
    orange "on" color instead of the tabs' selected brown, since this needs to read as a
-   simple on/off toggle rather than "which page is selected". row-reverse on
-   .wuxTabButtonRow puts whichever button is last in the markup at the visual far left, which
-   is why callers append this after building their page tabs. */
+   simple on/off toggle rather than "which page is selected". Lives in .wuxNavRow alongside
+   (not inside) .wuxTabButtonRow, so it stays fixed and visible even when the tab row scrolls
+   horizontally. */
 .wuxSidebarToggleButton {
     position: relative;
     flex: 0 0 auto;
@@ -734,14 +748,9 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxSidebarCollapsedOnly 
     font-size: 16px;
     line-height: 20px;
 
-    background-color: #cacbcf;
+    background-color: #da9b3c;
     border: 1px solid black;
     border-radius: 5px;
-}
-
-.wuxSidebarToggleButton input[type=checkbox]:hover + span {
-    color: #FFFFFF;
-    background: #1a6db5;
 }
 
 .wuxSidebarToggleButton input[type=checkbox]:checked + span {
@@ -749,7 +758,7 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxSidebarCollapsedOnly 
     background: #09bfff;
 }
 
-.wuxSidebarToggleButton input[type=checkbox]:checked:hover + span {
+.wuxSidebarToggleButton input[type=checkbox]:hover + span {
     color: #FFFFFF;
     background: #1a6db5;
 }
@@ -765,8 +774,122 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxSidebarCollapsedOnly 
     flex: 2;
 }
 
-.wuxTabButtonSelected {
+/* Bigger/highlighted while active - driven off the dedicated wuxTabHighlight-Flag/
+   wuxTabHighlight-CoreTabFlag inputs (WuxSheetNavigation.buildAll/buildTabHighlightFlag)
+   matching each button's own wuxTabButtonValue-<value> class, rather than the button's own
+   :has(input:checked)/:checked state. That was tried first (replacing an even older
+   server-computed "is this the active tab" class, which had its own bug: the character-
+   creation flow's 7-tab row is a fixed list that doesn't include "Training", so nothing was
+   ever marked big on that page) - but the same "Page"-named radio is duplicated across 5+
+   separate nav blocks, and Roll20 doesn't reliably sync every duplicate's own checked state
+   the instant the attribute changes, so the newly-revealed block's own copy would stay
+   visually unselected until a second click forced a fuller resync. A single global flag input
+   doesn't have that problem - it's exactly the mechanism the whole PageDisplay show/hide
+   system already depends on working instantly. Two attributes (Page, PageSet_Core_tab) means
+   two dedicated flag classes, each with their own value list below - own classes (not the
+   shared, generic wuxPageDisplay-Flag used for show/hide) because Page and PageSet share
+   value names like "Training"/"Advancement", and matching purely on value against that
+   generic, widely-reused class would risk an unrelated PageSet flag elsewhere in the DOM
+   falsely satisfying the same selector. "~ *" (not a named class) as the sibling step - the
+   actual direct sibling of the flag is whichever .wuxPageDisplay-X wrapper WuxSheet.PageDisplay
+   generates for that branch (a different class per branch), so a wildcard is needed to reach
+   past it down to the button; ~ alone only matches true siblings; the button itself is a
+   descendant of that wrapper, not a sibling of the flag. */
+input[type=hidden].wuxTabHighlight-Flag[value="Origin"] ~ * .wuxTabButtonValue-Origin,
+input[type=hidden].wuxTabHighlight-Flag[value="Training"] ~ * .wuxTabButtonValue-Training,
+input[type=hidden].wuxTabHighlight-Flag[value="Advancement"] ~ * .wuxTabButtonValue-Advancement,
+input[type=hidden].wuxTabHighlight-Flag[value="Jobs"] ~ * .wuxTabButtonValue-Jobs,
+input[type=hidden].wuxTabHighlight-Flag[value="Attributes"] ~ * .wuxTabButtonValue-Attributes,
+input[type=hidden].wuxTabHighlight-Flag[value="Knowledge"] ~ * .wuxTabButtonValue-Knowledge,
+input[type=hidden].wuxTabHighlight-Flag[value="Styles"] ~ * .wuxTabButtonValue-Styles,
+input[type=hidden].wuxTabHighlight-Flag[value="Gear"] ~ * .wuxTabButtonValue-Gear,
+input[type=hidden].wuxTabHighlight-Flag[value="Actions"] ~ * .wuxTabButtonValue-Actions,
+input[type=hidden].wuxTabHighlight-Flag[value="Character"] ~ * .wuxTabButtonValue-Character,
+input[type=hidden].wuxTabHighlight-Flag[value="NPC"] ~ * .wuxTabButtonValue-NPC,
+input[type=hidden].wuxTabHighlight-Flag[value="Notes"] ~ * .wuxTabButtonValue-Notes,
+input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Overview"] ~ * .wuxTabButtonValue-Overview,
+input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Details"] ~ * .wuxTabButtonValue-Details,
+input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Post"] ~ * .wuxTabButtonValue-Post {
     flex: 3;
+}
+
+input[type=hidden].wuxTabHighlight-Flag[value="Origin"] ~ * .wuxTabButtonValue-Origin span,
+input[type=hidden].wuxTabHighlight-Flag[value="Training"] ~ * .wuxTabButtonValue-Training span,
+input[type=hidden].wuxTabHighlight-Flag[value="Advancement"] ~ * .wuxTabButtonValue-Advancement span,
+input[type=hidden].wuxTabHighlight-Flag[value="Jobs"] ~ * .wuxTabButtonValue-Jobs span,
+input[type=hidden].wuxTabHighlight-Flag[value="Attributes"] ~ * .wuxTabButtonValue-Attributes span,
+input[type=hidden].wuxTabHighlight-Flag[value="Knowledge"] ~ * .wuxTabButtonValue-Knowledge span,
+input[type=hidden].wuxTabHighlight-Flag[value="Styles"] ~ * .wuxTabButtonValue-Styles span,
+input[type=hidden].wuxTabHighlight-Flag[value="Gear"] ~ * .wuxTabButtonValue-Gear span,
+input[type=hidden].wuxTabHighlight-Flag[value="Actions"] ~ * .wuxTabButtonValue-Actions span,
+input[type=hidden].wuxTabHighlight-Flag[value="Character"] ~ * .wuxTabButtonValue-Character span,
+input[type=hidden].wuxTabHighlight-Flag[value="NPC"] ~ * .wuxTabButtonValue-NPC span,
+input[type=hidden].wuxTabHighlight-Flag[value="Notes"] ~ * .wuxTabButtonValue-Notes span,
+input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Overview"] ~ * .wuxTabButtonValue-Overview span,
+input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Details"] ~ * .wuxTabButtonValue-Details span,
+input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Post"] ~ * .wuxTabButtonValue-Post span {
+    color: #FFFFFF;
+    font-size: 14px;
+    background: #512800;
+}
+
+/* Nav dropdown fallback (WuxSheetNavigation.buildTabDropdown) - hidden by default, since the
+   button row above handles navigation at normal widths. Below wuxNavCollapseWidth there isn't
+   room for every page tab button, so the buttons hide and this takes over instead; a plain
+   <select> already shows whichever <option> matches the bound attribute's current value, so
+   it doubles as the "which page is active" indicator with no extra work. Compound selector
+   (select.wuxNavDropdown, not just .wuxNavDropdown) needed to beat .wuxInput's own
+   display:inline-block on specificity, since .wuxInput's rule comes later in this file - same
+   trick as .wuxButton.wuxCatalogLoadMoreButton/.wuxButton.wuxSizePercent above. */
+select.wuxNavDropdown {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    /* Hides the whole row, not just its buttons - scoped to .wuxNavRow specifically (the
+       page-nav row paired with a dropdown fallback - WuxSheetNavigation.buildTabs/
+       buildCharacterCreationTabs, via buildNavRow). .wuxTabButtonRow/.wuxTabButton are also
+       reused by unrelated rows like the Finish button (buildExitStickyButtons) and the
+       Overview/Details/Post sub-tabs, which have no dropdown fallback and must stay visible
+       regardless of width. Hiding the row outright (rather than just its children) also keeps
+       it out of .wuxNavRow's flex layout entirely, so it can't compete with the dropdown
+       below for flex-grow space while sitting empty. */
+    .wuxNavRow .wuxTabButtonRow {
+        display: none;
+    }
+
+    /* A flex sibling of .wuxSidebarToggleButton within .wuxNavRow (not an absolutely-
+       positioned overlay), so it stretches to fill the rest of the row's width next to the
+       toggle. */
+    select.wuxNavDropdown {
+        display: block;
+        flex: 1 1 auto;
+        min-width: 0;
+        width: auto;
+    }
+
+    /* The dropdown already conveys "what page you're on", so the subheader text is redundant
+       at this width - scoped to .wuxSectionBlock.wuxLargeLayoutItem (buildSection, unique to
+       the nav header) since .wuxHeader2 is a generic class reused for section titles all over
+       the sheet. The title/character name (.wuxHeader) stays visible - only the page-name
+       subheader hides. */
+    .wuxSectionBlock.wuxLargeLayoutItem .wuxHeader2 {
+        display: none;
+    }
+
+    /* Finish/Wealth (.wuxStickySideTab) was capped at calc(100% - 210px) to leave room for the
+       header text - with the title/character name back, give the buttons priority over that
+       text instead of splitting the width: an opaque background plus stacking above the
+       header's own text means the buttons stay fully legible regardless of whatever the title
+       text does around them. Descendant selector (not just .wuxStickySideTab) for higher
+       specificity than the plain base rule in WCSS-Specialized.css, regardless of file
+       concatenation order. */
+    .wuxSectionBlock .wuxStickySideTab {
+        position: relative;
+        z-index: 2;
+        max-width: 100%;
+        background: #1d1e1f;
+    }
 }
 
 .wuxTabButton input[type=radio],
@@ -802,6 +925,7 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxSidebarCollapsedOnly 
 .wuxTabButton input[type=radio]:checked + span,
 .wuxTabButton input[type=checkbox]:checked + span {
     color: #FFFFFF;
+    font-size: 14px;
     background: #512800;
 }
 
@@ -810,13 +934,6 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxSidebarCollapsedOnly 
     color: #FFFFFF;
     background: #86530f;
     background: linear-gradient(to right, #86530f, #815822, #6e420a);
-}
-
-.wuxTabButtonSelected span {
-    color: #FFFFFF;
-    font-size: 14px;
-
-    background: #512800;
 }
 
 .wuxTabOptionButton {

@@ -11268,7 +11268,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
 var WuxSheetNavigation = WuxSheetNavigation || (function () {
     const mainPageNavigation = function (tabTitle, subheader, sideBarButtons) {
         let mainContents = ""
-        mainContents += buildTabs(tabTitle, WuxDef.GetAttribute("Page"), ["Actions", "Gear", "Character"]);
+        mainContents += buildTabs(WuxDef.GetAttribute("Page"), ["Actions", "Gear", "Character"]);
         mainContents += sideBarButtons;
         mainContents += buildMainSheetHeader(subheader);
 
@@ -11281,14 +11281,14 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
     const trainingPageNavigation = function (definition, subheader) {
         let fieldName = WuxDef.GetAttribute("PageSet_Training");
         let mainContents = "";
-        mainContents += buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Knowledge", "Styles", "Training"]);
+        mainContents += buildTabs(WuxDef.GetAttribute("Page"), ["Knowledge", "Styles", "Training"]);
         mainContents += buildExitStickyButtons(fieldName, true);
         mainContents += buildHeader("Training", subheader);
         return mainContents;
     };
     const advancementPageNavigation = function (definition, subheader) {
         let fieldName = WuxDef.GetAttribute("PageSet_Advancement");
-        let mainContents = buildTabs(definition.title, WuxDef.GetAttribute("Page"), ["Styles", "Knowledge", "Attributes", "Jobs", "Advancement"]);
+        let mainContents = buildTabs(WuxDef.GetAttribute("Page"), ["Styles", "Knowledge", "Attributes", "Jobs", "Advancement"]);
         mainContents += buildExitStickyButtons(fieldName, true);
         mainContents += buildHeader("Advancement", subheader);
         return mainContents;
@@ -11310,28 +11310,26 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
     const buildCharacterCreationTabs = function (sheetName) {
         let output = "";
         let tabNames = ["Advancement",  "Styles", "Gear", "Knowledge", "Attributes", "Jobs", "Origin"];
+        let fieldName = WuxDef.GetAttribute("Page");
 
         for (let i = 0; i < tabNames.length; i++) {
-            output += buildTabButton("radio", WuxDef.GetAttribute("Page"), tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
+            output += buildTabButton("radio", fieldName, tabNames[i], tabNames[i], "") + "\n";
         }
-        output += buildSidebarToggleButton();
-        output = buildTabButtonRow(output);
-
-        return output;
+        return buildNavRow(buildTabButtonRow(output), buildTabDropdown(fieldName, tabNames));
     };
     const buildExitStickyButtons = function (fieldName, showExit) {
         let output = "";
         // if (showExit) {
         //     output += buildTabButton("checkbox", `${fieldName}${WuxDef._exit}`, "Exit", "Exit", false, "") + "\n";
         // }
-        output += buildTabButton("checkbox", `${fieldName}${WuxDef._finish}`, "Finish", "Finish", false, "") + "\n";
+        output += buildTabButton("checkbox", `${fieldName}${WuxDef._finish}`, "Finish", "Finish", "") + "\n";
         output = buildTabButtonRow(output);
 
         return buildStickySideTab(output);
     };
     const partyManagerNavigation = function (tabTitle, subheader, sideBarButtons) {
         let mainContents = ""
-        mainContents += buildTabs(tabTitle, WuxDef.GetAttribute("Page"), ["NPC", "Notes"]);
+        mainContents += buildTabs(WuxDef.GetAttribute("Page"), ["NPC", "Notes"]);
         mainContents += sideBarButtons;
         mainContents += buildMainSheetHeader(subheader);
 
@@ -11359,17 +11357,49 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             return `<div class="wuxTabButtonRow">\n${contents}\n</div>`;
         },
 
-        buildTabButton = function (type, fieldName, value, name, isSelected, buttonClasses) {
-            return `<div class="wuxTabButton ${isSelected ? "wuxTabButtonSelected" : ""}">
+        // Wraps the sidebar toggle alongside (not inside) .wuxTabButtonRow, so the toggle
+        // stays fixed and always visible even when the tab row itself scrolls horizontally
+        // (.wuxTabButtonRow has its own overflow-x:auto for when there isn't room for every
+        // tab button) - previously the toggle was the row's own last child, and would scroll
+        // out of view along with everything else. The dropdown lives here too (as a flex
+        // sibling, not an absolutely-positioned overlay) so it stretches to fill whatever
+        // space is left next to the toggle, rather than being capped to some fixed width.
+        buildNavRow = function (tabButtonRowContents, dropdownContents) {
+            return `<div class="wuxNavRow">${buildSidebarToggleButton()}${tabButtonRowContents}${dropdownContents}</div>`;
+        },
+
+        // Below wuxNavCollapseWidth (see WCSS-Base.css), the individual tab buttons hide and
+        // this dropdown takes over instead - same fieldName/options as the button row it
+        // stands in for, so picking an option here drives the exact same attribute. A plain
+        // <select> already shows whichever option matches the attribute's current value, so
+        // "display the active page" comes for free.
+        buildTabDropdown = function (fieldName, tabNames) {
+            // Reversed from the button row's own order - the row is row-reverse (see
+            // .wuxTabButtonRow), so this puts the dropdown's top-to-bottom order in line with
+            // the row's actual left-to-right visual order instead of its underlying array order.
+            let options = tabNames.slice().reverse().map(name => `<option value="${name}">${name}</option>`).join("\n");
+            return `<select class="wuxInput wuxNavDropdown" name="${fieldName}">${options}</select>`;
+        },
+
+        // Size/highlight is driven by WCSS-Base.css matching this button's own
+        // wuxTabButtonValue-<value> class against the live wuxTabHighlight-Flag/
+        // wuxTabHighlight-CoreTabFlag value, not by this radio's own :checked state - Roll20
+        // doesn't reliably keep every duplicate copy of a same-named radio's checked state in
+        // sync the instant the attribute changes (this same "Page"/"Character" tab button
+        // exists in 5+ separate nav blocks), so the button one click away from active would
+        // stay visually unselected until a second interaction forced a fuller resync. The
+        // single global flag input doesn't have that problem, so keying off it instead
+        // sidesteps the issue entirely.
+        buildTabButton = function (type, fieldName, value, name, buttonClasses) {
+            return `<div class="wuxTabButton wuxTabButtonValue-${value}">
             <input type="${type}" class="wuxTabButton ${buttonClasses}" name="${fieldName}" value="${value}"><span>${name}</span>
             </div>`;
         },
 
         // Sidebar show/hide toggle, bound to the same attribute the sidebar itself watches
-        // (WuxSheetSidebar's wuxSideBarExtend-flag). Lives in the main tab row instead of the
-        // sidebar so it still works once the sidebar is fully hidden (display:none) rather
-        // than just shrunk. .wuxTabButtonRow is row-reverse, so appending this last in the
-        // row's markup is what puts it at the visual far left, ahead of the page tabs.
+        // (WuxSheetSidebar's wuxSideBarExtend-flag). Lives in the nav header (via buildNavRow)
+        // instead of the sidebar so it still works once the sidebar is fully hidden
+        // (display:none) rather than just shrunk.
         buildSidebarToggleButton = function () {
             // New-character default for Page_Sidebar is seeded in WJS-Loader.js's
             // upgrade_to_1_0_0 (brand-new sheets only), not via a checked="checked" default
@@ -11380,15 +11410,12 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             </div>`;
         },
 
-        buildTabs = function (sheetName, fieldName, tabNames) {
+        buildTabs = function (fieldName, tabNames) {
             let output = "";
             for (let i = 0; i < tabNames.length; i++) {
-                output += buildTabButton("radio", fieldName, tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
+                output += buildTabButton("radio", fieldName, tabNames[i], tabNames[i], "") + "\n";
             }
-            output += buildSidebarToggleButton();
-            output = buildTabButtonRow(output);
-
-            return output;
+            return buildNavRow(buildTabButtonRow(output), buildTabDropdown(fieldName, tabNames));
         },
 
         buildHeader = function (header, subheader) {
@@ -11399,9 +11426,9 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             let sideBarButtons = "";
             let tabFieldName = WuxDef.GetAttribute("PageSet_Core", WuxDef._tab);
             // sideBarButtons += buildTabButton("radio", tabFieldName, "Options", "Options", selectedTab == "Options", "") + "\n";
-            sideBarButtons += buildTabButton("radio", tabFieldName, "Post", "Post", selectedTab == "Post", "") + "\n";
-            sideBarButtons += buildTabButton("radio", tabFieldName, "Details", "Details", selectedTab == "Details", "") + "\n";
-            sideBarButtons += buildTabButton("radio", tabFieldName, "Overview", "Overview", selectedTab == "Overview", "") + "\n";
+            sideBarButtons += buildTabButton("radio", tabFieldName, "Post", "Post", "") + "\n";
+            sideBarButtons += buildTabButton("radio", tabFieldName, "Details", "Details", "") + "\n";
+            sideBarButtons += buildTabButton("radio", tabFieldName, "Overview", "Overview", "") + "\n";
 
             let definition = WuxDef.Get("Page_Character");
             return buildSection(mainPageNavigation(definition.title, WuxDef.GetTitle(`Page_${selectedTab}`), buildStickySideTab(buildTabButtonRow(sideBarButtons))));
@@ -11411,7 +11438,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             let definition = WuxDef.Get("Page_Gear");
             let jinDisplay = `<div class="wuxSlotSection"><span class="wuxSlotLabel">${WuxDef.GetTitle("Title_YourJin")}</span><span class="wuxSlotData"><span name="${WuxDef.GetAttribute("Jin")}"></span><span> J</span></span></div>`;
 
-            let finishButton = buildTabButton("checkbox", `${WuxDef.GetAttribute("PageSet_Character Creator")}${WuxDef._finish}`, "Finish", "Finish", false, "") + "\n";
+            let finishButton = buildTabButton("checkbox", `${WuxDef.GetAttribute("PageSet_Character Creator")}${WuxDef._finish}`, "Finish", "Finish", "") + "\n";
             let gearCharacterCreationContents = buildCharacterCreationTabs(definition.title) +
                 buildStickySideTab(jinDisplay + buildTabButtonRow(finishButton)) +
                 buildHeader("Character Creation", definition.title);
@@ -11486,11 +11513,22 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             return buildSection(output);
         },
 
+        // Dedicated flag (own class, not the shared "wuxPageDisplay-Flag") for driving tab
+        // button highlighting off the live "Page" value - see the .wuxTabHighlight-Flag rules
+        // in WCSS-Base.css for why this needs to be separate from a tab button's own :checked
+        // state, and why it needs its OWN class rather than reusing wuxPageDisplay-Flag (Page
+        // and PageSet share value names like "Training"/"Advancement", so matching purely on
+        // value against the generic, widely-reused flag class risks a PageSet flag elsewhere
+        // in the DOM falsely satisfying the same selector).
+        buildTabHighlightFlag = function () {
+            return `<input type="hidden" class="wuxTabHighlight-Flag" name="${WuxDef.GetAttribute("Page")}" />`;
+        },
+
         // Consolidates every page's navigation header into one shared block, built once and
         // shown/hidden per page via the existing Page/PageSet PageDisplay CSS convention,
         // instead of each Display*Sheet module independently re-invoking these same builders.
         buildAll = function () {
-            let output = "";
+            let output = buildTabHighlightFlag();
             output += WuxSheet.PageDisplay("Origin", buildOriginPageNavigation(WuxDef.Get("Page_Origin")));
             output += WuxSheet.PageDisplay("Training", buildTrainingPageNavigation(WuxDef.Get("Page_Training")));
             output += WuxSheet.PageDisplay("Advancement", buildAdvancementPageNavigation(WuxDef.Get("Page_Advancement")));
@@ -11504,8 +11542,12 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             // Overview/Details/Post are keyed off PageSet_Core_tab (not the global Page
             // attribute), nested inside Page=="Character" - mirrors DisplayCoreCharacterSheet's
             // own content-side nesting. Re-emitting this flag here is a deliberate, necessary
-            // exception - it's a single hidden input, not meaningful duplication.
+            // exception - it's a single hidden input, not meaningful duplication. The second,
+            // dedicated-class copy alongside it drives THIS sub-tab row's own button
+            // highlighting the same way buildTabHighlightFlag does for Page - own class since
+            // "PageSet_Core_tab" is a different attribute than "Page".
             let corePlayNav = `${WuxSheet.PageDisplayInput(WuxDef.GetAttribute("PageSet_Core", WuxDef._tab))}
+                <input type="hidden" class="wuxTabHighlight-CoreTabFlag" name="${WuxDef.GetAttribute("PageSet_Core", WuxDef._tab)}" />
                 ${WuxSheet.PageDisplay("Overview", buildOverviewPageNavigation("Overview"))}
                 ${WuxSheet.PageDisplay("Details", buildOverviewPageNavigation("Details"))}
                 ${WuxSheet.PageDisplay("Post", buildOverviewPageNavigation("Post"))}`;

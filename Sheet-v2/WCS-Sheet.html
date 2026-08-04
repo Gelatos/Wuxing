@@ -1,37 +1,49 @@
 <div class="wuxCharacterSheet">
 	<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
+	<input type="hidden" class="wuxTabHighlight-Flag" name="attr_pag" />
 	<div class="wuxPageDisplay-Origin">
 		<div class="wuxFloatHeader wuxStickyHeader">
 			<div class="wuxSectionBlock wuxLargeLayoutItem">
-				<div class="wuxTabButtonRow">
-					<div class="wuxTabButton ">
-						<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
-					</div>
-					<div class="wuxTabButton ">
-						<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-					</div>
-					<div class="wuxTabButton ">
-						<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
-					</div>
-					<div class="wuxTabButton ">
-						<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
-					</div>
-					<div class="wuxTabButton ">
-						<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
-					</div>
-					<div class="wuxTabButton ">
-						<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
-					</div>
-					<div class="wuxTabButton wuxTabButtonSelected">
-						<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
-					</div>
+				<div class="wuxNavRow">
 					<div class="wuxSidebarToggleButton">
 						<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 					</div>
+					<div class="wuxTabButtonRow">
+						<div class="wuxTabButton wuxTabButtonValue-Advancement">
+							<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
+						</div>
+						<div class="wuxTabButton wuxTabButtonValue-Styles">
+							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+						</div>
+						<div class="wuxTabButton wuxTabButtonValue-Gear">
+							<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
+						</div>
+						<div class="wuxTabButton wuxTabButtonValue-Knowledge">
+							<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
+						</div>
+						<div class="wuxTabButton wuxTabButtonValue-Attributes">
+							<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
+						</div>
+						<div class="wuxTabButton wuxTabButtonValue-Jobs">
+							<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
+						</div>
+						<div class="wuxTabButton wuxTabButtonValue-Origin">
+							<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
+						</div>
+
+					</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+						<option value="Origin">Origin</option>
+						<option value="Jobs">Jobs</option>
+						<option value="Attributes">Attributes</option>
+						<option value="Knowledge">Knowledge</option>
+						<option value="Gear">Gear</option>
+						<option value="Styles">Styles</option>
+						<option value="Advancement">Advancement</option>
+					</select>
 				</div>
 				<div class="wuxStickySideTab">
 					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
+						<div class="wuxTabButton wuxTabButtonValue-Finish">
 							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 
@@ -47,23 +59,30 @@
 			<div class="wuxSectionBlock wuxLargeLayoutItem">
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pgs" value="Builder" />
 				<div class="wuxPageDisplay-Training">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-						</div>
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Training"><span>Training</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Knowledge">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Styles">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Training">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Training"><span>Training</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Training">Training</option>
+							<option value="Styles">Styles</option>
+							<option value="Knowledge">Knowledge</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
 								<input type="checkbox" class="wuxTabButton " name="attr_pgs-training_finish" value="Finish"><span>Finish</span>
 							</div>
 
@@ -73,35 +92,46 @@
 					<div class="wuxHeader">Training</div>
 				</div>
 				<div class="wuxPageDisplay-Builder">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Advancement">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Styles">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Gear">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Knowledge">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Attributes">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Jobs">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Origin">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Origin">Origin</option>
+							<option value="Jobs">Jobs</option>
+							<option value="Attributes">Attributes</option>
+							<option value="Knowledge">Knowledge</option>
+							<option value="Gear">Gear</option>
+							<option value="Styles">Styles</option>
+							<option value="Advancement">Advancement</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
 								<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 							</div>
 
@@ -118,29 +148,38 @@
 			<div class="wuxSectionBlock wuxLargeLayoutItem">
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pgs" value="Builder" />
 				<div class="wuxPageDisplay-Advancement">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
-						</div>
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Styles">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Knowledge">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Attributes">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Jobs">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Advancement">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Advancement">Advancement</option>
+							<option value="Jobs">Jobs</option>
+							<option value="Attributes">Attributes</option>
+							<option value="Knowledge">Knowledge</option>
+							<option value="Styles">Styles</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
 								<input type="checkbox" class="wuxTabButton " name="attr_pgs-advancement_finish" value="Finish"><span>Finish</span>
 							</div>
 
@@ -150,35 +189,46 @@
 					<div class="wuxHeader">Advancement</div>
 				</div>
 				<div class="wuxPageDisplay-Builder">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Advancement">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Styles">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Gear">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Knowledge">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Attributes">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Jobs">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Origin">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Origin">Origin</option>
+							<option value="Jobs">Jobs</option>
+							<option value="Attributes">Attributes</option>
+							<option value="Knowledge">Knowledge</option>
+							<option value="Gear">Gear</option>
+							<option value="Styles">Styles</option>
+							<option value="Advancement">Advancement</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
 								<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 							</div>
 
@@ -195,29 +245,38 @@
 			<div class="wuxSectionBlock wuxLargeLayoutItem">
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pgs" value="Builder" />
 				<div class="wuxPageDisplay-Advancement">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
-						</div>
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Styles">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Knowledge">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Attributes">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Jobs">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Advancement">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Advancement">Advancement</option>
+							<option value="Jobs">Jobs</option>
+							<option value="Attributes">Attributes</option>
+							<option value="Knowledge">Knowledge</option>
+							<option value="Styles">Styles</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
 								<input type="checkbox" class="wuxTabButton " name="attr_pgs-advancement_finish" value="Finish"><span>Finish</span>
 							</div>
 
@@ -227,35 +286,46 @@
 					<div class="wuxHeader">Advancement</div>
 				</div>
 				<div class="wuxPageDisplay-Builder">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
-						</div>
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Advancement">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Styles">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Gear">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Knowledge">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Attributes">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Jobs">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Origin">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Origin">Origin</option>
+							<option value="Jobs">Jobs</option>
+							<option value="Attributes">Attributes</option>
+							<option value="Knowledge">Knowledge</option>
+							<option value="Gear">Gear</option>
+							<option value="Styles">Styles</option>
+							<option value="Advancement">Advancement</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
 								<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 							</div>
 
@@ -272,29 +342,38 @@
 			<div class="wuxSectionBlock wuxLargeLayoutItem">
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pgs" value="Builder" />
 				<div class="wuxPageDisplay-Advancement">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
-						</div>
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Styles">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Knowledge">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Attributes">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Jobs">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Advancement">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Advancement">Advancement</option>
+							<option value="Jobs">Jobs</option>
+							<option value="Attributes">Attributes</option>
+							<option value="Knowledge">Knowledge</option>
+							<option value="Styles">Styles</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
 								<input type="checkbox" class="wuxTabButton " name="attr_pgs-advancement_finish" value="Finish"><span>Finish</span>
 							</div>
 
@@ -304,35 +383,46 @@
 					<div class="wuxHeader">Advancement</div>
 				</div>
 				<div class="wuxPageDisplay-Builder">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
-						</div>
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Advancement">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Styles">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Gear">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Knowledge">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Attributes">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Jobs">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Origin">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Origin">Origin</option>
+							<option value="Jobs">Jobs</option>
+							<option value="Attributes">Attributes</option>
+							<option value="Knowledge">Knowledge</option>
+							<option value="Gear">Gear</option>
+							<option value="Styles">Styles</option>
+							<option value="Advancement">Advancement</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
 								<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 							</div>
 
@@ -349,29 +439,38 @@
 			<div class="wuxSectionBlock wuxLargeLayoutItem">
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pgs" value="Builder" />
 				<div class="wuxPageDisplay-Advancement">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-						</div>
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Styles">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Knowledge">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Attributes">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Jobs">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Advancement">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Advancement">Advancement</option>
+							<option value="Jobs">Jobs</option>
+							<option value="Attributes">Attributes</option>
+							<option value="Knowledge">Knowledge</option>
+							<option value="Styles">Styles</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
 								<input type="checkbox" class="wuxTabButton " name="attr_pgs-advancement_finish" value="Finish"><span>Finish</span>
 							</div>
 
@@ -381,35 +480,46 @@
 					<div class="wuxHeader">Advancement</div>
 				</div>
 				<div class="wuxPageDisplay-Builder">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
-						</div>
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Advancement">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Styles">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Gear">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Knowledge">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Attributes">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Jobs">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Origin">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Origin">Origin</option>
+							<option value="Jobs">Jobs</option>
+							<option value="Attributes">Attributes</option>
+							<option value="Knowledge">Knowledge</option>
+							<option value="Gear">Gear</option>
+							<option value="Styles">Styles</option>
+							<option value="Advancement">Advancement</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
 								<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 							</div>
 
@@ -426,35 +536,46 @@
 			<div class="wuxSectionBlock wuxLargeLayoutItem">
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pgs" value="Builder" />
 				<div class="wuxPageDisplay-Builder">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
-						</div>
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Advancement">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Styles">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Gear">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Knowledge">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Attributes">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Jobs">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Origin">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Origin">Origin</option>
+							<option value="Jobs">Jobs</option>
+							<option value="Attributes">Attributes</option>
+							<option value="Knowledge">Knowledge</option>
+							<option value="Gear">Gear</option>
+							<option value="Styles">Styles</option>
+							<option value="Advancement">Advancement</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
 								<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 							</div>
 
@@ -464,23 +585,30 @@
 					<div class="wuxHeader">Character Creation</div>
 				</div>
 				<div class="wuxPageDisplay-Training">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
-						</div>
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Training"><span>Training</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Knowledge">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Styles">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Training">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Training"><span>Training</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Training">Training</option>
+							<option value="Styles">Styles</option>
+							<option value="Knowledge">Knowledge</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
 								<input type="checkbox" class="wuxTabButton " name="attr_pgs-training_finish" value="Finish"><span>Finish</span>
 							</div>
 
@@ -490,29 +618,38 @@
 					<div class="wuxHeader">Training</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Styles">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Knowledge">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Attributes">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Jobs">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Advancement">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Advancement">Advancement</option>
+							<option value="Jobs">Jobs</option>
+							<option value="Attributes">Attributes</option>
+							<option value="Knowledge">Knowledge</option>
+							<option value="Styles">Styles</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
 								<input type="checkbox" class="wuxTabButton " name="attr_pgs-advancement_finish" value="Finish"><span>Finish</span>
 							</div>
 
@@ -529,19 +666,26 @@
 			<div class="wuxSectionBlock wuxLargeLayoutItem">
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pgs" value="Builder" />
 				<div class="wuxPageDisplay-Core">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Actions"><span>Actions</span>
-						</div>
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Character"><span>Character</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Actions">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Actions"><span>Actions</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Gear">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Character">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Character"><span>Character</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Character">Character</option>
+							<option value="Gear">Gear</option>
+							<option value="Actions">Actions</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxSlotSection"><span class="wuxSlotLabel">Your Wealth</span><span class="wuxSlotData"><span name="attr_jin"></span><span> J</span></span></div>
@@ -550,36 +694,47 @@
 					<div class="wuxHeader"><input type="text" name="attr_display_name" placeholder="Display Name" /></div>
 				</div>
 				<div class="wuxPageDisplay-Builder">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-						</div>
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Advancement">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Styles">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Gear">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Knowledge">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Attributes">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Jobs">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Origin">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Origin">Origin</option>
+							<option value="Jobs">Jobs</option>
+							<option value="Attributes">Attributes</option>
+							<option value="Knowledge">Knowledge</option>
+							<option value="Gear">Gear</option>
+							<option value="Styles">Styles</option>
+							<option value="Advancement">Advancement</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxSlotSection"><span class="wuxSlotLabel">Your Wealth</span><span class="wuxSlotData"><span name="attr_jin"></span><span> J</span></span></div>
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
 								<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 							</div>
 
@@ -596,53 +751,71 @@
 			<div class="wuxSectionBlock wuxLargeLayoutItem">
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pgs" value="Builder" />
 				<div class="wuxPageDisplay-Core">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Actions"><span>Actions</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Character"><span>Character</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Actions">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Actions"><span>Actions</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Gear">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Character">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Character"><span>Character</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Character">Character</option>
+							<option value="Gear">Gear</option>
+							<option value="Actions">Actions</option>
+						</select>
 					</div>
 					<div class="wuxHeader2">Actions</div>
 					<div class="wuxHeader"><input type="text" name="attr_display_name" placeholder="Display Name" /></div>
 				</div>
 				<div class="wuxPageDisplay-Builder">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
-						</div>
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Advancement">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Styles">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Gear">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Knowledge">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Attributes">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Jobs">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Origin">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Origin"><span>Origin</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Origin">Origin</option>
+							<option value="Jobs">Jobs</option>
+							<option value="Attributes">Attributes</option>
+							<option value="Knowledge">Knowledge</option>
+							<option value="Gear">Gear</option>
+							<option value="Styles">Styles</option>
+							<option value="Advancement">Advancement</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
 								<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 							</div>
 
@@ -652,29 +825,38 @@
 					<div class="wuxHeader">Character Creation</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Styles">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Styles"><span>Styles</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Knowledge">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Knowledge"><span>Knowledge</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Attributes">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Attributes"><span>Attributes</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Jobs">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Jobs"><span>Jobs</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Advancement">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Advancement"><span>Advancement</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Advancement">Advancement</option>
+							<option value="Jobs">Jobs</option>
+							<option value="Attributes">Attributes</option>
+							<option value="Knowledge">Knowledge</option>
+							<option value="Styles">Styles</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
 								<input type="checkbox" class="wuxTabButton " name="attr_pgs-advancement_finish" value="Finish"><span>Finish</span>
 							</div>
 
@@ -688,32 +870,40 @@
 	</div>
 	<div class="wuxPageDisplay-Character">
 		<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pgs-core_tab" />
+		<input type="hidden" class="wuxTabHighlight-CoreTabFlag" name="attr_pgs-core_tab" />
 		<div class="wuxPageDisplay-Overview">
 			<div class="wuxFloatHeader wuxStickyHeader">
 				<div class="wuxSectionBlock wuxLargeLayoutItem">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Actions"><span>Actions</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
-						</div>
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Character"><span>Character</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Actions">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Actions"><span>Actions</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Gear">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Character">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Character"><span>Character</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Character">Character</option>
+							<option value="Gear">Gear</option>
+							<option value="Actions">Actions</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Post">
 								<input type="radio" class="wuxTabButton " name="attr_pgs-core_tab" value="Post"><span>Post</span>
 							</div>
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Details">
 								<input type="radio" class="wuxTabButton " name="attr_pgs-core_tab" value="Details"><span>Details</span>
 							</div>
-							<div class="wuxTabButton wuxTabButtonSelected">
+							<div class="wuxTabButton wuxTabButtonValue-Overview">
 								<input type="radio" class="wuxTabButton " name="attr_pgs-core_tab" value="Overview"><span>Overview</span>
 							</div>
 
@@ -727,29 +917,36 @@
 		<div class="wuxPageDisplay-Details">
 			<div class="wuxFloatHeader wuxStickyHeader">
 				<div class="wuxSectionBlock wuxLargeLayoutItem">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Actions"><span>Actions</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
-						</div>
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Character"><span>Character</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Actions">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Actions"><span>Actions</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Gear">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Character">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Character"><span>Character</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Character">Character</option>
+							<option value="Gear">Gear</option>
+							<option value="Actions">Actions</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Post">
 								<input type="radio" class="wuxTabButton " name="attr_pgs-core_tab" value="Post"><span>Post</span>
 							</div>
-							<div class="wuxTabButton wuxTabButtonSelected">
+							<div class="wuxTabButton wuxTabButtonValue-Details">
 								<input type="radio" class="wuxTabButton " name="attr_pgs-core_tab" value="Details"><span>Details</span>
 							</div>
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Overview">
 								<input type="radio" class="wuxTabButton " name="attr_pgs-core_tab" value="Overview"><span>Overview</span>
 							</div>
 
@@ -763,29 +960,36 @@
 		<div class="wuxPageDisplay-Post">
 			<div class="wuxFloatHeader wuxStickyHeader">
 				<div class="wuxSectionBlock wuxLargeLayoutItem">
-					<div class="wuxTabButtonRow">
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Actions"><span>Actions</span>
-						</div>
-						<div class="wuxTabButton ">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
-						</div>
-						<div class="wuxTabButton wuxTabButtonSelected">
-							<input type="radio" class="wuxTabButton " name="attr_pag" value="Character"><span>Character</span>
-						</div>
+					<div class="wuxNavRow">
 						<div class="wuxSidebarToggleButton">
 							<input type="checkbox" name="attr_pag-sidebar"><span>&#9776;</span>
 						</div>
+						<div class="wuxTabButtonRow">
+							<div class="wuxTabButton wuxTabButtonValue-Actions">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Actions"><span>Actions</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Gear">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Gear"><span>Gear</span>
+							</div>
+							<div class="wuxTabButton wuxTabButtonValue-Character">
+								<input type="radio" class="wuxTabButton " name="attr_pag" value="Character"><span>Character</span>
+							</div>
+
+						</div><select class="wuxInput wuxNavDropdown" name="attr_pag">
+							<option value="Character">Character</option>
+							<option value="Gear">Gear</option>
+							<option value="Actions">Actions</option>
+						</select>
 					</div>
 					<div class="wuxStickySideTab">
 						<div class="wuxTabButtonRow">
-							<div class="wuxTabButton wuxTabButtonSelected">
+							<div class="wuxTabButton wuxTabButtonValue-Post">
 								<input type="radio" class="wuxTabButton " name="attr_pgs-core_tab" value="Post"><span>Post</span>
 							</div>
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Details">
 								<input type="radio" class="wuxTabButton " name="attr_pgs-core_tab" value="Details"><span>Details</span>
 							</div>
-							<div class="wuxTabButton ">
+							<div class="wuxTabButton wuxTabButtonValue-Overview">
 								<input type="radio" class="wuxTabButton " name="attr_pgs-core_tab" value="Overview"><span>Overview</span>
 							</div>
 
@@ -2136,50 +2340,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton wuxTabButtonValue-Finish">
+							<input type="checkbox" class="wuxTabButton false" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>
@@ -2298,50 +2502,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton wuxTabButtonValue-Finish">
+							<input type="checkbox" class="wuxTabButton false" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>
@@ -3507,50 +3711,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton wuxTabButtonValue-Finish">
+							<input type="checkbox" class="wuxTabButton false" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>
@@ -4764,50 +4968,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton wuxTabButtonValue-Finish">
+							<input type="checkbox" class="wuxTabButton false" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>
@@ -8425,50 +8629,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton wuxTabButtonValue-Finish">
+							<input type="checkbox" class="wuxTabButton false" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>
@@ -9557,50 +9761,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton wuxTabButtonValue-Finish">
+							<input type="checkbox" class="wuxTabButton false" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>
@@ -9618,50 +9822,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton wuxTabButtonValue-Finish">
+							<input type="checkbox" class="wuxTabButton false" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>
@@ -10106,50 +10310,50 @@
 					<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 					<div class="wuxPageDisplay-Origin">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Jobs">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Attributes">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Knowledge">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Gear">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-StylesData">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Advancement">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
+								<input type="checkbox" class="wuxTabButton false" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 							</div>
 						</div>
 					</div>
@@ -12051,50 +12255,50 @@
 					<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 					<div class="wuxPageDisplay-Origin">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Jobs">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Attributes">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Knowledge">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Gear">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-StylesData">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Advancement">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
+								<input type="checkbox" class="wuxTabButton false" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 							</div>
 						</div>
 					</div>
@@ -12721,50 +12925,50 @@
 					<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 					<div class="wuxPageDisplay-Origin">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Jobs">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Attributes">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Knowledge">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Gear">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-StylesData">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+							<div class="wuxTabButton wuxTabButtonValue-Next Section">
+								<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 							</div>
 						</div>
 					</div>
 					<div class="wuxPageDisplay-Advancement">
 						<div class="wuxMainFooter">
-							<div class="wuxTabButton ">
-								<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+							<div class="wuxTabButton wuxTabButtonValue-Finish">
+								<input type="checkbox" class="wuxTabButton false" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 							</div>
 						</div>
 					</div>
@@ -16170,50 +16374,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton wuxTabButtonValue-Finish">
+							<input type="checkbox" class="wuxTabButton false" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>
@@ -19384,50 +19588,50 @@
 				<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
 				<div class="wuxPageDisplay-Origin">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Jobs">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Attributes">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Knowledge">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Gear">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-StylesData">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
+						<div class="wuxTabButton wuxTabButtonValue-Next Section">
+							<input type="checkbox" class="wuxTabButton false" name="attr_ttl-nextsection" value="Next Section"><span>Next Section</span>
 						</div>
 					</div>
 				</div>
 				<div class="wuxPageDisplay-Advancement">
 					<div class="wuxMainFooter">
-						<div class="wuxTabButton ">
-							<input type="checkbox" class="wuxTabButton " name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
+						<div class="wuxTabButton wuxTabButtonValue-Finish">
+							<input type="checkbox" class="wuxTabButton false" name="attr_pgs-character_creator_finish" value="Finish"><span>Finish</span>
 						</div>
 					</div>
 				</div>

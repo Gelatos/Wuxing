@@ -141,6 +141,23 @@ input[type=hidden].wuxPageDisplay-Flag[value="Item"] ~ .wuxPageDisplay-FilterIte
 
 .wuxStickyHeader .wuxHeader input
 {
+    /* No width was set here, so the Display Name input used the browser's default intrinsic
+       input width regardless of how much room was actually left beside a floated sibling
+       (e.g. the Overview/Details/Post sticky tab) - if that default width didn't fit next to
+       the float, the whole input got pushed below it instead of shrinking to fit. Static
+       .wuxHeader text (plain text content, no input) never had this problem, which is why
+       only the Character page (the one using an <input> for its title) showed it.
+       width:100% alone overcorrected this - it demanded the FULL container width, which can
+       never fit next to any nonzero-width float, so it wrapped below every time instead of
+       only when actually too narrow. .wuxStickySideTab caps itself at
+       calc(100% - 210px), guaranteeing at least 210px stays free beside it - capping this
+       input's max-width comfortably under that guarantee (200px) means it always fits on the
+       same line at normal widths, while width:100% still lets it shrink further on genuinely
+       narrow windows instead of overflowing off-screen. */
+    width: 100%;
+    max-width: 200px;
+    box-sizing: border-box;
+
     font-family: "Candal";
     text-overflow: clip;
     border: none;
@@ -165,6 +182,9 @@ input[type=hidden].wuxPageDisplay-Flag[value="Item"] ~ .wuxPageDisplay-FilterIte
 .wuxStickySideTab
 {
     float: right;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 
     margin-top: 10px;
     width: auto;
