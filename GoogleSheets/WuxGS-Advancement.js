@@ -561,7 +561,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                     var
                         build = function (jobsDictionary) {
-                            let output = "";
+                            let output = WuxSheetMain.SlotDisplay("Job Pts", WuxDef.GetAttribute("Job", WuxDef._error), WuxDef.GetAttribute("Job"), WuxDef.GetAttribute("Job", WuxDef._max));
                             let jobClasses = WuxDef.Filter([new DatabaseFilterData("group", "JobClass")]);
                             for (let i = 0; i < jobClasses.length; i++) {
                                 output += buildJobClass(jobClasses[i], jobsDictionary);
@@ -681,7 +681,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         buildAttributesSection = function () {
-                            let contents = WuxSheetMain.MultiRowGroup(buildAttributes(), WuxSheetMain.Table.FlexTable, 3);
+                            // Below the collapsible tab's own auto-generated info/help box
+                            // (CollapsibleTab's infoDefinition param), above the actual
+                            // attribute dropdowns.
+                            let contents = WuxSheetMain.SlotDisplay("Attr. Pts", WuxDef.GetAttribute("Attribute", WuxDef._error), WuxDef.GetAttribute("Attribute"), WuxDef.GetAttribute("Attribute", WuxDef._max));
+                            contents += WuxSheetMain.MultiRowGroup(buildAttributes(), WuxSheetMain.Table.FlexTable, 3);
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Attributes");
@@ -708,8 +712,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                         buildSkillsSection = function (database) {
                             let skillGroups = ["ActiveSkills", "SocialSkills", "WorldSkills"];
-                            let contents = "";
-                            
+                            let contents = WuxSheetMain.SlotDisplay("Skill Pts", WuxDef.GetAttribute("Skill", WuxDef._error), WuxDef.GetAttribute("Skill"), WuxDef.GetAttribute("Skill", WuxDef._max));
+
                             for (let skillGroup of skillGroups) {
                                 let definitionName = Format.GetDefinitionName("Page", skillGroup);
                                 let definition = WuxDef.Get(definitionName);
@@ -839,7 +843,10 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         build = function (database) {
                             let leftColumn = buildCommonSection(database);
                             let rightColumn = buildGroupsColumn(database);
-                            let contents = WuxSheetMain.MultiRowGroup([leftColumn, rightColumn], WuxSheetMain.Table.FlexTable, 2);
+                            // Below the collapsible tab's own auto-generated info/help box,
+                            // above the Common/Walthair/etc. language columns.
+                            let contents = WuxSheetMain.SlotDisplay("Know. Pts", WuxDef.GetAttribute("Knowledge", WuxDef._error), WuxDef.GetAttribute("Knowledge"), WuxDef.GetAttribute("Knowledge", WuxDef._max));
+                            contents += WuxSheetMain.MultiRowGroup([leftColumn, rightColumn], WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Language");
@@ -941,7 +948,10 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                     var
                         build = function (database) {
-                            let contents = WuxSheetMain.MultiRowGroup(buildGroups(database), WuxSheetMain.Table.FlexTable, 2);
+                            // Below the collapsible tab's own auto-generated info/help box,
+                            // above the Academic/etc. lore groups.
+                            let contents = WuxSheetMain.SlotDisplay("Know. Pts", WuxDef.GetAttribute("Knowledge", WuxDef._error), WuxDef.GetAttribute("Knowledge"), WuxDef.GetAttribute("Knowledge", WuxDef._max));
+                            contents += WuxSheetMain.MultiRowGroup(buildGroups(database), WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Lore");

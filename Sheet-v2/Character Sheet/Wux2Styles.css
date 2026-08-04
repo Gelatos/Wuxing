@@ -237,7 +237,6 @@ button[type=roll].wuxButton.wuxSizePercent {
     left: 0px;
     width: 98%;
     min-width: 250px;
-    max-width: 1065px;
     padding-bottom: 30px;
     margin: 0px;
 
@@ -269,7 +268,12 @@ button[type=roll].wuxButton.wuxSizePercent {
     flex-direction: column;
     flex: 5;
 
-    width: calc(100% - 90px);
+    /* .wuxMainContent is a flex container (a BFC), so it can't overlap the sidebar's float box
+       even with an explicit width - if that width leaves no room for the float, the browser
+       pushes the whole thing below the sidebar instead of beside it. Collapsed sidebar is a
+       15px sliver + 10px margin, so that's the minimum gutter to reserve here; the
+       [value="on"] override below narrows it further while the sidebar is actually expanded. */
+    width: calc(100% - 25px);
 
     position: sticky;
     top: 80px;
@@ -314,6 +318,16 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxMainContent {
 
 .wuxSegment {
     position: relative;
+}
+
+/* .wuxSegment normally sizes to fit its content, but with .wuxTab hidden while collapsed
+   (display:none - see below) it would shrink to just the header's height, leaving most of the
+   visible 15px sliver with no element to actually catch clicks. Force it to always fill
+   .wuxFloatSidebar's own fixed height so .wuxSidebarPullOutHandle's height:100% covers the
+   whole sliver, not just the header's sliver of it. Scoped to the sidebar's own .wuxSegment
+   since that class is used generically all over the sheet. */
+.wuxFloatSidebar .wuxSegment {
+    height: 100%;
 }
 
 input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment {
@@ -378,11 +392,17 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment {
 }
 
 .wuxFloatSidebar {
+    /* Collapsed = a thin 15px sliver rather than fully gone - its own header
+       (.wuxFloatSidebarHeader below) stays visible as a pull-out handle, on top of the nav
+       header's own hamburger toggle. The rest of the sidebar's contents are hidden while
+       collapsed (see .wuxTab rule below) rather than left to render cut-off at 15px wide. */
+    display: block;
+    width: 15px;
+
     float: left;
     flex: 1;
     top: 80px;
 
-    width: 80px;
     height: calc(100vh - 150px);
     max-height: calc(100vh - 150px);
     margin-right: 10px;
@@ -401,29 +421,6 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment {
     scrollbar-width: none; /* Firefox */
 }
 
-.wuxFloatSidebarHeader {
-    position: relative;
-    display: inline-block;
-    margin-bottom: 15px;
-    width: 100%;
-    height: 22px;
-    padding: 3px;
-    padding-left: 6px;
-    z-index: 1;
-
-    color: #f4f6f8;
-    font-family: "Candal";
-    font-size: 16px;
-    line-height: 22px;
-    vertical-align: bottom;
-    text-transform: capitalize;
-
-    background: #1d1e1f;
-    border-bottom: 3px solid;
-    border-color: transparent transparent #71B9DE transparent;
-    border-radius: 0px 10px 0px 0px;
-}
-
 .wuxFloatSidebarContents {
     position: relative;
     left: 0px;
@@ -440,8 +437,163 @@ input[type=hidden].wuxFilterSegment-flag[value="1"] + .wuxSegment {
     border-radius: 0px 0px 5px 0px; */
 }
 
-input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxFloatSidebar {
+/* Always-visible header/pull-out handle (WuxSheetSidebar.tabHeader) - a <label> wrapping a
+   plain checkbox, so the whole bar is a natural two-way toggle: click to expand while
+   collapsed, click again to close while expanded. Small font/height so the ">>" chevron still
+   fits within the 15px collapsed width. */
+.wuxFloatSidebarHeader {
+    position: relative;
+    z-index: 2;
+    display: block;
+    width: 100%;
+    height: 20px;
+    margin-bottom: 10px;
+    padding: 0;
+
+    cursor: pointer;
+    color: #f4f6f8;
+    font-family: "Candal";
+    font-size: 12px;
+    line-height: 20px;
+    text-align: center;
+    overflow: hidden;
+
+    background: #1d1e1f;
+    border-bottom: 3px solid;
+    border-color: transparent transparent #71B9DE transparent;
+    border-radius: 0px 10px 0px 0px;
+}
+
+.wuxFloatSidebarHeader input[type=checkbox] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.wuxFloatSidebarHeader:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Covers the entire panel so the whole 15px sliver is clickable to expand, not just the
+   header above - z-index below the header so the header keeps its own hover feedback where
+   the two overlap. */
+.wuxSidebarPullOutHandle {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.wuxSidebarPullOutHandle input[type=checkbox] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.wuxSidebarPullOutHandle:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Hide the full-panel handle once expanded - otherwise it would sit on top of the real
+   sidebar content and swallow clicks meant for Roll Skill/Chat/etc. The header keeps working
+   in both directions since it isn't covered by this rule. */
+input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxFloatSidebar .wuxSidebarPullOutHandle {
+    display: none;
+}
+
+/* Real sidebar content (Roll Skill/Chat/etc, everything wrapped in WuxSheetMain.Tab) hidden
+   while collapsed - at only 15px wide it just rendered as cut-off text, not a useful preview.
+   Shown again once expanded. Scoped to .wuxFloatSidebar specifically since .wuxTab itself is a
+   generic building block used all over the sheet. */
+.wuxFloatSidebar .wuxTab {
+    display: none;
+}
+
+/* ~ (general sibling), not + (adjacent) - .wuxSidebarOverlayBackdrop now sits between the
+   flag input and .wuxFloatSidebar in the markup (WuxSheetSidebar.build), and + requires the
+   target to be the *immediate* next sibling, so it would silently stop matching the moment
+   anything gets inserted in between. ~ matches regardless of what else is between them. */
+input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxFloatSidebar {
+    display: block;
     width: 240px;
+}
+
+/* display:block, not flex - a pre-existing (unrelated, pre-dating this feature) selector typo
+   elsewhere in this file means .wuxTab's own "real" display:flex rule never actually matches
+   any element, so it has only ever rendered as plain display:block in practice. Using flex
+   here instead would activate real flex layout for the first time and throw off .wuxPointsRow
+   pill widths (a single points pill would shrink instead of sitting at its normal ~110px). */
+input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxFloatSidebar .wuxTab {
+    display: block;
+}
+
+/* Hidden by default outside the narrow-overlay media query below - without this, the plain
+   checkbox inside renders as a normal visible inline checkbox at ordinary widths, since
+   nothing else on a wide screen tells it to hide. */
+.wuxSidebarOverlayBackdrop {
+    display: none;
+}
+
+/* Below sidebar-width (240px) + 250px, there isn't enough room for the expanded sidebar and
+   the main content side by side without things getting cramped - let the sidebar float on
+   top of the content instead of squeezing it, so on small windows users get used to
+   collapsing it again once they're done with it. */
+@media (max-width: 490px) {
+    /* position:fixed anchors to the true browser viewport, which doesn't line up with the
+       rest of the sheet once the page has scrolled at all - that's what was bumping the
+       sidebar up and clipping its own "Check" title. position:absolute (relative to
+       .wuxCharacterSheet, its nearest positioned ancestor) keeps it in the same coordinate
+       space as the header above it instead, so it can't drift out of alignment. Padding-right
+       + border-box softens the sidebar's cut-off right edge without changing its 240px width. */
+    input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxFloatSidebar {
+        position: absolute;
+        box-sizing: border-box;
+        padding-right: 15px;
+    }
+    input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxMainContent {
+        width: 100%;
+    }
+
+    /* Full-screen click-to-close backdrop behind the overlaid sidebar, dimming the content
+       it's covering - same convention as the item popups' wuxPopupOverlay backdrop (fixed to
+       the true viewport with the same top:20px offset as .wuxCharacterSheet, since it just
+       needs to visually cover everything rather than align with a specific nearby element).
+       Sits below the sidebar's own z-index (9998) so clicks on the sidebar itself still reach
+       it; only clicks outside the sidebar hit this and close it. */
+    input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxSidebarOverlayBackdrop {
+        display: block;
+        position: fixed;
+        top: 20px;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9990;
+    }
+    .wuxSidebarOverlayBackdrop input[type=checkbox] {
+        position: fixed;
+        top: 20px;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        opacity: 0;
+        z-index: 9990;
+    }
 }
 
 /* General-purpose pair for anything in the sidebar that needs different content/markup
@@ -460,22 +612,6 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxSidebarExpandedOnly {
 }
 input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxSidebarCollapsedOnly {
     display: none;
-}
-
-.wuxSideBarExtend {
-    opacity: 0;
-    position: absolute;
-    top: 0px;
-    right: -3px;
-    left: 0px;
-    width: 18px;
-    min-height: 25px;
-    z-index: 100;
-}
-
-
-.wuxSideBarExtend:hover + .wuxFloatSidebarHeader {
-    background: #deaf72;
 }
 
 .wuxFloatSidebar::-webkit-scrollbar {
@@ -558,6 +694,64 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxSidebarCollapsedOnly 
 
 .wuxTabButtonRow::-webkit-scrollbar {
     display: none;
+}
+
+/* Sidebar show/hide toggle (WuxSheetNavigation.buildSidebarToggleButton) - same invisible-
+   checkbox-plus-styled-span convention as .wuxTabButton below, but a small fixed-size square
+   (flex:0, not flex:2) so it doesn't grow/shrink like the page tabs, and its own bright
+   orange "on" color instead of the tabs' selected brown, since this needs to read as a
+   simple on/off toggle rather than "which page is selected". row-reverse on
+   .wuxTabButtonRow puts whichever button is last in the markup at the visual far left, which
+   is why callers append this after building their page tabs. */
+.wuxSidebarToggleButton {
+    position: relative;
+    flex: 0 0 auto;
+    min-height: 20px;
+    width: 30px;
+    margin-right: 5px;
+}
+
+.wuxSidebarToggleButton input[type=checkbox] {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    min-height: 20px;
+
+    z-index: 9999;
+    opacity: 0;
+}
+
+.wuxSidebarToggleButton span {
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    text-align: center;
+    color: #000;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+
+    background-color: #cacbcf;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.wuxSidebarToggleButton input[type=checkbox]:hover + span {
+    color: #FFFFFF;
+    background: #1a6db5;
+}
+
+.wuxSidebarToggleButton input[type=checkbox]:checked + span {
+    color: #1d1e1f;
+    background: #09bfff;
+}
+
+.wuxSidebarToggleButton input[type=checkbox]:checked:hover + span {
+    color: #FFFFFF;
+    background: #1a6db5;
 }
 
 .wuxTabButton,

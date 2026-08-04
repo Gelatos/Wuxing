@@ -10976,15 +10976,32 @@ var WuxDefinition = WuxDefinition || (function () {
 }());
 
 var WuxSheetSidebar = WuxSheetSidebar || (function () {
-    const expandableTab = function (title, contents) {
+    // Always-visible header (both collapsed 15px sliver and expanded 240px) - the whole bar
+    // is a <label> wrapping a plain checkbox, so it's a natural two-way toggle: click to pull
+    // out while collapsed, click again to close while expanded. This is in addition to the
+    // nav header's own hamburger toggle (WuxSheetNavigation.buildSidebarToggleButton) - both
+    // are bound to the same Page_Sidebar attribute.
+    const tabHeader = function () {
+        return `<label class="wuxFloatSidebarHeader">
+        <input type="checkbox" name="${WuxDef.GetAttribute("Page_Sidebar")}">
+        <span>&#10217;&#10217;</span>
+        </label>`;
+    };
+    // Covers the whole panel so the entire 15px sliver is clickable to expand, not just the
+    // header - hidden again once expanded (see CSS) so it doesn't sit on top of the real
+    // content and swallow clicks meant for Roll Skill/Chat/etc. Placed before tabHeader in the
+    // markup so the header still paints on top of it and keeps its own hover behavior.
+    const pullOutHandle = function () {
+        return `<label class="wuxSidebarPullOutHandle">
+        <input type="checkbox" name="${WuxDef.GetAttribute("Page_Sidebar")}">
+        </label>`;
+    };
+    const expandableTab = function (contents) {
         return `<div class="wuxSegment">
-        ${WuxSheetMain.CustomInput("checkbox", WuxDef.GetAttribute("Page_Sidebar"), "wuxSideBarExtend", ` checked="checked"`)}
-        ${tabHeader(`<span>&#10217&#10217 ${title}</span>`)}
+        ${pullOutHandle()}
+        ${tabHeader()}
         ${WuxSheetMain.Tab(`<div class="wuxFloatSidebarContents">${contents}</div>`)}
         </div>`;
-    };
-    const tabHeader = function (contents) {
-        return `<div class="wuxFloatSidebarHeader">\n${contents}\n</div>`;
     };
     const collapsibleSection = function (header, fieldName, contents, defaultOpen) {
         return `<div class="wuxInteractiveBlock wuxSizeTiny">
@@ -11032,10 +11049,19 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
     };
     'use strict';
 
-    const build = function (title, contents) {
+    const build = function (contents) {
+            // Full-screen click-to-close backdrop, shown only in the narrow-window overlay
+            // mode (see the media query in WCSS-Base.css) while the sidebar is expanded -
+            // same invisible-checkbox-over-a-dimmed-div convention as the item popups'
+            // wuxPopupOverlay/wuxPopupOverlayClose, value="0" so a single click sets
+            // Page_Sidebar back to its "off" state.
+            let overlayBackdrop = `<div class="wuxSidebarOverlayBackdrop">
+        <input type="checkbox" name="${WuxDef.GetAttribute("Page_Sidebar")}" value="0">
+        </div>`;
             return `<input type="hidden" class="wuxSideBarExtend-flag" name="${WuxDef.GetAttribute("Page_Sidebar")}" />
+        ${overlayBackdrop}
         <div class="wuxFloatSidebar">
-        ${expandableTab(title, contents)}
+        ${expandableTab(contents)}
         </div>`;
         },
 
@@ -11108,7 +11134,10 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
                 skillGroupText += subGroups[i].getTitle();
             }
             let rollSkillValue = `!cskillgroupcheck @{${WuxDef.GetVariable("SheetName")}}@@@?{Choose a Skill Group to Roll|${skillGroupText}|Lore};?{Advantage|0}`;
-            return `<button class="wuxButton wuxSizePercent" type="roll" value="${rollSkillValue}"><span>Roll Skill</span></button>`;
+            let contents = `<button class="wuxButton wuxSizePercent" type="roll" value="${rollSkillValue}"><span>Roll Skill</span></button>`;
+
+            let titleDefinition = WuxDef.Get("Check");
+            return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), contents, true);
         },
 
         buildBoonSection = function () {
@@ -11187,17 +11216,17 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
                 ${buildPointsSection(WuxDef.GetAttribute("Perk"), "Perk Pts")}
             </div>`);
             contents += WuxSheet.PageDisplay("Jobs",
-                `<div class="wuxPointsRow">${buildPointsSection(WuxDef.GetAttribute("Job"))}</div>`);
+                `<div class="wuxPointsRow">${buildPointsSection(WuxDef.GetAttribute("Job"), "Job Pts")}</div>`);
             contents += WuxSheet.PageDisplay("Attributes", `<div class="wuxPointsRow">
                 ${buildPointsSection(WuxDef.GetAttribute("Attribute"), "Attr. Pts")}
                 ${buildPointsSection(WuxDef.GetAttribute("Skill"), "Skill Pts")}
             </div>`);
             contents += WuxSheet.PageDisplay("Knowledge",
-                `<div class="wuxPointsRow">${buildPointsSection(WuxDef.GetAttribute("Knowledge"))}</div>`);
+                `<div class="wuxPointsRow">${buildPointsSection(WuxDef.GetAttribute("Knowledge"), "Know. Pts")}</div>`);
             contents += WuxSheet.PageDisplay("Styles",
-                `<div class="wuxPointsRow">${buildPointsSection(WuxDef.GetAttribute("Technique"))}</div>`);
+                `<div class="wuxPointsRow">${buildPointsSection(WuxDef.GetAttribute("Technique"), "Style Pts")}</div>`);
             contents += WuxSheet.PageDisplay("StylesData",
-                `<div class="wuxPointsRow">${buildPointsSection(WuxDef.GetAttribute("Technique"))}</div>`);
+                `<div class="wuxPointsRow">${buildPointsSection(WuxDef.GetAttribute("Technique"), "Style Pts")}</div>`);
 
             // Chat + Language Select + Boon: normal play only - shown exclusively
             // when PageSet=="Core", never while inside any build flow (Builder/Training/
@@ -11218,7 +11247,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             let techDebugClasses = ["ActionsData", "StylesData"].map(name => `wuxPageDisplay-${name}`).join(" ");
             contents += `<div class="${techDebugClasses}">${buildTechDebugSection()}</div>`;
 
-            return build("", contents);
+            return build(contents);
         };
     return {
         Build: build,
@@ -11285,6 +11314,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         for (let i = 0; i < tabNames.length; i++) {
             output += buildTabButton("radio", WuxDef.GetAttribute("Page"), tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
         }
+        output += buildSidebarToggleButton();
         output = buildTabButtonRow(output);
 
         return output;
@@ -11335,11 +11365,27 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             </div>`;
         },
 
+        // Sidebar show/hide toggle, bound to the same attribute the sidebar itself watches
+        // (WuxSheetSidebar's wuxSideBarExtend-flag). Lives in the main tab row instead of the
+        // sidebar so it still works once the sidebar is fully hidden (display:none) rather
+        // than just shrunk. .wuxTabButtonRow is row-reverse, so appending this last in the
+        // row's markup is what puts it at the visual far left, ahead of the page tabs.
+        buildSidebarToggleButton = function () {
+            // New-character default for Page_Sidebar is seeded in WJS-Loader.js's
+            // upgrade_to_1_0_0 (brand-new sheets only), not via a checked="checked" default
+            // here - with multiple same-named checkboxes for this one attribute scattered
+            // across the sidebar/nav, relying on this markup's own default was unreliable.
+            return `<div class="wuxSidebarToggleButton">
+            <input type="checkbox" name="${WuxDef.GetAttribute("Page_Sidebar")}"><span>&#9776;</span>
+            </div>`;
+        },
+
         buildTabs = function (sheetName, fieldName, tabNames) {
             let output = "";
             for (let i = 0; i < tabNames.length; i++) {
                 output += buildTabButton("radio", fieldName, tabNames[i], tabNames[i], tabNames[i] == sheetName, "") + "\n";
             }
+            output += buildSidebarToggleButton();
             output = buildTabButtonRow(output);
 
             return output;
@@ -13121,7 +13167,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 buildStyleFilter = function () {
                     let titleDef = WuxDef.Get("Title_LearnNewStyles");
-                    let contents = WuxSheetMain.Header(titleDef.getTitle());
+                    let contents = WuxSheetMain.SlotDisplay("Style Pts", WuxDef.GetAttribute("Technique", WuxDef._error), WuxDef.GetAttribute("Technique"), WuxDef.GetAttribute("Technique", WuxDef._max));
+                    contents += WuxSheetMain.Header(titleDef.getTitle());
                     contents += buildStyleFilterCheckboxes();
                     contents += WuxSheetMain.Header2(WuxDef.GetTitle("Title_QuickStyleFilter"));
                     contents += buildRecommendedStyleFilterButton();
@@ -15419,7 +15466,7 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                     var
                         build = function (jobsDictionary) {
-                            let output = "";
+                            let output = WuxSheetMain.SlotDisplay("Job Pts", WuxDef.GetAttribute("Job", WuxDef._error), WuxDef.GetAttribute("Job"), WuxDef.GetAttribute("Job", WuxDef._max));
                             let jobClasses = WuxDef.Filter([new DatabaseFilterData("group", "JobClass")]);
                             for (let i = 0; i < jobClasses.length; i++) {
                                 output += buildJobClass(jobClasses[i], jobsDictionary);
@@ -15539,7 +15586,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         },
 
                         buildAttributesSection = function () {
-                            let contents = WuxSheetMain.MultiRowGroup(buildAttributes(), WuxSheetMain.Table.FlexTable, 3);
+                            // Below the collapsible tab's own auto-generated info/help box
+                            // (CollapsibleTab's infoDefinition param), above the actual
+                            // attribute dropdowns.
+                            let contents = WuxSheetMain.SlotDisplay("Attr. Pts", WuxDef.GetAttribute("Attribute", WuxDef._error), WuxDef.GetAttribute("Attribute"), WuxDef.GetAttribute("Attribute", WuxDef._max));
+                            contents += WuxSheetMain.MultiRowGroup(buildAttributes(), WuxSheetMain.Table.FlexTable, 3);
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Attributes");
@@ -15566,8 +15617,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                         buildSkillsSection = function (database) {
                             let skillGroups = ["ActiveSkills", "SocialSkills", "WorldSkills"];
-                            let contents = "";
-                            
+                            let contents = WuxSheetMain.SlotDisplay("Skill Pts", WuxDef.GetAttribute("Skill", WuxDef._error), WuxDef.GetAttribute("Skill"), WuxDef.GetAttribute("Skill", WuxDef._max));
+
                             for (let skillGroup of skillGroups) {
                                 let definitionName = Format.GetDefinitionName("Page", skillGroup);
                                 let definition = WuxDef.Get(definitionName);
@@ -15697,7 +15748,10 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         build = function (database) {
                             let leftColumn = buildCommonSection(database);
                             let rightColumn = buildGroupsColumn(database);
-                            let contents = WuxSheetMain.MultiRowGroup([leftColumn, rightColumn], WuxSheetMain.Table.FlexTable, 2);
+                            // Below the collapsible tab's own auto-generated info/help box,
+                            // above the Common/Walthair/etc. language columns.
+                            let contents = WuxSheetMain.SlotDisplay("Know. Pts", WuxDef.GetAttribute("Knowledge", WuxDef._error), WuxDef.GetAttribute("Knowledge"), WuxDef.GetAttribute("Knowledge", WuxDef._max));
+                            contents += WuxSheetMain.MultiRowGroup([leftColumn, rightColumn], WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Language");
@@ -15799,7 +15853,10 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                     var
                         build = function (database) {
-                            let contents = WuxSheetMain.MultiRowGroup(buildGroups(database), WuxSheetMain.Table.FlexTable, 2);
+                            // Below the collapsible tab's own auto-generated info/help box,
+                            // above the Academic/etc. lore groups.
+                            let contents = WuxSheetMain.SlotDisplay("Know. Pts", WuxDef.GetAttribute("Knowledge", WuxDef._error), WuxDef.GetAttribute("Knowledge"), WuxDef.GetAttribute("Knowledge", WuxDef._max));
+                            contents += WuxSheetMain.MultiRowGroup(buildGroups(database), WuxSheetMain.Table.FlexTable, 2);
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Lore");

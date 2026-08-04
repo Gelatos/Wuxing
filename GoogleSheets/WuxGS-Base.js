@@ -1500,7 +1500,8 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
 
                 buildStyleFilter = function () {
                     let titleDef = WuxDef.Get("Title_LearnNewStyles");
-                    let contents = WuxSheetMain.Header(titleDef.getTitle());
+                    let contents = WuxSheetMain.SlotDisplay("Style Pts", WuxDef.GetAttribute("Technique", WuxDef._error), WuxDef.GetAttribute("Technique"), WuxDef.GetAttribute("Technique", WuxDef._max));
+                    contents += WuxSheetMain.Header(titleDef.getTitle());
                     contents += buildStyleFilterCheckboxes();
                     contents += WuxSheetMain.Header2(WuxDef.GetTitle("Title_QuickStyleFilter"));
                     contents += buildRecommendedStyleFilterButton();

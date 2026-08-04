@@ -231,6 +231,7 @@ var upgrade_to_1_0_0 = function (currentVersion) {
 	attributeHandler.addUpdate(WuxDef.GetVariable("EN"), 0);
 	attributeHandler.addUpdate(WuxDef.GetVariable("EN", WuxDef._max), 9);
 	attributeHandler.addUpdate(WuxDef.GetVariable("MvCharge"), 0);
+	attributeHandler.addUpdate(WuxDef.GetVariable("Page_Sidebar"), "on");
 
 	let statBonusFilter = WuxDef.Filter([new DatabaseFilterData("group", "StatBonus")]);
 	for (let i = 0; i < statBonusFilter.length; i++) {
