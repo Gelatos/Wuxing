@@ -774,60 +774,39 @@ input[type=hidden].wuxSideBarExtend-flag[value="on"] ~ .wuxSidebarCollapsedOnly 
     flex: 2;
 }
 
-/* Bigger/highlighted while active - driven off the dedicated wuxTabHighlight-Flag/
-   wuxTabHighlight-CoreTabFlag inputs (WuxSheetNavigation.buildAll/buildTabHighlightFlag)
-   matching each button's own wuxTabButtonValue-<value> class, rather than the button's own
-   :has(input:checked)/:checked state. That was tried first (replacing an even older
-   server-computed "is this the active tab" class, which had its own bug: the character-
-   creation flow's 7-tab row is a fixed list that doesn't include "Training", so nothing was
-   ever marked big on that page) - but the same "Page"-named radio is duplicated across 5+
-   separate nav blocks, and Roll20 doesn't reliably sync every duplicate's own checked state
-   the instant the attribute changes, so the newly-revealed block's own copy would stay
-   visually unselected until a second click forced a fuller resync. A single global flag input
-   doesn't have that problem - it's exactly the mechanism the whole PageDisplay show/hide
-   system already depends on working instantly. Two attributes (Page, PageSet_Core_tab) means
-   two dedicated flag classes, each with their own value list below - own classes (not the
-   shared, generic wuxPageDisplay-Flag used for show/hide) because Page and PageSet share
-   value names like "Training"/"Advancement", and matching purely on value against that
-   generic, widely-reused class would risk an unrelated PageSet flag elsewhere in the DOM
-   falsely satisfying the same selector. "~ *" (not a named class) as the sibling step - the
-   actual direct sibling of the flag is whichever .wuxPageDisplay-X wrapper WuxSheet.PageDisplay
-   generates for that branch (a different class per branch), so a wildcard is needed to reach
-   past it down to the button; ~ alone only matches true siblings; the button itself is a
-   descendant of that wrapper, not a sibling of the flag. */
-input[type=hidden].wuxTabHighlight-Flag[value="Origin"] ~ * .wuxTabButtonValue-Origin,
-input[type=hidden].wuxTabHighlight-Flag[value="Training"] ~ * .wuxTabButtonValue-Training,
-input[type=hidden].wuxTabHighlight-Flag[value="Advancement"] ~ * .wuxTabButtonValue-Advancement,
-input[type=hidden].wuxTabHighlight-Flag[value="Jobs"] ~ * .wuxTabButtonValue-Jobs,
-input[type=hidden].wuxTabHighlight-Flag[value="Attributes"] ~ * .wuxTabButtonValue-Attributes,
-input[type=hidden].wuxTabHighlight-Flag[value="Knowledge"] ~ * .wuxTabButtonValue-Knowledge,
-input[type=hidden].wuxTabHighlight-Flag[value="Styles"] ~ * .wuxTabButtonValue-Styles,
-input[type=hidden].wuxTabHighlight-Flag[value="Gear"] ~ * .wuxTabButtonValue-Gear,
-input[type=hidden].wuxTabHighlight-Flag[value="Actions"] ~ * .wuxTabButtonValue-Actions,
-input[type=hidden].wuxTabHighlight-Flag[value="Character"] ~ * .wuxTabButtonValue-Character,
-input[type=hidden].wuxTabHighlight-Flag[value="NPC"] ~ * .wuxTabButtonValue-NPC,
-input[type=hidden].wuxTabHighlight-Flag[value="Notes"] ~ * .wuxTabButtonValue-Notes,
-input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Overview"] ~ * .wuxTabButtonValue-Overview,
-input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Details"] ~ * .wuxTabButtonValue-Details,
-input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Post"] ~ * .wuxTabButtonValue-Post {
+input[type=hidden].wuxTabHighlight-Flag[value="Origin"] ~ .wuxPageDisplay-Origin .wuxTabButtonValue-Origin,
+input[type=hidden].wuxTabHighlight-Flag[value="Training"] ~ .wuxPageDisplay-Training .wuxTabButtonValue-Training,
+input[type=hidden].wuxTabHighlight-Flag[value="Advancement"] ~ .wuxPageDisplay-Advancement .wuxTabButtonValue-Advancement,
+input[type=hidden].wuxTabHighlight-Flag[value="Jobs"] ~ .wuxPageDisplay-Jobs .wuxTabButtonValue-Jobs,
+input[type=hidden].wuxTabHighlight-Flag[value="Attributes"] ~ .wuxPageDisplay-Attributes .wuxTabButtonValue-Attributes,
+input[type=hidden].wuxTabHighlight-Flag[value="Knowledge"] ~ .wuxPageDisplay-Knowledge .wuxTabButtonValue-Knowledge,
+input[type=hidden].wuxTabHighlight-Flag[value="Styles"] ~ .wuxPageDisplay-Styles .wuxTabButtonValue-Styles,
+input[type=hidden].wuxTabHighlight-Flag[value="Gear"] ~ .wuxPageDisplay-Gear .wuxTabButtonValue-Gear,
+input[type=hidden].wuxTabHighlight-Flag[value="Actions"] ~ .wuxPageDisplay-Actions .wuxTabButtonValue-Actions,
+input[type=hidden].wuxTabHighlight-Flag[value="Character"] ~ .wuxPageDisplay-Character .wuxTabButtonValue-Character,
+input[type=hidden].wuxTabHighlight-Flag[value="NPC"] ~ .wuxPageDisplay-NPC .wuxTabButtonValue-NPC,
+input[type=hidden].wuxTabHighlight-Flag[value="Notes"] ~ .wuxPageDisplay-Notes .wuxTabButtonValue-Notes,
+input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Overview"] ~ .wuxPageDisplay-Overview .wuxTabButtonValue-Overview,
+input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Details"] ~ .wuxPageDisplay-Details .wuxTabButtonValue-Details,
+input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Post"] ~ .wuxPageDisplay-Post .wuxTabButtonValue-Post {
     flex: 3;
 }
 
-input[type=hidden].wuxTabHighlight-Flag[value="Origin"] ~ * .wuxTabButtonValue-Origin span,
-input[type=hidden].wuxTabHighlight-Flag[value="Training"] ~ * .wuxTabButtonValue-Training span,
-input[type=hidden].wuxTabHighlight-Flag[value="Advancement"] ~ * .wuxTabButtonValue-Advancement span,
-input[type=hidden].wuxTabHighlight-Flag[value="Jobs"] ~ * .wuxTabButtonValue-Jobs span,
-input[type=hidden].wuxTabHighlight-Flag[value="Attributes"] ~ * .wuxTabButtonValue-Attributes span,
-input[type=hidden].wuxTabHighlight-Flag[value="Knowledge"] ~ * .wuxTabButtonValue-Knowledge span,
-input[type=hidden].wuxTabHighlight-Flag[value="Styles"] ~ * .wuxTabButtonValue-Styles span,
-input[type=hidden].wuxTabHighlight-Flag[value="Gear"] ~ * .wuxTabButtonValue-Gear span,
-input[type=hidden].wuxTabHighlight-Flag[value="Actions"] ~ * .wuxTabButtonValue-Actions span,
-input[type=hidden].wuxTabHighlight-Flag[value="Character"] ~ * .wuxTabButtonValue-Character span,
-input[type=hidden].wuxTabHighlight-Flag[value="NPC"] ~ * .wuxTabButtonValue-NPC span,
-input[type=hidden].wuxTabHighlight-Flag[value="Notes"] ~ * .wuxTabButtonValue-Notes span,
-input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Overview"] ~ * .wuxTabButtonValue-Overview span,
-input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Details"] ~ * .wuxTabButtonValue-Details span,
-input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Post"] ~ * .wuxTabButtonValue-Post span {
+input[type=hidden].wuxTabHighlight-Flag[value="Origin"] ~ .wuxPageDisplay-Origin .wuxTabButtonValue-Origin span,
+input[type=hidden].wuxTabHighlight-Flag[value="Training"] ~ .wuxPageDisplay-Training .wuxTabButtonValue-Training span,
+input[type=hidden].wuxTabHighlight-Flag[value="Advancement"] ~ .wuxPageDisplay-Advancement .wuxTabButtonValue-Advancement span,
+input[type=hidden].wuxTabHighlight-Flag[value="Jobs"] ~ .wuxPageDisplay-Jobs .wuxTabButtonValue-Jobs span,
+input[type=hidden].wuxTabHighlight-Flag[value="Attributes"] ~ .wuxPageDisplay-Attributes .wuxTabButtonValue-Attributes span,
+input[type=hidden].wuxTabHighlight-Flag[value="Knowledge"] ~ .wuxPageDisplay-Knowledge .wuxTabButtonValue-Knowledge span,
+input[type=hidden].wuxTabHighlight-Flag[value="Styles"] ~ .wuxPageDisplay-Styles .wuxTabButtonValue-Styles span,
+input[type=hidden].wuxTabHighlight-Flag[value="Gear"] ~ .wuxPageDisplay-Gear .wuxTabButtonValue-Gear span,
+input[type=hidden].wuxTabHighlight-Flag[value="Actions"] ~ .wuxPageDisplay-Actions .wuxTabButtonValue-Actions span,
+input[type=hidden].wuxTabHighlight-Flag[value="Character"] ~ .wuxPageDisplay-Character .wuxTabButtonValue-Character span,
+input[type=hidden].wuxTabHighlight-Flag[value="NPC"] ~ .wuxPageDisplay-NPC .wuxTabButtonValue-NPC span,
+input[type=hidden].wuxTabHighlight-Flag[value="Notes"] ~ .wuxPageDisplay-Notes .wuxTabButtonValue-Notes span,
+input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Overview"] ~ .wuxPageDisplay-Overview .wuxTabButtonValue-Overview span,
+input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Details"] ~ .wuxPageDisplay-Details .wuxTabButtonValue-Details span,
+input[type=hidden].wuxTabHighlight-CoreTabFlag[value="Post"] ~ .wuxPageDisplay-Post .wuxTabButtonValue-Post span {
     color: #FFFFFF;
     font-size: 14px;
     background: #512800;
