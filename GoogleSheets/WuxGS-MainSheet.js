@@ -1155,7 +1155,10 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             return collapsibleHeader(header, titleDefinition.getAttribute(), WuxSheetMain.Language.Build(), true);
         },
 
-        buildRollSkillButton = function () {
+        // Bare button only, no "Checks" title/collapsible wrapper - reused directly by other
+        // pages (Character Core's Resources section, Details page's Skills section) that want
+        // just the button without a redundant second "Checks" header of their own.
+        buildRollSkillButtonBare = function () {
             let subGroups = WuxDef.Filter([new DatabaseFilterData("group", "SkillGroup")]);
             let skillGroupText = "";
             for (let i = 0; i < subGroups.length; i++) {
@@ -1165,10 +1168,12 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
                 skillGroupText += subGroups[i].getTitle();
             }
             let rollSkillValue = `!cskillgroupcheck @{${WuxDef.GetVariable("SheetName")}}@@@?{Choose a Skill Group to Roll|${skillGroupText}|Lore};?{Advantage|0}`;
-            let contents = `<button class="wuxButton wuxSizePercent" type="roll" value="${rollSkillValue}"><span>Roll Skill</span></button>`;
+            return `<button class="wuxButton wuxSizePercent" type="roll" value="${rollSkillValue}"><span>Roll Skill</span></button>`;
+        },
 
+        buildRollSkillButton = function () {
             let titleDefinition = WuxDef.Get("Check");
-            return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), contents, true);
+            return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), buildRollSkillButtonBare(), true);
         },
 
         buildBoonSection = function () {
@@ -1290,6 +1295,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
         BuildChatSection: buildChatSection,
         BuildLanguageSection: buildLanguageSection,
         BuildRollSkillButton: buildRollSkillButton,
+        BuildRollSkillButtonBare: buildRollSkillButtonBare,
         BuildTechDebugSection: buildTechDebugSection,
         BuildGearDebugSection: buildGearDebugSection,
         BuildAll: buildAll

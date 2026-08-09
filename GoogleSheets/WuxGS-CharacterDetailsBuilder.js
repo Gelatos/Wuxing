@@ -331,7 +331,7 @@ class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
     }
 
     printSkills() {
-        let contents = "";
+        let contents = WuxSheetSidebar.BuildRollSkillButtonBare();
         this.printHeader(WuxDef.GetTitle("Skill"));
 
         let skillGroups = ["ActiveSkills", "SocialSkills", "WorldSkills"];

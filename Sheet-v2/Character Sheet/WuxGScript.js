@@ -4540,10 +4540,19 @@ class FormulaData {
                         output += " + ";
                     }
                     let label = WuxDef.GetAbbreviation(worker.definitionName[0]);
+                    // A "Target's X" stat (e.g. "Target's Favor") lives on whoever
+                    // this technique is used against, not on the character whose
+                    // sheet/repeater this is - attributeHandler has no meaningful
+                    // value for it (either unfetched or some unrelated local
+                    // attribute), so fall back to the generic label-only bracket
+                    // text instead of printing a wrong/misleading number.
+                    let isTargetStat = definition.title != undefined && definition.title.startsWith("Target's");
                     if (definition.group == "StatBonus") {
-                        output += `${definition.formula.getCharacterString(attributeHandler)} `;
+                        output += isTargetStat
+                            ? `${definition.formula.getString()} `
+                            : `${definition.formula.getCharacterString(attributeHandler)} `;
                     } else if (worker.multiplier != 1) {
-                        let statValue = attributeHandler.parseInt(worker.variableName[0]);
+                        let statValue = isTargetStat ? undefined : attributeHandler.parseInt(worker.variableName[0]);
                         if (isNaN(parseFloat(worker.multiplier))) {
                             let text = "";
                             if (worker.multiplier == "adv-cr") {
@@ -4552,13 +4561,13 @@ class FormulaData {
                             else {
                                 text = WuxDef.GetAbbreviation(worker.multiplier);
                             }
-                            output += `[${label} x ${text}:${statValue}] `;
+                            output += isTargetStat ? `[${label} x ${text}] ` : `[${label} x ${text}:${statValue}] `;
                         } else if (worker.multiplier > 1) {
-                            output += `[${label} x ${worker.multiplier}:${statValue}] `;
+                            output += isTargetStat ? `[${label} x ${worker.multiplier}] ` : `[${label} x ${worker.multiplier}:${statValue}] `;
                         } else {
                             let fractionText = {0.5: "½", 0.33: "⅓", 0.25: "¼", 0.2: "⅕"}[worker.multiplier];
                             if (fractionText != undefined) {
-                                output += `[${fractionText} ${label}:${statValue}] `;
+                                output += isTargetStat ? `[${fractionText} ${label}] ` : `[${fractionText} ${label}:${statValue}] `;
                             }
                         }
                     } else {
@@ -4567,13 +4576,18 @@ class FormulaData {
                             secondDefinition = WuxDef.Get(worker.definitionName[1]);
                         }
                         if (secondDefinition != undefined && secondDefinition != "" && secondDefinition.getTitle() != "") {
-                            let value1 = attributeHandler.parseInt(worker.variableName[0]);
-                            let value2 = attributeHandler.parseInt(worker.variableName[1]);
                             let secondLabel = WuxDef.GetAbbreviation(worker.definitionName[1]);
-                            output += `[Highest of ${label} or ${secondLabel}:${Math.max(value1, value2)}] `;
+                            let isSecondTargetStat = secondDefinition.title != undefined && secondDefinition.title.startsWith("Target's");
+                            if (isTargetStat || isSecondTargetStat) {
+                                output += `[Highest of ${label} or ${secondLabel}] `;
+                            } else {
+                                let value1 = attributeHandler.parseInt(worker.variableName[0]);
+                                let value2 = attributeHandler.parseInt(worker.variableName[1]);
+                                output += `[Highest of ${label} or ${secondLabel}:${Math.max(value1, value2)}] `;
+                            }
                         }
                         else {
-                            output += `[${label}:${attributeHandler.parseInt(worker.variableName[0])}] `;
+                            output += isTargetStat ? `[${label}] ` : `[${label}:${attributeHandler.parseInt(worker.variableName[0])}] `;
                         }
                     }
 
@@ -11251,7 +11265,10 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
             return collapsibleHeader(header, titleDefinition.getAttribute(), WuxSheetMain.Language.Build(), true);
         },
 
-        buildRollSkillButton = function () {
+        // Bare button only, no "Checks" title/collapsible wrapper - reused directly by other
+        // pages (Character Core's Resources section, Details page's Skills section) that want
+        // just the button without a redundant second "Checks" header of their own.
+        buildRollSkillButtonBare = function () {
             let subGroups = WuxDef.Filter([new DatabaseFilterData("group", "SkillGroup")]);
             let skillGroupText = "";
             for (let i = 0; i < subGroups.length; i++) {
@@ -11261,10 +11278,12 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
                 skillGroupText += subGroups[i].getTitle();
             }
             let rollSkillValue = `!cskillgroupcheck @{${WuxDef.GetVariable("SheetName")}}@@@?{Choose a Skill Group to Roll|${skillGroupText}|Lore};?{Advantage|0}`;
-            let contents = `<button class="wuxButton wuxSizePercent" type="roll" value="${rollSkillValue}"><span>Roll Skill</span></button>`;
+            return `<button class="wuxButton wuxSizePercent" type="roll" value="${rollSkillValue}"><span>Roll Skill</span></button>`;
+        },
 
+        buildRollSkillButton = function () {
             let titleDefinition = WuxDef.Get("Check");
-            return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), contents, true);
+            return collapsibleHeader(titleDefinition.getTitle(), titleDefinition.getAttribute(), buildRollSkillButtonBare(), true);
         },
 
         buildBoonSection = function () {
@@ -11386,6 +11405,7 @@ var WuxSheetSidebar = WuxSheetSidebar || (function () {
         BuildChatSection: buildChatSection,
         BuildLanguageSection: buildLanguageSection,
         BuildRollSkillButton: buildRollSkillButton,
+        BuildRollSkillButtonBare: buildRollSkillButtonBare,
         BuildTechDebugSection: buildTechDebugSection,
         BuildGearDebugSection: buildGearDebugSection,
         BuildAll: buildAll
@@ -11908,6 +11928,8 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                                 WuxDefinition.BuildSelect(WuxDef.Get("AffinityAspect"),
                                     WuxDef.GetAttribute("Affinity"), affinityFilter, false)
                             );
+
+                            contents += WuxSheetSidebar.BuildRollSkillButtonBare();
 
                             return WuxSheetMain.Table.FlexTableGroup(contents);
                         },
@@ -17559,7 +17581,7 @@ class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
     }
 
     printSkills() {
-        let contents = "";
+        let contents = WuxSheetSidebar.BuildRollSkillButtonBare();
         this.printHeader(WuxDef.GetTitle("Skill"));
 
         let skillGroups = ["ActiveSkills", "SocialSkills", "WorldSkills"];
