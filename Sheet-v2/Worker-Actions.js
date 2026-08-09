@@ -77,14 +77,25 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         });
     }
 
-    const updateAllActions = function (attributeHandler, filters) {
+    const updateAllActions = function (attributeHandler, filters, forceRebuild) {
         let formeTech = new FormeTechniqueDatabase(attributeHandler, filters);
         attributeHandler.addGetAttrCallback(function (attrHandler) {
             formeTech.setupPostGetAttr(attrHandler);
             formeTech.registerTechDictionary(attrHandler);
-            formeTech.updateDataAndVisibilityOfRepeaterTechniques(attrHandler);
-            formeTech.addMissingTechniques(attrHandler);
-            formeTech.updateLoadTechniques(attrHandler);
+
+            // A separate, nested round-trip (mirrors Worker-InspectPopup.js's
+            // getTargetData) just to read the live stat values every known
+            // technique's own formulas reference - only known now that
+            // registerTechDictionary has populated techDictionary. Only ever
+            // read from (FormulaData.getCharacterString), never written to.
+            let characterAttrHandler = new WorkerAttributeHandler();
+            formeTech.addCharacterFormulaAttributes(characterAttrHandler);
+            characterAttrHandler.addGetAttrCallback(function () {
+                formeTech.updateDataAndVisibilityOfRepeaterTechniques(attrHandler, characterAttrHandler, forceRebuild);
+                formeTech.addMissingTechniques(attrHandler, undefined, characterAttrHandler);
+                formeTech.updateLoadTechniques(attrHandler);
+            });
+            characterAttrHandler.run();
         });
         attributeHandler.addFinishCallback(function () {
             formeTech.setSortOrder();
@@ -99,8 +110,14 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         attributeHandler.addGetAttrCallback(function (attrHandler) {
             formeTech.setupPostGetAttr(attrHandler);
             formeTech.registerTechDictionary(attrHandler);
-            formeTech.updateDataAndVisibilityOfRepeaterTechniques(attrHandler);
-            formeTech.addMissingJobTechniques(attrHandler, jobName);
+
+            let characterAttrHandler = new WorkerAttributeHandler();
+            formeTech.addCharacterFormulaAttributes(characterAttrHandler);
+            characterAttrHandler.addGetAttrCallback(function () {
+                formeTech.updateDataAndVisibilityOfRepeaterTechniques(attrHandler, characterAttrHandler);
+                formeTech.addMissingJobTechniques(attrHandler, jobName, characterAttrHandler);
+            });
+            characterAttrHandler.run();
         });
         attributeHandler.addFinishCallback(function () {
             formeTech.setSortOrder();
@@ -127,15 +144,25 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                             baseTech.techDictionary.add(name, baseTech.createTechDictionaryTechnique(technique, 1, true));
                         }
                     }
-                    baseTech.addMissingTechniques(attrHandler2, 1);
+                    let characterAttrHandler = new WorkerAttributeHandler();
+                    baseTech.addCharacterFormulaAttributes(characterAttrHandler);
+                    characterAttrHandler.addGetAttrCallback(function () {
+                        baseTech.addMissingTechniques(attrHandler2, 1, characterAttrHandler);
+                    });
+                    characterAttrHandler.run();
                 });
             } else {
                 let formeTech = new FormeTechniqueDatabase(attributeHandler2, filters);
                 attributeHandler2.addGetAttrCallback(function (attrHandler2) {
                     formeTech.setupPostGetAttr(attrHandler2);
                     formeTech.registerTechDictionary(attrHandler2);
-                    formeTech.updateDataAndVisibilityOfRepeaterTechniques(attrHandler2);
-                    formeTech.addMissingTechniques(attrHandler2, 1);
+                    let characterAttrHandler = new WorkerAttributeHandler();
+                    formeTech.addCharacterFormulaAttributes(characterAttrHandler);
+                    characterAttrHandler.addGetAttrCallback(function () {
+                        formeTech.updateDataAndVisibilityOfRepeaterTechniques(attrHandler2, characterAttrHandler);
+                        formeTech.addMissingTechniques(attrHandler2, 1, characterAttrHandler);
+                    });
+                    characterAttrHandler.run();
                 });
             }
             attributeHandler2.run();
@@ -201,8 +228,8 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 }
             });
         },
-        updateAllFormeActions = function (attributeHandler, filters) {
-            updateAllActions(attributeHandler, filters);
+        updateAllFormeActions = function (attributeHandler, filters, forceRebuild) {
+            updateAllActions(attributeHandler, filters, forceRebuild);
         },
         refreshAllFormeActions = function () {
             Debug.Log(`Refreshing All Forme Actions`);
@@ -229,6 +256,25 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 loader.run();
             });
         },
+        // Same filter-fetch/nested-handler shape as updateVisibilityOfFormeActions,
+        // but drives the full updateAllActions path instead of the visibility-only
+        // one - needed so a CR change (updateCR, Worker-General.js) actually reaches
+        // updateRepeaterTechniqueDisplayInfo's CR-gate and rebuilds the character-aware
+        // effect text, not just row visibility (which updateAllActions already covers
+        // via setRepeaterTechniqueVisibility, so no separate visibility call is needed).
+        updateFormeActionsForCRChange = function (attributeHandler) {
+            Debug.Log(`Update Forme Actions For CR Change`);
+            let pageSetVariable = WuxDef.GetVariable("PageSet");
+            let formeTechniqueFilterVariable = WuxDef.GetVariable("Action_FormeTechniques", WuxDef._filter);
+            attributeHandler.addMod(pageSetVariable, formeTechniqueFilterVariable);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let attributeHandler2 = new WorkerAttributeHandler();
+                let filter = attrHandler.parseJSON(formeTechniqueFilterVariable);
+                updateAllActions(attributeHandler2, filter);
+                let loader = new LoadingScreenHandler(attributeHandler2);
+                loader.run();
+            });
+        },
         loadFormeActions = function () {
             Debug.Log(`Load Forme Actions`);
             let attributeHandler = new WorkerAttributeHandler();
@@ -236,8 +282,13 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 formeTech.setupPostGetAttr(attrHandler);
                 formeTech.registerTechDictionary(attrHandler);
-                formeTech.updateDataAndVisibilityOfRepeaterTechniques(attrHandler);
-                formeTech.addMissingTechniques(attrHandler);
+                let characterAttrHandler = new WorkerAttributeHandler();
+                formeTech.addCharacterFormulaAttributes(characterAttrHandler);
+                characterAttrHandler.addGetAttrCallback(function () {
+                    formeTech.updateDataAndVisibilityOfRepeaterTechniques(attrHandler, characterAttrHandler);
+                    formeTech.addMissingTechniques(attrHandler, undefined, characterAttrHandler);
+                });
+                characterAttrHandler.run();
             });
             attributeHandler.addFinishCallback(function () {
                 formeTech.setSortOrder();
@@ -508,6 +559,7 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         RefreshAllFormeActions: refreshAllFormeActions,
         LoadFormeActions: loadFormeActions,
         UpdateVisibilityOfFormeActions: updateVisibilityOfFormeActions,
+        UpdateFormeActionsForCRChange: updateFormeActionsForCRChange,
         RankUpTechnique: rankUpTechnique,
         RankDownTechnique: rankDownTechnique,
         SwapTechniqueVariant: swapTechniqueVariantEvent,
@@ -865,7 +917,11 @@ class FormeTechniqueDatabaseBase {
         attributeHandler.getRepeatingSection(this.formeActionsRepeaterId).addFieldNames([
             techniqueAttributeHandler.getVariable("TechTrueName"),
             techniqueAttributeHandler.getVariable("TechName", WuxDef._max),
-            techniqueAttributeHandler.getVariable("TechActionType", WuxDef._max)
+            techniqueAttributeHandler.getVariable("TechActionType", WuxDef._max),
+            // Computed-character-CR piggyback (getComputedCharacterCR/setComputedCharacterCR,
+            // WJS-Service.js) - must be listed here or .run() never fetches it and the
+            // CR-gate in updateRepeaterTechniqueDisplayInfo always reads "undefined".
+            techniqueAttributeHandler.getVariable("TechActionType")
         ]);
     }
     createTechDictionaryTechnique(technique, techniqueRank, isActive) {
@@ -906,10 +962,63 @@ class FormeTechniqueDatabaseBase {
             }
         }
     }
-    updateDataAndVisibilityOfRepeaterTechniques(attrHandler) {
+    // Collects every stat any currently-known technique's own effect formulas
+    // reference (each effect plus its willBreakEffect, if any) and addMod's
+    // them onto characterAttrHandler - must run after registerTechDictionary
+    // populates techDictionary, since which techniques (and therefore which
+    // stats) are involved isn't known any earlier. characterAttrHandler is a
+    // separate WorkerAttributeHandler/round-trip from the one writing the
+    // repeater's own fields (mirrors the nested-attributeHandler pattern
+    // already used elsewhere, e.g. Worker-InspectPopup.js's getTargetData) -
+    // it's only ever read from (FormulaData.getCharacterString), never
+    // written to, so it doesn't need to share a fetch cycle with the writer.
+    addCharacterFormulaAttributes(characterAttrHandler) {
+        let attributes = [WuxDef.GetVariable("CR")];
+        Object.values(this.techDictionary.values).forEach((techData) => {
+            if (techData.isHeader) {
+                return;
+            }
+            let technique = techData.technique;
+            technique.getEffects().iterate((effect) => {
+                attributes = attributes.concat(effect.formula.getAttributes());
+            });
+            if (technique.willBreakEffect != undefined) {
+                attributes = attributes.concat(technique.willBreakEffect.formula.getAttributes());
+            }
+            attributes = attributes.concat(this.getSkillCheckAttributes(technique));
+        });
+        characterAttrHandler.addMod(attributes);
+    }
+    // Mirrors TechniqueDisplayData.printSkillCheck's parsing of technique.skill
+    // (WAPI-Database.js) just far enough to know which live attribute(s) its
+    // "Skill:value"/"Any Group:value" text will read - a "group" check needs
+    // every skill in that subGroup pre-fetched, since printSkillCheck itself
+    // takes the highest of them (same as an actual roll would, see
+    // WAPI-Combat.js's getGroupSkillCheck).
+    getSkillCheckAttributes(technique) {
+        if (technique.skill == "") {
+            return [];
+        }
+        let skillData = technique.skill.split(":");
+        skillData[0] = skillData[0].trim();
+        if (skillData.length > 1) {
+            if (skillData[1] == "group") {
+                return WuxDef.GetGroupVariables(new DatabaseFilterData("subGroup", skillData[0]));
+            }
+            else if (skillData[1] == "attr") {
+                return [WuxDef.GetVariable(Format.GetDefinitionName("Attribute", skillData[0]))];
+            }
+        }
+        return [WuxDef.GetVariable(Format.GetDefinitionName("Skill", skillData[0]))];
+    }
+    // characterAttrHandler (optional): passed through to setTechniqueInfo
+    // (WJS-Service.js) so FormeTechniques' own effect text can show live stat
+    // values instead of generic bracket text - see addCharacterFormulaAttributes
+    // above and updateAllActions below for how it gets built and threaded in.
+    updateDataAndVisibilityOfRepeaterTechniques(attrHandler, characterAttrHandler, forceRebuild) {
         let formeTechDatabase = this;
         this.iterateRepeaterTechniques(attrHandler, function (techniqueAttributeHandler, techniqueName, repeater, id) {
-            if (formeTechDatabase.tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, techniqueName, repeater, id)) {
+            if (formeTechDatabase.tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, techniqueName, repeater, id, characterAttrHandler, forceRebuild)) {
                 formeTechDatabase.setSortId(techniqueName, id);
             }
         });
@@ -931,7 +1040,7 @@ class FormeTechniqueDatabaseBase {
             callback(techniqueAttributeHandler, techniqueName, repeater, id);
         });
     }
-    tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, techniqueName, repeater, id) {
+    tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, techniqueName, repeater, id, characterAttrHandler, forceRebuild) {
         if (!this.techDictionary.has(techniqueName)) {
             Debug.Log(`Removing ${techniqueName} because it no longer exists in this kit.`);
             repeater.removeId(id);
@@ -942,16 +1051,16 @@ class FormeTechniqueDatabaseBase {
             repeater.removeId(id);
             return false;
         }
-        return this.tryUpdateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName);
+        return this.tryUpdateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName, characterAttrHandler, forceRebuild);
     }
-    tryUpdateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName) {
+    tryUpdateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName, characterAttrHandler, forceRebuild) {
         if (this.techDictionary.has(techniqueName)) {
-            this.updateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName);
+            this.updateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName, characterAttrHandler, forceRebuild);
             return true;
         }
         return false;
     }
-    updateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName) {
+    updateRepeaterTechniqueDisplayInfo(techniqueAttributeHandler, techniqueName, characterAttrHandler, forceRebuild) {
         let techniqueData = this.techDictionary.get(techniqueName);
         if (techniqueData.isHeader) {
             techniqueAttributeHandler.setHeaderInfo(techniqueName, techniqueData.headerText);
@@ -963,9 +1072,27 @@ class FormeTechniqueDatabaseBase {
         let technique = techniqueData.technique;
         technique.rank = techniqueData.techniqueRank;
         let variantOptions = {excludeCurrent: true, userAffinities: this.userAffinities};
-        if (technique.version != techVersion) {
-            Debug.Log(`Updating ${techniqueName} as it has a new version (${technique.version} != ${techVersion})`);
-            techniqueAttributeHandler.setTechniqueInfo(technique, true, variantOptions);
+        // Rebuild on a CR change too, not just a technique data version bump -
+        // the character-aware effect text (FormulaData.getCharacterString)
+        // depends on live stats that a CR change can affect (e.g. Potency),
+        // and nothing else about this gate would otherwise notice that.
+        let currentCR = characterAttrHandler != undefined
+            ? characterAttrHandler.parseString(WuxDef.GetVariable("CR"))
+            : undefined;
+        let storedCR = techniqueAttributeHandler.getComputedCharacterCR();
+        // forceRebuild is a mutable holder ({value: bool}, not a plain boolean) -
+        // WJS-Advancement.js's finishBuild passes it in before attributeHandler.run()
+        // has executed, and only sets .value once its own callback (registered right
+        // after the Skill/Attribute build-point commit) actually runs during that same
+        // cycle. Reading .value here, rather than a snapshotted boolean, is what lets
+        // that later-set value reach this gate correctly.
+        let forcedRebuild = forceRebuild != undefined && forceRebuild.value;
+        if (technique.version != techVersion || (characterAttrHandler != undefined && storedCR != currentCR) || forcedRebuild) {
+            Debug.Log(`Updating ${techniqueName} as it has a new version (${technique.version} != ${techVersion}), CR changed (${storedCR} != ${currentCR}), or a rebuild was forced (${forcedRebuild})`);
+            techniqueAttributeHandler.setTechniqueInfo(technique, true, variantOptions, characterAttrHandler);
+            if (characterAttrHandler != undefined) {
+                techniqueAttributeHandler.setComputedCharacterCR(currentCR);
+            }
         } else {
             if (Object.keys(technique.enhancementEffects).length > 0) {
                 techniqueAttributeHandler.setTechniqueRankButtons(technique);
@@ -987,7 +1114,7 @@ class FormeTechniqueDatabaseBase {
         let unsetBaseTechniqueData = this.getUnsetTechniqueData();
         attrHandler.addUpdate(WuxDef.GetVariable("Action_FormeLoadCount"), unsetBaseTechniqueData.length);
     }
-    addMissingTechniques(attrHandler, maxLoadCount) {
+    addMissingTechniques(attrHandler, maxLoadCount, characterAttrHandler) {
         let unsetBaseTechniqueData = this.getUnsetTechniqueData();
         let repeater = attrHandler.getRepeatingSection(this.formeActionsRepeaterId);
         let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler, "Action");
@@ -1003,7 +1130,7 @@ class FormeTechniqueDatabaseBase {
             }
             let id = repeater.generateRowId();
             techniqueAttributeHandler.setId(id);
-            this.tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, unsetBaseTechniqueData[0].technique.name, repeater, id);
+            this.tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, unsetBaseTechniqueData[0].technique.name, repeater, id, characterAttrHandler);
             this.setSortId(unsetBaseTechniqueData[0].technique.name, id);
             unsetBaseTechniqueData.splice(0, 1);
             i++;
@@ -1019,7 +1146,7 @@ class FormeTechniqueDatabaseBase {
     // Immediately adds every unset technique belonging to a single job's kit (technique.style === jobName),
     // instead of waiting for the generic one-at-a-time builder queue to eventually reach them. Boosters are
     // already registered for these by the time this runs, since registerTechDictionary must be called first.
-    addMissingJobTechniques(attrHandler, jobName) {
+    addMissingJobTechniques(attrHandler, jobName, characterAttrHandler) {
         let unsetBaseTechniqueData = this.getUnsetTechniqueData();
         let jobTechniqueData = unsetBaseTechniqueData.filter((techData) => !techData.isHeader && techData.technique.style === jobName);
 
@@ -1030,7 +1157,7 @@ class FormeTechniqueDatabaseBase {
         jobTechniqueData.forEach((techData) => {
             let id = repeater.generateRowId();
             techniqueAttributeHandler.setId(id);
-            this.tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, techData.technique.name, repeater, id);
+            this.tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, techData.technique.name, repeater, id, characterAttrHandler);
             this.setSortId(techData.technique.name, id);
         });
 

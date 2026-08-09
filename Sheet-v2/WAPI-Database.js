@@ -2512,13 +2512,19 @@ class ItemDefinitionData extends DefinitionData {
 // Display
 class TechniqueDisplayData {
 
-    constructor(technique, rank) {
+    // characterAttributeHandler (optional): when supplied, effect formula text
+    // shows the referenced stat's actual current value next to its name
+    // instead of the generic "[Title]" bracket text (FormulaData.getCharacterString) -
+    // only the FormeTechniques repeater passes this (TechniqueDataAttributeHandler.setTechniqueInfo,
+    // WJS-Service.js); every other technique display leaves it undefined and
+    // keeps showing the plain bracket text.
+    constructor(technique, rank, characterAttributeHandler) {
         this.createEmpty();
         if (technique != undefined) {
             if (rank != undefined) {
                 technique.rank = rank;
             }
-            this.importTechnique(technique);
+            this.importTechnique(technique, characterAttributeHandler);
         }
     }
 
@@ -2556,12 +2562,12 @@ class TechniqueDisplayData {
         this.enhanceEffect = "";
     }
 
-    importTechnique(technique) {
+    importTechnique(technique, characterAttributeHandler) {
         this.setTechBasics(technique);
         this.setActionName(technique);
         this.setTechTargetData(technique);
         this.setTraitsData(technique);
-        this.setEffects(technique);
+        this.setEffects(technique, characterAttributeHandler);
     }
 
     setTechBasics(technique) {
@@ -2730,7 +2736,7 @@ class TechniqueDisplayData {
         this.traits += technique.requirement;
     }
 
-    setEffects(technique) {
+    setEffects(technique, characterAttributeHandler) {
         let techDisplayData = this;
         let coreEffects = [];
         let checkedEffects = [];
@@ -2749,18 +2755,18 @@ class TechniqueDisplayData {
             }
         });
         if (coreEffects.length > 0) {
-            techDisplayData.coreEffect = new TechniqueEffectDisplayData(coreEffects, technique, "");
+            techDisplayData.coreEffect = new TechniqueEffectDisplayData(coreEffects, technique, "", undefined, characterAttributeHandler);
         }
         if (checkedEffects.length > 0) {
             let checkDef;
             if (isNaN(technique.coreDefense)) {
                 this.coreDefense = technique.coreDefense;
-                this.checkType = `${this.printSkillCheck(technique)} vs. ${technique.coreDefense}`;
+                this.checkType = `${this.printSkillCheck(technique, characterAttributeHandler)} vs. ${technique.coreDefense}`;
                 checkDef = WuxDef.Get("Trait_SkillCheck-Defense");
             }
-            else { 
+            else {
                 this.coreDefense = 0;
-                this.checkType = `DC ${technique.coreDefense} ${this.printSkillCheck(technique)}`;
+                this.checkType = `DC ${technique.coreDefense} ${this.printSkillCheck(technique, characterAttributeHandler)}`;
                 checkDef = WuxDef.Get("Trait_SkillCheck-DC");
             }
             let checkDesc = [];
@@ -2781,7 +2787,7 @@ class TechniqueDisplayData {
                 checkDesc.push(`[${accurateDef.getTitle()}]`);
                 checkDesc.push(accurateDef.descriptions.join(". "));
             }
-            techDisplayData.checkEffect = new TechniqueEffectDisplayData(checkedEffects, technique, technique.coreDefense, checkDesc);
+            techDisplayData.checkEffect = new TechniqueEffectDisplayData(checkedEffects, technique, technique.coreDefense, checkDesc, characterAttributeHandler);
         }
         if (technique.endEffectConditionName != "") {
             let def = WuxDef.Get(`Title_${technique.endEffectConditionName}`);
@@ -2792,28 +2798,53 @@ class TechniqueDisplayData {
             let willbreakDesc = [];
             willbreakDesc.push(`${checkDef.getTitle()}`);
             willbreakDesc.push(checkDef.descriptions.join(". "));
-            techDisplayData.willBreakEffect = new TechniqueEffectDisplayData([technique.willBreakEffect], technique, "", willbreakDesc);
+            techDisplayData.willBreakEffect = new TechniqueEffectDisplayData([technique.willBreakEffect], technique, "", willbreakDesc, characterAttributeHandler);
         }
         if (enhancingEffects.length > 0) {
-            techDisplayData.enhanceEffect = new TechniqueEffectDisplayEnhancmenteData(enhancingEffects, technique);
+            techDisplayData.enhanceEffect = new TechniqueEffectDisplayEnhancmenteData(enhancingEffects, technique, characterAttributeHandler);
         }
     }
-    printSkillCheck(technique) {
+    // characterAttributeHandler (optional, FormeTechniques repeater only - see
+    // Worker-Actions.js's addCharacterFormulaAttributes for how the underlying
+    // skill/attribute/group variables get pre-fetched into it): when supplied,
+    // appends ":value" after the check's own name, same convention as
+    // FormulaData.getCharacterString's "[Label:value]" bracket terms - e.g.
+    // "Body" becomes "Body:8". A "group" check (Any X) shows the highest
+    // value across every skill in that group, matching what the actual roll
+    // would use (WAPI-Combat.js's getGroupSkillCheck).
+    printSkillCheck(technique, characterAttributeHandler) {
         if (technique.skill == "" && technique.action != "Passive") {
-            return "No Check";
+            return "[No Check]";
         }
 
         let skillData = technique.skill.split(":");
         skillData[0] = skillData[0].trim();
         if (skillData.length > 1) {
             if (skillData[1] == "group") {
-                return `Any ${skillData[0]}`;
+                if (characterAttributeHandler != undefined) {
+                    let skillFilters = WuxDef.GetGroupVariables(new DatabaseFilterData("subGroup", skillData[0]));
+                    let highest = 0;
+                    skillFilters.forEach((variableName) => {
+                        highest = Math.max(highest, characterAttributeHandler.parseInt(variableName));
+                    });
+                    return `[Any ${skillData[0]}:${highest}]`;
+                }
+                return `[Any ${skillData[0]}]`;
             }
             else if (skillData[1] == "attr") {
-                return WuxDef.GetTitle(Format.GetDefinitionName("Attribute", skillData[0]));
+                let title = WuxDef.GetTitle(Format.GetDefinitionName("Attribute", skillData[0]));
+                if (characterAttributeHandler != undefined) {
+                    let variableName = WuxDef.GetVariable(Format.GetDefinitionName("Attribute", skillData[0]));
+                    return `[${title}:${characterAttributeHandler.parseInt(variableName)}]`;
+                }
+                return `[${title}]`;
             }
         }
-        return skillData[0];
+        if (characterAttributeHandler != undefined) {
+            let variableName = WuxDef.GetVariable(Format.GetDefinitionName("Skill", skillData[0]));
+            return `[${skillData[0]}:${characterAttributeHandler.parseInt(variableName)}]`;
+        }
+        return `[${skillData[0]}]`;
     }
 
     addDefintionToArray(definition) {
@@ -3510,7 +3541,7 @@ class BaseTechniqueEffectDisplayData {
     }
 
     formatFreeFocusEffect() {
-        this.effectDescription += `You may maintain focus on the triggering technique without expending EN and it does not count against your limit of focus techniques`;
+        this.effectDescription += `You may maintain focus on the triggering technique without expending Qi and it does not count against your limit of focus techniques`;
     }
 
     formatOverdoseEffect(statusEffect, technique) {
@@ -3573,8 +3604,9 @@ class BaseTechniqueEffectDisplayData {
 
 class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
 
-    constructor(techniqueEffects, technique, coreDefense, effectDefinitions) {
+    constructor(techniqueEffects, technique, coreDefense, effectDefinitions, characterAttributeHandler) {
         super();
+        this.characterAttributeHandler = characterAttributeHandler;
         if (techniqueEffects == undefined) {
             return;
         }
@@ -3637,10 +3669,12 @@ class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
         if (effect.formula.workers.length == 0) {
             return output;
         }
-        
+
         let formulaString;
         try {
-            formulaString = effect.formula.getString();
+            formulaString = this.characterAttributeHandler != undefined
+                ? effect.formula.getCharacterString(this.characterAttributeHandler)
+                : effect.formula.getString();
         } catch (e) {
             formulaString = `Something went wrong: ${JSON.stringify(e)}`;
         }
@@ -3660,8 +3694,9 @@ class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
 
 class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayData {
 
-    constructor(techniqueEffects, technique) {
+    constructor(techniqueEffects, technique, characterAttributeHandler) {
         super();
+        this.characterAttributeHandler = characterAttributeHandler;
         if (techniqueEffects == undefined) {
             return;
         }
@@ -3762,10 +3797,12 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
         if (effect.formula.workers.length == 0) {
             return output;
         }
-        
+
         let formulaString;
         try {
-            formulaString = effect.formula.getString();
+            formulaString = this.characterAttributeHandler != undefined
+                ? effect.formula.getCharacterString(this.characterAttributeHandler)
+                : effect.formula.getString();
         } catch (e) {
             formulaString = `Something went wrong: ${e}`;
         }
@@ -4407,33 +4444,37 @@ class FormulaData {
                     if (output != "") {
                         output += " + ";
                     }
+                    // Abbreviation when the definition has one, else its full title
+                    // (WuxDef.GetAbbreviation already falls back for us) - e.g.
+                    // "[Potency]" becomes "[Pot]".
+                    let label = WuxDef.GetAbbreviation(worker.definitionName[0]);
                     if (definition.group == "StatBonus") {
                         output += `${definition.formula.getString()} `;
                     } else if (worker.multiplier != 1) {
                         if (isNaN(parseFloat(worker.multiplier))) {
                             let text = "";
                             if (worker.multiplier == "adv-cr") {
-                                text = WuxDef.GetTitle("CR");
+                                text = WuxDef.GetAbbreviation("CR");
                             }
                             else {
-                                text = WuxDef.GetTitle(worker.multiplier);
+                                text = WuxDef.GetAbbreviation(worker.multiplier);
                             }
-                            output += `[${definition.title} x ${text}] `;
+                            output += `[${label} x ${text}] `;
                         } else if (worker.multiplier > 1) {
-                            output += `[${definition.title} x ${worker.multiplier}] `;
+                            output += `[${label} x ${worker.multiplier}] `;
                         } else {
                             switch (worker.multiplier) {
                                 case 0.5:
-                                    output += `[½ ${definition.title}] `;
+                                    output += `[½ ${label}] `;
                                     break;
                                 case 0.33:
-                                    output += `[⅓ ${definition.title}] `;
+                                    output += `[⅓ ${label}] `;
                                     break;
                                 case 0.25:
-                                    output += `[¼ ${definition.title}] `;
+                                    output += `[¼ ${label}] `;
                                     break;
                                 case 0.2:
-                                    output += `[⅕ ${definition.title}] `;
+                                    output += `[⅕ ${label}] `;
                                     break;
                             }
                         }
@@ -4443,10 +4484,11 @@ class FormulaData {
                             secondDefinition = WuxDef.Get(worker.definitionName[1]);
                         }
                         if (secondDefinition != undefined && secondDefinition != "" && secondDefinition.getTitle() != "") {
-                            output += `[Highest of ${definition.getTitle()} or ${secondDefinition.getTitle()}] `;
+                            let secondLabel = WuxDef.GetAbbreviation(worker.definitionName[1]);
+                            output += `[Highest of ${label} or ${secondLabel}] `;
                         }
                         else {
-                            output += `[${definition.title}] `;
+                            output += `[${label}] `;
                         }
                     }
 
@@ -4455,6 +4497,91 @@ class FormulaData {
                     }
                 }
             } 
+            else if (worker.value > 0) {
+                output += `${output != "" ? "+ " : ""} ${worker.value} `;
+                if (worker.max > 0) {
+                    output += `(min:${worker.max}) `;
+                }
+            }
+            else if (worker.value < 0) {
+                output += `- ${Math.abs(worker.value)} `;
+                if (worker.max > 0) {
+                    output += `(min:${worker.max}) `;
+                }
+            }
+
+        });
+        return output;
+    }
+
+    // Mirrors getString() exactly, but for each stat-referencing worker shows
+    // the character's actual current value alongside the same bracketed label
+    // instead of the bracket alone - e.g. "[Potency]" becomes "[Potency:6]"
+    // (or "[Pot:6]" if Potency has an abbreviation - see WuxDef.GetAbbreviation,
+    // which already falls back to the title when a definition has none) for a
+    // character whose Potency is 6. Used only where an attributeHandler for a
+    // specific character is available (the FormeTechniques repeater - see
+    // TechniqueEffectDisplayData/TechniqueEffectDisplayEnhancmenteData.
+    // formatCalcBonus); every other technique display (catalog, learned
+    // styles, perks) keeps calling getString() and never sees this.
+    // Multiplier terms (½ Potency, Potency x 2, etc.) show the raw referenced
+    // stat value with the multiplier kept as descriptive text in the label,
+    // rather than the multiplied contribution - getValue() sums and rounds
+    // across all of a formula's workers together, so replicating its per-term
+    // arithmetic here risks a displayed number that silently disagrees with
+    // the real total once multiple fractional terms combine.
+    getCharacterString(attributeHandler) {
+        let output = "";
+        this.workers.forEach((worker) => {
+            if (worker.definitionName.length > 0) {
+                let definition = WuxDef.Get(worker.definitionName[0]);
+                if (definition != undefined) {
+                    if (output != "") {
+                        output += " + ";
+                    }
+                    let label = WuxDef.GetAbbreviation(worker.definitionName[0]);
+                    if (definition.group == "StatBonus") {
+                        output += `${definition.formula.getCharacterString(attributeHandler)} `;
+                    } else if (worker.multiplier != 1) {
+                        let statValue = attributeHandler.parseInt(worker.variableName[0]);
+                        if (isNaN(parseFloat(worker.multiplier))) {
+                            let text = "";
+                            if (worker.multiplier == "adv-cr") {
+                                text = WuxDef.GetAbbreviation("CR");
+                            }
+                            else {
+                                text = WuxDef.GetAbbreviation(worker.multiplier);
+                            }
+                            output += `[${label} x ${text}:${statValue}] `;
+                        } else if (worker.multiplier > 1) {
+                            output += `[${label} x ${worker.multiplier}:${statValue}] `;
+                        } else {
+                            let fractionText = {0.5: "½", 0.33: "⅓", 0.25: "¼", 0.2: "⅕"}[worker.multiplier];
+                            if (fractionText != undefined) {
+                                output += `[${fractionText} ${label}:${statValue}] `;
+                            }
+                        }
+                    } else {
+                        let secondDefinition;
+                        if (worker.definitionName.length > 1) {
+                            secondDefinition = WuxDef.Get(worker.definitionName[1]);
+                        }
+                        if (secondDefinition != undefined && secondDefinition != "" && secondDefinition.getTitle() != "") {
+                            let value1 = attributeHandler.parseInt(worker.variableName[0]);
+                            let value2 = attributeHandler.parseInt(worker.variableName[1]);
+                            let secondLabel = WuxDef.GetAbbreviation(worker.definitionName[1]);
+                            output += `[Highest of ${label} or ${secondLabel}:${Math.max(value1, value2)}] `;
+                        }
+                        else {
+                            output += `[${label}:${attributeHandler.parseInt(worker.variableName[0])}] `;
+                        }
+                    }
+
+                    if (worker.max > 0) {
+                        output += `(min:${worker.max}) `;
+                    }
+                }
+            }
             else if (worker.value > 0) {
                 output += `${output != "" ? "+ " : ""} ${worker.value} `;
                 if (worker.max > 0) {
@@ -5114,7 +5241,7 @@ class CombatDetails {
 
     printTooltip() {
         let output = `${this.displayName} [CR${this.cr}] ${this.affinity == 0 ? "" : ` ${this.affinity}`} ${this.job}`;
-        output += `\nEN:${this.en}`;
+        output += `\nQi:${this.en}`;
         output += ` =========================== `;
         output += `${this.defenses.printDefenses(this.cr)} - `;
         switch (this.displayStyle) {

@@ -412,6 +412,22 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 				let pointManagers = new WuxWorkerBuildManager(["Skill", "Job", "Attribute"]);
 				pointManagers.commitChanges(attributeHandler);
 
+				// A mutable holder, not a plain boolean - UpdateAllFormeActions below is
+				// only registering callbacks at this point (attributeHandler.run() hasn't
+				// executed yet), so a snapshotted boolean would always read false. This
+				// callback is registered right after pointManagers.commitChanges, so it
+				// runs right after the Skill/Job/Attribute workers' own callbacks have
+				// populated buildStats from this session's committed draft (Roll20 runs
+				// get-attr callbacks in registration order) - by the time UpdateAllFormeActions'
+				// own callback reads forceFormeActionsRebuild.value, it's already set.
+				let forceFormeActionsRebuild = {value: false};
+				attributeHandler.addGetAttrCallback(function () {
+					let skillWorker = pointManagers.workers.find((worker) => worker.definition.name == "Skill");
+					let attributeWorker = pointManagers.workers.find((worker) => worker.definition.name == "Attribute");
+					forceFormeActionsRebuild.value = (skillWorker != undefined && skillWorker.buildStats.keys.length > 0)
+						|| (attributeWorker != undefined && attributeWorker.buildStats.keys.length > 0);
+				});
+
 				let perkWorker = new WuxPerkWorkerBuild();
 				perkWorker.commitChanges(attributeHandler);
 
@@ -423,9 +439,9 @@ var WuxWorkerAdvancement = WuxWorkerAdvancement || (function () {
 				WuxWorkerSkills.UpdateStats(attributeHandler);
 				WuxWorkerJobs.UpdateStats(attributeHandler);
 				WuxWorkerStyles.UpdateStats(attributeHandler);
-				WuxWorkerActions.UpdateAllFormeActions(attributeHandler);
+				WuxWorkerActions.UpdateAllFormeActions(attributeHandler, undefined, forceFormeActionsRebuild);
 				updateStats(attributeHandler);
-	
+
 				leavePageVariables(attributeHandler);
 
 				attributeHandler.addFinishCallback(() => {

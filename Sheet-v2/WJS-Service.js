@@ -1094,9 +1094,19 @@ class DatabaseItemAttributeHandler {
 
 class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 
-	setTechniqueInfo (technique, setUse, variantOptions) {
+	// characterAttributeHandler (optional): only the FormeTechniques repeater
+	// (Worker-Actions.js) passes this - when supplied, effect formula text
+	// shows the referenced stat's live value next to its name (e.g.
+	// "6(potency)") instead of the generic "[Potency]" bracket text every
+	// other technique display (catalog, learned styles, perks, custom
+	// techniques) keeps showing, since they never pass it. Threaded straight
+	// into TechniqueDisplayData (WAPI-Database.js), whose setEffects builds
+	// both the card's own effect text AND the roll template embedded in the
+	// "Use" button below from the exact same displayData instance, so both
+	// pick up the character-aware text from this one change.
+	setTechniqueInfo (technique, setUse, variantOptions, characterAttributeHandler) {
 		this.clearTechniqueInfo();
-		let displayData = new TechniqueDisplayData(technique);
+		let displayData = new TechniqueDisplayData(technique, undefined, characterAttributeHandler);
 
 		this.setTechniqueHeaderInfo(technique, displayData);
 		this.setTechniqueVariants(technique, variantOptions);
@@ -1489,6 +1499,24 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			return undefined;
 		}
 		return version;
+	}
+	// Piggybacked onto TechActionType's own base slot - unused now that the
+	// action-type badge's styling flag reads TechActionName directly instead
+	// (printActionType, WuxGS-FeatureDisplayBuilder.js; TechActionType's max
+	// slot is still the row's own IsVisible flag, untouched by this).
+	// Remembers the CR a FormeTechniques row's character-aware effect text was
+	// last computed for, so updateRepeaterTechniqueDisplayInfo (Worker-Actions.js)
+	// can rebuild on a CR change too, not just the technique's own data version.
+	getComputedCharacterCR() {
+		let cr = this.attrHandler.parseString(this.getVariable("TechActionType"), "undefined");
+		if (cr == "undefined") {
+			return undefined;
+		}
+		return cr;
+	}
+	setComputedCharacterCR(cr) {
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechActionType"), cr);
 	}
 }
 

@@ -539,7 +539,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
 
                 WuxWorkerSkills.UpdateStats(attributeHandler);
                 WuxWorkerKnowledges.UpdateStats(attributeHandler);
-                WuxWorkerActions.UpdateVisibilityOfFormeActions(attributeHandler);
+                WuxWorkerActions.UpdateFormeActionsForCRChange(attributeHandler);
                 updateStats(attributeHandler, combatDetailsHandler);
                 updatePerkMaxRanks(attributeHandler);
 

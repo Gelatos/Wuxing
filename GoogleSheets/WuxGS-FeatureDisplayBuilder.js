@@ -134,7 +134,7 @@ class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
 
     printEnCost() {}
     printEnCostField (contents) {
-        return `<div class="wuxFeatureHeaderDisplayInfoEnCost">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> EN</span></div>`;
+        return `<div class="wuxFeatureHeaderDisplayInfoEnCost">${contents}<span class="wuxFeatureHeaderDisplayInfoSubtitle"> ${WuxDef.GetAbbreviation("EN")}</span></div>`;
     }
     printWillCost() {}
     printWillCostField (contents) {
