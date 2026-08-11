@@ -10259,9 +10259,16 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return `<div class="wuxTabHeader">\n${contents}\n</div>`;
         },
 
-        collapsibleTab = function (fieldName, title, contents, infoDefinition) {
+        // extraInfoContent (optional) appends additional HTML into the same help/info box the
+        // infoDefinition already generates, instead of just its own description text - e.g.
+        // the Jobs page's Roles list (see buildJobs.build, WuxGS-Advancement.js). Inlines what
+        // Info.DefaultContents does rather than calling it, so the extra content ends up
+        // inside the SAME toggle wrapper instead of a second, redundant one.
+        collapsibleTab = function (fieldName, title, contents, infoDefinition, extraInfoContent) {
             let infoButton = infoDefinition != undefined ? WuxSheetMain.Info.Button(infoDefinition.getAttribute(WuxDef._info)) : "";
-            let infoContents = infoDefinition != undefined ? WuxSheetMain.Info.DefaultContents(infoDefinition) : "";
+            let infoContents = infoDefinition != undefined
+                ? WuxSheetMain.Info.Contents(infoDefinition.getAttribute(WuxDef._info), WuxDefinition.TooltipDescription(infoDefinition) + (extraInfoContent || ""))
+                : "";
             return `<div class="wuxSegment">
             ${tabHeader(infoButton + (title.startsWith("<") ? title : `<span>${title}</span>`))}
             ${infoContents}
@@ -15663,7 +15670,20 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 output += buildJobClass(jobClasses[i], jobsDictionary);
                             }
                             let sectionDef = WuxDef.Get("Title_JobsByDifficulty");
-                            return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand), sectionDef.getTitle(), WuxSheetMain.TabBlock(output), sectionDef);
+                            return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand), sectionDef.getTitle(), WuxSheetMain.TabBlock(output), sectionDef, buildRolesInfo());
+                        },
+
+                        // Name + description of every Role (JobGroup), appended into the Jobs
+                        // page's own help section. Inline "<strong>Name.</strong> description"
+                        // per role instead of TooltipDescription's own full Header2 block, which
+                        // took up too much vertical space for a list of six.
+                        buildRolesInfo = function () {
+                            let roleDefs = WuxDef.Filter([new DatabaseFilterData("group", "JobGroup")]);
+                            let content = "";
+                            for (let i = 0; i < roleDefs.length; i++) {
+                                content += `<div class="wuxDescription"><strong>${roleDefs[i].getTitle()}.</strong> ${roleDefs[i].getDescription(" ")}</div>`;
+                            }
+                            return content;
                         },
 
                         buildJobClass = function (jobclassDefinition, jobsDictionary) {

@@ -149,9 +149,16 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return `<div class="wuxTabHeader">\n${contents}\n</div>`;
         },
 
-        collapsibleTab = function (fieldName, title, contents, infoDefinition) {
+        // extraInfoContent (optional) appends additional HTML into the same help/info box the
+        // infoDefinition already generates, instead of just its own description text - e.g.
+        // the Jobs page's Roles list (see buildJobs.build, WuxGS-Advancement.js). Inlines what
+        // Info.DefaultContents does rather than calling it, so the extra content ends up
+        // inside the SAME toggle wrapper instead of a second, redundant one.
+        collapsibleTab = function (fieldName, title, contents, infoDefinition, extraInfoContent) {
             let infoButton = infoDefinition != undefined ? WuxSheetMain.Info.Button(infoDefinition.getAttribute(WuxDef._info)) : "";
-            let infoContents = infoDefinition != undefined ? WuxSheetMain.Info.DefaultContents(infoDefinition) : "";
+            let infoContents = infoDefinition != undefined
+                ? WuxSheetMain.Info.Contents(infoDefinition.getAttribute(WuxDef._info), WuxDefinition.TooltipDescription(infoDefinition) + (extraInfoContent || ""))
+                : "";
             return `<div class="wuxSegment">
             ${tabHeader(infoButton + (title.startsWith("<") ? title : `<span>${title}</span>`))}
             ${infoContents}

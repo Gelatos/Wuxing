@@ -567,7 +567,20 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 output += buildJobClass(jobClasses[i], jobsDictionary);
                             }
                             let sectionDef = WuxDef.Get("Title_JobsByDifficulty");
-                            return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand), sectionDef.getTitle(), WuxSheetMain.TabBlock(output), sectionDef);
+                            return WuxSheetMain.CollapsibleTab(sectionDef.getAttribute(WuxDef._tab, WuxDef._expand), sectionDef.getTitle(), WuxSheetMain.TabBlock(output), sectionDef, buildRolesInfo());
+                        },
+
+                        // Name + description of every Role (JobGroup), appended into the Jobs
+                        // page's own help section. Inline "<strong>Name.</strong> description"
+                        // per role instead of TooltipDescription's own full Header2 block, which
+                        // took up too much vertical space for a list of six.
+                        buildRolesInfo = function () {
+                            let roleDefs = WuxDef.Filter([new DatabaseFilterData("group", "JobGroup")]);
+                            let content = "";
+                            for (let i = 0; i < roleDefs.length; i++) {
+                                content += `<div class="wuxDescription"><strong>${roleDefs[i].getTitle()}.</strong> ${roleDefs[i].getDescription(" ")}</div>`;
+                            }
+                            return content;
                         },
 
                         buildJobClass = function (jobclassDefinition, jobsDictionary) {
