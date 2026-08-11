@@ -2643,16 +2643,26 @@ var TargetReference = TargetReference || (function () {
         },
 
         getTargetDataByName = function (characterName) {
-            if (state.TargetReference.activeCharacters.nameDatabase[characterName] == undefined) {
-                let targetData = new TargetData();
-                targetData.importCharacterByName(characterName);
-                if (targetData.charId == "") {
-                    Debug.LogError(`[TargetReference][getTargetDataByName] No target data exists for ${characterName}`);
-                    return undefined;
+            if (state.TargetReference.activeCharacters.nameDatabase[characterName] != undefined) {
+                let tokenData = TokenReference.GetTokenData(state.TargetReference.activeCharacters.targetData[state.TargetReference.activeCharacters.nameDatabase[characterName]]);
+                if (tokenData != undefined) {
+                    return tokenData;
                 }
-                return targetData;
+                // The token this character was registered under (e.g. when added to a
+                // conflict) no longer exists on the map - fall through to a plain
+                // by-name lookup instead of silently returning nothing, which used to
+                // make commands like !cskillgroupcheck do nothing for a character whose
+                // token was removed after combat ended, even though the character sheet
+                // itself is still perfectly resolvable by name.
+                Debug.LogError(`[TargetReference][getTargetDataByName] Tracked token for ${characterName} no longer exists - falling back to name lookup`);
             }
-            return TokenReference.GetTokenData(state.TargetReference.activeCharacters.targetData[state.TargetReference.activeCharacters.nameDatabase[characterName]]);
+            let targetData = new TargetData();
+            targetData.importCharacterByName(characterName);
+            if (targetData.charId == "") {
+                Debug.LogError(`[TargetReference][getTargetDataByName] No target data exists for ${characterName}`);
+                return undefined;
+            }
+            return targetData;
         }
     ;
     return {

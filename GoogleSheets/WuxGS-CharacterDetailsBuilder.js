@@ -141,9 +141,16 @@ class CharacterStatisticsBuilder {
         let levelDef = WuxDef.Get("Level");
         let jobDef = WuxDef.Get("Forme_JobSlot");
         let crDef = WuxDef.Get("CR");
+        let potencyDef = WuxDef.Get("Potency");
 
         let filteredStats = WuxDef.Filter([new DatabaseFilterData("subGroup", "CoreResource")]);
-        let resourceContents = "";
+        // Potency isn't part of the CoreResource subGroup (it's a single computed value, not a
+        // current/max pool like HP/WILL/Surge/Vitality below), so it's prepended here directly
+        // rather than through the filter - using its own plain attribute, since it has no _max
+        // variant to read.
+        let resourceContents = `<div class="wuxRow">
+        ${this.printStat(potencyDef, potencyDef.abbreviation, potencyDef.getAttribute(), potencyDef.getAttribute(WuxDef._info), true)}
+        </div>`;
         for (let definition of filteredStats) {
             resourceContents += `<div class="wuxRow">
             ${this.printStat(definition, definition.abbreviation,

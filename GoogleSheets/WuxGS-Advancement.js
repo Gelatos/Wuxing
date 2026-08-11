@@ -1012,11 +1012,16 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         buildSubLoreRepeater = function (groupName, subLores) {
                             let tierOptions = WuxDef.Filter([new DatabaseFilterData("group", "LoreTier")]);
 
-                            let subTypeSelect = `<select class="wuxInput wuxLoreDescription" name="${WuxDef.GetAttribute("Lore_SubType")}">
+                            // When there are no predefined sub-lores to pick from, the dropdown would
+                            // only ever offer "Choose Lore Type"/"Custom" - skip it and default straight
+                            // into the Custom name+description fields via a hidden Lore_SubType instead.
+                            let subTypeSelect = subLores.length > 0
+                                ? `<select class="wuxInput wuxLoreDescription" name="${WuxDef.GetAttribute("Lore_SubType")}">
                                 <option value="0">Choose Lore Type</option>
                                 ${subLores.map(k => `<option value="${k.name}">${k.name}</option>`).join("\n                                ")}
                                 <option value="1">Custom</option>
-                            </select>`;
+                            </select>`
+                                : `<input type="hidden" name="${WuxDef.GetAttribute("Lore_SubType")}" value="1" />`;
 
                             let repeaterContents = WuxSheetMain.MultiRow(
                                 WuxSheetMain.Select(WuxDef.GetAttribute("Lore_Tier"), tierOptions, false, "wuxLoreType") +
@@ -1056,11 +1061,10 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         buildMainLore = function (knowledge) {
                             let knowledgeDefinition = knowledge.createDefinition(WuxDef.Get("LoreCategory"));
                             return `<div class="wuxSkill">
-                                ${WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                <div class="wuxDescription">${knowledgeDefinition.getDescription(" ")}</div>
+                                ${WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                     knowledgeDefinition.getAttribute(WuxDef._rank),
-                                    knowledgeDefinition.getAttribute(WuxDef._info),
-                                    `<span class="wuxHeader">General ${knowledge.name}</span>`,
-                                    WuxDefinition.TooltipDescription(knowledgeDefinition))}
+                                    `<span class="wuxHeader">General ${knowledge.name}</span>`)}
                             </div>`;
                         }
 

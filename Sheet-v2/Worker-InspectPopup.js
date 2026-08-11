@@ -4051,7 +4051,7 @@ var WuxWorkerInspectPopup = WuxWorkerInspectPopup || (function () {
                                 requirementParts.push(`${formatListWithOr(affinityParts)} affinity`);
                             }
                         }
-                        let itemTitle = `Requirements: ${requirementParts.join(", ")} - Cost: ${cost} Point${cost === 1 ? "" : "s"}`;
+                        let itemTitle = `Requirements: ${requirementParts.join(", ")} \nCost: ${cost} Perk Point${cost === 1 ? "" : "s"}`;
                         sortedItems.push(new InspectionInventoryItem(itemTitle, "", true, affinity, tier));
                         techsByCost[cost].forEach(function (technique) {
                             let iconAffinities = techniqueIconAffinities[technique.name] || [];

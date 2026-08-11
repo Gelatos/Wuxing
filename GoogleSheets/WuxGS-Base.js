@@ -73,6 +73,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                                     WuxDef.GetAttribute("Affinity"), affinityFilter, false)
                             );
 
+                            contents += WuxSheetMain.Header2("Checks");
                             contents += WuxSheetSidebar.BuildRollSkillButtonBare();
 
                             return WuxSheetMain.Table.FlexTableGroup(contents);
