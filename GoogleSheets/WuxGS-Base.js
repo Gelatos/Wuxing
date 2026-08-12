@@ -451,11 +451,10 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let searchButtonDef = WuxDef.Get("Popup_SearchButton");
                     let autoEquipDef = WuxDef.Get("Gear_AutoEquipItems");
                     let autoEquip = [WuxSheetMain.Table.FlexTableGroup(
-                        WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                        WuxSheetMain.InteractionElement.BuildCheckboxInput(
                             autoEquipDef.getAttribute(),
-                            autoEquipDef.getAttribute(WuxDef._info),
-                            WuxSheetMain.Header(autoEquipDef.getTitle()),
-                            WuxDefinition.TooltipDescription(autoEquipDef)))];
+                            WuxSheetMain.Header(autoEquipDef.getTitle())) +
+                        WuxSheetMain.MoreInfo(autoEquipDef))];
 
                     let items = [];
                     for (let i = 0; i < consuTypes.length; i++) {
@@ -768,11 +767,10 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let searchButtonDef = WuxDef.Get("Popup_SearchButton");
                     let autoEquipDef = WuxDef.Get("Gear_AutoEquipItems");
                     let autoEquip = [WuxSheetMain.Table.FlexTableGroup(
-                        WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                        WuxSheetMain.InteractionElement.BuildCheckboxInput(
                             autoEquipDef.getAttribute(),
-                            autoEquipDef.getAttribute(WuxDef._info),
-                            WuxSheetMain.Header(autoEquipDef.getTitle()),
-                            WuxDefinition.TooltipDescription(autoEquipDef)))];
+                            WuxSheetMain.Header(autoEquipDef.getTitle())) +
+                        WuxSheetMain.MoreInfo(autoEquipDef))];
                     let items = [];
                     for (let i = 0; i < equipmentTypes.length; i++) {
                         items.push(WuxSheetMain.Table.FlexTableGroup(
@@ -1517,17 +1515,15 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let levelRestrictedDef = WuxDef.Get("Forme_ShowLevelRestricted");
                     let items = [
                         WuxSheetMain.Table.FlexTableGroup(
-                            WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                            WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                 nonElementDef.getAttribute(),
-                                nonElementDef.getAttribute(WuxDef._info),
-                                WuxSheetMain.Header(nonElementDef.getTitle()),
-                                WuxDefinition.TooltipDescription(nonElementDef))),
+                                WuxSheetMain.Header(nonElementDef.getTitle())) +
+                            WuxSheetMain.MoreInfo(nonElementDef)),
                         WuxSheetMain.Table.FlexTableGroup(
-                            WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                            WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                 levelRestrictedDef.getAttribute(),
-                                levelRestrictedDef.getAttribute(WuxDef._info),
-                                WuxSheetMain.Header(levelRestrictedDef.getTitle()),
-                                WuxDefinition.TooltipDescription(levelRestrictedDef)))
+                                WuxSheetMain.Header(levelRestrictedDef.getTitle())) +
+                            WuxSheetMain.MoreInfo(levelRestrictedDef))
                     ];
                     return `${WuxSheetMain.Header2(WuxDef.GetTitle("Title_StyleFilterOption"))}
                     ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 1)}`;

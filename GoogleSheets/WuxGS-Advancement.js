@@ -458,17 +458,15 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let levelRestrictedDef = WuxDef.Get("Forme_ShowLevelRestricted");
                             let filterCheckboxItems = [
                                 WuxSheetMain.Table.FlexTableGroup(
-                                    WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                    WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                         nonElementDef.getAttribute(),
-                                        nonElementDef.getAttribute(WuxDef._info),
-                                        WuxSheetMain.Header(nonElementDef.getTitle()),
-                                        WuxDefinition.TooltipDescription(nonElementDef))),
+                                        WuxSheetMain.Header(nonElementDef.getTitle())) +
+                                    WuxSheetMain.MoreInfo(nonElementDef)),
                                 WuxSheetMain.Table.FlexTableGroup(
-                                    WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                    WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                         levelRestrictedDef.getAttribute(),
-                                        levelRestrictedDef.getAttribute(WuxDef._info),
-                                        WuxSheetMain.Header(levelRestrictedDef.getTitle()),
-                                        WuxDefinition.TooltipDescription(levelRestrictedDef)))
+                                        WuxSheetMain.Header(levelRestrictedDef.getTitle())) +
+                                    WuxSheetMain.MoreInfo(levelRestrictedDef))
                             ];
                             let filterCheckboxes = `${WuxSheetMain.Header2(WuxDef.GetTitle("Title_StyleFilterOption"))}
                                 ${WuxSheetMain.MultiRowGroup(filterCheckboxItems, WuxSheetMain.Table.FlexTable, 1)}`;
@@ -714,12 +712,12 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             return output;
                         },
                         printAttribute = function (attributeDefinition, attributeValuesFilter) {
-                            let contents = "";
-                            contents += WuxSheetMain.Select(attributeDefinition.getAttribute(), attributeValuesFilter, false);
-                            
-                            let header = `${attributeDefinition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(attributeDefinition))}`;
-                            let output = WuxSheetMain.Table.FlexTableHeader(header);
-                            output += WuxSheetMain.Table.FlexTableData(contents);
+                            let select = WuxSheetMain.Select(attributeDefinition.getAttribute(), attributeValuesFilter, false, "wuxMaxWidth150");
+                            let row = `<div class="wuxAttributeRow">
+                                <span class="wuxHeader">${attributeDefinition.title}</span>
+                                ${select}
+                            </div>`;
+                            let output = row + WuxSheetMain.MoreInfo(attributeDefinition);
                             return WuxSheetMain.Table.FlexTableGroup(output, " wuxMinWidth150");
                         },
 
@@ -780,8 +778,9 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                     `<div class="wuxIsKeySkill">${interactHeader}</div>`,
                                     `${interactHeader}`) +
                                 WuxSheetMain.Desc(skill.quickDescription) +
+                                WuxSheetMain.MoreInfo(skillDefinition) +
                                 WuxSheetMain.HiddenField(skillDefinition.getAttribute(WuxDef._rank),
-                                    `<div class="wuxMarginLeft20">${expertiseHeader}</div>`) + 
+                                    `<div class="wuxMarginLeft20">${expertiseHeader}</div>`) +
                                 WuxSheetMain.Row("&nbsp;");
                         },
                         printInteractiveSkillHeader = function (skill, skillDefinition) {
@@ -793,10 +792,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let interactHeader = `<span class="wuxHeader">${skill.name} ${attributesLine}</span>`;
 
                             return `<div class="wuxSkill">
-                            ${WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
-                                skillDefinition.getAttribute(WuxDef._rank),
-                                skillDefinition.getAttribute(WuxDef._info),
-                                interactHeader, WuxDefinition.TooltipDescription(skillDefinition))}
+                            ${WuxSheetMain.InteractionElement.BuildCheckboxInput(
+                                skillDefinition.getAttribute(WuxDef._rank), interactHeader)}
                             ${printSkillStat(skillDefinition, skillDefinition.getAttribute(), skillDefinition.getAttribute(WuxDef._info))}
                             </div>`;
                         },
@@ -892,12 +889,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         buildCommonLanguage = function (knowledge) {
                             let knowledgeDefinition = knowledge.createDefinition(WuxDef.Get("Language"));
                             return `<div class="wuxSkill">
-                                ${WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                ${WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                     knowledgeDefinition.getAttribute(WuxDef._rank),
-                                    knowledgeDefinition.getAttribute(WuxDef._info),
-                                    buildInteractionMainBlock(knowledge, knowledgeDefinition),
-                                    WuxDefinition.TooltipDescription(knowledgeDefinition))}
-                                <span class="wuxSubheader"> - ${knowledge.group}</span>
+                                    buildInteractionMainBlock(knowledge, knowledgeDefinition))}
+                                <div class="wuxDescription">${knowledge.group}</div>
+                                ${WuxSheetMain.MoreInfo(knowledgeDefinition)}
                             </div>`;
                         },
 
@@ -938,12 +934,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         buildLanguage = function (knowledge) {
                             let knowledgeDefinition = knowledge.createDefinition(WuxDef.Get("Language"));
                             return `<div class="wuxSkill">
-                                ${WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                ${WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                     knowledgeDefinition.getAttribute(WuxDef._rank),
-                                    knowledgeDefinition.getAttribute(WuxDef._info),
-                                    buildInteractionMainBlock(knowledge, knowledgeDefinition),
-                                    WuxDefinition.TooltipDescription(knowledgeDefinition))}
-                                <span class="wuxSubheader"> - ${knowledge.location}</span>
+                                    buildInteractionMainBlock(knowledge, knowledgeDefinition))}
+                                <div class="wuxDescription">${knowledge.location}</div>
+                                ${WuxSheetMain.MoreInfo(knowledgeDefinition)}
                             </div>`;
                         },
 

@@ -318,6 +318,31 @@ var WuxSheetMain = WuxSheetMain || (function () {
             </div>`;
         },
 
+        // Replaces a hover tooltip with a "More Info"/"Less Info" button that toggles the
+        // definition's full description into view below it. Only needs
+        // getAttribute/getDescription/title, so it works on any definition (Skills,
+        // Attributes, Languages, Lore, ...). Field is the definition's own attribute name
+        // with the _moreinfo modifier, so each instance gets its own independent state.
+        //
+        // Driven entirely by the button's own checkbox :checked state (see .wuxMoreInfoBlock
+        // rules in WCSS-Specialized.css) instead of the wuxHiddenField-flag hidden-input
+        // pattern used elsewhere (HiddenFieldToggle/HiddenField) - one input instead of three.
+        // Safe here specifically because this checkbox is never duplicated elsewhere on the
+        // page - the earlier :checked-based tab highlighting was abandoned because Roll20
+        // doesn't reliably sync :checked across many same-named duplicate copies of one input,
+        // which doesn't apply to a single per-instance toggle like this. Uses :has() to reach
+        // the description div (a sibling of the button, not of the checkbox nested inside it).
+        moreInfo = function (definition) {
+            let moreInfoAttr = definition.getAttribute(WuxDef._moreinfo);
+            let moreInfoDef = WuxDef.Get("_moreinfo");
+            let lessInfoDef = WuxDef.Get("LessInfo");
+            let labels = `<span class="wuxMoreInfoLabel">${moreInfoDef.getTitle()}</span><span class="wuxLessInfoLabel">${lessInfoDef.getTitle()}</span>`;
+            let toggleButton = button(moreInfoAttr, labels, "wuxRepeatingTechActionButton wuxMoreInfoButton");
+            let fullDescription = `<div class="wuxDescription">${definition.getDescription(" ")}</div>`;
+
+            return `<div class="wuxMoreInfoBlock">${toggleButton}${fullDescription}</div>`;
+        },
+
         pictosButton = function (fieldName, contents, className) {
             if (className == undefined) {
                 className = "";
@@ -716,6 +741,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         Textarea: textarea,
         Select: select,
         Button: button,
+        MoreInfo: moreInfo,
         PictosButton: pictosButton,
         MultiRowGroup: multiRowGroup,
         HiddenField: hiddenField,

@@ -10428,6 +10428,31 @@ var WuxSheetMain = WuxSheetMain || (function () {
             </div>`;
         },
 
+        // Replaces a hover tooltip with a "More Info"/"Less Info" button that toggles the
+        // definition's full description into view below it. Only needs
+        // getAttribute/getDescription/title, so it works on any definition (Skills,
+        // Attributes, Languages, Lore, ...). Field is the definition's own attribute name
+        // with the _moreinfo modifier, so each instance gets its own independent state.
+        //
+        // Driven entirely by the button's own checkbox :checked state (see .wuxMoreInfoBlock
+        // rules in WCSS-Specialized.css) instead of the wuxHiddenField-flag hidden-input
+        // pattern used elsewhere (HiddenFieldToggle/HiddenField) - one input instead of three.
+        // Safe here specifically because this checkbox is never duplicated elsewhere on the
+        // page - the earlier :checked-based tab highlighting was abandoned because Roll20
+        // doesn't reliably sync :checked across many same-named duplicate copies of one input,
+        // which doesn't apply to a single per-instance toggle like this. Uses :has() to reach
+        // the description div (a sibling of the button, not of the checkbox nested inside it).
+        moreInfo = function (definition) {
+            let moreInfoAttr = definition.getAttribute(WuxDef._moreinfo);
+            let moreInfoDef = WuxDef.Get("_moreinfo");
+            let lessInfoDef = WuxDef.Get("LessInfo");
+            let labels = `<span class="wuxMoreInfoLabel">${moreInfoDef.getTitle()}</span><span class="wuxLessInfoLabel">${lessInfoDef.getTitle()}</span>`;
+            let toggleButton = button(moreInfoAttr, labels, "wuxRepeatingTechActionButton wuxMoreInfoButton");
+            let fullDescription = `<div class="wuxDescription">${definition.getDescription(" ")}</div>`;
+
+            return `<div class="wuxMoreInfoBlock">${toggleButton}${fullDescription}</div>`;
+        },
+
         pictosButton = function (fieldName, contents, className) {
             if (className == undefined) {
                 className = "";
@@ -10826,6 +10851,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         Textarea: textarea,
         Select: select,
         Button: button,
+        MoreInfo: moreInfo,
         PictosButton: pictosButton,
         MultiRowGroup: multiRowGroup,
         HiddenField: hiddenField,
@@ -12314,11 +12340,10 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let searchButtonDef = WuxDef.Get("Popup_SearchButton");
                     let autoEquipDef = WuxDef.Get("Gear_AutoEquipItems");
                     let autoEquip = [WuxSheetMain.Table.FlexTableGroup(
-                        WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                        WuxSheetMain.InteractionElement.BuildCheckboxInput(
                             autoEquipDef.getAttribute(),
-                            autoEquipDef.getAttribute(WuxDef._info),
-                            WuxSheetMain.Header(autoEquipDef.getTitle()),
-                            WuxDefinition.TooltipDescription(autoEquipDef)))];
+                            WuxSheetMain.Header(autoEquipDef.getTitle())) +
+                        WuxSheetMain.MoreInfo(autoEquipDef))];
 
                     let items = [];
                     for (let i = 0; i < consuTypes.length; i++) {
@@ -12631,11 +12656,10 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let searchButtonDef = WuxDef.Get("Popup_SearchButton");
                     let autoEquipDef = WuxDef.Get("Gear_AutoEquipItems");
                     let autoEquip = [WuxSheetMain.Table.FlexTableGroup(
-                        WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                        WuxSheetMain.InteractionElement.BuildCheckboxInput(
                             autoEquipDef.getAttribute(),
-                            autoEquipDef.getAttribute(WuxDef._info),
-                            WuxSheetMain.Header(autoEquipDef.getTitle()),
-                            WuxDefinition.TooltipDescription(autoEquipDef)))];
+                            WuxSheetMain.Header(autoEquipDef.getTitle())) +
+                        WuxSheetMain.MoreInfo(autoEquipDef))];
                     let items = [];
                     for (let i = 0; i < equipmentTypes.length; i++) {
                         items.push(WuxSheetMain.Table.FlexTableGroup(
@@ -13380,17 +13404,15 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let levelRestrictedDef = WuxDef.Get("Forme_ShowLevelRestricted");
                     let items = [
                         WuxSheetMain.Table.FlexTableGroup(
-                            WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                            WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                 nonElementDef.getAttribute(),
-                                nonElementDef.getAttribute(WuxDef._info),
-                                WuxSheetMain.Header(nonElementDef.getTitle()),
-                                WuxDefinition.TooltipDescription(nonElementDef))),
+                                WuxSheetMain.Header(nonElementDef.getTitle())) +
+                            WuxSheetMain.MoreInfo(nonElementDef)),
                         WuxSheetMain.Table.FlexTableGroup(
-                            WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                            WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                 levelRestrictedDef.getAttribute(),
-                                levelRestrictedDef.getAttribute(WuxDef._info),
-                                WuxSheetMain.Header(levelRestrictedDef.getTitle()),
-                                WuxDefinition.TooltipDescription(levelRestrictedDef)))
+                                WuxSheetMain.Header(levelRestrictedDef.getTitle())) +
+                            WuxSheetMain.MoreInfo(levelRestrictedDef))
                     ];
                     return `${WuxSheetMain.Header2(WuxDef.GetTitle("Title_StyleFilterOption"))}
                     ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 1)}`;
@@ -15562,17 +15584,15 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let levelRestrictedDef = WuxDef.Get("Forme_ShowLevelRestricted");
                             let filterCheckboxItems = [
                                 WuxSheetMain.Table.FlexTableGroup(
-                                    WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                    WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                         nonElementDef.getAttribute(),
-                                        nonElementDef.getAttribute(WuxDef._info),
-                                        WuxSheetMain.Header(nonElementDef.getTitle()),
-                                        WuxDefinition.TooltipDescription(nonElementDef))),
+                                        WuxSheetMain.Header(nonElementDef.getTitle())) +
+                                    WuxSheetMain.MoreInfo(nonElementDef)),
                                 WuxSheetMain.Table.FlexTableGroup(
-                                    WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                    WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                         levelRestrictedDef.getAttribute(),
-                                        levelRestrictedDef.getAttribute(WuxDef._info),
-                                        WuxSheetMain.Header(levelRestrictedDef.getTitle()),
-                                        WuxDefinition.TooltipDescription(levelRestrictedDef)))
+                                        WuxSheetMain.Header(levelRestrictedDef.getTitle())) +
+                                    WuxSheetMain.MoreInfo(levelRestrictedDef))
                             ];
                             let filterCheckboxes = `${WuxSheetMain.Header2(WuxDef.GetTitle("Title_StyleFilterOption"))}
                                 ${WuxSheetMain.MultiRowGroup(filterCheckboxItems, WuxSheetMain.Table.FlexTable, 1)}`;
@@ -15818,12 +15838,12 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             return output;
                         },
                         printAttribute = function (attributeDefinition, attributeValuesFilter) {
-                            let contents = "";
-                            contents += WuxSheetMain.Select(attributeDefinition.getAttribute(), attributeValuesFilter, false);
-                            
-                            let header = `${attributeDefinition.title}${WuxSheetMain.Tooltip.Icon(WuxDefinition.TooltipDescription(attributeDefinition))}`;
-                            let output = WuxSheetMain.Table.FlexTableHeader(header);
-                            output += WuxSheetMain.Table.FlexTableData(contents);
+                            let select = WuxSheetMain.Select(attributeDefinition.getAttribute(), attributeValuesFilter, false, "wuxMaxWidth150");
+                            let row = `<div class="wuxAttributeRow">
+                                <span class="wuxHeader">${attributeDefinition.title}</span>
+                                ${select}
+                            </div>`;
+                            let output = row + WuxSheetMain.MoreInfo(attributeDefinition);
                             return WuxSheetMain.Table.FlexTableGroup(output, " wuxMinWidth150");
                         },
 
@@ -15884,8 +15904,9 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                     `<div class="wuxIsKeySkill">${interactHeader}</div>`,
                                     `${interactHeader}`) +
                                 WuxSheetMain.Desc(skill.quickDescription) +
+                                WuxSheetMain.MoreInfo(skillDefinition) +
                                 WuxSheetMain.HiddenField(skillDefinition.getAttribute(WuxDef._rank),
-                                    `<div class="wuxMarginLeft20">${expertiseHeader}</div>`) + 
+                                    `<div class="wuxMarginLeft20">${expertiseHeader}</div>`) +
                                 WuxSheetMain.Row("&nbsp;");
                         },
                         printInteractiveSkillHeader = function (skill, skillDefinition) {
@@ -15897,10 +15918,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let interactHeader = `<span class="wuxHeader">${skill.name} ${attributesLine}</span>`;
 
                             return `<div class="wuxSkill">
-                            ${WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
-                                skillDefinition.getAttribute(WuxDef._rank),
-                                skillDefinition.getAttribute(WuxDef._info),
-                                interactHeader, WuxDefinition.TooltipDescription(skillDefinition))}
+                            ${WuxSheetMain.InteractionElement.BuildCheckboxInput(
+                                skillDefinition.getAttribute(WuxDef._rank), interactHeader)}
                             ${printSkillStat(skillDefinition, skillDefinition.getAttribute(), skillDefinition.getAttribute(WuxDef._info))}
                             </div>`;
                         },
@@ -15996,12 +16015,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         buildCommonLanguage = function (knowledge) {
                             let knowledgeDefinition = knowledge.createDefinition(WuxDef.Get("Language"));
                             return `<div class="wuxSkill">
-                                ${WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                ${WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                     knowledgeDefinition.getAttribute(WuxDef._rank),
-                                    knowledgeDefinition.getAttribute(WuxDef._info),
-                                    buildInteractionMainBlock(knowledge, knowledgeDefinition),
-                                    WuxDefinition.TooltipDescription(knowledgeDefinition))}
-                                <span class="wuxSubheader"> - ${knowledge.group}</span>
+                                    buildInteractionMainBlock(knowledge, knowledgeDefinition))}
+                                <div class="wuxDescription">${knowledge.group}</div>
+                                ${WuxSheetMain.MoreInfo(knowledgeDefinition)}
                             </div>`;
                         },
 
@@ -16042,12 +16060,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                         buildLanguage = function (knowledge) {
                             let knowledgeDefinition = knowledge.createDefinition(WuxDef.Get("Language"));
                             return `<div class="wuxSkill">
-                                ${WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
+                                ${WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                     knowledgeDefinition.getAttribute(WuxDef._rank),
-                                    knowledgeDefinition.getAttribute(WuxDef._info),
-                                    buildInteractionMainBlock(knowledge, knowledgeDefinition),
-                                    WuxDefinition.TooltipDescription(knowledgeDefinition))}
-                                <span class="wuxSubheader"> - ${knowledge.location}</span>
+                                    buildInteractionMainBlock(knowledge, knowledgeDefinition))}
+                                <div class="wuxDescription">${knowledge.location}</div>
+                                ${WuxSheetMain.MoreInfo(knowledgeDefinition)}
                             </div>`;
                         },
 

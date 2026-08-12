@@ -840,6 +840,42 @@ button.wuxRepeatingTechActionButton:hover {
     border: none;
 }
 
+/* Matches the light blue used for skill headers (.wuxSectionBlock .wuxInteractiveBlock
+   .wuxHeader) - the shared wuxRepeatingTechActionButton gray (#979898) was too close to the
+   dark sheet background to read as a button here. */
+div.wuxRepeatingTechActionButton.wuxMoreInfoButton span,
+button.wuxRepeatingTechActionButton.wuxMoreInfoButton span {
+    color: #71B9DE;
+}
+
+div.wuxRepeatingTechActionButton.wuxMoreInfoButton:hover span,
+button.wuxRepeatingTechActionButton.wuxMoreInfoButton:hover span {
+    color: #13a4f6;
+}
+
+/* PROTOTYPE toggle (WuxGS-Advancement.js printMoreInfo): the button's own checkbox
+   (nested inside .wuxMoreInfoButton, same DOM position WuxSheetMain.Button always
+   produces) drives everything via :checked - no separate hidden-field pair. */
+.wuxMoreInfoBlock .wuxLessInfoLabel {
+    display: none;
+}
+
+.wuxMoreInfoButton input:checked ~ span .wuxMoreInfoLabel {
+    display: none;
+}
+
+.wuxMoreInfoButton input:checked ~ span .wuxLessInfoLabel {
+    display: inline;
+}
+
+.wuxMoreInfoBlock .wuxDescription {
+    display: none;
+}
+
+.wuxMoreInfoBlock:has(.wuxMoreInfoButton input:checked) .wuxDescription {
+    display: block;
+}
+
 div.wuxRepeatingTechActionButton:hover span,
 button.wuxRepeatingTechActionButton:hover span {
     color: #f4f6f8;

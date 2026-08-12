@@ -313,7 +313,7 @@ button[type=roll].wuxButton.wuxSizePercent {
 
     /* Roll20 mobile app overlays its own floating action button in the bottom-right corner,
        covering this button - shifted left to stay clear of it. */
-    margin-right: 50px;
+    margin-right: 75px;
 }
 
 input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxMainContent {
@@ -1569,6 +1569,24 @@ input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGrou
 input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGroupHalf
 {
     display: none;
+}
+
+/* Attributes Page: name beside its value dropdown (WuxGS-Advancement.js printAttribute),
+   instead of the old stacked FlexTableHeader/FlexTableData rows. Overrides .wuxHeader's own
+   width:100% (needed when it stacked above the dropdown) so it only takes the space the row's
+   flex layout leaves it. */
+.wuxAttributeRow
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.wuxAttributeRow .wuxHeader
+{
+    width: auto;
+    flex: 1 1 auto;
 }
 
 .wuxFlexTableItemHeader,
@@ -2883,6 +2901,42 @@ button.wuxRepeatingTechActionButton:hover {
     background: none;
     box-shadow: none;
     border: none;
+}
+
+/* Matches the light blue used for skill headers (.wuxSectionBlock .wuxInteractiveBlock
+   .wuxHeader) - the shared wuxRepeatingTechActionButton gray (#979898) was too close to the
+   dark sheet background to read as a button here. */
+div.wuxRepeatingTechActionButton.wuxMoreInfoButton span,
+button.wuxRepeatingTechActionButton.wuxMoreInfoButton span {
+    color: #71B9DE;
+}
+
+div.wuxRepeatingTechActionButton.wuxMoreInfoButton:hover span,
+button.wuxRepeatingTechActionButton.wuxMoreInfoButton:hover span {
+    color: #13a4f6;
+}
+
+/* PROTOTYPE toggle (WuxGS-Advancement.js printMoreInfo): the button's own checkbox
+   (nested inside .wuxMoreInfoButton, same DOM position WuxSheetMain.Button always
+   produces) drives everything via :checked - no separate hidden-field pair. */
+.wuxMoreInfoBlock .wuxLessInfoLabel {
+    display: none;
+}
+
+.wuxMoreInfoButton input:checked ~ span .wuxMoreInfoLabel {
+    display: none;
+}
+
+.wuxMoreInfoButton input:checked ~ span .wuxLessInfoLabel {
+    display: inline;
+}
+
+.wuxMoreInfoBlock .wuxDescription {
+    display: none;
+}
+
+.wuxMoreInfoBlock:has(.wuxMoreInfoButton input:checked) .wuxDescription {
+    display: block;
 }
 
 div.wuxRepeatingTechActionButton:hover span,
@@ -7949,6 +8003,11 @@ Quest Box
 .wuxMaxWidth100
 {
     max-width: 100px;
+}
+
+.wuxMaxWidth150
+{
+    max-width: 150px;
 }
 
 .wuxMaxWidth220

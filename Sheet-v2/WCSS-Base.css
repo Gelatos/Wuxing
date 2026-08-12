@@ -313,7 +313,7 @@ button[type=roll].wuxButton.wuxSizePercent {
 
     /* Roll20 mobile app overlays its own floating action button in the bottom-right corner,
        covering this button - shifted left to stay clear of it. */
-    margin-right: 50px;
+    margin-right: 75px;
 }
 
 input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxMainContent {

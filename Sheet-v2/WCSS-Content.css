@@ -80,6 +80,24 @@ input[type=hidden].wuxFlexTableItemGroup-flag[value="1"] + .wuxFlexTableItemGrou
     display: none;
 }
 
+/* Attributes Page: name beside its value dropdown (WuxGS-Advancement.js printAttribute),
+   instead of the old stacked FlexTableHeader/FlexTableData rows. Overrides .wuxHeader's own
+   width:100% (needed when it stacked above the dropdown) so it only takes the space the row's
+   flex layout leaves it. */
+.wuxAttributeRow
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.wuxAttributeRow .wuxHeader
+{
+    width: auto;
+    flex: 1 1 auto;
+}
+
 .wuxFlexTableItemHeader,
 .wuxFlexTableItemSubheader,
 .wuxFlexTableItemData
