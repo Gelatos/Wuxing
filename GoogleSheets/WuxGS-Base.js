@@ -125,24 +125,20 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             if (presetStatusDefs.length > 0) {
                                 let statusSectionDef = WuxDef.Get("Page_OverviewStatus");
                                 contents += WuxSheetMain.Header(statusSectionDef.getTitle());
-                                let buildStatusTooltip = function (def) {
-                                    let tip = `${WuxSheetMain.Header2(def.getTitle())}
-                                        <span class="wuxDescription">${def.getDescription('</span><span class="wuxDescription">')}</span>`;
+                                let statusItems = presetStatusDefs.map(def => {
+                                    if (def.hasRanks) {
+                                        return WuxSheetMain.Table.FlexTableGroup(
+                                            WuxDefinition.BuildNumberLabelInput(def, def.getAttribute(), def.shortDescription));
+                                    }
                                     let notes = [];
                                     if (def.endsOnRoundStart) notes.push("Ends on round start");
                                     if (def.endsOnTrigger) notes.push("Ends when triggered");
-                                    if (notes.length > 0) tip += WuxSheetMain.Desc(notes.join(" · "));
-                                    return tip;
-                                };
-                                let statusItems = presetStatusDefs.map(def =>
-                                    WuxSheetMain.Table.FlexTableGroup(
-                                        def.hasRanks
-                                            ? WuxDefinition.BuildNumberLabelInput(def, def.getAttribute(), def.shortDescription)
-                                            : WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
-                                                def.getAttribute(),
-                                                def.getAttribute(WuxDef._info),
-                                                WuxSheetMain.Header2(def.getTitle()),
-                                                buildStatusTooltip(def))));
+                                    let extraContent = notes.length > 0 ? WuxSheetMain.Desc(notes.join(" · ")) : "";
+                                    return WuxSheetMain.Table.FlexTableGroup(
+                                        WuxSheetMain.InteractionElement.BuildCheckboxInput(
+                                            def.getAttribute(), WuxSheetMain.Header2(def.getTitle())) +
+                                        WuxSheetMain.MoreInfo(def, extraContent));
+                                });
                                 contents += WuxSheetMain.MultiRowGroup(statusItems, WuxSheetMain.Table.FlexTable, 2);
                             }
 
@@ -150,17 +146,11 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             if (boonDefs.length > 0) {
                                 let boonSectionDef = WuxDef.Get("Title_Boon");
                                 contents += WuxSheetMain.Header(boonSectionDef.getTitle());
-                                let buildBoonTooltip = function (def) {
-                                    return `${WuxSheetMain.Header2(def.getTitle())}
-                                        <span class="wuxDescription">${def.getDescription('</span><span class="wuxDescription">')}</span>`;
-                                };
                                 let boonItems = boonDefs.map(def =>
                                     WuxSheetMain.Table.FlexTableGroup(
-                                        WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
-                                            def.getAttribute(),
-                                            def.getAttribute(WuxDef._info),
-                                            WuxSheetMain.Header2(def.getTitle()),
-                                            buildBoonTooltip(def))));
+                                        WuxSheetMain.InteractionElement.BuildCheckboxInput(
+                                            def.getAttribute(), WuxSheetMain.Header2(def.getTitle())) +
+                                        WuxSheetMain.MoreInfo(def)));
                                 contents += WuxSheetMain.MultiRowGroup(boonItems, WuxSheetMain.Table.FlexTable, 2);
                             }
 

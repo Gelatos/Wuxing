@@ -10433,6 +10433,9 @@ var WuxSheetMain = WuxSheetMain || (function () {
         // getAttribute/getDescription/title, so it works on any definition (Skills,
         // Attributes, Languages, Lore, ...). Field is the definition's own attribute name
         // with the _moreinfo modifier, so each instance gets its own independent state.
+        // extraContent (optional) is appended after the description, inside the same
+        // toggle-revealed block - e.g. a Status effect's "Ends on round start" notes,
+        // which aren't part of the definition's own descriptions array.
         //
         // Driven entirely by the button's own checkbox :checked state (see .wuxMoreInfoBlock
         // rules in WCSS-Specialized.css) instead of the wuxHiddenField-flag hidden-input
@@ -10442,13 +10445,13 @@ var WuxSheetMain = WuxSheetMain || (function () {
         // doesn't reliably sync :checked across many same-named duplicate copies of one input,
         // which doesn't apply to a single per-instance toggle like this. Uses :has() to reach
         // the description div (a sibling of the button, not of the checkbox nested inside it).
-        moreInfo = function (definition) {
+        moreInfo = function (definition, extraContent) {
             let moreInfoAttr = definition.getAttribute(WuxDef._moreinfo);
             let moreInfoDef = WuxDef.Get("_moreinfo");
             let lessInfoDef = WuxDef.Get("LessInfo");
             let labels = `<span class="wuxMoreInfoLabel">${moreInfoDef.getTitle()}</span><span class="wuxLessInfoLabel">${lessInfoDef.getTitle()}</span>`;
             let toggleButton = button(moreInfoAttr, labels, "wuxRepeatingTechActionButton wuxMoreInfoButton");
-            let fullDescription = `<div class="wuxDescription">${definition.getDescription(" ")}</div>`;
+            let fullDescription = `<div class="wuxDescription">${definition.getDescription(" ")}</div>${extraContent || ""}`;
 
             return `<div class="wuxMoreInfoBlock">${toggleButton}${fullDescription}</div>`;
         },
@@ -12014,24 +12017,20 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             if (presetStatusDefs.length > 0) {
                                 let statusSectionDef = WuxDef.Get("Page_OverviewStatus");
                                 contents += WuxSheetMain.Header(statusSectionDef.getTitle());
-                                let buildStatusTooltip = function (def) {
-                                    let tip = `${WuxSheetMain.Header2(def.getTitle())}
-                                        <span class="wuxDescription">${def.getDescription('</span><span class="wuxDescription">')}</span>`;
+                                let statusItems = presetStatusDefs.map(def => {
+                                    if (def.hasRanks) {
+                                        return WuxSheetMain.Table.FlexTableGroup(
+                                            WuxDefinition.BuildNumberLabelInput(def, def.getAttribute(), def.shortDescription));
+                                    }
                                     let notes = [];
                                     if (def.endsOnRoundStart) notes.push("Ends on round start");
                                     if (def.endsOnTrigger) notes.push("Ends when triggered");
-                                    if (notes.length > 0) tip += WuxSheetMain.Desc(notes.join(" · "));
-                                    return tip;
-                                };
-                                let statusItems = presetStatusDefs.map(def =>
-                                    WuxSheetMain.Table.FlexTableGroup(
-                                        def.hasRanks
-                                            ? WuxDefinition.BuildNumberLabelInput(def, def.getAttribute(), def.shortDescription)
-                                            : WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
-                                                def.getAttribute(),
-                                                def.getAttribute(WuxDef._info),
-                                                WuxSheetMain.Header2(def.getTitle()),
-                                                buildStatusTooltip(def))));
+                                    let extraContent = notes.length > 0 ? WuxSheetMain.Desc(notes.join(" · ")) : "";
+                                    return WuxSheetMain.Table.FlexTableGroup(
+                                        WuxSheetMain.InteractionElement.BuildCheckboxInput(
+                                            def.getAttribute(), WuxSheetMain.Header2(def.getTitle())) +
+                                        WuxSheetMain.MoreInfo(def, extraContent));
+                                });
                                 contents += WuxSheetMain.MultiRowGroup(statusItems, WuxSheetMain.Table.FlexTable, 2);
                             }
 
@@ -12039,17 +12038,11 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             if (boonDefs.length > 0) {
                                 let boonSectionDef = WuxDef.Get("Title_Boon");
                                 contents += WuxSheetMain.Header(boonSectionDef.getTitle());
-                                let buildBoonTooltip = function (def) {
-                                    return `${WuxSheetMain.Header2(def.getTitle())}
-                                        <span class="wuxDescription">${def.getDescription('</span><span class="wuxDescription">')}</span>`;
-                                };
                                 let boonItems = boonDefs.map(def =>
                                     WuxSheetMain.Table.FlexTableGroup(
-                                        WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
-                                            def.getAttribute(),
-                                            def.getAttribute(WuxDef._info),
-                                            WuxSheetMain.Header2(def.getTitle()),
-                                            buildBoonTooltip(def))));
+                                        WuxSheetMain.InteractionElement.BuildCheckboxInput(
+                                            def.getAttribute(), WuxSheetMain.Header2(def.getTitle())) +
+                                        WuxSheetMain.MoreInfo(def)));
                                 contents += WuxSheetMain.MultiRowGroup(boonItems, WuxSheetMain.Table.FlexTable, 2);
                             }
 
@@ -15253,9 +15246,18 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             let contents = "";
                             let definition = WuxDef.Get("Page_Origin");
                             let backgroundBuilder = new CharacterBackgroundBuilder();
+
+                            // Origin page shows just the Outfits section (already carries its own
+                            // header via ChatDisplayBuilder.outfitCollection's InfoHeader call) below
+                            // the Background generator, instead of the full Emotes tab - the rest of
+                            // Emotes (chat post name/URL etc.) stays on the Post page only. Folded into
+                            // the same TabBlock as the background generator so it renders as one
+                            // section block instead of its own separate one.
+                            let outfitsContents = WuxSheetMain.MultiRowGroup(
+                                [new ChatDisplayBuilder().outfitCollection()], WuxSheetMain.Table.FlexTable, 2);
+
                             contents += `${WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title,
-                                WuxSheetMain.TabBlock(backgroundBuilder.print()), definition)}`;
-                            contents += new ChatDisplayBuilder().print();
+                                WuxSheetMain.TabBlock(backgroundBuilder.print() + outfitsContents), definition)}`;
                             return contents;
                         }
 

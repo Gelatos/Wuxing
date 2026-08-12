@@ -2683,7 +2683,7 @@ var WuxDef = WuxDef || (function() {
                 "linkedGroups":[],
                 "isResource":true},
             "Cmb_HV":{"name":"Cmb_HV","fieldName":"hv","group":"Combat","descriptions":["This value is a standard amount of HP you recover from some healing abilities."],
-                "variable":"cmb-hv{0}{1}","title":"Regen Value","subGroup":"CombatStat","abbreviation":"RV","baseFormula":"","modifiers":"_tech;_gear;_affinity;_perk","formula":{"formulaString":"15;CR*10;Attr_CNV","workers":[{"variableName":[],
+                "variable":"cmb-hv{0}{1}","title":"Regen Value","subGroup":"CombatStat","abbreviation":"Regen","baseFormula":"","modifiers":"_tech;_gear;_affinity;_perk","formula":{"formulaString":"15;CR*10;Attr_CNV","workers":[{"variableName":[],
                         "definitionName":[],
                         "value":15,"multiplier":1,"max":0},
                         {"variableName":["adv-cr"],
@@ -3094,9 +3094,9 @@ var WuxDef = WuxDef || (function() {
                 "variable":"trt-polearm{0}{1}","title":"Polearm","subGroup":"Martial Trait","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
-            "Trait_Whip":{"name":"Trait_Whip","fieldName":"whip","group":"Trait","descriptions":["A long, flexible weapon made of braided leather, chain, or cord. Usually ends with a sharp or blunt tip."],
-                "variable":"trt-whip{0}{1}","title":"Whip","subGroup":"Martial Trait","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]
-                },
+            "Trait_Whip":{"name":"Trait_Whip","fieldName":"whip","group":"Trait","descriptions":["A long, flexible weapon made of braided leather, chain, or cord. Usually ends with a sharp or blunt tip."]
+                ,
+                "variable":"trt-whip{0}{1}","title":"Whip","subGroup":"Martial Trait","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
             "Trait_RangedWeapon":{"name":"Trait_RangedWeapon","fieldName":"rangedweapon","group":"Trait","descriptions":["A weapon that can be used to attack single targets at a distance."],

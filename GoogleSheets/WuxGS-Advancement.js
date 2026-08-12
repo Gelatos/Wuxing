@@ -127,9 +127,18 @@ var DisplayOriginSheet = DisplayOriginSheet || (function () {
                             let contents = "";
                             let definition = WuxDef.Get("Page_Origin");
                             let backgroundBuilder = new CharacterBackgroundBuilder();
+
+                            // Origin page shows just the Outfits section (already carries its own
+                            // header via ChatDisplayBuilder.outfitCollection's InfoHeader call) below
+                            // the Background generator, instead of the full Emotes tab - the rest of
+                            // Emotes (chat post name/URL etc.) stays on the Post page only. Folded into
+                            // the same TabBlock as the background generator so it renders as one
+                            // section block instead of its own separate one.
+                            let outfitsContents = WuxSheetMain.MultiRowGroup(
+                                [new ChatDisplayBuilder().outfitCollection()], WuxSheetMain.Table.FlexTable, 2);
+
                             contents += `${WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title,
-                                WuxSheetMain.TabBlock(backgroundBuilder.print()), definition)}`;
-                            contents += new ChatDisplayBuilder().print();
+                                WuxSheetMain.TabBlock(backgroundBuilder.print() + outfitsContents), definition)}`;
                             return contents;
                         }
 
