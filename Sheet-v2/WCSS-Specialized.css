@@ -253,13 +253,19 @@ input[type=hidden].wuxPageDisplay-Flag[value="Item"] ~ .wuxPageDisplay-FilterIte
 .wuxInfoButton input[type=radio]:checked + span,
 .wuxInfoButton input[type=checkbox]:checked + span
 {
-    color: #5b5b5b;
+    color: #DE9B72;
 }
 
 .wuxInfoButton input[type=radio]:hover + span,
 .wuxInfoButton input[type=checkbox]:hover + span
 {
-    color: #979898;
+    color: #71B9DE;
+}
+
+.wuxInfoButton input[type=radio]:checked:hover + span,
+.wuxInfoButton input[type=checkbox]:checked:hover + span
+{
+    color: #EBB998;
 }
 
 .wuxInfoContent

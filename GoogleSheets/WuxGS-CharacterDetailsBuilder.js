@@ -87,7 +87,7 @@ class CharacterBackgroundBuilder {
         contents += WuxDefinition.BuildText(WuxDef.Get("Potency"), WuxSheetMain.Span(WuxDef.GetAttribute("Potency")));
         contents += WuxDefinition.BuildTextInput(WuxDef.Get("Title_StartingJin"), WuxDef.GetAttribute("Jin"));
 
-        return WuxSheetMain.Table.FlexTableGroup(contents);
+        return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth300");
     }
     
     printGenerator() {

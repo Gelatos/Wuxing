@@ -1666,7 +1666,7 @@ var WuxCharacterSheetBuilders = WuxCharacterSheetBuilders || (function () {
             contents += buildInfluenceTypeSelect(WuxDef.Get("Soc_Personality"), "PersonalityType");
             contents += buildInfluenceTypeSelect(WuxDef.Get("Soc_Motivation"), "MotivationType");
 
-            return WuxSheetMain.Table.FlexTableGroup(contents);
+            return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth300");
         },
 
         buildInfluenceTypeSelect = function (selectDef, groupName) {

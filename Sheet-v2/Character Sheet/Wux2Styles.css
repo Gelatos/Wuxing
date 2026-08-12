@@ -310,6 +310,10 @@ button[type=roll].wuxButton.wuxSizePercent {
 
 .wuxMainFooter .wuxTabButton {
     flex: 0 0 auto;
+
+    /* Roll20 mobile app overlays its own floating action button in the bottom-right corner,
+       covering this button - shifted left to stay clear of it. */
+    margin-right: 50px;
 }
 
 input[type=hidden].wuxSideBarExtend-flag[value="on"] + .wuxMainContent {
@@ -877,6 +881,8 @@ select.wuxNavDropdown {
     top: 0px;
     left: 0px;
     right: 0px;
+    width: 100%;
+    height: 100%;
     min-height: 20px;
     min-width: 60px;
 
@@ -2292,13 +2298,19 @@ input[type=hidden].wuxPageDisplay-Flag[value="Item"] ~ .wuxPageDisplay-FilterIte
 .wuxInfoButton input[type=radio]:checked + span,
 .wuxInfoButton input[type=checkbox]:checked + span
 {
-    color: #5b5b5b;
+    color: #DE9B72;
 }
 
 .wuxInfoButton input[type=radio]:hover + span,
 .wuxInfoButton input[type=checkbox]:hover + span
 {
-    color: #979898;
+    color: #71B9DE;
+}
+
+.wuxInfoButton input[type=radio]:checked:hover + span,
+.wuxInfoButton input[type=checkbox]:checked:hover + span
+{
+    color: #EBB998;
 }
 
 .wuxInfoContent
