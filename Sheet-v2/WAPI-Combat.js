@@ -622,7 +622,6 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
             return;
         }
         this.tokenEffect = new TokenTargetEffectsData(this.senderTokenTargetData);
-        this.addInitialMessage();
     }
 
     initializeTechniqueData(data) {
@@ -640,8 +639,11 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
         this.item = techniqueData.item || "";
     }
     
+    // Only called from consumeResources - i.e. only once resource consumption
+    // has actually succeeded, not up front when the command is first parsed -
+    // so a failed attempt (not enough EN/Will) never shows this line at all.
     addInitialMessage() {
-        this.addMessage(`${this.senderTokenTargetData.displayName} tries to consume resources for ${this.techniqueName}`);
+        this.addMessage(`${this.senderTokenTargetData.displayName} uses ${this.techniqueName}`);
     }
     
     run() {
@@ -741,10 +743,12 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
     }
     
     consumeResources(techniqueConsumptionResolver) {
+        techniqueConsumptionResolver.addInitialMessage();
+
         let attributeHandler = new SandboxAttributeHandler(this.tokenEffect.tokenTargetData.charId);
         let crVar = WuxDef.GetVariable("CR");
         attributeHandler.addMod(crVar, 0);
-        
+
         techniqueConsumptionResolver.iterateResources((resourceName) => {
             if (techniqueConsumptionResolver.newResourceValues.hasOwnProperty(resourceName)) {
                 let resourceObject = techniqueConsumptionResolver.newResourceValues[resourceName];
@@ -1338,8 +1342,9 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
             let passCheck = true;
             let willBreakEffect = new TechniqueWillBreakEffects(techUseResolver.technique.name,
                 techUseResolver.sourceSheetName, techUseResolver.targetTokenEffect.tokenTargetData.tokenId);
-            let techDisplayData = new TechniqueEffectDisplayUseData("", 
-                techUseResolver.senderTokenEffect.tokenTargetData.displayName, techUseResolver.targetTokenEffect.tokenTargetData.displayName);
+            let techDisplayData = new TechniqueEffectDisplayUseData("",
+                techUseResolver.senderTokenEffect.tokenTargetData.displayName, techUseResolver.targetTokenEffect.tokenTargetData.displayName,
+                senderAttrHandler);
 
             let attrGetters = new TechniqueTargetObjectCollection(senderAttrHandler, targetAttrHandler);
             let attrSetters = new TechniqueTargetObjectCollection(

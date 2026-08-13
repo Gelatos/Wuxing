@@ -675,7 +675,6 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
             return;
         }
         this.tokenEffect = new TokenTargetEffectsData(this.senderTokenTargetData);
-        this.addInitialMessage();
     }
 
     initializeTechniqueData(data) {
@@ -693,8 +692,11 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
         this.item = techniqueData.item || "";
     }
     
+    // Only called from consumeResources - i.e. only once resource consumption
+    // has actually succeeded, not up front when the command is first parsed -
+    // so a failed attempt (not enough EN/Will) never shows this line at all.
     addInitialMessage() {
-        this.addMessage(`${this.senderTokenTargetData.displayName} tries to consume resources for ${this.techniqueName}`);
+        this.addMessage(`${this.senderTokenTargetData.displayName} uses ${this.techniqueName}`);
     }
     
     run() {
@@ -794,10 +796,12 @@ class TechniqueConsumptionResolver extends TechniqueResolverData {
     }
     
     consumeResources(techniqueConsumptionResolver) {
+        techniqueConsumptionResolver.addInitialMessage();
+
         let attributeHandler = new SandboxAttributeHandler(this.tokenEffect.tokenTargetData.charId);
         let crVar = WuxDef.GetVariable("CR");
         attributeHandler.addMod(crVar, 0);
-        
+
         techniqueConsumptionResolver.iterateResources((resourceName) => {
             if (techniqueConsumptionResolver.newResourceValues.hasOwnProperty(resourceName)) {
                 let resourceObject = techniqueConsumptionResolver.newResourceValues[resourceName];
@@ -1391,8 +1395,9 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
             let passCheck = true;
             let willBreakEffect = new TechniqueWillBreakEffects(techUseResolver.technique.name,
                 techUseResolver.sourceSheetName, techUseResolver.targetTokenEffect.tokenTargetData.tokenId);
-            let techDisplayData = new TechniqueEffectDisplayUseData("", 
-                techUseResolver.senderTokenEffect.tokenTargetData.displayName, techUseResolver.targetTokenEffect.tokenTargetData.displayName);
+            let techDisplayData = new TechniqueEffectDisplayUseData("",
+                techUseResolver.senderTokenEffect.tokenTargetData.displayName, techUseResolver.targetTokenEffect.tokenTargetData.displayName,
+                senderAttrHandler);
 
             let attrGetters = new TechniqueTargetObjectCollection(senderAttrHandler, targetAttrHandler);
             let attrSetters = new TechniqueTargetObjectCollection(
@@ -11333,10 +11338,19 @@ class TechniqueEffectDisplayEnhancmenteData extends BaseTechniqueEffectDisplayDa
 
 class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
 
-    constructor(props, senderName, targetName) {
+    // senderAttributeHandler (optional): the acting character's own live
+    // attribute handler, already fully populated by the time this is built
+    // (TechniqueUseResolver.performEffects, WAPI-Combat.js, pre-fetches every
+    // effect formula's attributes via tryGetSenderAttributes). Every formula
+    // roll in combat is computed against the sender's own stats regardless of
+    // who the effect targets (see calculateFormula's callers), so
+    // formatCalcBonus uses it to show the resolved number with the source
+    // stat as hover text - see formatCalcBonus below.
+    constructor(props, senderName, targetName, senderAttributeHandler) {
         super(props);
         this.senderName = senderName;
         this.targetName = targetName;
+        this.senderAttributeHandler = senderAttributeHandler;
     }
 
     formatEffect(effect) {
@@ -11422,10 +11436,24 @@ class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
         if (effect.formula.workers.length == 0) {
             return output;
         }
-        
+
         let formulaString;
         try {
-            formulaString = effect.formula.getString();
+            // Same hover-tooltip convention as damage/skill-check totals
+            // (Format.ShowTooltip, see e.g. TokenTargetEffectsData's damage
+            // messages in WAPI-Target.js, and DieRoll.addModToRoll's own
+            // "Label[value]" breakdown text) - show the resolved number
+            // inline and put the source, in that same "Label[value]" style,
+            // in the hover text. getCharacterString already produces this
+            // per term (including suppressing "Target's X" values) just with
+            // "[Label:value]" delimiters for the FormeTechniques repeater -
+            // reformat those into "Label[value]" rather than duplicating all
+            // of its branching a third time.
+            formulaString = this.senderAttributeHandler != undefined
+                ? Format.ShowTooltip(
+                    effect.formula.getValue(this.senderAttributeHandler),
+                    effect.formula.getCharacterString(this.senderAttributeHandler).replace(/\[([^:\]]*):([^\]]*)\]/g, "$1[$2]"))
+                : effect.formula.getString();
         } catch (e) {
             formulaString = `Something went wrong: ${e}`;
         }

@@ -1835,7 +1835,7 @@ var TargetReference = TargetReference || (function () {
                     if (playerIsGM(msg.playerid)) {
                         output += tokenOptionButton("Full Heal", "tfullheal");
                     }
-                    output += tokenOptionButton("Add Energy", "ten ?{How much energy to add?|1}");
+                    output += tokenOptionButton("Add Qi", "ten ?{How much qi to add?|1}");
                     output += tokenOptionButton("Add Surge", "thealsurge ?{How much surge to add?|1}");
                     output += tokenOptionButton("Add Vitality", "thealvit ?{How much vitality to add?|1}");
                     output += tokenOptionButton("Take Condition Effect", `tconditional ?{Choose your conditional|${conditionals}`);
@@ -1860,7 +1860,7 @@ var TargetReference = TargetReference || (function () {
                         }
                         requestList += requestTypes[i].getTitle();
                     }
-                    output += tokenOptionButton("Add Energy", "ten ?{How much energy to add?|1}");
+                    output += tokenOptionButton("Add Qi", "ten ?{How much qi to add?|1}");
                     output += tokenOptionButton("Take Condition Effect", `tconditional ?{Choose your conditional|${conditionals}`);
                     output += tokenOptionButton("Request Threshold", `tss ?{Set the difficulty of the request|${requestList}}`);
                     output += tokenOptionButton("Set Influence", "tinfluence ?{Set the influence level of the character|0}");
@@ -2073,7 +2073,7 @@ var TargetReference = TargetReference || (function () {
                 attributeHandler.run();
             });
 
-            sendTokenUpdateMessage(msg, targets, `: ${content} EN`);
+            sendTokenUpdateMessage(msg, targets, `: ${content} QI`);
         },
 
         commandResetMoveCharge = function (msg, targets) {
