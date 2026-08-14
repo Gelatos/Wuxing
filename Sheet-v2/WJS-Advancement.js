@@ -1021,11 +1021,23 @@ var WuxWorkerKnowledges = WuxWorkerKnowledges || (function () {
 				let learnedLanguage = languageDefinitions.find(definition => definition.getVariable(WuxDef._rank) === eventinfo.sourceAttribute);
 				if (learnedLanguage != undefined) {
 					let chatLanguageVar = WuxDef.GetVariable("Chat_Language");
+					let chatLanguageTagVar = WuxDef.GetVariable("Chat_LanguageTag");
 					attributeHandler.addMod(chatLanguageVar);
 					attributeHandler.addGetAttrCallback(function (attrHandler) {
 						let currentLanguage = attrHandler.parseString(chatLanguageVar);
 						if (currentLanguage === "" || currentLanguage === "0") {
 							attrHandler.addUpdate(chatLanguageVar, learnedLanguage.title);
+
+							// WorkerAttributeHandler applies updates via setAttrs(..., {silent:true})
+							// (WJS-Service.js), which does not cascade into Chat_Language's own
+							// on("change:...") listener (WuxWorkerChat.UpdateSelectedLanguage,
+							// Worker-Chat.js) - that's what normally sets Chat_LanguageTag when a
+							// player picks a language from the radio buttons. Auto-equip has to set
+							// it directly here too, or the language name updates but its chat
+							// roll-template tag is left stale/unset.
+							let message = new EmoteMessage("");
+							message.setLanguage(learnedLanguage.title);
+							attrHandler.addUpdate(chatLanguageTagVar, message.languageTag);
 						}
 					});
 				}
