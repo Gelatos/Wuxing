@@ -19,7 +19,14 @@ var WuxWorkerManual = WuxWorkerManual || (function () {
     'use strict';
 
     var
-        defaultCategory = "Basics",
+        // First GuideCat entry (same order WuxGS-Base.js's ManualPopup lists them
+        // in the header nav) - not hardcoded, since categories now come entirely
+        // from the GuideCat definition group and can be added/reordered without
+        // touching this file.
+        getDefaultCategory = function () {
+            let guideCategories = WuxDef.Filter(new DatabaseFilterData("group", "GuideCat"));
+            return guideCategories.length > 0 ? guideCategories[0].name : "";
+        },
 
         // The nav-row "?" button (Popup_ManualOpen) is a momentary trigger, not a
         // toggle - reset back to "0" below so it fires again on every click rather
@@ -35,7 +42,7 @@ var WuxWorkerManual = WuxWorkerManual || (function () {
             attributeHandler.addMod([categoryAttr]);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let manualPopup = new ManualPopupAttributeHandler(attrHandler);
-                let category = attrHandler.parseString(categoryAttr) === "" ? defaultCategory : undefined;
+                let category = attrHandler.parseString(categoryAttr) === "" ? getDefaultCategory() : undefined;
                 manualPopup.show(category);
                 attrHandler.addUpdate(WuxDef.GetVariable("Popup_ManualOpen"), "0");
             });

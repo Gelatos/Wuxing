@@ -997,6 +997,7 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerLoadMoreCatalogItems();
             output += listenerInspectPopupButtons();
             output += listenerFilterPopupButtons();
+            output += listenerOpenManual();
             return output;
         },
         listenerOpenSubMenu = function () {
@@ -1212,6 +1213,15 @@ var PopupBuilder = PopupBuilder || (function () {
                 `WuxWorkerFilterPopup.ApplyFilter()`, false)}
                 ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Popup_ClearFilter")}`],
                 `WuxWorkerFilterPopup.ClearFilter()`, false)}`;
+        },
+        // The nav-row "?" button (WuxGS-Base.js's buildManualOpenButton) - same
+        // single-attribute popup-open trigger as listenerSeeAllPerkTechniques
+        // above, just for the Manual popup instead of the technique catalog.
+        listenerOpenManual = function () {
+            let groupVariableNames = [WuxDef.GetVariable("Popup_ManualOpen")];
+            let output = `WuxWorkerManual.OpenManual(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         }
     return {
         Print: print

@@ -1,4 +1,22 @@
-var wuxCurrentVersion = "2.0.5";
+var wuxCurrentVersion = "2.0.6";
+
+// Popup_ManualCategory is a brand-new attribute (Manual/Game Guide popup,
+// GuideCat definition group) - existing characters were already at the
+// current version before it existed, so versioning() below would otherwise
+// treat them as fully up to date and never seed it, leaving it permanently
+// unset. Same reasoning as Page_Sidebar's own seeding in upgrade_to_1_0_0:
+// the raw HTML value= default on the popup's own hidden flags only reliably
+// applies to brand-new characters, not ones migrating forward.
+var upgrade_to_2_0_6 = function (currentVersion) {
+	let attributeHandler = loaderAttrubuteHandler(currentVersion, "2.0.6");
+
+	let guideCategories = WuxDef.Filter(new DatabaseFilterData("group", "GuideCat"));
+	if (guideCategories.length > 0) {
+		attributeHandler.addUpdate(WuxDef.GetVariable("Popup_ManualCategory"), guideCategories[0].name);
+	}
+
+	attributeHandler.run();
+};
 
 var upgrade_to_2_0_5 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "2.0.5");
@@ -304,6 +322,9 @@ var versioning = function () {
 		switch(v["version"]) {
 			case wuxCurrentVersion:
 				console.log(`Wuxing Sheet modified from 5th Edition OGL by Roll20 v${wuxCurrentVersion}`);
+				break;
+			case "2.0.5":
+				upgrade_to_2_0_6(v["version"]);
 				break;
 			case "2.0.4":
 				upgrade_to_2_0_5(v["version"]);

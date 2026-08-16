@@ -8732,26 +8732,43 @@ input[type=hidden].wuxFilterPopupSelectContainer-flag[value="on"] + .wuxFilterPo
     border-radius: 5px;
 }
 
-.wuxManualBody {
-    position: relative;
+/* Header category nav (WuxGS-Base.js ManualPopup.PrintHeader) - lives beside
+   Exit, same choke point as .wuxManualSidebarToggle above. Plain button row
+   that collapses into the <select> fallback below wuxManualNavCollapseWidth,
+   mirroring the main sheet's own page nav (.wuxNavRow/.wuxTabButtonRow +
+   select.wuxNavDropdown, WCSS-Base.css) - just its own classes so this
+   popup's white-background styling doesn't fight the main nav's dark one. */
+.wuxManualNav {
     display: flex;
     flex: 1 1 auto;
-    min-height: 0;
-    width: calc(100% - 30px);
-    margin: 0 15px 15px 15px;
-    gap: 15px;
-}
-
-.wuxManualSidebar {
-    flex: 0 0 180px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.wuxManualCategoryButton {
     min-width: 0;
-    height: auto;
+    align-items: stretch;
+}
+
+.wuxManualNavButtonRow {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+}
+
+.wuxManualNavButtonRow::-webkit-scrollbar {
+    display: none;
+}
+
+/* No height override here - .wuxButton's own default (26px, WCSS-Base.css)
+   is what keeps these matching Exit's height in the same header row. An
+   earlier "height: auto" (left over from when these were stacked vertically
+   in the sidebar, before the header-nav/sidebar-TOC split) let them shrink
+   to fit their own padding instead, which is what made them look tiny and
+   uneven next to Exit. */
+.wuxManualCategoryButton {
+    flex: 0 0 auto;
+    min-width: 0;
 }
 
 /* .wuxButton's own hidden-input rule (WCSS-Base.css) only covers
@@ -8769,12 +8786,23 @@ input[type=hidden].wuxFilterPopupSelectContainer-flag[value="on"] + .wuxFilterPo
     z-index: 100;
 }
 
+/* width/height 100% + border-box so this fills the whole button (up to
+   .wuxButton's own border, WCSS-Base.css) instead of just wrapping its own
+   text - without it the highlight background only covers a small pill
+   floating inside the button's border, leaving .wuxButton's own gray
+   gradient visible in the gap around it. display:flex centers the label
+   vertically regardless of exact padding/line-height math. */
 .wuxManualCategoryButton span {
-    display: block;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
     padding: 6px 10px;
 
     text-align: left;
     cursor: pointer;
+    white-space: nowrap;
 
     background: #ebf7ff;
     border-radius: 5px;
@@ -8785,17 +8813,96 @@ input[type=hidden].wuxFilterPopupSelectContainer-flag[value="on"] + .wuxFilterPo
     background: #71B9DE;
 }
 
+/* Same specificity trick as select.wuxNavDropdown (WCSS-Base.css) - needed
+   to beat .wuxInput's own display:inline-block, since .wuxInput's rule comes
+   later in this file. Hidden by default; the media query below swaps it in
+   for .wuxManualNavButtonRow once the row can no longer fit. */
+select.wuxManualNavDropdown {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .wuxManualNavButtonRow {
+        display: none;
+    }
+
+    select.wuxManualNavDropdown {
+        display: block;
+        flex: 1 1 auto;
+        min-width: 0;
+        width: auto;
+    }
+}
+
+.wuxManualBody {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+    /* Without this, .wuxManualSidebar's own content (54 links for Status
+       Effects) can render taller than the space .wuxManualBody's flex-fill
+       actually allotted it - min-height:0 lets the row shrink, but doesn't
+       clip a child that overflows it, so the excess bumped .wuxPopup's own
+       overflow:auto (WCSS-Footer.css) into scrolling the whole popup as one
+       unit instead of each column scrolling independently. */
+    overflow: hidden;
+    width: calc(100% - 30px);
+    margin: 0 15px 15px 15px;
+    gap: 15px;
+}
+
+/* Sidebar - no longer picks the category (see .wuxManualNav above); each
+   .wuxManualSidebarCategory-X is an anchor TOC for the CURRENTLY shown
+   category only, jumping to a term's id within .wuxManualContent. Only one
+   is ever displayed, gated by the same Popup_ManualCategory flag as the
+   content itself, a few rules down. */
+.wuxManualSidebar {
+    flex: 0 0 180px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow-y: auto;
+}
+
+.wuxManualSidebar > div {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.wuxManualSidebarLink {
+    display: block;
+    padding: 6px 10px;
+
+    color: #1d1e1f;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+
+    background: #ebf7ff;
+    border-radius: 5px;
+}
+
+.wuxManualSidebarLink:hover {
+    color: #FFFFFF;
+    background: #71B9DE;
+}
+
 .wuxManualContent {
     flex: 1 1 auto;
     min-width: 0;
     overflow-y: auto;
 }
 
-/* .wuxHeader2/.wuxDescription default to light-on-dark colors (meant for the
-   sheet's dark background) - unreadable on this popup's white background,
-   same fix the item/filter popups apply to their own content. */
+/* .wuxHeader2/.wuxSubheader/.wuxDescription default to light-on-dark colors
+   (meant for the sheet's dark background) - unreadable on this popup's white
+   background, same fix the item/filter popups apply to their own content. */
 .wuxManualContent .wuxHeader2 {
     color: #000000;
+}
+
+.wuxManualContent .wuxSubheader {
+    color: #666666;
 }
 
 .wuxManualContent .wuxDescription {
@@ -8806,10 +8913,25 @@ input[type=hidden].wuxFilterPopupSelectContainer-flag[value="on"] + .wuxFilterPo
     display: none;
 }
 
-input[type=hidden].wuxManualCategory-Flag[value="Basics"] ~ .wuxManualContent .wuxManualCategory-Basics,
-input[type=hidden].wuxManualCategory-Flag[value="Advancement"] ~ .wuxManualContent .wuxManualCategory-Advancement,
-input[type=hidden].wuxManualCategory-Flag[value="Techniques"] ~ .wuxManualContent .wuxManualCategory-Techniques {
+/* One value here per GuideCat definition (GoogleSheets/WuxGS-Base.js's
+   ManualPopup) - not generated automatically, same as the main sheet's own
+   page nav (.wuxPageDisplay-Flag, WCSS-Specialized.css). Adding a new
+   GuideCat entry to the dictionary needs a matching pair of new lines here
+   (one in this rule, one in the sidebar rule below) using its exact name as
+   the value.
+   Adjacent-sibling (+), not general-sibling (~) into a wrapper - each target
+   now has its own colocated flag directly in front of it (WuxGS-Base.js's
+   sidebarCategory/categoryContent), matching .wuxPageDisplay-Flag's proven
+   shape instead of one flag reaching across .wuxManualContent/.wuxManualSidebar
+   into a deeply nested descendant. */
+input[type=hidden].wuxManualCategory-Flag[value="GuideCat_CharacterCreation"] + .wuxManualCategory-GuideCat_CharacterCreation,
+input[type=hidden].wuxManualCategory-Flag[value="GuideCat_StatusEffects"] + .wuxManualCategory-GuideCat_StatusEffects {
     display: block;
+}
+
+input[type=hidden].wuxManualCategory-Flag[value="GuideCat_CharacterCreation"] + .wuxManualSidebarCategory-GuideCat_CharacterCreation,
+input[type=hidden].wuxManualCategory-Flag[value="GuideCat_StatusEffects"] + .wuxManualSidebarCategory-GuideCat_StatusEffects {
+    display: flex;
 }
 
 /* Sidebar disappears below this width (framework requirement) - the header's
@@ -8829,6 +8951,11 @@ input[type=hidden].wuxManualCategory-Flag[value="Techniques"] ~ .wuxManualConten
         left: 0;
         z-index: 10;
         width: 180px;
+        /* position:absolute has no implicit height here (only top is set, not
+           bottom) - without this it would just grow to fit every link instead
+           of scrolling, same gap this rule is fixing for the wide-screen
+           layout above. */
+        max-height: calc(100% - 20px);
         padding: 10px;
 
         background: white;

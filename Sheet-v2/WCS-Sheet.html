@@ -22684,46 +22684,221 @@
 				<div class="wuxPopup">
 					<div class="wuxPopupHeader">
 						<span class="wuxPopupInnerHeader" name="attr_popup-popupname">Name</span>
+						<input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="GuideCat_CharacterCreation" />
 						<div class="wuxManualSidebarToggle">
 							<input type="checkbox" name="attr_popup-manualsidebar"><span>&#9776;</span>
+						</div>
+						<div class="wuxManualNav">
+							<div class="wuxManualNavButtonRow">
+								<div class="wuxButton wuxManualCategoryButton">
+									<input type="radio" class="" name="attr_popup-manualcategory" value="GuideCat_CharacterCreation" /><span>Character Creation</span>
+								</div>
+								<div class="wuxButton wuxManualCategoryButton">
+									<input type="radio" class="" name="attr_popup-manualcategory" value="GuideCat_StatusEffects" /><span>Status Effects</span>
+								</div>
+							</div>
+							<select class="wuxInput wuxManualNavDropdown" name="attr_popup-manualcategory">
+								<option value="GuideCat_CharacterCreation">Character Creation</option>
+								<option value="GuideCat_StatusEffects">Status Effects</option>
+							</select>
 						</div>
 						<div class="wuxButton wuxPopupClose">
 							<input type="checkbox" name="attr_popup-popupactive">
 							<span>Exit</span>
 						</div>
 					</div>
-					<input type="hidden" class="wuxManualSidebarToggle-flag" name="attr_popup-manualsidebar" value="0">
+					<input type="hidden" class="wuxManualSidebarToggle-flag" name="attr_popup-manualsidebar" value="0" />
 					<div class="wuxManualBody">
-						<input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="Basics">
-						<div class="wuxManualSidebar">
-							<div class="wuxButton wuxManualCategoryButton">
-								<input type="radio" class="wuxInput" name="attr_popup-manualcategory" value="Basics"><span>Basics</span>
-							</div>
-							<div class="wuxButton wuxManualCategoryButton">
-								<input type="radio" class="wuxInput" name="attr_popup-manualcategory" value="Advancement"><span>Advancement</span>
-							</div>
-							<div class="wuxButton wuxManualCategoryButton">
-								<input type="radio" class="wuxInput" name="attr_popup-manualcategory" value="Techniques"><span>Techniques</span>
-							</div>
+						<div class="wuxManualSidebar"><input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="0" />
+							<div class="wuxManualSidebarCategory-GuideCat_CharacterCreation"><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_CharacterCreation-page_origin">Origin</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_CharacterCreation-page_jobs">Jobs</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_CharacterCreation-page_attributes">Attributes</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_CharacterCreation-page_skills">Skills</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_CharacterCreation-page_language">Language</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_CharacterCreation-page_lore">Lore</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_CharacterCreation-page_learntechniques">Styles</a></div><input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="0" />
+							<div class="wuxManualSidebarCategory-GuideCat_StatusEffects"><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_blinded">Blinded</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_burst">Burst</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_downed">Downed</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_engaged">Engaged</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_ethereal">Ethereal</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_exhausted">Exhausted</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_float">Float</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_focus">Focus</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_frozen">Frozen</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_grappled">Grappled</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_hidden">Hidden</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_invisible">Invisible</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_mantle">Mantle</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_paralyzed">Paralyzed</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_restrained">Restrained</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_unconscious">Unconscious</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_aflame">Aflame</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_burn_aegis">Burn Aegis</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_chilled">Chilled</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_cold_aegis">Cold Aegis</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_dazed">Dazed</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_dodge">Dodge</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_dying">Dying</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_earthblight">Earthblight</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_empowered">Empowered</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_hindered">Hindered</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_immobilized">Immobilized</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_iron_plates">Iron Plates</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_jolted">Jolted</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_magnetized">Magnetized</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_prone">Prone</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_quickened">Quickened</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_sand_aegis">Sand Aegis</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_shielded">Shielded</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_shock_aegis">Shock Aegis</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_sickened">Sickened</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_soaked">Soaked</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_static">Static</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_stunned">Stunned</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_vined">Vined</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_agreeable">Agreeable</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_angered">Angered</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_calmed">Calmed</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_distracted">Distracted</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_doubt">Doubt</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_encouraged">Encouraged</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_flustered">Flustered</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_frightened">Frightened</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_overjoyed">Overjoyed</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_oppositional">Oppositional</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_persevering">Persevering</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_rally">Rally</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_surprised">Surprised</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_steadfast">Steadfast</a></div>
 						</div>
-						<div class="wuxManualContent">
-							<div class="wuxManualCategory-Basics">
-								<div class="wuxHeader2">Style Points</div>
-								<div class="wuxDescription">Style Points are spent to learn and use Techniques from your Styles. Your current total and maximum are shown whenever you add a Technique from the catalog.</div>
-								<div class="wuxHeader2">Perk Points</div>
-								<div class="wuxDescription">Perk Points are spent on Perks, small standalone bonuses separate from your Styles and Techniques. Your current total and maximum are shown whenever you add a Perk from the catalog.</div>
-							</div>
-							<div class="wuxManualCategory-Advancement">
-								<div class="wuxHeader2">Advancement Points (AP)</div>
-								<div class="wuxDescription">Advancement Points are earned as your character gains XP, and can be spent on Jobs, Skills, Techniques, or transferred into Perks during Advancement.</div>
-								<div class="wuxHeader2">Character Rank (CR)</div>
-								<div class="wuxDescription">Character Rank represents your character's overall power level. It scales the base pool sizes for Attributes, Skills, Jobs, Knowledge, and Techniques as it increases.</div>
-							</div>
-							<div class="wuxManualCategory-Techniques">
-								<div class="wuxHeader2">Techniques &amp; Variants</div>
-								<div class="wuxDescription">Techniques are the actions your character can take, learned from Styles, Gear, or Jobs. Some Techniques offer Variants - alternate versions you can swap between once learned.</div>
-								<div class="wuxHeader2">Action Types</div>
-								<div class="wuxDescription">Every Technique has an Action Type (such as Swift, Quick, or Full) that determines how much of your turn it costs to use.</div>
+						<div class="wuxManualContent"><input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="0" />
+							<div class="wuxManualCategory-GuideCat_CharacterCreation">
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_CharacterCreation-page_origin">Origin</div>
+								<div class="wuxDescription">These are the details of your character's background. Fill in information as it pertains to this character. When creating a new character, you are also able to set your character's starting level, whether this is an NPC or PC, and other core stats. The background generator allows you to set some statistics to help generate a name and some personality quirks to help you decide on this character's background.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_CharacterCreation-page_jobs">Jobs</div>
+								<div class="wuxDescription">A job represents what a character does. When learning a job you immediately gain a set of techniques that help perform these roles. On this page you can spend a job point by selecting one of these jobs. A character is capable of learning multiple jobs but only one can ever be active at one time. If you learn multiple jobs you are abile to swap between them by spending energy. Every Job has a list of Roles to describe broadly their capabilities.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_CharacterCreation-page_attributes">Attributes</div>
+								<div class="wuxDescription">Attributes are the inherent characteristics of your character. Characters have a numerical rating for each attribute, which determines the modifier they grant to skills and defenses. Attributes range from a +3 bonus to a -1 penalty. Whenever you raise an attribute to a rank you spend an equal number of attribute points. By reducing an attribute below 0, you gain an equal number of attribute points. At most, a character can gain only one attribute point in this way. You gain a number of attribute points equal to 6 + your Character Rank.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_CharacterCreation-page_skills">Skills</div>
+								<div class="wuxDescription">Skills represent a broad application of techniques and ability. Anytime you do anything complex in Wuxing you will be making a skill check to determine your success. In addition, most techniques will require the use of a skill to function. Skills are all tied to at least one of the six attributes. Some have two and the skill will take the better of the two. As a base, a skill modifier is equal to its associated attribute. When you are trained in a skill your modifier increases to 2 + your CR. You begin play with 6 skill points. You gain an additional skill point whenever you increase your CR. You may choose to gain additional skill points by spending advancement points on level up. Some skills in this section may have a red color. That means a job or a style you have learned uses that skill. You should prioritize training these skills.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_CharacterCreation-page_language">Language</div>
+								<div class="wuxDescription">Languages are a type of knowledge that allows a character to communicate with others that share a language. Languages are divided by the locations of the world where they are used. Learning a language allows one to speak, read, and write the language. Learning a language always costs one knowledge point. You always begin play with 4 knowledge points and gain an additional 1 every time you increase your Character Rank.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_CharacterCreation-page_lore">Lore</div>
+								<div class="wuxDescription">Lore is knowledge of a single broad topic. You use lore whenever you make a Lore check. This check will always be in reference to a type of subject. If you have training in that subject you will be able to make a Lore check to determine if you have information on the subject. Lore is divided into categories based on the context of their usage. Each category has a General knowledge that can be trained. Normally, you cannot make a lore check without having an associated lore, however having the general knowledge of the subject will allow it. When making a general lore check, your modifier is equal to your Character Rank. Specialized Lores can also be added on this page. If you have training in one, when making a Lore check you also add the rank of the specialized lore if it is appropriate. Learning a lore, both specialized and general, always costs one knowledge point. You always begin play with 4 knowledge points and gain an additional 1 every time you increase your Character Rank.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_CharacterCreation-page_learntechniques">Styles</div>
+								<div class="wuxDescription">Each technique allows a character to perform a variety of actions including granting bonuses to the character, performing attacks, manipulate others, or maneuvering around the world. All techniques are grouped into Styles. Broadly, a style is simply a group of techniques united by a theme. When entering a conflict, a character is limited in the number of styles they are able to set. When a style is set, the character has access to all techniques associated with that style. On this page you can learn general styles and techniques. This page contains general styles and techniques that are available to all characters as long as they meet the requirements to learn the style or technique. When learning a style often the style will grant a set of techniques that are learned as part of the style. These are listed as Free Techniques in the Style's entry. You begin play with 4 technique points and gain an additional point at 2nd, 3rd, and 4th level. You gain an additional 3 technique points whenever you increase in Character Rank. You may choose to gain additional technique points by spending advancement points on level up. You may also choose to gain additional technique points by spending training points through training on level up.</div>
+							</div><input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="0" />
+							<div class="wuxManualCategory-GuideCat_StatusEffects">
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_blinded">Blinded</div>
+								<div class="wuxSubheader">Status</div>
+								<div class="wuxDescription">You cannot see and have +2 Disadvantage on all skill checks. Characters have +1 Advantage when attacking you.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_burst">Burst</div>
+								<div class="wuxSubheader">Status</div>
+								<div class="wuxDescription">You maintain a concentrated burst of Ki that creates dim light in 5 spaces around you. You may only ever hold up to 3 charges of Burst. </div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_downed">Downed</div>
+								<div class="wuxSubheader">Status</div>
+								<div class="wuxDescription">You are severely injured. You have +1 Disadvantage per rank on all skill checks from techniques with the exception of Assist techniques. You cannot maintain focus on any techniques. You do not gain your starting movement when you start your turn. You do not block foes from entering your space. Characters that end movement on your space force you to move into an adjacent space. If you gain this status while already having ranks in Downed you also receive the Dying status.
+									This status ends after a brief rest.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_engaged">Engaged</div>
+								<div class="wuxSubheader">Status</div>
+								<div class="wuxDescription">When you move adjacent to a hostile character you both gain the Engaged status for as long as you remain adjacent to one another. When you become Engaged by targets of equal or greater Size during the course of a movement you lose all remaining movement. You do not gain your starting movement at the start of your turn.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_ethereal">Ethereal</div>
+								<div class="wuxSubheader">Status</div>
+								<div class="wuxDescription">You are in the spirit realm. If you have a physical body it is treated as unconscious. Nothing in the physical plane may interact with your ethereal form and likewise, you may not interact with characters or objects in the physical plane.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_exhausted">Exhausted</div>
+								<div class="wuxSubheader">Status</div>
+								<div class="wuxDescription">You gain +2 disadvantage on all skill checks. Skill checks against you gain +1 Advantage.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_float">Float</div>
+								<div class="wuxSubheader">Status</div>
+								<div class="wuxDescription">You are floating and do not fall naturally. You cannot make any voluntary movements except for fly. </div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_focus">Focus</div>
+								<div class="wuxSubheader">Status</div>
+								<div class="wuxDescription">You are focusing on a technique. You consume 1 EN at the start of the round while you maintain focus on the technique.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_frozen">Frozen</div>
+								<div class="wuxSubheader">Status</div>
+								<div class="wuxDescription">You cannot use Assist actions and cannot move. Even if this condition ends, on your next turn you cannot use any full or quick actions. Techniques are made against you at +2 Advantage.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_grappled">Grappled</div>
+								<div class="wuxSubheader">Status</div>
+								<div class="wuxDescription">You cannot make any voluntary movements, although involuntary movements are unaffected. You move when the controlling character moves, mirroring their movement. A grapple automatically ends when either character breaks adjacency, such as if they are knocked back by another effect or if the controller chooses to end the grapple as a reaction.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_hidden">Hidden</div>
+								<div class="wuxSubheader">Status</div>
+								<div class="wuxDescription">You can’t be targeted by hostile attacks or actions, don’t cause engagement, and enemies only know your approximate location. Attacking, taking reactions, moving, and losing cover all remove this condition after they resolve. Characters can find you with Search.
+									To remain hidden you must either be outside of any enemies’ line of sight, obscured by sufficient cover, or invisible. If you Hide while meeting one of these criteria, you gain the Hidden status.
+									Hard cover is sufficient to Hide as long as it is large enough to totally conceal you, but soft cover is only sufficient if you are completely inside an area or zone that grants soft cover.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_invisible">Invisible</div>
+								<div class="wuxSubheader">Status</div>
+								<div class="wuxDescription">All attacks against Invisible characters, regardless of type, have a 50 percent chance to miss outright before an attack roll is made. Attacks made by an Invisible character gain +1 advantage. Invisible characters can always Hide, even without cover.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_mantle">Mantle</div>
+								<div class="wuxSubheader">Status</div>
+								<div class="wuxDescription">A mantle always has a value associated with it. When you take HP damage, the mantle absorbs half of the damage instead until destroyed. Once destroyed, any additional damage is taken to the character. </div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_paralyzed">Paralyzed</div>
+								<div class="wuxSubheader">Status</div>
+								<div class="wuxDescription">You cannot use Assist actions and can speak only falteringly. Even if this condition ends, on your next turn you cannot use any full or quick actions. Techniques are made against you at +2 Advantage.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_restrained">Restrained</div>
+								<div class="wuxSubheader">Status</div>
+								<div class="wuxDescription">You cannot make any voluntary movements, although involuntary movements are unaffected.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_unconscious">Unconscious</div>
+								<div class="wuxSubheader">Status</div>
+								<div class="wuxDescription">You cannot take actions, can’t move or speak, and are unaware of your surroundings.
+									You drop whatever you're holding and fall prone.
+									All of the character's defenses and senses are considered to be 0.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_aflame">Aflame</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">You are on fire. At the start of each round you take 1d6 fire damage per rank of the Aflame condition. This condition ends when you are doused by water.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_burn_aegis">Burn Aegis</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">You gain resistance to burn damage equal to your Burn Aegis rank x your CR. At the start of the round if you are aflame both this and the aflame condition ends.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_chilled">Chilled</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">You gain weakness to cold damage equal to your Chilled rank x 2. Your Base Speed is reduced by your chilled rank. This condition ends when you are warmed or are set on fire.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_cold_aegis">Cold Aegis</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">You gain resistance to cold damage equal to your Cold Aegis rank x your Character Rank. At the start of the round if you are chilled both this and the chilled condition ends.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_dazed">Dazed</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">You cannot use any actions and cannot volunarily move.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_dodge">Dodge</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">Your Evasion defense increases by 5 the next time a technique targets your evasion.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_dying">Dying</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">You are unconscious. At the start of each round roll 2d6. On a 7 or lower you lose [Downed rank x 10] + [Character Rank x 10] HP. On a 12, the condition is removed. If your HP reduces to 0 while dying, you die. When this condition is removed the one who removes it may choose whether you remain unconscious.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_earthblight">Earthblight</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">Earth clings to you, reducing your abiility to defend yourself. You gain weakness to force and piercing damage equal to your Earthblight rank x 2. Your Dash Speed is reduced by your Earthblight rank. If you are Soaked this condition ends.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_empowered">Empowered</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">The next time you deal hp damage with an attack you add 3 + Character Rank to the damage. </div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_hindered">Hindered</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">Skill checks against you gain +1 Advantage.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_immobilized">Immobilized</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">You cannot make any voluntary movements, although involuntary movements are unaffected.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_iron_plates">Iron Plates</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">You gain Armor equal to your Iron Plates rank. When gaining this status, if you have the Sand Aegis condition you gain double the ranks.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_jolted">Jolted</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">You can only perform one quick action on your turn. You cannot perform full actions.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_magnetized">Magnetized</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">All skill checks made against you have +1 Advantage. If you gain the Static or Chilled condition, all ranks gained are doubled then this condition ends.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_prone">Prone</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">Skill checks against you receive +1 Advantage.
+									Prone characters count as moving in difficult terrain. You can stand and remove Prone by spending 2 Move Charge, unless you're Immobilized or Restrained. Standing up doesn’t count as movement.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_quickened">Quickened</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">On your turn, you can perform one additional Quick action or Assist action. If you are jolted, the jolted condition immediately ends. If you are stunned, both this condition and the stunned condition ends. </div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_sand_aegis">Sand Aegis</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">You gain resistance to force and piercing damage equal to your Sand Aegis rank x your Character Rank. At the start of the round if you are earthblighted both this and the earthblight condition ends.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_shielded">Shielded</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">The next time you take damage, halve the damage.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_shock_aegis">Shock Aegis</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">You gain resistance to energy damage equal to your Shock Aegis rank x your Character Rank. At the start of the round if you have static both this and the static condition ends.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_sickened">Sickened</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">You receive +1 Disadvantage on all skill checks. You can't willingly ingest anything while Sickened.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_soaked">Soaked</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">You have +1 Disadvantage on all skill checks. If you gain the Vined or Chilled condition, all ranks gained are doubled then this condition ends.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_static">Static</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">You gain weakness to energy damage equal to your Shocked rank x 2. Your Armor is reduced by your shocked rank. </div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_stunned">Stunned</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">A stunned character can only perform one quick action on their turn. They cannot perform any full actions. If you are quickened, both this condition and the quickened condition ends.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_vined">Vined</div>
+								<div class="wuxSubheader">Condition</div>
+								<div class="wuxDescription">Your Base Speed is reduced by your vined rank. When you have the Aflame condition, all ranks of vined are added to the Aflame condition and you immediately take the aflame damage; the vined condition then ends.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_agreeable">Agreeable</div>
+								<div class="wuxSubheader">Emotion</div>
+								<div class="wuxDescription">The opponent's side has made a point that you are positively influenced by. Techniques with the Social Keyword used against you gain advantage equal to your Agreeable rank. Requests made against you gain [5 * rank] on their check.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_angered">Angered</div>
+								<div class="wuxSubheader">Emotion</div>
+								<div class="wuxDescription">When you use an [Attack] or [Social] technique and it does not include the source of your anger, you lose (5 x Character Rank) Willpower and 5 + (5 x Character Rank) HP. This cannot cause a Will Break.. An Angered character can only have one character be the target of this emotion and will have the target replaced by a new target if this emotion is gained again.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_calmed">Calmed</div>
+								<div class="wuxSubheader">Emotion</div>
+								<div class="wuxDescription">You lose 1 impatience at the start of the round. If you are angered and/or frightened, the angered and frightened emotions end along with this condition.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_distracted">Distracted</div>
+								<div class="wuxSubheader">Emotion</div>
+								<div class="wuxDescription">Skill checks against you gain +1 Advantage per rank of the Distracted emotion.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_doubt">Doubt</div>
+								<div class="wuxSubheader">Emotion</div>
+								<div class="wuxDescription">At the start of the round, you lose 5 + (5 x Character Rank) Willpower. This cannot cause a Will Break.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_encouraged">Encouraged</div>
+								<div class="wuxSubheader">Emotion</div>
+								<div class="wuxDescription">Gain +1 Advantage on your next skill check.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_flustered">Flustered</div>
+								<div class="wuxSubheader">Emotion</div>
+								<div class="wuxDescription">All skill checks against a flustered target receive +1 Advantage and request checks against the target increase by 5. </div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_frightened">Frightened</div>
+								<div class="wuxSubheader">Emotion</div>
+								<div class="wuxDescription">When you use an [Attack] or [Social] technique on the source of your fear, you lose 10 + (5 x Character Rank) Willpower. You can’t willingly move closer to the source. A frightened character can only have one character be the target of this emotion and will have the target replaced by a new target if this emotion is gained again.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_overjoyed">Overjoyed</div>
+								<div class="wuxSubheader">Emotion</div>
+								<div class="wuxDescription">As a reaction to failing a skill check, reroll the skill check.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_oppositional">Oppositional</div>
+								<div class="wuxSubheader">Emotion</div>
+								<div class="wuxDescription">The opponent's side has made a point that insults you. Techniques with the Social Keyword used against you gain disadvantage equal to your Oppositional rank. Requests made against you lose [5 * rank] on their check.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_persevering">Persevering</div>
+								<div class="wuxSubheader">Emotion</div>
+								<div class="wuxDescription">As a swift action, end one condition affecting you. </div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_rally">Rally</div>
+								<div class="wuxSubheader">Emotion</div>
+								<div class="wuxDescription">You gain Advantage per rank of the Rally emotion.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_surprised">Surprised</div>
+								<div class="wuxSubheader">Emotion</div>
+								<div class="wuxDescription">A surprised character can only perform one quick action on their turn. They cannot perform any full actions.</div>
+								<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_steadfast">Steadfast</div>
+								<div class="wuxSubheader">Emotion</div>
+								<div class="wuxDescription">If you were at more than 1 HP and are reduced to 0, you drop to 1 HP instead. </div>
 							</div>
 						</div>
 					</div>
@@ -22894,9 +23069,6 @@ WuxWorkerPerks.UpdateSecondAffinityBranch(eventinfo)
 });
 on("change:forme-seetechniques", function (eventinfo) {
 WuxWorkerInspectPopup.OpenAllPerkTechniqueInspection(eventinfo)
-});
-on("change:popup-manualopen", function (eventinfo) {
-WuxWorkerManual.OpenManual(eventinfo)
 });
 on("change:ttl-isplayer", function (eventinfo) {
 WuxWorkerPerks.SetIsPlayer(eventinfo);
@@ -23389,6 +23561,9 @@ WuxWorkerFilterPopup.ApplyFilter()
 
 on("change:popup-clearfilter", function (eventinfo) {
 WuxWorkerFilterPopup.ClearFilter()
+});
+on("change:popup-manualopen", function (eventinfo) {
+WuxWorkerManual.OpenManual(eventinfo)
 });
 on("change:chat-message", function (eventinfo) {
 WuxWorkerChat.UpdatePostContent(eventinfo)

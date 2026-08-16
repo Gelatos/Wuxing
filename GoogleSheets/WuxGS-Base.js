@@ -1797,71 +1797,130 @@ var DisplayPopups = DisplayPopups || (function () {
             }
         }()),
 
-        // Flat category list of manual entries (game-term lookups/how-to-play info,
-        // eventually replacing the per-field "More Info" toggles - see WuxSheetMain.MoreInfo).
-        // Categories are plain local data rather than WuxDef entries since nothing outside
-        // this popup needs to reference them - only the popup's own open/close/active-category
-        // plumbing (Popup_Manual*) goes through the dictionary, same as every other popup here.
         ManualPopup = ManualPopup || (function () {
             'use strict';
 
             var
-                categories = [
-                    { value: "Basics", title: "Basics" },
-                    { value: "Advancement", title: "Advancement" },
-                    { value: "Techniques", title: "Techniques" }
-                ],
+                cachedCategories,
+
+                getCategories = function () {
+                    if (cachedCategories == undefined) {
+                        let guideCategories = WuxDef.Filter(new DatabaseFilterData("group", "GuideCat"));
+                        cachedCategories = guideCategories.map(function (guideCat) {
+                            return {
+                                value: guideCat.name,
+                                title: guideCat.title,
+                                topics: getTopics(guideCat)
+                            };
+                        });
+                    }
+                    return cachedCategories;
+                },
+
+                getTopics = function (guideCat) {
+                    let explicitList = guideCat.getDescription("");
+                    let topicDefinitions;
+                    if (explicitList !== "") {
+                        topicDefinitions = explicitList.split(";")
+                            .map(name => name.trim())
+                            .filter(name => name !== "")
+                            .map(name => WuxDef.Get(name));
+                    } else if (guideCat.subGroup !== "") {
+                        topicDefinitions = WuxDef.Filter(new DatabaseFilterData("group", guideCat.subGroup));
+                    } else {
+                        topicDefinitions = [];
+                    }
+                    return topicDefinitions.map(function (definition) {
+                        return {
+                            slug: definition.fieldName,
+                            title: definition.title,
+                            subGroup: definition.subGroup,
+                            description: definition.getDescription(" ")
+                        };
+                    });
+                },
+
+                anchorId = function (category, topic) {
+                    return `manual-anchor-${category.value}-${topic.slug}`;
+                },
 
                 print = function () {
-                    let categoryAttr = WuxDef.GetAttribute("Popup_ManualCategory");
+                    let categories = getCategories();
                     let sidebarToggleAttr = WuxDef.GetAttribute("Popup_ManualSidebar");
-                    let sidebar = `<div class="wuxManualSidebar">${categories.map(category => categoryButton(categoryAttr, category)).join("")}</div>`;
+                    let sidebar = `<div class="wuxManualSidebar">${categories.map(category => sidebarCategory(category)).join("")}</div>`;
                     let content = `<div class="wuxManualContent">${categories.map(category => categoryContent(category)).join("")}</div>`;
 
                     return `${WuxSheetMain.CustomInput("hidden", sidebarToggleAttr, "wuxManualSidebarToggle-flag", ` value="0"`)}
                     <div class="wuxManualBody">
-                        ${WuxSheetMain.CustomInput("hidden", categoryAttr, "wuxManualCategory-Flag", ` value="${categories[0].value}"`)}
                         ${sidebar}
                         ${content}
                     </div>`;
                 },
 
                 printHeader = function () {
+                    let categories = getCategories();
+                    let categoryAttr = WuxDef.GetAttribute("Popup_ManualCategory");
                     let sidebarToggleAttr = WuxDef.GetAttribute("Popup_ManualSidebar");
-                    return `<div class="wuxManualSidebarToggle">
+                    let buttonRow = categories.map(category => categoryButton(categoryAttr, category)).join("");
+                    let options = categories.map(category => `<option value="${category.value}">${category.title}</option>`).join("");
+
+                    // The one true default for a brand-new character with this
+                    // attribute never set - has to be the FIRST element anywhere in
+                    // the popup carrying this name, same role .wuxPageDisplay-Flag
+                    // plays as the very first element in .wuxCharacterSheet for
+                    // attr_pag. Every other copy of this flag (categoryButton's
+                    // radios, the dropdown, each colocated content/sidebar flag)
+                    // just needs to stay in sync with whatever the real value ends
+                    // up being, not carry a default of its own.
+                    let defaultFlag = WuxSheetMain.CustomInput("hidden", categoryAttr, "wuxManualCategory-Flag",
+                        ` value="${categories.length > 0 ? categories[0].value : ""}"`);
+
+                    return `${defaultFlag}
+                    <div class="wuxManualSidebarToggle">
                         <input type="checkbox" name="${sidebarToggleAttr}"><span>&#9776;</span>
+                    </div>
+                    <div class="wuxManualNav">
+                        <div class="wuxManualNavButtonRow">${buttonRow}</div>
+                        <select class="wuxInput wuxManualNavDropdown" name="${categoryAttr}">${options}</select>
                     </div>`;
                 },
 
+                // No "wuxInput" class on this radio (unlike a plain form field) -
+                // .wuxInput sets its own width/height/padding/margin that this
+                // rule's absolute-positioning override (below) never touches, since
+                // it only overrides the properties it actually cares about. With
+                // both applied together, .wuxInput's leftover box-model values
+                // distorted this button's rendered size - same reason
+                // WuxSheetMain.Button's own checkboxes never carry that class either.
                 categoryButton = function (categoryAttr, category) {
                     return `<div class="wuxButton wuxManualCategoryButton">
-                        ${WuxSheetMain.CustomInput("radio", categoryAttr, "wuxInput", ` value="${category.value}"`)}<span>${category.title}</span>
+                        ${WuxSheetMain.CustomInput("radio", categoryAttr, "", ` value="${category.value}"`)}<span>${category.title}</span>
                     </div>`;
+                },
+
+                // Each target gets its OWN flag instance immediately in front of it -
+                // not one shared flag reaching in via general-sibling + descendant
+                // combinators - matching .wuxPageDisplay-Flag's proven convention
+                // (WCSS-Specialized.css/WCS-Sheet.html: 53 separate colocated
+                // instances, never one flag reaching across a wrapper into deeply
+                // nested descendants). All copies share the same attribute name, so
+                // Roll20 keeps them in sync regardless of which one is physically
+                // closest to what changed it.
+                sidebarCategory = function (category) {
+                    let categoryAttr = WuxDef.GetAttribute("Popup_ManualCategory");
+                    let links = category.topics.map(topic => `<a class="wuxManualSidebarLink" href="#${anchorId(category, topic)}">${topic.title}</a>`).join("");
+                    return `${WuxSheetMain.CustomInput("hidden", categoryAttr, "wuxManualCategory-Flag", ` value="0"`)}<div class="wuxManualSidebarCategory-${category.value}">${links}</div>`;
                 },
 
                 categoryContent = function (category) {
-                    return `<div class="wuxManualCategory-${category.value}">${entriesForCategory(category.value)}</div>`;
+                    let categoryAttr = WuxDef.GetAttribute("Popup_ManualCategory");
+                    let entries = category.topics.map(topic => entry(category, topic)).join("");
+                    return `${WuxSheetMain.CustomInput("hidden", categoryAttr, "wuxManualCategory-Flag", ` value="0"`)}<div class="wuxManualCategory-${category.value}">${entries}</div>`;
                 },
 
-                // Framework proof-of-concept entries - real content still needs to be
-                // written for the rest of the categories/terms this is meant to cover.
-                entriesForCategory = function (categoryValue) {
-                    switch (categoryValue) {
-                        case "Basics":
-                            return entry("Style Points", "Style Points are spent to learn and use Techniques from your Styles. Your current total and maximum are shown whenever you add a Technique from the catalog.")
-                                + entry("Perk Points", "Perk Points are spent on Perks, small standalone bonuses separate from your Styles and Techniques. Your current total and maximum are shown whenever you add a Perk from the catalog.");
-                        case "Advancement":
-                            return entry("Advancement Points (AP)", "Advancement Points are earned as your character gains XP, and can be spent on Jobs, Skills, Techniques, or transferred into Perks during Advancement.")
-                                + entry("Character Rank (CR)", "Character Rank represents your character's overall power level. It scales the base pool sizes for Attributes, Skills, Jobs, Knowledge, and Techniques as it increases.");
-                        case "Techniques":
-                            return entry("Techniques &amp; Variants", "Techniques are the actions your character can take, learned from Styles, Gear, or Jobs. Some Techniques offer Variants - alternate versions you can swap between once learned.")
-                                + entry("Action Types", "Every Technique has an Action Type (such as Swift, Quick, or Full) that determines how much of your turn it costs to use.");
-                    }
-                    return "";
-                },
-
-                entry = function (title, description) {
-                    return `${WuxSheetMain.Header2(title)}<div class="wuxDescription">${description}</div>`;
+                entry = function (category, topic) {
+                    let subheader = topic.subGroup !== "" ? WuxSheetMain.Subheader(topic.subGroup) : "";
+                    return `<div class="wuxHeader2" id="${anchorId(category, topic)}">${topic.title}</div>${subheader}<div class="wuxDescription">${topic.description}</div>`;
                 }
 
             return {
