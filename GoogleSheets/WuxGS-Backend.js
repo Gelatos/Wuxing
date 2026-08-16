@@ -998,6 +998,7 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerInspectPopupButtons();
             output += listenerFilterPopupButtons();
             output += listenerOpenManual();
+            output += listenerOpenManualForStatus();
             return output;
         },
         listenerOpenSubMenu = function () {
@@ -1222,6 +1223,25 @@ var PopupBuilder = PopupBuilder || (function () {
             let output = `WuxWorkerManual.OpenManual(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        // Character Overview's status effect "More Info" buttons (WuxGS-Base.js's
+        // openManualButton) - reuses each status definition's own _moreinfo
+        // attribute, same filter (group Status, presetStatus, not hasRanks) as
+        // the generator uses to decide which statuses get this button at all, so
+        // this only binds to attributes that actually exist in the HTML. Not
+        // gated on eventinfo.newValue like listenerOpenManual - this button has
+        // no other CSS tied to its checkbox anymore, so both the check and the
+        // matching uncheck are fine to treat as "open the Manual".
+        listenerOpenManualForStatus = function () {
+            let presetStatusDefs = WuxDef.Filter([new DatabaseFilterData("group", "Status")])
+                .filter(def => def.presetStatus && !def.hasRanks);
+            let groupVariableNames = presetStatusDefs.map(def => def.getVariable(WuxDef._moreinfo));
+            if (groupVariableNames.length === 0) {
+                return "";
+            }
+            let output = `WuxWorkerManual.OpenManualToCategory("GuideCat_StatusEffects")`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         }
     return {
         Print: print

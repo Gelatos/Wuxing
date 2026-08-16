@@ -12023,6 +12023,34 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         },
 
+                        // Opens the Manual to GuideCat_StatusEffects (Worker-Manual.js's
+                        // OpenManualToCategory, via the WuxGS-Backend.js listener bound to
+                        // this same attribute) instead of WuxSheetMain.MoreInfo's inline
+                        // toggle - status effects now have a real writeup in the Manual
+                        // (the same GuideCat_StatusEffects subGroup filter feeds both), so
+                        // there's no separate inline description to reveal here anymore.
+                        // Reuses the definition's own _moreinfo attribute rather than a new
+                        // one - it's still a single momentary per-definition trigger, just
+                        // wired to a different action.
+                        //
+                        // Deliberately NOT a fragment link to the entry's own anchor - tried
+                        // that (both nested-in and wrapping the checkbox via label[for]) and
+                        // confirmed in practice that browsers only ever run ONE of "follow
+                        // href" or "activate the other nested/associated control" per click,
+                        // never both, regardless of which one is nested inside which. A pure
+                        // :target-driven CSS reveal has its own dealbreaker too: since it
+                        // isn't tied to Popup_PopupActive, Exit can't clear it - the popup
+                        // would stay stuck open (CSS override still matching the unchanged
+                        // URL fragment) after leaving via one of these links. Landing on the
+                        // right category and using the sidebar TOC from there is the
+                        // reliable option this sheet can actually offer.
+                        openManualButton = function (definition) {
+                            return `<div class="wuxButton wuxRepeatingTechActionButton wuxMoreInfoButton">
+                            <input type="checkbox" name="${definition.getAttribute(WuxDef._moreinfo)}">
+                            <span>More Info...</span>
+                            </div>`;
+                        },
+
                         resources = function () {
                             let contents = "";
                             let titleDefinition = WuxDef.Get("Page_OverviewResources");
@@ -12054,14 +12082,15 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                                         return WuxSheetMain.Table.FlexTableGroup(
                                             WuxDefinition.BuildNumberLabelInput(def, def.getAttribute(), def.shortDescription));
                                     }
-                                    let notes = [];
-                                    if (def.endsOnRoundStart) notes.push("Ends on round start");
-                                    if (def.endsOnTrigger) notes.push("Ends when triggered");
-                                    let extraContent = notes.length > 0 ? WuxSheetMain.Desc(notes.join(" · ")) : "";
+                                    // Ends on round start/trigger notes dropped from here -
+                                    // now covered by the Manual's own richer description
+                                    // (ManualPopup.getTopics, GoogleSheets/WuxGS-Base.js),
+                                    // which uses StatusData.getDescriptions() to include
+                                    // that same "ends when..." sentence automatically.
                                     return WuxSheetMain.Table.FlexTableGroup(
                                         WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                             def.getAttribute(), WuxSheetMain.Header2(def.getTitle())) +
-                                        WuxSheetMain.MoreInfo(def, extraContent));
+                                        openManualButton(def));
                                 });
                                 contents += WuxSheetMain.MultiRowGroup(statusItems, WuxSheetMain.Table.FlexTable, 2);
                             }
@@ -13759,9 +13788,26 @@ var DisplayPopups = DisplayPopups || (function () {
                             slug: definition.fieldName,
                             title: definition.title,
                             subGroup: definition.subGroup,
-                            description: definition.getDescription(" ")
+                            descriptions: getDescriptions(definition)
                         };
                     });
+                },
+
+                // Status effects specifically go through StatusData.getDescriptions()
+                // (WAPI-Database.js) rather than the plain definition's own
+                // descriptions - StatusDefinitionData (what WuxDef.Get/Filter
+                // actually returns) carries the same raw descriptions array and the
+                // endsOnRoundStart/endsOnTrigger flags, but never runs them through
+                // getDescriptions() itself, so the auto-generated "This Status ends
+                // when it is triggered." rider sentence never made it into the
+                // definition - only StatusData (re-wrapping the same fields) knows
+                // how to add it. Every other group just uses its own descriptions
+                // array directly, same as before.
+                getDescriptions = function (definition) {
+                    let descriptions = definition.group === "Status"
+                        ? new StatusData(definition).getDescriptions()
+                        : definition.descriptions;
+                    return descriptions.filter(d => d !== "");
                 },
 
                 anchorId = function (category, topic) {
@@ -13844,7 +13890,8 @@ var DisplayPopups = DisplayPopups || (function () {
 
                 entry = function (category, topic) {
                     let subheader = topic.subGroup !== "" ? WuxSheetMain.Subheader(topic.subGroup) : "";
-                    return `<div class="wuxHeader2" id="${anchorId(category, topic)}">${topic.title}</div>${subheader}<div class="wuxDescription">${topic.description}</div>`;
+                    let descriptions = topic.descriptions.map(description => `<div class="wuxDescription">${description}</div>`).join("");
+                    return `<div class="wuxHeader2" id="${anchorId(category, topic)}">${topic.title}</div>${subheader}${descriptions}`;
                 }
 
             return {
@@ -14880,6 +14927,7 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerInspectPopupButtons();
             output += listenerFilterPopupButtons();
             output += listenerOpenManual();
+            output += listenerOpenManualForStatus();
             return output;
         },
         listenerOpenSubMenu = function () {
@@ -15104,6 +15152,25 @@ var PopupBuilder = PopupBuilder || (function () {
             let output = `WuxWorkerManual.OpenManual(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        // Character Overview's status effect "More Info" buttons (WuxGS-Base.js's
+        // openManualButton) - reuses each status definition's own _moreinfo
+        // attribute, same filter (group Status, presetStatus, not hasRanks) as
+        // the generator uses to decide which statuses get this button at all, so
+        // this only binds to attributes that actually exist in the HTML. Not
+        // gated on eventinfo.newValue like listenerOpenManual - this button has
+        // no other CSS tied to its checkbox anymore, so both the check and the
+        // matching uncheck are fine to treat as "open the Manual".
+        listenerOpenManualForStatus = function () {
+            let presetStatusDefs = WuxDef.Filter([new DatabaseFilterData("group", "Status")])
+                .filter(def => def.presetStatus && !def.hasRanks);
+            let groupVariableNames = presetStatusDefs.map(def => def.getVariable(WuxDef._moreinfo));
+            if (groupVariableNames.length === 0) {
+                return "";
+            }
+            let output = `WuxWorkerManual.OpenManualToCategory("GuideCat_StatusEffects")`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         }
     return {
         Print: print

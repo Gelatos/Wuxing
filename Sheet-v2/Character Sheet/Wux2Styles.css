@@ -2911,6 +2911,14 @@ button.wuxRepeatingTechActionButton.wuxMoreInfoButton span {
     color: #71B9DE;
 }
 
+/* Status effects on Character Overview (WuxGS-Base.js's resources) can render
+   a .wuxDescription note (e.g. "Ends when triggered") directly in front of
+   this button now that it's not tucked inside a collapsed .wuxMoreInfoBlock
+   - without this they render flush against each other with no gap. */
+div.wuxRepeatingTechActionButton.wuxMoreInfoButton {
+    margin-left: 6px;
+}
+
 div.wuxRepeatingTechActionButton.wuxMoreInfoButton:hover span,
 button.wuxRepeatingTechActionButton.wuxMoreInfoButton:hover span {
     color: #13a4f6;
