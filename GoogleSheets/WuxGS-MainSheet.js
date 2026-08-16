@@ -1438,7 +1438,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         // sibling, not an absolutely-positioned overlay) so it stretches to fill whatever
         // space is left next to the toggle, rather than being capped to some fixed width.
         buildNavRow = function (tabButtonRowContents, dropdownContents) {
-            return `<div class="wuxNavRow">${buildSidebarToggleButton()}${tabButtonRowContents}${dropdownContents}</div>`;
+            return `<div class="wuxNavRow">${buildSidebarToggleButton()}${buildManualOpenButton()}${tabButtonRowContents}${dropdownContents}</div>`;
         },
 
         // Below wuxNavCollapseWidth (see WCSS-Base.css), the individual tab buttons hide and
@@ -1480,6 +1480,15 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             // across the sidebar/nav, relying on this markup's own default was unreliable.
             return `<div class="wuxSidebarToggleButton">
             <input type="checkbox" name="${WuxDef.GetAttribute("Page_Sidebar")}"><span>&#9776;</span>
+            </div>`;
+        },
+
+        // Opens the Manual popup (Worker-Manual.js, via on(change:...) on this same
+        // attribute) - momentary trigger, not a toggle, so the worker resets it back to
+        // "0" after handling the click rather than this markup carrying any state.
+        buildManualOpenButton = function () {
+            return `<div class="wuxManualOpenButton">
+            <input type="checkbox" name="${WuxDef.GetAttribute("Popup_ManualOpen")}"><span>?</span>
             </div>`;
         },
 

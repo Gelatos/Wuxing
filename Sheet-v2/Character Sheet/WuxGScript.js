@@ -11571,7 +11571,7 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
         // sibling, not an absolutely-positioned overlay) so it stretches to fill whatever
         // space is left next to the toggle, rather than being capped to some fixed width.
         buildNavRow = function (tabButtonRowContents, dropdownContents) {
-            return `<div class="wuxNavRow">${buildSidebarToggleButton()}${tabButtonRowContents}${dropdownContents}</div>`;
+            return `<div class="wuxNavRow">${buildSidebarToggleButton()}${buildManualOpenButton()}${tabButtonRowContents}${dropdownContents}</div>`;
         },
 
         // Below wuxNavCollapseWidth (see WCSS-Base.css), the individual tab buttons hide and
@@ -11613,6 +11613,15 @@ var WuxSheetNavigation = WuxSheetNavigation || (function () {
             // across the sidebar/nav, relying on this markup's own default was unreliable.
             return `<div class="wuxSidebarToggleButton">
             <input type="checkbox" name="${WuxDef.GetAttribute("Page_Sidebar")}"><span>&#9776;</span>
+            </div>`;
+        },
+
+        // Opens the Manual popup (Worker-Manual.js, via on(change:...) on this same
+        // attribute) - momentary trigger, not a toggle, so the worker resets it back to
+        // "0" after handling the click rather than this markup carrying any state.
+        buildManualOpenButton = function () {
+            return `<div class="wuxManualOpenButton">
+            <input type="checkbox" name="${WuxDef.GetAttribute("Popup_ManualOpen")}"><span>?</span>
             </div>`;
         },
 
@@ -13503,6 +13512,7 @@ var DisplayPopups = DisplayPopups || (function () {
             let output = "";
             output += printInspectionPopup();
             output += printFilterPopup();
+            output += printManualPopup();
             return printBasePopupSheet(output);
         },
 
@@ -13531,6 +13541,10 @@ var DisplayPopups = DisplayPopups || (function () {
 
         printFilterPopup = function () {
             return buildBasePopup(WuxDef.GetAttribute("Popup_FilterPopupActive"), FilterPopup.Print(), FilterPopup.PrintHeader());
+        },
+
+        printManualPopup = function () {
+            return buildBasePopup(WuxDef.GetAttribute("Popup_ManualActive"), ManualPopup.Print(), ManualPopup.PrintHeader());
         },
 
         buildBasePopup = function (attribute, popupContents, popupHeaderContents) {
@@ -13699,6 +13713,79 @@ var DisplayPopups = DisplayPopups || (function () {
                 printClearFilterButton = function () {
                     let clearFilterDef = WuxDef.Get("Popup_ClearFilter");
                     return WuxSheetMain.Button(clearFilterDef.getAttribute(), `<span">${clearFilterDef.getTitle()}</span>`, "wuxPopupActionButton");
+                }
+
+            return {
+                Print: print,
+                PrintHeader: printHeader
+            }
+        }()),
+
+        // Flat category list of manual entries (game-term lookups/how-to-play info,
+        // eventually replacing the per-field "More Info" toggles - see WuxSheetMain.MoreInfo).
+        // Categories are plain local data rather than WuxDef entries since nothing outside
+        // this popup needs to reference them - only the popup's own open/close/active-category
+        // plumbing (Popup_Manual*) goes through the dictionary, same as every other popup here.
+        ManualPopup = ManualPopup || (function () {
+            'use strict';
+
+            var
+                categories = [
+                    { value: "Basics", title: "Basics" },
+                    { value: "Advancement", title: "Advancement" },
+                    { value: "Techniques", title: "Techniques" }
+                ],
+
+                print = function () {
+                    let categoryAttr = WuxDef.GetAttribute("Popup_ManualCategory");
+                    let sidebarToggleAttr = WuxDef.GetAttribute("Popup_ManualSidebar");
+                    let sidebar = `<div class="wuxManualSidebar">${categories.map(category => categoryButton(categoryAttr, category)).join("")}</div>`;
+                    let content = `<div class="wuxManualContent">${categories.map(category => categoryContent(category)).join("")}</div>`;
+
+                    return `${WuxSheetMain.CustomInput("hidden", sidebarToggleAttr, "wuxManualSidebarToggle-flag", ` value="0"`)}
+                    <div class="wuxManualBody">
+                        ${WuxSheetMain.CustomInput("hidden", categoryAttr, "wuxManualCategory-Flag", ` value="${categories[0].value}"`)}
+                        ${sidebar}
+                        ${content}
+                    </div>`;
+                },
+
+                printHeader = function () {
+                    let sidebarToggleAttr = WuxDef.GetAttribute("Popup_ManualSidebar");
+                    return `<div class="wuxManualSidebarToggle">
+                        <input type="checkbox" name="${sidebarToggleAttr}"><span>&#9776;</span>
+                    </div>`;
+                },
+
+                categoryButton = function (categoryAttr, category) {
+                    return `<div class="wuxButton wuxManualCategoryButton">
+                        ${WuxSheetMain.CustomInput("radio", categoryAttr, "wuxInput", ` value="${category.value}"`)}<span>${category.title}</span>
+                    </div>`;
+                },
+
+                categoryContent = function (category) {
+                    return `<div class="wuxManualCategory-${category.value}">${entriesForCategory(category.value)}</div>`;
+                },
+
+                // Framework proof-of-concept entries - real content still needs to be
+                // written for the rest of the categories/terms this is meant to cover.
+                entriesForCategory = function (categoryValue) {
+                    switch (categoryValue) {
+                        case "Basics":
+                            return entry("Style Points", "Style Points are spent to learn and use Techniques from your Styles. Your current total and maximum are shown whenever you add a Technique from the catalog.")
+                                + entry("Perk Points", "Perk Points are spent on Perks, small standalone bonuses separate from your Styles and Techniques. Your current total and maximum are shown whenever you add a Perk from the catalog.");
+                        case "Advancement":
+                            return entry("Advancement Points (AP)", "Advancement Points are earned as your character gains XP, and can be spent on Jobs, Skills, Techniques, or transferred into Perks during Advancement.")
+                                + entry("Character Rank (CR)", "Character Rank represents your character's overall power level. It scales the base pool sizes for Attributes, Skills, Jobs, Knowledge, and Techniques as it increases.");
+                        case "Techniques":
+                            return entry("Techniques &amp; Variants", "Techniques are the actions your character can take, learned from Styles, Gear, or Jobs. Some Techniques offer Variants - alternate versions you can swap between once learned.")
+                                + entry("Action Types", "Every Technique has an Action Type (such as Swift, Quick, or Full) that determines how much of your turn it costs to use.");
+                    }
+                    return "";
+                },
+
+                entry = function (title, description) {
+                    return `${WuxSheetMain.Header2(title)}<div class="wuxDescription">${description}</div>`;
                 }
 
             return {

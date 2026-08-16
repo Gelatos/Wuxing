@@ -8649,6 +8649,199 @@ input[type=hidden].wuxFilterPopupSelectContainer-flag[value="on"] + .wuxFilterPo
 }
 
 /*========================================
+    Manual Popup
+========================================*/
+
+/* Nav-row trigger button (one per page, alongside .wuxSidebarToggleButton -
+   see WCSS-Base.css) - same invisible-checkbox-plus-styled-span convention,
+   just its own color so it doesn't read as "the sidebar toggle". */
+.wuxManualOpenButton {
+    position: relative;
+    flex: 0 0 auto;
+    min-height: 20px;
+    width: 30px;
+    margin-right: 5px;
+}
+
+.wuxManualOpenButton input[type=checkbox] {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    min-height: 20px;
+
+    z-index: 9999;
+    opacity: 0;
+}
+
+.wuxManualOpenButton span {
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    text-align: center;
+    color: #1d1e1f;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+
+    background-color: #71B9DE;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.wuxManualOpenButton input[type=checkbox]:hover + span {
+    color: #FFFFFF;
+    background: #1a6db5;
+}
+
+/* Hidden by default (wide screens show the sidebar inline) - only shown by
+   the media query below, where it toggles .wuxManualSidebar as an overlay. */
+.wuxManualSidebarToggle {
+    display: none;
+    position: relative;
+    flex: 0 0 auto;
+    width: 30px;
+    min-height: 20px;
+    margin-right: 10px;
+}
+
+.wuxManualSidebarToggle input[type=checkbox] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    z-index: 2;
+}
+
+.wuxManualSidebarToggle span {
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    text-align: center;
+    color: #1d1e1f;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+
+    background-color: #aae1ff;
+    border-radius: 5px;
+}
+
+.wuxManualBody {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+    width: calc(100% - 30px);
+    margin: 0 15px 15px 15px;
+    gap: 15px;
+}
+
+.wuxManualSidebar {
+    flex: 0 0 180px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.wuxManualCategoryButton {
+    min-width: 0;
+    height: auto;
+}
+
+/* .wuxButton's own hidden-input rule (WCSS-Base.css) only covers
+   input[type=checkbox] - these are radios (one shared field picks the
+   category), so they need the same absolute/invisible treatment repeated
+   here or the native radio circle shows through above the label. */
+.wuxManualCategoryButton input[type=radio] {
+    position: absolute;
+    display: block;
+    opacity: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+}
+
+.wuxManualCategoryButton span {
+    display: block;
+    padding: 6px 10px;
+
+    text-align: left;
+    cursor: pointer;
+
+    background: #ebf7ff;
+    border-radius: 5px;
+}
+
+.wuxManualCategoryButton input[type=radio]:checked + span {
+    color: #FFFFFF;
+    background: #71B9DE;
+}
+
+.wuxManualContent {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-y: auto;
+}
+
+/* .wuxHeader2/.wuxDescription default to light-on-dark colors (meant for the
+   sheet's dark background) - unreadable on this popup's white background,
+   same fix the item/filter popups apply to their own content. */
+.wuxManualContent .wuxHeader2 {
+    color: #000000;
+}
+
+.wuxManualContent .wuxDescription {
+    color: #3e3e3e;
+}
+
+.wuxManualContent > div {
+    display: none;
+}
+
+input[type=hidden].wuxManualCategory-Flag[value="Basics"] ~ .wuxManualContent .wuxManualCategory-Basics,
+input[type=hidden].wuxManualCategory-Flag[value="Advancement"] ~ .wuxManualContent .wuxManualCategory-Advancement,
+input[type=hidden].wuxManualCategory-Flag[value="Techniques"] ~ .wuxManualContent .wuxManualCategory-Techniques {
+    display: block;
+}
+
+/* Sidebar disappears below this width (framework requirement) - the header's
+   .wuxManualSidebarToggle takes over, showing it as a floating overlay panel
+   instead of a permanent column, the same way it behaves on wide screens
+   otherwise. Same breakpoint as the item/filter popup's own column collapse
+   above, for consistency within this popup family. */
+@media (max-width: 699px) {
+    .wuxManualSidebarToggle {
+        display: block;
+    }
+
+    .wuxManualSidebar {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        width: 180px;
+        padding: 10px;
+
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    input[type=hidden].wuxManualSidebarToggle-flag[value="on"] ~ .wuxManualBody .wuxManualSidebar {
+        display: flex;
+    }
+}
+
+/*========================================
     Affinity Icons
 ========================================*/
 

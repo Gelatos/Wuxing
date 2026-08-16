@@ -602,6 +602,9 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                     case WuxDef.GetTitle("Popup_CustomStylesFilterName"):
                         WuxWorkerFilterPopup.Close();
                         break;
+                    case WuxDef.GetTitle("Popup_ManualName"):
+                        WuxWorkerManual.Close();
+                        break;
                 }
             });
             attributeHandler.run();
