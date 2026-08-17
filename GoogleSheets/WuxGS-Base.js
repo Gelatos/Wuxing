@@ -1858,12 +1858,22 @@ var DisplayPopups = DisplayPopups || (function () {
                     let explicitList = guideCat.getDescription("");
                     let topicDefinitions;
                     if (explicitList !== "") {
+                        // Order is deliberate here (e.g. Character Creation's Origin
+                        // -> Jobs -> Attributes -> ... flow) - left exactly as listed,
+                        // never sorted.
                         topicDefinitions = explicitList.split(";")
                             .map(name => name.trim())
                             .filter(name => name !== "")
                             .map(name => WuxDef.Get(name));
                     } else if (guideCat.subGroup !== "") {
-                        topicDefinitions = WuxDef.Filter(new DatabaseFilterData("group", guideCat.subGroup));
+                        // Unlike an explicit list, a subGroup pull (e.g. Status Effects'
+                        // whole "Status" group) has no curated order to preserve - just
+                        // whatever order the dictionary happens to store them in - so
+                        // alphabetized by title for both this array's consumers,
+                        // categoryContent (main page) and sidebarCategory (TOC), which
+                        // both read the same category.topics this feeds (getCategories).
+                        topicDefinitions = WuxDef.Filter(new DatabaseFilterData("group", guideCat.subGroup))
+                            .sort((a, b) => a.title.localeCompare(b.title));
                     } else {
                         topicDefinitions = [];
                     }
