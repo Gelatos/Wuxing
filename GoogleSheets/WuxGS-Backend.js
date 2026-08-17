@@ -1231,7 +1231,11 @@ var PopupBuilder = PopupBuilder || (function () {
         // this only binds to attributes that actually exist in the HTML. Not
         // gated on eventinfo.newValue like listenerOpenManual - this button has
         // no other CSS tied to its checkbox anymore, so both the check and the
-        // matching uncheck are fine to treat as "open the Manual".
+        // matching uncheck are fine to treat as "open the Manual". hasEvents is
+        // now true (was false) - with several statuses sharing one listener,
+        // eventinfo.sourceAttribute is the only way to tell which one actually
+        // fired, so OpenManualWithDefinitions gets just that status's own
+        // definition name via the switch below instead of the whole category.
         listenerOpenManualForStatus = function () {
             let presetStatusDefs = WuxDef.Filter([new DatabaseFilterData("group", "Status")])
                 .filter(def => def.presetStatus && !def.hasRanks);
@@ -1239,9 +1243,12 @@ var PopupBuilder = PopupBuilder || (function () {
             if (groupVariableNames.length === 0) {
                 return "";
             }
-            let output = `WuxWorkerManual.OpenManualToCategory("GuideCat_StatusEffects")`;
+            let cases = presetStatusDefs.map(def =>
+                `case "${def.getVariable(WuxDef._moreinfo)}": WuxWorkerManual.OpenManualWithDefinitions(["${def.name}"]); break;`
+            ).join(" ");
+            let output = `switch (eventinfo.sourceAttribute) { ${cases} }`;
 
-            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         }
     return {
         Print: print

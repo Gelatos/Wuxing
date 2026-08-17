@@ -99,27 +99,25 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth150");
                         },
 
-                        // Opens the Manual to GuideCat_StatusEffects (Worker-Manual.js's
-                        // OpenManualToCategory, via the WuxGS-Backend.js listener bound to
-                        // this same attribute) instead of WuxSheetMain.MoreInfo's inline
-                        // toggle - status effects now have a real writeup in the Manual
-                        // (the same GuideCat_StatusEffects subGroup filter feeds both), so
-                        // there's no separate inline description to reveal here anymore.
-                        // Reuses the definition's own _moreinfo attribute rather than a new
-                        // one - it's still a single momentary per-definition trigger, just
-                        // wired to a different action.
+                        // Opens the Manual straight to its reserved "More Info" page
+                        // (Worker-Manual.js's OpenManualWithDefinitions, via the
+                        // WuxGS-Backend.js listener bound to this same attribute),
+                        // showing ONLY this one status's own writeup - sidebar-free,
+                        // nothing else on the page to scroll past. Reuses the
+                        // definition's own _moreinfo attribute rather than a new one -
+                        // still a single momentary per-definition trigger, just wired to
+                        // a different action.
                         //
-                        // Deliberately NOT a fragment link to the entry's own anchor - tried
-                        // that (both nested-in and wrapping the checkbox via label[for]) and
-                        // confirmed in practice that browsers only ever run ONE of "follow
-                        // href" or "activate the other nested/associated control" per click,
-                        // never both, regardless of which one is nested inside which. A pure
-                        // :target-driven CSS reveal has its own dealbreaker too: since it
-                        // isn't tied to Popup_PopupActive, Exit can't clear it - the popup
-                        // would stay stuck open (CSS override still matching the unchanged
-                        // URL fragment) after leaving via one of these links. Landing on the
-                        // right category and using the sidebar TOC from there is the
-                        // reliable option this sheet can actually offer.
+                        // This replaced an earlier attempt to jump to
+                        // GuideCat_StatusEffects and land on the specific entry via a
+                        // same-page fragment anchor - confirmed in practice that browsers
+                        // only ever run ONE of "follow href" or "activate the other
+                        // nested/associated control" per click, never both, regardless of
+                        // which one is nested inside which, and a pure :target-driven CSS
+                        // reveal isn't tied to Popup_PopupActive so Exit could never
+                        // clear it. Showing just the requested definition(s) on their own
+                        // page sidesteps the whole scrolling problem instead of solving
+                        // it.
                         openManualButton = function (definition) {
                             return `<div class="wuxButton wuxRepeatingTechActionButton wuxMoreInfoButton">
                             <input type="checkbox" name="${definition.getAttribute(WuxDef._moreinfo)}">
@@ -1832,6 +1830,16 @@ var DisplayPopups = DisplayPopups || (function () {
             var
                 cachedCategories,
 
+                // Reserved Popup_ManualCategory value for the "More Info" pseudo-page
+                // (moreInfoContent below) - never a real GuideCat definition name, so
+                // it deliberately never appears in getCategories()'s array and can't be
+                // reached via the header nav/dropdown. Worker-Manual.js's
+                // OpenManualWithDefinitions sets Popup_ManualCategory to this exact
+                // string, so it has to match here verbatim - the two files have no
+                // shared constant to enforce that (generator vs. worker are separate
+                // execution contexts), only this comment pair.
+                moreInfoCategoryValue = "MoreInfo",
+
                 getCategories = function () {
                     if (cachedCategories == undefined) {
                         let guideCategories = WuxDef.Filter(new DatabaseFilterData("group", "GuideCat"));
@@ -1892,13 +1900,19 @@ var DisplayPopups = DisplayPopups || (function () {
 
                 print = function () {
                     let categories = getCategories();
+                    let categoryAttr = WuxDef.GetAttribute("Popup_ManualCategory");
                     let sidebarToggleAttr = WuxDef.GetAttribute("Popup_ManualSidebar");
                     let sidebar = `<div class="wuxManualSidebar">${categories.map(category => sidebarCategory(category)).join("")}</div>`;
-                    let content = `<div class="wuxManualContent">${categories.map(category => categoryContent(category)).join("")}</div>`;
+                    let content = `<div class="wuxManualContent">${categories.map(category => categoryContent(category)).join("")}${moreInfoContent()}</div>`;
 
+                    // Colocated flag for the sidebar column itself (not just its
+                    // per-category contents, which sidebarCategory already gates) -
+                    // lets .wuxManualContent claim the full width while the More Info
+                    // page is active instead of leaving the empty sidebar column's
+                    // space reserved.
                     return `${WuxSheetMain.CustomInput("hidden", sidebarToggleAttr, "wuxManualSidebarToggle-flag", ` value="0"`)}
                     <div class="wuxManualBody">
-                        ${sidebar}
+                        ${WuxSheetMain.CustomInput("hidden", categoryAttr, "wuxManualCategory-Flag", ` value="0"`)}${sidebar}
                         ${content}
                     </div>`;
                 },
@@ -1907,8 +1921,8 @@ var DisplayPopups = DisplayPopups || (function () {
                     let categories = getCategories();
                     let categoryAttr = WuxDef.GetAttribute("Popup_ManualCategory");
                     let sidebarToggleAttr = WuxDef.GetAttribute("Popup_ManualSidebar");
-                    let buttonRow = categories.map(category => categoryButton(categoryAttr, category)).join("");
-                    let options = categories.map(category => `<option value="${category.value}">${category.title}</option>`).join("");
+                    let buttonRow = categories.map(category => categoryButton(categoryAttr, category)).join("") + moreInfoCategoryButton(categoryAttr);
+                    let options = categories.map(category => `<option value="${category.value}">${category.title}</option>`).join("") + moreInfoCategoryOption();
 
                     // The one true default for a brand-new character with this
                     // attribute never set - has to be the FIRST element anywhere in
@@ -1938,6 +1952,36 @@ var DisplayPopups = DisplayPopups || (function () {
                 // both applied together, .wuxInput's leftover box-model values
                 // distorted this button's rendered size - same reason
                 // WuxSheetMain.Button's own checkboxes never carry that class either.
+                // Not part of getCategories()'s array (moreInfoCategoryValue is a
+                // reserved value, never a real GuideCat), so it's appended
+                // separately in printHeader rather than folding into that map -
+                // never selectable as a starting point (WuxWorkerManual never lets
+                // a user manually navigate to it, only OpenManualWithDefinitions
+                // sets it), so unlike the real category buttons this one is
+                // hidden by default and only shown while it's already the active
+                // category (WCSS-Footer.css) - a "you are here" indicator, not a
+                // nav target. Own colocated flag, same convention as every other
+                // per-target flag in this popup.
+                moreInfoCategoryButton = function (categoryAttr) {
+                    return `${WuxSheetMain.CustomInput("hidden", categoryAttr, "wuxManualCategory-Flag", ` value="0"`)}<div class="wuxButton wuxManualCategoryButton wuxManualMoreInfoCategoryButton">
+                        ${WuxSheetMain.CustomInput("radio", categoryAttr, "", ` value="${moreInfoCategoryValue}"`)}<span>More Info</span>
+                    </div>`;
+                },
+
+                // Narrow-screen dropdown equivalent of moreInfoCategoryButton above -
+                // same hidden-unless-active treatment, but <option> can only be a
+                // child of <select>, so it can't carry its own colocated flag input
+                // the way every other target in this popup does. Reaches off
+                // printHeader's own defaultFlag instead (general-sibling + descendant
+                // into .wuxManualNav select, WCSS-Footer.css) - same established
+                // pattern the narrow-screen sidebar overlay toggle already uses here,
+                // and defaultFlag is kept in sync with the real value like every
+                // other instance of this attribute, so it's a valid read of the
+                // current category despite not being adjacent.
+                moreInfoCategoryOption = function () {
+                    return `<option class="wuxManualMoreInfoCategoryOption" value="${moreInfoCategoryValue}">More Info</option>`;
+                },
+
                 categoryButton = function (categoryAttr, category) {
                     return `<div class="wuxButton wuxManualCategoryButton">
                         ${WuxSheetMain.CustomInput("radio", categoryAttr, "", ` value="${category.value}"`)}<span>${category.title}</span>
@@ -1968,6 +2012,54 @@ var DisplayPopups = DisplayPopups || (function () {
                     let subheader = topic.subGroup !== "" ? WuxSheetMain.Subheader(topic.subGroup) : "";
                     let descriptions = topic.descriptions.map(description => `<div class="wuxDescription">${description}</div>`).join("");
                     return `<div class="wuxHeader2" id="${anchorId(category, topic)}">${topic.title}</div>${subheader}${descriptions}`;
+                },
+
+                // The "More Info" page (moreInfoCategoryValue above) - a reserved
+                // pseudo-category outside the GuideCat-driven set, gated by the exact
+                // same colocated-flag mechanism as categoryContent's real categories,
+                // but with no matching sidebarCategory()/wuxManualSidebarCategory-*
+                // entry anywhere, so .wuxManualSidebar renders nothing while it's
+                // active (per-value flag mismatch = nothing shown, same reason a
+                // brand-new GuideCat value with no sidebar div would also show blank -
+                // no extra CSS needed to enforce "never add a sidebar for this").
+                // Unlike every other category, its content isn't known until runtime -
+                // Worker-Manual.js's OpenManualWithDefinitions writes it into the
+                // GuideMoreInfoValues repeating section right before switching
+                // Popup_ManualCategory to this value - so this just prints that
+                // repeater's single row template (moreInfoEntry), which Roll20 repeats
+                // for however many rows the worker created. Inlined instead of reusing
+                // one of this file's other buildRepeater helpers - those are private
+                // vars scoped to different IIFEs (InspectionPopup's, etc.) and aren't
+                // reachable from here.
+                moreInfoContent = function () {
+                    let categoryAttr = WuxDef.GetAttribute("Popup_ManualCategory");
+                    let repeatingVariable = WuxDef.Get("GuideMoreInfoValues").getVariable();
+                    let repeaterHtml = `<div class="wuxNoRepControl wuxRepeatingFlexSection wuxManualMoreInfoRepeater">
+                        <fieldset class="${repeatingVariable}">
+                            ${moreInfoEntry()}
+                        </fieldset>
+                    </div>`;
+                    return `${WuxSheetMain.CustomInput("hidden", categoryAttr, "wuxManualCategory-Flag", ` value="0"`)}<div class="wuxManualCategory-${moreInfoCategoryValue}">${repeaterHtml}</div>`;
+                },
+
+                // Row template for GuideMoreInfoValues - Roll20 rescopes these bare
+                // field references to whichever row is currently rendering (same
+                // <fieldset class="repeating_x"> rescoping every other catalog
+                // repeater in this file relies on). GuideInfoDesc holds every
+                // description the worker joined with "\n\n" (getDescriptions/StatusData
+                // rider sentences included, same source entry() uses for the normal
+                // topic view) rendered as one bound span rather than entry()'s separate
+                // wuxDescription divs per description - span.wuxDescription already has
+                // white-space:pre-line (WCSS-Base.css), so the "\n\n" breaks still read
+                // as separate paragraphs without needing a fixed number of bound slots
+                // for a per-definition description count that's only known at runtime.
+                moreInfoEntry = function () {
+                    let titleAttr = WuxDef.GetAttribute("Popup_GuideInfoTitle");
+                    let subGroupAttr = WuxDef.GetAttribute("Popup_GuideInfoSubGroup");
+                    let descAttr = WuxDef.GetAttribute("Popup_GuideInfoDesc");
+                    return `<div class="wuxHeader2"><span name="${titleAttr}"></span></div>
+                    <div class="wuxSubheader"><span name="${subGroupAttr}"></span></div>
+                    <span class="wuxDescription" name="${descAttr}"></span>`;
                 }
 
             return {

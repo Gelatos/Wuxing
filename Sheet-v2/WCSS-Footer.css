@@ -1055,13 +1055,93 @@ select.wuxManualNavDropdown {
    shape instead of one flag reaching across .wuxManualContent/.wuxManualSidebar
    into a deeply nested descendant. */
 input[type=hidden].wuxManualCategory-Flag[value="GuideCat_CharacterCreation"] + .wuxManualCategory-GuideCat_CharacterCreation,
-input[type=hidden].wuxManualCategory-Flag[value="GuideCat_StatusEffects"] + .wuxManualCategory-GuideCat_StatusEffects {
+input[type=hidden].wuxManualCategory-Flag[value="GuideCat_StatusEffects"] + .wuxManualCategory-GuideCat_StatusEffects,
+input[type=hidden].wuxManualCategory-Flag[value="MoreInfo"] + .wuxManualCategory-MoreInfo {
+    display: block;
+}
+
+/* moreInfoCategoryButton/moreInfoCategoryOption (WuxGS-Base.js) - unlike the
+   real category buttons above, these are hidden by default and only shown
+   while "MoreInfo" is already the active category - a "you are here"
+   indicator for the page opened via a More Info link, not a normal nav
+   target (nothing else ever sets Popup_ManualCategory to this value except
+   OpenManualWithDefinitions, Worker-Manual.js). The button gets its own
+   colocated flag like every other target; the dropdown <option> can't (only
+   <option>/<optgroup> are valid children of <select>), so it reaches off
+   printHeader's defaultFlag instead - same general-sibling-into-.wuxManualNav
+   shape as the narrow-screen sidebar overlay toggle below, not the banned
+   "~ *" wildcard-sibling shape (see WCS-Sheet.html's CSS parsing history). */
+.wuxManualMoreInfoCategoryButton,
+.wuxManualMoreInfoCategoryOption {
+    display: none;
+}
+
+input[type=hidden].wuxManualCategory-Flag[value="MoreInfo"] + .wuxManualMoreInfoCategoryButton {
+    display: inline-block;
+}
+
+input[type=hidden].wuxManualCategory-Flag[value="MoreInfo"] ~ .wuxManualNav select.wuxManualNavDropdown .wuxManualMoreInfoCategoryOption {
     display: block;
 }
 
 input[type=hidden].wuxManualCategory-Flag[value="GuideCat_CharacterCreation"] + .wuxManualSidebarCategory-GuideCat_CharacterCreation,
 input[type=hidden].wuxManualCategory-Flag[value="GuideCat_StatusEffects"] + .wuxManualSidebarCategory-GuideCat_StatusEffects {
     display: flex;
+}
+
+/* "More Info" (moreInfoCategoryValue, GoogleSheets/WuxGS-Base.js) never gets a
+   .wuxManualSidebarCategory-MoreInfo entry above - .wuxManualSidebar > div's own
+   default (display:none) already leaves the sidebar column empty while it's
+   active. The toggle button that would open that empty column on narrow
+   screens is hidden here too - visibility (not display) so the nav row's
+   layout doesn't shift switching to/from this page. Same colocated-flag
+   adjacency as the rules above; this particular flag instance
+   (printHeader's defaultFlag) sits directly in front of .wuxManualSidebarToggle
+   (WuxGS-Base.js). */
+input[type=hidden].wuxManualCategory-Flag[value="MoreInfo"] + .wuxManualSidebarToggle {
+    visibility: hidden;
+}
+
+/* The sidebar column itself (not just its per-category contents, gated above) -
+   collapses the whole reserved-width column so .wuxManualContent (flex: 1 1
+   auto, same row) expands to fill the freed space instead of leaving an empty
+   180px gap next to the full-width More Info page. This flag instance (print,
+   WuxGS-Base.js) sits directly in front of .wuxManualSidebar itself, a
+   different colocated instance than the per-category ones above. */
+input[type=hidden].wuxManualCategory-Flag[value="MoreInfo"] + .wuxManualSidebar {
+    display: none;
+}
+
+/* Vertical stacked list, not the wrapped card grid .wuxRepeatingFlexSection
+   otherwise lays out (WCSS-Base.css) - this repeater prints full writeups one
+   under another (moreInfoEntry, GoogleSheets/WuxGS-Base.js), not fixed-width
+   cards. */
+.wuxManualMoreInfoRepeater .repcontainer {
+    flex-direction: column;
+}
+
+.wuxManualMoreInfoRepeater .repcontainer > .repitem {
+    flex: 0 0 auto;
+    width: 100%;
+    margin-bottom: 12px;
+    border: none;
+    background: none;
+}
+
+/* .wuxSubheader is display:inline (WCSS-Base.css) - normal Manual topics still
+   land it on its own line because it's followed by a block-level
+   div.wuxDescription there. This page's description is a bound
+   span.wuxDescription instead (needed for its own white-space:pre-line rule,
+   WCSS-Base.css - see moreInfoEntry, GoogleSheets/WuxGS-Base.js), which is only
+   inline-block, so without this it flows on the same line as the subheader. */
+.wuxManualMoreInfoRepeater .wuxSubheader {
+    display: block;
+}
+
+/* GuideInfo_SubGroup is blank for most definitions (status effects have no
+   subGroup) - collapses the row rather than leaving an empty subtitle gap. */
+.wuxManualMoreInfoRepeater .wuxSubheader:has(span:empty) {
+    display: none;
 }
 
 /* Sidebar disappears below this width (framework requirement) - the header's
