@@ -1615,8 +1615,7 @@ var DisplayPopups = DisplayPopups || (function () {
             let output = "";
             output += printInspectionPopup();
             output += printFilterPopup();
-            output += printManualPopup();
-            return printBasePopupSheet(output);
+            return printBasePopupSheet(output) + printManualPopupOverlay();
         },
 
         printBasePopupSheet = function (contents) {
@@ -1646,8 +1645,33 @@ var DisplayPopups = DisplayPopups || (function () {
             return buildBasePopup(WuxDef.GetAttribute("Popup_FilterPopupActive"), FilterPopup.Print(), FilterPopup.PrintHeader());
         },
 
-        printManualPopup = function () {
-            return buildBasePopup(WuxDef.GetAttribute("Popup_ManualActive"), ManualPopup.Print(), ManualPopup.PrintHeader());
+        // The Manual is its own independent overlay, not nested inside the shared
+        // Popup_PopupActive wrapper printBasePopupSheet builds for the Inspect/Filter
+        // popups - its own colocated wuxPopupOverlay/backdrop-click, gated by its own
+        // Popup_ManualActive flag alone. Opening it (e.g. a technique's More Info
+        // button while an Inspection Popup is open) never has to touch
+        // Popup_PopupActive/Popup_InspectPopupActive, and closing it can't cascade
+        // into closing whatever's underneath - it just layers on top and, once
+        // closed, reveals whatever was already there untouched. WCSS-Footer.css gives
+        // wuxManualPopupOverlay/wuxManualPopup a higher z-index than the shared
+        // overlay so it renders above Inspect/Filter when both happen to be open.
+        // Title is a static string (WuxDef.GetTitle, not a bound span) since unlike
+        // Popup_PopupName - shared across several differently-titled popup types -
+        // the Manual's own header text never changes.
+        printManualPopupOverlay = function () {
+            let manualActiveAttr = WuxDef.GetAttribute("Popup_ManualActive");
+            let contents = `<div class="wuxPopupOverlay wuxManualPopupOverlay">
+                <input type="checkbox" class="wuxInput wuxPopupOverlayClose" name="${manualActiveAttr}" value="0" />
+                <div class="wuxPopup wuxManualPopup">
+                    <div class="wuxPopupHeader">
+                        <span class="wuxPopupInnerHeader">${WuxDef.GetTitle("Popup_ManualName")}</span>
+                        ${ManualPopup.PrintHeader()}
+                        ${WuxSheetMain.Button(manualActiveAttr, "Exit", "wuxPopupClose")}
+                    </div>
+                    ${ManualPopup.Print()}
+                </div>
+            </div>`;
+            return WuxSheetMain.HiddenField(manualActiveAttr, contents);
         },
 
         buildBasePopup = function (attribute, popupContents, popupHeaderContents) {

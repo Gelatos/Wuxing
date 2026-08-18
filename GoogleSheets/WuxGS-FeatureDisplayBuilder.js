@@ -97,6 +97,44 @@ class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
         return "";
     }
 
+    // Technique-scoped override of BaseFeatureDisplayBuilder.printTooltip -
+    // items (BaseItemDisplayBuilder) keep the original hover-tooltip version
+    // untouched, since only technique tooltips are being converted to Manual
+    // buttons. moreInfoFieldName is a per-technique-instance, per-section
+    // trigger attribute (see TechniqueDisplayBuilder's call sites, which mint
+    // one via this.displayData.definition.getAttribute("_moreinfo_<section>")
+    // - an arbitrary suffix string, not a pre-registered WuxDef modifier, same
+    // mechanism WuxDef._moreinfo itself already relies on). Static technique
+    // content is fixed at generation time, so the listener that opens the
+    // Manual (WuxGS-Backend.js) embeds this exact title/description as
+    // literals rather than reading a live attribute - no round-trip needed.
+    printTooltip (name, tooltipName, descriptions, moreInfoFieldName) {
+        if (descriptions.length > 0) {
+            return this.printMoreInfoButton(name, moreInfoFieldName);
+        }
+        else {
+            return this.printSpan(name);
+        }
+    }
+    // WuxSheetMain.Button's <div>-based markup - same one RankUp/RankDown/the
+    // status More Info button already use with no issues. An earlier attempt
+    // to wrap this in a <span> instead (on the theory that a nested <div>
+    // inside <strong>/<span> breaks parsing) turned out to be solving the
+    // wrong problem - HTML doesn't actually auto-correct that nesting, and
+    // the <span> version broke the trigger checkbox's own hiding (a stray
+    // white box appeared behind the button text). The Field methods that
+    // embed this (printTraitsField, etc.) are responsible for not nesting it
+    // inside an inline-only wrapper themselves.
+    // "wuxManualButton", not "wuxTooltipButton" - that name is already a
+    // large, unrelated pre-existing class (a roll-template chat-message
+    // hover-tooltip-button system, WCSS-Specialized.css) with its own
+    // hover/color/content-reveal rules, which this was silently inheriting
+    // and fighting against (that's what caused the orange hover color and
+    // other styling that no override seemed to fully fix).
+    printMoreInfoButton (name, moreInfoFieldName) {
+        return WuxSheetMain.Button(moreInfoFieldName, name, "wuxManualButton");
+    }
+
     printHeaderBlock() {
         return this.printHeaderBlockField(
             `<div class="wuxFeatureHeaderDisplayInfoBlock">
@@ -147,8 +185,18 @@ class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
     }
 
     printTraits() {}
+    // title used to always be plain text ("Traits"), rendered bold+the
+    // trailing "." via a <strong> wrapper ("Traits. {contents}"). Now that
+    // title is usually a whole More Info button (a <div>, via
+    // WuxSheetMain.Button), it's placed directly instead - a <div> nested
+    // inside <strong> is semantically off even though browsers render it
+    // fine, and the "." would've glued onto the end of a button rather than
+    // a word. Bold is now applied via .wuxFeatureHeaderInfoTraits's own CSS
+    // (WCSS-Specialized.css), matching how every other section header here
+    // (Core/Check/Will Break/Action) gets its bold from its own container
+    // class rather than a native <strong> tag.
     printTraitsField (title, contents) {
-        return `<div class="wuxFeatureHeaderInfoTraits"><strong>${title}.</strong> ${contents}</div>`;
+        return `<div class="wuxFeatureHeaderInfoTraits">${title} ${contents}</div>`;
     }
 
     printFlavorText() {}
@@ -194,9 +242,15 @@ class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
     }
 
     printEnhancementEffects() {}
+    // Title_TechEnhancement is a fixed, technique-independent definition (the
+    // same writeup for every technique's Enhancement section) - reuses the
+    // existing status-effect More Info mechanism directly
+    // (WuxWorkerManual.OpenManualWithDefinitions via the definition's own
+    // _moreinfo attribute) instead of the per-technique embedded-content path,
+    // since there's nothing per-technique to embed.
     printEnhancementEffectsField(contents) {
         let enhancementDef = WuxDef.Get("Title_TechEnhancement");
-        let title = this.printTooltip(enhancementDef.getTitle(), enhancementDef.getTitle(), enhancementDef.descriptions);
+        let title = this.printMoreInfoButton(enhancementDef.getTitle(), enhancementDef.getAttribute(WuxDef._moreinfo));
         return `<div class="wuxFeatureHeaderInfoEffect-Enhance">
             <input type="hidden" class="wuxFeatureHeader-flag" value="Enhance">
             <div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">${title}</span></div>
@@ -224,7 +278,8 @@ class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
     }
     printRange() {
         return this.printRangeField(
-            this.printTooltip(this.displayData.range, "Range", this.displayData.targetDesc));
+            this.printTooltip(this.displayData.range, "Range", this.displayData.targetDesc,
+                this.displayData.definition.getAttribute("_moreinfo_range")));
     }
     printTargetType() {
         if (this.displayData.targetType == "") {
@@ -255,7 +310,8 @@ class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
             return "";
         }
         return this.printTraitsField(
-            this.printTooltip("Traits", "Traits", this.displayData.traitsDesc),
+            this.printTooltip("Traits", "Traits", this.displayData.traitsDesc,
+                this.displayData.definition.getAttribute("_moreinfo_traits")),
             this.printSpan(this.displayData.traits));
     }
     printFlavorText() {
@@ -269,16 +325,21 @@ class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
             return "";
         }
         return this.printCoreEffectsField(
-            this.printTooltip("Effects", "Core Effects", this.displayData.coreEffect.effectTypeDesc),
+            this.printTooltip("Effects", "Core Effects", this.displayData.coreEffect.effectTypeDesc,
+                this.displayData.definition.getAttribute("_moreinfo_core")),
             this.printSpan(this.displayData.getCoreEffects("\n"))
         );
     }
+    // Trait_OnEnter is a fixed, technique-independent definition (same
+    // writeup regardless of which technique it's shown on) - reuses the
+    // status-effect More Info mechanism directly (definition's own _moreinfo
+    // attribute) instead of the per-technique embedded-content path.
     printOnEnter() {
         if (!this.displayData.isOnEnter) {
             return "";
         }
         let onEnterDef = WuxDef.Get("Trait_OnEnter");
-        return this.printOnEnterField(this.printTooltip("On Enter Effects", "On Enter Effects", onEnterDef.descriptions));
+        return this.printOnEnterField(this.printMoreInfoButton("On Enter Effects", onEnterDef.getAttribute(WuxDef._moreinfo)));
     }
 
     printCheckEffects() {
@@ -287,7 +348,8 @@ class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
         }
         return this.printCheckEffectsField(
             `<input type="hidden" class="wuxFeatureHeader-flag" value="${this.displayData.coreDefense}">`,
-            this.printTooltip(this.displayData.checkType, "Skill Check Effects", this.displayData.checkEffect.effectTypeDesc),
+            this.printTooltip(this.displayData.checkType, "Skill Check Effects", this.displayData.checkEffect.effectTypeDesc,
+                this.displayData.definition.getAttribute("_moreinfo_check")),
             this.printSpan(this.displayData.getCheckEffects("\n"))
         );
     }
@@ -302,7 +364,8 @@ class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
             return "";
         }
         return this.printWillBreakEffectsField(
-            this.printTooltip("Will Break Effects", "Will Break Effects", this.displayData.willBreakEffect.effectTypeDesc),
+            this.printTooltip("Will Break Effects", "Will Break Effects", this.displayData.willBreakEffect.effectTypeDesc,
+                this.displayData.definition.getAttribute("_moreinfo_willbreak")),
             this.printSpan(this.displayData.getWillBreakEffects("\n"))
         );
     }
@@ -364,10 +427,20 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
     printSpanActionTypeAttribute (attribute, suffix) {
         return `<span name="${this.getActionTypeAttribute(attribute, suffix)}"></span>`;
     }
-    printAttributeTooltip (name, tooltipName, fieldName) {
-        let descriptionData = `<span class="wuxDescription" name="${fieldName}"></span>`;
+    // name: the button's own visible label (sometimes itself a live
+    // <span name="..."> for a value that changes per-technique, e.g. the
+    // check line's "Body vs. Evasion" text). fieldName: the row's own
+    // already-computed content attribute (e.g. TechTraits_max) - still used
+    // to gate button-vs-plain-text (HiddenSpanFieldToggle), same as when this
+    // held an inline tooltip, even though the content itself is no longer
+    // rendered here. moreInfoFieldName: the new per-row trigger attribute the
+    // button is bound to - clicking it fires a shared listener
+    // (WuxGS-Backend.js) that reads fieldName's current value and forwards it
+    // to the Manual popup (WuxWorkerManual.OpenManualWithContent,
+    // Worker-Manual.js) instead of showing a hover tooltip.
+    printAttributeTooltip (name, fieldName, moreInfoFieldName) {
         return WuxSheetMain.HiddenSpanFieldToggle(fieldName,
-            this.printTooltipField(name, tooltipName, descriptionData),
+            this.printMoreInfoButton(name, moreInfoFieldName),
             `${name}`);
     }
 
@@ -414,7 +487,8 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         return this.printActionTypeField(
             `<input type="hidden" class="wuxFeatureHeader-flag" name="${this.getActionTypeAttribute("TechActionName")}">`,
             this.printAttributeTooltip(`<span name="${this.getActionTypeAttribute("TechActionName")}"></span>`,
-                "Action", this.getActionTypeAttribute("TechActionName", WuxDef._max))
+                this.getActionTypeAttribute("TechActionName", WuxDef._max),
+                this.getActionTypeAttribute("TechActionName", WuxDef._moreinfo))
         )
     }
     printRange() {
@@ -422,7 +496,9 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         return WuxSheetMain.HiddenField(fieldName,
             this.printRangeField(
                 // Target description is piggybacked onto TechTargetType's max slot.
-                this.printAttributeTooltip(`<span name="${fieldName}"></span>`, "Range", this.getActionTypeAttribute("TechTargetType", WuxDef._max))
+                this.printAttributeTooltip(`<span name="${fieldName}"></span>`,
+                    this.getActionTypeAttribute("TechTargetType", WuxDef._max),
+                    this.getActionTypeAttribute("TechTargetType", WuxDef._moreinfo))
             )
         );
     }
@@ -448,7 +524,8 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         let fieldName = this.getActionTypeAttribute("TechTraits");
         return WuxSheetMain.HiddenField(fieldName,
             this.printTraitsField(
-                this.printAttributeTooltip("Traits", "Traits", this.getActionTypeAttribute("TechTraits", WuxDef._max)),
+                this.printAttributeTooltip("Traits", this.getActionTypeAttribute("TechTraits", WuxDef._max),
+                    this.getActionTypeAttribute("TechTraits", WuxDef._moreinfo)),
                 this.printSpan(fieldName)
             )
         );
@@ -461,17 +538,22 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         let fieldName = this.getActionTypeAttribute("TechCoreEffect");
         return WuxSheetMain.HiddenField(fieldName,
             this.printCoreEffectsField(
-                this.printAttributeTooltip("Effects", "Core Effects",
-                    this.getActionTypeAttribute("TechCoreEffect", WuxDef._max)),
+                this.printAttributeTooltip("Effects",
+                    this.getActionTypeAttribute("TechCoreEffect", WuxDef._max),
+                    this.getActionTypeAttribute("TechCoreEffect", WuxDef._moreinfo)),
                 this.printSpan(fieldName)
             )
         );
     }
+    // Trait_OnEnter is a fixed, technique-independent definition (same
+    // writeup regardless of which technique it's shown on) - reuses the
+    // status-effect More Info mechanism directly (definition's own _moreinfo
+    // attribute) instead of the per-technique embedded-content path.
     printOnEnter() {
         let fieldName = this.getActionTypeAttribute("TechOnEnter");
         let onEnterDef = WuxDef.Get("Trait_OnEnter");
         return WuxSheetMain.HiddenField(fieldName,
-            this.printOnEnterField(this.printTooltip("On Enter Effects", "On Enter Effects", onEnterDef.descriptions)));
+            this.printOnEnterField(this.printMoreInfoButton("On Enter Effects", onEnterDef.getAttribute(WuxDef._moreinfo))));
     }
 
     // The hidden flag input and the visible title span both bind to
@@ -487,8 +569,9 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         return WuxSheetMain.HiddenField(fieldName,
             this.printCheckEffectsField(
                 `<input type="hidden" class="wuxFeatureHeader-flag" name="${this.getActionTypeAttribute("TechCoreDefense", WuxDef._max)}">`,
-                this.printAttributeTooltip(this.printSpanActionTypeAttribute("TechCoreDefense", WuxDef._max), "Skill Check Effects",
-                    this.getActionTypeAttribute("TechCheckEffect", WuxDef._max)),
+                this.printAttributeTooltip(this.printSpanActionTypeAttribute("TechCoreDefense", WuxDef._max),
+                    this.getActionTypeAttribute("TechCheckEffect", WuxDef._max),
+                    this.getActionTypeAttribute("TechCheckEffect", WuxDef._moreinfo)),
                 this.printSpan(fieldName)
             )
         );
@@ -502,8 +585,9 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
         let fieldName = this.getActionTypeAttribute("TechWillBreakEffect");
         return WuxSheetMain.HiddenField(fieldName,
             this.printWillBreakEffectsField(
-                this.printAttributeTooltip("Will Break Effects", "Will Break Effects",
-                    this.getActionTypeAttribute("TechWillBreakEffect", WuxDef._max)),
+                this.printAttributeTooltip("Will Break Effects",
+                    this.getActionTypeAttribute("TechWillBreakEffect", WuxDef._max),
+                    this.getActionTypeAttribute("TechWillBreakEffect", WuxDef._moreinfo)),
                 this.printSpan(fieldName)
             )
         );

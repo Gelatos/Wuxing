@@ -10285,9 +10285,7 @@ class TechniqueDisplayData {
                 this.checkType = `DC ${technique.coreDefense} ${this.printSkillCheck(technique, characterAttributeHandler)}`;
                 checkDef = WuxDef.Get("Trait_SkillCheck-DC");
             }
-            let checkDesc = [];
-            checkDesc.push(`[${checkDef.getTitle()}]`);
-            checkDesc.push(checkDef.descriptions.join(". "));
+            let checkDesc = [checkDef];
 
             if (technique.impacts.includes("Truehit")) {
                 let trueHitDef = WuxDef.Get("Trait_Truehit");
@@ -10296,12 +10294,7 @@ class TechniqueDisplayData {
             if (technique.impacts.includes("Accurate")) {
                 let accurateDef = WuxDef.Get("Trait_Accurate");
                 this.checkType += ` - ${accurateDef.getTitle()}`;
-
-                if (checkDesc.length > 0) {
-                    checkDesc.push("");
-                }
-                checkDesc.push(`[${accurateDef.getTitle()}]`);
-                checkDesc.push(accurateDef.descriptions.join(". "));
+                checkDesc.push(accurateDef);
             }
             techDisplayData.checkEffect = new TechniqueEffectDisplayData(checkedEffects, technique, technique.coreDefense, checkDesc, characterAttributeHandler);
         }
@@ -10310,11 +10303,7 @@ class TechniqueDisplayData {
             techDisplayData.endEffectDesc = def.descriptions.join("") + technique.endEffectConditionEffect;
         }
         if (technique.willBreakEffect != undefined) {
-            let checkDef = WuxDef.Get("WillBreak");
-            let willbreakDesc = [];
-            willbreakDesc.push(`${checkDef.getTitle()}`);
-            willbreakDesc.push(checkDef.descriptions.join(". "));
-            techDisplayData.willBreakEffect = new TechniqueEffectDisplayData([technique.willBreakEffect], technique, "", willbreakDesc, characterAttributeHandler);
+            techDisplayData.willBreakEffect = new TechniqueEffectDisplayData([technique.willBreakEffect], technique, "", [WuxDef.Get("WillBreak")], characterAttributeHandler);
         }
         if (enhancingEffects.length > 0) {
             techDisplayData.enhanceEffect = new TechniqueEffectDisplayEnhancmenteData(enhancingEffects, technique, characterAttributeHandler);
@@ -10422,7 +10411,24 @@ class TechniqueDisplayData {
         }
         return this.enhanceEffect.effects.join(join);
     }
-    
+
+    // Structured counterpart to getCoreEffectTooltips/getCheckEffectTooltips/
+    // getWillBreakEffectTooltips - one {title, subGroup, description} entry
+    // per definition involved (Damage type, Status effects applied, the
+    // skill-check/DC/Accurate/WillBreak definitions, etc.), instead of one
+    // joined "[Title]"-bracketed string. Used by the Manual popup so each
+    // concept shows as its own clean entry (Worker-Actions.js's
+    // openTechniqueMoreInfo) rather than the compact inline format the old
+    // hover tooltip needed.
+    getCoreEffectTooltipDefinitions() {
+        return this.coreEffect == "" ? [] : this.coreEffect.effectTypeDescDefinitions;
+    }
+    getCheckEffectTooltipDefinitions() {
+        return this.checkEffect == "" ? [] : this.checkEffect.effectTypeDescDefinitions;
+    }
+    getWillBreakEffectTooltipDefinitions() {
+        return this.willBreakEffect == "" ? [] : this.willBreakEffect.effectTypeDescDefinitions;
+    }
 
     getRollTemplate(addTechnique) {
         let output = `&{template:technique} {{Displayname=${this.displayname}}}`;
@@ -10545,6 +10551,13 @@ class BaseTechniqueEffectDisplayData {
     constructor() {
         this.effectType = "";
         this.effectTypeDesc = [];
+        // Parallel to effectTypeDesc, but structured ({title, subGroup,
+        // description} per definition instead of one big joined "[Title]"-
+        // bracketed string) - lets a consumer like the Manual popup show each
+        // concept as its own clean entry instead of the compact inline
+        // bracket format the old hover tooltip needed. Populated in the same
+        // place effectTypeDesc is (addDefintionToEffectDescription below).
+        this.effectTypeDescDefinitions = [];
         this.effectDescription = "";
         this.focusType = "";
         this.evasionDefense = "";
@@ -11115,11 +11128,26 @@ class BaseTechniqueEffectDisplayData {
         }
         this.effectTypeDesc.push(`[${definition.getTitle()}]`);
         this.effectTypeDesc = this.effectTypeDesc.concat(definition.descriptions);
+        this.effectTypeDescDefinitions.push({
+            title: definition.getTitle(),
+            subGroup: definition.group,
+            description: definition.descriptions.filter(d => d !== "").join("\n\n")
+        });
     }
 }
 
 class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
 
+    // effectDefinitions (optional): raw WuxDef definitions to seed
+    // effectTypeDesc/effectTypeDescDefinitions with, before any effect-specific
+    // formatting runs - e.g. setEffects (below) passes the check/DC definition
+    // (and Truehit/Accurate, when the technique has those impacts) for
+    // checkEffect, and the WillBreak definition for willBreakEffect. Routed
+    // through addDefintionToEffectDescription (same as every other definition
+    // added while formatting effects) so both representations - the joined
+    // bracket-header string and the structured per-definition list - stay in
+    // sync from a single call site, instead of each seed definition needing
+    // to be hand-formatted into a matching string here.
     constructor(techniqueEffects, technique, coreDefense, effectDefinitions, characterAttributeHandler) {
         super();
         this.characterAttributeHandler = characterAttributeHandler;
@@ -11128,7 +11156,7 @@ class TechniqueEffectDisplayData extends BaseTechniqueEffectDisplayData {
         }
         this.effects = [];
         if (effectDefinitions != undefined) {
-            this.effectTypeDesc = this.effectTypeDesc.concat(effectDefinitions);
+            effectDefinitions.forEach((definition) => this.addDefintionToEffectDescription(definition));
         }
 
         this.setEvasionDefense(technique, coreDefense);
@@ -18682,11 +18710,11 @@ var WuxDef = WuxDef || (function() {
                 "linkedGroups":[],
                 "isResource":""},
             "TechRankUp":{"name":"TechRankUp","fieldName":"techrankup","group":"Untyped","descriptions":[""],
-                "variable":"techrankup","title":"","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
+                "variable":"techrankup{0}{1}","title":"","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
             "TechRankDown":{"name":"TechRankDown","fieldName":"techrankdown","group":"Untyped","descriptions":[""],
-                "variable":"techrankdown","title":"","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
+                "variable":"techrankdown{0}{1}","title":"","subGroup":"","abbreviation":"","baseFormula":"","modifiers":"","formula":{"formulaString":"","workers":[]},
                 "linkedGroups":[],
                 "isResource":""},
             "TechDisplayName":{"name":"TechDisplayName","fieldName":"techdisplayname","group":"Untyped","descriptions":[""],

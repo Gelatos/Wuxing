@@ -552,6 +552,245 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         attributeHandler.run();
     }
 
+    // Reached from the "More Info" buttons that replaced every technique
+    // repeater row's hover tooltips (Range/Traits/Core Effects/Check
+    // Effects/Will Break/Action - GoogleSheets/WuxGS-FeatureDisplayBuilder.js).
+    // repeaterId defaults to the live FormeTechniques repeater, but the
+    // generator's listener (WuxGS-Backend.js's listenerOpenTechniqueMoreInfo)
+    // always passes it explicitly - confirmed every technique repeater
+    // (RepeatingFormeTech, the technique catalog/Job Techniques popup's
+    // TechPopupValues, RepeatingStyles, RepeatingPerks) builds its rows with
+    // the same "Action" base definition (Worker-InspectPopup.js:469,1123,
+    // Worker-Styles.js:754), so a single TechniqueDataAttributeHandler("Action")
+    // works for all of them - only the repeater name differs. eventinfo.sourceAttribute
+    // carries both which row was clicked and which section's button it was
+    // (e.g. ..._techtraits_moreinfo vs ..._techcoreeffect_moreinfo), so one
+    // shared listener per repeater dispatches every section's button on every
+    // row to this single handler. The content is already sitting in that
+    // row's own "_max" slot (written by setTechniqueInfo/TechniqueDisplayData
+    // the last time the row was built) - this just forwards it to the Manual,
+    // nothing recomputed here.
+    const openTechniqueMoreInfo = function (eventinfo, repeaterId) {
+        // Roll20 marks eventinfo.sourceType "sheetworker" (not "player") when a
+        // change comes from another sheet worker's setAttrs() rather than a real
+        // click - rewriting this same row's fields in bulk (rank change/variant
+        // swap both go through setTechniqueInfo, WJS-Service.js, via
+        // addRepeatingSectionRowUpdate) fires change events across the row,
+        // including this button's own trigger, even though setTechniqueInfo
+        // never explicitly writes it. Only an actual click has sourceType
+        // "player", so that's checked alongside the "on" transition below.
+        if (eventinfo.sourceType !== "player" || eventinfo.newValue !== "on") {
+            return;
+        }
+        let repeater = new WorkerRepeatingSectionHandler(repeaterId || "RepeatingFormeTech");
+        let rowId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+        let attributeHandler = new WorkerAttributeHandler();
+        let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attributeHandler, "Action");
+        techniqueAttributeHandler.setRepeaterData(repeater, rowId);
+
+        // labelAttribute/labelSuffix (when set) point at the button's own
+        // live visible text - e.g. Action's button shows TechActionName's
+        // base slot ("Swift - 1/Turn"), not the "Action" title. labelText
+        // covers the one section whose button text is just a fixed string
+        // (Traits). The three effect-type sections (Core/Check/Will Break)
+        // deliberately have neither set, so the default below falls through
+        // to their own attribute's base slot - the effect's actual resolved
+        // text ("You gain 1 ranks in the Burst Status"), not the generic
+        // button label ("Effects"/"Will Break Effects") or the check line
+        // ("Body vs. Evasion") - see each section's printAttributeTooltip
+        // call in TechniqueRepeaterDisplayBuilder for what name each button
+        // actually renders, and WJS-Service.js for how the base slot (vs.
+        // _max) holds the effect text itself vs. its tooltip breakdown.
+        // extraLabelAttribute (Range only): the target style span
+        // (printTargetType, TechniqueRepeaterDisplayBuilder) sits next to the
+        // Range button but isn't part of it - combined here into one header,
+        // "{range} - {targetStyle}" (e.g. "1 - One Target"), since on the
+        // card itself the two already read as one unit.
+        let sections = [
+            {attribute: "TechActionName", title: "Action"},
+            {attribute: "TechTargetType", title: "Range", labelAttribute: "TechRange", extraLabelAttribute: "TechTargetType"},
+            {attribute: "TechTraits", title: "Traits"},
+            {attribute: "TechCoreEffect", title: "Core Effects"},
+            {attribute: "TechCheckEffect", title: "Skill Check Effects"},
+            {attribute: "TechWillBreakEffect", title: "Will Break Effects"}
+        ];
+        let section = sections.find((s) => techniqueAttributeHandler.getVariable(s.attribute, WuxDef._moreinfo) == eventinfo.sourceAttribute);
+        if (section == undefined) {
+            return;
+        }
+
+        let nameVar = techniqueAttributeHandler.getVariable("TechName");
+        let trueNameVar = techniqueAttributeHandler.getVariable("TechTrueName");
+        let rankVar = techniqueAttributeHandler.getVariable("TechRank");
+        let contentVar = techniqueAttributeHandler.getVariable(section.attribute, WuxDef._max);
+        let labelVar = section.labelText == undefined
+            ? techniqueAttributeHandler.getVariable(section.labelAttribute || section.attribute, section.labelSuffix)
+            : undefined;
+        let extraLabelVar = section.extraLabelAttribute != undefined
+            ? techniqueAttributeHandler.getVariable(section.extraLabelAttribute)
+            : undefined;
+        attributeHandler.addMod([nameVar, trueNameVar, rankVar, contentVar]);
+        if (labelVar != undefined) {
+            attributeHandler.addMod(labelVar);
+        }
+        if (extraLabelVar != undefined) {
+            attributeHandler.addMod(extraLabelVar);
+        }
+        attributeHandler.addUpdate(eventinfo.sourceAttribute, "0");
+        attributeHandler.addFinishCallback(function (attrHandler) {
+            let techniqueName = attrHandler.parseString(nameVar);
+            let trueName = attrHandler.parseString(trueNameVar);
+            let rank = attrHandler.parseInt(rankVar, 0);
+            let label = labelVar != undefined ? attrHandler.parseString(labelVar) : section.labelText;
+            if (extraLabelVar != undefined) {
+                label = `${label} - ${attrHandler.parseString(extraLabelVar)}`;
+            }
+            let isEffectSection = section.attribute == "TechCoreEffect" || section.attribute == "TechCheckEffect" || section.attribute == "TechWillBreakEffect";
+            // For the three effect-type sections, the old bracket-crammed
+            // breakdown (getXEffectTooltips) is dropped entirely in favor of
+            // getEffectExplanationEntries' clean, separate entries below -
+            // Action/Range/Traits don't have a structured equivalent yet, so
+            // they keep showing their own "_max" slot text as-is.
+            // A literal "" here doesn't reliably clear this field's earlier
+            // value in Roll20 (same class of issue as the project's established
+            // "never use \"\" as an empty sentinel" rule for hidden-field flags -
+            // confirmed by a previous More Info click's leftover text staying
+            // visible under a later click's title/subgroup that correctly
+            // updated). A single space is a genuine value change, so it
+            // actually overwrites the old text, and reads as blank.
+            let description = isEffectSection ? " " : attrHandler.parseString(contentVar);
+            let entries = [{
+                title: label,
+                subGroup: `${techniqueName} - ${section.title}`,
+                description: description
+            }];
+            WuxWorkerManual.OpenManualWithContent(entries.concat(getEffectExplanationEntries(trueName, section.attribute, rank)));
+        });
+        attributeHandler.run();
+    };
+
+    // "On Enter Effects"/Enhancement header buttons (WuxGS-Backend.js's
+    // listenerOpenTechniqueFixedMoreInfo) - the button points at one fixed,
+    // technique-independent definition (Trait_OnEnter/Title_TechEnhancement),
+    // but still renders inside each technique's own repeating row, so the
+    // generator now binds it per repeater/row like openTechniqueMoreInfo above
+    // instead of as a bare global attribute. That means eventinfo.sourceAttribute
+    // here is the full row-qualified name (e.g. "...-XXXX_ttl-techenhancement_
+    // moreinfo"), not the bare "ttl-techenhancement_moreinfo" the two fixed
+    // definitions' own getVariable(_moreinfo) computes - matched with endsWith
+    // rather than equality. Resets its own trigger back to "0" after dispatch,
+    // same reason openTechniqueMoreInfo does - so it can be clicked again
+    // without an intervening uncheck, and doesn't sit "on" for some other
+    // row-touch event to pick back up later.
+    const openTechniqueFixedMoreInfo = function (eventinfo) {
+        if (eventinfo.newValue !== "on") {
+            return;
+        }
+        let defs = [WuxDef.Get("Trait_OnEnter"), WuxDef.Get("Title_TechEnhancement")];
+        let definition = defs.find((def) => eventinfo.sourceAttribute.endsWith(def.getVariable(WuxDef._moreinfo)));
+        if (definition == undefined) {
+            return;
+        }
+        let attributeHandler = new WorkerAttributeHandler();
+        attributeHandler.addUpdate(eventinfo.sourceAttribute, "0");
+        attributeHandler.run();
+        WuxWorkerManual.OpenManualWithDefinitions([definition.name]);
+    };
+
+    // For the three effect-type sections (Core/Check/Will Break), explains
+    // every concept involved as its own clean {title, subGroup, description}
+    // entry instead of one bracket-crammed string - both the definitions the
+    // effect text itself is built from (Damage type, Status effects applied,
+    // the skill-check/DC/Accurate/WillBreak definitions - TechniqueDisplayData.
+    // getCoreEffectTooltipDefinitions/getCheckEffectTooltipDefinitions/
+    // getWillBreakEffectTooltipDefinitions, WAPI-Database.js) and any
+    // character stat the effect's own formula references (e.g. Jing,
+    // Potency). GuideMoreInfoValues (the Manual's "MoreInfo" page) already
+    // supports printing several entries at once, the same mechanism
+    // openManualWithDefinitions uses for showing one status's writeup.
+    // Action/Range/Traits don't have a structured (non-bracket-string)
+    // equivalent yet, so they're skipped (sectionAttribute won't match any
+    // branch below).
+    // rank: WuxTechs.Get always returns a fresh technique at rank 0 (the base
+    // data, WJS-TechDef.js) - rank is applied at runtime via setRank, never
+    // baked into the lookup itself. Without re-applying the row's actual
+    // current rank here, TechniqueEffect.getEffects()'s rank>1 enhancement
+    // merge (WAPI-Database.js) never runs, so any stat (e.g. Potency) that
+    // only enters an effect's formula through that merge - rather than being
+    // in the base formula from rank 1 - silently never shows up here, even
+    // though the card's own display text (built from a rank-correct technique
+    // instance) shows it fine.
+    const getEffectExplanationEntries = function (techniqueName, sectionAttribute, rank) {
+        let technique = WuxTechs.Get(techniqueName);
+        if (technique == undefined) {
+            return [];
+        }
+        technique.setRank(rank);
+
+        // Formula references are grabbed BEFORE constructing TechniqueDisplayData
+        // below, not after - TechniqueDisplayData.setEffects (WAPI-Database.js)
+        // builds enhanceEffect last, and TechniqueEffectDisplayEnhancmenteData.
+        // importEffectData reassigns effect.formula in place (to the
+        // enhancement's own, often-empty formula) for every effect that's both
+        // check/core-gated AND enhancing (e.g. a Damage effect with
+        // enhancing:"1") - a real, shared effect object mutation, not a copy.
+        // Reading effect.formula fresh AFTER that constructor runs (the
+        // original order here) meant this always saw the already-overwritten,
+        // typically workers:[] formula instead of the real one, silently
+        // dropping any stat (e.g. Potency) the base formula referenced. Once
+        // captured into this array, the reference is unaffected by that later
+        // reassignment on the effect object itself.
+        let formulas = [];
+        if (sectionAttribute == "TechCoreEffect" || sectionAttribute == "TechCheckEffect") {
+            // "" = a core/free effect, "Core" = gated behind the technique's
+            // skill check - same split TechniqueDisplayData.setEffects uses
+            // (WAPI-Database.js) to sort effects into coreEffect vs. checkEffect.
+            let wantedDefense = sectionAttribute == "TechCoreEffect" ? "" : "Core";
+            technique.getEffects().iterate(function (effect) {
+                if (effect.defense == wantedDefense) {
+                    formulas.push(effect.formula);
+                }
+            });
+        } else if (sectionAttribute == "TechWillBreakEffect" && technique.willBreakEffect != undefined) {
+            formulas.push(technique.willBreakEffect.formula);
+        }
+
+        let displayData = new TechniqueDisplayData(technique);
+        let conceptEntries = [];
+        if (sectionAttribute == "TechCoreEffect") {
+            conceptEntries = displayData.getCoreEffectTooltipDefinitions();
+        } else if (sectionAttribute == "TechCheckEffect") {
+            conceptEntries = displayData.getCheckEffectTooltipDefinitions();
+        } else if (sectionAttribute == "TechWillBreakEffect" && technique.willBreakEffect != undefined) {
+            conceptEntries = displayData.getWillBreakEffectTooltipDefinitions();
+        }
+
+        let definitions = new Dictionary();
+        formulas.forEach(function (formula) {
+            formula.workers.forEach(function (worker) {
+                worker.definitionName.forEach(function (definitionName) {
+                    if (definitionName == "" || definitions.has(definitionName)) {
+                        return;
+                    }
+                    let definition = WuxDef.Get(definitionName);
+                    if (definition != undefined && definition.descriptions.length > 0) {
+                        definitions.add(definitionName, definition);
+                    }
+                });
+            });
+        });
+        let statEntries = definitions.keys.map(function (key) {
+            let definition = definitions.get(key);
+            return {
+                title: definition.getTitle(),
+                subGroup: "Stat",
+                description: definition.descriptions.filter(d => d !== "").join("\n\n")
+            };
+        });
+
+        return conceptEntries.concat(statEntries);
+    };
+
     return {
         UpdateAllActionsFromMenu: updateAllActionsFromMenu,
         UpdateAllFormeActions: updateAllFormeActions,
@@ -571,6 +810,8 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         UpdateTechniqueChangeVisibility: updateTechniqueChangeVisibility,
         TriggerBuilderActionUpdate: triggerBuilderActionUpdate,
         OnEnterActionsPage: onEnterActionsPage,
+        OpenTechniqueMoreInfo: openTechniqueMoreInfo,
+        OpenTechniqueFixedMoreInfo: openTechniqueFixedMoreInfo,
     };
 }());
 

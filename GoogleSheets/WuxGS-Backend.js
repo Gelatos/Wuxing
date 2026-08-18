@@ -998,7 +998,10 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerInspectPopupButtons();
             output += listenerFilterPopupButtons();
             output += listenerOpenManual();
+            output += listenerCloseManual();
             output += listenerOpenManualForStatus();
+            output += listenerOpenTechniqueMoreInfo();
+            output += listenerOpenTechniqueFixedMoreInfo();
             return output;
         },
         listenerOpenSubMenu = function () {
@@ -1063,7 +1066,7 @@ var PopupBuilder = PopupBuilder || (function () {
         },
         listenerClosePopup = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Popup_PopupActive")}`];
-            let output = `WuxWorkerGeneral.ClosePopup()`;
+            let output = `WuxWorkerGeneral.ClosePopup(eventinfo)`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
@@ -1224,6 +1227,19 @@ var PopupBuilder = PopupBuilder || (function () {
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
         },
+        // The Manual is its own independent popup (WuxGS-Base.js's
+        // printManualPopupOverlay), not part of the shared Popup_PopupActive
+        // overlay/listenerClosePopup dispatch Inspect/Filter use - its Exit button
+        // and backdrop-click both write directly to Popup_ManualActive, same
+        // convention as those popups' own Popup_XPopupActive flags, so this just
+        // watches that attribute directly instead of going through a shared name
+        // dispatch.
+        listenerCloseManual = function () {
+            let groupVariableNames = [WuxDef.GetVariable("Popup_ManualActive")];
+            let output = `WuxWorkerManual.Close(eventinfo)`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+        },
         // Character Overview's status effect "More Info" buttons (WuxGS-Base.js's
         // openManualButton) - reuses each status definition's own _moreinfo
         // attribute, same filter (group Status, presetStatus, not hasRanks) as
@@ -1249,6 +1265,71 @@ var PopupBuilder = PopupBuilder || (function () {
             let output = `switch (eventinfo.sourceAttribute) { ${cases} }`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        // FormeTechniques' technique tooltips (Range/Traits/Core Effects/Check
+        // Effects/Will Break/Action - GoogleSheets/WuxGS-FeatureDisplayBuilder.js)
+        // are now More Info buttons instead of hover tooltips, each bound to a
+        // per-row, per-section _moreinfo trigger minted off that section's own
+        // content-holding definition (TechTraits, TechCoreEffect, etc.) - see
+        // TechniqueRepeaterDisplayBuilder.printAttributeTooltip. One shared
+        // listener per repeater covers every row and every section at once;
+        // WuxWorkerActions.OpenTechniqueMoreInfo (Worker-Actions.js) reads
+        // eventinfo.sourceAttribute to find both. gated=true (like every other
+        // momentary-checkbox trigger here) since the handler itself resets the
+        // clicked attribute back to "0" once done, and that reset would
+        // otherwise re-fire this same listener a second time.
+        // Every technique repeater confirmed to share the same "Action" base
+        // definition (TechPopupValues - the technique catalog/Job Techniques
+        // inspection popup; RepeatingStyles - learned styles; RepeatingPerks -
+        // Worker-Styles.js:754/Worker-InspectPopup.js:469,1123 all construct
+        // their own TechniqueDataAttributeHandler with "Action" too), so one
+        // loop covers all four with the same dispatch shape used elsewhere in
+        // this file for multi-repeater technique buttons (e.g.
+        // listenerSwapItemTechniqueVariant's repeaterId param).
+        listenerOpenTechniqueMoreInfo = function () {
+            let repeaters = ["RepeatingFormeTech", "TechPopupValues", "RepeatingStyles", "RepeatingPerks"];
+            let baseDef = WuxDef.Get("Action");
+            let sections = ["TechActionName", "TechTargetType", "TechTraits", "TechCoreEffect", "TechCheckEffect", "TechWillBreakEffect"];
+
+            let output = "";
+            for (let i = 0; i < repeaters.length; i++) {
+                let repeaterName = repeaters[i];
+                let repeaterVar = WuxDef.GetVariable(repeaterName);
+                let groupVariableNames = sections.map((section) =>
+                    `${repeaterVar}:${baseDef.getVariable(`-${WuxDef.GetVariable(section, WuxDef._moreinfo)}`)}`);
+                output += WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerActions.OpenTechniqueMoreInfo(eventinfo, "${repeaterName}")`, true);
+            }
+            return output;
+        },
+        // "On Enter Effects" and the Enhancement section's header tooltip both
+        // point at one fixed, technique-independent definition (same writeup
+        // regardless of which technique it's shown on - Trait_OnEnter /
+        // Title_TechEnhancement) - but the button itself still renders inside
+        // each technique's own repeating row (printEnhancementEffects/
+        // printOnEnter, WuxGS-FeatureDisplayBuilder.js), so - same as every
+        // other field referenced inside a <fieldset class="repeating_x"> -
+        // Roll20 silently rescopes it to a per-row attribute even though the
+        // definition itself is meant to be global. Binding to the bare,
+        // unscoped variable name (the original version of this listener) never
+        // reliably matched that per-row reality, and had no eventinfo.newValue
+        // guard at all - any row rebuild that happened to touch this attribute
+        // (rank change, variant swap) could pop the Manual open unconditionally.
+        // Scoped per repeater now, same shape as listenerOpenTechniqueMoreInfo -
+        // the per-row/per-definition matching and the "on" guard both move into
+        // WuxWorkerActions.OpenTechniqueFixedMoreInfo (Worker-Actions.js), since
+        // eventinfo.sourceAttribute is the full row-qualified name once scoped,
+        // not the bare suffix a generated switch could compare directly.
+        listenerOpenTechniqueFixedMoreInfo = function () {
+            let repeaters = ["RepeatingFormeTech", "TechPopupValues", "RepeatingStyles", "RepeatingPerks"];
+            let defs = [WuxDef.Get("Trait_OnEnter"), WuxDef.Get("Title_TechEnhancement")];
+
+            let output = "";
+            for (let i = 0; i < repeaters.length; i++) {
+                let repeaterVar = WuxDef.GetVariable(repeaters[i]);
+                let groupVariableNames = defs.map((def) => `${repeaterVar}:${def.getVariable(WuxDef._moreinfo)}`);
+                output += WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerActions.OpenTechniqueFixedMoreInfo(eventinfo)`, true);
+            }
+            return output;
         }
     return {
         Print: print

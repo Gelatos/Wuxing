@@ -496,6 +496,19 @@ input[type=hidden].wuxHiddenSingleCount-flag[value="1"] + .wuxFeatureHeaderNameC
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* The Manual is its own independent overlay (WuxGS-Base.js's
+   printManualPopupOverlay), a sibling of the shared .wuxPopupOverlay
+   Inspect/Filter popups nest inside rather than a child of it - bumped above
+   that overlay's own z-index (99999) so it renders on top when opened while
+   an Inspect/Filter popup is still open underneath. .wuxPopupOverlay creates
+   its own stacking context, so this one override is enough; the Exit
+   button/backdrop-checkbox/.wuxPopup z-indexes nested inside still stack
+   correctly relative to each other exactly as they already do for the base
+   overlay. */
+.wuxManualPopupOverlay {
+    z-index: 100001;
+}
+
 .wuxPopup .wuxInteractiveContent-flag:hover + .wuxInteractiveContent
 {
     background: #eae7e7;
@@ -615,9 +628,6 @@ input[type=hidden].wuxHiddenSingleCount-flag[value="1"] + .wuxFeatureHeaderNameC
 
 .wuxInspectionPopupContents
 {
-    /* Single catalog column now instead of the old select-list + preview pair,
-       so this no longer needs its own row layout/clipping - the whole popup
-       scrolls as one unit instead (.wuxPopup's own overflow:auto above). */
     flex-flow: column nowrap;
     flex: 1 1 auto;
     min-height: 0;
@@ -633,20 +643,12 @@ input[type=hidden].wuxHiddenSingleCount-flag[value="1"] + .wuxFeatureHeaderNameC
 
 .wuxInspectionPopupContentData
 {
-    /* Only one of these divs now (the catalog) instead of two side-by-side
-       columns, so it takes the full width and grows to its natural height
-       instead of clipping/scrolling on its own - see .wuxInspectionPopupContents
-       above. FilterPopup keeps its original two-column scroll behavior
-       (.wuxFilterPopupContentData isn't included in this selector). */
     display: block;
     width: 100%;
     height: auto;
     overflow: visible;
 }
 
-/* Below this width the two columns can no longer sit side by side at a
-   readable size, so stack them and split the available height evenly
-   instead of relying on flex-wrap (which can't size wrapped items reliably). */
 @media (max-width: 699px)
 {
     .wuxInspectionPopupContents
@@ -720,12 +722,6 @@ input[type=hidden].wuxHiddenSingleCount-flag[value="1"] + .wuxFeatureHeaderNameC
     cursor: pointer;
 }
 
-/* The rule above's "background" shorthand resets background-image/position/size/
-   repeat to their defaults for any .wuxButton inside the inspection popup - harmless
-   for plain buttons, but .wuxTechVariantButton (WCSS-Specialized.css) needs its own
-   background-image (the affinity icon) and matching size/position/repeat to actually
-   show. Variant-swap buttons only started appearing inside this popup with the
-   all-items redesign; restore their icon sizing here. */
 .wuxInspectionPopupContentData .wuxTechVariantButton
 {
     margin: 0;
@@ -782,9 +778,6 @@ input[type=hidden].wuxFilterPopupSelectContainer-flag[value="on"] + .wuxFilterPo
     Manual Popup
 ========================================*/
 
-/* Nav-row trigger button (one per page, alongside .wuxSidebarToggleButton -
-   see WCSS-Base.css) - same invisible-checkbox-plus-styled-span convention,
-   just its own color so it doesn't read as "the sidebar toggle". */
 .wuxManualOpenButton {
     position: relative;
     flex: 0 0 auto;
@@ -826,8 +819,6 @@ input[type=hidden].wuxFilterPopupSelectContainer-flag[value="on"] + .wuxFilterPo
     background: #1a6db5;
 }
 
-/* Hidden by default (wide screens show the sidebar inline) - only shown by
-   the media query below, where it toggles .wuxManualSidebar as an overlay. */
 .wuxManualSidebarToggle {
     display: none;
     position: relative;
@@ -862,12 +853,6 @@ input[type=hidden].wuxFilterPopupSelectContainer-flag[value="on"] + .wuxFilterPo
     border-radius: 5px;
 }
 
-/* Header category nav (WuxGS-Base.js ManualPopup.PrintHeader) - lives beside
-   Exit, same choke point as .wuxManualSidebarToggle above. Plain button row
-   that collapses into the <select> fallback below wuxManualNavCollapseWidth,
-   mirroring the main sheet's own page nav (.wuxNavRow/.wuxTabButtonRow +
-   select.wuxNavDropdown, WCSS-Base.css) - just its own classes so this
-   popup's white-background styling doesn't fight the main nav's dark one. */
 .wuxManualNav {
     display: flex;
     flex: 1 1 auto;
@@ -890,21 +875,11 @@ input[type=hidden].wuxFilterPopupSelectContainer-flag[value="on"] + .wuxFilterPo
     display: none;
 }
 
-/* No height override here - .wuxButton's own default (26px, WCSS-Base.css)
-   is what keeps these matching Exit's height in the same header row. An
-   earlier "height: auto" (left over from when these were stacked vertically
-   in the sidebar, before the header-nav/sidebar-TOC split) let them shrink
-   to fit their own padding instead, which is what made them look tiny and
-   uneven next to Exit. */
 .wuxManualCategoryButton {
     flex: 0 0 auto;
     min-width: 0;
 }
 
-/* .wuxButton's own hidden-input rule (WCSS-Base.css) only covers
-   input[type=checkbox] - these are radios (one shared field picks the
-   category), so they need the same absolute/invisible treatment repeated
-   here or the native radio circle shows through above the label. */
 .wuxManualCategoryButton input[type=radio] {
     position: absolute;
     display: block;
@@ -916,12 +891,6 @@ input[type=hidden].wuxFilterPopupSelectContainer-flag[value="on"] + .wuxFilterPo
     z-index: 100;
 }
 
-/* width/height 100% + border-box so this fills the whole button (up to
-   .wuxButton's own border, WCSS-Base.css) instead of just wrapping its own
-   text - without it the highlight background only covers a small pill
-   floating inside the button's border, leaving .wuxButton's own gray
-   gradient visible in the gap around it. display:flex centers the label
-   vertically regardless of exact padding/line-height math. */
 .wuxManualCategoryButton span {
     display: flex;
     align-items: center;
@@ -943,10 +912,6 @@ input[type=hidden].wuxFilterPopupSelectContainer-flag[value="on"] + .wuxFilterPo
     background: #71B9DE;
 }
 
-/* Same specificity trick as select.wuxNavDropdown (WCSS-Base.css) - needed
-   to beat .wuxInput's own display:inline-block, since .wuxInput's rule comes
-   later in this file. Hidden by default; the media query below swaps it in
-   for .wuxManualNavButtonRow once the row can no longer fit. */
 select.wuxManualNavDropdown {
     display: none;
 }
@@ -969,23 +934,12 @@ select.wuxManualNavDropdown {
     display: flex;
     flex: 1 1 auto;
     min-height: 0;
-    /* Without this, .wuxManualSidebar's own content (54 links for Status
-       Effects) can render taller than the space .wuxManualBody's flex-fill
-       actually allotted it - min-height:0 lets the row shrink, but doesn't
-       clip a child that overflows it, so the excess bumped .wuxPopup's own
-       overflow:auto (WCSS-Footer.css) into scrolling the whole popup as one
-       unit instead of each column scrolling independently. */
     overflow: hidden;
     width: calc(100% - 30px);
     margin: 0 15px 15px 15px;
     gap: 15px;
 }
 
-/* Sidebar - no longer picks the category (see .wuxManualNav above); each
-   .wuxManualSidebarCategory-X is an anchor TOC for the CURRENTLY shown
-   category only, jumping to a term's id within .wuxManualContent. Only one
-   is ever displayed, gated by the same Popup_ManualCategory flag as the
-   content itself, a few rules down. */
 .wuxManualSidebar {
     flex: 0 0 180px;
     display: flex;
@@ -1024,9 +978,6 @@ select.wuxManualNavDropdown {
     overflow-y: auto;
 }
 
-/* .wuxHeader2/.wuxSubheader/.wuxDescription default to light-on-dark colors
-   (meant for the sheet's dark background) - unreadable on this popup's white
-   background, same fix the item/filter popups apply to their own content. */
 .wuxManualContent .wuxHeader2 {
     color: #000000;
 }
@@ -1043,34 +994,12 @@ select.wuxManualNavDropdown {
     display: none;
 }
 
-/* One value here per GuideCat definition (GoogleSheets/WuxGS-Base.js's
-   ManualPopup) - not generated automatically, same as the main sheet's own
-   page nav (.wuxPageDisplay-Flag, WCSS-Specialized.css). Adding a new
-   GuideCat entry to the dictionary needs a matching pair of new lines here
-   (one in this rule, one in the sidebar rule below) using its exact name as
-   the value.
-   Adjacent-sibling (+), not general-sibling (~) into a wrapper - each target
-   now has its own colocated flag directly in front of it (WuxGS-Base.js's
-   sidebarCategory/categoryContent), matching .wuxPageDisplay-Flag's proven
-   shape instead of one flag reaching across .wuxManualContent/.wuxManualSidebar
-   into a deeply nested descendant. */
 input[type=hidden].wuxManualCategory-Flag[value="GuideCat_CharacterCreation"] + .wuxManualCategory-GuideCat_CharacterCreation,
 input[type=hidden].wuxManualCategory-Flag[value="GuideCat_StatusEffects"] + .wuxManualCategory-GuideCat_StatusEffects,
 input[type=hidden].wuxManualCategory-Flag[value="MoreInfo"] + .wuxManualCategory-MoreInfo {
     display: block;
 }
 
-/* moreInfoCategoryButton/moreInfoCategoryOption (WuxGS-Base.js) - unlike the
-   real category buttons above, these are hidden by default and only shown
-   while "MoreInfo" is already the active category - a "you are here"
-   indicator for the page opened via a More Info link, not a normal nav
-   target (nothing else ever sets Popup_ManualCategory to this value except
-   OpenManualWithDefinitions, Worker-Manual.js). The button gets its own
-   colocated flag like every other target; the dropdown <option> can't (only
-   <option>/<optgroup> are valid children of <select>), so it reaches off
-   printHeader's defaultFlag instead - same general-sibling-into-.wuxManualNav
-   shape as the narrow-screen sidebar overlay toggle below, not the banned
-   "~ *" wildcard-sibling shape (see WCS-Sheet.html's CSS parsing history). */
 .wuxManualMoreInfoCategoryButton,
 .wuxManualMoreInfoCategoryOption {
     display: none;
@@ -1089,33 +1018,14 @@ input[type=hidden].wuxManualCategory-Flag[value="GuideCat_StatusEffects"] + .wux
     display: flex;
 }
 
-/* "More Info" (moreInfoCategoryValue, GoogleSheets/WuxGS-Base.js) never gets a
-   .wuxManualSidebarCategory-MoreInfo entry above - .wuxManualSidebar > div's own
-   default (display:none) already leaves the sidebar column empty while it's
-   active. The toggle button that would open that empty column on narrow
-   screens is hidden here too - visibility (not display) so the nav row's
-   layout doesn't shift switching to/from this page. Same colocated-flag
-   adjacency as the rules above; this particular flag instance
-   (printHeader's defaultFlag) sits directly in front of .wuxManualSidebarToggle
-   (WuxGS-Base.js). */
 input[type=hidden].wuxManualCategory-Flag[value="MoreInfo"] + .wuxManualSidebarToggle {
     visibility: hidden;
 }
 
-/* The sidebar column itself (not just its per-category contents, gated above) -
-   collapses the whole reserved-width column so .wuxManualContent (flex: 1 1
-   auto, same row) expands to fill the freed space instead of leaving an empty
-   180px gap next to the full-width More Info page. This flag instance (print,
-   WuxGS-Base.js) sits directly in front of .wuxManualSidebar itself, a
-   different colocated instance than the per-category ones above. */
 input[type=hidden].wuxManualCategory-Flag[value="MoreInfo"] + .wuxManualSidebar {
     display: none;
 }
 
-/* Vertical stacked list, not the wrapped card grid .wuxRepeatingFlexSection
-   otherwise lays out (WCSS-Base.css) - this repeater prints full writeups one
-   under another (moreInfoEntry, GoogleSheets/WuxGS-Base.js), not fixed-width
-   cards. */
 .wuxManualMoreInfoRepeater .repcontainer {
     flex-direction: column;
 }
@@ -1128,27 +1038,14 @@ input[type=hidden].wuxManualCategory-Flag[value="MoreInfo"] + .wuxManualSidebar 
     background: none;
 }
 
-/* .wuxSubheader is display:inline (WCSS-Base.css) - normal Manual topics still
-   land it on its own line because it's followed by a block-level
-   div.wuxDescription there. This page's description is a bound
-   span.wuxDescription instead (needed for its own white-space:pre-line rule,
-   WCSS-Base.css - see moreInfoEntry, GoogleSheets/WuxGS-Base.js), which is only
-   inline-block, so without this it flows on the same line as the subheader. */
 .wuxManualMoreInfoRepeater .wuxSubheader {
     display: block;
 }
 
-/* GuideInfo_SubGroup is blank for most definitions (status effects have no
-   subGroup) - collapses the row rather than leaving an empty subtitle gap. */
 .wuxManualMoreInfoRepeater .wuxSubheader:has(span:empty) {
     display: none;
 }
 
-/* Sidebar disappears below this width (framework requirement) - the header's
-   .wuxManualSidebarToggle takes over, showing it as a floating overlay panel
-   instead of a permanent column, the same way it behaves on wide screens
-   otherwise. Same breakpoint as the item/filter popup's own column collapse
-   above, for consistency within this popup family. */
 @media (max-width: 699px) {
     .wuxManualSidebarToggle {
         display: block;
@@ -1161,10 +1058,6 @@ input[type=hidden].wuxManualCategory-Flag[value="MoreInfo"] + .wuxManualSidebar 
         left: 0;
         z-index: 10;
         width: 180px;
-        /* position:absolute has no implicit height here (only top is set, not
-           bottom) - without this it would just grow to fit every link instead
-           of scrolling, same gap this rule is fixing for the wide-screen
-           layout above. */
         max-height: calc(100% - 20px);
         padding: 10px;
 
@@ -1507,15 +1400,47 @@ button.wuxSubMenuOptionButton[type=roll]:hover span {
     color: #000;
 }
 
-/* Debug-only sidebar options that should disappear once the character has
-   left the Builder pageset and moved into normal play (buildTechDebugSection,
-   WuxGS-MainSheet.js). PageSet isn't a "0"/blank boolean like the standard
-   wuxHiddenField-flag convention, so this checks its actual string value
-   directly instead of reusing that shared flag class. */
 .wuxDebugNotCoreField {
     display: none;
 }
 
 input[type=hidden].wuxDebugNotCore-flag:not([value="Core"]) + .wuxDebugNotCoreField {
     display: inherit;
+}
+
+div.wuxButton.wuxManualButton {
+    display: inline-block;
+    height: auto;
+    width: auto;
+    min-width: 0;
+    margin-right: 0;
+
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+div.wuxButton.wuxManualButton:hover {
+    background: none;
+    box-shadow: none;
+}
+
+div.wuxButton.wuxManualButton span {
+    position: relative;
+    display: inline;
+    padding: 0;
+    text-align: left;
+    line-height: inherit;
+    color: inherit;
+    font-size: inherit;
+    text-decoration: underline dotted;
+    font-weight: inherit;
+}
+
+div.wuxButton.wuxManualButton:hover span {
+    color: #979898;
+}
+
+.wuxFeatureHeaderInfoTraits div.wuxButton.wuxManualButton span {
+    font-weight: bold;
 }

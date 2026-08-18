@@ -583,7 +583,20 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             });
             attributeHandler.run();
         },
-        closePopup = function () {
+        // Bound to Popup_PopupActive's own change in either direction (see
+        // WuxGS-Backend.js's listenerClosePopup), because the Exit button and
+        // the backdrop-click both just write "0" to that same attribute rather
+        // than calling a dedicated close function - so this has to be the one
+        // place that notices. eventinfo.newValue is checked so this only
+        // dispatches when the attribute is actually headed to "0", not on
+        // some other write that happens to touch it. The Manual is not part
+        // of this dispatch - it's its own independent popup with its own
+        // Popup_ManualActive flag and its own listener (listenerCloseManual),
+        // not nested inside this shared overlay at all (Worker-Manual.js).
+        closePopup = function (eventinfo) {
+            if (eventinfo != undefined && eventinfo.newValue !== "0") {
+                return;
+            }
             let attributeHandler = new WorkerAttributeHandler();
             let nameFieldName = WuxDef.GetVariable("Popup_PopupName");
             attributeHandler.addMod(nameFieldName);
@@ -601,9 +614,6 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                     case WuxDef.GetTitle("Popup_FilterTechniquePopupName"):
                     case WuxDef.GetTitle("Popup_CustomStylesFilterName"):
                         WuxWorkerFilterPopup.Close();
-                        break;
-                    case WuxDef.GetTitle("Popup_ManualName"):
-                        WuxWorkerManual.Close();
                         break;
                 }
             });

@@ -1267,6 +1267,19 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 	setTechniqueHeaderInfo(technique, displayData) {
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechTrueName"), technique.name);
+		// Previously-unused definition - WuxTechs.Get(name) always returns a fresh
+		// TechniqueData at rank 0 (WJS-TechDef.js's base data), never the
+		// character's actual current rank, since rank is purely a runtime
+		// technique.setRank() applied on top. Anything that needs the technique's
+		// real rank from a fresh lookup (Worker-Actions.js's
+		// getEffectExplanationEntries, re-deriving effect formulas to explain
+		// referenced stats like Potency) has to read it back from here and apply
+		// it via setRank() itself - without it, rank-gated enhancement formula
+		// terms (TechniqueEffect.getEffects()'s enhancing-effect merge) never
+		// get applied, silently dropping any stat that only enters the formula
+		// through that merge.
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechRank"), technique.rank);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechName"), displayData.name);
 		// Version is piggybacked onto TechName's max slot instead of its own attribute,
@@ -1376,6 +1389,8 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechTrueName", WuxDef._max), "0");
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+			this.getVariable("TechRank"), 0);
+		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechName"), 0);
 		// Version is piggybacked onto TechName's max slot.
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
@@ -1438,6 +1453,19 @@ class TechniqueDataAttributeHandler extends DatabaseItemAttributeHandler {
 			this.getVariable("TechRankUp", WuxDef._max), 0);
 		this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
 			this.getVariable("TechRankDown", WuxDef._max), 0);
+		// Explicitly reset every More Info button's own trigger (Worker-Actions.js's
+		// openTechniqueMoreInfo reads these same six) on every row rebuild - Roll20
+		// can fire a repeating row's OTHER change listeners when the row is
+		// rewritten, even for attributes this rebuild never otherwise touches, so a
+		// trigger left holding a stale "on" from an earlier click (or never
+		// explicitly written at all) can get re-reported and pop the Manual back
+		// open on an unrelated rank change or variant swap. Writing "0" here every
+		// time means that re-fire (if it happens) reports newValue "0", which fails
+		// openTechniqueMoreInfo's own "on" check instead of passing it.
+		["TechActionName", "TechTargetType", "TechTraits", "TechCoreEffect", "TechCheckEffect", "TechWillBreakEffect"].forEach((attribute) => {
+			this.attrHandler.addRepeatingSectionRowUpdate(this.repeater?.definitionId,
+				this.getVariable(attribute, WuxDef._moreinfo), "0");
+		});
 	}
 	setHeaderInfo(headerKey, headerText) {
 		this.clearTechniqueInfo();
