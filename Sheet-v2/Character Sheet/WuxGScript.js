@@ -2658,8 +2658,21 @@ class TechniqueDisplayData {
                 this.targetType += `${technique.target}`;
             }
 
-            rangeDesc.addSubDefinition(WuxDef.Get(`Pattern_${technique.target}`));
-            this.targetDesc = rangeDesc.descriptions;
+            // Not rangeDesc.addSubDefinition(...) - WuxDef.Get(technique.rangeType)
+            // returns the same cached DefinitionData instance every time (shared by
+            // every technique with this rangeType), and addSubDefinition mutates
+            // "this" in place (appends to this.descriptions permanently). Since
+            // setTechTargetData runs fresh on every TechniqueDisplayData construction
+            // (card build, then again for the Manual popup, then again on every
+            // rank change/variant swap/refresh), each call kept re-appending the
+            // same sub-definition text onto the shared cached object, so the
+            // description grew a duplicate copy every time it was rebuilt. Built as
+            // a new array instead (matching addSubDefinition's own concat shape),
+            // leaving the cached rangeDesc object untouched.
+            let subDefinition = WuxDef.Get(`Pattern_${technique.target}`);
+            this.targetDesc = rangeDesc.descriptions
+                .concat(["", `[${subDefinition.getTitle()}]`])
+                .concat(subDefinition.descriptions);
         }
     }
 
@@ -17420,7 +17433,13 @@ class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
         if (this.displayData.targetType == "") {
             return "";
         }
-        return this.printTargetTypeField(this.printSpan(this.displayData.targetType));
+        // Same trigger/descriptions as printRange's own button - clicking
+        // either opens the exact same Manual entry, since Range and Target
+        // Type are two different spots on the card describing the same
+        // underlying concept.
+        return this.printTargetTypeField(
+            this.printTooltip(this.displayData.targetType, "Range", this.displayData.targetDesc,
+                this.displayData.definition.getAttribute("_moreinfo_range")));
     }
     printEnCost() {
         if (this.displayData.enCost == "") {
@@ -17639,7 +17658,17 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
     }
     printTargetType() {
         let fieldName = this.getActionTypeAttribute("TechTargetType");
-        return WuxSheetMain.HiddenField(fieldName, this.printTargetTypeField(this.printSpan(fieldName)));
+        return WuxSheetMain.HiddenField(fieldName,
+            this.printTargetTypeField(
+                // Same trigger as Range's own button (both read TechTargetType's
+                // max slot/_moreinfo) - clicking either opens the exact same
+                // Manual entry, since Range and Target Type are two different
+                // spots on the card describing the same underlying concept.
+                this.printAttributeTooltip(this.printSpan(fieldName),
+                    this.getActionTypeAttribute("TechTargetType", WuxDef._max),
+                    this.getActionTypeAttribute("TechTargetType", WuxDef._moreinfo))
+            )
+        );
     }
     printEnCost() {
         let fieldName = this.getActionTypeAttribute("TechEnCost");

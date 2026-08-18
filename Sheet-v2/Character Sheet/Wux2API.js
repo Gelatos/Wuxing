@@ -10174,8 +10174,21 @@ class TechniqueDisplayData {
                 this.targetType += `${technique.target}`;
             }
 
-            rangeDesc.addSubDefinition(WuxDef.Get(`Pattern_${technique.target}`));
-            this.targetDesc = rangeDesc.descriptions;
+            // Not rangeDesc.addSubDefinition(...) - WuxDef.Get(technique.rangeType)
+            // returns the same cached DefinitionData instance every time (shared by
+            // every technique with this rangeType), and addSubDefinition mutates
+            // "this" in place (appends to this.descriptions permanently). Since
+            // setTechTargetData runs fresh on every TechniqueDisplayData construction
+            // (card build, then again for the Manual popup, then again on every
+            // rank change/variant swap/refresh), each call kept re-appending the
+            // same sub-definition text onto the shared cached object, so the
+            // description grew a duplicate copy every time it was rebuilt. Built as
+            // a new array instead (matching addSubDefinition's own concat shape),
+            // leaving the cached rangeDesc object untouched.
+            let subDefinition = WuxDef.Get(`Pattern_${technique.target}`);
+            this.targetDesc = rangeDesc.descriptions
+                .concat(["", `[${subDefinition.getTitle()}]`])
+                .concat(subDefinition.descriptions);
         }
     }
 

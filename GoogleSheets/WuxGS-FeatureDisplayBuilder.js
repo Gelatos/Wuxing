@@ -268,7 +268,13 @@ class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
         if (this.displayData.targetType == "") {
             return "";
         }
-        return this.printTargetTypeField(this.printSpan(this.displayData.targetType));
+        // Same trigger/descriptions as printRange's own button - clicking
+        // either opens the exact same Manual entry, since Range and Target
+        // Type are two different spots on the card describing the same
+        // underlying concept.
+        return this.printTargetTypeField(
+            this.printTooltip(this.displayData.targetType, "Range", this.displayData.targetDesc,
+                this.displayData.definition.getAttribute("_moreinfo_range")));
     }
     printEnCost() {
         if (this.displayData.enCost == "") {
@@ -487,7 +493,17 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
     }
     printTargetType() {
         let fieldName = this.getActionTypeAttribute("TechTargetType");
-        return WuxSheetMain.HiddenField(fieldName, this.printTargetTypeField(this.printSpan(fieldName)));
+        return WuxSheetMain.HiddenField(fieldName,
+            this.printTargetTypeField(
+                // Same trigger as Range's own button (both read TechTargetType's
+                // max slot/_moreinfo) - clicking either opens the exact same
+                // Manual entry, since Range and Target Type are two different
+                // spots on the card describing the same underlying concept.
+                this.printAttributeTooltip(this.printSpan(fieldName),
+                    this.getActionTypeAttribute("TechTargetType", WuxDef._max),
+                    this.getActionTypeAttribute("TechTargetType", WuxDef._moreinfo))
+            )
+        );
     }
     printEnCost() {
         let fieldName = this.getActionTypeAttribute("TechEnCost");
