@@ -1949,7 +1949,63 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
         }
     };
 
+    // Reached from the "More Info" buttons that replaced item cards' hover
+    // tooltips (Traits, Crafting - GoogleSheets/WuxGS-FeatureDisplayBuilder.js)
+    // in both the Gear Page's five owned-item repeaters and the Inspect
+    // Popup's item catalog ("ItemPopupValues", shared by all 7 catalog types).
+    // WuxGS-Backend.js's listenerOpenItemMoreInfo always passes both the
+    // repeater name and the base definition name explicitly, since unlike
+    // techniques items don't share one base definition across every context
+    // ("Gear" for owned items, "Action" for the catalog). Mirrors
+    // Worker-Actions.js's openTechniqueMoreInfo, but simpler - items have no
+    // formula-driven effects, so there's no concept/stat breakdown to
+    // concatenate, just the one section's own content.
+    const openItemMoreInfo = function (eventinfo, repeaterId, baseDefinitionName) {
+        if (eventinfo.newValue !== "on") {
+            return;
+        }
+        let repeater = new WorkerRepeatingSectionHandler(repeaterId);
+        let rowId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+        let attributeHandler = new WorkerAttributeHandler();
+        let itemDataAttributeHandler = new ItemDataAttributeHandler(attributeHandler, baseDefinitionName);
+        itemDataAttributeHandler.setRepeaterData(repeater, rowId);
+
+        // contentSuffix: Traits' button shows ItemTrait's own max slot (the
+        // traits descriptions, same as before this was a hover tooltip).
+        // Crafting shows ItemCraft's base slot instead (the item's specific
+        // recipe text) - its max slot holds separate generic crafting-rules
+        // text that was never shown by the old tooltip either. labelAttribute
+        // (Crafting only): the button's own visible text is the item's
+        // category badge (ItemGroup), not ItemCraft itself.
+        let sections = [
+            {attribute: "ItemTrait", title: "Traits", contentSuffix: WuxDef._max},
+            {attribute: "ItemCraft", title: "Crafting", labelAttribute: "ItemGroup"}
+        ];
+        let section = sections.find((s) => itemDataAttributeHandler.getVariable(s.attribute, WuxDef._moreinfo) == eventinfo.sourceAttribute);
+        if (section == undefined) {
+            return;
+        }
+
+        let nameVar = itemDataAttributeHandler.getVariable("ItemName");
+        let labelVar = itemDataAttributeHandler.getVariable(section.labelAttribute || section.attribute);
+        let contentVar = itemDataAttributeHandler.getVariable(section.attribute, section.contentSuffix);
+        attributeHandler.addMod([nameVar, labelVar, contentVar]);
+        attributeHandler.addUpdate(eventinfo.sourceAttribute, "0");
+        attributeHandler.addFinishCallback(function (attrHandler) {
+            let itemName = attrHandler.parseString(nameVar);
+            let label = attrHandler.parseString(labelVar);
+            let description = attrHandler.parseString(contentVar);
+            WuxWorkerManual.OpenManualWithContent([{
+                title: label,
+                subGroup: `${itemName} - ${section.title}`,
+                description: description
+            }]);
+        });
+        attributeHandler.run();
+    };
+
     return {
+        OpenItemMoreInfo: openItemMoreInfo,
         ToggleEquipItem: toggleEquipItem,
         EquipWeapon: equipWeapon,
         PurchaseGear: purchaseGear,

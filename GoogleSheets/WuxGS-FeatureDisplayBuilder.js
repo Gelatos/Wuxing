@@ -15,23 +15,26 @@ class BaseFeatureDisplayBuilder {
         `;
     }
 
-    printTooltip (name, tooltipName, descriptions) {
-        if (descriptions.length > 0) {
-            let descriptionData = `<span class="wuxDescription">${descriptions.join(`</span><br /><span class="wuxDescription">`)}</span>`;
-            return this.printTooltipField(name, tooltipName, descriptionData);
-        }
-        else {
-            return this.printSpan(name);
-        }
-    }
-    printTooltipField (name, tooltipName, descriptionData) {
-        return `<span class="wuxTooltip">
-            <span class="wuxTooltipText"><strong>${name}</strong></span>
-            <div class="wuxTooltipContent">
-                <div class="wuxHeader2">${tooltipName}</div>
-                ${descriptionData}
-            </div>
-        </span>`;
+    // WuxSheetMain.Button's <div>-based markup - same one RankUp/RankDown/the
+    // status More Info button already use with no issues. An earlier attempt
+    // to wrap this in a <span> instead (on the theory that a nested <div>
+    // inside <strong>/<span> breaks parsing) turned out to be solving the
+    // wrong problem - HTML doesn't actually auto-correct that nesting, and
+    // the <span> version broke the trigger checkbox's own hiding (a stray
+    // white box appeared behind the button text). The Field methods that
+    // embed this (printTraitsField, etc.) are responsible for not nesting it
+    // inside an inline-only wrapper themselves.
+    // "wuxManualButton", not "wuxTooltipButton" - that name is already a
+    // large, unrelated pre-existing class (a roll-template chat-message
+    // hover-tooltip-button system, WCSS-Specialized.css) with its own
+    // hover/color/content-reveal rules, which this was silently inheriting
+    // and fighting against (that's what caused the orange hover color and
+    // other styling that no override seemed to fully fix). Shared by both
+    // technique and item display builders - every hover tooltip in both
+    // families has been converted to one of these, opening the Manual
+    // popup with the tooltip's content instead of showing it on hover.
+    printMoreInfoButton (name, moreInfoFieldName) {
+        return WuxSheetMain.Button(moreInfoFieldName, name, "wuxManualButton");
     }
 
     printHeaderBlock() {}
@@ -98,12 +101,10 @@ class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
     }
 
     // Technique-scoped override of BaseFeatureDisplayBuilder.printTooltip -
-    // items (BaseItemDisplayBuilder) keep the original hover-tooltip version
-    // untouched, since only technique tooltips are being converted to Manual
-    // buttons. moreInfoFieldName is a per-technique-instance, per-section
-    // trigger attribute (see TechniqueDisplayBuilder's call sites, which mint
-    // one via this.displayData.definition.getAttribute("_moreinfo_<section>")
-    // - an arbitrary suffix string, not a pre-registered WuxDef modifier, same
+    // moreInfoFieldName is a per-technique-instance, per-section trigger
+    // attribute (see TechniqueDisplayBuilder's call sites, which mint one via
+    // this.displayData.definition.getAttribute("_moreinfo_<section>") - an
+    // arbitrary suffix string, not a pre-registered WuxDef modifier, same
     // mechanism WuxDef._moreinfo itself already relies on). Static technique
     // content is fixed at generation time, so the listener that opens the
     // Manual (WuxGS-Backend.js) embeds this exact title/description as
@@ -115,24 +116,6 @@ class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
         else {
             return this.printSpan(name);
         }
-    }
-    // WuxSheetMain.Button's <div>-based markup - same one RankUp/RankDown/the
-    // status More Info button already use with no issues. An earlier attempt
-    // to wrap this in a <span> instead (on the theory that a nested <div>
-    // inside <strong>/<span> breaks parsing) turned out to be solving the
-    // wrong problem - HTML doesn't actually auto-correct that nesting, and
-    // the <span> version broke the trigger checkbox's own hiding (a stray
-    // white box appeared behind the button text). The Field methods that
-    // embed this (printTraitsField, etc.) are responsible for not nesting it
-    // inside an inline-only wrapper themselves.
-    // "wuxManualButton", not "wuxTooltipButton" - that name is already a
-    // large, unrelated pre-existing class (a roll-template chat-message
-    // hover-tooltip-button system, WCSS-Specialized.css) with its own
-    // hover/color/content-reveal rules, which this was silently inheriting
-    // and fighting against (that's what caused the orange hover color and
-    // other styling that no override seemed to fully fix).
-    printMoreInfoButton (name, moreInfoFieldName) {
-        return WuxSheetMain.Button(moreInfoFieldName, name, "wuxManualButton");
     }
 
     printHeaderBlock() {
@@ -673,8 +656,17 @@ class BaseItemDisplayBuilder extends BaseFeatureDisplayBuilder {
     }
 
     printTraits() {}
+    // title used to always be plain text ("Traits"), rendered bold+the
+    // trailing "." via a <strong> wrapper ("Traits. {contents}"). Now that
+    // title is a More Info button (a <div>, via WuxSheetMain.Button), it's
+    // placed directly instead - a <div> nested inside <strong> is
+    // semantically off even though browsers render it fine, and the "."
+    // would've glued onto the end of a button rather than a word. Bold is
+    // now applied via .wuxFeatureHeaderInfoTraits's own CSS
+    // (WCSS-Specialized.css) - same fix already applied to the technique
+    // version of this method.
     printTraitsField (title, contents) {
-        return `<div class="wuxFeatureHeaderInfoTraits"><strong>${title}.</strong> ${contents}</div>`;
+        return `<div class="wuxFeatureHeaderInfoTraits">${title} ${contents}</div>`;
     }
 }
 
@@ -697,10 +689,18 @@ class ItemRepeaterDisplayBuilder extends BaseItemDisplayBuilder {
     printSpanActionTypeAttribute (attribute, suffix) {
         return `<span name="${this.getActionTypeAttribute(attribute, suffix)}"></span>`;
     }
-    printAttributeTooltip (name, tooltipName, fieldName) {
-        let descriptionData = `<span class="wuxDescription" name="${fieldName}"></span>`;
+    // name: the button's own visible label (fixed text - items have nothing
+    // per-instance like techniques' live effect text to show here instead).
+    // fieldName: the row's own already-computed content attribute - still
+    // used to gate button-vs-plain-text (HiddenSpanFieldToggle), same as
+    // when this held an inline tooltip. moreInfoFieldName: the per-row
+    // trigger attribute the button is bound to - clicking it fires a shared
+    // listener (WuxGS-Backend.js) that reads fieldName's current value and
+    // forwards it to the Manual popup (WuxWorkerManual.OpenManualWithContent,
+    // Worker-Gear.js) instead of showing a hover tooltip.
+    printAttributeTooltip (name, fieldName, moreInfoFieldName) {
         return WuxSheetMain.HiddenSpanFieldToggle(fieldName,
-            this.printTooltipField(name, tooltipName, descriptionData),
+            this.printMoreInfoButton(name, moreInfoFieldName),
             `${name}`);
     }
 
@@ -752,25 +752,24 @@ class ItemRepeaterDisplayBuilder extends BaseItemDisplayBuilder {
         let fieldName = this.getActionTypeAttribute("ItemTrait");
         return WuxSheetMain.HiddenField(fieldName,
             this.printTraitsField(
-                // Tooltip text is piggybacked onto ItemTrait's max slot.
-                this.printAttributeTooltip("Traits", "Traits", this.getActionTypeAttribute("ItemTrait", WuxDef._max)),
+                this.printAttributeTooltip("Traits", fieldName, this.getActionTypeAttribute("ItemTrait", WuxDef._moreinfo)),
                 this.printSpan(fieldName)
             )
         );
     }
     // The item's actual crafting recipe (DC/skill check, time, components - see
-    // ItemDisplayData.setCrafting, WAPI-Database.js) is hidden inside a tooltip
+    // ItemDisplayData.setCrafting, WAPI-Database.js) is hidden behind a button
     // on the item's category label instead of its own always-visible section -
-    // only becomes hoverable when the item actually has crafting data
+    // only becomes clickable when the item actually has crafting data
     // (ItemCraft's base slot). Only that base slot is shown here - ItemCraft's
     // max slot holds the generic crafting RULES text (System_CraftingRecipe/
     // System_CraftSkillCheck/etc plus each component's own description), which
-    // is a different concern from this item's specific recipe.
+    // is a different concern from this item's specific recipe (unused today,
+    // same as before this button conversion).
     printCraftingTooltip (categoryContents) {
         let fieldName = this.getActionTypeAttribute("ItemCraft");
-        let descriptionData = `<span class="wuxDescription" name="${fieldName}"></span>`;
         return WuxSheetMain.HiddenSpanFieldToggle(fieldName,
-            this.printTooltipField(categoryContents, "Crafting", descriptionData),
+            this.printMoreInfoButton(categoryContents, this.getActionTypeAttribute("ItemCraft", WuxDef._moreinfo)),
             categoryContents);
     }
 }

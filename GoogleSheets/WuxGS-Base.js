@@ -1666,7 +1666,7 @@ var DisplayPopups = DisplayPopups || (function () {
                     <div class="wuxPopupHeader">
                         <span class="wuxPopupInnerHeader">${WuxDef.GetTitle("Popup_ManualName")}</span>
                         ${ManualPopup.PrintHeader()}
-                        ${WuxSheetMain.Button(manualActiveAttr, "Exit", "wuxPopupClose")}
+                        ${WuxSheetMain.Button(manualActiveAttr, "Back", "wuxPopupClose")}
                     </div>
                     ${ManualPopup.Print()}
                 </div>

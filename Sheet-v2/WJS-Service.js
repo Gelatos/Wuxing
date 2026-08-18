@@ -1616,6 +1616,18 @@ class ItemDataAttributeHandler extends DatabaseItemAttributeHandler {
 		this.attrHandler.addUpdate(this.getVariable("ItemCraft"), 0);
 		this.attrHandler.addUpdate(this.getVariable("ItemCraft", WuxDef._max), 0);
 		this.attrHandler.addUpdate(this.getVariable("ItemPerFive"), "0");
+		// Explicitly reset both More Info buttons' own triggers (Worker-Gear.js's
+		// openItemMoreInfo reads these same two) on every row rebuild - same
+		// defensive fix as clearTechniqueInfo's equivalent reset, learned the
+		// hard way on the technique version of this feature: Roll20 can fire a
+		// repeating row's other change listeners when the row is rewritten, so
+		// a trigger left holding a stale "on" (or never written at all) can get
+		// re-reported and pop the Manual back open on an unrelated row rebuild
+		// (e.g. adjusting an item's quantity). Writing "0" here every time means
+		// that re-fire, if it happens, reports newValue "0", which fails
+		// openItemMoreInfo's own "on" check instead of passing it.
+		this.attrHandler.addUpdate(this.getVariable("ItemTrait", WuxDef._moreinfo), "0");
+		this.attrHandler.addUpdate(this.getVariable("ItemCraft", WuxDef._moreinfo), "0");
 	}
 }
 

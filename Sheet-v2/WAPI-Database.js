@@ -3148,6 +3148,24 @@ class BaseTechniqueEffectDisplayData {
                 break;
             case "Boost":
                 this.effectType = effect.type;
+                // Unlike every other case here, the concept to explain isn't
+                // fixed per effect type - it's whichever stat this specific
+                // effect raises (effect.effect, e.g. "Physique"), so the usual
+                // "did effectType just change" guard doesn't apply: two Boost
+                // effects back to back can easily raise two different stats,
+                // each needing its own definition, while the same stat boosted
+                // twice (e.g. a base effect plus an Enhance one) shouldn't
+                // repeat itself. Tracked per stat name instead.
+                if (this.includedBoostStats == undefined) {
+                    this.includedBoostStats = [];
+                }
+                if (!this.includedBoostStats.includes(effect.effect)) {
+                    this.includedBoostStats.push(effect.effect);
+                    let boostedStat = WuxDef.Get(effect.effect);
+                    if (boostedStat != undefined) {
+                        this.addDefintionToEffectDescription(boostedStat);
+                    }
+                }
                 this.formatBoostEffect(effect);
                 break;
             case "Terrain":

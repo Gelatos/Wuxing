@@ -509,6 +509,18 @@ input[type=hidden].wuxHiddenSingleCount-flag[value="1"] + .wuxFeatureHeaderNameC
     z-index: 100001;
 }
 
+/* Slightly smaller than the shared .wuxPopup size (Inspect/Filter) - both
+   dimensions scaled down a bit so it visibly reads as a distinct, smaller
+   window rather than matching them exactly. Qualified as
+   ".wuxPopup.wuxManualPopup" (2 classes), not the bare ".wuxManualPopup" (1
+   class) - same specificity as plain ".wuxPopup" would only win by accident
+   of file order, matching or beating it wins outright regardless. */
+.wuxPopup.wuxManualPopup {
+    width: 80%;
+    max-width: 700px;
+    height: 72%;
+}
+
 .wuxPopup .wuxInteractiveContent-flag:hover + .wuxInteractiveContent
 {
     background: #eae7e7;
@@ -1434,6 +1446,12 @@ div.wuxButton.wuxManualButton span {
     color: inherit;
     font-size: inherit;
     text-decoration: underline dotted;
+    /* Default browser dotted-underline thickness reads as too faint against
+       body text - thickened and offset slightly so the click target is
+       obvious at a glance, same rule for every Manual button regardless of
+       which display builder (technique or item) emits it. */
+    text-decoration-thickness: 1.75px;
+    text-underline-offset: 2px;
     font-weight: inherit;
 }
 

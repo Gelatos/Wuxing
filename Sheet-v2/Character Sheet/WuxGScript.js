@@ -3148,6 +3148,24 @@ class BaseTechniqueEffectDisplayData {
                 break;
             case "Boost":
                 this.effectType = effect.type;
+                // Unlike every other case here, the concept to explain isn't
+                // fixed per effect type - it's whichever stat this specific
+                // effect raises (effect.effect, e.g. "Physique"), so the usual
+                // "did effectType just change" guard doesn't apply: two Boost
+                // effects back to back can easily raise two different stats,
+                // each needing its own definition, while the same stat boosted
+                // twice (e.g. a base effect plus an Enhance one) shouldn't
+                // repeat itself. Tracked per stat name instead.
+                if (this.includedBoostStats == undefined) {
+                    this.includedBoostStats = [];
+                }
+                if (!this.includedBoostStats.includes(effect.effect)) {
+                    this.includedBoostStats.push(effect.effect);
+                    let boostedStat = WuxDef.Get(effect.effect);
+                    if (boostedStat != undefined) {
+                        this.addDefintionToEffectDescription(boostedStat);
+                    }
+                }
                 this.formatBoostEffect(effect);
                 break;
             case "Terrain":
@@ -13618,7 +13636,7 @@ var DisplayPopups = DisplayPopups || (function () {
                     <div class="wuxPopupHeader">
                         <span class="wuxPopupInnerHeader">${WuxDef.GetTitle("Popup_ManualName")}</span>
                         ${ManualPopup.PrintHeader()}
-                        ${WuxSheetMain.Button(manualActiveAttr, "Exit", "wuxPopupClose")}
+                        ${WuxSheetMain.Button(manualActiveAttr, "Back", "wuxPopupClose")}
                     </div>
                     ${ManualPopup.Print()}
                 </div>
@@ -15085,6 +15103,7 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerOpenManualForStatus();
             output += listenerOpenTechniqueMoreInfo();
             output += listenerOpenTechniqueFixedMoreInfo();
+            output += listenerOpenItemMoreInfo();
             return output;
         },
         listenerOpenSubMenu = function () {
@@ -15365,12 +15384,22 @@ var PopupBuilder = PopupBuilder || (function () {
         // definition (TechPopupValues - the technique catalog/Job Techniques
         // inspection popup; RepeatingStyles - learned styles; RepeatingPerks -
         // Worker-Styles.js:754/Worker-InspectPopup.js:469,1123 all construct
-        // their own TechniqueDataAttributeHandler with "Action" too), so one
-        // loop covers all four with the same dispatch shape used elsewhere in
-        // this file for multi-repeater technique buttons (e.g.
-        // listenerSwapItemTechniqueVariant's repeaterId param).
+        // their own TechniqueDataAttributeHandler with "Action" too), plus
+        // every item repeater an attached-technique section can render into
+        // (printCatalogItemTechniqueSection, WuxGS-Base.js, always builds via
+        // TechniqueRepeaterDisplayBuilder(WuxDef.Get("Action")) too, regardless
+        // of which item repeater embeds it) - shared by both technique More
+        // Info listeners below, since a row rebuild in either direction needs
+        // the exact same repeater list.
+        techniqueTooltipRepeaters = [
+            "RepeatingFormeTech", "TechPopupValues", "RepeatingStyles", "RepeatingPerks",
+            "RepeatingConsumables", "RepeatingGear", "RepeatingFoods", "RepeatingEquipment", "RepeatingSyncedEquipment", "ItemPopupValues"
+        ],
+        // One loop covers every repeater above with the same dispatch shape
+        // used elsewhere in this file for multi-repeater technique buttons
+        // (e.g. listenerSwapItemTechniqueVariant's repeaterId param).
         listenerOpenTechniqueMoreInfo = function () {
-            let repeaters = ["RepeatingFormeTech", "TechPopupValues", "RepeatingStyles", "RepeatingPerks"];
+            let repeaters = techniqueTooltipRepeaters;
             let baseDef = WuxDef.Get("Action");
             let sections = ["TechActionName", "TechTargetType", "TechTraits", "TechCoreEffect", "TechCheckEffect", "TechWillBreakEffect"];
 
@@ -15403,7 +15432,7 @@ var PopupBuilder = PopupBuilder || (function () {
         // eventinfo.sourceAttribute is the full row-qualified name once scoped,
         // not the bare suffix a generated switch could compare directly.
         listenerOpenTechniqueFixedMoreInfo = function () {
-            let repeaters = ["RepeatingFormeTech", "TechPopupValues", "RepeatingStyles", "RepeatingPerks"];
+            let repeaters = techniqueTooltipRepeaters;
             let defs = [WuxDef.Get("Trait_OnEnter"), WuxDef.Get("Title_TechEnhancement")];
 
             let output = "";
@@ -15411,6 +15440,40 @@ var PopupBuilder = PopupBuilder || (function () {
                 let repeaterVar = WuxDef.GetVariable(repeaters[i]);
                 let groupVariableNames = defs.map((def) => `${repeaterVar}:${def.getVariable(WuxDef._moreinfo)}`);
                 output += WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerActions.OpenTechniqueFixedMoreInfo(eventinfo)`, true);
+            }
+            return output;
+        },
+        // Same shape as listenerOpenTechniqueMoreInfo, but items don't share
+        // one base definition across every repeater the way techniques do
+        // (all four technique repeaters use "Action") - the Gear Page's five
+        // owned-item repeaters build their cards via
+        // ItemRepeaterDisplayBuilder(WuxDef.Get("Gear")), while the Inspect
+        // Popup's item catalog (ItemPopupValues, shared by all 7 catalog
+        // types - Item/Consumables/Gear/Goods/GoodsForGear/Foods/Ings,
+        // Worker-InspectPopup.js) builds via
+        // ItemRepeaterDisplayBuilder(WuxDef.Get("Action")) instead
+        // (WuxGS-Base.js's buildOwnedItemCard/printCatalogItemFullDisplay) -
+        // so each context needs its own base definition when computing the
+        // trigger attribute name, not one shared across the whole loop.
+        listenerOpenItemMoreInfo = function () {
+            let contexts = [
+                {repeater: "RepeatingConsumables", baseDef: "Gear"},
+                {repeater: "RepeatingGear", baseDef: "Gear"},
+                {repeater: "RepeatingFoods", baseDef: "Gear"},
+                {repeater: "RepeatingEquipment", baseDef: "Gear"},
+                {repeater: "RepeatingSyncedEquipment", baseDef: "Gear"},
+                {repeater: "ItemPopupValues", baseDef: "Action"}
+            ];
+            let sections = ["ItemTrait", "ItemCraft"];
+
+            let output = "";
+            for (let i = 0; i < contexts.length; i++) {
+                let repeaterVar = WuxDef.GetVariable(contexts[i].repeater);
+                let baseDef = WuxDef.Get(contexts[i].baseDef);
+                let groupVariableNames = sections.map((section) =>
+                    `${repeaterVar}:${baseDef.getVariable(`-${WuxDef.GetVariable(section, WuxDef._moreinfo)}`)}`);
+                output += WuxSheetBackend.OnChange(groupVariableNames,
+                    `WuxWorkerGear.OpenItemMoreInfo(eventinfo, "${contexts[i].repeater}", "${contexts[i].baseDef}")`, true);
             }
             return output;
         }
@@ -17104,23 +17167,26 @@ var DisplayAdvancedSheet = DisplayAdvancedSheet || (function () {
         `;
     }
 
-    printTooltip (name, tooltipName, descriptions) {
-        if (descriptions.length > 0) {
-            let descriptionData = `<span class="wuxDescription">${descriptions.join(`</span><br /><span class="wuxDescription">`)}</span>`;
-            return this.printTooltipField(name, tooltipName, descriptionData);
-        }
-        else {
-            return this.printSpan(name);
-        }
-    }
-    printTooltipField (name, tooltipName, descriptionData) {
-        return `<span class="wuxTooltip">
-            <span class="wuxTooltipText"><strong>${name}</strong></span>
-            <div class="wuxTooltipContent">
-                <div class="wuxHeader2">${tooltipName}</div>
-                ${descriptionData}
-            </div>
-        </span>`;
+    // WuxSheetMain.Button's <div>-based markup - same one RankUp/RankDown/the
+    // status More Info button already use with no issues. An earlier attempt
+    // to wrap this in a <span> instead (on the theory that a nested <div>
+    // inside <strong>/<span> breaks parsing) turned out to be solving the
+    // wrong problem - HTML doesn't actually auto-correct that nesting, and
+    // the <span> version broke the trigger checkbox's own hiding (a stray
+    // white box appeared behind the button text). The Field methods that
+    // embed this (printTraitsField, etc.) are responsible for not nesting it
+    // inside an inline-only wrapper themselves.
+    // "wuxManualButton", not "wuxTooltipButton" - that name is already a
+    // large, unrelated pre-existing class (a roll-template chat-message
+    // hover-tooltip-button system, WCSS-Specialized.css) with its own
+    // hover/color/content-reveal rules, which this was silently inheriting
+    // and fighting against (that's what caused the orange hover color and
+    // other styling that no override seemed to fully fix). Shared by both
+    // technique and item display builders - every hover tooltip in both
+    // families has been converted to one of these, opening the Manual
+    // popup with the tooltip's content instead of showing it on hover.
+    printMoreInfoButton (name, moreInfoFieldName) {
+        return WuxSheetMain.Button(moreInfoFieldName, name, "wuxManualButton");
     }
 
     printHeaderBlock() {}
@@ -17187,12 +17253,10 @@ class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
     }
 
     // Technique-scoped override of BaseFeatureDisplayBuilder.printTooltip -
-    // items (BaseItemDisplayBuilder) keep the original hover-tooltip version
-    // untouched, since only technique tooltips are being converted to Manual
-    // buttons. moreInfoFieldName is a per-technique-instance, per-section
-    // trigger attribute (see TechniqueDisplayBuilder's call sites, which mint
-    // one via this.displayData.definition.getAttribute("_moreinfo_<section>")
-    // - an arbitrary suffix string, not a pre-registered WuxDef modifier, same
+    // moreInfoFieldName is a per-technique-instance, per-section trigger
+    // attribute (see TechniqueDisplayBuilder's call sites, which mint one via
+    // this.displayData.definition.getAttribute("_moreinfo_<section>") - an
+    // arbitrary suffix string, not a pre-registered WuxDef modifier, same
     // mechanism WuxDef._moreinfo itself already relies on). Static technique
     // content is fixed at generation time, so the listener that opens the
     // Manual (WuxGS-Backend.js) embeds this exact title/description as
@@ -17204,24 +17268,6 @@ class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
         else {
             return this.printSpan(name);
         }
-    }
-    // WuxSheetMain.Button's <div>-based markup - same one RankUp/RankDown/the
-    // status More Info button already use with no issues. An earlier attempt
-    // to wrap this in a <span> instead (on the theory that a nested <div>
-    // inside <strong>/<span> breaks parsing) turned out to be solving the
-    // wrong problem - HTML doesn't actually auto-correct that nesting, and
-    // the <span> version broke the trigger checkbox's own hiding (a stray
-    // white box appeared behind the button text). The Field methods that
-    // embed this (printTraitsField, etc.) are responsible for not nesting it
-    // inside an inline-only wrapper themselves.
-    // "wuxManualButton", not "wuxTooltipButton" - that name is already a
-    // large, unrelated pre-existing class (a roll-template chat-message
-    // hover-tooltip-button system, WCSS-Specialized.css) with its own
-    // hover/color/content-reveal rules, which this was silently inheriting
-    // and fighting against (that's what caused the orange hover color and
-    // other styling that no override seemed to fully fix).
-    printMoreInfoButton (name, moreInfoFieldName) {
-        return WuxSheetMain.Button(moreInfoFieldName, name, "wuxManualButton");
     }
 
     printHeaderBlock() {
@@ -17762,8 +17808,17 @@ class BaseItemDisplayBuilder extends BaseFeatureDisplayBuilder {
     }
 
     printTraits() {}
+    // title used to always be plain text ("Traits"), rendered bold+the
+    // trailing "." via a <strong> wrapper ("Traits. {contents}"). Now that
+    // title is a More Info button (a <div>, via WuxSheetMain.Button), it's
+    // placed directly instead - a <div> nested inside <strong> is
+    // semantically off even though browsers render it fine, and the "."
+    // would've glued onto the end of a button rather than a word. Bold is
+    // now applied via .wuxFeatureHeaderInfoTraits's own CSS
+    // (WCSS-Specialized.css) - same fix already applied to the technique
+    // version of this method.
     printTraitsField (title, contents) {
-        return `<div class="wuxFeatureHeaderInfoTraits"><strong>${title}.</strong> ${contents}</div>`;
+        return `<div class="wuxFeatureHeaderInfoTraits">${title} ${contents}</div>`;
     }
 }
 
@@ -17786,10 +17841,18 @@ class ItemRepeaterDisplayBuilder extends BaseItemDisplayBuilder {
     printSpanActionTypeAttribute (attribute, suffix) {
         return `<span name="${this.getActionTypeAttribute(attribute, suffix)}"></span>`;
     }
-    printAttributeTooltip (name, tooltipName, fieldName) {
-        let descriptionData = `<span class="wuxDescription" name="${fieldName}"></span>`;
+    // name: the button's own visible label (fixed text - items have nothing
+    // per-instance like techniques' live effect text to show here instead).
+    // fieldName: the row's own already-computed content attribute - still
+    // used to gate button-vs-plain-text (HiddenSpanFieldToggle), same as
+    // when this held an inline tooltip. moreInfoFieldName: the per-row
+    // trigger attribute the button is bound to - clicking it fires a shared
+    // listener (WuxGS-Backend.js) that reads fieldName's current value and
+    // forwards it to the Manual popup (WuxWorkerManual.OpenManualWithContent,
+    // Worker-Gear.js) instead of showing a hover tooltip.
+    printAttributeTooltip (name, fieldName, moreInfoFieldName) {
         return WuxSheetMain.HiddenSpanFieldToggle(fieldName,
-            this.printTooltipField(name, tooltipName, descriptionData),
+            this.printMoreInfoButton(name, moreInfoFieldName),
             `${name}`);
     }
 
@@ -17841,25 +17904,24 @@ class ItemRepeaterDisplayBuilder extends BaseItemDisplayBuilder {
         let fieldName = this.getActionTypeAttribute("ItemTrait");
         return WuxSheetMain.HiddenField(fieldName,
             this.printTraitsField(
-                // Tooltip text is piggybacked onto ItemTrait's max slot.
-                this.printAttributeTooltip("Traits", "Traits", this.getActionTypeAttribute("ItemTrait", WuxDef._max)),
+                this.printAttributeTooltip("Traits", fieldName, this.getActionTypeAttribute("ItemTrait", WuxDef._moreinfo)),
                 this.printSpan(fieldName)
             )
         );
     }
     // The item's actual crafting recipe (DC/skill check, time, components - see
-    // ItemDisplayData.setCrafting, WAPI-Database.js) is hidden inside a tooltip
+    // ItemDisplayData.setCrafting, WAPI-Database.js) is hidden behind a button
     // on the item's category label instead of its own always-visible section -
-    // only becomes hoverable when the item actually has crafting data
+    // only becomes clickable when the item actually has crafting data
     // (ItemCraft's base slot). Only that base slot is shown here - ItemCraft's
     // max slot holds the generic crafting RULES text (System_CraftingRecipe/
     // System_CraftSkillCheck/etc plus each component's own description), which
-    // is a different concern from this item's specific recipe.
+    // is a different concern from this item's specific recipe (unused today,
+    // same as before this button conversion).
     printCraftingTooltip (categoryContents) {
         let fieldName = this.getActionTypeAttribute("ItemCraft");
-        let descriptionData = `<span class="wuxDescription" name="${fieldName}"></span>`;
         return WuxSheetMain.HiddenSpanFieldToggle(fieldName,
-            this.printTooltipField(categoryContents, "Crafting", descriptionData),
+            this.printMoreInfoButton(categoryContents, this.getActionTypeAttribute("ItemCraft", WuxDef._moreinfo)),
             categoryContents);
     }
 }

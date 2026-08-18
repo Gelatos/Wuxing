@@ -1002,6 +1002,7 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerOpenManualForStatus();
             output += listenerOpenTechniqueMoreInfo();
             output += listenerOpenTechniqueFixedMoreInfo();
+            output += listenerOpenItemMoreInfo();
             return output;
         },
         listenerOpenSubMenu = function () {
@@ -1282,12 +1283,22 @@ var PopupBuilder = PopupBuilder || (function () {
         // definition (TechPopupValues - the technique catalog/Job Techniques
         // inspection popup; RepeatingStyles - learned styles; RepeatingPerks -
         // Worker-Styles.js:754/Worker-InspectPopup.js:469,1123 all construct
-        // their own TechniqueDataAttributeHandler with "Action" too), so one
-        // loop covers all four with the same dispatch shape used elsewhere in
-        // this file for multi-repeater technique buttons (e.g.
-        // listenerSwapItemTechniqueVariant's repeaterId param).
+        // their own TechniqueDataAttributeHandler with "Action" too), plus
+        // every item repeater an attached-technique section can render into
+        // (printCatalogItemTechniqueSection, WuxGS-Base.js, always builds via
+        // TechniqueRepeaterDisplayBuilder(WuxDef.Get("Action")) too, regardless
+        // of which item repeater embeds it) - shared by both technique More
+        // Info listeners below, since a row rebuild in either direction needs
+        // the exact same repeater list.
+        techniqueTooltipRepeaters = [
+            "RepeatingFormeTech", "TechPopupValues", "RepeatingStyles", "RepeatingPerks",
+            "RepeatingConsumables", "RepeatingGear", "RepeatingFoods", "RepeatingEquipment", "RepeatingSyncedEquipment", "ItemPopupValues"
+        ],
+        // One loop covers every repeater above with the same dispatch shape
+        // used elsewhere in this file for multi-repeater technique buttons
+        // (e.g. listenerSwapItemTechniqueVariant's repeaterId param).
         listenerOpenTechniqueMoreInfo = function () {
-            let repeaters = ["RepeatingFormeTech", "TechPopupValues", "RepeatingStyles", "RepeatingPerks"];
+            let repeaters = techniqueTooltipRepeaters;
             let baseDef = WuxDef.Get("Action");
             let sections = ["TechActionName", "TechTargetType", "TechTraits", "TechCoreEffect", "TechCheckEffect", "TechWillBreakEffect"];
 
@@ -1320,7 +1331,7 @@ var PopupBuilder = PopupBuilder || (function () {
         // eventinfo.sourceAttribute is the full row-qualified name once scoped,
         // not the bare suffix a generated switch could compare directly.
         listenerOpenTechniqueFixedMoreInfo = function () {
-            let repeaters = ["RepeatingFormeTech", "TechPopupValues", "RepeatingStyles", "RepeatingPerks"];
+            let repeaters = techniqueTooltipRepeaters;
             let defs = [WuxDef.Get("Trait_OnEnter"), WuxDef.Get("Title_TechEnhancement")];
 
             let output = "";
@@ -1328,6 +1339,40 @@ var PopupBuilder = PopupBuilder || (function () {
                 let repeaterVar = WuxDef.GetVariable(repeaters[i]);
                 let groupVariableNames = defs.map((def) => `${repeaterVar}:${def.getVariable(WuxDef._moreinfo)}`);
                 output += WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerActions.OpenTechniqueFixedMoreInfo(eventinfo)`, true);
+            }
+            return output;
+        },
+        // Same shape as listenerOpenTechniqueMoreInfo, but items don't share
+        // one base definition across every repeater the way techniques do
+        // (all four technique repeaters use "Action") - the Gear Page's five
+        // owned-item repeaters build their cards via
+        // ItemRepeaterDisplayBuilder(WuxDef.Get("Gear")), while the Inspect
+        // Popup's item catalog (ItemPopupValues, shared by all 7 catalog
+        // types - Item/Consumables/Gear/Goods/GoodsForGear/Foods/Ings,
+        // Worker-InspectPopup.js) builds via
+        // ItemRepeaterDisplayBuilder(WuxDef.Get("Action")) instead
+        // (WuxGS-Base.js's buildOwnedItemCard/printCatalogItemFullDisplay) -
+        // so each context needs its own base definition when computing the
+        // trigger attribute name, not one shared across the whole loop.
+        listenerOpenItemMoreInfo = function () {
+            let contexts = [
+                {repeater: "RepeatingConsumables", baseDef: "Gear"},
+                {repeater: "RepeatingGear", baseDef: "Gear"},
+                {repeater: "RepeatingFoods", baseDef: "Gear"},
+                {repeater: "RepeatingEquipment", baseDef: "Gear"},
+                {repeater: "RepeatingSyncedEquipment", baseDef: "Gear"},
+                {repeater: "ItemPopupValues", baseDef: "Action"}
+            ];
+            let sections = ["ItemTrait", "ItemCraft"];
+
+            let output = "";
+            for (let i = 0; i < contexts.length; i++) {
+                let repeaterVar = WuxDef.GetVariable(contexts[i].repeater);
+                let baseDef = WuxDef.Get(contexts[i].baseDef);
+                let groupVariableNames = sections.map((section) =>
+                    `${repeaterVar}:${baseDef.getVariable(`-${WuxDef.GetVariable(section, WuxDef._moreinfo)}`)}`);
+                output += WuxSheetBackend.OnChange(groupVariableNames,
+                    `WuxWorkerGear.OpenItemMoreInfo(eventinfo, "${contexts[i].repeater}", "${contexts[i].baseDef}")`, true);
             }
             return output;
         }
