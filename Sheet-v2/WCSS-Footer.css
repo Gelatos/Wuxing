@@ -1006,6 +1006,8 @@ select.wuxManualNavDropdown {
     display: none;
 }
 
+input[type=hidden].wuxManualCategory-Flag[value="GuideCat_Basics"] + .wuxManualCategory-GuideCat_Basics,
+input[type=hidden].wuxManualCategory-Flag[value="GuideCat_Encounters"] + .wuxManualCategory-GuideCat_Encounters,
 input[type=hidden].wuxManualCategory-Flag[value="GuideCat_CharacterCreation"] + .wuxManualCategory-GuideCat_CharacterCreation,
 input[type=hidden].wuxManualCategory-Flag[value="GuideCat_StatusEffects"] + .wuxManualCategory-GuideCat_StatusEffects,
 input[type=hidden].wuxManualCategory-Flag[value="MoreInfo"] + .wuxManualCategory-MoreInfo {
@@ -1025,6 +1027,8 @@ input[type=hidden].wuxManualCategory-Flag[value="MoreInfo"] ~ .wuxManualNav sele
     display: block;
 }
 
+input[type=hidden].wuxManualCategory-Flag[value="GuideCat_Basics"] + .wuxManualSidebarCategory-GuideCat_Basics,
+input[type=hidden].wuxManualCategory-Flag[value="GuideCat_Encounters"] + .wuxManualSidebarCategory-GuideCat_Encounters,
 input[type=hidden].wuxManualCategory-Flag[value="GuideCat_CharacterCreation"] + .wuxManualSidebarCategory-GuideCat_CharacterCreation,
 input[type=hidden].wuxManualCategory-Flag[value="GuideCat_StatusEffects"] + .wuxManualSidebarCategory-GuideCat_StatusEffects {
     display: flex;

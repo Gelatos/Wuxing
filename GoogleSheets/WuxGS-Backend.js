@@ -1000,6 +1000,11 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerOpenManual();
             output += listenerCloseManual();
             output += listenerOpenManualForStatus();
+            output += listenerOpenManualForBoons();
+            output += listenerOpenManualForOrigin();
+            output += listenerOpenManualForStatSummary();
+            output += listenerOpenStatMoreInfo();
+            output += listenerOpenLoreMoreInfo();
             output += listenerOpenTechniqueMoreInfo();
             output += listenerOpenTechniqueFixedMoreInfo();
             output += listenerOpenItemMoreInfo();
@@ -1241,31 +1246,137 @@ var PopupBuilder = PopupBuilder || (function () {
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
-        // Character Overview's status effect "More Info" buttons (WuxGS-Base.js's
-        // openManualButton) - reuses each status definition's own _moreinfo
-        // attribute, same filter (group Status, presetStatus, not hasRanks) as
-        // the generator uses to decide which statuses get this button at all, so
-        // this only binds to attributes that actually exist in the HTML. Not
-        // gated on eventinfo.newValue like listenerOpenManual - this button has
-        // no other CSS tied to its checkbox anymore, so both the check and the
-        // matching uncheck are fine to treat as "open the Manual". hasEvents is
-        // now true (was false) - with several statuses sharing one listener,
-        // eventinfo.sourceAttribute is the only way to tell which one actually
-        // fired, so OpenManualWithDefinitions gets just that status's own
-        // definition name via the switch below instead of the whole category.
-        listenerOpenManualForStatus = function () {
-            let presetStatusDefs = WuxDef.Filter([new DatabaseFilterData("group", "Status")])
-                .filter(def => def.presetStatus && !def.hasRanks);
-            let groupVariableNames = presetStatusDefs.map(def => def.getVariable(WuxDef._moreinfo));
+        // Generic dispatcher for "click a definition's own _moreinfo button,
+        // open the Manual straight to that definition's own description" -
+        // same shape as the original listenerOpenManualForStatus (below), just
+        // parameterized on an arbitrary definitions list instead of always
+        // re-deriving the Status filter. Not gated on eventinfo.newValue -
+        // these buttons have no other CSS tied to their checkbox, so both the
+        // check and the matching uncheck are fine to treat as "open the
+        // Manual". hasEvents is true since, with several definitions sharing
+        // one listener, eventinfo.sourceAttribute is the only way to tell
+        // which one actually fired.
+        listenerOpenManualForDefinitions = function (definitions) {
+            let groupVariableNames = definitions.map(def => def.getVariable(WuxDef._moreinfo));
             if (groupVariableNames.length === 0) {
                 return "";
             }
-            let cases = presetStatusDefs.map(def =>
+            let cases = definitions.map(def =>
                 `case "${def.getVariable(WuxDef._moreinfo)}": WuxWorkerManual.OpenManualWithDefinitions(["${def.name}"]); break;`
             ).join(" ");
             let output = `switch (eventinfo.sourceAttribute) { ${cases} }`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        // Character Overview's status effect "More Info" buttons (WuxGS-Base.js's
+        // openManualButton) - reuses each status definition's own _moreinfo
+        // attribute, same filter (group Status, presetStatus, not hasRanks) as
+        // the generator uses to decide which statuses get this button at all, so
+        // this only binds to attributes that actually exist in the HTML.
+        listenerOpenManualForStatus = function () {
+            let presetStatusDefs = WuxDef.Filter([new DatabaseFilterData("group", "Status")])
+                .filter(def => def.presetStatus && !def.hasRanks);
+            return listenerOpenManualForDefinitions(presetStatusDefs);
+        },
+        // Character Overview's Boon "More Info" buttons (WuxGS-Base.js's
+        // resources) - now reuse the same openManualButton markup as Status
+        // above instead of WuxSheetMain.MoreInfo's pure-CSS inline reveal, so
+        // this needs its own listener the same shape as
+        // listenerOpenManualForStatus. Same unfiltered "group Boon" list the
+        // generator uses to decide which defs get the button at all - unlike
+        // Status, every Boon def gets one, no presetStatus/hasRanks split.
+        listenerOpenManualForBoons = function () {
+            let boonDefs = WuxDef.Filter([new DatabaseFilterData("group", "Boon")]);
+            return listenerOpenManualForDefinitions(boonDefs);
+        },
+        // Character Details page's Origin tab (CharacterBackgroundBuilder,
+        // GoogleSheets/WuxGS-CharacterDetailsBuilder.js) - every Build* field
+        // label there was converted to a Manual button (useManualButton=true
+        // passed through WuxDefinition.BuildHeader). This is a fixed,
+        // explicit list matching that builder's own field definitions one for
+        // one, since Origin's fields are pulled by name rather than through a
+        // WuxDef.Filter(...) the way Stat Summary's are below.
+        listenerOpenManualForOrigin = function () {
+            let originFieldNames = [
+                "Title_IsPlayer", "CharSheetName", "SheetName", "FullName", "Ancestry", "Ethnicity", "Affinity", "QuickDescription",
+                "Title", "Age", "Gender", "HomeRegion", "Backstory",
+                "Level", "CR", "Potency", "Title_StartingJin",
+                "Note_GenName", "Note_GenFullName", "Note_GenGender", "Note_GenHomeRegion", "Note_GenRace", "Note_GenPersonality", "Note_GenMotivation"
+            ];
+            let definitions = originFieldNames.map(name => WuxDef.Get(name));
+            return listenerOpenManualForDefinitions(definitions);
+        },
+        // Character Details page's Stat Summary tab (CharacterStatisticsBuilder/
+        // ExtendedCharacterStatisticsBuilder, same file) - Attributes
+        // (printSetStat) and Lore category headers (printKnowledges) have only
+        // a label, no value-side breakdown, so they're the only Stat Summary
+        // labels still dispatched through the plain single-definition path.
+        // Everything printStat renders (Potency/Recall/Defenses/CoreResource/
+        // En-Move-CombatStat/Skills) moves to listenerOpenStatMoreInfo below,
+        // since those labels now open the same combined view their value-side
+        // breakdown does.
+        listenerOpenManualForStatSummary = function () {
+            let attributeOrder = ["Attr_BOD", "Attr_CNV", "Attr_PRC", "Attr_RSN", "Attr_QCK", "Attr_INT"];
+            let definitions = attributeOrder.map(name => WuxDef.Get(name))
+                .concat(WuxDef.Filter(new DatabaseFilterData("group", "LoreCategory")));
+            return listenerOpenManualForDefinitions(definitions);
+        },
+        // Stat Summary's label AND value-side triggers for every stat printStat
+        // renders (Potency/Recall/Defenses/CoreResource/En-Move-CombatStat/
+        // Skills - Attributes and Lore headers have no breakdown and stay on
+        // listenerOpenManualForStatSummary above). Both triggers on a given
+        // stat now open the same combined view - the stat's own description
+        // followed by its live calculation breakdown - rather than the label
+        // showing just the description and the value showing just the
+        // breakdown separately. WuxWorkerGeneral.OpenStatMoreInfo
+        // (Worker-General.js) builds both pieces itself from just the
+        // definition name, so one switch case per stat covers both its label
+        // (bare _moreinfo) and value ("value"-suffixed) triggers.
+        listenerOpenStatMoreInfo = function () {
+            let defenseOrder = ["Def_Brace", "Def_Resolve", "Def_Warding", "Def_Logic", "Def_Evasion", "Def_Insight"];
+            let definitions = [WuxDef.Get("Potency"), WuxDef.Get("Recall")]
+                .concat(defenseOrder.map(name => WuxDef.Get(name)))
+                .concat(WuxDef.Filter([new DatabaseFilterData("subGroup", "CoreResource")]))
+                .concat(WuxDef.Filter([new DatabaseFilterData("subGroup", "EnStat")]))
+                .concat(WuxDef.Filter([new DatabaseFilterData("subGroup", "MoveStat")]))
+                .concat(WuxDef.Filter([new DatabaseFilterData("subGroup", "CombatStat")]))
+                .concat(WuxDef.Filter([new DatabaseFilterData("group", "Skill")]));
+            let groupVariableNames = [];
+            let cases = "";
+            definitions.forEach(def => {
+                let labelVar = def.getVariable(WuxDef._moreinfo);
+                let valueVar = `${labelVar}value`;
+                groupVariableNames.push(labelVar, valueVar);
+                cases += `case "${labelVar}": case "${valueVar}": WuxWorkerGeneral.OpenStatMoreInfo(eventinfo, "${def.name}"); break; `;
+            });
+            if (groupVariableNames.length === 0) {
+                return "";
+            }
+            let output = `switch (eventinfo.sourceAttribute) { ${cases} }`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        // Character Details page's Lore entries (printLoreStat) - the trigger
+        // is a bare, unprefixed _moreinfo attribute minted off the shared
+        // "Lore_SubType" definition (same as Lore_SubType/Lore_Description
+        // themselves), so - same as every other field referenced inside a
+        // <fieldset class="repeating_x"> - Roll20 silently rescopes it to a
+        // per-row attribute per Lore repeater. Bound per-repeater here, same
+        // shape as listenerOpenTechniqueFixedMoreInfo's Trait_OnEnter fix.
+        listenerOpenLoreMoreInfo = function () {
+            let loreRepeaterIds = [
+                "RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
+                "RepeaterGeography", "RepeaterHistory", "RepeaterCulture"
+            ];
+            let triggerVar = WuxDef.Get("Lore_SubType").getVariable(WuxDef._moreinfo);
+
+            let output = "";
+            for (let i = 0; i < loreRepeaterIds.length; i++) {
+                let repeaterVar = WuxDef.GetVariable(loreRepeaterIds[i]);
+                let groupVariableNames = [`${repeaterVar}:${triggerVar}`];
+                output += WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerGeneral.OpenLoreMoreInfo(eventinfo, "${loreRepeaterIds[i]}")`, true);
+            }
+            return output;
         },
         // FormeTechniques' technique tooltips (Range/Traits/Core Effects/Check
         // Effects/Will Break/Action - GoogleSheets/WuxGS-FeatureDisplayBuilder.js)

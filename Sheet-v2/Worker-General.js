@@ -618,8 +618,68 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
                 }
             });
             attributeHandler.run();
+        },
+        // Character Details page's Stat Summary tooltips (printStat,
+        // GoogleSheets/WuxGS-CharacterDetailsBuilder.js) - both the label and
+        // the value-side breakdown button now open the same combined view
+        // (the definition's own description, then its live calculation
+        // breakdown) instead of two separate ones. eventinfo carries no info
+        // about which stat or which of the two triggers fired beyond
+        // definitionName, passed explicitly by the listener's switch
+        // (WuxGS-Backend.js's listenerOpenStatMoreInfo). The live calculation
+        // breakdown text itself is written elsewhere (Worker-Actions.js/
+        // Worker-Skills.js) into the definition's own _info attribute - this
+        // just reads it at click time, same shape as Worker-Gear.js's
+        // openItemMoreInfo. The description entry mirrors
+        // openManualWithDefinitions' own join convention (Worker-Manual.js)
+        // since OpenManualWithContent takes a plain string, not the raw
+        // descriptions array.
+        openStatMoreInfo = function (eventinfo, definitionName) {
+            if (eventinfo.newValue !== "on") { return; }
+            let definition = WuxDef.Get(definitionName);
+            let infoVar = definition.getVariable(WuxDef._info);
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod([infoVar]);
+            attributeHandler.addUpdate(eventinfo.sourceAttribute, "0");
+            attributeHandler.addFinishCallback(function (attrHandler) {
+                let liveValue = attrHandler.parseString(infoVar);
+                let descriptionEntry = {
+                    title: definition.getTitle(),
+                    subGroup: definition.subGroup,
+                    description: definition.descriptions.filter(d => d !== "").join("\n\n")
+                };
+                let calculationEntry = liveValue !== ""
+                    ? { title: definition.getTitle(), subGroup: "Calculation", description: liveValue }
+                    : undefined;
+                WuxWorkerManual.OpenManualWithContent([descriptionEntry, calculationEntry]);
+            });
+            attributeHandler.run();
+        },
+        // Character Details page's Lore entries (printLoreStat,
+        // GoogleSheets/WuxGS-CharacterDetailsBuilder.js) - the character's own
+        // free-text Lore_SubType/Lore_Description, not a WuxDef description,
+        // so this reads the row's own live text instead of calling
+        // OpenManualWithDefinitions. Same structural shape as Worker-Gear.js's
+        // openItemMoreInfo: resolve the row from eventinfo.sourceAttribute,
+        // read that row's own fields, reset the trigger, open the Manual with
+        // the row's own content.
+        openLoreMoreInfo = function (eventinfo, repeaterId) {
+            if (eventinfo.newValue !== "on") { return; }
+            let repeater = new WorkerRepeatingSectionHandler(repeaterId);
+            let rowId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let subTypeVar = repeater.getFieldName(rowId, WuxDef.Get("Lore_SubType").getVariable());
+            let descVar = repeater.getFieldName(rowId, WuxDef.Get("Lore_Description").getVariable());
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod([subTypeVar, descVar]);
+            attributeHandler.addUpdate(eventinfo.sourceAttribute, "0");
+            attributeHandler.addFinishCallback(function (attrHandler) {
+                let subType = attrHandler.parseString(subTypeVar);
+                let description = attrHandler.parseString(descVar);
+                WuxWorkerManual.OpenManualWithContent([{ title: subType, subGroup: "Lore", description: description }]);
+            });
+            attributeHandler.run();
         }
-        
+
     return {
         UpdatePerkMaxRanks: updatePerkMaxRanks,
         UpdateStats: updateStats,
@@ -639,7 +699,9 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
         UpdateVitality: updateVitality,
         OpenSubMenu: openSubMenu,
         CloseSubMenu: closeSubMenu,
-        ClosePopup: closePopup
+        ClosePopup: closePopup,
+        OpenStatMoreInfo: openStatMoreInfo,
+        OpenLoreMoreInfo: openLoreMoreInfo
     };
 }());
 

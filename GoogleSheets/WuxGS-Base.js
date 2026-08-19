@@ -177,7 +177,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                                     WuxSheetMain.Table.FlexTableGroup(
                                         WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                             def.getAttribute(), WuxSheetMain.Header2(def.getTitle())) +
-                                        WuxSheetMain.MoreInfo(def)));
+                                        openManualButton(def)));
                                 contents += WuxSheetMain.MultiRowGroup(boonItems, WuxSheetMain.Table.FlexTable, 2);
                             }
 
@@ -1890,14 +1890,18 @@ var DisplayPopups = DisplayPopups || (function () {
                             .filter(name => name !== "")
                             .map(name => WuxDef.Get(name));
                     } else if (guideCat.subGroup !== "") {
-                        // Unlike an explicit list, a subGroup pull (e.g. Status Effects'
-                        // whole "Status" group) has no curated order to preserve - just
-                        // whatever order the dictionary happens to store them in - so
-                        // alphabetized by title for both this array's consumers,
-                        // categoryContent (main page) and sidebarCategory (TOC), which
-                        // both read the same category.topics this feeds (getCategories).
-                        topicDefinitions = WuxDef.Filter(new DatabaseFilterData("group", guideCat.subGroup))
-                            .sort((a, b) => a.title.localeCompare(b.title));
+                        // A subGroup pull covers several categories (Basics, Encounters,
+                        // Status Effects, ...), each with its own dictionary order that's
+                        // meaningful for everything except Status - only Status Effects'
+                        // whole "Status" group has no curated order to preserve, so
+                        // alphabetizing by title is scoped to that one subGroup
+                        // specifically, not applied to every subGroup pull. Feeds both
+                        // consumers of category.topics (getCategories): categoryContent
+                        // (main page) and sidebarCategory (TOC).
+                        topicDefinitions = WuxDef.Filter(new DatabaseFilterData("group", guideCat.subGroup));
+                        if (guideCat.subGroup === "Status") {
+                            topicDefinitions = topicDefinitions.sort((a, b) => a.title.localeCompare(b.title));
+                        }
                     } else {
                         topicDefinitions = [];
                     }

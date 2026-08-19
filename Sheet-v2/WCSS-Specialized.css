@@ -418,6 +418,16 @@ input[type=hidden].wuxStatSummary-flag[value="2"] + .wuxStatSummary-value
     color: white;
 }
 
+/* div.wuxButton.wuxManualButton span (WCSS-Footer.css) sets color: inherit
+   with higher specificity (two classes) than the plain rule above (one
+   class), so Manual-button labels here would otherwise fall back through
+   the div's own inherited color instead of picking up white - same fix
+   shape as the rule above, just scoped past that button's own span rule. */
+.wuxCharacterStatistics div.wuxButton.wuxManualButton span
+{
+    color: white;
+}
+
 .wuxCharacterStatistics .wuxTooltipContent .wuxDescription
 {
     color: black;

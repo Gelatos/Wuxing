@@ -11165,37 +11165,52 @@ var WuxDefinition = WuxDefinition || (function () {
             ${WuxSheetMain.Info.DefaultContents(definition)}`;
         },
 
-        buildHeader = function (definition) {
-            return WuxSheetMain.Header2(`${WuxSheetMain.Tooltip.Text(definition.title, WuxDefinition.TooltipDescription(definition))}`);
+        // useManualButton (optional, default falsy): every existing caller across
+        // the Overview page (WuxGS-Base.js) and the character-creation wizard
+        // (WuxGS-Advancement.js) omits this and keeps today's hover tooltip
+        // exactly as-is - only CharacterBackgroundBuilder (WuxGS-Character
+        // DetailsBuilder.js, the Details page's Origin tab) passes true, opening
+        // the Manual instead (same "wuxManualButton" markup printMoreInfoButton
+        // uses for techniques/items - WuxGS-FeatureDisplayBuilder.js). The
+        // trigger is minted off the field's own definition via WuxDef._moreinfo,
+        // same arbitrary-suffix piggyback used everywhere else this session -
+        // dispatched by a generic listener (WuxGS-Backend.js's
+        // listenerOpenManualForDefinitions) rather than a per-field one, since
+        // Origin has over a dozen of these.
+        buildHeader = function (definition, useManualButton) {
+            let title = useManualButton
+                ? WuxSheetMain.Button(definition.getAttribute(WuxDef._moreinfo), definition.title, "wuxManualButton")
+                : WuxSheetMain.Tooltip.Text(definition.title, WuxDefinition.TooltipDescription(definition));
+            return WuxSheetMain.Header2(title);
         },
 
-        buildText = function (definition, textContents) {
-            return buildHeader(definition) + "\n" +
+        buildText = function (definition, textContents, useManualButton) {
+            return buildHeader(definition, useManualButton) + "\n" +
                 WuxSheetMain.Desc(textContents);
         },
 
-        buildTextInput = function (definition, fieldName, className) {
-            return buildHeader(definition) + "\n" +
+        buildTextInput = function (definition, fieldName, className, useManualButton) {
+            return buildHeader(definition, useManualButton) + "\n" +
                 WuxSheetMain.CustomInput("text", fieldName, className);
         },
 
-        buildTextarea = function (definition, fieldName, className, placeholder) {
-            return buildHeader(definition) + "\n" +
+        buildTextarea = function (definition, fieldName, className, placeholder, useManualButton) {
+            return buildHeader(definition, useManualButton) + "\n" +
                 WuxSheetMain.Textarea(fieldName, className, placeholder);
         },
 
-        buildNumberInput = function (definition, fieldName, defaultValue) {
-            return buildHeader(definition) + "\n" +
+        buildNumberInput = function (definition, fieldName, defaultValue, useManualButton) {
+            return buildHeader(definition, useManualButton) + "\n" +
                 WuxSheetMain.Input("number", fieldName, defaultValue);
         },
 
-        buildNumberLabelInput = function (definition, fieldName, labelContent) {
-            return buildHeader(definition) + "\n" +
+        buildNumberLabelInput = function (definition, fieldName, labelContent, useManualButton) {
+            return buildHeader(definition, useManualButton) + "\n" +
                 WuxSheetMain.MultiRow(WuxSheetMain.Input("number", fieldName, "", "0") + WuxSheetMain.InputLabel(labelContent));
         },
 
-        buildSelect = function (definition, fieldName, definitionGroup, showEmpty) {
-            return buildHeader(definition) + "\n" +
+        buildSelect = function (definition, fieldName, definitionGroup, showEmpty, useManualButton) {
+            return buildHeader(definition, useManualButton) + "\n" +
                 WuxSheetMain.Select(fieldName, definitionGroup, showEmpty);
         }
     ;
@@ -12160,7 +12175,7 @@ var DisplayCoreCharacterSheet = DisplayCoreCharacterSheet || (function () {
                                     WuxSheetMain.Table.FlexTableGroup(
                                         WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                             def.getAttribute(), WuxSheetMain.Header2(def.getTitle())) +
-                                        WuxSheetMain.MoreInfo(def)));
+                                        openManualButton(def)));
                                 contents += WuxSheetMain.MultiRowGroup(boonItems, WuxSheetMain.Table.FlexTable, 2);
                             }
 
@@ -13873,14 +13888,18 @@ var DisplayPopups = DisplayPopups || (function () {
                             .filter(name => name !== "")
                             .map(name => WuxDef.Get(name));
                     } else if (guideCat.subGroup !== "") {
-                        // Unlike an explicit list, a subGroup pull (e.g. Status Effects'
-                        // whole "Status" group) has no curated order to preserve - just
-                        // whatever order the dictionary happens to store them in - so
-                        // alphabetized by title for both this array's consumers,
-                        // categoryContent (main page) and sidebarCategory (TOC), which
-                        // both read the same category.topics this feeds (getCategories).
-                        topicDefinitions = WuxDef.Filter(new DatabaseFilterData("group", guideCat.subGroup))
-                            .sort((a, b) => a.title.localeCompare(b.title));
+                        // A subGroup pull covers several categories (Basics, Encounters,
+                        // Status Effects, ...), each with its own dictionary order that's
+                        // meaningful for everything except Status - only Status Effects'
+                        // whole "Status" group has no curated order to preserve, so
+                        // alphabetizing by title is scoped to that one subGroup
+                        // specifically, not applied to every subGroup pull. Feeds both
+                        // consumers of category.topics (getCategories): categoryContent
+                        // (main page) and sidebarCategory (TOC).
+                        topicDefinitions = WuxDef.Filter(new DatabaseFilterData("group", guideCat.subGroup));
+                        if (guideCat.subGroup === "Status") {
+                            topicDefinitions = topicDefinitions.sort((a, b) => a.title.localeCompare(b.title));
+                        }
                     } else {
                         topicDefinitions = [];
                     }
@@ -15114,6 +15133,11 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerOpenManual();
             output += listenerCloseManual();
             output += listenerOpenManualForStatus();
+            output += listenerOpenManualForBoons();
+            output += listenerOpenManualForOrigin();
+            output += listenerOpenManualForStatSummary();
+            output += listenerOpenStatMoreInfo();
+            output += listenerOpenLoreMoreInfo();
             output += listenerOpenTechniqueMoreInfo();
             output += listenerOpenTechniqueFixedMoreInfo();
             output += listenerOpenItemMoreInfo();
@@ -15355,31 +15379,137 @@ var PopupBuilder = PopupBuilder || (function () {
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
-        // Character Overview's status effect "More Info" buttons (WuxGS-Base.js's
-        // openManualButton) - reuses each status definition's own _moreinfo
-        // attribute, same filter (group Status, presetStatus, not hasRanks) as
-        // the generator uses to decide which statuses get this button at all, so
-        // this only binds to attributes that actually exist in the HTML. Not
-        // gated on eventinfo.newValue like listenerOpenManual - this button has
-        // no other CSS tied to its checkbox anymore, so both the check and the
-        // matching uncheck are fine to treat as "open the Manual". hasEvents is
-        // now true (was false) - with several statuses sharing one listener,
-        // eventinfo.sourceAttribute is the only way to tell which one actually
-        // fired, so OpenManualWithDefinitions gets just that status's own
-        // definition name via the switch below instead of the whole category.
-        listenerOpenManualForStatus = function () {
-            let presetStatusDefs = WuxDef.Filter([new DatabaseFilterData("group", "Status")])
-                .filter(def => def.presetStatus && !def.hasRanks);
-            let groupVariableNames = presetStatusDefs.map(def => def.getVariable(WuxDef._moreinfo));
+        // Generic dispatcher for "click a definition's own _moreinfo button,
+        // open the Manual straight to that definition's own description" -
+        // same shape as the original listenerOpenManualForStatus (below), just
+        // parameterized on an arbitrary definitions list instead of always
+        // re-deriving the Status filter. Not gated on eventinfo.newValue -
+        // these buttons have no other CSS tied to their checkbox, so both the
+        // check and the matching uncheck are fine to treat as "open the
+        // Manual". hasEvents is true since, with several definitions sharing
+        // one listener, eventinfo.sourceAttribute is the only way to tell
+        // which one actually fired.
+        listenerOpenManualForDefinitions = function (definitions) {
+            let groupVariableNames = definitions.map(def => def.getVariable(WuxDef._moreinfo));
             if (groupVariableNames.length === 0) {
                 return "";
             }
-            let cases = presetStatusDefs.map(def =>
+            let cases = definitions.map(def =>
                 `case "${def.getVariable(WuxDef._moreinfo)}": WuxWorkerManual.OpenManualWithDefinitions(["${def.name}"]); break;`
             ).join(" ");
             let output = `switch (eventinfo.sourceAttribute) { ${cases} }`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        // Character Overview's status effect "More Info" buttons (WuxGS-Base.js's
+        // openManualButton) - reuses each status definition's own _moreinfo
+        // attribute, same filter (group Status, presetStatus, not hasRanks) as
+        // the generator uses to decide which statuses get this button at all, so
+        // this only binds to attributes that actually exist in the HTML.
+        listenerOpenManualForStatus = function () {
+            let presetStatusDefs = WuxDef.Filter([new DatabaseFilterData("group", "Status")])
+                .filter(def => def.presetStatus && !def.hasRanks);
+            return listenerOpenManualForDefinitions(presetStatusDefs);
+        },
+        // Character Overview's Boon "More Info" buttons (WuxGS-Base.js's
+        // resources) - now reuse the same openManualButton markup as Status
+        // above instead of WuxSheetMain.MoreInfo's pure-CSS inline reveal, so
+        // this needs its own listener the same shape as
+        // listenerOpenManualForStatus. Same unfiltered "group Boon" list the
+        // generator uses to decide which defs get the button at all - unlike
+        // Status, every Boon def gets one, no presetStatus/hasRanks split.
+        listenerOpenManualForBoons = function () {
+            let boonDefs = WuxDef.Filter([new DatabaseFilterData("group", "Boon")]);
+            return listenerOpenManualForDefinitions(boonDefs);
+        },
+        // Character Details page's Origin tab (CharacterBackgroundBuilder,
+        // GoogleSheets/WuxGS-CharacterDetailsBuilder.js) - every Build* field
+        // label there was converted to a Manual button (useManualButton=true
+        // passed through WuxDefinition.BuildHeader). This is a fixed,
+        // explicit list matching that builder's own field definitions one for
+        // one, since Origin's fields are pulled by name rather than through a
+        // WuxDef.Filter(...) the way Stat Summary's are below.
+        listenerOpenManualForOrigin = function () {
+            let originFieldNames = [
+                "Title_IsPlayer", "CharSheetName", "SheetName", "FullName", "Ancestry", "Ethnicity", "Affinity", "QuickDescription",
+                "Title", "Age", "Gender", "HomeRegion", "Backstory",
+                "Level", "CR", "Potency", "Title_StartingJin",
+                "Note_GenName", "Note_GenFullName", "Note_GenGender", "Note_GenHomeRegion", "Note_GenRace", "Note_GenPersonality", "Note_GenMotivation"
+            ];
+            let definitions = originFieldNames.map(name => WuxDef.Get(name));
+            return listenerOpenManualForDefinitions(definitions);
+        },
+        // Character Details page's Stat Summary tab (CharacterStatisticsBuilder/
+        // ExtendedCharacterStatisticsBuilder, same file) - Attributes
+        // (printSetStat) and Lore category headers (printKnowledges) have only
+        // a label, no value-side breakdown, so they're the only Stat Summary
+        // labels still dispatched through the plain single-definition path.
+        // Everything printStat renders (Potency/Recall/Defenses/CoreResource/
+        // En-Move-CombatStat/Skills) moves to listenerOpenStatMoreInfo below,
+        // since those labels now open the same combined view their value-side
+        // breakdown does.
+        listenerOpenManualForStatSummary = function () {
+            let attributeOrder = ["Attr_BOD", "Attr_CNV", "Attr_PRC", "Attr_RSN", "Attr_QCK", "Attr_INT"];
+            let definitions = attributeOrder.map(name => WuxDef.Get(name))
+                .concat(WuxDef.Filter(new DatabaseFilterData("group", "LoreCategory")));
+            return listenerOpenManualForDefinitions(definitions);
+        },
+        // Stat Summary's label AND value-side triggers for every stat printStat
+        // renders (Potency/Recall/Defenses/CoreResource/En-Move-CombatStat/
+        // Skills - Attributes and Lore headers have no breakdown and stay on
+        // listenerOpenManualForStatSummary above). Both triggers on a given
+        // stat now open the same combined view - the stat's own description
+        // followed by its live calculation breakdown - rather than the label
+        // showing just the description and the value showing just the
+        // breakdown separately. WuxWorkerGeneral.OpenStatMoreInfo
+        // (Worker-General.js) builds both pieces itself from just the
+        // definition name, so one switch case per stat covers both its label
+        // (bare _moreinfo) and value ("value"-suffixed) triggers.
+        listenerOpenStatMoreInfo = function () {
+            let defenseOrder = ["Def_Brace", "Def_Resolve", "Def_Warding", "Def_Logic", "Def_Evasion", "Def_Insight"];
+            let definitions = [WuxDef.Get("Potency"), WuxDef.Get("Recall")]
+                .concat(defenseOrder.map(name => WuxDef.Get(name)))
+                .concat(WuxDef.Filter([new DatabaseFilterData("subGroup", "CoreResource")]))
+                .concat(WuxDef.Filter([new DatabaseFilterData("subGroup", "EnStat")]))
+                .concat(WuxDef.Filter([new DatabaseFilterData("subGroup", "MoveStat")]))
+                .concat(WuxDef.Filter([new DatabaseFilterData("subGroup", "CombatStat")]))
+                .concat(WuxDef.Filter([new DatabaseFilterData("group", "Skill")]));
+            let groupVariableNames = [];
+            let cases = "";
+            definitions.forEach(def => {
+                let labelVar = def.getVariable(WuxDef._moreinfo);
+                let valueVar = `${labelVar}value`;
+                groupVariableNames.push(labelVar, valueVar);
+                cases += `case "${labelVar}": case "${valueVar}": WuxWorkerGeneral.OpenStatMoreInfo(eventinfo, "${def.name}"); break; `;
+            });
+            if (groupVariableNames.length === 0) {
+                return "";
+            }
+            let output = `switch (eventinfo.sourceAttribute) { ${cases} }`;
+
+            return WuxSheetBackend.OnChange(groupVariableNames, output, true);
+        },
+        // Character Details page's Lore entries (printLoreStat) - the trigger
+        // is a bare, unprefixed _moreinfo attribute minted off the shared
+        // "Lore_SubType" definition (same as Lore_SubType/Lore_Description
+        // themselves), so - same as every other field referenced inside a
+        // <fieldset class="repeating_x"> - Roll20 silently rescopes it to a
+        // per-row attribute per Lore repeater. Bound per-repeater here, same
+        // shape as listenerOpenTechniqueFixedMoreInfo's Trait_OnEnter fix.
+        listenerOpenLoreMoreInfo = function () {
+            let loreRepeaterIds = [
+                "RepeaterAcademic", "RepeaterProfession", "RepeaterCraftmanship",
+                "RepeaterGeography", "RepeaterHistory", "RepeaterCulture"
+            ];
+            let triggerVar = WuxDef.Get("Lore_SubType").getVariable(WuxDef._moreinfo);
+
+            let output = "";
+            for (let i = 0; i < loreRepeaterIds.length; i++) {
+                let repeaterVar = WuxDef.GetVariable(loreRepeaterIds[i]);
+                let groupVariableNames = [`${repeaterVar}:${triggerVar}`];
+                output += WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerGeneral.OpenLoreMoreInfo(eventinfo, "${loreRepeaterIds[i]}")`, true);
+            }
+            return output;
         },
         // FormeTechniques' technique tooltips (Range/Traits/Core Effects/Check
         // Effects/Will Break/Action - GoogleSheets/WuxGS-FeatureDisplayBuilder.js)
@@ -17978,32 +18108,32 @@ class CharacterBackgroundBuilder {
     backgroundBasics() {
         let isPlayerField = `${WuxSheet.MainPageDisplayInput()}
             ${WuxSheet.PageDisplay("OriginData", WuxDefinition.BuildSelect(WuxDef.Get("Title_IsPlayer"), WuxDef.GetAttribute("Title_IsPlayer"),
-                WuxDef.Filter([new DatabaseFilterData("group", "IsPlayer")]), false))}`;
+                WuxDef.Filter([new DatabaseFilterData("group", "IsPlayer")]), false, true))}`;
 
 
         let sheetNameField = `${WuxSheet.MainPageDisplayInput()}
-                ${WuxSheet.PageDisplay("OriginData", WuxDefinition.BuildTextInput(WuxDef.Get("CharSheetName"), WuxDef.GetAttribute("CharSheetName")))}
-                ${WuxSheet.PageDisplay("CharacterData", WuxDefinition.BuildTextInput(WuxDef.Get("SheetName"), WuxDef.GetAttribute("SheetName")))}`;
+                ${WuxSheet.PageDisplay("OriginData", WuxDefinition.BuildTextInput(WuxDef.Get("CharSheetName"), WuxDef.GetAttribute("CharSheetName"), undefined, true))}
+                ${WuxSheet.PageDisplay("CharacterData", WuxDefinition.BuildTextInput(WuxDef.Get("SheetName"), WuxDef.GetAttribute("SheetName"), undefined, true))}`;
         let nameFields = WuxSheetMain.MultiRowGroup([
                 WuxSheetMain.Table.FlexTableGroup(sheetNameField),
-                WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName")), " wuxFlexTableItemGroup2")],
+                WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildTextInput(WuxDef.Get("FullName"), WuxDef.GetAttribute("FullName"), undefined, true), " wuxFlexTableItemGroup2")],
             WuxSheetMain.Table.FlexTable, 2);
-        
+
         let ancestryField = WuxDefinition.BuildSelect(WuxDef.Get("Ancestry"), WuxDef.GetAttribute("Ancestry"),
-            WuxDef.Filter([new DatabaseFilterData("group", "AncestryType")]));
+            WuxDef.Filter([new DatabaseFilterData("group", "AncestryType")]), undefined, true);
         let ethnicityField = `<input type="hidden" class="wuxAncestrySelection-flag" name="${WuxDef.GetAttribute("Ancestry")}" value="0">
             <div class="wuxAncestrySelection-Human">\n${WuxDefinition.BuildSelect(WuxDef.Get("Ethnicity"), WuxDef.GetAttribute("Ethnicity"),
-            WuxDef.Filter([new DatabaseFilterData("group", "RaceType")]), true)}\n</div>`;
+            WuxDef.Filter([new DatabaseFilterData("group", "RaceType")]), true, true)}\n</div>`;
         let ancestryFields = WuxSheetMain.MultiRowGroup(
             [WuxSheetMain.Table.FlexTableGroup(ancestryField), WuxSheetMain.Table.FlexTableGroup(ethnicityField, " wuxFlexTableItemGroup2")],
             WuxSheetMain.Table.FlexTable, 2);
-        
+
         let affinityField = WuxDefinition.BuildSelect(WuxDef.Get("Affinity"), WuxDef.GetAttribute("AffinityAspect"),
-            [WuxDef.Get("Unaspected")].concat(WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])), 
-            false);
-        
+            [WuxDef.Get("Unaspected")].concat(WuxDef.Filter([new DatabaseFilterData("group", "AffinityType")])),
+            false, true);
+
         let quickDescriptionField = WuxDefinition.BuildTextarea(WuxDef.Get("QuickDescription"), WuxDef.GetAttribute("QuickDescription"),
-            "wuxInput wuxHeight30");
+            "wuxInput wuxHeight30", undefined, true);
 
         return WuxSheetMain.Table.FlexTableGroup(`${isPlayerField}
         ${nameFields}
@@ -18013,16 +18143,16 @@ class CharacterBackgroundBuilder {
     }
 
     backgroundBackstory() {
-        let titleField = WuxDefinition.BuildTextInput(WuxDef.Get("Title"), WuxDef.GetAttribute("Title"));
+        let titleField = WuxDefinition.BuildTextInput(WuxDef.Get("Title"), WuxDef.GetAttribute("Title"), undefined, true);
         let ageGenderFields = WuxSheetMain.MultiRowGroup([
-            WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildTextInput(WuxDef.Get("Age"), WuxDef.GetAttribute("Age"))),
+            WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildTextInput(WuxDef.Get("Age"), WuxDef.GetAttribute("Age"), undefined, true)),
             WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildSelect(WuxDef.Get("Gender"), WuxDef.GetAttribute("Gender"),
-                WuxDef.Filter([new DatabaseFilterData("group", "GenderType")]), true))
+                WuxDef.Filter([new DatabaseFilterData("group", "GenderType")]), true, true))
         ], WuxSheetMain.Table.FlexTable, 2);
         let homeRegionField = WuxDefinition.BuildSelect(WuxDef.Get("HomeRegion"), WuxDef.GetAttribute("HomeRegion"),
-            WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]));
+            WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]), undefined, true);
         let backgroundField = WuxDefinition.BuildTextarea(WuxDef.Get("Backstory"), WuxDef.GetAttribute("Backstory"),
-            "wuxInput wuxHeight150");
+            "wuxInput wuxHeight150", undefined, true);
         return WuxSheetMain.Table.FlexTableGroup(`${titleField}
         ${ageGenderFields}
         ${homeRegionField}
@@ -18039,10 +18169,10 @@ class CharacterBackgroundBuilder {
     buildAdvancementData() {
         let contents = "";
         contents += WuxDefinition.InfoHeader(WuxDef.Get("Title_StartingData"));
-        contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Level"), WuxDef.GetAttribute("Level"));
-        contents += WuxDefinition.BuildText(WuxDef.Get("CR"), WuxSheetMain.Span(WuxDef.GetAttribute("CR", WuxDef._max)));
-        contents += WuxDefinition.BuildText(WuxDef.Get("Potency"), WuxSheetMain.Span(WuxDef.GetAttribute("Potency")));
-        contents += WuxDefinition.BuildTextInput(WuxDef.Get("Title_StartingJin"), WuxDef.GetAttribute("Jin"));
+        contents += WuxDefinition.BuildNumberInput(WuxDef.Get("Level"), WuxDef.GetAttribute("Level"), undefined, true);
+        contents += WuxDefinition.BuildText(WuxDef.Get("CR"), WuxSheetMain.Span(WuxDef.GetAttribute("CR", WuxDef._max)), true);
+        contents += WuxDefinition.BuildText(WuxDef.Get("Potency"), WuxSheetMain.Span(WuxDef.GetAttribute("Potency")), true);
+        contents += WuxDefinition.BuildTextInput(WuxDef.Get("Title_StartingJin"), WuxDef.GetAttribute("Jin"), undefined, true);
 
         return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth300");
     }
@@ -18057,20 +18187,20 @@ class CharacterBackgroundBuilder {
 
     backgroundGenerator() {
         let leftColumn = "";
-        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenName"), WuxDef.GetAttribute("Note_GenName"));
-        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenFullName"), WuxDef.GetAttribute("Note_GenFullName"));
-        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenGender"), WuxDef.GetAttribute("Note_GenGender"));
+        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenName"), WuxDef.GetAttribute("Note_GenName"), undefined, true);
+        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenFullName"), WuxDef.GetAttribute("Note_GenFullName"), undefined, true);
+        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenGender"), WuxDef.GetAttribute("Note_GenGender"), undefined, true);
         leftColumn += WuxDefinition.BuildSelect(WuxDef.Get("Note_GenHomeRegion"), WuxDef.GetAttribute("Note_GenHomeRegion"),
-            WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]));
-        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenRace"), WuxDef.GetAttribute("Note_GenRace"));
+            WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]), undefined, true);
+        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenRace"), WuxDef.GetAttribute("Note_GenRace"), undefined, true);
         leftColumn = WuxSheetMain.Table.FlexTableGroup(leftColumn);
 
         let rightColumn = "";
         let generatorDefinition = WuxDef.Get("Note_GenerateCharacter");
         let useDefinition = WuxDef.Get("Note_UseGeneration");
         let clearDefinition = WuxDef.Get("Note_ClearBackground");
-        rightColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenPersonality"), WuxDef.GetAttribute("Note_GenPersonality"));
-        rightColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenMotivation"), WuxDef.GetAttribute("Note_GenMotivation"));
+        rightColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenPersonality"), WuxDef.GetAttribute("Note_GenPersonality"), undefined, true);
+        rightColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenMotivation"), WuxDef.GetAttribute("Note_GenMotivation"), undefined, true);
         rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(generatorDefinition.getAttribute(), generatorDefinition.getTitle()));
         rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(useDefinition.getAttribute(), useDefinition.getTitle()));
         rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(clearDefinition.getAttribute(), clearDefinition.getTitle()));
@@ -18106,12 +18236,12 @@ class CharacterStatisticsBuilder {
         // rather than through the filter - using its own plain attribute, since it has no _max
         // variant to read.
         let resourceContents = `<div class="wuxRow">
-        ${this.printStat(potencyDef, potencyDef.abbreviation, potencyDef.getAttribute(), potencyDef.getAttribute(WuxDef._info), true)}
+        ${this.printStat(potencyDef, potencyDef.abbreviation, potencyDef.getAttribute(), true)}
         </div>`;
         for (let definition of filteredStats) {
             resourceContents += `<div class="wuxRow">
             ${this.printStat(definition, definition.abbreviation,
-                definition.getAttribute(WuxDef._max), definition.getAttribute(WuxDef._info), true)}
+                definition.getAttribute(WuxDef._max), true)}
             </div>`;
         }
         
@@ -18145,7 +18275,7 @@ class CharacterStatisticsBuilder {
             }
             
             contents += this.printStat(definition, `${definition.getTitle()} ${attributesLine}`,
-                definition.getAttribute(), definition.getAttribute(WuxDef._info), true);
+                definition.getAttribute(), true);
         }
         return contents;
     }
@@ -18162,7 +18292,7 @@ class CharacterStatisticsBuilder {
         let filteredStats = WuxDef.Filter([new DatabaseFilterData("subGroup", subGroupName)]);
         for (let definition of filteredStats) {
             contents += this.printStat(definition, definition.getTitle(),
-                definition.getAttribute(), definition.getAttribute(WuxDef._info), useEvaluation);
+                definition.getAttribute(), useEvaluation);
         }
         return `${contents}
         `;
@@ -18177,36 +18307,25 @@ class CharacterStatisticsBuilder {
             ? WuxSheetMain.EvaluatedSpan(fieldAttr, definition.getAttribute(WuxDef._evaluation))
             : WuxSheetMain.Span(fieldAttr);
         return `<div class="wuxFlexTableItemGroup">
-            <strong>${WuxSheetMain.Tooltip.Text(title,
-            this.printDefinitionTooltipContents(definition))}</strong>
+            <strong>${WuxSheetMain.Button(definition.getAttribute(WuxDef._moreinfo), title, "wuxManualButton")}</strong>
             <div class="wuxCharacterStatisticsStat">
                 ${valueDisplay}
             </div>
         </div>`;
     }
-    printDefinitionTooltipContents(definitionData) {
-        return `${WuxSheetMain.Header2(definitionData.title)}
-        <span class="wuxDescription">${definitionData.getDescription(`</span><span class="wuxDescription">`)}</span>`;
-    }
 
-    printStat(definition, title, fieldAttr, statCalculationField, useEvaluation) {
+    printStat(definition, title, fieldAttr, useEvaluation) {
         let valueDisplay = useEvaluation
             ? WuxSheetMain.EvaluatedSpan(fieldAttr, definition.getAttribute(WuxDef._evaluation))
             : WuxSheetMain.Span(fieldAttr);
         return `<div class="wuxFlexTableItemGroup">
-            ${WuxSheetMain.Tooltip.Text(title,
-            this.printDefinitionTooltipContents(definition))}
+            ${WuxSheetMain.Button(definition.getAttribute(WuxDef._moreinfo), title, "wuxManualButton")}
             <div class="wuxCharacterStatisticsStat">
-                ${WuxSheetMain.Tooltip.Text(valueDisplay,
-            this.printStatCalculationTooltipContent(definition, statCalculationField))}
+                ${WuxSheetMain.Button(`${definition.getAttribute(WuxDef._moreinfo)}value`, valueDisplay, "wuxManualButton")}
             </div>
         </div>`;
     }
-    printStatCalculationTooltipContent(definitionData, statCalculationField) {
-        return `${WuxSheetMain.Header2(definitionData.title)}
-        <span class="wuxDescription" name="${statCalculationField}"></span>`;
-    }
-    
+
 }
 
 class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
@@ -18242,12 +18361,9 @@ class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
         return contents;
     }
 
-    printLoreStat(nameAttr, descAttr, statAttr) {
+    printLoreStat(nameAttr, statAttr) {
         return `<div class="wuxFlexTableItemGroup">
-            ${WuxSheetMain.Tooltip.Text(
-                `<span name="${nameAttr}"></span>`,
-                `${WuxSheetMain.Header2(`<span name="${nameAttr}"></span>`)}<span class="wuxDescription" name="${descAttr}"></span>`
-            )}
+            ${WuxSheetMain.Button(WuxDef.Get("Lore_SubType").getAttribute(WuxDef._moreinfo), `<span name="${nameAttr}"></span>`, "wuxManualButton")}
             <div class="wuxCharacterStatisticsStat">
                 ${WuxSheetMain.Span(statAttr)}
             </div>
@@ -18264,7 +18380,7 @@ class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
         let generalLoreTitle = WuxDef.GetTitle("Title_GeneralLore");
         let loreCategoryDef = WuxDef.Get("Title_LoreCategory");
         let contents = this.printHeader(WuxDef.GetTitle("Page_Knowledge"));
-        contents += WuxSheetMain.Row(this.printStat(recallDef, recallDef.getTitle(), recallDef.getAttribute(), recallDef.getAttribute(WuxDef._info)));
+        contents += WuxSheetMain.Row(this.printStat(recallDef, recallDef.getTitle(), recallDef.getAttribute()));
 
         for (let i = 0; i < loreCategoryDefinitions.length; i++) {
             let categoryDef = loreCategoryDefinitions[i];
@@ -18273,12 +18389,11 @@ class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
             let categoryHeader = WuxSheetMain.Header2(loreCategoryDef.getTitle(categoryDef.getTitle()));
 
             let categoryContents = WuxSheetMain.HiddenField(categoryDef.getAttribute(WuxDef._rank),
-                `<div class="wuxFlexTableItemGroup">${WuxSheetMain.Tooltip.Text(generalLoreTitle, this.printDefinitionTooltipContents(categoryDef))}</div>`);
+                `<div class="wuxFlexTableItemGroup">${WuxSheetMain.Button(categoryDef.getAttribute(WuxDef._moreinfo), generalLoreTitle, "wuxManualButton")}</div>`);
 
             categoryContents += `<div class="wuxNoRepControl"><fieldset class="${repeaterDef.getVariable()}">
                 ${this.printLoreStat(
                     WuxDef.GetAttribute("Lore_SubType"),
-                    WuxDef.GetAttribute("Lore_Description"),
                     WuxDef.GetAttribute("Lore_Tier")
                 )}
             </fieldset></div>`;
@@ -18308,7 +18423,7 @@ class ExtendedCharacterStatisticsBuilder extends CharacterStatisticsBuilder {
                 let skillDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "Skill"),
                     new DatabaseFilterData("subGroup", subSkillGroup.getTitle())]);
                 for (let definition of skillDefinitions) {
-                    contents += this.printStat(definition, definition.getTitle(), definition.getAttribute(), definition.getAttribute(WuxDef._info), true);
+                    contents += this.printStat(definition, definition.getTitle(), definition.getAttribute(), true);
                 }
             }
         }

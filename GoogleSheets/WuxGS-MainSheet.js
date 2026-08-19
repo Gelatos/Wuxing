@@ -973,37 +973,52 @@ var WuxDefinition = WuxDefinition || (function () {
             ${WuxSheetMain.Info.DefaultContents(definition)}`;
         },
 
-        buildHeader = function (definition) {
-            return WuxSheetMain.Header2(`${WuxSheetMain.Tooltip.Text(definition.title, WuxDefinition.TooltipDescription(definition))}`);
+        // useManualButton (optional, default falsy): every existing caller across
+        // the Overview page (WuxGS-Base.js) and the character-creation wizard
+        // (WuxGS-Advancement.js) omits this and keeps today's hover tooltip
+        // exactly as-is - only CharacterBackgroundBuilder (WuxGS-Character
+        // DetailsBuilder.js, the Details page's Origin tab) passes true, opening
+        // the Manual instead (same "wuxManualButton" markup printMoreInfoButton
+        // uses for techniques/items - WuxGS-FeatureDisplayBuilder.js). The
+        // trigger is minted off the field's own definition via WuxDef._moreinfo,
+        // same arbitrary-suffix piggyback used everywhere else this session -
+        // dispatched by a generic listener (WuxGS-Backend.js's
+        // listenerOpenManualForDefinitions) rather than a per-field one, since
+        // Origin has over a dozen of these.
+        buildHeader = function (definition, useManualButton) {
+            let title = useManualButton
+                ? WuxSheetMain.Button(definition.getAttribute(WuxDef._moreinfo), definition.title, "wuxManualButton")
+                : WuxSheetMain.Tooltip.Text(definition.title, WuxDefinition.TooltipDescription(definition));
+            return WuxSheetMain.Header2(title);
         },
 
-        buildText = function (definition, textContents) {
-            return buildHeader(definition) + "\n" +
+        buildText = function (definition, textContents, useManualButton) {
+            return buildHeader(definition, useManualButton) + "\n" +
                 WuxSheetMain.Desc(textContents);
         },
 
-        buildTextInput = function (definition, fieldName, className) {
-            return buildHeader(definition) + "\n" +
+        buildTextInput = function (definition, fieldName, className, useManualButton) {
+            return buildHeader(definition, useManualButton) + "\n" +
                 WuxSheetMain.CustomInput("text", fieldName, className);
         },
 
-        buildTextarea = function (definition, fieldName, className, placeholder) {
-            return buildHeader(definition) + "\n" +
+        buildTextarea = function (definition, fieldName, className, placeholder, useManualButton) {
+            return buildHeader(definition, useManualButton) + "\n" +
                 WuxSheetMain.Textarea(fieldName, className, placeholder);
         },
 
-        buildNumberInput = function (definition, fieldName, defaultValue) {
-            return buildHeader(definition) + "\n" +
+        buildNumberInput = function (definition, fieldName, defaultValue, useManualButton) {
+            return buildHeader(definition, useManualButton) + "\n" +
                 WuxSheetMain.Input("number", fieldName, defaultValue);
         },
 
-        buildNumberLabelInput = function (definition, fieldName, labelContent) {
-            return buildHeader(definition) + "\n" +
+        buildNumberLabelInput = function (definition, fieldName, labelContent, useManualButton) {
+            return buildHeader(definition, useManualButton) + "\n" +
                 WuxSheetMain.MultiRow(WuxSheetMain.Input("number", fieldName, "", "0") + WuxSheetMain.InputLabel(labelContent));
         },
 
-        buildSelect = function (definition, fieldName, definitionGroup, showEmpty) {
-            return buildHeader(definition) + "\n" +
+        buildSelect = function (definition, fieldName, definitionGroup, showEmpty, useManualButton) {
+            return buildHeader(definition, useManualButton) + "\n" +
                 WuxSheetMain.Select(fieldName, definitionGroup, showEmpty);
         }
     ;
