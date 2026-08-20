@@ -8890,12 +8890,22 @@ select.wuxManualNavDropdown {
     color: #3e3e3e;
 }
 
+/* wuxActionFeature is shared with every other Action Feature card (job/style
+   technique lists, equipped-gear techniques, etc.) at 240px - this scopes the
+   Manual's own technique cards (TechniqueGroup rule, ManualPopup.buildTechniqueCard)
+   to 220px instead, without touching that shared 240px everywhere else. */
+.wuxManualContent .wuxFeature.wuxActionFeature {
+    min-width: 220px;
+    max-width: 220px;
+}
+
 .wuxManualContent > div {
     display: none;
 }
 
 input[type=hidden].wuxManualCategory-Flag[value="GuideCat_Basics"] + .wuxManualCategory-GuideCat_Basics,
 input[type=hidden].wuxManualCategory-Flag[value="GuideCat_Encounters"] + .wuxManualCategory-GuideCat_Encounters,
+input[type=hidden].wuxManualCategory-Flag[value="GuideCat_Techniques"] + .wuxManualCategory-GuideCat_Techniques,
 input[type=hidden].wuxManualCategory-Flag[value="GuideCat_CharacterCreation"] + .wuxManualCategory-GuideCat_CharacterCreation,
 input[type=hidden].wuxManualCategory-Flag[value="GuideCat_StatusEffects"] + .wuxManualCategory-GuideCat_StatusEffects,
 input[type=hidden].wuxManualCategory-Flag[value="MoreInfo"] + .wuxManualCategory-MoreInfo {
@@ -8917,6 +8927,7 @@ input[type=hidden].wuxManualCategory-Flag[value="MoreInfo"] ~ .wuxManualNav sele
 
 input[type=hidden].wuxManualCategory-Flag[value="GuideCat_Basics"] + .wuxManualSidebarCategory-GuideCat_Basics,
 input[type=hidden].wuxManualCategory-Flag[value="GuideCat_Encounters"] + .wuxManualSidebarCategory-GuideCat_Encounters,
+input[type=hidden].wuxManualCategory-Flag[value="GuideCat_Techniques"] + .wuxManualSidebarCategory-GuideCat_Techniques,
 input[type=hidden].wuxManualCategory-Flag[value="GuideCat_CharacterCreation"] + .wuxManualSidebarCategory-GuideCat_CharacterCreation,
 input[type=hidden].wuxManualCategory-Flag[value="GuideCat_StatusEffects"] + .wuxManualSidebarCategory-GuideCat_StatusEffects {
     display: flex;

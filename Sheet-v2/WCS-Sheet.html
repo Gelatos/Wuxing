@@ -21805,6 +21805,9 @@
 								<input type="radio" class="" name="attr_popup-manualcategory" value="GuideCat_Encounters" /><span>Encounters</span>
 							</div>
 							<div class="wuxButton wuxManualCategoryButton">
+								<input type="radio" class="" name="attr_popup-manualcategory" value="GuideCat_Techniques" /><span>Techniques</span>
+							</div>
+							<div class="wuxButton wuxManualCategoryButton">
 								<input type="radio" class="" name="attr_popup-manualcategory" value="GuideCat_StatusEffects" /><span>Status Effects</span>
 							</div><input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="0" />
 							<div class="wuxButton wuxManualCategoryButton wuxManualMoreInfoCategoryButton">
@@ -21814,6 +21817,7 @@
 						<select class="wuxInput wuxManualNavDropdown" name="attr_popup-manualcategory">
 							<option value="GuideCat_Basics">Basics</option>
 							<option value="GuideCat_Encounters">Encounters</option>
+							<option value="GuideCat_Techniques">Techniques</option>
 							<option value="GuideCat_StatusEffects">Status Effects</option>
 							<option class="wuxManualMoreInfoCategoryOption" value="MoreInfo">More Info</option>
 						</select>
@@ -21827,32 +21831,33 @@
 				<div class="wuxManualBody">
 					<input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="0" />
 					<div class="wuxManualSidebar"><input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="0" />
-						<div class="wuxManualSidebarCategory-GuideCat_Basics"><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Basics-sysbasics_goldenrules">Golden Rules</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Basics-sysbasics_skillchecks">Skill Checks</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Basics-sysbasics_choosingtofail">Choosing to Fail</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Basics-sysbasics_bonuses">Bonuses</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Basics-sysbasics_advantagedisadvantage">Advantage and Disadvantage</a></div><input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="0" />
-						<div class="wuxManualSidebarCategory-GuideCat_Encounters"><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-sysencounter_encounters">Encounters</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-sysencounter_round">Round</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-sysencounter_phase">Phase</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-sysencounter_takingaturn">Taking a Turn</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-sysencounter_channelingqi">Channeling Qi</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-sysencounter_thegrid">Grid Movement and Range</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-sysencounter_adjacency">Adjacency</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-sysencounter_attacking">Attacking</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-sysencounter_healthdamage">Health Damage</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-sysencounter_willdamage">Will Damage</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-sysencounter_phaserouted">Phase Routed</a></div><input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="0" />
+						<div class="wuxManualSidebarCategory-GuideCat_Basics"><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Basics-system_goldenrules">Golden Rules</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Basics-system_skillchecks">Skill Checks</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Basics-system_choosingtofail">Choosing to Fail</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Basics-system_bonuses">Bonuses</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Basics-system_advantagedisadvantage">Advantage and Disadvantage</a></div><input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="0" />
+						<div class="wuxManualSidebarCategory-GuideCat_Encounters"><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-system_encounters">Encounters</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-system_round">Round</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-system_phase">Phase</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-system_takingaturn">Taking a Turn</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-system_channelingqi">Channeling Qi</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-system_thegrid">Grid Movement and Range</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-system_adjacency">Adjacency</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-system_attacking">Attacking</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-system_healthdamage">Health Damage</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-system_willdamage">Will Damage</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Encounters-system_phaserouted">Phase Routed</a></div><input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="0" />
+						<div class="wuxManualSidebarCategory-GuideCat_Techniques"><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-system_formatoftechniques">Format of Techniques</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-system_techniquename">Technique Name</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-system_actioncost">Action Cost</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-techfiltertype_swiftaction">Swift Action</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-techfiltertype_assistaction">Assist Action</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-techfiltertype_quickaction">Quick Action</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-techfiltertype_fullaction">Full Action</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-techfiltertype_reactionaction">Reaction</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-techfiltertype_briefaction">Brief Action</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-techfiltertype_shortaction">Short Action</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-techfiltertype_longaction">Long Action</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-techfiltertype_passiveaction">Passive</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-system_targettingstyle">Targeting Style</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-pattern_target">Target</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-pattern_targets">Multiple Targets</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-pattern_target/self">Target or Self</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-pattern_object">Object</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-pattern_objects">Multiple Objects</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-pattern_space">Space</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-pattern_spaces">Multiple Spaces</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-pattern_line">Line X</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-pattern_wide_line">Wide Line X</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-pattern_cone">Cone X</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-pattern_blast">Blast X</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-pattern_blast(5h)">Blast X</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-pattern_radial">Radial X</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-system_resourcecost">Resource Costs</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-en">Qi</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-will">Will</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-system_variants">Variants</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-system_effects">Effects</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-system_freeeffects">Free Effects</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-system_skillcheckeffects">Skill Check Effects</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-system_onentereffects">On Enter Effects</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-system_willbreakeffects">WillBreak Effects</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-system_increaserankeffects">Increase Rank Effects</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_Techniques-system_basictech">Basic Techniques</a></div><input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="0" />
 						<div class="wuxManualSidebarCategory-GuideCat_StatusEffects"><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_aflame">Aflame</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_agreeable">Agreeable</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_angered">Angered</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_blinded">Blinded</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_burn_aegis">Burn Aegis</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_burst">Burst</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_calmed">Calmed</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_chilled">Chilled</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_cold_aegis">Cold Aegis</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_dazed">Dazed</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_distracted">Distracted</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_dodge">Dodge</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_doubt">Doubt</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_downed">Downed</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_dying">Dying</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_earthblight">Earthblight</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_empowered">Empowered</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_encouraged">Encouraged</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_engaged">Engaged</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_ethereal">Ethereal</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_exhausted">Exhausted</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_float">Float</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_flustered">Flustered</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_focus">Focus</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_frightened">Frightened</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_frozen">Frozen</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_grappled">Grappled</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_hidden">Hidden</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_hindered">Hindered</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_immobilized">Immobilized</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_invisible">Invisible</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_iron_plates">Iron Plates</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_jolted">Jolted</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_magnetized">Magnetized</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_mantle">Mantle</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_oppositional">Oppositional</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_overjoyed">Overjoyed</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_paralyzed">Paralyzed</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_persevering">Persevering</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_prone">Prone</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_quickened">Quickened</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_rally">Rally</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_restrained">Restrained</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_sand_aegis">Sand Aegis</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_shielded">Shielded</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_shock_aegis">Shock Aegis</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_sickened">Sickened</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_soaked">Soaked</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_static">Static</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_steadfast">Steadfast</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_stunned">Stunned</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_surprised">Surprised</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_unconscious">Unconscious</a><a class="wuxManualSidebarLink" href="#manual-anchor-GuideCat_StatusEffects-stat_vined">Vined</a></div>
 					</div>
 					<div class="wuxManualContent"><input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="0" />
 						<div class="wuxManualCategory-GuideCat_Basics">
-							<div class="wuxHeader2" id="manual-anchor-GuideCat_Basics-sysbasics_goldenrules">Golden Rules</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Basics-system_goldenrules">Golden Rules</div>
 							<div class="wuxDescription">There are three golden rules to remember when playing:</div>
 							<div class="wuxDescription">• Specific rules override general statements and rules. </div>
 							<div class="wuxDescription">• Always round down (to the nearest whole number).</div>
 							<div class="wuxDescription">• Ties favor the aggressor. Whoever initiates an action wins in the result of a tie.</div>
-							<div class="wuxHeader2" id="manual-anchor-GuideCat_Basics-sysbasics_skillchecks">Skill Checks</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Basics-system_skillchecks">Skill Checks</div>
 							<div class="wuxDescription">Skill Checks are the most common type of check in the game.</div>
 							<div class="wuxDescription">You make skill checks when your character is in a challenging or tense situation that requires effort to overcome. When you want to act in such a situation, state your objective (e.g., break down the door, scale a building, or sweet-talk the guard), then roll 2 six-sided dice. You then add any relevant bonuses.On a total of 10 or higher, you succeed on most challenges. A total of 15 or higher will succeed on difficult challenges. </div>
 							<div class="wuxDescription">When using Techniques you will often be required to make a Skill check vs. either a defense or a DC.</div>
 							<div class="wuxDescription">When a technique calls for a DC check the technique's effects only occur if the skill check meets or beats the listed DC.</div>
 							<div class="wuxDescription">When a techniques says it is vs. a defense, the skill check must meet or beat the target's listed defense.</div>
-							<div class="wuxHeader2" id="manual-anchor-GuideCat_Basics-sysbasics_choosingtofail">Choosing to Fail</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Basics-system_choosingtofail">Choosing to Fail</div>
 							<div class="wuxDescription">You may always choose to fail a skill check. You might do this if an ally is trying to help you out or even just because you think failing would create a more interesting story.</div>
-							<div class="wuxHeader2" id="manual-anchor-GuideCat_Basics-sysbasics_bonuses">Bonuses</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Basics-system_bonuses">Bonuses</div>
 							<div class="wuxDescription">There are three kinds of bonuses that can be applied to rolls:</div>
 							<div class="wuxDescription">• Statistic Bonuses</div>
 							<div class="wuxDescription">• Advantage</div>
 							<div class="wuxDescription">• Disadvantage </div>
 							<div class="wuxDescription">Statistic bonuses come from three sources: your character's ability scores, skill modifiers, and technique modifiers.</div>
-							<div class="wuxHeader2" id="manual-anchor-GuideCat_Basics-sysbasics_advantagedisadvantage">Advantage and Disadvantage</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Basics-system_advantagedisadvantage">Advantage and Disadvantage</div>
 							<div class="wuxDescription">Advantage and Disadvantage are temporary modifiers gained and lost in rapid, chaotic moments of action.</div>
 							<div class="wuxDescription">• Each point of Advantage adds 1d6 to a skill check.
 								• Each point of Disadvantage subtracts 1d6 from a skill check.
@@ -21860,231 +21865,1574 @@
 							<div class="wuxDescription">When rolling any skill check with advantage or disadvantage, you will never keep more than 2 dice for the die roll. If you have advantage, you keep the two highest values. When rolling with disadvantage you keep the two lowest die rolls.</div>
 						</div><input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="0" />
 						<div class="wuxManualCategory-GuideCat_Encounters">
-							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-sysencounter_encounters">Encounters</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-system_encounters">Encounters</div>
 							<div class="wuxDescription">Encounters are a mode of gameplay used to track the passage of time when every action made matters. This game offers two different uses of it, Social Enconuters and Combat Encounters. </div>
-							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-sysencounter_round">Round</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-system_round">Round</div>
 							<div class="wuxDescription">During an Encounter, time is divided into segments called rounds. When a round begins, many status effects can take effect. Also, every character in the encounter gains an amount of Qi equal to their Jing. </div>
 							<div class="wuxDescription">A round ends when all characters that have turns available have taken their turn and each Phase Shift has had an equal number of phases.</div>
-							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-sysencounter_phase">Phase</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-system_phase">Phase</div>
 							<div class="wuxDescription">Every character in a conflict is designated a phase team. Allied player characters will all be on the same phase team along with any other non-player allied characters. This will determine how many turns every phase team will get during a round.</div>
 							<div class="wuxDescription">When a phase starts, the team will nominate one character to take a turn. This character must be chosen from characters who have yet to take their turn during the round. If all characters have taken their turn, any character may take an additional turn during the phase. </div>
 							<div class="wuxDescription">Once a character completes their turn, the phase transitions to the next team. Once every turn of every phase has been made, the round ends.</div>
-							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-sysencounter_takingaturn">Taking a Turn</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-system_takingaturn">Taking a Turn</div>
 							<div class="wuxDescription">Characters take turns during an encounter. When a character takes their turn they will use their techniques. All techniques have an action cost, this determines how the technique is used. The types of action costs a technique will use are detailed in the Techniques Guide.</div>
 							<div class="wuxDescription">On a character's turn, they can either use a Full action or two Quick actions and may use any number of Swift actions.</div>
-							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-sysencounter_channelingqi">Channeling Qi</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-system_channelingqi">Channeling Qi</div>
 							<div class="wuxDescription">When an encounter begins, all character start creating Qi in anticipation. As long as a character starts an encounter at rest they will begin an enconuter with an amount of Qi equal to their Resting Qi (usually 5).</div>
 							<div class="wuxDescription">Many techniques will interact with Qi by spending it to fuel the technique. Some techniques like Assist techniques will help you generate Qi. You will also generate Qi whenever you start a future round.</div>
-							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-sysencounter_thegrid">Grid Movement and Range</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-system_thegrid">Grid Movement and Range</div>
 							<div class="wuxDescription">Combat Encounters in Wuxing are played on a square grid. When determining range of a technique you count the distance in numbers of squares. A square is always 1 square away on the horizontal and vertical planes. Diagonal squares always cost 2 spaces of range.</div>
 							<div class="wuxDescription">The one exception to the above rule is when you are calculating the cost of the final space of range or movement. You always count all spaces as possible to move into if you have at least 1 space of movement. This means diagonal squares become a 1 cost space when it is the last square in range. </div>
-							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-sysencounter_adjacency">Adjacency</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-system_adjacency">Adjacency</div>
 							<div class="wuxDescription">Characters are considered adjacent to another character or object when they are within one space of it in any direction - even diagonal and vertical.</div>
 							<div class="wuxDescription">Some techniques do not allow a character to target characters that are within 1 square of range. This means you cannot target characters that are adjacent to you.</div>
-							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-sysencounter_attacking">Attacking</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-system_attacking">Attacking</div>
 							<div class="wuxDescription">Performing a Technique against another character and dealing damage - whether it is HP or Will damage - is considered an Attack.</div>
 							<div class="wuxDescription">When attacking a creature, you will often target one of their defenses. </div>
 							<div class="wuxDescription">If the attack is mental in nature you will attack a mental defense - Insight, Resolve, or Logic. If your skill check is successful you will do the full damage of the attack. If you fail you will then check your skill check against the target's Insight defense. If you pass this you will still deal half damage to the target's Will.</div>
-							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-sysencounter_healthdamage">Health Damage</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-system_healthdamage">Health Damage</div>
 							<div class="wuxDescription">Whenever a character's HP is reduced below 1:</div>
 							<div class="wuxDescription">• Reduce their Vitality by 1. </div>
 							<div class="wuxDescription">• If the character's Vitality is below 1, they immediately receive a rank in the Downed status. If the character already has the Downed Status they receive the Dying condition.</div>
 							<div class="wuxDescription">• Restore an amount of HP equal to the character's maximum HP. </div>
-							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-sysencounter_willdamage">Will Damage</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-system_willdamage">Will Damage</div>
 							<div class="wuxDescription">Whenever a character's Will is reduced below 1:</div>
 							<div class="wuxDescription">• Perform the Willbreak effects. All techniques that deal will damage will have a Willbreak effect. If you are reduced below 1 Will by using a technique that has Will as a cost, you will take an amount of HP damage equal to 5 + [5 x CR].</div>
 							<div class="wuxDescription">• If the character has at lesat 1 Surge, the character loses 1 Surge and then regain Will equal to the character's maximum Will.</div>
-							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-sysencounter_phaserouted">Phase Routed</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Encounters-system_phaserouted">Phase Routed</div>
 							<div class="wuxDescription">Generally, when all members of a Phase Team have the Downed status, the team is considered defeated and the encounter is over. However, in some situations the encounter may continue if members of the team refuse to give up.</div>
 							<div class="wuxDescription">When all characters on a Phase Team have the Downed status, they are considered Routed. Whenever a character on a routed team takes damage, the damage is multiplied by 10. </div>
 						</div><input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="0" />
+						<div class="wuxManualCategory-GuideCat_Techniques">
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-system_formatoftechniques">Format of Techniques</div>
+							<div class="wuxDescription">Characters use Techniques to act upon the world. When you use a Technique, you generate an effect. Below is an example of a technique.</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Technique Name</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Action Cost">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Action Cost</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-technique_name_moreinfo_range">
+															<span>1</span>
+														</div>
+													</div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-technique_name_moreinfo_range">
+															<span>Targeting Style</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+													<div class="wuxFeatureHeaderDisplayInfoEnCost"><span>1</span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Qi</span></div>
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+											<div class="wuxFeatureHeaderInfoTraits"><span>Traits</span> <span>Any requirements to use this technique will be listed here.</span></div>
+											<div class="wuxFeatureHeaderInfoFlavor"><span>Flavor text for the technique.</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span>Effects</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>The effects listed here will happen immediately.</span></div>
+											</div>
+
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Defense">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-technique_name_moreinfo_check">
+															<span>[Skill] vs. Defense</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>The effects listed here only happen if you succeed on the skill check vs. the target's defense stat.</span></div>
+											</div>
+
+											<div class="wuxFeatureHeaderInfoEffect-WillBreak">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="WillBreak">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-technique_name_moreinfo_willbreak">
+															<span>Will Break Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>The effects listed here will only happen if this attack reduces the target's will to 0.</span></div>
+											</div>
+
+										</div>
+									</div>
+
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Reaction Example</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Reaction">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Reaction - Limits</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-reaction_example_moreinfo_range">
+															<span>Self</span>
+														</div>
+													</div>
+
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+													<div class="wuxFeatureHeaderDisplayInfoEnCost"><span>1</span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Qi</span></div>
+													<div class="wuxFeatureHeaderDisplayInfoWillCost"><span>5</span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+											<div class="wuxFeatureHeaderInfoTrigger"><strong>Trigger.</strong> <span>This technique is a reaction and will only be usable when the trigger condition here happens. Reactions can be used at any time even when it is not your turn.</span></div>
+
+											<div class="wuxFeatureHeaderInfoFlavor"><span>Flavor text for the technique.</span></div>
+
+											<div class="wuxFeatureHeaderInfoEffectOnEnter"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+													<div class="wuxButton wuxManualButton">
+														<input type="checkbox" name="attr_trt-onenter_moreinfo">
+														<span>On Enter Effects</span>
+													</div>
+												</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="0">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-reaction_example_moreinfo_check">
+															<span>DC [No Check]</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>The effects listed here will happen immediately.</span></div>
+											</div>
+
+
+
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-system_techniquename">Technique Name</div>
+							<div class="wuxDescription">The name of the technique to identify it.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-system_actioncost">Action Cost</div>
+							<div class="wuxDescription">An action is a slot of time that describes when and how this technique can be used.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-techfiltertype_swiftaction">Swift Action</div>
+							<div class="wuxDescription">In a conflict, a Swift action can only be used on your turn.</div>
+							<div class="wuxDescription">When it is your turn you may use any number of swift actions unless otherwise specified.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-techfiltertype_assistaction">Assist Action</div>
+							<div class="wuxDescription">An Assist action is a fast technique that generates EN for the user.</div>
+							<div class="wuxDescription">In a conflict, an Assist action can be used in place of a Quick action. When it is your turn you may either use two Quick actions or one Full action unless otherwise specified.</div>
+							<div class="wuxDescription">Assist actions have the special quality of being able to be used on allies' turns when they grant an ally the ability to use an Assist action.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-techfiltertype_quickaction">Quick Action</div>
+							<div class="wuxDescription">In a conflict, a Quick action can only be used on your turn.</div>
+							<div class="wuxDescription">When it is your turn you may either use two Quick actions or one Full action unless otherwise specified.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-techfiltertype_fullaction">Full Action</div>
+							<div class="wuxDescription">In a conflict, a Full action can only be used on your turn.</div>
+							<div class="wuxDescription">When it is your turn you may either use two Quick actions or one Full action unless otherwise specified.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-techfiltertype_reactionaction">Reaction</div>
+							<div class="wuxDescription">In a conflict, a Reaction may be used when its trigger condition is fullfilled, regardless of whether it is your turn. Refer to the Trigger section to determine the condition.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-techfiltertype_briefaction">Brief Action</div>
+							<div class="wuxDescription">This technique cannot be used while in a conflict. It takes the duration of a Brief rest to complete.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-techfiltertype_shortaction">Short Action</div>
+							<div class="wuxDescription">This technique cannot be used while in a conflict. It takes the duration of a Short rest to complete.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-techfiltertype_longaction">Long Action</div>
+							<div class="wuxDescription">This technique cannot be used while in a conflict. It takes the duration of a Long rest to complete.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-techfiltertype_passiveaction">Passive</div>
+							<div class="wuxDescription">This technique's effects are always active.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-system_targettingstyle">Targeting Style</div>
+							<div class="wuxDescription">This segment details the rules for how you can select valid targets for the technique. </div>
+							<div class="wuxDescription">The numbers on top designate the range of the attack. Combat Encounters in Wuxing are played on a square grid. When determining range of a technique you count the distance in numbers of squares. A square is always 1 square away on the horizontal and vertical planes. Diagonal squares always cost 2 spaces of range.</div>
+							<div class="wuxDescription">The one exception to the above rule is when you are calculating the cost of the final space of range or movement. You always count all spaces as possible to move into if you have at least 1 space of movement. This means diagonal squares become a 1 cost space when it is the last square in range. </div>
+							<div class="wuxDescription">The bottom segment details the target format. This is detailed below.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-pattern_target">Target</div>
+							<div class="wuxDescription">A range of Target has a single specified target character or object for the technique. This technique may have special qualities that also affect the user.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-pattern_targets">Multiple Targets</div>
+							<div class="wuxDescription">A range of Targets has multiple specified target character or object for the technique. This technique may have special qualities that also affect the user.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-pattern_target/self">Target or Self</div>
+							<div class="wuxDescription">A range of Target/Self has a specified target character or object for the technique that may also be used to target the user. This technique may have special qualities that also affect the user.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-pattern_object">Object</div>
+							<div class="wuxDescription">A range of Object has a single specified target object for the technique. This technique may have special qualities that also affect the user.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-pattern_objects">Multiple Objects</div>
+							<div class="wuxDescription">A range of Objects has multiple target objects for the technique. This technique may have special qualities that also affect the user.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-pattern_space">Space</div>
+							<div class="wuxDescription">A range of Space has a specified space as a target for the technique and often targets the ground. </div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-pattern_spaces">Multiple Spaces</div>
+							<div class="wuxDescription">A range of Spaces has multipe spaces as the targets for the technique and often targets the ground. </div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-pattern_line">Line X</div>
+							<div class="wuxDescription">This technique affects all characters in a straight line, X spaces long.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-pattern_wide_line">Wide Line X</div>
+							<div class="wuxDescription">This technique affects all characters in a straight line, X spaces long. The spaces adjacent to these spaces are also affected. The target spaces never include the user's space.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-pattern_cone">Cone X</div>
+							<div class="wuxDescription">This technique affects all characters within a cone, X spaces long and X spaces wide at its furthest point. The cone begins at one space wide and increases the width by 1 as distance increases.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-pattern_blast">Blast X</div>
+							<div class="wuxDescription">Choose a point within the defined range. This technique affects all characters within a radius of X spaces. Cover and line of sight for the technique are calculated based on the center of the blast, rather than the position of the user.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-pattern_blast(5h)">Blast X</div>
+							<div class="wuxDescription">Choose a point within the defined range. This technique affects all characters within a radius of X spaces and all targets up to 5 spaces high within this area. Cover and line of sight for the technique are calculated based on the center of the blast, rather than the position of the user.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-pattern_radial">Radial X</div>
+							<div class="wuxDescription">This technique affects all characters within a radius of X spaces, centered on but not including the user.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-system_resourcecost">Resource Costs</div>
+							<div class="wuxDescription">The top right section of a Technique details resource costs to use the Technique. You must consume these resources before the Technique can be used. The two Resource Costs that will appear here are Qi and Will.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-en">Qi</div>
+							<div class="wuxDescription">Qi is a resource that is spent when using powerful techniques. Usually you will generate some at the start of a combat. Some techniques can also generate Qi.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-will">Will</div>
+							<div class="wuxDescription">Will is a representation of a character's mental fortitude. Techniques that use magic will often consume this as a resource. Some attacks will target Will to deal damage to it as well. When Will drops to 0, harmful effects will often occur, depending on the type of action that dealt damage to your Will. Will is a resource that continuously replenishes. When it drops to 0 it will immediately return to full by consuming a Surge. </div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-system_variants">Variants</div>
+							<div class="wuxDescription">Some Techniques offer multiple variant techniques all in one. You can swap between these techniques by using the buttons listed here.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-system_effects">Effects</div>
+							<div class="wuxDescription">At the bottom of every Technique is a list of Effects. These effects occur as long as you meet the conditions of the effect headers. There are 5 types of effect headers: Free, Skill Check, On Enter, WillBreak, and Increase Rank.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-system_freeeffects">Free Effects</div>
+							<div class="wuxDescription">These effects will activate on the targets unconditionally.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-system_skillcheckeffects">Skill Check Effects</div>
+							<div class="wuxDescription">These effects require a skill check be made. These come in two variants, a DC check and a Defense check. </div>
+							<div class="wuxDescription">DC check: Your skill check must be equal to or greater than the DC listed</div>
+							<div class="wuxDescription">Defense check: Your skill check must be equal to or greater than the listed defense stat of each of your targets.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-system_onentereffects">On Enter Effects</div>
+							<div class="wuxDescription">These Techniques will always create a persistent effect that lingers in the area it targets.</div>
+							<div class="wuxDescription">As long as this effect persists the effects below this entry all occur to any character in the area immediately on casting. These effects also occur to every character in the area at the start of every subsequent round - this happens after all sustained effects have been determined. These effects also occur for any character that enters the affected spaces. These effects can only trigger on a character once per round.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-system_willbreakeffects">WillBreak Effects</div>
+							<div class="wuxDescription">When a character's Willpower depletes to zero they can suffer from a technique's will break effects. You can choose to not trigger a technique's will break effects. When a will break is triggered, the effects listed occur to the target and then their Willpower restores to full.</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-system_increaserankeffects">Increase Rank Effects</div>
+							<div class="wuxDescription">Some Techniques allow you to increase their base power by spending more Qi on the effect. You gain the effects listed every time you increase the amount of Qi you spend on the Technique. </div>
+							<div class="wuxDescription">On any single Technique you can spend a maximum amount of Qi equal to your CR + 1</div>
+							<div class="wuxHeader2" id="manual-anchor-GuideCat_Techniques-system_basictech">Basic Techniques</div>
+							<div class="wuxDescription">Below are a list of every Basic Technique. These are techniques every character has access to.</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Grapple</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Full">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Full</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-grapple_moreinfo_range">
+															<span>1</span>
+														</div>
+													</div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-grapple_moreinfo_range">
+															<span>One Target</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+													<div class="wuxFeatureHeaderDisplayInfoEnCost"><span>1</span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Qi</span></div>
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+											<div class="wuxFeatureHeaderInfoTraits"><span>Traits</span> <span>Target must be the same Size or smaller than you.</span></div>
+											<div class="wuxFeatureHeaderInfoFlavor"><span>You grab onto another after a violent strike.</span></div>
+
+
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Brace">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-grapple_moreinfo_check">
+															<span>[Physique] vs. Brace</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target takes 6d6 + [PT] Force damage
+														Target gains the Grappled Status</span></div>
+											</div>
+
+
+											<div class="wuxFeatureHeaderInfoEffect-Enhance">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Enhance">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_ttl-techenhancement_moreinfo">
+															<span>Increased Rank Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Increase Force damage by 2d6</span></div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Throw</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-throw_moreinfo_range">
+															<span>2-5</span>
+														</div>
+													</div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-throw_moreinfo_range">
+															<span>One Target</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+													<div class="wuxFeatureHeaderDisplayInfoEnCost"><span>1</span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Qi</span></div>
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+
+
+
+
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Evasion">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-throw_moreinfo_check">
+															<span>[Physique] vs. Evasion</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target takes 2d6 + [PT] Force damage</span></div>
+											</div>
+
+
+											<div class="wuxFeatureHeaderInfoEffect-Enhance">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Enhance">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_ttl-techenhancement_moreinfo">
+															<span>Increased Rank Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Increase Force damage by 1d6</span></div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Free Move</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Swift">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Swift - 1/Round</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-free_move_moreinfo_range">
+															<span>Self</span>
+														</div>
+													</div>
+
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+											<div class="wuxFeatureHeaderInfoTraits"><span>Traits</span> <span>You must not have used any Full Action or Quick Action this round. You must not have the Downed Status.</span></div>
+											<div class="wuxFeatureHeaderInfoFlavor"><span>You quickly move. </span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-free_move_moreinfo_core">
+															<span>Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>You may Move up to [Mv] spaces </span></div>
+											</div>
+
+
+
+
+
+										</div>
+									</div>
+
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Dash</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick - 3/Round</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-dash_moreinfo_range">
+															<span>Self</span>
+														</div>
+													</div>
+
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+
+											<div class="wuxFeatureHeaderInfoFlavor"><span>You move and may attempt to make it with a quick leap.</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-dash_moreinfo_core">
+															<span>Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>You may Move up to [Dash] spaces </span></div>
+											</div>
+
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="0">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-dash_moreinfo_check">
+															<span>DC 11 [Physique]</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>You jump 2 spaces wide</span></div>
+											</div>
+
+
+
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Hide</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-hide_moreinfo_range">
+															<span>Self</span>
+														</div>
+													</div>
+
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+
+											<div class="wuxFeatureHeaderInfoFlavor"><span>You hide behind cover to avoid others' notice.</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-hide_moreinfo_core">
+															<span>Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>You gain the Hidden Status</span></div>
+											</div>
+
+
+
+
+
+										</div>
+									</div>
+
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Distract</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Assist">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Assist</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-distract_moreinfo_range">
+															<span>1-10</span>
+														</div>
+													</div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-distract_moreinfo_range">
+															<span>One Target</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+											<div class="wuxFeatureHeaderInfoTraits">
+												<div class="wuxButton wuxManualButton">
+													<input type="checkbox" name="attr_tch-distract_moreinfo_traits">
+													<span>Traits</span>
+												</div> <span>This is a Social technique. </span>
+											</div>
+											<div class="wuxFeatureHeaderInfoFlavor"><span>Your words are designed to frustrate.</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-distract_moreinfo_core">
+															<span>Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>You gain [Jing] Qi
+														Target gains 1 Impatience</span></div>
+											</div>
+
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Insight">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-distract_moreinfo_check">
+															<span>[Any Cunning] vs. Insight</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target takes 1d6 + [PT] Will damage
+														Target gains Distracted Status [Rank 1]</span></div>
+											</div>
+
+											<div class="wuxFeatureHeaderInfoEffect-WillBreak">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="WillBreak">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-distract_moreinfo_willbreak">
+															<span>Will Break Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target gains 2 ranks in the Distracted Status</span></div>
+											</div>
+
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Gain Favor</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Full">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Full</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-gain_favor_moreinfo_range">
+															<span>1-10</span>
+														</div>
+													</div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-gain_favor_moreinfo_range">
+															<span>One Target</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+													<div class="wuxFeatureHeaderDisplayInfoEnCost"><span>2</span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Qi</span></div>
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+											<div class="wuxFeatureHeaderInfoTraits">
+												<div class="wuxButton wuxManualButton">
+													<input type="checkbox" name="attr_tch-gain_favor_moreinfo_traits">
+													<span>Traits</span>
+												</div> <span>This is a Social technique. </span>
+											</div>
+											<div class="wuxFeatureHeaderInfoFlavor"><span>You try to win them over to your side by saying something they will approve of.</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-gain_favor_moreinfo_core">
+															<span>Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target gains 2 Impatience</span></div>
+											</div>
+
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Insight">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-gain_favor_moreinfo_check">
+															<span>[Any Persuade] vs. Insight</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target takes 7d6 + [PT] Will damage</span></div>
+											</div>
+
+											<div class="wuxFeatureHeaderInfoEffect-WillBreak">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="WillBreak">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-gain_favor_moreinfo_willbreak">
+															<span>Will Break Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target gains 2d6 + [CR] Favor</span></div>
+											</div>
+											<div class="wuxFeatureHeaderInfoEffect-Enhance">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Enhance">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_ttl-techenhancement_moreinfo">
+															<span>Increased Rank Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Increase Will damage by 2d6</span></div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Modify Influence</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Full">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Full</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-modify_influence_moreinfo_range">
+															<span>1-10</span>
+														</div>
+													</div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-modify_influence_moreinfo_range">
+															<span>One Target</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+													<div class="wuxFeatureHeaderDisplayInfoEnCost"><span>2</span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Qi</span></div>
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+											<div class="wuxFeatureHeaderInfoTraits">
+												<div class="wuxButton wuxManualButton">
+													<input type="checkbox" name="attr_tch-modify_influence_moreinfo_traits">
+													<span>Traits</span>
+												</div> <span>This is a Social technique. </span>
+											</div>
+											<div class="wuxFeatureHeaderInfoFlavor"><span>You try to convince another that a held conviction of theirs is more or less important.</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-modify_influence_moreinfo_core">
+															<span>Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target gains 2 Impatience</span></div>
+											</div>
+
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Resolve">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-modify_influence_moreinfo_check">
+															<span>[Any Persuade] vs. Resolve</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target takes 9d6 + [PT] Will damage</span></div>
+											</div>
+
+											<div class="wuxFeatureHeaderInfoEffect-WillBreak">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="WillBreak">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-modify_influence_moreinfo_willbreak">
+															<span>Will Break Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Raise or lower the severity of an influence on your target</span></div>
+											</div>
+											<div class="wuxFeatureHeaderInfoEffect-Enhance">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Enhance">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_ttl-techenhancement_moreinfo">
+															<span>Increased Rank Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Increase Will damage by 2d6</span></div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Bargain</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Full">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Full</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-bargain_moreinfo_range">
+															<span>1-10</span>
+														</div>
+													</div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-bargain_moreinfo_range">
+															<span>One Target</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+											<div class="wuxFeatureHeaderInfoTraits">
+												<div class="wuxButton wuxManualButton">
+													<input type="checkbox" name="attr_tch-bargain_moreinfo_traits">
+													<span>Traits</span>
+												</div> <span>This is a Social technique. </span>
+											</div>
+											<div class="wuxFeatureHeaderInfoFlavor"><span>You make a request of someone, leveraging the favor you've built.</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-bargain_moreinfo_core">
+															<span>Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target gains 2 Impatience
+														Make a request check on the target with [Target's Favor] . When making your request, you may attempt to bargain at the same time by offering goods, services, or favors. You may also choose to threaten and offering them things they do not want at the risk of angering them. This may increase the results of your request check. </span></div>
+											</div>
+
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Insight">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-bargain_moreinfo_check">
+															<span>[Any Persuade] vs. Insight</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Make a request check on the target with 1d6 + [CR] </span></div>
+											</div>
+
+
+
+										</div>
+									</div>
+
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>End Conversation</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Full">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Full</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-end_conversation_moreinfo_range">
+															<span>Self</span>
+														</div>
+													</div>
+
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+											<div class="wuxFeatureHeaderInfoTraits">
+												<div class="wuxButton wuxManualButton">
+													<input type="checkbox" name="attr_tch-end_conversation_moreinfo_traits">
+													<span>Traits</span>
+												</div> <span>This is a Social technique. Add your total Impatience to the skill check. </span>
+											</div>
+											<div class="wuxFeatureHeaderInfoFlavor"><span>Your frustration grows with the conversation so you attempt to end it.</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-end_conversation_moreinfo_core">
+															<span>Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>You gain 1 Impatience
+														Add your total Impatience to the following check.</span></div>
+											</div>
+
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="0">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-end_conversation_moreinfo_check">
+															<span>DC 20 [Conviction]</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>You remove yourself from the conversation and can no longer be requested of anything. </span></div>
+											</div>
+
+
+
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Calm Emotions</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-calm_emotions_moreinfo_range">
+															<span>Self</span>
+														</div>
+													</div>
+
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+													<div class="wuxFeatureHeaderDisplayInfoEnCost"><span>2</span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Qi</span></div>
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+
+											<div class="wuxFeatureHeaderInfoFlavor"><span>You calm your emotions to refocus.</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-calm_emotions_moreinfo_core">
+															<span>Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>You lose all emotions of your choice</span></div>
+											</div>
+
+
+
+
+
+										</div>
+									</div>
+
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Remove Condition</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Full">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Full</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-remove_condition_moreinfo_range">
+															<span>1</span>
+														</div>
+													</div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-remove_condition_moreinfo_range">
+															<span>One Target</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+
+											<div class="wuxFeatureHeaderInfoFlavor"><span>You try to remove a condition afffecting you or an ally.</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-remove_condition_moreinfo_core">
+															<span>Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target loses any condition of your choice</span></div>
+											</div>
+
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="0">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-remove_condition_moreinfo_check">
+															<span>DC 10 [Physio]</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target loses any condition of your choice</span></div>
+											</div>
+
+
+
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Interact</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Swift">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Swift - 2/Round</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-interact_moreinfo_range">
+															<span>1</span>
+														</div>
+													</div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-interact_moreinfo_range">
+															<span>One Target</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+
+											<div class="wuxFeatureHeaderInfoFlavor"><span>You interact with an object or person in your environment.</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span>Effects</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>You use your hand or hands to manipulate an object or the terrain. For example, you can grab an unattended or stored object, open a door, or eat some food. You might have to attempt a skill check to determine if your Interact action was successful.</span></div>
+											</div>
+
+
+
+
+
+										</div>
+									</div>
+
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Equip Item</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-equip_item_moreinfo_range">
+															<span>Self</span>
+														</div>
+													</div>
+
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+
+
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span>Effects</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>You equip an item to an equipment slot or a consumable slot. As part of this action you may unequip an item.</span></div>
+											</div>
+
+
+
+
+
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Call Assist</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Swift">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Swift - 1/Turn</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-call_assist_moreinfo_range">
+															<span>1-3</span>
+														</div>
+													</div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-call_assist_moreinfo_range">
+															<span>One Target</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+
+											<div class="wuxFeatureHeaderInfoFlavor"><span>You call on an ally to take an action.</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader"><span>Effects</span></span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>The target may use an Assist action</span></div>
+											</div>
+
+
+
+
+
+										</div>
+									</div>
+
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Detect Ether</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-detect_ether_moreinfo_range">
+															<span>1</span>
+														</div>
+													</div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-detect_ether_moreinfo_range">
+															<span>Cone 5</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+
+											<div class="wuxFeatureHeaderInfoFlavor"><span>You detect the presence of ether.</span></div>
+
+
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="0">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-detect_ether_moreinfo_check">
+															<span>DC 10 [Resonance]</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>You can confirm if ether is particularly dense in your selected area and if any elemental affinity is present. Usually this will detect living creatures or active magical effects in the area but not specifically where it is. Rarely, this can detect strong ether lingering from the environment itself. </span></div>
+											</div>
+
+
+
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Detect Creature</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-detect_creature_moreinfo_range">
+															<span>1</span>
+														</div>
+													</div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-detect_creature_moreinfo_range">
+															<span>Cone 5</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+
+											<div class="wuxFeatureHeaderInfoFlavor"><span>You try to find a hidden character.</span></div>
+
+
+											<div class="wuxFeatureHeaderInfoEffect-Check">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Evasion">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-detect_creature_moreinfo_check">
+															<span>[Notice] vs. Evasion</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>Target loses the Hidden Status</span></div>
+											</div>
+
+
+
+										</div>
+									</div>
+
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Burst Ki Charge</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Swift">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Swift - 1/Turn</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-burst_ki_charge_moreinfo_range">
+															<span>Self</span>
+														</div>
+													</div>
+
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+													<div class="wuxFeatureHeaderDisplayInfoEnCost"><span>1</span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Qi</span></div>
+													<div class="wuxFeatureHeaderDisplayInfoWillCost"><span>5</span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+
+											<div class="wuxFeatureHeaderInfoFlavor"><span>You release stored ether, creating a small ball of glowing light at your fingertips.</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-burst_ki_charge_moreinfo_core">
+															<span>Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>You gain 1 ranks in the Burst Status</span></div>
+											</div>
+
+
+
+
+
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class="wuxFlexTable">
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Impart Burst Energy</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Quick">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Quick</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-impart_burst_energy_moreinfo_range">
+															<span>1</span>
+														</div>
+													</div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-impart_burst_energy_moreinfo_range">
+															<span>One Target</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+													<div class="wuxFeatureHeaderDisplayInfoEnCost"><span>1</span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Qi</span></div>
+													<div class="wuxFeatureHeaderDisplayInfoWillCost"><span>5</span><span class="wuxFeatureHeaderDisplayInfoSubtitle"> Will</span></div>
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+
+											<div class="wuxFeatureHeaderInfoFlavor"><span>You release stored ether into a target.</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-impart_burst_energy_moreinfo_core">
+															<span>Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>The target gains EN equal to your Burst Status rank.
+														You lose the Burst Status</span></div>
+											</div>
+
+
+
+
+
+										</div>
+									</div>
+
+								</div>
+								<div class="wuxFlexTableItemGroup">
+									<div class="wuxFeature wuxActionFeature">
+										<div class="wuxFeatureHeader">
+											<div class="wuxFeatureHeaderDisplayBlock">
+												<div class="wuxFeatureHeaderDisplayTitleBlock">
+													<div class="wuxFeatureHeaderName"><span>Creature Manifest</span></div>
+
+													<input type="hidden" class="wuxFeatureHeader-flag" value="Full">
+													<div class="wuxFeatureHeaderDisplayInfoActionType"><span>Full</span></div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayInfoBlock">
+													<div class="wuxFeatureHeaderDisplayInfoRange">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-creature_manifest_moreinfo_range">
+															<span>1</span>
+														</div>
+													</div>
+													<div class="wuxFeatureHeaderDisplayInfoTargetType">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-creature_manifest_moreinfo_range">
+															<span>One Target</span>
+														</div>
+													</div>
+												</div>
+												<div class="wuxFeatureHeaderDisplayCostBlock">
+
+
+												</div>
+											</div>
+										</div>
+										<div class="wuxFeatureInfoDisplayBlock">
+
+											<div class="wuxFeatureHeaderInfoTraits"><span>Traits</span> <span>You must share a space with a target creature in the material plane. The target must not have an elemental aspect.</span></div>
+											<div class="wuxFeatureHeaderInfoFlavor"><span>You manifest into the material plane by entering a creature.</span></div>
+											<div class="wuxFeatureHeaderInfoEffect-Core">
+												<input type="hidden" class="wuxFeatureHeader-flag" value="Core">
+												<div class="wuxFeatureHeaderInfoEffectTitle"><span class="wuxFeatureHeaderInfoEffectTitleHeader">
+														<div class="wuxButton wuxManualButton">
+															<input type="checkbox" name="attr_tch-creature_manifest_moreinfo_core">
+															<span>Effects</span>
+														</div>
+													</span></div>
+												<div class="wuxFeatureHeaderInfoContents"><span>You lose the Ethereal Status
+														The spirit is considered Manifesting into a host. A spirit manifesting into a creature gains the senses of the creature and can communicate with their host through thoughts as long as both share a language. . While Manifesting in a creature, all resource costs for your techniques are consumed by your host instead of yourself. Creatures you are manifesting within may equip techniques as if they have your affinity.You may choose at any time to end the manifestation.</span></div>
+											</div>
+
+
+
+
+
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div><input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="0" />
 						<div class="wuxManualCategory-GuideCat_StatusEffects">
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_aflame">Aflame</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">You are on fire. At the start of each round you take 1d6 fire damage per rank of the Aflame condition. This condition ends when you are doused by water.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_agreeable">Agreeable</div>
-							<div class="wuxSubheader">Emotion</div>
 							<div class="wuxDescription">The opponent's side has made a point that you are positively influenced by. Techniques with the Social Keyword used against you gain advantage equal to your Agreeable rank. Requests made against you gain [5 * rank] on their check.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_angered">Angered</div>
-							<div class="wuxSubheader">Emotion</div>
 							<div class="wuxDescription">When you use an [Attack] or [Social] technique and it does not include the source of your anger, you lose (5 x Character Rank) Willpower and 5 + (5 x Character Rank) HP. This cannot cause a Will Break.. An Angered character can only have one character be the target of this emotion and will have the target replaced by a new target if this emotion is gained again.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_blinded">Blinded</div>
-							<div class="wuxSubheader">Status</div>
 							<div class="wuxDescription">You cannot see and have +2 Disadvantage on all skill checks. Characters have +1 Advantage when attacking you.</div>
 							<div class="wuxDescription">This Status ends at the start of the next round.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_burn_aegis">Burn Aegis</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">You gain resistance to burn damage equal to your Burn Aegis rank x your CR. At the start of the round if you are aflame both this and the aflame condition ends.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_burst">Burst</div>
-							<div class="wuxSubheader">Status</div>
 							<div class="wuxDescription">You maintain a concentrated burst of Ki that creates dim light in 5 spaces around you. You may only ever hold up to 3 charges of Burst. </div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_calmed">Calmed</div>
-							<div class="wuxSubheader">Emotion</div>
 							<div class="wuxDescription">You lose 1 impatience at the start of the round. If you are angered and/or frightened, the angered and frightened emotions end along with this condition.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_chilled">Chilled</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">You gain weakness to cold damage equal to your Chilled rank x 2. Your Base Speed is reduced by your chilled rank. This condition ends when you are warmed or are set on fire.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_cold_aegis">Cold Aegis</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">You gain resistance to cold damage equal to your Cold Aegis rank x your Character Rank. At the start of the round if you are chilled both this and the chilled condition ends.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_dazed">Dazed</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">You cannot use any actions and cannot volunarily move.</div>
 							<div class="wuxDescription">This Status ends when it is triggered or at the start of the next round.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_distracted">Distracted</div>
-							<div class="wuxSubheader">Emotion</div>
 							<div class="wuxDescription">Skill checks against you gain +1 Advantage per rank of the Distracted emotion.</div>
 							<div class="wuxDescription">This Status ends when it is triggered or at the start of the next round.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_dodge">Dodge</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">Your Evasion defense increases by 5 the next time a technique targets your evasion.</div>
 							<div class="wuxDescription">This Status ends when it is triggered or at the start of the next round.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_doubt">Doubt</div>
-							<div class="wuxSubheader">Emotion</div>
 							<div class="wuxDescription">At the start of the round, you lose 5 + (5 x Character Rank) Willpower. This cannot cause a Will Break.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_downed">Downed</div>
-							<div class="wuxSubheader">Status</div>
 							<div class="wuxDescription">You are severely injured. You have +1 Disadvantage per rank on all skill checks from techniques with the exception of Assist techniques. You cannot maintain focus on any techniques. You do not block foes from entering your space. Characters that end movement on your space force you to move into an adjacent space. If you gain this status while already having ranks in Downed you also receive the Dying condition.
 								This status ends after a brief rest.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_dying">Dying</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">You are unconscious. At the start of each round roll 2d6. On a 7 or lower you lose [Downed rank x 10] + [Character Rank x 10] HP. On a 12, the condition is removed. If your HP reduces to 0 while dying, you die. When this condition is removed the one who removes it may choose whether you remain unconscious.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_earthblight">Earthblight</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">Earth clings to you, reducing your abiility to defend yourself. You gain weakness to force and piercing damage equal to your Earthblight rank x 2. Your Dash Speed is reduced by your Earthblight rank. If you are Soaked this condition ends.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_empowered">Empowered</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">The next time you deal hp damage with an attack you add 3 + Character Rank to the damage. </div>
 							<div class="wuxDescription">This Status ends when it is triggered.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_encouraged">Encouraged</div>
-							<div class="wuxSubheader">Emotion</div>
 							<div class="wuxDescription">Gain +1 Advantage on your next skill check.</div>
 							<div class="wuxDescription">This Status ends when it is triggered.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_engaged">Engaged</div>
-							<div class="wuxSubheader">Status</div>
 							<div class="wuxDescription">When you move adjacent to a hostile character you both gain the Engaged status for as long as you remain adjacent to one another. When you become Engaged by targets of equal or greater Size during the course of a movement you lose all remaining movement. You do not gain your starting movement at the start of your turn.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_ethereal">Ethereal</div>
-							<div class="wuxSubheader">Status</div>
 							<div class="wuxDescription">You are in the spirit realm. If you have a physical body it is treated as unconscious. Nothing in the physical plane may interact with your ethereal form and likewise, you may not interact with characters or objects in the physical plane.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_exhausted">Exhausted</div>
-							<div class="wuxSubheader">Status</div>
 							<div class="wuxDescription">You gain +2 disadvantage on all skill checks. Skill checks against you gain +1 Advantage.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_float">Float</div>
-							<div class="wuxSubheader">Status</div>
 							<div class="wuxDescription">You are floating and do not fall naturally. You cannot make any voluntary movements except for fly. </div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_flustered">Flustered</div>
-							<div class="wuxSubheader">Emotion</div>
 							<div class="wuxDescription">All skill checks against a flustered target receive +1 Advantage and request checks against the target increase by 5. </div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_focus">Focus</div>
-							<div class="wuxSubheader">Status</div>
 							<div class="wuxDescription">You are focusing on a technique. You consume 1 EN at the start of the round while you maintain focus on the technique.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_frightened">Frightened</div>
-							<div class="wuxSubheader">Emotion</div>
 							<div class="wuxDescription">When you use an [Attack] or [Social] technique on the source of your fear, you lose 10 + (5 x Character Rank) Willpower. You can’t willingly move closer to the source. A frightened character can only have one character be the target of this emotion and will have the target replaced by a new target if this emotion is gained again.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_frozen">Frozen</div>
-							<div class="wuxSubheader">Status</div>
 							<div class="wuxDescription">You cannot use Assist actions and cannot move. Even if this condition ends, on your next turn you cannot use any full or quick actions. Techniques are made against you at +2 Advantage.</div>
 							<div class="wuxDescription">This Status ends at the start of the next round.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_grappled">Grappled</div>
-							<div class="wuxSubheader">Status</div>
 							<div class="wuxDescription">You cannot make any voluntary movements, although involuntary movements are unaffected. You move when the controlling character moves, mirroring their movement. A grapple automatically ends when either character breaks adjacency, such as if they are knocked back by another effect or if the controller chooses to end the grapple as a reaction.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_hidden">Hidden</div>
-							<div class="wuxSubheader">Status</div>
 							<div class="wuxDescription">You can’t be targeted by hostile attacks or actions, don’t cause engagement, and enemies only know your approximate location. Attacking, taking reactions, moving, and losing cover all remove this condition after they resolve. Characters can find you with Search.
 								To remain hidden you must either be outside of any enemies’ line of sight, obscured by sufficient cover, or invisible. If you Hide while meeting one of these criteria, you gain the Hidden status.
 								Hard cover is sufficient to Hide as long as it is large enough to totally conceal you, but soft cover is only sufficient if you are completely inside an area or zone that grants soft cover.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_hindered">Hindered</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">Skill checks against you gain +1 Advantage.</div>
 							<div class="wuxDescription">This Status ends when it is triggered or at the start of the next round.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_immobilized">Immobilized</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">You cannot make any voluntary movements, although involuntary movements are unaffected.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_invisible">Invisible</div>
-							<div class="wuxSubheader">Status</div>
 							<div class="wuxDescription">All attacks against Invisible characters, regardless of type, have a 50 percent chance to miss outright before an attack roll is made. Attacks made by an Invisible character gain +1 advantage. Invisible characters can always Hide, even without cover.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_iron_plates">Iron Plates</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">You gain Armor equal to your Iron Plates rank. When gaining this status, if you have the Sand Aegis condition you gain double the ranks.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_jolted">Jolted</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">You can only perform one quick action on your turn. You cannot perform full actions.</div>
 							<div class="wuxDescription">This Status ends when it is triggered.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_magnetized">Magnetized</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">All skill checks made against you have +1 Advantage. If you gain the Static or Chilled condition, all ranks gained are doubled then this condition ends.</div>
 							<div class="wuxDescription">This Status ends at the start of the next round.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_mantle">Mantle</div>
-							<div class="wuxSubheader">Status</div>
 							<div class="wuxDescription">A mantle always has a value associated with it. When you take HP damage, the mantle absorbs half of the damage instead until destroyed. Once destroyed, any additional damage is taken to the character. </div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_oppositional">Oppositional</div>
-							<div class="wuxSubheader">Emotion</div>
 							<div class="wuxDescription">The opponent's side has made a point that insults you. Techniques with the Social Keyword used against you gain disadvantage equal to your Oppositional rank. Requests made against you lose [5 * rank] on their check.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_overjoyed">Overjoyed</div>
-							<div class="wuxSubheader">Emotion</div>
 							<div class="wuxDescription">As a reaction to failing a skill check, reroll the skill check.</div>
 							<div class="wuxDescription">This Status ends when it is triggered.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_paralyzed">Paralyzed</div>
-							<div class="wuxSubheader">Status</div>
 							<div class="wuxDescription">You cannot use Assist actions and can speak only falteringly. Even if this condition ends, on your next turn you cannot use any full or quick actions. Techniques are made against you at +2 Advantage.</div>
 							<div class="wuxDescription">This Status ends at the start of the next round.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_persevering">Persevering</div>
-							<div class="wuxSubheader">Emotion</div>
 							<div class="wuxDescription">As a swift action, end one condition affecting you. </div>
 							<div class="wuxDescription">This Status ends when it is triggered.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_prone">Prone</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">Skill checks against you receive +1 Advantage.
 								Prone characters count as moving in difficult terrain. You can stand and remove Prone by spending 2 Move Charge, unless you're Immobilized or Restrained. Standing up doesn’t count as movement.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_quickened">Quickened</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">On your turn, you can perform one additional Quick action or Assist action. If you are jolted, the jolted condition immediately ends. If you are stunned, both this condition and the stunned condition ends. </div>
 							<div class="wuxDescription">This Status ends when it is triggered.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_rally">Rally</div>
-							<div class="wuxSubheader">Emotion</div>
 							<div class="wuxDescription">You gain Advantage per rank of the Rally emotion.</div>
 							<div class="wuxDescription">This Status ends when it is triggered or at the start of the next round.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_restrained">Restrained</div>
-							<div class="wuxSubheader">Status</div>
 							<div class="wuxDescription">You cannot make any voluntary movements, although involuntary movements are unaffected.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_sand_aegis">Sand Aegis</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">You gain resistance to force and piercing damage equal to your Sand Aegis rank x your Character Rank. At the start of the round if you are earthblighted both this and the earthblight condition ends.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_shielded">Shielded</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">The next time you take damage, halve the damage.</div>
 							<div class="wuxDescription">This Status ends when it is triggered.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_shock_aegis">Shock Aegis</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">You gain resistance to energy damage equal to your Shock Aegis rank x your Character Rank. At the start of the round if you have static both this and the static condition ends.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_sickened">Sickened</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">You receive +1 Disadvantage on all skill checks. You can't willingly ingest anything while Sickened.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_soaked">Soaked</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">You have +1 Disadvantage on all skill checks. If you gain the Vined or Chilled condition, all ranks gained are doubled then this condition ends.</div>
 							<div class="wuxDescription">This Status ends at the start of the next round.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_static">Static</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">You gain weakness to energy damage equal to your Shocked rank x 2. Your Armor is reduced by your shocked rank. </div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_steadfast">Steadfast</div>
-							<div class="wuxSubheader">Emotion</div>
 							<div class="wuxDescription">If you were at more than 1 HP and are reduced to 0, you drop to 1 HP instead. </div>
 							<div class="wuxDescription">This Status ends when it is triggered.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_stunned">Stunned</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">A stunned character can only perform one quick action on their turn. They cannot perform any full actions. If you are quickened, both this condition and the quickened condition ends.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_surprised">Surprised</div>
-							<div class="wuxSubheader">Emotion</div>
 							<div class="wuxDescription">A surprised character can only perform one quick action on their turn. They cannot perform any full actions.</div>
 							<div class="wuxDescription">This Status ends when it is triggered.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_unconscious">Unconscious</div>
-							<div class="wuxSubheader">Status</div>
 							<div class="wuxDescription">You cannot take actions, can’t move or speak, and are unaware of your surroundings.
 								You drop whatever you're holding and fall prone.
 								All of the character's defenses and senses are considered to be 0.</div>
 							<div class="wuxHeader2" id="manual-anchor-GuideCat_StatusEffects-stat_vined">Vined</div>
-							<div class="wuxSubheader">Condition</div>
 							<div class="wuxDescription">Your Base Speed is reduced by your vined rank. When you have the Aflame condition, all ranks of vined are added to the Aflame condition and you immediately take the aflame damage; the vined condition then ends.</div>
 						</div><input type="hidden" class="wuxManualCategory-Flag" name="attr_popup-manualcategory" value="0" />
 						<div class="wuxManualCategory-MoreInfo">

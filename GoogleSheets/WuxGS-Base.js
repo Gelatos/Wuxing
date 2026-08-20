@@ -1864,9 +1864,15 @@ var DisplayPopups = DisplayPopups || (function () {
                 // execution contexts), only this comment pair.
                 moreInfoCategoryValue = "MoreInfo",
 
+                // The GuideCat group holds two different kinds of entry now: the
+                // category itself (subGroup "BaseGroup" - one per header nav/dropdown
+                // entry) and its rule definitions (subGroup equal to the category's own
+                // title - see getTopics below). Only the former belongs in the category
+                // list itself.
                 getCategories = function () {
                     if (cachedCategories == undefined) {
-                        let guideCategories = WuxDef.Filter(new DatabaseFilterData("group", "GuideCat"));
+                        let guideCategories = WuxDef.Filter([new DatabaseFilterData("group", "GuideCat"),
+                            new DatabaseFilterData("subGroup", "BaseGroup")]);
                         cachedCategories = guideCategories.map(function (guideCat) {
                             return {
                                 value: guideCat.name,
@@ -1878,41 +1884,81 @@ var DisplayPopups = DisplayPopups || (function () {
                     return cachedCategories;
                 },
 
+                // A category's contents come from its own rule definitions - other
+                // GuideCat-group entries whose subGroup names this category's title,
+                // rather than the category definition's own description. Each rule
+                // definition can carry several rules, one per description line, each
+                // formatted "RuleType:value" (see getTopicsForRule) - all of them
+                // concatenated in the order the rule definitions and their description
+                // lines are encountered. Feeds both consumers of category.topics
+                // (getCategories): categoryContent (main page) and sidebarCategory (TOC).
                 getTopics = function (guideCat) {
-                    let explicitList = guideCat.getDescription("");
-                    let topicDefinitions;
-                    if (explicitList !== "") {
-                        // Order is deliberate here (e.g. Character Creation's Origin
-                        // -> Jobs -> Attributes -> ... flow) - left exactly as listed,
-                        // never sorted.
-                        topicDefinitions = explicitList.split(";")
-                            .map(name => name.trim())
-                            .filter(name => name !== "")
-                            .map(name => WuxDef.Get(name));
-                    } else if (guideCat.subGroup !== "") {
-                        // A subGroup pull covers several categories (Basics, Encounters,
-                        // Status Effects, ...), each with its own dictionary order that's
-                        // meaningful for everything except Status - only Status Effects'
-                        // whole "Status" group has no curated order to preserve, so
-                        // alphabetizing by title is scoped to that one subGroup
-                        // specifically, not applied to every subGroup pull. Feeds both
-                        // consumers of category.topics (getCategories): categoryContent
-                        // (main page) and sidebarCategory (TOC).
-                        topicDefinitions = WuxDef.Filter(new DatabaseFilterData("group", guideCat.subGroup));
-                        if (guideCat.subGroup === "Status") {
-                            topicDefinitions = topicDefinitions.sort((a, b) => a.title.localeCompare(b.title));
-                        }
-                    } else {
-                        topicDefinitions = [];
-                    }
-                    return topicDefinitions.map(function (definition) {
-                        return {
-                            slug: definition.fieldName,
-                            title: definition.title,
-                            subGroup: definition.subGroup,
-                            descriptions: getDescriptions(definition)
-                        };
+                    let ruleDefinitions = WuxDef.Filter([new DatabaseFilterData("group", "GuideCat"),
+                        new DatabaseFilterData("subGroup", guideCat.title)]);
+                    let topics = [];
+                    ruleDefinitions.forEach(function (ruleDefinition) {
+                        ruleDefinition.descriptions.filter(rule => rule !== "").forEach(function (rule) {
+                            topics = topics.concat(getTopicsForRule(rule));
+                        });
                     });
+                    return topics;
+                },
+
+                // A plain WuxDef definition, shown as its own title/description
+                // stack (entry below) - no subtitle, unlike the dynamic More Info
+                // page's moreInfoEntry, which still shows one.
+                buildTopic = function (definition) {
+                    return {
+                        slug: definition.fieldName,
+                        title: definition.title,
+                        descriptions: getDescriptions(definition)
+                    };
+                },
+
+                // A whole techset's worth of techniques, shown together as one
+                // flextable grid (techniqueGroupEntry below) rather than as
+                // separate topics. No title and no table-of-contents entry -
+                // sidebarCategory filters these out entirely (they have no
+                // .title/.slug at all) - the author supplies any heading
+                // themselves via a separate Definitions rule if they want one.
+                buildTechniqueGroupTopic = function (techset) {
+                    return {
+                        techniques: WuxTechs.Filter(new DatabaseFilterData("style", techset))
+                    };
+                },
+
+                // Parses one "RuleType:value" rule line into the topics it
+                // contributes to a category.
+                getTopicsForRule = function (rule) {
+                    let separatorIndex = rule.indexOf(":");
+                    if (separatorIndex === -1) {
+                        return [];
+                    }
+                    let ruleType = rule.substring(0, separatorIndex).trim();
+                    let ruleValue = rule.substring(separatorIndex + 1).trim();
+                    switch (ruleType) {
+                        case "Group":
+                            return WuxDef.Filter([new DatabaseFilterData("group", ruleValue)]).map(buildTopic);
+                        case "SubGroup":
+                            return WuxDef.Filter([new DatabaseFilterData("subGroup", ruleValue)]).map(buildTopic);
+                        case "AlphabeticalGroup":
+                            return WuxDef.Filter([new DatabaseFilterData("group", ruleValue)])
+                                .sort((a, b) => a.title.localeCompare(b.title))
+                                .map(buildTopic);
+                        case "Definitions":
+                            // Order is deliberate here (e.g. Character Creation's Origin
+                            // -> Jobs -> Attributes -> ... flow) - left exactly as
+                            // listed, never sorted.
+                            return ruleValue.split(";")
+                                .map(name => name.trim())
+                                .filter(name => name !== "")
+                                .map(name => WuxDef.Get(name))
+                                .map(buildTopic);
+                        case "TechniqueGroup":
+                            return [buildTechniqueGroupTopic(ruleValue)];
+                        default:
+                            return [];
+                    }
                 },
 
                 // Status effects specifically go through StatusData.getDescriptions()
@@ -2036,7 +2082,10 @@ var DisplayPopups = DisplayPopups || (function () {
                 // closest to what changed it.
                 sidebarCategory = function (category) {
                     let categoryAttr = WuxDef.GetAttribute("Popup_ManualCategory");
-                    let links = category.topics.map(topic => `<a class="wuxManualSidebarLink" href="#${anchorId(category, topic)}">${topic.title}</a>`).join("");
+                    // Technique group topics (buildTechniqueGroupTopic) have no
+                    // title/slug of their own and never get a sidebar link.
+                    let links = category.topics.filter(topic => topic.techniques === undefined)
+                        .map(topic => `<a class="wuxManualSidebarLink" href="#${anchorId(category, topic)}">${topic.title}</a>`).join("");
                     return `${WuxSheetMain.CustomInput("hidden", categoryAttr, "wuxManualCategory-Flag", ` value="0"`)}<div class="wuxManualSidebarCategory-${category.value}">${links}</div>`;
                 },
 
@@ -2047,9 +2096,38 @@ var DisplayPopups = DisplayPopups || (function () {
                 },
 
                 entry = function (category, topic) {
-                    let subheader = topic.subGroup !== "" ? WuxSheetMain.Subheader(topic.subGroup) : "";
+                    if (topic.techniques !== undefined) {
+                        return techniqueGroupEntry(category, topic);
+                    }
                     let descriptions = topic.descriptions.map(description => `<div class="wuxDescription">${description}</div>`).join("");
-                    return `<div class="wuxHeader2" id="${anchorId(category, topic)}">${topic.title}</div>${subheader}${descriptions}`;
+                    return `<div class="wuxHeader2" id="${anchorId(category, topic)}">${topic.title}</div>${descriptions}`;
+                },
+
+                // A static, non-character-bound technique card - same TechniqueDisplayData/
+                // TechniqueDisplayBuilder pair buildStaticTechniqueDisplay above already
+                // uses for a fixed technique with no rank/character context, just without
+                // TechniqueDisplayBuilderUsable's roll button (this is a reference page,
+                // not something rollable). wuxActionFeature (WCSS-Specialized.css)
+                // fixes the card itself at 240px - same class the repeating Action
+                // Feature cards use for the same width.
+                buildTechniqueCard = function (technique) {
+                    let displayData = new TechniqueDisplayData(technique);
+                    let builder = new TechniqueDisplayBuilder(displayData);
+                    builder.setFeatureBonusClasses("wuxActionFeature");
+                    return builder.print();
+                },
+
+                // No header/anchor here - this group has no title and isn't its
+                // own sidebar entry (sidebarCategory filters it out); the author
+                // supplies any heading themselves via a separate Definitions rule
+                // if they want one. No wuxMinWidth modifier on the cards either -
+                // each one is already fixed at 240px (buildTechniqueCard's
+                // wuxActionFeature class), and a wider wrapper would just leave
+                // empty space around it.
+                techniqueGroupEntry = function (category, topic) {
+                    let cards = topic.techniques.map(technique =>
+                        WuxSheetMain.Table.FlexTableGroup(buildTechniqueCard(technique)));
+                    return WuxSheetMain.MultiRowGroup(cards, WuxSheetMain.Table.FlexTable, 2);
                 },
 
                 // The "More Info" page (moreInfoCategoryValue above) - a reserved
