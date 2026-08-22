@@ -467,11 +467,17 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let consuTypes = WuxDef.Filter([new DatabaseFilterData("group", "ConsuType")]);
                     let searchButtonDef = WuxDef.Get("Popup_SearchButton");
                     let autoEquipDef = WuxDef.Get("Gear_AutoEquipItems");
+                    // Opens the Manual straight to Gear_AutoEquipItems' own
+                    // description instead of the old MoreInfo/LessInfo inline-textbox
+                    // toggle - listenerOpenManualForGearAutoEquip (WuxGS-Backend.js)
+                    // dispatches the click. Explicit blue, same reasoning as every
+                    // other MoreInfo->Manual conversion this session.
                     let autoEquip = [WuxSheetMain.Table.FlexTableGroup(
                         WuxSheetMain.InteractionElement.BuildCheckboxInput(
                             autoEquipDef.getAttribute(),
                             WuxSheetMain.Header(autoEquipDef.getTitle())) +
-                        WuxSheetMain.MoreInfo(autoEquipDef))];
+                        WuxSheetMain.Button(autoEquipDef.getAttribute(WuxDef._moreinfo),
+                            `<span style="color:#71B9DE;">${WuxDef.Get("_moreinfo").getTitle()}</span>`, "wuxManualButton"))];
 
                     let items = [];
                     for (let i = 0; i < consuTypes.length; i++) {
@@ -783,11 +789,13 @@ var DisplayGearSheet = DisplayGearSheet || (function () {
                     let findByTechniqueDef = WuxDef.Get("Popup_FindItemsByTechnique");
                     let searchButtonDef = WuxDef.Get("Popup_SearchButton");
                     let autoEquipDef = WuxDef.Get("Gear_AutoEquipItems");
+                    // Same Manual-button conversion as addConsumableFilterButtons above.
                     let autoEquip = [WuxSheetMain.Table.FlexTableGroup(
                         WuxSheetMain.InteractionElement.BuildCheckboxInput(
                             autoEquipDef.getAttribute(),
                             WuxSheetMain.Header(autoEquipDef.getTitle())) +
-                        WuxSheetMain.MoreInfo(autoEquipDef))];
+                        WuxSheetMain.Button(autoEquipDef.getAttribute(WuxDef._moreinfo),
+                            `<span style="color:#71B9DE;">${WuxDef.Get("_moreinfo").getTitle()}</span>`, "wuxManualButton"))];
                     let items = [];
                     for (let i = 0; i < equipmentTypes.length; i++) {
                         items.push(WuxSheetMain.Table.FlexTableGroup(
@@ -1658,6 +1666,11 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
 
+                // Opens the Manual straight to each definition's own description
+                // instead of the old MoreInfo/LessInfo inline-textbox toggle -
+                // listenerOpenManualForStyleFilterOptions (WuxGS-Backend.js)
+                // dispatches the click. Explicit blue, same reasoning as every
+                // other MoreInfo->Manual conversion this session.
                 buildStyleFilterCheckboxes = function () {
                     let nonElementDef = WuxDef.Get("Forme_ShowFromNonElement");
                     let levelRestrictedDef = WuxDef.Get("Forme_ShowLevelRestricted");
@@ -1666,12 +1679,14 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                             WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                 nonElementDef.getAttribute(),
                                 WuxSheetMain.Header(nonElementDef.getTitle())) +
-                            WuxSheetMain.MoreInfo(nonElementDef)),
+                            WuxSheetMain.Button(nonElementDef.getAttribute(WuxDef._moreinfo),
+                                `<span style="color:#71B9DE;">${WuxDef.Get("_moreinfo").getTitle()}</span>`, "wuxManualButton")),
                         WuxSheetMain.Table.FlexTableGroup(
                             WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                 levelRestrictedDef.getAttribute(),
                                 WuxSheetMain.Header(levelRestrictedDef.getTitle())) +
-                            WuxSheetMain.MoreInfo(levelRestrictedDef))
+                            WuxSheetMain.Button(levelRestrictedDef.getAttribute(WuxDef._moreinfo),
+                                `<span style="color:#71B9DE;">${WuxDef.Get("_moreinfo").getTitle()}</span>`, "wuxManualButton"))
                     ];
                     return `${WuxSheetMain.Header2(WuxDef.GetTitle("Title_StyleFilterOption"))}
                     ${WuxSheetMain.MultiRowGroup(items, WuxSheetMain.Table.FlexTable, 1)}`;

@@ -460,6 +460,12 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             return inputRow + (desc !== "" ? WuxSheetMain.MultiRow(`<div class="wuxDescription">${desc}</div>`) : "");
                         },
 
+                        // Opens the Manual straight to each definition's own description
+                        // instead of the old MoreInfo/LessInfo inline-textbox toggle -
+                        // listenerOpenManualForStyleFilterOptions (WuxGS-Backend.js)
+                        // dispatches the click, same as WuxGS-Base.js's own
+                        // buildStyleFilterCheckboxes (identical Forme_ShowFromNonElement/
+                        // Forme_ShowLevelRestricted pair, just on this page).
                         buildPerkTechniqueList = function () {
                             let repeatingDef = WuxDef.Get("RepeatingPerks");
 
@@ -470,12 +476,14 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                     WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                         nonElementDef.getAttribute(),
                                         WuxSheetMain.Header(nonElementDef.getTitle())) +
-                                    WuxSheetMain.MoreInfo(nonElementDef)),
+                                    WuxSheetMain.Button(nonElementDef.getAttribute(WuxDef._moreinfo),
+                                        `<span style="color:#71B9DE;">${WuxDef.Get("_moreinfo").getTitle()}</span>`, "wuxManualButton")),
                                 WuxSheetMain.Table.FlexTableGroup(
                                     WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                         levelRestrictedDef.getAttribute(),
                                         WuxSheetMain.Header(levelRestrictedDef.getTitle())) +
-                                    WuxSheetMain.MoreInfo(levelRestrictedDef))
+                                    WuxSheetMain.Button(levelRestrictedDef.getAttribute(WuxDef._moreinfo),
+                                        `<span style="color:#71B9DE;">${WuxDef.Get("_moreinfo").getTitle()}</span>`, "wuxManualButton"))
                             ];
                             let filterCheckboxes = `${WuxSheetMain.Header2(WuxDef.GetTitle("Title_StyleFilterOption"))}
                                 ${WuxSheetMain.MultiRowGroup(filterCheckboxItems, WuxSheetMain.Table.FlexTable, 1)}`;
@@ -633,15 +641,33 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 jobDefinition.getAttribute(), interactHeader);
                         },
 
+                        // Role/sub-role open the Manual to that JobGroup definition's
+                        // own description now, instead of a hover tooltip
+                        // (listenerOpenManualForJobRoles, WuxGS-Backend.js dispatches
+                        // the click). Explicit blue - wuxManualButton span uses
+                        // color: inherit (WCSS-Footer.css), and WuxSheetMain.Desc's
+                        // own text here isn't blue, same reasoning as
+                        // printAttribute/printSkill's own buttons.
+                        //
+                        // .replace strips the newlines/indentation baked into
+                        // WuxSheetMain.Button's own multi-line template - harmless
+                        // everywhere else this session (ordinary HTML collapses that
+                        // whitespace), but roleContent below ends up inside
+                        // WuxSheetMain.Desc, whose span.wuxDescription is
+                        // white-space: pre-line (WCSS-Base.css), which renders every
+                        // one of those embedded newlines as a real line break -
+                        // that's the huge vertical gap.
                         buildJobDescription = function (job) {
                             let roleGroupDef = WuxDef.Get(`JobGroup_${job.role}`);
                             let roleDisplay = job.role
-                                ? WuxSheetMain.Tooltip.Inline(job.role, WuxDefinition.TooltipDescription(roleGroupDef))
+                                ? WuxSheetMain.Button(roleGroupDef.getAttribute(WuxDef._moreinfo),
+                                    `<span style="color:#71B9DE;">${job.role}</span>`, "wuxManualButton").replace(/\s*\n\s*/g, "")
                                 : "";
                             let roleContent = `${WuxDef.GetTitle("Title_MainRole")}: ${roleDisplay}`;
                             if (job.subRole) {
                                 let subRoleGroupDef = WuxDef.Get(`JobGroup_${job.subRole}`);
-                                let subRoleDisplay = WuxSheetMain.Tooltip.Inline(job.subRole, WuxDefinition.TooltipDescription(subRoleGroupDef));
+                                let subRoleDisplay = WuxSheetMain.Button(subRoleGroupDef.getAttribute(WuxDef._moreinfo),
+                                    `<span style="color:#71B9DE;">${job.subRole}</span>`, "wuxManualButton").replace(/\s*\n\s*/g, "");
                                 roleContent += ` | ${WuxDef.GetTitle("Title_SubRole")}: ${subRoleDisplay}`;
                             }
                             let difficultyIcons = Format.PrintIcons(job.difficulty, 3, `★`, `☆`);
@@ -726,7 +752,18 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                 <span class="wuxHeader">${attributeDefinition.title}</span>
                                 ${select}
                             </div>`;
-                            let output = row + WuxSheetMain.MoreInfo(attributeDefinition);
+                            // Opens the Manual straight to this attribute's own
+                            // description instead of the old MoreInfo/LessInfo
+                            // inline toggle - listenerOpenManualForAttributesAndSkills
+                            // (WuxGS-Backend.js) dispatches the click. wuxManualButton
+                            // span uses color: inherit (WCSS-Footer.css), so without an
+                            // explicit color here it just picks up this row's own
+                            // ambient (gray) text instead of the light blue the old
+                            // MoreInfo button had (#71B9DE, WCSS-Specialized.css) -
+                            // same inline-span-color convention used for every button
+                            // icon elsewhere on this sheet.
+                            let output = row + WuxSheetMain.Button(attributeDefinition.getAttribute(WuxDef._moreinfo),
+                                `<span style="color:#71B9DE;">${WuxDef.Get("_moreinfo").getTitle()}</span>`, "wuxManualButton");
                             return WuxSheetMain.Table.FlexTableGroup(output, " wuxMinWidth150");
                         },
 
@@ -787,7 +824,11 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                                     `<div class="wuxIsKeySkill">${interactHeader}</div>`,
                                     `${interactHeader}`) +
                                 WuxSheetMain.Desc(skill.quickDescription) +
-                                WuxSheetMain.MoreInfo(skillDefinition) +
+                                // Same Manual-opening button as printAttribute above,
+                                // instead of the old MoreInfo/LessInfo inline toggle -
+                                // same explicit blue too, see its own comment.
+                                WuxSheetMain.Button(skillDefinition.getAttribute(WuxDef._moreinfo),
+                                    `<span style="color:#71B9DE;">${WuxDef.Get("_moreinfo").getTitle()}</span>`, "wuxManualButton") +
                                 WuxSheetMain.HiddenField(skillDefinition.getAttribute(WuxDef._rank),
                                     `<div class="wuxMarginLeft20">${expertiseHeader}</div>`) +
                                 WuxSheetMain.Row("&nbsp;");
@@ -895,14 +936,18 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             return output;
                         },
 
+                        // Same Manual-button conversion as buildLanguage below -
+                        // this is the sibling renderer for the "Common" languages
+                        // subsection specifically, easy to miss since it's a
+                        // separate function from the regional one.
                         buildCommonLanguage = function (knowledge) {
                             let knowledgeDefinition = knowledge.createDefinition(WuxDef.Get("Language"));
                             return `<div class="wuxSkill">
                                 ${WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                     knowledgeDefinition.getAttribute(WuxDef._rank),
-                                    buildInteractionMainBlock(knowledge, knowledgeDefinition))}
-                                <div class="wuxDescription">${knowledge.group}</div>
-                                ${WuxSheetMain.MoreInfo(knowledgeDefinition)}
+                                    buildInteractionMainBlock(knowledge, knowledgeDefinition, knowledge.group))}
+                                ${WuxSheetMain.Button(knowledgeDefinition.getAttribute(WuxDef._moreinfo),
+                                    `<span style="color:#71B9DE;">${WuxDef.Get("_moreinfo").getTitle()}</span>`, "wuxManualButton")}
                             </div>`;
                         },
 
@@ -942,17 +987,30 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                         buildLanguage = function (knowledge) {
                             let knowledgeDefinition = knowledge.createDefinition(WuxDef.Get("Language"));
+                            // Opens the Manual straight to this language's own
+                            // description instead of the old MoreInfo/LessInfo
+                            // inline-textbox toggle - listenerOpenManualForLanguages
+                            // (WuxGS-Backend.js) dispatches the click. Explicit blue,
+                            // same reasoning as printAttribute/printSkill's own
+                            // buttons - wuxManualButton span uses color: inherit
+                            // (WCSS-Footer.css), and nothing in .wuxSkill sets it.
                             return `<div class="wuxSkill">
                                 ${WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                     knowledgeDefinition.getAttribute(WuxDef._rank),
-                                    buildInteractionMainBlock(knowledge, knowledgeDefinition))}
-                                <div class="wuxDescription">${knowledge.location}</div>
-                                ${WuxSheetMain.MoreInfo(knowledgeDefinition)}
+                                    buildInteractionMainBlock(knowledge, knowledgeDefinition, knowledge.location))}
+                                ${WuxSheetMain.Button(knowledgeDefinition.getAttribute(WuxDef._moreinfo),
+                                    `<span style="color:#71B9DE;">${WuxDef.Get("_moreinfo").getTitle()}</span>`, "wuxManualButton")}
                             </div>`;
                         },
 
-                        buildInteractionMainBlock = function (knowledge, knowledgeDefinition) {
-                            return `<span class="wuxHeader">${knowledgeDefinition.title}</span>`;
+                        // subheaderText (optional) - the language's own location/group,
+                        // shown inline next to its name instead of as a separate line
+                        // below it (wuxSubheader, same "[Prereq: ...]" shape
+                        // buildTechnique's own prerequisites note uses elsewhere in
+                        // this file).
+                        buildInteractionMainBlock = function (knowledge, knowledgeDefinition, subheaderText) {
+                            let subheader = subheaderText ? `<div class="wuxSubheader">${subheaderText}</div>` : "";
+                            return `<span class="wuxHeader">${knowledgeDefinition.title}</span>${subheader}`;
                         }
 
                     return {

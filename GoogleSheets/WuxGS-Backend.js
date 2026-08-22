@@ -1076,6 +1076,11 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerOpenManualForStatus();
             output += listenerOpenManualForFilterEditMode();
             output += listenerOpenManualForBoons();
+            output += listenerOpenManualForAttributesAndSkills();
+            output += listenerOpenManualForJobRoles();
+            output += listenerOpenManualForLanguages();
+            output += listenerOpenManualForGearAutoEquip();
+            output += listenerOpenManualForStyleFilterOptions();
             output += listenerOpenManualForOrigin();
             output += listenerOpenManualForStatSummary();
             output += listenerOpenStatMoreInfo();
@@ -1370,6 +1375,45 @@ var PopupBuilder = PopupBuilder || (function () {
         listenerOpenManualForBoons = function () {
             let boonDefs = WuxDef.Filter([new DatabaseFilterData("group", "Boon")]);
             return listenerOpenManualForDefinitions(boonDefs);
+        },
+        // Advancement page's Attributes/Skills sections (WuxGS-Advancement.js's
+        // printAttribute/printSkill) - same "drop the old MoreInfo/LessInfo
+        // inline toggle for a Manual button" conversion as Boons above. Every
+        // group Attribute def and every group Skill def gets one, matching
+        // buildAttributes'/printSkill's own unfiltered lists.
+        listenerOpenManualForAttributesAndSkills = function () {
+            let attributeDefs = WuxDef.Filter([new DatabaseFilterData("group", "Attribute")]);
+            let skillDefs = WuxDef.Filter([new DatabaseFilterData("group", "Skill")]);
+            return listenerOpenManualForDefinitions(attributeDefs.concat(skillDefs));
+        },
+        // Jobs page's role/sub-role buttons (WuxGS-Advancement.js's
+        // buildJobDescription) - same conversion, dropping the old hover
+        // tooltip (WuxSheetMain.Tooltip.Inline). Every group JobGroup def
+        // gets one, matching buildRolesInfo's own unfiltered list (the
+        // Jobs page's own help-section role summary).
+        listenerOpenManualForJobRoles = function () {
+            let jobGroupDefs = WuxDef.Filter([new DatabaseFilterData("group", "JobGroup")]);
+            return listenerOpenManualForDefinitions(jobGroupDefs);
+        },
+        // Knowledge page's Language section (WuxGS-Advancement.js's
+        // buildLanguage) - same conversion, dropping the old MoreInfo/LessInfo
+        // inline toggle. Every group Language def gets one.
+        listenerOpenManualForLanguages = function () {
+            let languageDefs = WuxDef.Filter([new DatabaseFilterData("group", "Language")]);
+            return listenerOpenManualForDefinitions(languageDefs);
+        },
+        // Gear page's Auto Equip checkbox (WuxGS-Base.js's addConsumableFilterButtons/
+        // addEquipmentFilterButtons - same Gear_AutoEquipItems definition reused
+        // by both sections' own copy of the toggle) - same conversion, dropping
+        // the old MoreInfo/LessInfo inline toggle.
+        listenerOpenManualForGearAutoEquip = function () {
+            return listenerOpenManualForDefinitions([WuxDef.Get("Gear_AutoEquipItems")]);
+        },
+        // Actions page's Style filter options (WuxGS-Base.js's
+        // buildStyleFilterCheckboxes) - same conversion, dropping the old
+        // MoreInfo/LessInfo inline toggle.
+        listenerOpenManualForStyleFilterOptions = function () {
+            return listenerOpenManualForDefinitions([WuxDef.Get("Forme_ShowFromNonElement"), WuxDef.Get("Forme_ShowLevelRestricted")]);
         },
         // Character Details page's Origin tab (CharacterBackgroundBuilder,
         // GoogleSheets/WuxGS-CharacterDetailsBuilder.js) - every Build* field

@@ -101,6 +101,12 @@ var WuxWorkerJobs = WuxWorkerJobs || (function () {
                             `Level ${level}`,
                             true);
                     }
+                    // Tier 1 has no level prerequisite (GetLevelPrerequisites(1) === 0,
+                    // so it can't share the "Level X" phrasing above) - these are the
+                    // techniques learned immediately on taking the job itself.
+                    return new InspectionInventoryItem(`These Techniques are gained when you acquire the ${jobName} Job`,
+                        `Level 1`,
+                        true);
                 });
             if (inventoryItems.items.length == 0) {
                 return;
