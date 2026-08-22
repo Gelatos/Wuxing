@@ -12967,7 +12967,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                 buildFormeActions = function () {
                     let contents = "";
 
-                    contents += buildBaseFilterButtons();
+                    contents += buildFilterPresetButtons();
                     contents += repeatingFormeSection();
                     contents += buildInstantConsumablesSection();
                     contents += repeatingCustomTechniquesSection();
@@ -12978,58 +12978,173 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         `${sectionDef.getTitle()}`, contents, sectionDef);
                 },
 
-                buildBaseFilterButtons = function () {
+                // Replaces the old checkbox-based TechBaseFilter UI with four
+                // mutually-exclusive preset buttons (a native radio group, all
+                // sharing filterPresetField - same "one shared attribute, one
+                // wins" mechanism as the Manual's own categoryButton). "All"
+                // shows everything (Worker-Actions.js's
+                // applyTechniqueFilterPreset clears the filter outright for
+                // it, leaving only the job/CR-based restrictions
+                // FormeTechniqueDatabase always applies). filterPresetsField
+                // is the hidden, worker-populated store of the precomputed
+                // presets themselves (FormeTechniqueFilterPresets,
+                // FormeTechniqueDatabase.updateFilterPresets) - needs a real
+                // element here or the attribute wouldn't persist at all.
+                buildFilterPresetButtons = function () {
                     let titleDef = WuxDef.Get("TechBaseFilter");
-                    let clearAllDef = WuxDef.Get("Action_ClearFilter");
-                    let customFilterDef = WuxDef.Get("Action_CustomFilter");
                     let sectionDefinition = WuxDef.Get("Action_FormeTechniques");
-                    let filterField = sectionDefinition.getAttribute(WuxDef._learn);
-                    let baseGroups = WuxDef.Filter([
-                        new DatabaseFilterData("group", "TechBaseFilter"),
-                        new DatabaseFilterData("subGroup", "BaseGroup")
-                    ]);
+                    let filterPresetField = sectionDefinition.getAttribute("FilterPreset");
+                    let filterPresetsField = sectionDefinition.getAttribute("FilterPresets");
+                    let presetNames = ["All", "Basic Actions", "Basic Social", "Job + Style"];
 
-                    let filterOptions = [];
-                    for (let i = 0; i < baseGroups.length; i++) {
-                        let groupDef = baseGroups[i];
-                        let groupButtons = WuxDef.Filter([
-                            new DatabaseFilterData("group", "TechBaseFilter"),
-                            new DatabaseFilterData("subGroup", groupDef.getTitle())
-                        ]);
+                    let defaultFlag = WuxSheetMain.CustomInput("hidden", filterPresetField, "", ` value="All"`);
+                    let presetsDataField = WuxSheetMain.CustomInput("hidden", filterPresetsField, "");
 
-                        let items = [];
-                        for (let j = 0; j < groupButtons.length; j++) {
-                            items.push(WuxSheetMain.Table.FlexTableGroup(
-                                WuxSheetMain.InteractionElement.BuildCheckboxInput(
-                                    groupButtons[j].getAttribute(), groupButtons[j].getTitle()),
-                                " wuxTechBaseFilterButtonGroup"));
-                        }
+                    // No wuxTechBaseFilterButtonGroup wrapper (flex: 0 0 auto, shared
+                    // with the unrelated Style Auto Filter buttons below) and no
+                    // wuxButton base class - wuxWidth120 (WCSS-Footer.css, the same
+                    // fixed-width utility the old Clear All/Custom Filter buttons
+                    // used here) gives all four an equal, fixed 120px instead of
+                    // flex-sharing the row. wuxTechFilterPresetButton's own look
+                    // mirrors the Overview/Details/Post sub-tabs (wuxTabButton,
+                    // WCSS-Content.css).
+                    let buttons = presetNames.map(name => WuxSheetMain.Table.FlexTableGroup(
+                        `<div class="wuxTechFilterPresetButton wuxWidth120">
+                            ${WuxSheetMain.CustomInput("radio", filterPresetField, "", ` value="${name}"`)}<span>${name}</span>
+                        </div>`));
 
-                        let expandField = groupDef.getAttribute(WuxDef._expand);
-                        let categoryHeader = WuxSheetMain.Header2(
-                            WuxSheetMain.CollapsibleHeader(`<span>${groupDef.getTitle()}</span>`, expandField));
-                        let categoryContent = WuxSheetMain.HiddenAuxField(expandField,
-                            WuxSheetMain.Table.FlexTable(items.join("")));
+                    // One custom-filter button per RepeatingTechFilters row -
+                    // Roll20 stamps this template once per existing row (same
+                    // "write the row template once, let Roll20 repeat it"
+                    // idiom as RepeatingOutfits/repeatingEmoteButtons), so
+                    // this is one control, not a loop. Not part of the fixed
+                    // buttons' own radio group - Forme_CustomFilterName's own
+                    // _learn suffix is the row's "select this filter"
+                    // checkbox, rescoped per row by Roll20's fieldset
+                    // mechanism same as every other per-row trigger this
+                    // session, since a dynamic row id can't be baked into a
+                    // static radio value the way the four fixed names can.
+                    // wuxTechFilterPresetSelect-flag (WCSS-Content.css) is the
+                    // sibling hidden flag Worker-Actions.js's
+                    // selectTechFilterWithData actually drives the "selected"
+                    // look through - a checkbox's own :checked state doesn't
+                    // reliably clear across sibling rows the way a native
+                    // radio group would.
+                    let customFilterNameDef = WuxDef.Get("Forme_CustomFilterName");
+                    let customFilterSelectField = customFilterNameDef.getAttribute(WuxDef._learn);
+                    // Same wuxRepeatingFlexSection wrapper repeatingFormeSection's
+                    // own buildRepeater uses for RepeatingFormeTech's card grid -
+                    // FlexTable/FlexTableGroup (an earlier attempt here) only
+                    // ever works on markup WE build directly; Roll20 wraps each
+                    // repeated row of a repeating section in its own .repitem
+                    // div first, one level outside anything in our own template,
+                    // so a FlexTable inside the template can't reach across rows.
+                    // wuxRepeatingFlexSection's own CSS (WCSS-Base.css) targets
+                    // .repcontainer (Roll20's wrapper around every .repitem)
+                    // instead, which is the only way to actually flex-wrap them.
+                    // wuxCustomFilterButtonRepeater is the same idea as
+                    // wuxFormeTechRepeater's own fixed-240px override, just
+                    // sized to each button's own content (wuxWidth120) instead
+                    // of a fixed card width.
+                    let customFilterButtons = `<div class="wuxNoRepControl wuxRepeatingFlexSection wuxCustomFilterButtonRepeater"><fieldset class="${WuxDef.GetVariable("RepeatingTechFilters")}">
+                        <div class="wuxTechFilterPresetButton wuxWidth120">
+                                ${WuxSheetMain.CustomInput("checkbox", customFilterSelectField, "")}
+                                ${WuxSheetMain.CustomInput("hidden", customFilterSelectField, "wuxTechFilterPresetSelect-flag")}
+                                <span name="${customFilterNameDef.getAttribute()}"></span>
+                            </div>
+                    </fieldset></div>`;
 
-                        filterOptions.push(WuxSheetMain.Table.FlexTableGroup(categoryHeader + categoryContent));
-                    }
+                    // Styled like the Emotes section's own Add Outfit button
+                    // (wuxRepeatingTechActionButton, buildStaticTechniqueDisplay's
+                    // sibling ChatDisplayBuilder.outfitCollection) rather than
+                    // matching the preset/custom-filter pill buttons above -
+                    // a small text link, not another pill.
+                    let addFilterDef = WuxDef.Get("Title_AddTechFilter");
+                    let addFilterButton = `<div>${WuxSheetMain.Button(addFilterDef.getAttribute(),
+                        `<span style="color:#4CAF50;">&#43;</span> ${addFilterDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>`;
 
-                    let clearAllButton = WuxSheetMain.Table.FlexTableGroup(
-                        WuxSheetMain.Button(clearAllDef.getAttribute(), clearAllDef.getTitle(), "wuxWidth120"),
-                        " wuxTechBaseFilterButtonGroup");
-
-                    let customFilterButton = WuxSheetMain.Table.FlexTableGroup(
-                        WuxSheetMain.Button(filterField, customFilterDef.getTitle(), "wuxWidth120"),
-                        " wuxTechBaseFilterButtonGroup");
+                    let customFilterDetails = buildCustomFilterDetails();
+                    let filterEditModeSection = buildFilterEditModeSection();
 
                     let sectionExpandField = titleDef.getAttribute(WuxDef._expand);
                     let sectionHeader = WuxSheetMain.Header(
                         WuxSheetMain.CollapsibleHeader(`<span>${titleDef.getTitle()}</span>`, sectionExpandField));
                     let sectionContent = WuxSheetMain.HiddenAuxField(sectionExpandField,
-                        WuxSheetMain.Table.FlexTable(clearAllButton + customFilterButton) +
-                        WuxSheetMain.MultiRowGroup(filterOptions, WuxSheetMain.Table.FlexTable, 1));
+                        `${defaultFlag}${presetsDataField}${WuxSheetMain.Table.FlexTable(buttons.join(""))}${customFilterButtons}${addFilterButton}${customFilterDetails}${filterEditModeSection}`);
 
                     return sectionHeader + sectionContent;
+                },
+
+                // Shown only while a custom filter (not a fixed preset) is
+                // selected - CustomFilterId (Action_FormeTechniques,
+                // Worker-Actions.js's selectTechFilterWithData/
+                // deleteTechFilter) is "0" whenever none is, so this gates on
+                // that same attribute rather than needing its own separate
+                // flag. Forme_CustomFilterName's plain (unsuffixed) attribute
+                // is already the repeating field itself (the button's own
+                // <span name>), so its "Selected" suffix mints a distinct,
+                // non-repeating attribute here instead - a live, editable
+                // copy of whichever row is currently selected, synced by the
+                // same worker functions that handle selection/rename. The
+                // Edit button itself is additionally gated off separately
+                // (wuxFilterEditMode-flag, Forme_EditFilter's own value) so
+                // it hides once edit mode starts - buildFilterEditModeSection
+                // takes its place then.
+                buildCustomFilterDetails = function () {
+                    let detailsTitleDef = WuxDef.Get("Title_CustomFilterDetails");
+                    let sectionDefinition = WuxDef.Get("Action_FormeTechniques");
+                    let customFilterIdField = sectionDefinition.getAttribute("CustomFilterId");
+                    let customFilterNameDef = WuxDef.Get("Forme_CustomFilterName");
+                    let selectedNameField = customFilterNameDef.getAttribute("Selected");
+                    let editDef = WuxDef.Get("Forme_EditFilter");
+                    let deleteDef = WuxDef.Get("Forme_DeleteFilter");
+
+                    // Explicit default value="0" (not "" - Roll20 doesn't
+                    // reliably report a blank attribute as "" for CSS
+                    // attribute-selector matching, only an explicitly
+                    // written value), matching every other colocated flag's
+                    // own convention (WuxSheetMain.HiddenField's default).
+                    let flag = WuxSheetMain.CustomInput("hidden", customFilterIdField, "wuxCustomFilterDetails-flag", ` value="0"`);
+                    let editModeFlag = WuxSheetMain.CustomInput("hidden", editDef.getAttribute(), "wuxFilterEditMode-flag", ` value="0"`);
+                    let editButton = `${editModeFlag}<div class="wuxEditFilterButton">
+                        ${WuxSheetMain.Button(editDef.getAttribute(), `<span style="color:#5bc0de;">&#9998;</span> ${editDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                    </div>`;
+                    let content = `${WuxSheetMain.Header(detailsTitleDef.getTitle())}
+                        ${WuxSheetMain.CustomInput("text", selectedNameField, "wuxInput")}
+                        ${editButton}
+                        ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}`;
+
+                    return `${flag}<div class="wuxCustomFilterDetails">${content}</div>`;
+                },
+
+                // Replaces the (now-hidden) Edit button while a custom
+                // filter is being edited - gated by the exact same
+                // wuxFilterEditMode-flag/Forme_EditFilter value
+                // buildCustomFilterDetails' own editButton wrapper uses, so
+                // exactly one of the two is ever visible. The help button
+                // mirrors printMoreInfoButton's own shape (a plain
+                // wuxManualButton bound to Title_FilterEditMode's own
+                // _moreinfo attribute) via the generic
+                // listenerOpenManualForDefinitions dispatcher
+                // (WuxGS-Backend.js), same mechanism every other "explain
+                // this definition" button this session already uses.
+                buildFilterEditModeSection = function () {
+                    let titleDef = WuxDef.Get("Title_FilterEditMode");
+                    let editDef = WuxDef.Get("Forme_EditFilter");
+                    let finishDef = WuxDef.Get("Forme_FinishFilter");
+                    let hideAllDef = WuxDef.Get("Forme_HideAll");
+                    let showAllDef = WuxDef.Get("Forme_ShowAll");
+                    let setCustomFilterDef = WuxDef.Get("Forme_SetCustomFilter");
+
+                    let flag = WuxSheetMain.CustomInput("hidden", editDef.getAttribute(), "wuxFilterEditMode-flag", ` value="0"`);
+                    let header = `${WuxSheetMain.Header(titleDef.getTitle())}
+                        ${WuxSheetMain.Button(titleDef.getAttribute(WuxDef._moreinfo), "?", "wuxManualButton")}`;
+                    let buttons = `${WuxSheetMain.Button(finishDef.getAttribute(), `<span style="color:#5bc0de;">&#10003;</span> ${finishDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                        ${WuxSheetMain.Button(hideAllDef.getAttribute(), `<span style="color:#cc3333;">&#8722;</span> ${hideAllDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                        ${WuxSheetMain.Button(showAllDef.getAttribute(), `<span style="color:#4caf50;">&#43;</span> ${showAllDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                        ${WuxSheetMain.Button(setCustomFilterDef.getAttribute(), `<span style="color:#c8a020;">&#9776;</span> ${setCustomFilterDef.getTitle()}`, "wuxRepeatingTechActionButton")}`;
+
+                    return `${flag}<div class="wuxFilterEditModeSection">${header}${buttons}</div>`;
                 },
 
                 buildJobSelection = function () {
@@ -15081,8 +15196,17 @@ var ActionBuilder = ActionBuilder || (function () {
             output += listenerRefreshBasicActions();
             output += listenerTechniquesFilterPopup();
             output += listenerStyleAutoFilterButtons();
-            output += listenerBaseFilterButtons();
-            output += listenerClearBaseFilters();
+            output += listenerFilterPresetButtons();
+            output += listenerSelectTechFilter();
+            output += listenerAddTechFilter();
+            output += listenerRenameTechFilter();
+            output += listenerEditTechFilter();
+            output += listenerDeleteTechFilter();
+            output += listenerFinishTechFilter();
+            output += listenerHideAllTechniques();
+            output += listenerShowAllTechniques();
+            output += listenerSetCustomFilter();
+            output += listenerFilterEditButtons();
             output += listenerUpdateTechniqueChangeVisibility();
             return output;
         },
@@ -15143,14 +15267,14 @@ var ActionBuilder = ActionBuilder || (function () {
                 `WuxWorkerActions.RemoveAllOldStyleData()`, false)}`;
             return output;
         },
+        // Action_FormeTechniques' own _learn/_filter bindings (the old "Custom
+        // Filter" button that opened TechniqueFilterPopup, and the "Remove
+        // Filter" refresh that fired on clearing it) are gone along with that
+        // button (buildFilterPresetButtons replaced it) - Forme_CustomStyleFilter/
+        // Forme_RecommendedStyles are unrelated (Style browsing, not the
+        // Techniques section's own filter) and stay.
         listenerTechniquesFilterPopup = function () {
             return `${WuxSheetBackend.OnChange(
-                [WuxDef.GetVariable("Action_FormeTechniques", WuxDef._learn)],
-                `WuxWorkerFilterPopup.OpenFormeTechnique()`, true)}
-                ${WuxSheetBackend.OnChange(
-                [WuxDef.GetVariable("Action_FormeTechniques", WuxDef._filter)],
-                `WuxWorkerFilterPopup.RemoveFilter()`, true)}
-                ${WuxSheetBackend.OnChange(
                 [WuxDef.GetVariable("Forme_CustomStyleFilter")],
                 `WuxWorkerFilterPopup.OpenCustomStyleFilter()`, true)}
                 ${WuxSheetBackend.OnChange(
@@ -15165,19 +15289,84 @@ var ActionBuilder = ActionBuilder || (function () {
             }
             return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerInspectPopup.OpenStyleFilterTechniqueInspection(eventinfo)`, true);
         },
-        listenerBaseFilterButtons = function () {
-            let baseFilters = WuxDef.Filter([new DatabaseFilterData("group", "TechBaseFilter")])
-                .filter(def => def.subGroup !== "BaseGroup");
-            let groupVariableNames = [];
-            for (let i = 0; i < baseFilters.length; i++) {
-                groupVariableNames.push(baseFilters[i].getVariable());
-            }
-            return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerActions.QuickFilterFormeActions()`, true);
+        // The Techniques section's All/Basic Actions/Basic Social/Job + Style
+        // radio group (GoogleSheets/WuxGS-Base.js's buildFilterPresetButtons) -
+        // one shared attribute, so this fires once per click with eventinfo.newValue
+        // already holding the clicked preset's own name.
+        listenerFilterPresetButtons = function () {
+            let filterPresetField = WuxDef.GetVariable("Action_FormeTechniques", "FilterPreset");
+            return WuxSheetBackend.OnChange([filterPresetField], `WuxWorkerActions.ApplyTechniqueFilterPreset(eventinfo)`, true);
         },
-        listenerClearBaseFilters = function () {
-            return WuxSheetBackend.OnChange(
-                [WuxDef.GetVariable("Action_ClearFilter")],
-                `WuxWorkerActions.ClearBaseFilters()`, true);
+        // Each RepeatingTechFilters row's own "select this filter" checkbox
+        // (Forme_CustomFilterName's _learn suffix, buildFilterPresetButtons) -
+        // a plain unprefixed field name rescoped per row by Roll20's fieldset
+        // mechanism, same as every other per-row trigger this session (e.g.
+        // listenerOpenLoreMoreInfo above), so this one repeater-scoped
+        // binding covers every custom filter row at once.
+        listenerSelectTechFilter = function () {
+            let repeaterVar = WuxDef.GetVariable("RepeatingTechFilters");
+            let selectField = WuxDef.GetVariable("Forme_CustomFilterName", WuxDef._learn);
+            return WuxSheetBackend.OnChange([`${repeaterVar}:${selectField}`], `WuxWorkerActions.SelectTechFilter(eventinfo)`, true);
+        },
+        // Title_AddTechFilter (buildFilterPresetButtons) - creates and
+        // immediately selects a new custom filter.
+        listenerAddTechFilter = function () {
+            let addFilterDef = WuxDef.Get("Title_AddTechFilter");
+            return WuxSheetBackend.OnChange([addFilterDef.getVariable()], `WuxWorkerActions.AddTechFilter()`, false);
+        },
+        // Custom Filter Details' name input (buildCustomFilterDetails) -
+        // writes back into whichever row is currently selected.
+        listenerRenameTechFilter = function () {
+            let nameDef = WuxDef.Get("Forme_CustomFilterName");
+            let selectedNameField = nameDef.getVariable("Selected");
+            return WuxSheetBackend.OnChange([selectedNameField], `WuxWorkerActions.RenameTechFilter(eventinfo)`, true);
+        },
+        // Forme_EditFilter (buildCustomFilterDetails) - the button itself
+        // hides once checked (buildFilterEditModeSection takes its place),
+        // so this only ever needs to enter edit mode.
+        listenerEditTechFilter = function () {
+            let editDef = WuxDef.Get("Forme_EditFilter");
+            return WuxSheetBackend.OnChange([editDef.getVariable()], `WuxWorkerActions.EditTechFilter()`, false);
+        },
+        // Forme_DeleteFilter (buildCustomFilterDetails).
+        listenerDeleteTechFilter = function () {
+            let deleteDef = WuxDef.Get("Forme_DeleteFilter");
+            return WuxSheetBackend.OnChange([deleteDef.getVariable()], `WuxWorkerActions.DeleteTechFilter()`, false);
+        },
+        // Filter Edit Mode section (buildFilterEditModeSection) - Finish
+        // Editing/Hide All/Show All/Show By Filter. Its own help button is
+        // PopupBuilder's listenerOpenManualForFilterEditMode, since the
+        // generic listenerOpenManualForDefinitions dispatcher it reuses is
+        // private to that module.
+        listenerFinishTechFilter = function () {
+            let finishDef = WuxDef.Get("Forme_FinishFilter");
+            return WuxSheetBackend.OnChange([finishDef.getVariable()], `WuxWorkerActions.FinishTechFilter()`, false);
+        },
+        listenerHideAllTechniques = function () {
+            let hideAllDef = WuxDef.Get("Forme_HideAll");
+            return WuxSheetBackend.OnChange([hideAllDef.getVariable()], `WuxWorkerActions.HideAllTechniques()`, false);
+        },
+        listenerShowAllTechniques = function () {
+            let showAllDef = WuxDef.Get("Forme_ShowAll");
+            return WuxSheetBackend.OnChange([showAllDef.getVariable()], `WuxWorkerActions.ShowAllTechniques()`, false);
+        },
+        listenerSetCustomFilter = function () {
+            let setCustomFilterDef = WuxDef.Get("Forme_SetCustomFilter");
+            return WuxSheetBackend.OnChange([setCustomFilterDef.getVariable()], `WuxWorkerFilterPopup.OpenSetCustomFilter()`, false);
+        },
+        // Every technique row's own Hide/Show buttons (edit mode only,
+        // TechniqueRepeaterDisplayBuilderUsable.printFilterEditButtons) -
+        // RepeatingFormeTech is the only repeater that ever has these, unlike
+        // listenerRankRepeatingStyles' own repeater list above (rank buttons
+        // exist there too, but this session's filter-edit feature only
+        // touches the live Actions-page list).
+        listenerFilterEditButtons = function () {
+            let repeaterVar = WuxDef.GetVariable("RepeatingFormeTech");
+            let baseDef = WuxDef.Get("Action");
+            let hideVar = baseDef.getVariable(`-${WuxDef.GetVariable("Forme_Hide")}`);
+            let showVar = baseDef.getVariable(`-${WuxDef.GetVariable("Forme_Show")}`);
+            return `${WuxSheetBackend.OnChange([`${repeaterVar}:${hideVar}`], `WuxWorkerActions.HideTechniqueInFilter(eventinfo)`, true)}
+                ${WuxSheetBackend.OnChange([`${repeaterVar}:${showVar}`], `WuxWorkerActions.ShowTechniqueInFilter(eventinfo)`, true)}`;
         },
         listenerUpdateTechniqueChangeVisibility = function () {
             return WuxSheetBackend.OnChange(
@@ -15211,6 +15400,7 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerOpenManual();
             output += listenerCloseManual();
             output += listenerOpenManualForStatus();
+            output += listenerOpenManualForFilterEditMode();
             output += listenerOpenManualForBoons();
             output += listenerOpenManualForOrigin();
             output += listenerOpenManualForStatSummary();
@@ -15488,6 +15678,13 @@ var PopupBuilder = PopupBuilder || (function () {
             let presetStatusDefs = WuxDef.Filter([new DatabaseFilterData("group", "Status")])
                 .filter(def => def.presetStatus && !def.hasRanks);
             return listenerOpenManualForDefinitions(presetStatusDefs);
+        },
+        // Filter Edit Mode section's own help button
+        // (GoogleSheets/WuxGS-Base.js's buildFilterEditModeSection, Actions
+        // page) - lives here rather than in ActionBuilder because
+        // listenerOpenManualForDefinitions above is private to this module.
+        listenerOpenManualForFilterEditMode = function () {
+            return listenerOpenManualForDefinitions([WuxDef.Get("Title_FilterEditMode")]);
         },
         // Character Overview's Boon "More Info" buttons (WuxGS-Base.js's
         // resources) - now reuse the same openManualButton markup as Status
@@ -17513,7 +17710,8 @@ class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
             ${this.printCheckEffects()}
             ${this.printEndEffects()}
             ${this.printWillBreakEffects()}
-            ${this.printEnhancementEffects()}`);
+            ${this.printEnhancementEffects()}
+            ${this.printFilterEditButtons()}`);
     }
 
     printRange() {}
@@ -17613,6 +17811,12 @@ class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
             <div class="wuxFeatureHeaderInfoContents">${contents}</div>
         </div>`;
     }
+
+    // Custom-filter edit mode's per-technique Hide/Show pair - only
+    // TechniqueRepeaterDisplayBuilderUsable overrides this (RepeatingFormeTech
+    // is the only repeater that's ever in edit mode), same stub-then-override
+    // shape as every other printX() here.
+    printFilterEditButtons() {}
 }
 
 class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
@@ -17976,6 +18180,21 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
 }
 
 class TechniqueRepeaterDisplayBuilderUsable extends TechniqueRepeaterDisplayBuilder {
+    // Filter Edit Mode's own "would this be visible if the filter being
+    // edited were applied right now?" indicator - same border+glow the
+    // Technique Catalog's selected-card state already uses
+    // (wuxCatalogCard-selected-flag, WCSS-Specialized.css). Reads a single
+    // combined flag (Forme_Show's max slot, Worker-Actions.js's
+    // setFilterEditMode/setTechniqueInFilter) rather than chaining two
+    // separate ones in CSS, since it needs to be an immediate sibling of
+    // .wuxFeature for the selector to match - that has to happen here, in
+    // print() itself, rather than nested inside printInfoBlock like
+    // everything else on this class.
+    print() {
+        let isVisibleFlag = this.getActionTypeAttribute("Forme_Show", WuxDef._max);
+        return `<input type="hidden" class="wuxFilterEditVisible-flag" name="${isVisibleFlag}" value="0">
+            ${super.print()}`;
+    }
     printName() {
         let contents = `<button class="wuxFeatureHeaderNameButton" type="roll" value="@{${WuxDef.GetVariable("Action_Use")}}">
             ${this.printSpanActionTypeAttribute("TechName")}
@@ -17997,10 +18216,44 @@ class TechniqueRepeaterDisplayBuilderUsable extends TechniqueRepeaterDisplayBuil
             WuxSheetMain.Button(rankDownField, "<span class='wuxFeatureButtonIcon'>&#8722;</span> Decrease Rank", "wuxFeatureButtonDisabled"));
         let contents = `<div class="wuxFeatureHeaderInfoEffect-EnhanceButtons">${rankDownButton}${rankUpButton}</div>`;
 
-        return WuxSheetMain.HiddenField(fieldName,
+        let enhancementBlock = WuxSheetMain.HiddenField(fieldName,
             `${this.printEnhancementEffectsField(this.printSpan(fieldName))}
             ${contents}`
         );
+
+        // Hidden outright while editing a custom filter - printFilterEditButtons
+        // (below) takes over as this technique's action row instead. Every
+        // technique gets that in edit mode, not just ones with an enhance
+        // effect, so it can't just nest inside this fieldName-gated block -
+        // this wraps the WHOLE thing (rank buttons included) in a second,
+        // outer toggle instead. HiddenAuxField shows its content when the
+        // flag is "0" (not editing, the default) and hides it otherwise -
+        // the mirror image of printFilterEditButtons' own HiddenField below.
+        let editModeRowFlag = this.getActionTypeAttribute("Forme_EditFilter", WuxDef._max);
+        return WuxSheetMain.HiddenAuxField(editModeRowFlag, enhancementBlock);
+    }
+
+    // Custom-filter edit mode's per-technique Hide/Show pair - shown for
+    // every technique while editing (Worker-Actions.js's
+    // FormeTechniqueDatabaseBase.setFilterEditMode writes editModeRowFlag/
+    // inFilterFlag to every row in one pass on entering/exiting edit mode or
+    // toggling a technique), regardless of whether that technique also has
+    // an enhance effect - see printEnhancementEffects' own edit-mode gate
+    // above for why these can't share one block.
+    printFilterEditButtons() {
+        let editModeRowFlag = this.getActionTypeAttribute("Forme_EditFilter", WuxDef._max);
+        let hideField = this.getActionTypeAttribute("Forme_Hide");
+        let showField = this.getActionTypeAttribute("Forme_Show");
+        // Whether this technique is currently included in the filter being
+        // edited - piggybacked onto Forme_Hide's own max slot, same
+        // "enabled flag lives on the clickable field's own max slot"
+        // convention the rank buttons use above.
+        let inFilterFlag = this.getActionTypeAttribute("Forme_Hide", WuxDef._max);
+        let hideButton = WuxSheetMain.Button(hideField, "<span class='wuxFeatureButtonIcon'>&#8722;</span> Hide", "wuxFeatureButton");
+        let showButton = WuxSheetMain.Button(showField, "<span class='wuxFeatureButtonIcon'>&#43;</span> Show", "wuxFeatureButton");
+        let contents = `<div class="wuxFeatureHeaderInfoEffect-EnhanceButtons">${WuxSheetMain.HiddenSpanFieldToggle(inFilterFlag, hideButton, showButton)}</div>`;
+
+        return WuxSheetMain.HiddenField(editModeRowFlag, contents);
     }
 }
 

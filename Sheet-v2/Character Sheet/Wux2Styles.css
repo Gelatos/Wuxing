@@ -133,6 +133,33 @@ input[type=number]::-webkit-inner-spin-button {
     box-sizing: border-box !important;
 }
 
+/* Same fixed-width-per-row idea as wuxFormeTechRepeater above, just sized to
+   each button's own content (wuxWidth120, WuxGS-Base.js's buildFilterPresetButtons)
+   instead of a fixed 240px card - without this override, the generic
+   wuxRepeatingFlexSection rule above gives every row flex: 1, stretching
+   each custom filter button to share the row equally instead of sitting at
+   its own natural width like the fixed preset buttons beside it. */
+.wuxCustomFilterButtonRepeater .repcontainer > .repitem {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    /* wuxFlexTableItemGroup's own 5px padding (WCSS-Content.css) is what
+       actually spaces the fixed preset buttons apart, not any margin on
+       wuxTechFilterPresetButton itself - .repitem has no equivalent of its
+       own, so without this the custom filter buttons sit flush against
+       each other and against the fixed row above. */
+    padding: 5px !important;
+}
+
+/* auto-width rows still get spread across the full row (Roll20's own
+   .repcontainer default justify-content, which wuxRepeatingFlexSection's
+   own rule above never overrides) unless justify-content is pinned back to
+   flex-start here - same left-packed look as the fixed preset buttons
+   above (a plain wuxFlexTable row, whose own flex-start default was never
+   overridden by anything). */
+.wuxCustomFilterButtonRepeater .repcontainer {
+    justify-content: flex-start;
+}
+
 .wuxFormeTechRepeater .wuxFeature {
     box-sizing: border-box;
 }
@@ -1545,6 +1572,113 @@ button.wuxPostButton[type=roll]::before {
 .wuxTechBaseFilterButtonGroup .wuxInteractiveContent
 {
 	color: #d0d0d0;
+}
+
+/* Mirrors the Overview/Details/Post sub-tabs' own look (wuxTabButton,
+   WCSS-Base.css) rather than reusing that class directly - wuxTabButton is
+   shared by a dozen other page-nav rows via a highlight-flag/value-matching
+   mechanism built for handling several duplicate copies of the same row,
+   which this single, never-duplicated button row doesn't need. Same
+   hide-the-native-control-show-the-sibling-span idiom either way (also used
+   by the Manual's own wuxManualCategoryButton) - the radio still drives the
+   actual selection/mutual-exclusivity, it's just invisible and stretched to
+   cover the whole button as the real click target, with :checked driving the
+   "selected" look on its sibling span instead of a native radio dot. No
+   wuxButton base class on the wrapping div (see buildFilterPresetButtons) -
+   wuxTabButton doesn't carry one either, so nothing here needs to override
+   wuxButton's own height/background/border. */
+.wuxTechFilterPresetButton
+{
+	position: relative;
+	min-height: 20px;
+}
+
+.wuxTechFilterPresetButton input[type=radio],
+.wuxTechFilterPresetButton input[type=checkbox]
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	min-height: 20px;
+	z-index: 9999;
+	opacity: 0;
+}
+
+.wuxTechFilterPresetButton span
+{
+	display: block;
+	width: 100%;
+	height: 100%;
+
+	text-align: center;
+	color: #000000;
+	font-weight: bold;
+	font-size: 12px;
+
+	background-color: #cacbcf;
+	border: 1px solid black;
+	border-radius: 5px;
+}
+
+/* Custom filter rows use a checkbox, not a radio, since a dynamic repeating
+   row id can't be baked into a static radio value (see buildFilterPresetButtons) -
+   :checked doesn't reliably clear across sibling rows the way a native radio
+   group does, so Worker-Actions.js's selectTechFilterWithData drives the
+   "selected" look through this local hidden flag instead (same
+   flag[value="on"]-plus-sibling idiom RepeatingOutfits already uses), while
+   the checkbox itself stays only the invisible click target above. */
+.wuxTechFilterPresetButton input[type=radio]:checked + span,
+.wuxTechFilterPresetButton input[type=hidden].wuxTechFilterPresetSelect-flag[value="on"] + span
+{
+	color: #FFFFFF;
+	font-size: 14px;
+	background: #512800;
+}
+
+.wuxTechFilterPresetButton input[type=radio]:hover + span,
+.wuxTechFilterPresetButton input[type=checkbox]:hover + span
+{
+	color: #FFFFFF;
+	background: linear-gradient(to right, #86530f, #815822, #6e420a);
+}
+
+/* Hidden unless a custom filter (not a fixed preset) is selected -
+   Action_FormeTechniques' own CustomFilterId is "0" whenever none is
+   (Worker-Actions.js's selectTechFilterWithData/deleteTechFilter/
+   applyTechniqueFilterPreset), same colocated-flag idiom used everywhere
+   else this session - "0", not "", since Roll20 doesn't reliably report a
+   blank attribute as "" for CSS attribute-selector matching. */
+.wuxCustomFilterDetails
+{
+	display: none;
+}
+
+input[type=hidden].wuxCustomFilterDetails-flag:not([value="0"]) + .wuxCustomFilterDetails
+{
+	display: block;
+}
+
+/* Exactly one of the Edit button / Filter Edit Mode section shows at a time,
+   both gated off the same Forme_EditFilter value (buildCustomFilterDetails/
+   buildFilterEditModeSection, WuxGS-Base.js) - "0" (not checked) shows the
+   Edit button and hides the section; anything else (checked, "on") does the
+   opposite. */
+.wuxFilterEditModeSection
+{
+	display: none;
+}
+
+input[type=hidden].wuxFilterEditMode-flag:not([value="0"]) + .wuxFilterEditModeSection
+{
+	display: block;
+}
+
+input[type=hidden].wuxFilterEditMode-flag:not([value="0"]) + .wuxEditFilterButton
+{
+	display: none;
 }
 
 .wuxFlexTableItemGroup3
@@ -3077,6 +3211,17 @@ input[type=hidden].wuxFeature-flag[value="on"] + .wuxFeature
    already toggles (InspectPopupAttributeHandler.setSelectedItem/
    clearLastSelectedItem, Worker-InspectPopup.js). */
 input[type=hidden].wuxCatalogCard-selected-flag:not([value="0"]) + .wuxFeature
+{
+    border-color: #7ec8e3;
+    box-shadow: 0 0 8px 2px rgba(126, 200, 227, 0.7);
+}
+
+/* Filter Edit Mode's own "would this be visible if the filter being edited
+   were applied right now?" indicator (GoogleSheets/WuxGS-FeatureDisplayBuilder.js's
+   TechniqueRepeaterDisplayBuilderUsable.print(), Worker-Actions.js's
+   setFilterEditMode/setTechniqueInFilter) - same border+glow as the catalog
+   card's selected state above. */
+input[type=hidden].wuxFilterEditVisible-flag:not([value="0"]) + .wuxFeature
 {
     border-color: #7ec8e3;
     box-shadow: 0 0 8px 2px rgba(126, 200, 227, 0.7);

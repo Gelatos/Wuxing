@@ -870,8 +870,17 @@ var ActionBuilder = ActionBuilder || (function () {
             output += listenerRefreshBasicActions();
             output += listenerTechniquesFilterPopup();
             output += listenerStyleAutoFilterButtons();
-            output += listenerBaseFilterButtons();
-            output += listenerClearBaseFilters();
+            output += listenerFilterPresetButtons();
+            output += listenerSelectTechFilter();
+            output += listenerAddTechFilter();
+            output += listenerRenameTechFilter();
+            output += listenerEditTechFilter();
+            output += listenerDeleteTechFilter();
+            output += listenerFinishTechFilter();
+            output += listenerHideAllTechniques();
+            output += listenerShowAllTechniques();
+            output += listenerSetCustomFilter();
+            output += listenerFilterEditButtons();
             output += listenerUpdateTechniqueChangeVisibility();
             return output;
         },
@@ -932,14 +941,14 @@ var ActionBuilder = ActionBuilder || (function () {
                 `WuxWorkerActions.RemoveAllOldStyleData()`, false)}`;
             return output;
         },
+        // Action_FormeTechniques' own _learn/_filter bindings (the old "Custom
+        // Filter" button that opened TechniqueFilterPopup, and the "Remove
+        // Filter" refresh that fired on clearing it) are gone along with that
+        // button (buildFilterPresetButtons replaced it) - Forme_CustomStyleFilter/
+        // Forme_RecommendedStyles are unrelated (Style browsing, not the
+        // Techniques section's own filter) and stay.
         listenerTechniquesFilterPopup = function () {
             return `${WuxSheetBackend.OnChange(
-                [WuxDef.GetVariable("Action_FormeTechniques", WuxDef._learn)],
-                `WuxWorkerFilterPopup.OpenFormeTechnique()`, true)}
-                ${WuxSheetBackend.OnChange(
-                [WuxDef.GetVariable("Action_FormeTechniques", WuxDef._filter)],
-                `WuxWorkerFilterPopup.RemoveFilter()`, true)}
-                ${WuxSheetBackend.OnChange(
                 [WuxDef.GetVariable("Forme_CustomStyleFilter")],
                 `WuxWorkerFilterPopup.OpenCustomStyleFilter()`, true)}
                 ${WuxSheetBackend.OnChange(
@@ -954,19 +963,84 @@ var ActionBuilder = ActionBuilder || (function () {
             }
             return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerInspectPopup.OpenStyleFilterTechniqueInspection(eventinfo)`, true);
         },
-        listenerBaseFilterButtons = function () {
-            let baseFilters = WuxDef.Filter([new DatabaseFilterData("group", "TechBaseFilter")])
-                .filter(def => def.subGroup !== "BaseGroup");
-            let groupVariableNames = [];
-            for (let i = 0; i < baseFilters.length; i++) {
-                groupVariableNames.push(baseFilters[i].getVariable());
-            }
-            return WuxSheetBackend.OnChange(groupVariableNames, `WuxWorkerActions.QuickFilterFormeActions()`, true);
+        // The Techniques section's All/Basic Actions/Basic Social/Job + Style
+        // radio group (GoogleSheets/WuxGS-Base.js's buildFilterPresetButtons) -
+        // one shared attribute, so this fires once per click with eventinfo.newValue
+        // already holding the clicked preset's own name.
+        listenerFilterPresetButtons = function () {
+            let filterPresetField = WuxDef.GetVariable("Action_FormeTechniques", "FilterPreset");
+            return WuxSheetBackend.OnChange([filterPresetField], `WuxWorkerActions.ApplyTechniqueFilterPreset(eventinfo)`, true);
         },
-        listenerClearBaseFilters = function () {
-            return WuxSheetBackend.OnChange(
-                [WuxDef.GetVariable("Action_ClearFilter")],
-                `WuxWorkerActions.ClearBaseFilters()`, true);
+        // Each RepeatingTechFilters row's own "select this filter" checkbox
+        // (Forme_CustomFilterName's _learn suffix, buildFilterPresetButtons) -
+        // a plain unprefixed field name rescoped per row by Roll20's fieldset
+        // mechanism, same as every other per-row trigger this session (e.g.
+        // listenerOpenLoreMoreInfo above), so this one repeater-scoped
+        // binding covers every custom filter row at once.
+        listenerSelectTechFilter = function () {
+            let repeaterVar = WuxDef.GetVariable("RepeatingTechFilters");
+            let selectField = WuxDef.GetVariable("Forme_CustomFilterName", WuxDef._learn);
+            return WuxSheetBackend.OnChange([`${repeaterVar}:${selectField}`], `WuxWorkerActions.SelectTechFilter(eventinfo)`, true);
+        },
+        // Title_AddTechFilter (buildFilterPresetButtons) - creates and
+        // immediately selects a new custom filter.
+        listenerAddTechFilter = function () {
+            let addFilterDef = WuxDef.Get("Title_AddTechFilter");
+            return WuxSheetBackend.OnChange([addFilterDef.getVariable()], `WuxWorkerActions.AddTechFilter()`, false);
+        },
+        // Custom Filter Details' name input (buildCustomFilterDetails) -
+        // writes back into whichever row is currently selected.
+        listenerRenameTechFilter = function () {
+            let nameDef = WuxDef.Get("Forme_CustomFilterName");
+            let selectedNameField = nameDef.getVariable("Selected");
+            return WuxSheetBackend.OnChange([selectedNameField], `WuxWorkerActions.RenameTechFilter(eventinfo)`, true);
+        },
+        // Forme_EditFilter (buildCustomFilterDetails) - the button itself
+        // hides once checked (buildFilterEditModeSection takes its place),
+        // so this only ever needs to enter edit mode.
+        listenerEditTechFilter = function () {
+            let editDef = WuxDef.Get("Forme_EditFilter");
+            return WuxSheetBackend.OnChange([editDef.getVariable()], `WuxWorkerActions.EditTechFilter()`, false);
+        },
+        // Forme_DeleteFilter (buildCustomFilterDetails).
+        listenerDeleteTechFilter = function () {
+            let deleteDef = WuxDef.Get("Forme_DeleteFilter");
+            return WuxSheetBackend.OnChange([deleteDef.getVariable()], `WuxWorkerActions.DeleteTechFilter()`, false);
+        },
+        // Filter Edit Mode section (buildFilterEditModeSection) - Finish
+        // Editing/Hide All/Show All/Show By Filter. Its own help button is
+        // PopupBuilder's listenerOpenManualForFilterEditMode, since the
+        // generic listenerOpenManualForDefinitions dispatcher it reuses is
+        // private to that module.
+        listenerFinishTechFilter = function () {
+            let finishDef = WuxDef.Get("Forme_FinishFilter");
+            return WuxSheetBackend.OnChange([finishDef.getVariable()], `WuxWorkerActions.FinishTechFilter()`, false);
+        },
+        listenerHideAllTechniques = function () {
+            let hideAllDef = WuxDef.Get("Forme_HideAll");
+            return WuxSheetBackend.OnChange([hideAllDef.getVariable()], `WuxWorkerActions.HideAllTechniques()`, false);
+        },
+        listenerShowAllTechniques = function () {
+            let showAllDef = WuxDef.Get("Forme_ShowAll");
+            return WuxSheetBackend.OnChange([showAllDef.getVariable()], `WuxWorkerActions.ShowAllTechniques()`, false);
+        },
+        listenerSetCustomFilter = function () {
+            let setCustomFilterDef = WuxDef.Get("Forme_SetCustomFilter");
+            return WuxSheetBackend.OnChange([setCustomFilterDef.getVariable()], `WuxWorkerFilterPopup.OpenSetCustomFilter()`, false);
+        },
+        // Every technique row's own Hide/Show buttons (edit mode only,
+        // TechniqueRepeaterDisplayBuilderUsable.printFilterEditButtons) -
+        // RepeatingFormeTech is the only repeater that ever has these, unlike
+        // listenerRankRepeatingStyles' own repeater list above (rank buttons
+        // exist there too, but this session's filter-edit feature only
+        // touches the live Actions-page list).
+        listenerFilterEditButtons = function () {
+            let repeaterVar = WuxDef.GetVariable("RepeatingFormeTech");
+            let baseDef = WuxDef.Get("Action");
+            let hideVar = baseDef.getVariable(`-${WuxDef.GetVariable("Forme_Hide")}`);
+            let showVar = baseDef.getVariable(`-${WuxDef.GetVariable("Forme_Show")}`);
+            return `${WuxSheetBackend.OnChange([`${repeaterVar}:${hideVar}`], `WuxWorkerActions.HideTechniqueInFilter(eventinfo)`, true)}
+                ${WuxSheetBackend.OnChange([`${repeaterVar}:${showVar}`], `WuxWorkerActions.ShowTechniqueInFilter(eventinfo)`, true)}`;
         },
         listenerUpdateTechniqueChangeVisibility = function () {
             return WuxSheetBackend.OnChange(
@@ -1000,6 +1074,7 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerOpenManual();
             output += listenerCloseManual();
             output += listenerOpenManualForStatus();
+            output += listenerOpenManualForFilterEditMode();
             output += listenerOpenManualForBoons();
             output += listenerOpenManualForOrigin();
             output += listenerOpenManualForStatSummary();
@@ -1277,6 +1352,13 @@ var PopupBuilder = PopupBuilder || (function () {
             let presetStatusDefs = WuxDef.Filter([new DatabaseFilterData("group", "Status")])
                 .filter(def => def.presetStatus && !def.hasRanks);
             return listenerOpenManualForDefinitions(presetStatusDefs);
+        },
+        // Filter Edit Mode section's own help button
+        // (GoogleSheets/WuxGS-Base.js's buildFilterEditModeSection, Actions
+        // page) - lives here rather than in ActionBuilder because
+        // listenerOpenManualForDefinitions above is private to this module.
+        listenerOpenManualForFilterEditMode = function () {
+            return listenerOpenManualForDefinitions([WuxDef.Get("Title_FilterEditMode")]);
         },
         // Character Overview's Boon "More Info" buttons (WuxGS-Base.js's
         // resources) - now reuse the same openManualButton markup as Status

@@ -176,6 +176,53 @@ class TechniqueFilterPopup extends FilterPopup {
     }
 }
 
+// The Techniques section's "Show By Filter" button (Forme_SetCustomFilter,
+// edit mode only) - reuses the same plain technique filter picker as
+// TechniqueFilterPopup, but instead of replacing the live Actions-page
+// filter (Action_FormeTechniques' own _filter), it resolves the pick into a
+// technique-name list and hands it to WuxWorkerActions'
+// ApplyFilterEditSelectionFromPopup, which writes it into whichever custom
+// filter is currently being edited (Action_FormeTechniques' CustomFilterId -
+// untouched by anything in this file, so it survives the whole open ->
+// pick -> Apply round trip). No LoadingScreenHandler/ClearBaseFilterCheckboxes
+// here - those are specific to the live-filter path.
+class SetCustomFilterPopup extends FilterPopup {
+    open() {
+        super.open("Popup_FilterTechniquePopupName", "SetCustomFilter", "Technique");
+    }
+
+    applyFilter() {
+        let filterPopup = this;
+        this.attributeHandler.addMod(this.filterDefinitions.getAllVariables());
+
+        // getTechniqueFilters() returns the bare number 0 when nothing was
+        // picked - ApplyFilterEditSelectionFromPopup treats undefined as
+        // "match every technique currently in the kit" (same as pressing
+        // Show All), not an empty result.
+        let capturedTechniqueFilters;
+
+        this.attributeHandler.addGetAttrCallback(function (attrHandler) {
+            let filterPopupAttrHandler = new FilterPopupAttributeHandler(attrHandler, filterPopup.filterDefinitions, filterPopup.equipmentFilterDefinitions);
+            let techniqueFilters = filterPopupAttrHandler.getTechniqueFilters();
+            filterPopupAttrHandler.hide();
+            capturedTechniqueFilters = Array.isArray(techniqueFilters) ? techniqueFilters : undefined;
+        });
+        // Deferred to the finish callback - same shape every other
+        // FilterPopup subclass uses (TechniqueFilterPopup/ItemTechFilterPopup)
+        // for their own downstream action. ApplyFilterEditSelectionFromPopup
+        // starts its own separate WorkerAttributeHandler chain; firing it
+        // from inside addGetAttrCallback would start that chain before this
+        // popup's own setAttrsAsync (the hide() resets above) had actually
+        // run, racing two independent setAttrs calls against each other -
+        // which is why Forme_FilterData wasn't reliably getting the picked
+        // selection.
+        this.attributeHandler.addFinishCallback(function () {
+            WuxWorkerActions.ApplyFilterEditSelectionFromPopup(capturedTechniqueFilters);
+        });
+        this.attributeHandler.run();
+    }
+}
+
 class StyleFilterPopup extends FilterPopup {
     open() {
         super.open("Popup_CustomStylesFilterName", "CustomStyle", "Technique");
@@ -298,6 +345,12 @@ var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
             new ItemTechFilterPopup(attributeHandler).open();
             attributeHandler.run();
         },
+        openSetCustomFilter = function () {
+            Debug.Log("Open Set Custom Filter Popup");
+            let attributeHandler = new WorkerAttributeHandler();
+            new SetCustomFilterPopup(attributeHandler).open();
+            attributeHandler.run();
+        },
         close = function () {
             let attributeHandler = new WorkerAttributeHandler();
             new FilterPopup(attributeHandler).close();
@@ -320,6 +373,8 @@ var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
                     new ItemFilterPopup(attributeHandler2).applyFilter();
                 } else if (popupType === "ItemTechFilter") {
                     new ItemTechFilterPopup(attributeHandler2).applyFilter();
+                } else if (popupType === "SetCustomFilter") {
+                    new SetCustomFilterPopup(attributeHandler2).applyFilter();
                 }
             });
 
@@ -339,6 +394,7 @@ var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
         OpenCustomStyleFilter: openCustomStyleFilter,
         OpenItemFilter: openItemFilter,
         OpenItemTechFilter: openItemTechFilter,
+        OpenSetCustomFilter: openSetCustomFilter,
         Close: close,
         ApplyFilter: applyFilter,
         RemoveFilter: removeFilter,

@@ -1019,6 +1019,17 @@ input[type=hidden].wuxCatalogCard-selected-flag:not([value="0"]) + .wuxFeature
     box-shadow: 0 0 8px 2px rgba(126, 200, 227, 0.7);
 }
 
+/* Filter Edit Mode's own "would this be visible if the filter being edited
+   were applied right now?" indicator (GoogleSheets/WuxGS-FeatureDisplayBuilder.js's
+   TechniqueRepeaterDisplayBuilderUsable.print(), Worker-Actions.js's
+   setFilterEditMode/setTechniqueInFilter) - same border+glow as the catalog
+   card's selected state above. */
+input[type=hidden].wuxFilterEditVisible-flag:not([value="0"]) + .wuxFeature
+{
+    border-color: #7ec8e3;
+    box-shadow: 0 0 8px 2px rgba(126, 200, 227, 0.7);
+}
+
 input[type=hidden].wuxFilterFeature-flag + .wuxFeature
 {
     display: block;

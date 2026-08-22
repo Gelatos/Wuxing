@@ -133,6 +133,33 @@ input[type=number]::-webkit-inner-spin-button {
     box-sizing: border-box !important;
 }
 
+/* Same fixed-width-per-row idea as wuxFormeTechRepeater above, just sized to
+   each button's own content (wuxWidth120, WuxGS-Base.js's buildFilterPresetButtons)
+   instead of a fixed 240px card - without this override, the generic
+   wuxRepeatingFlexSection rule above gives every row flex: 1, stretching
+   each custom filter button to share the row equally instead of sitting at
+   its own natural width like the fixed preset buttons beside it. */
+.wuxCustomFilterButtonRepeater .repcontainer > .repitem {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    /* wuxFlexTableItemGroup's own 5px padding (WCSS-Content.css) is what
+       actually spaces the fixed preset buttons apart, not any margin on
+       wuxTechFilterPresetButton itself - .repitem has no equivalent of its
+       own, so without this the custom filter buttons sit flush against
+       each other and against the fixed row above. */
+    padding: 5px !important;
+}
+
+/* auto-width rows still get spread across the full row (Roll20's own
+   .repcontainer default justify-content, which wuxRepeatingFlexSection's
+   own rule above never overrides) unless justify-content is pinned back to
+   flex-start here - same left-packed look as the fixed preset buttons
+   above (a plain wuxFlexTable row, whose own flex-start default was never
+   overridden by anything). */
+.wuxCustomFilterButtonRepeater .repcontainer {
+    justify-content: flex-start;
+}
+
 .wuxFormeTechRepeater .wuxFeature {
     box-sizing: border-box;
 }

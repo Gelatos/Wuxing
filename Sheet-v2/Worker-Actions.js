@@ -407,120 +407,525 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                 .filter(def => def.subGroup !== "BaseGroup");
         },
 
-        applyBaseFilters = function (filters) {
-            // Write the filter JSON to _filter so the "Remove Filter" button becomes visible,
-            // and apply the filter directly since setAttrs is always silent and won't trigger onChange.
-            let filterVariable = WuxDef.GetVariable("Action_FormeTechniques", WuxDef._filter);
-            let filtersToStore = filters.length > 0 ? filters : 0;
-            let loader = new LoadingScreenHandler();
-            loader.showLoadingScreen(() => {
-                let attributeHandler = new WorkerAttributeHandler();
-                attributeHandler.addUpdate(filterVariable, JSON.stringify(filtersToStore));
-                updateAllFormeActions(attributeHandler, filters.length > 0 ? filters : undefined);
-                attributeHandler.addFinishCallback(() => {
-                    loader.hideLoadingScreen();
-                });
-                attributeHandler.run();
-            });
-        },
-
-        getBaseFilterCategoryKeys = function () {
-            let baseGroups = WuxDef.Filter([
-                new DatabaseFilterData("group", "TechBaseFilter"),
-                new DatabaseFilterData("subGroup", "BaseGroup")
-            ]);
-            let categoryKeyByTitle = {};
-            baseGroups.forEach(groupDef => {
-                categoryKeyByTitle[groupDef.getTitle()] = groupDef.getDescription();
-            });
-            return categoryKeyByTitle;
-        },
-
-        quickFilterFormeActions = function () {
-            Debug.Log("Quick Filter Forme Actions");
-            let categoryKeyByTitle = getBaseFilterCategoryKeys();
-            let allBaseFilters = getBaseFilterLeafDefinitions();
-            let filterVariables = allBaseFilters.map(def => def.getVariable());
-
-            // The Style filter computes its match values dynamically instead of from a static
-            // description: it covers both the style currently equipped in the Job Forme slot
-            // and every individually learned style.
-            let styleWorker = new WuxStyleWorkerBuild();
-            let jobSlotVariable = WuxDef.GetVariable("Forme_JobSlot");
-
-            let attributeHandler = new WorkerAttributeHandler();
-            attributeHandler.addMod(filterVariables);
-            attributeHandler.addMod(styleWorker.attrBuildDraft);
-            attributeHandler.addMod(jobSlotVariable);
-            attributeHandler.addGetAttrCallback(function (attrHandler) {
-                styleWorker.setBuildStatsDraft(attrHandler);
-                let equippedJobStyle = attrHandler.parseString(jobSlotVariable);
-                let learnedStyleNames = styleWorker.getStyles().map(technique => technique.name);
-
-                let mergedRules = {};
-                // A checked box always claims its key, even with zero values - an empty value
-                // list still filters correctly (Database.filter treats it as "match nothing"),
-                // so checking e.g. Style with no styles learned should show nothing, not everything.
-                let addValues = function (key, values) {
-                    if (mergedRules[key] == undefined) {
-                        mergedRules[key] = new Set();
-                    }
-                    values.forEach(v => mergedRules[key].add(v));
-                };
-
-                for (let def of allBaseFilters) {
-                    if (attrHandler.parseString(def.getVariable()) !== "on") {
-                        continue;
-                    }
-
-                    if (def.name === "TechBaseFilter_Style") {
-                        // "Job" and "Style" were merged into one checkbox, so this now needs to
-                        // cover both: the equipped job's style, plus every individually learned
-                        // style. sortingGroups.style[<style name>] only lists that style's variant
-                        // techniques, not the base style technique itself - so also match the
-                        // broad "Style" category to pick up the learned/equipped base(s). This
-                        // can't leak in unlearned styles' bases since checkTechniqueIsVisibleInFilter
-                        // only ever runs against techniques already registered in the kit.
-                        let styleNames = learnedStyleNames.slice();
-                        if (equippedJobStyle !== "") {
-                            styleNames.push(equippedJobStyle);
-                        }
-                        addValues("style", styleNames.length > 0 ? styleNames.concat("Style") : []);
-                        continue;
-                    }
-
-                    let key = categoryKeyByTitle[def.subGroup];
-                    if (key == undefined || key === "") {
-                        Debug.Log(`No filter key defined for category "${def.subGroup}"`);
-                        continue;
-                    }
-                    let description = def.getDescription();
-                    if (description === "") {
-                        continue;
-                    }
-                    addValues(key, description.split(",").map(v => v.trim()).filter(v => v !== ""));
-                }
-
-                let filters = Object.keys(mergedRules).map(key => {
-                    let values = Array.from(mergedRules[key]);
-                    return new DatabaseFilterData(key, values.length === 1 ? values[0] : values);
-                });
-                applyBaseFilters(filters);
-            });
-            attributeHandler.run();
-        },
-
         clearBaseFilterCheckboxes = function (attributeHandler) {
             let allBaseFilters = getBaseFilterLeafDefinitions();
             allBaseFilters.forEach(def => attributeHandler.addUpdate(def.getVariable(), 0));
         },
 
-        clearBaseFilters = function () {
-            Debug.Log("Clear All Base Filters");
+        // Shared tail end of every filter-selection path (a fixed preset, a
+        // custom filter, or a brand-new custom filter's initial "everything
+        // visible" list) - reads the technique-name list straight out of
+        // already-computed data instead of recomputing it via WuxTechs.Filter,
+        // and skips the loading screen entirely (unlike
+        // updateAllActionsFromMenu's LoadingScreenHandler usage) since reading
+        // precomputed data is fast enough not to need one. filterNames ==
+        // undefined clears the filter outright (this.filters == 0, "All"),
+        // leaving only the job/CR-based restrictions FormeTechniqueDatabase
+        // already applies independent of any filter. Always builds its own
+        // fresh WorkerAttributeHandler rather than accepting the caller's -
+        // every caller reaches this from inside its own already-fired
+        // addGetAttrCallback, and AttributeHandler's getCallbacks/
+        // finishCallbacks arrays are never cleared between .run() calls, so
+        // reusing that same handler here would re-queue and re-fire the
+        // caller's own callback on this function's own nested .run(),
+        // cascading into a runaway recursive loop that never reaches
+        // setAttrsAsync - exactly what was silently blocking every filter
+        // switch. Callers that need to bundle their own writes (clearing the
+        // previous selection's flag, etc.) do so on their own handler and
+        // call this afterward instead, as a separate round trip.
+        applyTechniqueFilterNames = function (filterNames) {
             let attributeHandler = new WorkerAttributeHandler();
-            clearBaseFilterCheckboxes(attributeHandler);
+            let filterVariable = WuxDef.GetVariable("Action_FormeTechniques", WuxDef._filter);
+            attributeHandler.addUpdate(filterVariable, JSON.stringify(filterNames != undefined ? filterNames : 0));
+
+            // Any filter application (a real switch, or the tail end of
+            // finishing an edit) always leaves edit mode fully off - "if the
+            // player swaps to any other filter, immediately exit edit mode".
+            // This is also wuxFilterEditMode-flag's own value
+            // (buildCustomFilterDetails/buildFilterEditModeSection), so it
+            // un-hides the Edit button and re-hides the Filter Edit Mode
+            // section too.
+            let editDef = WuxDef.Get("Forme_EditFilter");
+            attributeHandler.addUpdate(editDef.getVariable(), "0");
+
+            let formeTech = new FormeTechniqueDatabase(attributeHandler, filterNames);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                formeTech.setupPostGetAttr(attrHandler);
+                formeTech.registerTechDictionary(attrHandler);
+                formeTech.updateVisibilityOfRepeaterTechniques(attrHandler);
+                // Every technique's own row reverts from Hide/Show back to
+                // the normal rank buttons - "all techniques should swap back
+                // to their normal display method".
+                formeTech.setFilterEditMode(attrHandler, false);
+            });
+            attributeHandler.addFinishCallback(function () {
+                formeTech.setSortOrder();
+            });
             attributeHandler.run();
-            applyBaseFilters([]);
+        },
+
+        // The Techniques section's All/Basic Actions/Basic Social/Job + Style
+        // radio buttons (GoogleSheets/WuxGS-Base.js's buildFilterPresetButtons)
+        // - reads the technique-name list straight out of the persisted
+        // FormeTechniqueFilterPresets JSON (FilterPresets attribute, written by
+        // FormeTechniqueDatabase.updateFilterPresets).
+        applyTechniqueFilterPreset = function (eventinfo) {
+            let presetName = eventinfo.newValue;
+            let presetsVariable = WuxDef.GetVariable("Action_FormeTechniques", "FilterPresets");
+            let customFilterIdVariable = WuxDef.GetVariable("Action_FormeTechniques", "CustomFilterId");
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod([presetsVariable, customFilterIdVariable]);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let filterNames;
+                if (presetName !== "All") {
+                    let presets = attrHandler.parseJSON(presetsVariable) || {};
+                    let preset = presets[presetName];
+                    filterNames = preset != undefined ? preset.TechniquesThatAreVisible : [];
+                }
+
+                // Picking a fixed preset deselects whatever custom filter was
+                // active - only the one row remembered by
+                // customFilterIdVariable ever needs clearing (mirrors
+                // Worker-Chat.js's selectOutfitWithData).
+                let selectedCustomFilterId = attrHandler.parseString(customFilterIdVariable);
+                if (selectedCustomFilterId !== "0") {
+                    let customFilterRepeater = new WorkerRepeatingSectionHandler("RepeatingTechFilters");
+                    let selectField = WuxDef.GetVariable("Forme_CustomFilterName", WuxDef._learn);
+                    attrHandler.addUpdate(customFilterRepeater.getFieldName(selectedCustomFilterId, selectField), "0");
+                    attrHandler.addUpdate(customFilterIdVariable, "0");
+                }
+
+                applyTechniqueFilterNames(filterNames);
+            });
+            attributeHandler.run();
+        },
+
+        // Marks customFilterId as the selected filter (deselecting whatever
+        // custom filter was previously active, same one-row-only clearing as
+        // applyTechniqueFilterPreset's own deselect) and applies filterNames.
+        // Also clears the fixed presets' own radio value - none of their
+        // static values will ever match a row id anyway, so this alone
+        // already shows none of them selected, but writing it explicitly
+        // means the stored value never lingers as a stale preset name.
+        // Shared by both a real click (selectTechFilter) and a brand-new
+        // filter's auto-select (addTechFilter).
+        selectTechFilterWithData = function (newSelectionId, filterNames) {
+            let repeater = new WorkerRepeatingSectionHandler("RepeatingTechFilters");
+            let selectField = WuxDef.GetVariable("Forme_CustomFilterName", WuxDef._learn);
+            let nameField = WuxDef.GetVariable("Forme_CustomFilterName");
+            let customFilterIdVariable = WuxDef.GetVariable("Action_FormeTechniques", "CustomFilterId");
+            let filterPresetVariable = WuxDef.GetVariable("Action_FormeTechniques", "FilterPreset");
+            let selectedNameVariable = WuxDef.GetVariable("Forme_CustomFilterName", "Selected");
+
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod([customFilterIdVariable, repeater.getFieldName(newSelectionId, nameField)]);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let previousId = attrHandler.parseString(customFilterIdVariable);
+                if (previousId !== "0" && previousId !== newSelectionId) {
+                    attrHandler.addUpdate(repeater.getFieldName(previousId, selectField), "0");
+                }
+                attrHandler.addUpdate(repeater.getFieldName(newSelectionId, selectField), "on");
+                attrHandler.addUpdate(customFilterIdVariable, newSelectionId);
+                attrHandler.addUpdate(filterPresetVariable, "0");
+                // Custom Filter Details' own name field is a separate,
+                // non-repeating copy (buildCustomFilterDetails) - keep it in
+                // sync with whichever row is now selected.
+                attrHandler.addUpdate(selectedNameVariable, attrHandler.parseString(repeater.getFieldName(newSelectionId, nameField)));
+                applyTechniqueFilterNames(filterNames);
+            });
+            attributeHandler.run();
+        },
+
+        // A custom filter row's own "select this filter" checkbox
+        // (GoogleSheets/WuxGS-Base.js's buildFilterPresetButtons, bound across
+        // every RepeatingTechFilters row by WuxGS-Backend.js's
+        // listenerSelectTechFilter). No eventinfo.newValue guard, same as
+        // RepeatingOutfits' own selectOutfit - both checking and unchecking
+        // this row's control are fine to treat as "select this filter".
+        selectTechFilter = function (eventinfo) {
+            let repeater = new WorkerRepeatingSectionHandler("RepeatingTechFilters");
+            let newSelectionId = repeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let filterDataVar = WuxDef.GetVariable("Forme_FilterData");
+
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod(repeater.getFieldName(newSelectionId, filterDataVar));
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let filterNames;
+                try {
+                    filterNames = JSON.parse(attrHandler.parseString(repeater.getFieldName(newSelectionId, filterDataVar)));
+                } catch (e) {}
+                if (!Array.isArray(filterNames)) {
+                    filterNames = [];
+                }
+                selectTechFilterWithData(newSelectionId, filterNames);
+            });
+            attributeHandler.run();
+        },
+
+        // Title_AddTechFilter (GoogleSheets/WuxGS-Base.js's
+        // buildFilterPresetButtons, styled like the Emotes section's Add
+        // Outfit button) - creates a new RepeatingTechFilters row starting
+        // with every technique the character currently has visible (per
+        // spec), defaults its name to "Custom Filter <count>" (count
+        // includes the new row itself - the first one made is "Custom
+        // Filter 1"), and selects it immediately. getIds is needed first
+        // just to count the existing rows before generateRowId adds one
+        // more to that same list.
+        addTechFilter = function () {
+            Debug.Log("Adding Custom Filter");
+            let repeater = new WorkerRepeatingSectionHandler("RepeatingTechFilters");
+            repeater.getIds(function (repeater) {
+                let existingCount = repeater.ids.length;
+                let newId = repeater.generateRowId();
+                let defaultName = `Custom Filter ${existingCount + 1}`;
+                let nameVar = WuxDef.GetVariable("Forme_CustomFilterName");
+                let filterDataVar = WuxDef.GetVariable("Forme_FilterData");
+                // Every technique this filter has ever been offered -
+                // piggybacked onto Forme_FilterData's own max slot, same
+                // convention as Forme_EditFilter/Forme_Hide's max-slot flags
+                // elsewhere in this feature.
+                let knownDataVar = WuxDef.GetVariable("Forme_FilterData", WuxDef._max);
+
+                let attributeHandler = new WorkerAttributeHandler();
+                let formeTech = new FormeTechniqueDatabase(attributeHandler);
+                let allTechniqueNames = [];
+                attributeHandler.addGetAttrCallback(function (attrHandler) {
+                    formeTech.setupPostGetAttr(attrHandler);
+                    formeTech.registerTechDictionary(attrHandler);
+                    allTechniqueNames = Object.entries(formeTech.techDictionary.values)
+                        .filter(([, techData]) => !techData.isHeader)
+                        .map(([name]) => name);
+
+                    attrHandler.addUpdate(repeater.getFieldName(newId, nameVar), defaultName);
+                    attrHandler.addUpdate(repeater.getFieldName(newId, filterDataVar), JSON.stringify(allTechniqueNames));
+                    // Everything's included by default, so everything's
+                    // already "known" too - updateCustomFilters() only
+                    // needs to onboard techniques the character learns
+                    // after this point.
+                    attrHandler.addUpdate(repeater.getFieldName(newId, knownDataVar), JSON.stringify(allTechniqueNames));
+                });
+                attributeHandler.addFinishCallback(function () {
+                    formeTech.setSortOrder();
+                    selectTechFilterWithData(newId, allTechniqueNames);
+                });
+                attributeHandler.run();
+            });
+        },
+
+        // Custom Filter Details' own name text input (buildCustomFilterDetails,
+        // a non-repeating live copy of whichever row is selected) - writes
+        // the new value back into that one row's real Forme_CustomFilterName.
+        renameTechFilter = function (eventinfo) {
+            let customFilterIdVariable = WuxDef.GetVariable("Action_FormeTechniques", "CustomFilterId");
+            let repeater = new WorkerRepeatingSectionHandler("RepeatingTechFilters");
+            let nameVar = WuxDef.GetVariable("Forme_CustomFilterName");
+
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod(customFilterIdVariable);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let customFilterId = attrHandler.parseString(customFilterIdVariable);
+                if (customFilterId === "0") {
+                    return;
+                }
+                attrHandler.addUpdate(repeater.getFieldName(customFilterId, nameVar), eventinfo.newValue);
+            });
+            attributeHandler.run();
+        },
+
+        // Forme_DeleteFilter (Custom Filter Details) - removes the selected
+        // row outright and falls back to "All", same shape as
+        // applyTechniqueFilterPreset's own "All" branch.
+        deleteTechFilter = function () {
+            let customFilterIdVariable = WuxDef.GetVariable("Action_FormeTechniques", "CustomFilterId");
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod(customFilterIdVariable);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let customFilterId = attrHandler.parseString(customFilterIdVariable);
+                if (customFilterId === "0") {
+                    return;
+                }
+                let repeater = new WorkerRepeatingSectionHandler("RepeatingTechFilters");
+                repeater.removeId(customFilterId);
+
+                attrHandler.addUpdate(customFilterIdVariable, "0");
+                let filterPresetVariable = WuxDef.GetVariable("Action_FormeTechniques", "FilterPreset");
+                attrHandler.addUpdate(filterPresetVariable, "All");
+                applyTechniqueFilterNames(undefined);
+            });
+            attributeHandler.run();
+        },
+
+        // Forme_EditFilter (Custom Filter Details) - the button itself is
+        // hidden once edit mode starts (buildFilterEditModeSection takes its
+        // place), so this checkbox only ever gets checked, never unchecked
+        // by the user - "finish" is Forme_FinishFilter's own separate button
+        // now (finishTechFilter). Only reachable while a custom filter is
+        // actually selected - the button itself is inside
+        // buildCustomFilterDetails, which is hidden otherwise.
+        editTechFilter = function () {
+            enterTechFilterEditMode();
+        },
+
+        // Reads the selected custom filter's own Forme_FilterData, then
+        // builds a full FormeTechniqueDatabase (needed for
+        // setFilterEditMode's row iteration) and marks every technique in
+        // edit mode against that filter's current contents.
+        enterTechFilterEditMode = function () {
+            Debug.Log("Entering Custom Filter Edit Mode");
+            let customFilterIdVariable = WuxDef.GetVariable("Action_FormeTechniques", "CustomFilterId");
+
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod(customFilterIdVariable);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let customFilterId = attrHandler.parseString(customFilterIdVariable);
+                if (customFilterId === "0") {
+                    return;
+                }
+
+                let repeater = new WorkerRepeatingSectionHandler("RepeatingTechFilters");
+                let filterDataVar = WuxDef.GetVariable("Forme_FilterData");
+                let attributeHandler2 = new WorkerAttributeHandler();
+                attributeHandler2.addMod(repeater.getFieldName(customFilterId, filterDataVar));
+                attributeHandler2.addGetAttrCallback(function (attrHandler2) {
+                    let filterNames;
+                    try {
+                        filterNames = JSON.parse(attrHandler2.parseString(repeater.getFieldName(customFilterId, filterDataVar)));
+                    } catch (e) {}
+                    if (!Array.isArray(filterNames)) {
+                        filterNames = [];
+                    }
+
+                    let attributeHandler3 = new WorkerAttributeHandler();
+                    let formeTech = new FormeTechniqueDatabase(attributeHandler3);
+                    attributeHandler3.addGetAttrCallback(function (attrHandler3) {
+                        formeTech.setupPostGetAttr(attrHandler3);
+                        // true - every owned technique gets sectioned, not
+                        // just the ones currently eligible/visible, since
+                        // Filter Edit Mode is about to force them all
+                        // visible below.
+                        formeTech.registerTechDictionary(attrHandler3, true);
+                        // Writes each row's real sortId/header placement
+                        // from the techDictionary just built above - without
+                        // this, setSortOrder() (the finish callback below)
+                        // has nothing to apply and today's sort silently
+                        // reverts to whatever order the section was in
+                        // before edit mode was entered.
+                        formeTech.updateVisibilityOfRepeaterTechniques(attrHandler3);
+                        formeTech.setFilterEditMode(attrHandler3, true, filterNames);
+                    });
+                    attributeHandler3.addFinishCallback(function () {
+                        formeTech.setSortOrder();
+                    });
+                    attributeHandler3.run();
+                });
+                attributeHandler2.run();
+            });
+            attributeHandler.run();
+        },
+
+        // Ends edit mode by re-applying whichever filter is actually active
+        // (a custom filter if CustomFilterId is set, otherwise the fixed
+        // preset named by FilterPreset) - applyTechniqueFilterNames's own
+        // tail already clears edit mode/resets the button label as a side
+        // effect of applying any filter, so this only needs to resolve which
+        // filterNames to apply.
+        finishTechFilter = function () {
+            let filterPresetVariable = WuxDef.GetVariable("Action_FormeTechniques", "FilterPreset");
+            let customFilterIdVariable = WuxDef.GetVariable("Action_FormeTechniques", "CustomFilterId");
+            let presetsVariable = WuxDef.GetVariable("Action_FormeTechniques", "FilterPresets");
+
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod([filterPresetVariable, customFilterIdVariable, presetsVariable]);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let customFilterId = attrHandler.parseString(customFilterIdVariable);
+                if (customFilterId !== "0") {
+                    let repeater = new WorkerRepeatingSectionHandler("RepeatingTechFilters");
+                    let filterDataVar = WuxDef.GetVariable("Forme_FilterData");
+                    let attributeHandler2 = new WorkerAttributeHandler();
+                    attributeHandler2.addMod(repeater.getFieldName(customFilterId, filterDataVar));
+                    attributeHandler2.addGetAttrCallback(function (attrHandler2) {
+                        let filterNames;
+                        try {
+                            filterNames = JSON.parse(attrHandler2.parseString(repeater.getFieldName(customFilterId, filterDataVar)));
+                        } catch (e) {}
+                        if (!Array.isArray(filterNames)) {
+                            filterNames = [];
+                        }
+                        applyTechniqueFilterNames(filterNames);
+                    });
+                    attributeHandler2.run();
+                    return;
+                }
+
+                let presetName = attrHandler.parseString(filterPresetVariable);
+                let filterNames;
+                if (presetName !== "All" && presetName !== "0") {
+                    let presets = attrHandler.parseJSON(presetsVariable) || {};
+                    let preset = presets[presetName];
+                    filterNames = preset != undefined ? preset.TechniquesThatAreVisible : [];
+                }
+                applyTechniqueFilterNames(filterNames);
+            });
+            attributeHandler.run();
+        },
+
+        // Forme_Hide/Forme_Show (a technique's own row, edit mode only) -
+        // adds/removes this technique from the custom filter currently being
+        // edited and flips its own Forme_Hide max-slot flag so the clicked
+        // button immediately swaps to its opposite (TechniqueRepeaterDisplayBuilderUsable.
+        // printFilterEditButtons).
+        setTechniqueInFilter = function (eventinfo, makeVisible) {
+            let techniquesRepeater = new WorkerRepeatingSectionHandler("RepeatingFormeTech");
+            let selectedId = techniquesRepeater.getIdFromFieldName(eventinfo.sourceAttribute);
+            let techniqueNameField = techniquesRepeater.getFieldName(
+                selectedId, WuxDef.GetUntypedVariable("Action", "TechTrueName"));
+            let customFilterIdVariable = WuxDef.GetVariable("Action_FormeTechniques", "CustomFilterId");
+
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod([techniqueNameField, customFilterIdVariable]);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let customFilterId = attrHandler.parseString(customFilterIdVariable);
+                if (customFilterId === "0") {
+                    return;
+                }
+                let techniqueName = attrHandler.parseString(techniqueNameField);
+
+                let filterRepeater = new WorkerRepeatingSectionHandler("RepeatingTechFilters");
+                let filterDataVar = WuxDef.GetVariable("Forme_FilterData");
+                let attributeHandler2 = new WorkerAttributeHandler();
+                attributeHandler2.addMod(filterRepeater.getFieldName(customFilterId, filterDataVar));
+                attributeHandler2.addGetAttrCallback(function (attrHandler2) {
+                    let filterNames;
+                    try {
+                        filterNames = JSON.parse(attrHandler2.parseString(filterRepeater.getFieldName(customFilterId, filterDataVar)));
+                    } catch (e) {}
+                    if (!Array.isArray(filterNames)) {
+                        filterNames = [];
+                    }
+
+                    let inFilter = filterNames.includes(techniqueName);
+                    if (makeVisible && !inFilter) {
+                        filterNames.push(techniqueName);
+                    } else if (!makeVisible && inFilter) {
+                        filterNames = filterNames.filter(name => name !== techniqueName);
+                    }
+                    attrHandler2.addUpdate(filterRepeater.getFieldName(customFilterId, filterDataVar), JSON.stringify(filterNames));
+
+                    let techniqueAttributeHandler = new TechniqueDataAttributeHandler(attrHandler2, "Action");
+                    techniqueAttributeHandler.setRepeaterData(techniquesRepeater);
+                    techniqueAttributeHandler.setId(selectedId);
+                    let inFilterFlagVar = techniqueAttributeHandler.getVariable("Forme_Hide", WuxDef._max);
+                    attrHandler2.addRepeatingSectionRowUpdate(techniquesRepeater.definitionId, inFilterFlagVar, makeVisible ? "1" : "0");
+                    // Keeps the card-border indicator (setFilterEditMode's
+                    // own comment) in sync with this single-row toggle too.
+                    let isVisibleFlagVar = techniqueAttributeHandler.getVariable("Forme_Show", WuxDef._max);
+                    attrHandler2.addRepeatingSectionRowUpdate(techniquesRepeater.definitionId, isVisibleFlagVar, makeVisible ? "1" : "0");
+                });
+                attributeHandler2.run();
+            });
+            attributeHandler.run();
+        },
+        hideTechniqueInFilter = function (eventinfo) {
+            setTechniqueInFilter(eventinfo, false);
+        },
+        showTechniqueInFilter = function (eventinfo) {
+            setTechniqueInFilter(eventinfo, true);
+        },
+
+        // Shared tail for Hide All/Show All/Show By Filter (Forme_HideAll/
+        // Forme_ShowAll/Forme_SetCustomFilter, buildFilterEditModeSection) -
+        // overwrites the filter being edited's own Forme_FilterData outright
+        // (unlike setTechniqueInFilter's single add/remove) and repaints
+        // every technique row's Hide/Show state to match in the same pass,
+        // via the same FormeTechniqueDatabase/setFilterEditMode shape
+        // enterTechFilterEditMode itself uses.
+        applyFilterEditSelection = function (filterNames) {
+            let customFilterIdVariable = WuxDef.GetVariable("Action_FormeTechniques", "CustomFilterId");
+            let repeater = new WorkerRepeatingSectionHandler("RepeatingTechFilters");
+            let filterDataVar = WuxDef.GetVariable("Forme_FilterData");
+            let knownDataVar = WuxDef.GetVariable("Forme_FilterData", WuxDef._max);
+
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod(customFilterIdVariable);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                let customFilterId = attrHandler.parseString(customFilterIdVariable);
+                if (customFilterId === "0") {
+                    return;
+                }
+
+                let attributeHandler2 = new WorkerAttributeHandler();
+                let formeTech = new FormeTechniqueDatabase(attributeHandler2);
+                attributeHandler2.addGetAttrCallback(function (attrHandler2) {
+                    formeTech.setupPostGetAttr(attrHandler2);
+                    // Same "include everyone, then actually apply the
+                    // resulting order" pair as enterTechFilterEditMode -
+                    // see its own comments.
+                    formeTech.registerTechDictionary(attrHandler2, true);
+                    formeTech.updateVisibilityOfRepeaterTechniques(attrHandler2);
+                    formeTech.setFilterEditMode(attrHandler2, true, filterNames);
+
+                    // Writes the deliberate selection itself, plus marks
+                    // every currently-owned technique "known" (not just the
+                    // ones in filterNames) via Forme_FilterData's own max
+                    // slot - registerTechDictionary skips
+                    // updateCustomFilters() during Filter Edit Mode
+                    // specifically so this is the only writer of that pair
+                    // for this round trip, and marking everything known
+                    // here means a technique this action deliberately left
+                    // out (Hide All, or one Show By Filter's criteria just
+                    // didn't match) won't look "never seen" and get
+                    // silently re-added by a later updateCustomFilters()
+                    // pass.
+                    let allTechniqueNames = Object.entries(formeTech.techDictionary.values)
+                        .filter(([, techData]) => !techData.isHeader)
+                        .map(([name]) => name);
+                    attrHandler2.addUpdate(repeater.getFieldName(customFilterId, filterDataVar), JSON.stringify(filterNames));
+                    attrHandler2.addUpdate(repeater.getFieldName(customFilterId, knownDataVar), JSON.stringify(allTechniqueNames));
+                });
+                attributeHandler2.addFinishCallback(function () {
+                    formeTech.setSortOrder();
+                });
+                attributeHandler2.run();
+            });
+            attributeHandler.run();
+        },
+
+        // Forme_HideAll - every technique in the filter being edited is
+        // removed at once.
+        hideAllTechniques = function () {
+            Debug.Log("Hiding All Techniques In Filter");
+            applyFilterEditSelection([]);
+        },
+
+        // Forme_ShowAll - every technique the character currently has
+        // becomes included in the filter being edited.
+        showAllTechniques = function () {
+            Debug.Log("Showing All Techniques In Filter");
+            let attributeHandler = new WorkerAttributeHandler();
+            let formeTech = new FormeTechniqueDatabase(attributeHandler);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                formeTech.setupPostGetAttr(attrHandler);
+                formeTech.registerTechDictionary(attrHandler);
+                let allTechniqueNames = Object.entries(formeTech.techDictionary.values)
+                    .filter(([, techData]) => !techData.isHeader)
+                    .map(([name]) => name);
+                applyFilterEditSelection(allTechniqueNames);
+            });
+            attributeHandler.run();
+        },
+
+        // Forme_SetCustomFilter (Sheet-v2/Worker-FilterPopup.js's
+        // SetCustomFilterPopup) - matchedTechniqueFilters is either a
+        // DatabaseFilterData[] (something was picked in the popup) or
+        // undefined (nothing was picked, meaning "match everything
+        // currently in the kit" - same result as Show All).
+        applyFilterEditSelectionFromPopup = function (matchedTechniqueFilters) {
+            if (matchedTechniqueFilters == undefined) {
+                showAllTechniques();
+                return;
+            }
+            let matchingNames = WuxTechs.Filter(matchedTechniqueFilters).map((technique) => technique.name);
+            applyFilterEditSelection(matchingNames);
         },
 
         updateTechniqueChangeVisibility = function () {
@@ -804,8 +1209,18 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         SwapTechniqueVariant: swapTechniqueVariantEvent,
         RemoveAllOldStyleData: removeAllOldStyleData,
         SetCustomTechnique: setCustomTechnique,
-        QuickFilterFormeActions: quickFilterFormeActions,
-        ClearBaseFilters: clearBaseFilters,
+        ApplyTechniqueFilterPreset: applyTechniqueFilterPreset,
+        SelectTechFilter: selectTechFilter,
+        AddTechFilter: addTechFilter,
+        RenameTechFilter: renameTechFilter,
+        DeleteTechFilter: deleteTechFilter,
+        EditTechFilter: editTechFilter,
+        FinishTechFilter: finishTechFilter,
+        HideTechniqueInFilter: hideTechniqueInFilter,
+        ShowTechniqueInFilter: showTechniqueInFilter,
+        HideAllTechniques: hideAllTechniques,
+        ShowAllTechniques: showAllTechniques,
+        ApplyFilterEditSelectionFromPopup: applyFilterEditSelectionFromPopup,
         ClearBaseFilterCheckboxes: clearBaseFilterCheckboxes,
         UpdateTechniqueChangeVisibility: updateTechniqueChangeVisibility,
         TriggerBuilderActionUpdate: triggerBuilderActionUpdate,
@@ -1090,15 +1505,21 @@ class FormeTechniqueSort {
         this.listSize = 0;
     }
 
-    getSortOrder(sortStyle, techDictionary) {
+    // includeAll - Filter Edit Mode needs a real computed sortOrder for
+    // every owned technique, not just the ones currently isVisible (see
+    // FormeTechniqueDatabaseBase.updateHeaderDictionary's own comment) -
+    // otherwise a technique this sort skips keeps its default sortOrder of
+    // -1, which setSortId reads as "append to the very end, unsorted"
+    // instead of placing it in its actual action-priority position.
+    getSortOrder(sortStyle, techDictionary, includeAll) {
         switch (sortStyle) {
             case "Action":
-                this.sortByActionType(techDictionary);
+                this.sortByActionType(techDictionary, includeAll);
                 return;
         }
     }
-    
-    sortByActionType (techDictionary) {
+
+    sortByActionType (techDictionary, includeAll) {
         const actionPriority = {
             Swift: 0,
             Assist: 1,
@@ -1111,7 +1532,7 @@ class FormeTechniqueSort {
             Passive:8
         };
 
-        const entries = this.getEntries(techDictionary);
+        const entries = this.getEntries(techDictionary, includeAll);
 
         // Sort them
         entries.sort(([, a], [, b]) => {
@@ -1133,9 +1554,9 @@ class FormeTechniqueSort {
         this.updateSortOrder(techDictionary, entries);
     }
     
-    getEntries(techDictionary) {
+    getEntries(techDictionary, includeAll) {
         return Object.entries(techDictionary.values)
-            .filter(([, v]) => v.isVisible);
+            .filter(([, v]) => includeAll || v.isVisible);
     }
     
     updateSortOrder(techDictionary, entries) {
@@ -1145,6 +1566,37 @@ class FormeTechniqueSort {
         this.listSize = entries.length;
     }
 }
+
+// One precomputed preset - SortingGroupName is this preset's own name (also
+// its key in FormeTechniqueFilterPresets below), SortingOrderOfTechniques is
+// its technique names in the exact order FormeTechniqueSort would display
+// them, and TechniquesThatAreVisible is the same set as a plain name list
+// (checkTechniqueIsVisibleInFilter-shaped) for fast membership checks - this
+// is what applyTechniqueFilterPreset reads directly instead of recomputing
+// via WuxTechs.Filter.
+class FormeTechniqueFilterPresetData {
+    constructor(sortingGroupName, techniques) {
+        this.SortingGroupName = sortingGroupName;
+        this.SortingOrderOfTechniques = techniques.map(technique => technique.name);
+        this.TechniquesThatAreVisible = techniques.map(technique => technique.name);
+    }
+}
+
+// Dictionary of every preset filter, keyed by its own SortingGroupName -
+// populated by FormeTechniqueDatabase.updateFilterPresets, not filled in
+// statically here, since "Job + Style" depends on the current character's
+// learned styles/equipped job and can't be known ahead of time.
+var FormeTechniqueFilterPresets = FormeTechniqueFilterPresets || {};
+
+// The two presets with a fixed, character-independent WuxTechs filter.
+// "Job + Style" isn't listed here - it's computed dynamically in
+// FormeTechniqueDatabase.updateFilterPresets instead, since it depends on
+// the current character's own learned styles/equipped job.
+var staticFormeTechniqueFilterPresetRules = {
+    "Basic Actions": [new DatabaseFilterData("style", "Basic"), new DatabaseFilterData("group", ["TechFilterType_Combat", "TechFilterType_Utility"])],
+    "Basic Social": [new DatabaseFilterData("style", "Basic"), new DatabaseFilterData("group", "TechFilterType_Social")]
+};
+
 class FormeTechniqueDatabaseBase {
     constructor(attributeHandler) {
         this.techDictionary = new Dictionary();
@@ -1269,6 +1721,46 @@ class FormeTechniqueDatabaseBase {
         this.iterateRepeaterTechniques(attrHandler, function (techniqueAttributeHandler, techniqueName, repeater, id) {
             formeTechDatabase.setRepeaterTechniqueVisibility(techniqueAttributeHandler, techniqueName);
             formeTechDatabase.setSortId(techniqueName, id);
+        });
+    }
+    // Custom-filter edit mode - writes every RepeatingFormeTech row's own
+    // Forme_EditFilter max-slot flag (TechniqueRepeaterDisplayBuilderUsable.
+    // printEnhancementEffects/printFilterEditButtons swap between the rank
+    // buttons and Hide/Show based on it) in one pass, same
+    // iterateRepeaterTechniques/addRepeatingSectionRowUpdate shape
+    // updateVisibilityOfRepeaterTechniques itself uses. Entering edit mode
+    // (isEditing) also forces every technique visible regardless of the
+    // active filter ("every technique should then be shown") and seeds each
+    // row's own Forme_Hide max-slot flag from inFilterNames (the filter
+    // being edited's own current contents) so the correct one of
+    // Hide/Show shows immediately. Exiting just clears the flag - the caller
+    // (applyTechniqueFilterNames) is responsible for restoring real filter
+    // visibility afterward via its own updateVisibilityOfRepeaterTechniques
+    // call.
+    setFilterEditMode(attrHandler, isEditing, inFilterNames) {
+        let inFilterSet = new Set(inFilterNames || []);
+        this.iterateRepeaterTechniques(attrHandler, function (techniqueAttributeHandler, techniqueName, repeater) {
+            let editFlagVar = techniqueAttributeHandler.getVariable("Forme_EditFilter", WuxDef._max);
+            attrHandler.addRepeatingSectionRowUpdate(repeater.definitionId, editFlagVar, isEditing ? "1" : "0");
+            // "Would this technique be visible if the filter being edited
+            // were applied right now?" - piggybacked onto Forme_Show's own
+            // max slot (same "enabled flag on the clickable field's own max
+            // slot" convention as inFilterFlagVar below), read by
+            // TechniqueRepeaterDisplayBuilderUsable.print() to border the
+            // card (WCSS-Specialized.css). Unlike inFilterFlagVar - which
+            // deliberately stays whatever it last was outside edit mode -
+            // this one is explicitly cleared on exit, since the border
+            // should never show outside edit mode.
+            let isVisibleFlagVar = techniqueAttributeHandler.getVariable("Forme_Show", WuxDef._max);
+            if (isEditing) {
+                let inFilter = inFilterSet.has(techniqueName);
+                let inFilterFlagVar = techniqueAttributeHandler.getVariable("Forme_Hide", WuxDef._max);
+                attrHandler.addRepeatingSectionRowUpdate(repeater.definitionId, inFilterFlagVar, inFilter ? "1" : "0");
+                attrHandler.addRepeatingSectionRowUpdate(repeater.definitionId, isVisibleFlagVar, inFilter ? "1" : "0");
+                techniqueAttributeHandler.setVisibilityAttribute(true);
+            } else {
+                attrHandler.addRepeatingSectionRowUpdate(repeater.definitionId, isVisibleFlagVar, "0");
+            }
         });
     }
     iterateRepeaterTechniques(attrHandler, callback) {
@@ -1417,11 +1909,20 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
         this.userCr = 0;
 
         if (Array.isArray(filters)) {
-            let filteredTechs = WuxTechs.Filter(filters);
-            this.filters = [];
-            filteredTechs.forEach((technique) => {
-                this.filters.push(technique.name);
-            });
+            if (filters.length > 0 && typeof filters[0] === "string") {
+                // Already a precomputed technique-name list (a preset's own
+                // TechniquesThatAreVisible, FormeTechniqueFilterPresets) -
+                // skip WuxTechs.Filter(filters) entirely, since the whole
+                // point of a preset is to have already done that work ahead
+                // of time.
+                this.filters = filters;
+            } else {
+                let filteredTechs = WuxTechs.Filter(filters);
+                this.filters = [];
+                filteredTechs.forEach((technique) => {
+                    this.filters.push(technique.name);
+                });
+            }
             Debug.Log(`Filtering with: ${JSON.stringify(filters)}
             Filtered Techniques: ${JSON.stringify(this.filters)}`);
         }
@@ -1524,7 +2025,12 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
         if (!Array.isArray(this.equippedItemTraits)) this.equippedItemTraits = [];
     }
 
-    registerTechDictionary(attrHandler) {
+    // includeAllForSections is threaded straight through to
+    // updateHeaderDictionary - see its own comment. Only Filter Edit Mode's
+    // entry points (enterTechFilterEditMode/applyFilterEditSelection) pass
+    // true; every other caller omits it and keeps today's "only currently-
+    // visible techniques get sectioned" behavior.
+    registerTechDictionary(attrHandler, includeAllForSections) {
         let formeTechDatabase = this;
         attrHandler.addUpdate(formeTechDatabase.boosterFieldName, "[]");
         formeTechDatabase.addAllBasicTechniques();
@@ -1536,14 +2042,166 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
             }
         });
         formeTechDatabase.addGearItemTechniques(attrHandler);
-        this.techSorter.getSortOrder("Action", formeTechDatabase.techDictionary);
-        this.updateHeaderDictionary();
+        this.techSorter.getSortOrder("Action", formeTechDatabase.techDictionary, includeAllForSections);
+        this.updateHeaderDictionary(includeAllForSections);
         this.sortList = [this.techSorter.listSize];
         WuxWorkerActionsService.SetTechniqueBoosters(attrHandler);
+        // Every registerTechDictionary run is already a "this character's
+        // technique kit may have changed" event (job/style change, new
+        // WuxTechs content after a sheet update, etc.), so the preset filters
+        // are refreshed here too rather than needing their own separate
+        // trigger.
+        this.updateFilterPresets(attrHandler);
+        // Same "kit may have changed" trigger, for every custom filter -
+        // newly learned techniques get unioned into each one (never removed,
+        // so a technique the user has deliberately taken out of one custom
+        // filter stays out). A separate round trip (RepeatingTechFilters
+        // isn't registered on attrHandler the way RepeatingFormeTech is) that
+        // no-ops immediately if no custom filters exist yet. Skipped for
+        // Filter Edit Mode's own registrations (includeAllForSections) -
+        // those already read/write Forme_FilterData themselves in the same
+        // round trip (enterTechFilterEditMode/applyFilterEditSelection), and
+        // this runs as a separate, independently-timed handler chain of its
+        // own; running both against the same row risked one silently
+        // clobbering the other depending on which finished first.
+        if (!includeAllForSections) {
+            this.updateCustomFilters();
+        }
     }
-    updateHeaderDictionary() {
+    // Builds/refreshes every entry in FormeTechniqueFilterPresets against the
+    // currently-loaded WuxTechs and (for "Job + Style") this character's
+    // current learned styles/equipped job - requires setupPostGetAttr to have
+    // already run (styleWorker/equippedSlots), same precondition
+    // registerTechDictionary itself has at every call site. Also persists the
+    // whole dictionary to Action_FormeTechniques' own FilterPresets attribute
+    // (a hidden field, GoogleSheets/WuxGS-Base.js's buildFilterPresetButtons)
+    // so applyTechniqueFilterPreset can read it back without recomputing -
+    // an in-memory-only object never survives past this one worker call.
+    updateFilterPresets(attrHandler) {
+        for (let name in staticFormeTechniqueFilterPresetRules) {
+            let techniques = WuxTechs.Filter(staticFormeTechniqueFilterPresetRules[name]);
+            FormeTechniqueFilterPresets[name] = new FormeTechniqueFilterPresetData(name, this.buildSortedTechniqueList(techniques));
+        }
+
+        // The equipped job's style plus every individually learned style,
+        // plus the literal "Style" tag to also pick up the learned/equipped
+        // base style technique(s) themselves.
+        let learnedStyleNames = this.styleWorker.getStyles().map(technique => technique.name);
+        let equippedJobStyle = this.equippedSlots[0];
+        let styleNames = learnedStyleNames.slice();
+        if (equippedJobStyle != undefined && equippedJobStyle !== "") {
+            styleNames.push(equippedJobStyle);
+        }
+        let styleTechniques = styleNames.length > 0
+            ? WuxTechs.Filter([new DatabaseFilterData("style", styleNames.concat("Style"))])
+            : [];
+        // "Job + Style" also always shows every Gear technique the character
+        // owns (not just currently-equipped ones - same "everything learned/
+        // owned, not just active" shape as learnedStyleNames above) and every
+        // learned Perk technique, so the preset covers the character's full
+        // kit rather than just their trained styles.
+        let jobStyleTechniques = styleTechniques.concat(this.collectGearTechniques(), this.perkWorker.getPerkTechniques());
+        FormeTechniqueFilterPresets["Job + Style"] = new FormeTechniqueFilterPresetData("Job + Style", this.buildSortedTechniqueList(jobStyleTechniques));
+
+        let presetsVariable = WuxDef.GetVariable("Action_FormeTechniques", "FilterPresets");
+        attrHandler.addUpdate(presetsVariable, JSON.stringify(FormeTechniqueFilterPresets));
+    }
+    // Unions every technique currently in this.techDictionary into each
+    // RepeatingTechFilters row's own Forme_FilterData list, adding whatever
+    // this filter has never seen before (a newly learned job/style's
+    // techniques) and leaving everything else untouched - a technique the
+    // user has deliberately removed from one custom filter was already in
+    // its list once, so it's never re-added just because it's still in the
+    // kit. That distinction needs its own tracking (Forme_FilterData's own
+    // max slot, a companion list of every technique name ever unioned into
+    // this filter) rather than just checking Forme_FilterData's own current
+    // contents - a removed technique disappears from Forme_FilterData too,
+    // so checking that alone can't tell "never seen" apart from
+    // "deliberately excluded" and was re-adding exclusions right back in
+    // every time this ran.
+    updateCustomFilters() {
+        let allTechniqueNames = Object.entries(this.techDictionary.values)
+            .filter(([, techData]) => !techData.isHeader)
+            .map(([name]) => name);
+        if (allTechniqueNames.length === 0) {
+            return;
+        }
+
+        let repeater = new WorkerRepeatingSectionHandler("RepeatingTechFilters");
+        let filterDataVar = WuxDef.GetVariable("Forme_FilterData");
+        let knownDataVar = WuxDef.GetVariable("Forme_FilterData", WuxDef._max);
+        repeater.getIds(function (repeater) {
+            if (repeater.ids.length === 0) {
+                return;
+            }
+            let attributeHandler = new WorkerAttributeHandler();
+            repeater.addAttributeMods(attributeHandler, [filterDataVar, knownDataVar]);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                repeater.iterate(function (id) {
+                    let existing;
+                    try {
+                        existing = JSON.parse(attrHandler.parseString(repeater.getFieldName(id, filterDataVar)));
+                    } catch (e) {}
+                    if (!Array.isArray(existing)) {
+                        existing = [];
+                    }
+                    let known;
+                    try {
+                        known = JSON.parse(attrHandler.parseString(repeater.getFieldName(id, knownDataVar)));
+                    } catch (e) {}
+                    if (!Array.isArray(known)) {
+                        // A filter created before this max slot was used
+                        // for known-technique tracking - treat whatever's
+                        // currently included as already known, so this
+                        // one-time migration doesn't resurrect anything the
+                        // player already excluded before then.
+                        known = existing.slice();
+                    }
+                    let knownSet = new Set(known);
+                    let grown = existing.slice();
+                    let grownKnown = known.slice();
+                    let changed = false;
+                    allTechniqueNames.forEach((name) => {
+                        if (!knownSet.has(name)) {
+                            grown.push(name);
+                            grownKnown.push(name);
+                            changed = true;
+                        }
+                    });
+                    if (changed) {
+                        attrHandler.addUpdate(repeater.getFieldName(id, filterDataVar), JSON.stringify(grown));
+                        attrHandler.addUpdate(repeater.getFieldName(id, knownDataVar), JSON.stringify(grownKnown));
+                    }
+                });
+            });
+            attributeHandler.run();
+        });
+    }
+    // Runs the exact same action-type-then-alphabetical sort
+    // FormeTechniqueSort applies to the live RepeatingFormeTech list, against
+    // an arbitrary standalone technique array - a fresh Dictionary/sorter pair
+    // so this never touches this.techDictionary/this.techSorter's own state.
+    buildSortedTechniqueList(techniques) {
+        let tempDictionary = new Dictionary();
+        techniques.forEach((technique) => {
+            tempDictionary.add(technique.name, { technique: technique, isVisible: true });
+        });
+        let sorter = new FormeTechniqueSort();
+        sorter.getSortOrder("Action", tempDictionary);
+        return Object.entries(tempDictionary.values)
+            .sort(([, a], [, b]) => a.sortOrder - b.sortOrder)
+            .map(([, value]) => value.technique);
+    }
+    // includeAllForSections - Filter Edit Mode shows every owned technique
+    // (setFilterEditMode forces every row visible, including ones this
+    // character can't currently use/equip), so headers/sortOrder offsets
+    // need to account for ALL of them too, not just the ones isVisible
+    // under whatever filter/eligibility state happens to be active right
+    // now - otherwise a hidden technique's sortOrder never gets the offset
+    // from headers inserted ahead of it and it lands in the wrong section.
+    updateHeaderDictionary(includeAllForSections) {
         let visibleEntries = Object.entries(this.techDictionary.values)
-            .filter(([, v]) => v.isVisible && !v.isHeader)
+            .filter(([, v]) => (includeAllForSections || v.isVisible) && !v.isHeader)
             .sort((a, b) => a[1].sortOrder - b[1].sortOrder);
 
         let sectionsWithVisibleMembers = new Set();
@@ -1577,7 +2235,7 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
         // technique row already relies on, instead of depending on the row-removal cleanup path.
         let allSections = new Set();
         Object.values(this.techDictionary.values).forEach(v => {
-            if (v.isHeader || !v.isActive) return;
+            if (v.isHeader || (!includeAllForSections && !v.isActive)) return;
             allSections.add(v.technique.action || "Other");
         });
         allSections.forEach(sectionName => {
@@ -1690,6 +2348,25 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
             if (def == undefined) return false;
             return this.equippedItemTraits.includes(def.getTitle());
         });
+    }
+    // Same item/technique iteration as addGearItemTechniques below, but
+    // returning root technique objects instead of writing into
+    // techDictionary - used by updateFilterPresets to fold every owned
+    // Gear technique into the "Job + Style" preset.
+    collectGearTechniques() {
+        let techniques = [];
+        this.gearEquipBuildMax.forEach(itemName => {
+            let item = WuxItems.Get(itemName);
+            if (item == undefined) return;
+            if (item.hasTechnique && item.technique != undefined) {
+                techniques.push(item.technique);
+            }
+            let commonTechniques = item.getCommonTechniques ? item.getCommonTechniques() : [];
+            commonTechniques.forEach(technique => techniques.push(technique));
+        });
+        return techniques
+            .map(technique => WuxTechs.Get(technique.getRootName()))
+            .filter(technique => technique != undefined);
     }
     addGearItemTechniques(attrHandler) {
         let gearEquipSet = new Set(this.gearEquipBuild);

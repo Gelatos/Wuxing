@@ -56,6 +56,113 @@
 	color: #d0d0d0;
 }
 
+/* Mirrors the Overview/Details/Post sub-tabs' own look (wuxTabButton,
+   WCSS-Base.css) rather than reusing that class directly - wuxTabButton is
+   shared by a dozen other page-nav rows via a highlight-flag/value-matching
+   mechanism built for handling several duplicate copies of the same row,
+   which this single, never-duplicated button row doesn't need. Same
+   hide-the-native-control-show-the-sibling-span idiom either way (also used
+   by the Manual's own wuxManualCategoryButton) - the radio still drives the
+   actual selection/mutual-exclusivity, it's just invisible and stretched to
+   cover the whole button as the real click target, with :checked driving the
+   "selected" look on its sibling span instead of a native radio dot. No
+   wuxButton base class on the wrapping div (see buildFilterPresetButtons) -
+   wuxTabButton doesn't carry one either, so nothing here needs to override
+   wuxButton's own height/background/border. */
+.wuxTechFilterPresetButton
+{
+	position: relative;
+	min-height: 20px;
+}
+
+.wuxTechFilterPresetButton input[type=radio],
+.wuxTechFilterPresetButton input[type=checkbox]
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	min-height: 20px;
+	z-index: 9999;
+	opacity: 0;
+}
+
+.wuxTechFilterPresetButton span
+{
+	display: block;
+	width: 100%;
+	height: 100%;
+
+	text-align: center;
+	color: #000000;
+	font-weight: bold;
+	font-size: 12px;
+
+	background-color: #cacbcf;
+	border: 1px solid black;
+	border-radius: 5px;
+}
+
+/* Custom filter rows use a checkbox, not a radio, since a dynamic repeating
+   row id can't be baked into a static radio value (see buildFilterPresetButtons) -
+   :checked doesn't reliably clear across sibling rows the way a native radio
+   group does, so Worker-Actions.js's selectTechFilterWithData drives the
+   "selected" look through this local hidden flag instead (same
+   flag[value="on"]-plus-sibling idiom RepeatingOutfits already uses), while
+   the checkbox itself stays only the invisible click target above. */
+.wuxTechFilterPresetButton input[type=radio]:checked + span,
+.wuxTechFilterPresetButton input[type=hidden].wuxTechFilterPresetSelect-flag[value="on"] + span
+{
+	color: #FFFFFF;
+	font-size: 14px;
+	background: #512800;
+}
+
+.wuxTechFilterPresetButton input[type=radio]:hover + span,
+.wuxTechFilterPresetButton input[type=checkbox]:hover + span
+{
+	color: #FFFFFF;
+	background: linear-gradient(to right, #86530f, #815822, #6e420a);
+}
+
+/* Hidden unless a custom filter (not a fixed preset) is selected -
+   Action_FormeTechniques' own CustomFilterId is "0" whenever none is
+   (Worker-Actions.js's selectTechFilterWithData/deleteTechFilter/
+   applyTechniqueFilterPreset), same colocated-flag idiom used everywhere
+   else this session - "0", not "", since Roll20 doesn't reliably report a
+   blank attribute as "" for CSS attribute-selector matching. */
+.wuxCustomFilterDetails
+{
+	display: none;
+}
+
+input[type=hidden].wuxCustomFilterDetails-flag:not([value="0"]) + .wuxCustomFilterDetails
+{
+	display: block;
+}
+
+/* Exactly one of the Edit button / Filter Edit Mode section shows at a time,
+   both gated off the same Forme_EditFilter value (buildCustomFilterDetails/
+   buildFilterEditModeSection, WuxGS-Base.js) - "0" (not checked) shows the
+   Edit button and hides the section; anything else (checked, "on") does the
+   opposite. */
+.wuxFilterEditModeSection
+{
+	display: none;
+}
+
+input[type=hidden].wuxFilterEditMode-flag:not([value="0"]) + .wuxFilterEditModeSection
+{
+	display: block;
+}
+
+input[type=hidden].wuxFilterEditMode-flag:not([value="0"]) + .wuxEditFilterButton
+{
+	display: none;
+}
+
 .wuxFlexTableItemGroup3
 {
 	flex: 3;

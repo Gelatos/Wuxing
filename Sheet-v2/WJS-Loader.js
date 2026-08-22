@@ -1,4 +1,24 @@
-var wuxCurrentVersion = "2.0.6";
+var wuxCurrentVersion = "2.0.7";
+
+// Presets are a plain in-memory dictionary (FormeTechniqueFilterPresets,
+// Worker-Actions.js), rebuilt fresh by FormeTechniqueDatabase.updateFilterPresets
+// every time registerTechDictionary runs (job/style change, sheet load, new
+// WuxTechs content after a sheet update, etc.) - this just seeds it right away
+// on version upgrade instead of waiting for whatever the next natural trigger
+// happens to be. Same setupPostGetAttr-then-work shape updateAllActions itself
+// uses (Worker-Actions.js), minus registerTechDictionary since this only needs
+// to seed the presets, not rebuild the whole RepeatingFormeTech list.
+var upgrade_to_2_0_7 = function (currentVersion) {
+	let attributeHandler = loaderAttrubuteHandler(currentVersion, "2.0.7");
+
+	let formeTechDatabase = new FormeTechniqueDatabase(attributeHandler);
+	attributeHandler.addGetAttrCallback(function (attrHandler) {
+		formeTechDatabase.setupPostGetAttr(attrHandler);
+		formeTechDatabase.updateFilterPresets(attrHandler);
+	});
+
+	attributeHandler.run();
+};
 
 // Popup_ManualCategory is a brand-new attribute (Manual/Game Guide popup,
 // GuideCat definition group) - existing characters were already at the
@@ -322,6 +342,9 @@ var versioning = function () {
 		switch(v["version"]) {
 			case wuxCurrentVersion:
 				console.log(`Wuxing Sheet modified from 5th Edition OGL by Roll20 v${wuxCurrentVersion}`);
+				break;
+			case "2.0.6":
+				upgrade_to_2_0_7(v["version"]);
 				break;
 			case "2.0.5":
 				upgrade_to_2_0_6(v["version"]);

@@ -140,7 +140,8 @@ class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
             ${this.printCheckEffects()}
             ${this.printEndEffects()}
             ${this.printWillBreakEffects()}
-            ${this.printEnhancementEffects()}`);
+            ${this.printEnhancementEffects()}
+            ${this.printFilterEditButtons()}`);
     }
 
     printRange() {}
@@ -240,6 +241,12 @@ class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
             <div class="wuxFeatureHeaderInfoContents">${contents}</div>
         </div>`;
     }
+
+    // Custom-filter edit mode's per-technique Hide/Show pair - only
+    // TechniqueRepeaterDisplayBuilderUsable overrides this (RepeatingFormeTech
+    // is the only repeater that's ever in edit mode), same stub-then-override
+    // shape as every other printX() here.
+    printFilterEditButtons() {}
 }
 
 class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {
@@ -603,6 +610,21 @@ class TechniqueRepeaterDisplayBuilder extends BaseTechniqueDisplayBuilder {
 }
 
 class TechniqueRepeaterDisplayBuilderUsable extends TechniqueRepeaterDisplayBuilder {
+    // Filter Edit Mode's own "would this be visible if the filter being
+    // edited were applied right now?" indicator - same border+glow the
+    // Technique Catalog's selected-card state already uses
+    // (wuxCatalogCard-selected-flag, WCSS-Specialized.css). Reads a single
+    // combined flag (Forme_Show's max slot, Worker-Actions.js's
+    // setFilterEditMode/setTechniqueInFilter) rather than chaining two
+    // separate ones in CSS, since it needs to be an immediate sibling of
+    // .wuxFeature for the selector to match - that has to happen here, in
+    // print() itself, rather than nested inside printInfoBlock like
+    // everything else on this class.
+    print() {
+        let isVisibleFlag = this.getActionTypeAttribute("Forme_Show", WuxDef._max);
+        return `<input type="hidden" class="wuxFilterEditVisible-flag" name="${isVisibleFlag}" value="0">
+            ${super.print()}`;
+    }
     printName() {
         let contents = `<button class="wuxFeatureHeaderNameButton" type="roll" value="@{${WuxDef.GetVariable("Action_Use")}}">
             ${this.printSpanActionTypeAttribute("TechName")}
@@ -624,10 +646,44 @@ class TechniqueRepeaterDisplayBuilderUsable extends TechniqueRepeaterDisplayBuil
             WuxSheetMain.Button(rankDownField, "<span class='wuxFeatureButtonIcon'>&#8722;</span> Decrease Rank", "wuxFeatureButtonDisabled"));
         let contents = `<div class="wuxFeatureHeaderInfoEffect-EnhanceButtons">${rankDownButton}${rankUpButton}</div>`;
 
-        return WuxSheetMain.HiddenField(fieldName,
+        let enhancementBlock = WuxSheetMain.HiddenField(fieldName,
             `${this.printEnhancementEffectsField(this.printSpan(fieldName))}
             ${contents}`
         );
+
+        // Hidden outright while editing a custom filter - printFilterEditButtons
+        // (below) takes over as this technique's action row instead. Every
+        // technique gets that in edit mode, not just ones with an enhance
+        // effect, so it can't just nest inside this fieldName-gated block -
+        // this wraps the WHOLE thing (rank buttons included) in a second,
+        // outer toggle instead. HiddenAuxField shows its content when the
+        // flag is "0" (not editing, the default) and hides it otherwise -
+        // the mirror image of printFilterEditButtons' own HiddenField below.
+        let editModeRowFlag = this.getActionTypeAttribute("Forme_EditFilter", WuxDef._max);
+        return WuxSheetMain.HiddenAuxField(editModeRowFlag, enhancementBlock);
+    }
+
+    // Custom-filter edit mode's per-technique Hide/Show pair - shown for
+    // every technique while editing (Worker-Actions.js's
+    // FormeTechniqueDatabaseBase.setFilterEditMode writes editModeRowFlag/
+    // inFilterFlag to every row in one pass on entering/exiting edit mode or
+    // toggling a technique), regardless of whether that technique also has
+    // an enhance effect - see printEnhancementEffects' own edit-mode gate
+    // above for why these can't share one block.
+    printFilterEditButtons() {
+        let editModeRowFlag = this.getActionTypeAttribute("Forme_EditFilter", WuxDef._max);
+        let hideField = this.getActionTypeAttribute("Forme_Hide");
+        let showField = this.getActionTypeAttribute("Forme_Show");
+        // Whether this technique is currently included in the filter being
+        // edited - piggybacked onto Forme_Hide's own max slot, same
+        // "enabled flag lives on the clickable field's own max slot"
+        // convention the rank buttons use above.
+        let inFilterFlag = this.getActionTypeAttribute("Forme_Hide", WuxDef._max);
+        let hideButton = WuxSheetMain.Button(hideField, "<span class='wuxFeatureButtonIcon'>&#8722;</span> Hide", "wuxFeatureButton");
+        let showButton = WuxSheetMain.Button(showField, "<span class='wuxFeatureButtonIcon'>&#43;</span> Show", "wuxFeatureButton");
+        let contents = `<div class="wuxFeatureHeaderInfoEffect-EnhanceButtons">${WuxSheetMain.HiddenSpanFieldToggle(inFilterFlag, hideButton, showButton)}</div>`;
+
+        return WuxSheetMain.HiddenField(editModeRowFlag, contents);
     }
 }
 
