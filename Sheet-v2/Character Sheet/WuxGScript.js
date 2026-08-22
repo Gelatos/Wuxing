@@ -13066,9 +13066,20 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let customFilterDetails = buildCustomFilterDetails();
                     let filterEditModeSection = buildFilterEditModeSection();
 
+                    // Shows Action_FormeTechniques' own title ("Techniques")
+                    // rather than titleDef's own ("Technique Filters") -
+                    // repeatingFormeSection's separate "Techniques" header is
+                    // gone now, so this is the only header text left for the
+                    // whole Techniques section. Still uses titleDef's own
+                    // _expand flag/collapse state (unchanged) - only the
+                    // displayed text changed, not which attribute drives it.
+                    // buildLoadFormeButton rides along as this header's own
+                    // additionalButtons, having moved here from that removed
+                    // header.
                     let sectionExpandField = titleDef.getAttribute(WuxDef._expand);
                     let sectionHeader = WuxSheetMain.Header(
-                        WuxSheetMain.CollapsibleHeader(`<span>${titleDef.getTitle()}</span>`, sectionExpandField));
+                        WuxSheetMain.CollapsibleHeader(`<span>${WuxDef.Get("Action_FormeTechniques").getTitle()}</span>`,
+                            sectionExpandField, buildLoadFormeButton()));
                     let sectionContent = WuxSheetMain.HiddenAuxField(sectionExpandField,
                         `${defaultFlag}${presetsDataField}${WuxSheetMain.Table.FlexTable(buttons.join(""))}${customFilterButtons}${addFilterButton}${customFilterDetails}${filterEditModeSection}`);
 
@@ -13109,12 +13120,23 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let editButton = `${editModeFlag}<div class="wuxEditFilterButton">
                         ${WuxSheetMain.Button(editDef.getAttribute(), `<span style="color:#5bc0de;">&#9998;</span> ${editDef.getTitle()}`, "wuxRepeatingTechActionButton")}
                     </div>`;
-                    let content = `${WuxSheetMain.Header(detailsTitleDef.getTitle())}
-                        ${WuxSheetMain.CustomInput("text", selectedNameField, "wuxInput")}
-                        ${editButton}
-                        ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}`;
 
-                    return `${flag}<div class="wuxCustomFilterDetails">${content}</div>`;
+                    // Same CollapsibleHeader/_expand shape every other
+                    // collapsible section on this page uses (e.g.
+                    // buildFilterPresetButtons' own header) - Worker-Actions.js's
+                    // addTechFilter resets this flag to "0" (shown) whenever
+                    // a new filter is created, so a player who's collapsed
+                    // this before still sees their brand new filter's
+                    // details right away.
+                    let sectionExpandField = detailsTitleDef.getAttribute(WuxDef._expand);
+                    let sectionHeader = WuxSheetMain.Header(
+                        WuxSheetMain.CollapsibleHeader(`<span>${detailsTitleDef.getTitle()}</span>`, sectionExpandField));
+                    let sectionContent = WuxSheetMain.HiddenAuxField(sectionExpandField,
+                        `${WuxSheetMain.CustomInput("text", selectedNameField, "wuxInput")}
+                        ${editButton}
+                        ${WuxSheetMain.Button(deleteDef.getAttribute(), `<span style="color:#cc3333;">&#10008;</span> ${deleteDef.getTitle()}`, "wuxRepeatingTechActionButton")}`);
+
+                    return `${flag}<div class="wuxCustomFilterDetails">${sectionHeader}${sectionContent}</div>`;
                 },
 
                 // Replaces the (now-hidden) Edit button while a custom
@@ -13214,25 +13236,22 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     <div class="wuxFlexTable">${output}</div>
                     ${WuxSheetMain.Row("&nbsp;")}`;
                 },
+                // No header of its own anymore - buildFilterPresetButtons'
+                // own "Technique Filters" header now shows Action_FormeTechniques'
+                // title ("Techniques") instead, so this repeater's own
+                // separate "Techniques" header would just be a duplicate
+                // label. Its Load Forme button rode along into that header
+                // too (buildLoadFormeButton).
                 repeatingFormeSection = function () {
                     let repeaterDefinition = WuxDef.Get("RepeatingFormeTech");
                     let repeatingVariable = repeaterDefinition.getVariable();
-                    let sectionDefinition = WuxDef.Get("Action_FormeTechniques");
-                    let refreshField = sectionDefinition.getAttribute(WuxDef._refresh);
-                    let sortField = sectionDefinition.getAttribute(WuxDef._subfilter);
-                    let filterField = sectionDefinition.getAttribute(WuxDef._learn);
-                    let removeFilterField = sectionDefinition.getAttribute(WuxDef._filter);
-
-                    let header = getFormeSectionHeader(
-                        `<span>${sectionDefinition.getTitle()}</span>`, refreshField, filterField, removeFilterField);
 
                     // IsVisible is piggybacked onto TechActionType's max slot.
                     let actionDisplay = WuxSheetMain.HiddenField(getActionTypeAttribute("TechActionType", WuxDef._max),
                         printFormTechniqueFullActionDisplay());
                     let displayTechniquesContents = buildRepeater(repeatingVariable, actionDisplay, "wuxFormeTechRepeater");
 
-                    return `${WuxSheetMain.Header(header)}
-                    ${displayTechniquesContents}
+                    return `${displayTechniquesContents}
                     ${WuxSheetMain.Row("&nbsp;")}`;
                 },
                 repeatingCustomTechniquesSection = function () {
@@ -13259,22 +13278,19 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     // return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth350 wuxFlexTableItemGroup2");
                 },
 
-                getFormeSectionHeader = function (headerName, refreshField, filterField, removeFilterField) {
-                    let headerButtons = "";
+                // Moved out of the old (now-removed) repeatingFormeSection
+                // header into buildFilterPresetButtons' own header as an
+                // additionalButtons argument (WuxSheetMain.CollapsibleHeader) -
+                // still page-gated the same way (only shown on the Actions
+                // page) and still hidden outright when there's nothing to
+                // load (Action_FormeLoadCount == 0).
+                buildLoadFormeButton = function () {
                     let loadFormeField = WuxDef.GetAttribute("Action_FormeLoadCount");
                     let loadFormeDef = WuxDef.Get("Action_FormeLoad");
-                    headerButtons += WuxSheetMain.HiddenField(loadFormeField, WuxSheetMain.Button(loadFormeDef.getAttribute(),
+                    let button = WuxSheetMain.HiddenField(loadFormeField, WuxSheetMain.Button(loadFormeDef.getAttribute(),
                         `<span class='wuxStyleHeaderButtonIcon'>&#10227;</span>${loadFormeDef.getTitle(`<span name="${loadFormeField}"></span>`)}`,
                         "wuxStyleHeaderButton"));
-                    // headerButtons += WuxSheetMain.Button(filterField,
-                    //     "<span class='wuxStyleHeaderButtonIcon'>&#9776;</span> Filter", "wuxStyleHeaderButton");
-                    // headerButtons += WuxSheetMain.HiddenSpanField(removeFilterField, WuxSheetMain.Button(removeFilterField,
-                    //     "<span class='wuxStyleHeaderButtonIconClear'>&#10008;</span> Remove Filter", "wuxStyleHeaderButton", "0"));
-
-                    headerButtons = `${WuxSheet.MainPageDisplayInput()}
-                        ${WuxSheet.PageDisplay("Actions",
-                        `<span class="wuxStyleHeaderButtonContainer">${headerButtons}</span>`)}`;
-                    return headerButtons + headerName;
+                    return `${WuxSheet.MainPageDisplayInput()}${WuxSheet.PageDisplay("Actions", button)}`;
                 },
 
                 printFormTechniqueFullActionDisplay = function () {

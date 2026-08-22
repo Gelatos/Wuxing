@@ -603,6 +603,12 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                     // needs to onboard techniques the character learns
                     // after this point.
                     attrHandler.addUpdate(repeater.getFieldName(newId, knownDataVar), JSON.stringify(allTechniqueNames));
+                    // Custom Filter Details is now its own collapsible
+                    // section (WuxGS-Base.js's buildCustomFilterDetails) -
+                    // force it back open on every new filter, even if the
+                    // player collapsed it while looking at an earlier one,
+                    // so the filter they just created is immediately visible.
+                    attrHandler.addUpdate(WuxDef.GetVariable("Title_CustomFilterDetails", WuxDef._expand), "0");
                 });
                 attributeHandler.addFinishCallback(function () {
                     formeTech.setSortOrder();
@@ -1909,12 +1915,17 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
         this.userCr = 0;
 
         if (Array.isArray(filters)) {
-            if (filters.length > 0 && typeof filters[0] === "string") {
+            if (filters.length === 0 || typeof filters[0] === "string") {
                 // Already a precomputed technique-name list (a preset's own
                 // TechniquesThatAreVisible, FormeTechniqueFilterPresets) -
                 // skip WuxTechs.Filter(filters) entirely, since the whole
                 // point of a preset is to have already done that work ahead
-                // of time.
+                // of time. An empty list (Hide All, or a custom filter with
+                // nothing in it) is unambiguously this case too - treating
+                // it as a raw DatabaseFilterData[] criteria array instead
+                // (the old filters.length > 0 check) called
+                // WuxTechs.Filter([]), which crashes reading .property off
+                // filterData[0] === undefined.
                 this.filters = filters;
             } else {
                 let filteredTechs = WuxTechs.Filter(filters);

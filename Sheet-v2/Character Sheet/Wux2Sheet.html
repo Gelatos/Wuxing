@@ -16817,7 +16817,17 @@
 						<div class="wuxSectionBlock wuxLayoutItem">
 							<div class="wuxTabContent">
 								<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
+										<input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
+										<div class="wuxPageDisplay-Actions">
+											<input type="hidden" class="wuxHiddenField-flag" name="attr_act-formeloadcount" value="0">
+											<div class="wuxHiddenField">
+												<div class="wuxButton wuxStyleHeaderButton">
+													<input type="checkbox" name="attr_act-formeload">
+													<span><span class='wuxStyleHeaderButtonIcon'>&#10227;</span>Load Techs (<span name="attr_act-formeloadcount"></span> more)</span>
+												</div>
+											</div>
 
+										</div>
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter_expand" value="0">
 										<span class="wuxHiddenInlineField">
 											<div class="wuxButton wuxStyleHeaderButton">
@@ -16834,7 +16844,7 @@
 											</div>
 										</span>
 
-									</span><span>Technique Filters</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter_expand" value="0">
+									</span><span>Techniques</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_techbasefilter_expand" value="0">
 								<div class="wuxHiddenAuxField">
 									<input type="hidden" class="" name="attr_act-formetechniquesFilterPreset" value="All" /><input type="hidden" class="" name="attr_act-formetechniquesFilterPresets" />
 									<div class="wuxFlexTable">
@@ -16875,18 +16885,38 @@
 										</div>
 									</div><input type="hidden" class="wuxCustomFilterDetails-flag" name="attr_act-formetechniquesCustomFilterId" value="0" />
 									<div class="wuxCustomFilterDetails">
-										<div class="wuxHeader">Custom Filter Details</div>
-										<input type="text" class="wuxInput" name="attr_forme-customfilternameSelected" />
-										<input type="hidden" class="wuxFilterEditMode-flag" name="attr_forme-editfilter" value="0" />
-										<div class="wuxEditFilterButton">
-											<div class="wuxButton wuxRepeatingTechActionButton">
-												<input type="checkbox" name="attr_forme-editfilter">
-												<span><span style="color:#5bc0de;">&#9998;</span> Edit Filter</span>
+										<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
+
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-customfilterdetails_expand" value="0">
+												<span class="wuxHiddenInlineField">
+													<div class="wuxButton wuxStyleHeaderButton">
+														<input type="checkbox" name="attr_ttl-customfilterdetails_expand">
+														<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
+													</div>
+												</span>
+
+												<input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-customfilterdetails_expand" value="0">
+												<span class="wuxHiddenInlineAuxField">
+													<div class="wuxButton wuxStyleHeaderButton">
+														<input type="checkbox" name="attr_ttl-customfilterdetails_expand">
+														<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
+													</div>
+												</span>
+
+											</span><span>Custom Filter Details</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_ttl-customfilterdetails_expand" value="0">
+										<div class="wuxHiddenAuxField">
+											<input type="text" class="wuxInput" name="attr_forme-customfilternameSelected" />
+											<input type="hidden" class="wuxFilterEditMode-flag" name="attr_forme-editfilter" value="0" />
+											<div class="wuxEditFilterButton">
+												<div class="wuxButton wuxRepeatingTechActionButton">
+													<input type="checkbox" name="attr_forme-editfilter">
+													<span><span style="color:#5bc0de;">&#9998;</span> Edit Filter</span>
+												</div>
 											</div>
-										</div>
-										<div class="wuxButton wuxRepeatingTechActionButton">
-											<input type="checkbox" name="attr_forme-deletefilter">
-											<span><span style="color:#cc3333;">&#10008;</span> Delete Filter</span>
+											<div class="wuxButton wuxRepeatingTechActionButton">
+												<input type="checkbox" name="attr_forme-deletefilter">
+												<span><span style="color:#cc3333;">&#10008;</span> Delete Filter</span>
+											</div>
 										</div>
 									</div><input type="hidden" class="wuxFilterEditMode-flag" name="attr_forme-editfilter" value="0" />
 									<div class="wuxFilterEditModeSection">
@@ -16912,18 +16942,6 @@
 											<span><span style="color:#c8a020;">&#9776;</span> Show By Filter</span>
 										</div>
 									</div>
-								</div>
-								<div class="wuxHeader"><input type="hidden" class="wuxPageDisplay-Flag" name="attr_pag" value="Origin" />
-									<div class="wuxPageDisplay-Actions">
-										<span class="wuxStyleHeaderButtonContainer"><input type="hidden" class="wuxHiddenField-flag" name="attr_act-formeloadcount" value="0">
-											<div class="wuxHiddenField">
-												<div class="wuxButton wuxStyleHeaderButton">
-													<input type="checkbox" name="attr_act-formeload">
-													<span><span class='wuxStyleHeaderButtonIcon'>&#10227;</span>Load Techs (<span name="attr_act-formeloadcount"></span> more)</span>
-												</div>
-											</div>
-										</span>
-									</div><span>Techniques</span>
 								</div>
 								<div class="wuxNoRepControl wuxRepeatingFlexSection wuxFormeTechRepeater">
 									<fieldset class="repeating_formetech">
@@ -45994,6 +46012,12 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
                     // needs to onboard techniques the character learns
                     // after this point.
                     attrHandler.addUpdate(repeater.getFieldName(newId, knownDataVar), JSON.stringify(allTechniqueNames));
+                    // Custom Filter Details is now its own collapsible
+                    // section (WuxGS-Base.js's buildCustomFilterDetails) -
+                    // force it back open on every new filter, even if the
+                    // player collapsed it while looking at an earlier one,
+                    // so the filter they just created is immediately visible.
+                    attrHandler.addUpdate(WuxDef.GetVariable("Title_CustomFilterDetails", WuxDef._expand), "0");
                 });
                 attributeHandler.addFinishCallback(function () {
                     formeTech.setSortOrder();
@@ -47300,12 +47324,17 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
         this.userCr = 0;
 
         if (Array.isArray(filters)) {
-            if (filters.length > 0 && typeof filters[0] === "string") {
+            if (filters.length === 0 || typeof filters[0] === "string") {
                 // Already a precomputed technique-name list (a preset's own
                 // TechniquesThatAreVisible, FormeTechniqueFilterPresets) -
                 // skip WuxTechs.Filter(filters) entirely, since the whole
                 // point of a preset is to have already done that work ahead
-                // of time.
+                // of time. An empty list (Hide All, or a custom filter with
+                // nothing in it) is unambiguously this case too - treating
+                // it as a raw DatabaseFilterData[] criteria array instead
+                // (the old filters.length > 0 check) called
+                // WuxTechs.Filter([]), which crashes reading .property off
+                // filterData[0] === undefined.
                 this.filters = filters;
             } else {
                 let filteredTechs = WuxTechs.Filter(filters);
