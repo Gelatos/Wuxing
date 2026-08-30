@@ -985,9 +985,20 @@ var WuxDefinition = WuxDefinition || (function () {
         // dispatched by a generic listener (WuxGS-Backend.js's
         // listenerOpenManualForDefinitions) rather than a per-field one, since
         // Origin has over a dozen of these.
+        // definition.getAttribute(WuxDef._moreinfo) only produces a genuinely
+        // separate attribute when the definition's own variable template has
+        // {0}/{1} placeholders - several Origin fields (SheetName, FullName,
+        // Ancestry, Ethnicity, QuickDescription, Age, Gender, HomeRegion,
+        // Backstory, CharSheetName) don't, so that call silently returned the
+        // exact same attribute as the field's own value, and editing the field
+        // fired the Manual-opening listener too. Direct concatenation
+        // (matching listenerOpenManualForOrigin's own useConcatenatedTrigger
+        // flag, WuxGS-Backend.js) is safe and unique regardless of the
+        // template, so it's used here unconditionally rather than only for the
+        // fields that actually need it.
         buildHeader = function (definition, useManualButton) {
             let title = useManualButton
-                ? WuxSheetMain.Button(definition.getAttribute(WuxDef._moreinfo), definition.title, "wuxManualButton")
+                ? WuxSheetMain.Button(`${definition.getAttribute()}${WuxDef._moreinfo}`, definition.title, "wuxManualButton")
                 : WuxSheetMain.Tooltip.Text(definition.title, WuxDefinition.TooltipDescription(definition));
             return WuxSheetMain.Header2(title);
         },

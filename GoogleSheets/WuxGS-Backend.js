@@ -1082,6 +1082,7 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerOpenManualForGearAutoEquip();
             output += listenerOpenManualForStyleFilterOptions();
             output += listenerOpenManualForOrigin();
+            output += listenerOpenManualForAffinity();
             output += listenerOpenManualForStatSummary();
             output += listenerOpenStatMoreInfo();
             output += listenerOpenLoreMoreInfo();
@@ -1336,13 +1337,29 @@ var PopupBuilder = PopupBuilder || (function () {
         // Manual". hasEvents is true since, with several definitions sharing
         // one listener, eventinfo.sourceAttribute is the only way to tell
         // which one actually fired.
-        listenerOpenManualForDefinitions = function (definitions) {
-            let groupVariableNames = definitions.map(def => def.getVariable(WuxDef._moreinfo));
+        // useConcatenatedTrigger (optional) - def.getVariable(WuxDef._moreinfo)
+        // only actually produces a distinct attribute when the definition's own
+        // variable template has {0}/{1} placeholders to substitute the suffix
+        // into (DefinitionData.getVariable does a plain string .replace against
+        // those literal placeholders - no placeholders means the suffix argument
+        // is silently dropped). Most definitions used for a Manual button have
+        // them (they're already parameterized for other suffixes elsewhere), but
+        // plain one-off fields like the Origin tab's (SheetName, FullName, ...)
+        // don't, so getVariable(WuxDef._moreinfo) there just returns the exact
+        // same attribute as the field's own value - meaning editing the field
+        // itself fired this listener too. true builds the trigger by direct
+        // string concatenation instead (def.getVariable() + WuxDef._moreinfo),
+        // which is safe and unique regardless of the template.
+        listenerOpenManualForDefinitions = function (definitions, useConcatenatedTrigger) {
+            let getTrigger = useConcatenatedTrigger
+                ? (def) => `${def.getVariable()}${WuxDef._moreinfo}`
+                : (def) => def.getVariable(WuxDef._moreinfo);
+            let groupVariableNames = definitions.map(getTrigger);
             if (groupVariableNames.length === 0) {
                 return "";
             }
             let cases = definitions.map(def =>
-                `case "${def.getVariable(WuxDef._moreinfo)}": WuxWorkerManual.OpenManualWithDefinitions(["${def.name}"]); break;`
+                `case "${getTrigger(def)}": WuxWorkerManual.OpenManualWithDefinitions(["${def.name}"]); break;`
             ).join(" ");
             let output = `switch (eventinfo.sourceAttribute) { ${cases} }`;
 
@@ -1424,13 +1441,35 @@ var PopupBuilder = PopupBuilder || (function () {
         // WuxDef.Filter(...) the way Stat Summary's are below.
         listenerOpenManualForOrigin = function () {
             let originFieldNames = [
-                "Title_IsPlayer", "CharSheetName", "SheetName", "FullName", "Ancestry", "Ethnicity", "Affinity", "QuickDescription",
+                "Title_IsPlayer", "CharSheetName", "SheetName", "FullName", "Ancestry", "Ethnicity", "QuickDescription",
                 "Title", "Age", "Gender", "HomeRegion", "Backstory",
                 "Level", "CR", "Potency", "Title_StartingJin",
                 "Note_GenName", "Note_GenFullName", "Note_GenGender", "Note_GenHomeRegion", "Note_GenRace", "Note_GenPersonality", "Note_GenMotivation"
             ];
             let definitions = originFieldNames.map(name => WuxDef.Get(name));
-            return listenerOpenManualForDefinitions(definitions);
+            // true - see listenerOpenManualForDefinitions' own comment. Most of
+            // these (SheetName, FullName, Ancestry, Ethnicity, QuickDescription,
+            // Age, Gender, HomeRegion, Backstory, CharSheetName) have plain,
+            // non-suffixable variable templates. Affinity is handled separately
+            // below (listenerOpenManualForAffinity) since its button needs to
+            // open more than just its own definition.
+            return listenerOpenManualForDefinitions(definitions, true);
+        },
+        // Affinity's own More Info button (CharacterBackgroundBuilder's
+        // affinityField, WuxGS-CharacterDetailsBuilder.js) - opens its own
+        // description plus every element's (Wood/Fire/Earth/Metal/Water), not
+        // just Affinity's own entry, so it can't share
+        // listenerOpenManualForOrigin's generic one-definition-per-field
+        // dispatch. Trigger built the same way buildHeader (WuxGS-MainSheet.js)
+        // mints it for every useManualButton field - direct concatenation, not
+        // the {0}/{1} template (Affinity's own variable only has room for one
+        // suffix, "affinity{0}", but buildHeader doesn't special-case that).
+        listenerOpenManualForAffinity = function () {
+            let affinityDef = WuxDef.Get("Affinity");
+            let trigger = `${affinityDef.getVariable()}${WuxDef._moreinfo}`;
+            let manualNames = ["Affinity", "Wood", "Fire", "Earth", "Metal", "Water"].map(name => `"${name}"`).join(", ");
+            let output = `switch (eventinfo.sourceAttribute) { case "${trigger}": WuxWorkerManual.OpenManualWithDefinitions([${manualNames}]); break; }`;
+            return WuxSheetBackend.OnChange([trigger], output, true);
         },
         // Character Details page's Stat Summary tab (CharacterStatisticsBuilder/
         // ExtendedCharacterStatisticsBuilder, same file) - Attributes

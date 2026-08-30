@@ -42,7 +42,7 @@ var upgrade_to_2_0_5 = function (currentVersion) {
 	let attributeHandler = loaderAttrubuteHandler(currentVersion, "2.0.5");
 	attributeHandler.run();
 
-	WuxWorkerGeneral.ExportBackgroundData();
+	// WuxWorkerGeneral.ExportBackgroundData();
 };
 
 var upgrade_to_2_0_4 = function (currentVersion) {

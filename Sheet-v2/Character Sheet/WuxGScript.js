@@ -11177,9 +11177,20 @@ var WuxDefinition = WuxDefinition || (function () {
         // dispatched by a generic listener (WuxGS-Backend.js's
         // listenerOpenManualForDefinitions) rather than a per-field one, since
         // Origin has over a dozen of these.
+        // definition.getAttribute(WuxDef._moreinfo) only produces a genuinely
+        // separate attribute when the definition's own variable template has
+        // {0}/{1} placeholders - several Origin fields (SheetName, FullName,
+        // Ancestry, Ethnicity, QuickDescription, Age, Gender, HomeRegion,
+        // Backstory, CharSheetName) don't, so that call silently returned the
+        // exact same attribute as the field's own value, and editing the field
+        // fired the Manual-opening listener too. Direct concatenation
+        // (matching listenerOpenManualForOrigin's own useConcatenatedTrigger
+        // flag, WuxGS-Backend.js) is safe and unique regardless of the
+        // template, so it's used here unconditionally rather than only for the
+        // fields that actually need it.
         buildHeader = function (definition, useManualButton) {
             let title = useManualButton
-                ? WuxSheetMain.Button(definition.getAttribute(WuxDef._moreinfo), definition.title, "wuxManualButton")
+                ? WuxSheetMain.Button(`${definition.getAttribute()}${WuxDef._moreinfo}`, definition.title, "wuxManualButton")
                 : WuxSheetMain.Tooltip.Text(definition.title, WuxDefinition.TooltipDescription(definition));
             return WuxSheetMain.Header2(title);
         },
@@ -15693,13 +15704,29 @@ var PopupBuilder = PopupBuilder || (function () {
         // Manual". hasEvents is true since, with several definitions sharing
         // one listener, eventinfo.sourceAttribute is the only way to tell
         // which one actually fired.
-        listenerOpenManualForDefinitions = function (definitions) {
-            let groupVariableNames = definitions.map(def => def.getVariable(WuxDef._moreinfo));
+        // useConcatenatedTrigger (optional) - def.getVariable(WuxDef._moreinfo)
+        // only actually produces a distinct attribute when the definition's own
+        // variable template has {0}/{1} placeholders to substitute the suffix
+        // into (DefinitionData.getVariable does a plain string .replace against
+        // those literal placeholders - no placeholders means the suffix argument
+        // is silently dropped). Most definitions used for a Manual button have
+        // them (they're already parameterized for other suffixes elsewhere), but
+        // plain one-off fields like the Origin tab's (SheetName, FullName, ...)
+        // don't, so getVariable(WuxDef._moreinfo) there just returns the exact
+        // same attribute as the field's own value - meaning editing the field
+        // itself fired this listener too. true builds the trigger by direct
+        // string concatenation instead (def.getVariable() + WuxDef._moreinfo),
+        // which is safe and unique regardless of the template.
+        listenerOpenManualForDefinitions = function (definitions, useConcatenatedTrigger) {
+            let getTrigger = useConcatenatedTrigger
+                ? (def) => `${def.getVariable()}${WuxDef._moreinfo}`
+                : (def) => def.getVariable(WuxDef._moreinfo);
+            let groupVariableNames = definitions.map(getTrigger);
             if (groupVariableNames.length === 0) {
                 return "";
             }
             let cases = definitions.map(def =>
-                `case "${def.getVariable(WuxDef._moreinfo)}": WuxWorkerManual.OpenManualWithDefinitions(["${def.name}"]); break;`
+                `case "${getTrigger(def)}": WuxWorkerManual.OpenManualWithDefinitions(["${def.name}"]); break;`
             ).join(" ");
             let output = `switch (eventinfo.sourceAttribute) { ${cases} }`;
 
@@ -15787,7 +15814,11 @@ var PopupBuilder = PopupBuilder || (function () {
                 "Note_GenName", "Note_GenFullName", "Note_GenGender", "Note_GenHomeRegion", "Note_GenRace", "Note_GenPersonality", "Note_GenMotivation"
             ];
             let definitions = originFieldNames.map(name => WuxDef.Get(name));
-            return listenerOpenManualForDefinitions(definitions);
+            // true - see listenerOpenManualForDefinitions' own comment. Most of
+            // these (SheetName, FullName, Ancestry, Ethnicity, QuickDescription,
+            // Age, Gender, HomeRegion, Backstory, CharSheetName) have plain,
+            // non-suffixable variable templates.
+            return listenerOpenManualForDefinitions(definitions, true);
         },
         // Character Details page's Stat Summary tab (CharacterStatisticsBuilder/
         // ExtendedCharacterStatisticsBuilder, same file) - Attributes

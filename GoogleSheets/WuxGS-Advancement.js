@@ -783,7 +783,18 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             contents = WuxSheetMain.TabBlock(contents);
 
                             let definition = WuxDef.Get("Page_Skills");
-                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition);
+                            return WuxSheetMain.CollapsibleTab(definition.getAttribute(WuxDef._tab, WuxDef._expand), definition.title, contents, definition, buildSkillExpertiseInfo());
+                        },
+                        // Skill Expertise's own explanation, appended into this
+                        // section's help box (same "<strong>Name.</strong>
+                        // description" inline shape buildJobs' own buildRolesInfo
+                        // uses for the Jobs page's Role summary) - now the only
+                        // place Skill Expertise's description shows at all, since
+                        // printInteractiveExpertiseHeader's own hover tooltip was
+                        // removed.
+                        buildSkillExpertiseInfo = function () {
+                            let expertiseDef = WuxDef.Get("SkillExpertise");
+                            return `<div class="wuxDescription"><strong>${expertiseDef.getTitle()}.</strong> ${expertiseDef.getDescription(" ")}</div>`;
                         },
                         buildSkillSubGroups = function (database, subGroups) {
                             let output = [];
@@ -844,29 +855,34 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             return `<div class="wuxSkill">
                             ${WuxSheetMain.InteractionElement.BuildCheckboxInput(
                                 skillDefinition.getAttribute(WuxDef._rank), interactHeader)}
-                            ${printSkillStat(skillDefinition, skillDefinition.getAttribute(), skillDefinition.getAttribute(WuxDef._info))}
+                            ${printSkillStat(skillDefinition, skillDefinition.getAttribute())}
                             </div>`;
                         },
-                        printSkillStat = function(definition, fieldAttr, statCalculationField) {
+                        // Opens the same combined Manual view (the skill's own
+                        // description, then its live calculation) as the skill's
+                        // own More Info button (printSkill's wuxManualButton,
+                        // triggered off skillDefinition's own _moreinfo attribute) -
+                        // "value" appended to that same trigger matches
+                        // listenerOpenStatMoreInfo's own labelVar/valueVar pairing
+                        // (WuxGS-Backend.js), which already dispatches every group
+                        // Skill definition's value-side trigger through
+                        // WuxWorkerGeneral.OpenStatMoreInfo (Worker-General.js), so
+                        // no new listener is needed here.
+                        printSkillStat = function(definition, fieldAttr) {
                             return `<span class="wuxFloatRight">
-                                ${WuxSheetMain.Tooltip.Text(WuxSheetMain.EvaluatedSpan(fieldAttr, definition.getAttribute(WuxDef._evaluation)),
-                                    printStatCalculationTooltipContent(definition, statCalculationField))}
+                                ${WuxSheetMain.Button(`${definition.getAttribute(WuxDef._moreinfo)}value`,
+                                    WuxSheetMain.EvaluatedSpan(fieldAttr, definition.getAttribute(WuxDef._evaluation)), "wuxManualButton")}
                             </span>`;
                         },
-                        printStatCalculationTooltipContent = function(definitionData, statCalculationField) {
-                            return `${WuxSheetMain.Header2(definitionData.title)}
-                                <span class="wuxDescription" name="${statCalculationField}"></span>`;
-                        },
+                        // No tooltip at all now - Skill Expertise's own explanation
+                        // moved to the section's help box instead
+                        // (buildSkillExpertiseInfo above).
                         printInteractiveExpertiseHeader = function (skillDefinition) {
                             let expertiseDef = WuxDef.Get("SkillExpertise");
                             let interactHeader = `<span class="wuxHeader">${expertiseDef.getTitle()}</span>`;
 
-                            return WuxSheetMain.InteractionElement.BuildTooltipCheckboxInput(
-                                skillDefinition.getAttribute(WuxDef._expertise),
-                                skillDefinition.getAttribute(WuxDef._info),
-                                interactHeader,
-                                WuxDefinition.TooltipDescription(expertiseDef)
-                            );
+                            return WuxSheetMain.InteractionElement.BuildCheckboxInput(
+                                skillDefinition.getAttribute(WuxDef._expertise), interactHeader);
                         },
 
                         buildStatSummarySection = function () {
