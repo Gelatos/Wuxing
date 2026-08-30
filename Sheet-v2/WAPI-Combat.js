@@ -467,6 +467,9 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
                 case "!sutech":
                     commandUseTechnique(msg, content);
                     break;
+                case "!cstruct":
+                    commandCreateStructure(msg, content);
+                    break;
             }
         },
 
@@ -489,6 +492,13 @@ var WuxTechniqueResolver = WuxTechniqueResolver || (function () {
             let techUseResolver = new TechniqueUseResolver(msg, content, true);
             techUseResolver.initialize();
             techUseResolver.run();
+        },
+        // {{structureData}}'s own button (WCS-RollTemplates.html's Create
+        // Structure), TechniqueDisplayData.generateRollTemplate.
+        commandCreateStructure = function (msg, content) {
+            let structureResolver = new TechniqueCreateStructureResolver(msg, content);
+            structureResolver.initialize();
+            structureResolver.run();
         }
     ;
 
@@ -1224,6 +1234,112 @@ class TechniqueSkillCheckResolver extends TechniqueResolverData {
         }
         Debug.Log(`[Personality] Final personality advantage: ${bestAdvantage}.`);
         return bestAdvantage;
+    }
+}
+
+// {{structureData}}'s own button (Create Structure, WCS-RollTemplates.html) -
+// TechniqueDisplayData.generateRollTemplate only emits that field for
+// techniques with a Structure-type effect (Granite Wall, etc.), carrying the
+// HP/Armor values to give the new token. Extends TechniqueResolverData
+// directly rather than TechniqueSkillCheckResolver - this has no skill check
+// or effect resolution to do, just token creation, so it doesn't need any of
+// that class's own machinery (same reasoning TechniqueConsumptionResolver's
+// own shape follows for resource consumption).
+//
+// Targeting ($$@{target||token_id}, same as Check/Target Effects above) picks
+// an existing token to spawn the structure at/on top of, rather than a bare
+// grid coordinate - Roll20's roll template button syntax has no native way to
+// prompt for an empty map location, only for clicking an existing token, so
+// the caster (or GM) drops a spare token at the desired spot first and
+// targets that.
+class TechniqueCreateStructureResolver extends TechniqueResolverData {
+    constructor(msg, content) {
+        super(msg, content);
+    }
+
+    createEmpty() {
+        super.createEmpty();
+        this.structureName = "";
+        this.hp = 0;
+        this.armor = 0;
+        this.targetTokenTargetData = undefined;
+    }
+
+    initializeTechniqueData(data) {
+        let structureData = new TechniqueStructureData();
+        structureData.importSandboxJson(data);
+        this.structureName = structureData.name;
+        this.hp = parseInt(structureData.hp) || 0;
+        this.armor = parseInt(structureData.armor) || 0;
+    }
+
+    initializeData(contentData) {
+        super.initializeData(contentData);
+        if (contentData.length < 3) {
+            Debug.LogError(`[TechniqueCreateStructureResolver] No target token provided - select a token at the desired location before clicking Create Structure. Content: ${contentData}`);
+            return;
+        }
+        this.targetTokenTargetData = TargetReference.GetTokenTargetData(contentData[2]);
+        if (this.targetTokenTargetData == undefined || this.targetTokenTargetData.token == undefined) {
+            Debug.LogError(`[TechniqueCreateStructureResolver] No target token found for content: ${contentData}`);
+        }
+    }
+
+    run() {
+        if (this.targetTokenTargetData == undefined || this.targetTokenTargetData.token == undefined) {
+            return;
+        }
+
+        // HP lives on the token's own bar1 - same "HP" bar every character/NPC
+        // token already uses (WAPI-Target.js's own setBar(1, hpAttribute, ...)
+        // calls) - not CombatDetails' own vitality field, which is a
+        // completely separate resource (surges/vitality track something else
+        // entirely - see CombatDetails.printVitality/printSurges). Set here
+        // directly and unlinked (no variableObj, unlike setBar's own linked
+        // shape) since the structure's shared/generic character has no HP
+        // attribute of its own this specific token instance could safely
+        // link to (every token representing it would show the same value).
+        let targetToken = this.targetTokenTargetData.token;
+        targetToken.set("bar1_link", "");
+        targetToken.set("bar1_value", this.hp);
+        targetToken.set("bar1_max", this.hp);
+
+        // Written to the targeted token's own note, not its linked
+        // character's CombatDetails attribute - same "shared template
+        // character, per-token data" reasoning as bar1 above.
+        // TokenNoteReference's defenses/damageResist/displayStyle/displayName
+        // (WAPI-Target.js) exist specifically for this -
+        // CombatDetailsHandler.setDataFromTokenNote (WAPI-Database.js)
+        // overlays them onto the token's own combat details, same as
+        // vitality/surges already do for every other token. Read-then-write
+        // (same shape as every other setTokenNote caller in WAPI-Target.js)
+        // preserves anything already on this token's note - status effects,
+        // team, etc. - if it was already part of a conflict. Vitality itself
+        // stays at 1/1 (CombatDetails' own default) - structures only ever
+        // have 1, regardless of HP.
+        let tokenNoteReference = new TokenNoteReference(this.targetTokenTargetData.getTokenNote());
+        tokenNoteReference.displayStyle = "Battle";
+        tokenNoteReference.displayName = this.structureName;
+        tokenNoteReference.defenses = {
+            brace: 5, warding: 5, reflex: 5, evasion: 5, resolve: 5, insight: 5, logic: 5
+        };
+        tokenNoteReference.vitality = {current: 1, max: 1};
+        tokenNoteReference.damageResist = this.armor;
+        this.targetTokenTargetData.setTokenNote(JSON.stringify(tokenNoteReference));
+
+        // Hard-refreshes the token's own tooltip right away (setCombatDetails,
+        // WAPI-Target.js - the same "recompute from the character attribute
+        // plus this token note overlay, then write the tooltip" pass every
+        // other combat-data change already goes through) instead of leaving
+        // it stale until whatever next interaction would normally trigger it.
+        let attributeHandler = new SandboxAttributeHandler(this.targetTokenTargetData.charId);
+        this.targetTokenTargetData.refreshCombatDetails(attributeHandler, tokenNoteReference);
+        this.targetTokenTargetData.setCombatDetails(attributeHandler, tokenNoteReference);
+        attributeHandler.run();
+
+        this.addMessage(`${this.senderTokenTargetData.displayName} creates ${this.structureName}` +
+            ` (HP ${this.hp}${this.armor > 0 ? `, Armor ${this.armor}` : ""}).`);
+        WuxMessage.Send(this.getMessageObject());
     }
 }
 

@@ -1542,7 +1542,16 @@ class TokenNoteReference {
         this.vitality = {current: 0, max: 0};
         this.teamIndex = 0;
         this.personality = "";
-
+        // Structure tokens (TechniqueCreateStructureResolver, WAPI-Combat.js)
+        // have no linked character at all, so their defenses/damage resist
+        // have nowhere else to live - undefined by default (not a zeroed
+        // object like surges/vitality above), so CombatDetailsHandler.
+        // setDataFromTokenNote only overrides a character-linked token's own
+        // combat details when a token note actually set them.
+        this.defenses = undefined;
+        this.damageResist = undefined;
+        this.displayStyle = undefined;
+        this.displayName = undefined;
     }
 
     importJson(json) {
@@ -1555,6 +1564,10 @@ class TokenNoteReference {
         this.vitality = json.vitality == undefined ? {current: 0, max: 0} : json.vitality;
         this.teamIndex = json.teamIndex ?? 0;
         this.personality = json.personality ?? "";
+        this.defenses = json.defenses;
+        this.damageResist = json.damageResist;
+        this.displayStyle = json.displayStyle;
+        this.displayName = json.displayName;
     }
 }
 

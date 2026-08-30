@@ -1340,6 +1340,62 @@ class TechniqueResources extends dbObj {
     }
 }
 
+// Payload for the Create Structure roll template button (TechniqueDisplayData.
+// generateRollTemplate, WCS-RollTemplates.html) - same shape/sanitization as
+// TechniqueResources above, just carrying a Structure-creating technique's own
+// HP (always present) and Armor (0 if the technique never set one) instead of
+// resource costs.
+class TechniqueStructureData extends dbObj {
+    importJson(json) {
+        this.name = json.name;
+        this.hp = json.hp;
+        this.armor = json.armor;
+    }
+
+    importSheets(dataArray) {
+        let i = 0;
+        this.name = "" + dataArray[i];
+        i++;
+        this.hp = "" + dataArray[i];
+        i++;
+        this.armor = "" + dataArray[i];
+        i++;
+    }
+
+    createEmpty() {
+        super.createEmpty();
+        this.name = "";
+        this.hp = 0;
+        this.armor = 0;
+    }
+
+    sanitizeSheetRollAction(sheetRoll) {
+        sheetRoll = sheetRoll.replace(/"/g, "%%");
+        sheetRoll = sheetRoll.replace(/:/g, "&&");
+        sheetRoll = sheetRoll.replace(/%/g, "&#37;");
+        sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
+        sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
+        sheetRoll = sheetRoll.replace(/\*/g, "&#42;");
+        sheetRoll = sheetRoll.replace(/\?/g, "&#63;");
+        sheetRoll = sheetRoll.replace(/@/g, "&#64;");
+        sheetRoll = sheetRoll.replace(/\[/g, "&#91;");
+        sheetRoll = sheetRoll.replace(/]/g, "&#93;");
+        sheetRoll = sheetRoll.replace(/\(/g, "&#40;");
+        sheetRoll = sheetRoll.replace(/\)/g, "&#41;");
+        return sheetRoll;
+    }
+
+    unsanitizeSheetRollAction(jsonString) {
+        jsonString = jsonString.replace(/%%/g, '"');
+        jsonString = jsonString.replace(/&&/g, ":");
+        return JSON.parse(jsonString);
+    }
+
+    importSandboxJson(jsonString) {
+        this.importJson(this.unsanitizeSheetRollAction(jsonString));
+    }
+}
+
 class TechniqueUseEffect extends dbObj {
     importJson(json) {
         this.name = json.name;
@@ -2520,6 +2576,11 @@ class TechniqueDisplayData {
     // keeps showing the plain bracket text.
     constructor(technique, rank, characterAttributeHandler) {
         this.createEmpty();
+        // Stashed here (not just threaded into the effect-text builders
+        // below, the only place it was used before) so generateRollTemplate
+        // can also use it further down, for a Structure effect's own
+        // formula-driven HP/Armor values.
+        this.characterAttributeHandler = characterAttributeHandler;
         if (technique != undefined) {
             if (rank != undefined) {
                 technique.rank = rank;
@@ -2974,6 +3035,27 @@ class TechniqueDisplayData {
             }
             if (this.technique.hasAdv != 0) {
                 output += `{{hascheck=${this.technique.hasAdv}}`;
+            }
+            // Structure-creating techniques (Granite Wall, etc.) - a "Structure"
+            // type effect with subType "HP" (always present when the technique
+            // creates a structure at all) and optionally "Armor" carries the
+            // values for the token this technique's own Create Structure button
+            // (WCS-RollTemplates.html) spawns. Same formula-driven value every
+            // other effect uses (FormulaData.getValue), and the same
+            // !command <sanitized>$$sheetname button-payload shape consumeData
+            // uses above - only emitted when there's actually Structure data to
+            // read, so the roll template's own {{#structureData}} conditional
+            // block only shows the button when it applies.
+            let structureEffects = this.technique.effects.filter(new DatabaseFilterData("type", "Structure"));
+            if (structureEffects.length > 0) {
+                let hpEffect = structureEffects.find((effect) => effect.subType === "HP");
+                if (hpEffect != undefined) {
+                    let armorEffect = structureEffects.find((effect) => effect.subType === "Armor");
+                    let hpValue = hpEffect.formula.getValue(this.characterAttributeHandler);
+                    let armorValue = armorEffect != undefined ? armorEffect.formula.getValue(this.characterAttributeHandler) : 0;
+                    let structureData = new TechniqueStructureData([this.name, hpValue, armorValue]);
+                    output += `{{structureData=!cstruct ${structureData.sanitizeSheetRollAction(JSON.stringify(structureData))}$$${this.sheetname}}}`;
+                }
             }
         }
         return output;
@@ -5349,7 +5431,7 @@ class CombatDetails {
             case "Battle":
                 output += this.printVitality();
                 output += `.${this.printSurges()}`;
-                output += `;.Regen:${this.healvalue}`;
+                output += ` Regen:${this.healvalue}`;
                 output += `;.Mv:${this.mvSpeed}`;
                 output += `;.Dash:${this.dashSpeed}`;
                 output += this.printResistances();
@@ -5669,6 +5751,23 @@ class CombatDetailsHandler {
         if (tokenNote.vitality != undefined) {
             this.combatDetails.vitality = tokenNote.vitality.current;
             this.combatDetails.maxvitality = tokenNote.vitality.max;
+        }
+        // Structure tokens (TechniqueCreateStructureResolver, WAPI-Combat.js)
+        // have no linked character, so these live purely on the token note
+        // instead - undefined (TokenNoteReference's own default) for every
+        // ordinary character-linked token, so this never overrides their
+        // real CombatDetails attribute values.
+        if (tokenNote.defenses != undefined) {
+            this.combatDetails.defenses = new CombatDetailsDefenses(tokenNote.defenses);
+        }
+        if (tokenNote.damageResist != undefined) {
+            this.combatDetails.damageResist = tokenNote.damageResist;
+        }
+        if (tokenNote.displayStyle != undefined) {
+            this.combatDetails.displayStyle = tokenNote.displayStyle;
+        }
+        if (tokenNote.displayName != undefined) {
+            this.combatDetails.displayName = tokenNote.displayName;
         }
     }
 }
