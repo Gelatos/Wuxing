@@ -24,7 +24,13 @@ class FilterDisplayBuilder {
 
     printFilterEntry(filterName, options) {
         let baseDefinition = WuxDef.Get(filterName);
-        let optionsOutput = "";
+        // Always first - clicking it toggles every option below at once
+        // (Worker-FilterPopup.js's toggleAllInFilterCategory, dispatched by
+        // WuxGS-Backend.js's listenerFilterPopupCategoryAllToggles). Keyed
+        // off the category's own definition (baseDefinition) rather than any
+        // option's, so getCompoundAttribute mints it a trigger none of this
+        // category's real options could ever collide with.
+        let optionsOutput = this.printAllOption(baseDefinition);
         for(let i = 0; i < options.length; i++) {
             optionsOutput += this.printFilterOption(options[i]);
         }
@@ -36,6 +42,10 @@ class FilterDisplayBuilder {
             `${optionsOutput}
             ${WuxSheetMain.Row("&nbsp;")}`);
         return header + content;
+    }
+    printAllOption(baseDefinition) {
+        return this.printFilterData(WuxSheetMain.InteractionElement.BuildCheckboxInput(
+            this.filterDefinitions.getCompoundAttribute(baseDefinition), "All"));
     }
     printFilterOption(optionDefinition) {
         return this.printFilterData(WuxSheetMain.InteractionElement.BuildCheckboxInput(

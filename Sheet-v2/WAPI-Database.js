@@ -3518,6 +3518,9 @@ class BaseTechniqueEffectDisplayData {
             case "HP":
                 this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("HP")}. `;
                 return;
+            case "Armor":
+                this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("Cmb_DamageResist")}. `;
+                return;
             default:
                 this.effectDescription += effect.effect;
         }
@@ -5290,6 +5293,7 @@ class CombatDetails {
         this.vitality = 1;
         this.maxvitality = 1;
         this.healvalue = 0;
+        this.damageResist = 0;
         this.burnResist = 0;
         this.coldResist = 0;
         this.energyResist = 0;
@@ -5323,6 +5327,7 @@ class CombatDetails {
         this.vitality = json.vitality != undefined ? json.vitality : 1;
         this.maxvitality = json.maxvitality != undefined ? json.maxvitality : 1;
         this.healvalue = json.healvalue;
+        this.damageResist = json.damageResist != undefined ? json.damageResist : 0;
         this.burnResist = json.burnResist != undefined ? json.burnResist : 0;
         this.coldResist = json.coldResist != undefined ? json.coldResist : 0;
         this.energyResist = json.energyResist != undefined ? json.energyResist : 0;
@@ -5365,6 +5370,9 @@ class CombatDetails {
     }
     printResistances() {
         let resistances = "";
+        if (this.dmageResist != 0) {
+            resistances += `;.Damage:${this.damageResist}`;
+        }
         if (this.burnResist != 0) {
             resistances += `;.Burn:${this.burnResist}`;
         }
@@ -5478,17 +5486,17 @@ class CombatDetailsHandler {
     getResistance(resistance) {
         switch (resistance) {
             case "Burn":
-                return this.combatDetails.burnResist;
+                return this.combatDetails.burnResist + this.combatDetails.damageResist;
             case "Cold":
-                return this.combatDetails.coldResist;
+                return this.combatDetails.coldResist + this.combatDetails.damageResist;
             case "Energy":
-                return this.combatDetails.energyResist;
+                return this.combatDetails.energyResist + this.combatDetails.damageResist;
             case "Force":
-                return this.combatDetails.forceResist;
+                return this.combatDetails.forceResist + this.combatDetails.damageResist;
             case "Piercing":
-                return this.combatDetails.piercingResist;
+                return this.combatDetails.piercingResist + this.combatDetails.damageResist;
             case "Psyche":
-                return this.combatDetails.psycheResist;
+                return this.combatDetails.psycheResist + this.combatDetails.damageResist;
             default:
                 return 0;
         }
@@ -5579,8 +5587,9 @@ class CombatDetailsHandler {
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
     
-    onUpdateResistanceValues(attrHandler, burn, cold, energy, force, piercing, psyche) {
+    onUpdateResistanceValues(attrHandler, damage, burn, cold, energy, force, piercing, psyche) {
         this.setData(attrHandler);
+        this.combatDetails.damageResist = damage;
         this.combatDetails.burnResist = burn;
         this.combatDetails.coldResist = cold;
         this.combatDetails.energyResist = energy;

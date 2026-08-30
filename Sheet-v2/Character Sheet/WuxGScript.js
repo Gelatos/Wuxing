@@ -3518,6 +3518,9 @@ class BaseTechniqueEffectDisplayData {
             case "HP":
                 this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("HP")}. `;
                 return;
+            case "Armor":
+                this.effectDescription += `Each ${effect.effect} has ${count} ${WuxDef.GetTitle("Cmb_DamageResist")}. `;
+                return;
             default:
                 this.effectDescription += effect.effect;
         }
@@ -5290,6 +5293,7 @@ class CombatDetails {
         this.vitality = 1;
         this.maxvitality = 1;
         this.healvalue = 0;
+        this.damageResist = 0;
         this.burnResist = 0;
         this.coldResist = 0;
         this.energyResist = 0;
@@ -5323,6 +5327,7 @@ class CombatDetails {
         this.vitality = json.vitality != undefined ? json.vitality : 1;
         this.maxvitality = json.maxvitality != undefined ? json.maxvitality : 1;
         this.healvalue = json.healvalue;
+        this.damageResist = json.damageResist != undefined ? json.damageResist : 0;
         this.burnResist = json.burnResist != undefined ? json.burnResist : 0;
         this.coldResist = json.coldResist != undefined ? json.coldResist : 0;
         this.energyResist = json.energyResist != undefined ? json.energyResist : 0;
@@ -5365,6 +5370,9 @@ class CombatDetails {
     }
     printResistances() {
         let resistances = "";
+        if (this.dmageResist != 0) {
+            resistances += `;.Damage:${this.damageResist}`;
+        }
         if (this.burnResist != 0) {
             resistances += `;.Burn:${this.burnResist}`;
         }
@@ -5478,17 +5486,17 @@ class CombatDetailsHandler {
     getResistance(resistance) {
         switch (resistance) {
             case "Burn":
-                return this.combatDetails.burnResist;
+                return this.combatDetails.burnResist + this.combatDetails.damageResist;
             case "Cold":
-                return this.combatDetails.coldResist;
+                return this.combatDetails.coldResist + this.combatDetails.damageResist;
             case "Energy":
-                return this.combatDetails.energyResist;
+                return this.combatDetails.energyResist + this.combatDetails.damageResist;
             case "Force":
-                return this.combatDetails.forceResist;
+                return this.combatDetails.forceResist + this.combatDetails.damageResist;
             case "Piercing":
-                return this.combatDetails.piercingResist;
+                return this.combatDetails.piercingResist + this.combatDetails.damageResist;
             case "Psyche":
-                return this.combatDetails.psycheResist;
+                return this.combatDetails.psycheResist + this.combatDetails.damageResist;
             default:
                 return 0;
         }
@@ -5579,8 +5587,9 @@ class CombatDetailsHandler {
         attrHandler.addUpdate(this.combatDetailsVar, JSON.stringify(this.combatDetails));
     }
     
-    onUpdateResistanceValues(attrHandler, burn, cold, energy, force, piercing, psyche) {
+    onUpdateResistanceValues(attrHandler, damage, burn, cold, energy, force, piercing, psyche) {
         this.setData(attrHandler);
+        this.combatDetails.damageResist = damage;
         this.combatDetails.burnResist = burn;
         this.combatDetails.coldResist = cold;
         this.combatDetails.energyResist = energy;
@@ -9836,7 +9845,7 @@ class TechniqueAssessment {
     }
     
     getStructureValueMod() {
-        return Math.ceil(this.structureHP / 2) + Math.ceil(this.structureArmor);
+        return Math.ceil(this.structureHP / 2) + Math.ceil(this.structureArmor / 2);
     }
 
     getMoveAssessment(effect, attributeHandler) {
@@ -15439,6 +15448,7 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerLoadMoreCatalogItems();
             output += listenerInspectPopupButtons();
             output += listenerFilterPopupButtons();
+            output += listenerFilterPopupCategoryAllToggles();
             output += listenerOpenManual();
             output += listenerCloseManual();
             output += listenerOpenManualForStatus();
@@ -15672,6 +15682,34 @@ var PopupBuilder = PopupBuilder || (function () {
                 `WuxWorkerFilterPopup.ApplyFilter()`, false)}
                 ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Popup_ClearFilter")}`],
                 `WuxWorkerFilterPopup.ClearFilter()`, false)}`;
+        },
+        // Filter/Item popup's per-category "All" toggle (WuxGS-FilterDisplayBuilder.js's
+        // printAllOption, always the first option under each category) - one
+        // OnChange per category, since WuxWorkerFilterPopup.ToggleAllInFilterCategory
+        // needs that category's own explicit option list (eventinfo carries no
+        // way to derive it). Same TechniqueFilterDefinitions/EquipmentFilterDefinitions
+        // instances buildTechniqueFilters/buildItemFilters (WuxGS-Base.js) build
+        // the checkboxes from, so the trigger/option names here always match
+        // what's actually rendered.
+        listenerFilterPopupCategoryAllToggles = function () {
+            let output = "";
+            let filterDefsList = [
+                new TechniqueFilterDefinitions("TechFilterPopup"),
+                new EquipmentFilterDefinitions("Popup_FindItemsByFilter")
+            ];
+            for (let filterDefs of filterDefsList) {
+                for (let key of filterDefs.getKeys()) {
+                    let options = filterDefs.getDefinitions(key);
+                    if (options.length === 0) {
+                        continue;
+                    }
+                    let allTrigger = filterDefs.getCompoundVariable(WuxDef.Get(key));
+                    let optionVars = options.map(option => `"${filterDefs.getCompoundVariable(option)}"`).join(", ");
+                    output += WuxSheetBackend.OnChange([allTrigger],
+                        `WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, [${optionVars}])`, true);
+                }
+            }
+            return output;
         },
         // The nav-row "?" button (WuxGS-Base.js's buildManualOpenButton) - same
         // single-attribute popup-open trigger as listenerSeeAllPerkTechniques
@@ -19071,7 +19109,13 @@ class FilterDisplayBuilder {
 
     printFilterEntry(filterName, options) {
         let baseDefinition = WuxDef.Get(filterName);
-        let optionsOutput = "";
+        // Always first - clicking it toggles every option below at once
+        // (Worker-FilterPopup.js's toggleAllInFilterCategory, dispatched by
+        // WuxGS-Backend.js's listenerFilterPopupCategoryAllToggles). Keyed
+        // off the category's own definition (baseDefinition) rather than any
+        // option's, so getCompoundAttribute mints it a trigger none of this
+        // category's real options could ever collide with.
+        let optionsOutput = this.printAllOption(baseDefinition);
         for(let i = 0; i < options.length; i++) {
             optionsOutput += this.printFilterOption(options[i]);
         }
@@ -19083,6 +19127,10 @@ class FilterDisplayBuilder {
             `${optionsOutput}
             ${WuxSheetMain.Row("&nbsp;")}`);
         return header + content;
+    }
+    printAllOption(baseDefinition) {
+        return this.printFilterData(WuxSheetMain.InteractionElement.BuildCheckboxInput(
+            this.filterDefinitions.getCompoundAttribute(baseDefinition), "All"));
     }
     printFilterOption(optionDefinition) {
         return this.printFilterData(WuxSheetMain.InteractionElement.BuildCheckboxInput(

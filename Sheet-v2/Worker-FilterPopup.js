@@ -29,11 +29,26 @@ class FilterPopupAttributeHandler extends BasePopupAttributeHandler {
         variables.forEach((variable) => {
             this.attrHandler.addUpdate(variable, 0);
         });
+        this.resetCategoryAllToggles(this.filterDefinitions);
         if (this.equipmentFilterDefinitions) {
             this.equipmentFilterDefinitions.getAllVariables().forEach((variable) => {
                 this.attrHandler.addUpdate(variable, 0);
             });
+            this.resetCategoryAllToggles(this.equipmentFilterDefinitions);
         }
+    };
+    // Each category's own "All" toggle (WuxGS-FilterDisplayBuilder.js's
+    // printAllOption) lives outside getAllVariables()'s own sweep - that only
+    // covers the individual per-option checkboxes - so it needs its own reset
+    // pass here, otherwise Clear Filter would leave an "All" checkbox looking
+    // checked after wiping out everything it represents.
+    resetCategoryAllToggles(filterDefs) {
+        filterDefs.getKeys().forEach((key) => {
+            if (filterDefs.getDefinitions(key).length === 0) {
+                return;
+            }
+            this.attrHandler.addUpdate(filterDefs.getCompoundVariable(WuxDef.Get(key)), 0);
+        });
     };
     setFilterActive() {
         this.attrHandler.addUpdate(this.getFilterVariable(), JSON.stringify(this.getTechniqueFilters()));
@@ -48,6 +63,23 @@ class FilterPopupAttributeHandler extends BasePopupAttributeHandler {
                 let activeValues = [];
                 definitions.forEach((definition) => {
                     if (this.attrHandler.parseString(this.filterDefinitions.getCompoundVariable(definition)) == "on") {
+                        // TechFilterType_Job (the TechSource category's "Job"
+                        // option) never appears as a technique's own style tag
+                        // itself - job-sourced techniques carry the specific
+                        // job's own name there instead (e.g. "Fighter",
+                        // matching Job_Fighter's title, same convention
+                        // WuxTechs.Filter(new DatabaseFilterData("style", jobName))
+                        // already relies on elsewhere, Worker-Actions.js). So
+                        // checking "Job" needs to expand to every individual
+                        // Job definition's own title instead of pushing this
+                        // definition's own name/title, which would never match
+                        // anything.
+                        if (definition.name === "TechFilterType_Job") {
+                            WuxDef.Filter([new DatabaseFilterData("group", "Job")]).forEach((jobDefinition) => {
+                                activeValues.push(jobDefinition.title);
+                            });
+                            return;
+                        }
                         // Technique fields store these tags inconsistently: some (e.g. group, itemTraits)
                         // use the full definition name ("Trait_Accurate"), others (e.g. skill, coreDefense,
                         // impacts, forms) use the bare title ("Accurate"). Include every representation so
@@ -387,6 +419,20 @@ var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
             let attributeHandler = new WorkerAttributeHandler();
             new FilterPopup(attributeHandler).clearFilter();
             attributeHandler.run();
+        },
+        // A category's own "All" checkbox (WuxGS-FilterDisplayBuilder.js's
+        // printAllOption) - optionVariableNames is that category's full option
+        // list, passed explicitly by the listener's own switch
+        // (WuxGS-Backend.js's listenerFilterPopupCategoryAllToggles) since
+        // eventinfo carries no way to tell which category fired. Sets every
+        // option to match the checkbox's own new state - "on" (checked) mirrors
+        // it being turned on, "" (unchecked) mirrors it being turned off -
+        // same on/"" convention getTechniqueFilters' own == "on" check reads.
+        toggleAllInFilterCategory = function (eventinfo, optionVariableNames) {
+            let newValue = eventinfo.newValue === "on" ? "on" : "";
+            let attributeHandler = new WorkerAttributeHandler();
+            optionVariableNames.forEach((name) => attributeHandler.addUpdate(name, newValue));
+            attributeHandler.run();
         };
 
     return {
@@ -398,6 +444,7 @@ var WuxWorkerFilterPopup = WuxWorkerFilterPopup || (function () {
         Close: close,
         ApplyFilter: applyFilter,
         RemoveFilter: removeFilter,
-        ClearFilter: clearFilter
+        ClearFilter: clearFilter,
+        ToggleAllInFilterCategory: toggleAllInFilterCategory
     };
 }());

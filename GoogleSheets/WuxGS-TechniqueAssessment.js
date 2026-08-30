@@ -1018,7 +1018,7 @@ class TechniqueAssessment {
     }
     
     getStructureValueMod() {
-        return Math.ceil(this.structureHP / 2) + Math.ceil(this.structureArmor);
+        return Math.ceil(this.structureHP / 2) + Math.ceil(this.structureArmor / 2);
     }
 
     getMoveAssessment(effect, attributeHandler) {

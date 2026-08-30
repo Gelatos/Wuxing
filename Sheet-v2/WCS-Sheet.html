@@ -8690,7 +8690,7 @@
 														<div class="wuxTooltipContent">
 															<div class="wuxHeader2">Elemental Affinity</div>
 
-															<span class="wuxDescription">Characters that are able to cast spells have an elemental affinity that ties them to one of the five primary elements. Some techniques require an elemental affinity before they may be taken.</span><span class="wuxDescription">Your chosen affinity grants weaknesses and resistances to certain elemental damage types.</span>
+															<span class="wuxDescription">Characters that are able to cast spells have an elemental affinity that ties them to one of the five primary elements. Some techniques require an elemental affinity before they may be taken.</span><span class="wuxDescription">There are five elemental affinities, Wood, Fire, Earth, Metal, and Water</span>
 														</div>
 													</span></div>
 												<span class="wuxDescription"><span name="attr_affinity"></span></span>
@@ -16114,7 +16114,7 @@
 										</div>
 										<div class="wuxButton wuxRepeatingTechActionButton">
 											<input type="checkbox" name="attr_forme-setcustomfilter">
-											<span><span style="color:#c8a020;">&#9776;</span> Show By Filter</span>
+											<span><span style="color:#c8a020;">&#9776;</span> Select By Filter</span>
 										</div>
 									</div>
 								</div>
@@ -18492,6 +18492,21 @@
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-techcategory" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-techcategory" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-techcategory" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-techcategory" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
 												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-combat" />
 												<div class="wuxInteractiveContent">
 													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-combat" />
@@ -18540,6 +18555,120 @@
 
 								<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
 
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_techfiltertype-techsource_expand" value="0">
+										<span class="wuxHiddenInlineField">
+											<div class="wuxButton wuxStyleHeaderButton">
+												<input type="checkbox" name="attr_techfiltertype-techsource_expand">
+												<span><span class='wuxStyleHeaderButtonIcon'>&#8857;</span> Show</span>
+											</div>
+										</span>
+
+										<input type="hidden" class="wuxHiddenField-flag" name="attr_techfiltertype-techsource_expand" value="0">
+										<span class="wuxHiddenInlineAuxField">
+											<div class="wuxButton wuxStyleHeaderButton">
+												<input type="checkbox" name="attr_techfiltertype-techsource_expand">
+												<span><span class='wuxStyleHeaderButtonIcon'>&#8853;</span> Hide</span>
+											</div>
+										</span>
+
+									</span><span>Source</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_techfiltertype-techsource_expand" value="0">
+								<div class="wuxHiddenAuxField">
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-techsource" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-techsource" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-techsource" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-techsource" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-basic" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-basic" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-basic" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-basic" />
+													Basic
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-job" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-job" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-job" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-job" />
+													Job
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-style" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-style" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-style" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-style" />
+													Style
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-gear" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-gear" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-gear" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-gear" />
+													Gear
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-perk" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-perk" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-perk" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-perk" />
+													Perk
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="wuxRow">&nbsp;</div>
+								</div>
+
+								<div class="wuxHeader"><span class="wuxStyleHeaderButtonContainer">
+
 										<input type="hidden" class="wuxHiddenField-flag" name="attr_techfiltertype-actiontype_expand" value="0">
 										<span class="wuxHiddenInlineField">
 											<div class="wuxButton wuxStyleHeaderButton">
@@ -18558,6 +18687,21 @@
 
 									</span><span>Action Type</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_techfiltertype-actiontype_expand" value="0">
 								<div class="wuxHiddenAuxField">
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-actiontype" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-actiontype" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-actiontype" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-actiontype" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
@@ -18720,6 +18864,21 @@
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-targeting" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-targeting" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-targeting" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-targeting" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
 												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-rangeself" />
 												<div class="wuxInteractiveContent">
 													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-rangeself" />
@@ -18864,6 +19023,21 @@
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-combatkeywords" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-combatkeywords" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-combatkeywords" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-combatkeywords" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
 												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-trt-accurate" />
 												<div class="wuxInteractiveContent">
 													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-trt-accurate" />
@@ -18930,6 +19104,21 @@
 
 									</span><span>Social Keywords</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_techfiltertype-socialkeywords_expand" value="0">
 								<div class="wuxHiddenAuxField">
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-socialkeywords" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-socialkeywords" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-socialkeywords" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-socialkeywords" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
@@ -19002,6 +19191,21 @@
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-supportkeywords" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-supportkeywords" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-supportkeywords" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-supportkeywords" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
 												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-trt-cleanse" />
 												<div class="wuxInteractiveContent">
 													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-trt-cleanse" />
@@ -19068,6 +19272,21 @@
 
 									</span><span>Utility Keywords</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_techfiltertype-utilitykeywords_expand" value="0">
 								<div class="wuxHiddenAuxField">
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-utilitykeywords" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-utilitykeywords" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-utilitykeywords" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-utilitykeywords" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
@@ -19215,6 +19434,21 @@
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-defense" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-defense" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-defense" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-defense" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
 												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-def-brace" />
 												<div class="wuxInteractiveContent">
 													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-def-brace" />
@@ -19326,6 +19560,21 @@
 
 									</span><span>Damage Types</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_techfiltertype-damagetype_expand" value="0">
 								<div class="wuxHiddenAuxField">
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-damagetype" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-damagetype" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-damagetype" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-damagetype" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
@@ -19470,6 +19719,21 @@
 
 									</span><span>Status (Beneficial)</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_techfiltertype-statusgood_expand" value="0">
 								<div class="wuxHiddenAuxField">
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-statusgood" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-statusgood" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-statusgood" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-statusgood" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
@@ -19659,6 +19923,21 @@
 
 									</span><span>Status (Harmful)</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_techfiltertype-statusbad_expand" value="0">
 								<div class="wuxHiddenAuxField">
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-statusbad" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-statusbad" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-statusbad" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-statusbad" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
@@ -19896,6 +20175,21 @@
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-weaponkeywords" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-weaponkeywords" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-weaponkeywords" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-weaponkeywords" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
 												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-trt-hammer" />
 												<div class="wuxInteractiveContent">
 													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-trt-hammer" />
@@ -20070,6 +20364,21 @@
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-athleticskills" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-athleticskills" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-athleticskills" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-athleticskills" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
 												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-skl-agility" />
 												<div class="wuxInteractiveContent">
 													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-skl-agility" />
@@ -20151,6 +20460,21 @@
 
 									</span><span>Magic Skills</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_techfiltertype-magicskills_expand" value="0">
 								<div class="wuxHiddenAuxField">
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-magicskills" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-magicskills" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-magicskills" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-magicskills" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
@@ -20253,6 +20577,21 @@
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-socialskills" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-socialskills" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-socialskills" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-socialskills" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
 												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-skl-charm" />
 												<div class="wuxInteractiveContent">
 													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-skl-charm" />
@@ -20349,6 +20688,21 @@
 
 									</span><span>World Skills</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_techfiltertype-worldskills_expand" value="0">
 								<div class="wuxHiddenAuxField">
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_techfilterpopup-techfiltertype-worldskills" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-worldskills" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-worldskills" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_techfilterpopup-techfiltertype-worldskills" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
@@ -20457,6 +20811,21 @@
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_popup-finditemsbyfilter-equipfilter-weapontype" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-equipfilter-weapontype" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-equipfilter-weapontype" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-equipfilter-weapontype" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
 												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_popup-finditemsbyfilter-equipfilter-melee" />
 												<div class="wuxInteractiveContent">
 													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-equipfilter-melee" />
@@ -20508,6 +20877,21 @@
 
 									</span><span>Weapon Keywords</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_equipfilter-weaponkeywords_expand" value="0">
 								<div class="wuxHiddenAuxField">
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_popup-finditemsbyfilter-equipfilter-weaponkeywords" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-equipfilter-weaponkeywords" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-equipfilter-weaponkeywords" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-equipfilter-weaponkeywords" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
@@ -20685,6 +21069,21 @@
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_popup-finditemsbyfilter-equipfilter-tooltype" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-equipfilter-tooltype" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-equipfilter-tooltype" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-equipfilter-tooltype" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
 												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_popup-finditemsbyfilter-equipfilter-comms" />
 												<div class="wuxInteractiveContent">
 													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-equipfilter-comms" />
@@ -20769,6 +21168,21 @@
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_popup-finditemsbyfilter-equipfilter-toolkeywords" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-equipfilter-toolkeywords" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-equipfilter-toolkeywords" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-equipfilter-toolkeywords" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
 												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_popup-finditemsbyfilter-trt-magitech" />
 												<div class="wuxInteractiveContent">
 													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-trt-magitech" />
@@ -20850,6 +21264,21 @@
 
 									</span><span>Apparel Category</span></div><input type="hidden" class="wuxHiddenField-flag" name="attr_equipfilter-appareltype_expand" value="0">
 								<div class="wuxHiddenAuxField">
+									<div class="wuxFilterPopupContentData">
+										<div class="wuxInteractiveBlock">
+											<div class="wuxInteractiveInnerBlock">
+												<input type="checkbox" class="wuxInteractiveContent-flag" name="attr_popup-finditemsbyfilter-equipfilter-appareltype" />
+												<div class="wuxInteractiveContent">
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-equipfilter-appareltype" />
+													<span class="wuxInteractiveIcon">&#9635;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-equipfilter-appareltype" />
+													<span class="wuxInteractiveAuxIcon">&#9634;</span>
+													<input type="hidden" class="wuxInteractiveIcon-flag" name="attr_popup-finditemsbyfilter-equipfilter-appareltype" />
+													All
+												</div>
+											</div>
+										</div>
+									</div>
 									<div class="wuxFilterPopupContentData">
 										<div class="wuxInteractiveBlock">
 											<div class="wuxInteractiveInnerBlock">
@@ -23370,6 +23799,72 @@ WuxWorkerFilterPopup.ApplyFilter()
 
 on("change:popup-clearfilter", function (eventinfo) {
 WuxWorkerFilterPopup.ClearFilter()
+});
+on("change:techfilterpopup-techfiltertype-techcategory", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["techfilterpopup-techfiltertype-combat", "techfilterpopup-techfiltertype-social", "techfilterpopup-techfiltertype-utility"])
+});
+on("change:techfilterpopup-techfiltertype-techsource", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["techfilterpopup-techfiltertype-basic", "techfilterpopup-techfiltertype-job", "techfilterpopup-techfiltertype-style", "techfilterpopup-techfiltertype-gear", "techfilterpopup-techfiltertype-perk"])
+});
+on("change:techfilterpopup-techfiltertype-actiontype", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["techfilterpopup-techfiltertype-swiftaction", "techfilterpopup-techfiltertype-assistaction", "techfilterpopup-techfiltertype-quickaction", "techfilterpopup-techfiltertype-fullaction", "techfilterpopup-techfiltertype-reactionaction", "techfilterpopup-techfiltertype-briefaction", "techfilterpopup-techfiltertype-shortaction", "techfilterpopup-techfiltertype-longaction", "techfilterpopup-techfiltertype-passiveaction"])
+});
+on("change:techfilterpopup-techfiltertype-targeting", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["techfilterpopup-techfiltertype-rangeself", "techfilterpopup-techfiltertype-rangemelee", "techfilterpopup-techfiltertype-rangeclose", "techfilterpopup-techfiltertype-rangeshort", "techfilterpopup-techfiltertype-rangeshortarea", "techfilterpopup-techfiltertype-rangelong", "techfilterpopup-techfiltertype-rangelongarea", "techfilterpopup-techfiltertype-rangespecial"])
+});
+on("change:techfilterpopup-techfiltertype-combatkeywords", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["techfilterpopup-trt-accurate", "techfilterpopup-trt-ap", "techfilterpopup-trt-truehit"])
+});
+on("change:techfilterpopup-techfiltertype-socialkeywords", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["techfilterpopup-trt-favor", "techfilterpopup-trt-influence", "techfilterpopup-trt-request"])
+});
+on("change:techfilterpopup-techfiltertype-supportkeywords", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["techfilterpopup-trt-cleanse", "techfilterpopup-trt-en", "techfilterpopup-trt-heal"])
+});
+on("change:techfilterpopup-techfiltertype-utilitykeywords", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["techfilterpopup-trt-breakfocus", "techfilterpopup-trt-forcemove", "techfilterpopup-trt-illusion", "techfilterpopup-trt-move", "techfilterpopup-trt-move-sneak", "techfilterpopup-trt-move-special", "techfilterpopup-trt-structure", "techfilterpopup-trt-terrain"])
+});
+on("change:techfilterpopup-techfiltertype-defense", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["techfilterpopup-def-brace", "techfilterpopup-def-disruption", "techfilterpopup-def-evasion", "techfilterpopup-sen-resolve", "techfilterpopup-sen-insight", "techfilterpopup-sen-logic"])
+});
+on("change:techfilterpopup-techfiltertype-damagetype", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["techfilterpopup-dmg-burn", "techfilterpopup-dmg-cold", "techfilterpopup-dmg-energy", "techfilterpopup-dmg-force", "techfilterpopup-dmg-piercing", "techfilterpopup-dmg-psyche", "techfilterpopup-dmg-tension", "techfilterpopup-dmg-weapon"])
+});
+on("change:techfilterpopup-techfiltertype-statusgood", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["techfilterpopup-sts-hidden", "techfilterpopup-sts-invisible", "techfilterpopup-sts-burn_aegis", "techfilterpopup-sts-cold_aegis", "techfilterpopup-sts-dodge", "techfilterpopup-sts-empowered", "techfilterpopup-sts-iron_plates", "techfilterpopup-sts-quickened", "techfilterpopup-sts-sand_aegis", "techfilterpopup-sts-shielded", "techfilterpopup-sts-shock_aegis"])
+});
+on("change:techfilterpopup-techfiltertype-statusbad", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["techfilterpopup-sts-grappled", "techfilterpopup-sts-aflame", "techfilterpopup-sts-chilled", "techfilterpopup-sts-earthblight", "techfilterpopup-sts-hindered", "techfilterpopup-sts-immobilized", "techfilterpopup-sts-jolted", "techfilterpopup-sts-magnetized", "techfilterpopup-sts-prone", "techfilterpopup-sts-sickened", "techfilterpopup-sts-soaked", "techfilterpopup-sts-static", "techfilterpopup-sts-stunned", "techfilterpopup-sts-vined"])
+});
+on("change:techfilterpopup-techfiltertype-weaponkeywords", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["techfilterpopup-trt-hammer", "techfilterpopup-trt-heavyblade", "techfilterpopup-trt-lightblade", "techfilterpopup-trt-polearm", "techfilterpopup-trt-whip", "techfilterpopup-trt-bow", "techfilterpopup-trt-handgun", "techfilterpopup-trt-longshot", "techfilterpopup-trt-scattershot", "techfilterpopup-trt-thrownblade"])
+});
+on("change:techfilterpopup-techfiltertype-athleticskills", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["techfilterpopup-skl-agility", "techfilterpopup-skl-aim", "techfilterpopup-skl-martial", "techfilterpopup-skl-physique"])
+});
+on("change:techfilterpopup-techfiltertype-magicskills", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["techfilterpopup-skl-energize", "techfilterpopup-skl-flux", "techfilterpopup-skl-materialize", "techfilterpopup-skl-physio", "techfilterpopup-skl-transmute"])
+});
+on("change:techfilterpopup-techfiltertype-socialskills", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["techfilterpopup-skl-charm", "techfilterpopup-skl-demoralize", "techfilterpopup-skl-inspire", "techfilterpopup-skl-misdirect", "techfilterpopup-skl-rationalize"])
+});
+on("change:techfilterpopup-techfiltertype-worldskills", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["techfilterpopup-skl-analyze", "techfilterpopup-skl-empathy", "techfilterpopup-skl-medicine", "techfilterpopup-skl-notice", "techfilterpopup-skl-resonance"])
+});
+on("change:popup-finditemsbyfilter-equipfilter-weapontype", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["popup-finditemsbyfilter-equipfilter-melee", "popup-finditemsbyfilter-equipfilter-ranged"])
+});
+on("change:popup-finditemsbyfilter-equipfilter-weaponkeywords", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["popup-finditemsbyfilter-trt-hammer", "popup-finditemsbyfilter-trt-heavyblade", "popup-finditemsbyfilter-trt-lightblade", "popup-finditemsbyfilter-trt-polearm", "popup-finditemsbyfilter-trt-whip", "popup-finditemsbyfilter-trt-bow", "popup-finditemsbyfilter-trt-handgun", "popup-finditemsbyfilter-trt-longshot", "popup-finditemsbyfilter-trt-scattershot", "popup-finditemsbyfilter-trt-thrownblade"])
+});
+on("change:popup-finditemsbyfilter-equipfilter-tooltype", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["popup-finditemsbyfilter-equipfilter-comms", "popup-finditemsbyfilter-equipfilter-bindings", "popup-finditemsbyfilter-equipfilter-light", "popup-finditemsbyfilter-equipfilter-misc"])
+});
+on("change:popup-finditemsbyfilter-equipfilter-toolkeywords", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["popup-finditemsbyfilter-trt-magitech", "popup-finditemsbyfilter-trt-medkit", "popup-finditemsbyfilter-trt-dustcontainer", "popup-finditemsbyfilter-trt-fishingtool"])
+});
+on("change:popup-finditemsbyfilter-equipfilter-appareltype", function (eventinfo) {
+WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, ["popup-finditemsbyfilter-equipfilter-chest", "popup-finditemsbyfilter-equipfilter-head", "popup-finditemsbyfilter-equipfilter-eyes", "popup-finditemsbyfilter-equipfilter-back", "popup-finditemsbyfilter-equipfilter-arms", "popup-finditemsbyfilter-equipfilter-legs", "popup-finditemsbyfilter-equipfilter-feet"])
 });
 on("change:popup-manualopen", function (eventinfo) {
 WuxWorkerManual.OpenManual(eventinfo)

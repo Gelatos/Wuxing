@@ -1071,6 +1071,7 @@ var PopupBuilder = PopupBuilder || (function () {
             output += listenerLoadMoreCatalogItems();
             output += listenerInspectPopupButtons();
             output += listenerFilterPopupButtons();
+            output += listenerFilterPopupCategoryAllToggles();
             output += listenerOpenManual();
             output += listenerCloseManual();
             output += listenerOpenManualForStatus();
@@ -1304,6 +1305,34 @@ var PopupBuilder = PopupBuilder || (function () {
                 `WuxWorkerFilterPopup.ApplyFilter()`, false)}
                 ${WuxSheetBackend.OnChange([`${WuxDef.GetVariable("Popup_ClearFilter")}`],
                 `WuxWorkerFilterPopup.ClearFilter()`, false)}`;
+        },
+        // Filter/Item popup's per-category "All" toggle (WuxGS-FilterDisplayBuilder.js's
+        // printAllOption, always the first option under each category) - one
+        // OnChange per category, since WuxWorkerFilterPopup.ToggleAllInFilterCategory
+        // needs that category's own explicit option list (eventinfo carries no
+        // way to derive it). Same TechniqueFilterDefinitions/EquipmentFilterDefinitions
+        // instances buildTechniqueFilters/buildItemFilters (WuxGS-Base.js) build
+        // the checkboxes from, so the trigger/option names here always match
+        // what's actually rendered.
+        listenerFilterPopupCategoryAllToggles = function () {
+            let output = "";
+            let filterDefsList = [
+                new TechniqueFilterDefinitions("TechFilterPopup"),
+                new EquipmentFilterDefinitions("Popup_FindItemsByFilter")
+            ];
+            for (let filterDefs of filterDefsList) {
+                for (let key of filterDefs.getKeys()) {
+                    let options = filterDefs.getDefinitions(key);
+                    if (options.length === 0) {
+                        continue;
+                    }
+                    let allTrigger = filterDefs.getCompoundVariable(WuxDef.Get(key));
+                    let optionVars = options.map(option => `"${filterDefs.getCompoundVariable(option)}"`).join(", ");
+                    output += WuxSheetBackend.OnChange([allTrigger],
+                        `WuxWorkerFilterPopup.ToggleAllInFilterCategory(eventinfo, [${optionVars}])`, true);
+                }
+            }
+            return output;
         },
         // The nav-row "?" button (WuxGS-Base.js's buildManualOpenButton) - same
         // single-attribute popup-open trigger as listenerSeeAllPerkTechniques
