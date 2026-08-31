@@ -1460,7 +1460,7 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                 techUseResolver.sourceSheetName, techUseResolver.targetTokenEffect.tokenTargetData.tokenId);
             let techDisplayData = new TechniqueEffectDisplayUseData("",
                 techUseResolver.senderTokenEffect.tokenTargetData.displayName, techUseResolver.targetTokenEffect.tokenTargetData.displayName,
-                senderAttrHandler);
+                senderAttrHandler, targetAttrHandler);
 
             let attrGetters = new TechniqueTargetObjectCollection(senderAttrHandler, targetAttrHandler);
             let attrSetters = new TechniqueTargetObjectCollection(

@@ -3974,11 +3974,17 @@ class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
     // who the effect targets (see calculateFormula's callers), so
     // formatCalcBonus uses it to show the resolved number with the source
     // stat as hover text - see formatCalcBonus below.
-    constructor(props, senderName, targetName, senderAttributeHandler) {
+    // targetAttributeHandler (optional): same, for the technique's own cast
+    // target - only used for a handful of stats (Move/Dash Speed, same
+    // "resolve off whoever's affected, not the sender" fix as Regen Value
+    // gets in TechniqueUseResolver.addHPEffect) that formatCalcBonus special-
+    // cases below.
+    constructor(props, senderName, targetName, senderAttributeHandler, targetAttributeHandler) {
         super(props);
         this.senderName = senderName;
         this.targetName = targetName;
         this.senderAttributeHandler = senderAttributeHandler;
+        this.targetAttributeHandler = targetAttributeHandler;
     }
 
     formatEffect(effect) {
@@ -4065,6 +4071,18 @@ class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
             return output;
         }
 
+        // Move/Dash Speed (Cmb_Mv/Cmb_MvDash) describe whoever's actually
+        // moving, not necessarily the caster - same "resolve off the
+        // affected side, not the sender" fix as Regen Value (Cmb_HV,
+        // TechniqueUseResolver.addHPEffect, WAPI-Combat.js). effect.target
+        // ("Self" vs. the cast target) routes to the same side
+        // TechniqueTargetObjectCollection.getObjByTarget would, so a
+        // Self-targeted Move effect still reads your own speed.
+        let usesMoveStat = effect.formula.hasWorker(WuxDef.GetVariable("Cmb_Mv")) || effect.formula.hasWorker(WuxDef.GetVariable("Cmb_MvDash"));
+        let attributeHandler = usesMoveStat && effect.target != "Self" && this.targetAttributeHandler != undefined
+            ? this.targetAttributeHandler
+            : this.senderAttributeHandler;
+
         let formulaString;
         try {
             // Same hover-tooltip convention as damage/skill-check totals
@@ -4077,10 +4095,10 @@ class TechniqueEffectDisplayUseData extends BaseTechniqueEffectDisplayData {
             // "[Label:value]" delimiters for the FormeTechniques repeater -
             // reformat those into "Label[value]" rather than duplicating all
             // of its branching a third time.
-            formulaString = this.senderAttributeHandler != undefined
+            formulaString = attributeHandler != undefined
                 ? Format.ShowTooltip(
-                    effect.formula.getValue(this.senderAttributeHandler),
-                    effect.formula.getCharacterString(this.senderAttributeHandler).replace(/\[([^:\]]*):([^\]]*)\]/g, "$1[$2]"))
+                    effect.formula.getValue(attributeHandler),
+                    effect.formula.getCharacterString(attributeHandler).replace(/\[([^:\]]*):([^\]]*)\]/g, "$1[$2]"))
                 : effect.formula.getString();
         } catch (e) {
             formulaString = `Something went wrong: ${e}`;
