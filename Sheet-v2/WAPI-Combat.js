@@ -254,13 +254,12 @@ var WuxConflictManager = WuxConflictManager || (function () {
                     newAttributeHandler.run();
                 });
                 
+                // Round-start RoundEN gain removed - only the very first
+                // round of a conflict still sets everyone's starting EN.
                 if (startConflict) {
                     tokenTargetData.setEnergyToStart(attributeHandler);
                 }
-                else {
-                    tokenTargetData.addStartRoundEnergy(attributeHandler);
-                }
-                
+
                 switch (state.WuxConflictManager.conflictType) {
                     case "Battle":
                         if (tokenTargetData.getDowned()) {
@@ -1344,7 +1343,19 @@ class TechniqueCreateStructureResolver extends TechniqueResolverData {
 }
 
 class TechniqueCheckResolver extends TechniqueSkillCheckResolver {
-    
+
+    // Overrides TechniqueSkillCheckResolver's own "X uses Y on Z" - this
+    // resolver (the Check button, WCS-RollTemplates.html) only ever shows
+    // pass-odds (printPassChance below), never actually applies the
+    // technique's effects, so its own initial message should read as a
+    // chance/probability instead of an action already taken. TechniqueUseResolver
+    // (the Use/Target Effects button) doesn't override this - it keeps the
+    // original "X uses Y on Z" wording, since it's the one that actually
+    // resolves the technique.
+    addInitialMessage() {
+        this.addMessage(`Chance for ${this.technique.name} effects to trigger against ${this.targetTokenEffect.tokenTargetData.displayName}`);
+    }
+
     performEffects(techCheckResolver, senderAttrHandler, targetAttributeHandler) {
         this.printPassChance();
         this.printMessages();
@@ -1933,6 +1944,21 @@ class TechniqueUseResolver extends TechniqueSkillCheckResolver {
                 break;
             case "Remove":
                 tokenEffect.tryAddStatusResult(techniqueEffect.effect, "remove", roll.total);
+                // Shielded specifically affects how a damage roll gets
+                // computed later in this SAME technique resolution
+                // (TokenTargetEffectsData.performDamageRolls's
+                // modifyDamageRollShieldedCheck, WAPI-Target.js) - that check
+                // reads the token note directly and always runs before the
+                // queued removal above (tryAddStatusResult/
+                // performStatusResults) actually writes anything, since that
+                // one defers its write until attrSetters.run() much later.
+                // Removing it here too, immediately, is what makes "remove
+                // Shielded, then deal damage" techniques (Quick Armorsmash,
+                // etc.) actually apply undiminished damage instead of still
+                // being treated as Shielded.
+                if (techniqueEffect.effect == "Stat_Shielded") {
+                    tokenEffect.tokenTargetData.removeStatusImmediate("Stat_Shielded");
+                }
                 break;
             case "Remove Any":
             case "Remove All":

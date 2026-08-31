@@ -810,6 +810,12 @@ class TokenTargetData extends TargetData {
         this.modifyStatus(attributeHandler, statusDefinitionName, "remove");
     }
     
+    removeStatusImmediate(statusDefinitionName) {
+        let tokenNoteReference = new TokenNoteReference(this.getTokenNote());
+        tokenNoteReference.statusHandler.removeStatus(statusDefinitionName);
+        this.setTokenNote(JSON.stringify(tokenNoteReference));
+    }
+
     removeAllStatus(attributeHandler) {
         let tokenTargetData = this;
         tokenTargetData.refreshCombatDetails(attributeHandler);
@@ -1417,9 +1423,6 @@ class TokenTargetEffectsData {
                     surgeResults.newValue = surgeResults.current - 1;
                     results.newValue = results.max;
                     Debug.Log("Setting will results to " + results.newValue);
-                    // if (results.newValue <= 0) {
-                    //     results.newValue = 1; // we do not allow multiple willbreaks to occur. Willpower always restores to at least 1
-                    // }
                     targetEffect.effectMessages.push(`${targetEffect.tokenTargetData.displayName} consumes a Surge. ` +
                         `${targetEffect.tokenTargetData.displayName} fully heals Will ` +
                         (damageRoll.total > 0 ? `then takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} damage.` : ""));
@@ -1542,12 +1545,6 @@ class TokenNoteReference {
         this.vitality = {current: 0, max: 0};
         this.teamIndex = 0;
         this.personality = "";
-        // Structure tokens (TechniqueCreateStructureResolver, WAPI-Combat.js)
-        // have no linked character at all, so their defenses/damage resist
-        // have nowhere else to live - undefined by default (not a zeroed
-        // object like surges/vitality above), so CombatDetailsHandler.
-        // setDataFromTokenNote only overrides a character-linked token's own
-        // combat details when a token note actually set them.
         this.defenses = undefined;
         this.damageResist = undefined;
         this.displayStyle = undefined;
@@ -2834,11 +2831,12 @@ var TokenReference = TokenReference || (function () {
         setTokenForBattle = function (tokenTargetData, attributeHandler) {
             let hpVar = WuxDef.GetVariable("HP");
             let willpowerVar = WuxDef.GetVariable("WILL");
-            let enVar = WuxDef.GetVariable("EN");
             let fullNameVar = WuxDef.GetVariable("FullName");
-            attributeHandler.addAttribute([hpVar, willpowerVar, enVar, fullNameVar]);
+            attributeHandler.addAttribute([hpVar, willpowerVar, fullNameVar]);
             tokenTargetData.importTokenNoteReferenceData(attributeHandler);
             tokenTargetData.refreshCombatDetails(attributeHandler);
+
+            tokenTargetData.setEnergyToStart(attributeHandler);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 tokenTargetData.setBar(1, attrHandler.getAttribute(hpVar), true, true);
@@ -2849,7 +2847,6 @@ var TokenReference = TokenReference || (function () {
                     tokenTargetData.unlinkBar(2);
                 }
 
-                tokenTargetData.setEnergyIcon(attrHandler.parseInt(enVar, 0, false));
                 tokenTargetData.combatDetails.onUpdateDisplayStyle(attrHandler, "Battle");
 
                 let tokenNoteReference = new TokenNoteReference(tokenTargetData.getTokenNote());
@@ -2878,11 +2875,12 @@ var TokenReference = TokenReference || (function () {
             let patienceVar = WuxDef.GetVariable("Soc_Impatience");
             let willpowerVar = WuxDef.GetVariable("WILL");
             let favorVar = WuxDef.GetVariable("Soc_Favor");
-            let enVar = WuxDef.GetVariable("EN");
             let fullNameVar = WuxDef.GetVariable("FullName");
-            attributeHandler.addAttribute([patienceVar, willpowerVar, favorVar, enVar, fullNameVar]);
+            attributeHandler.addAttribute([patienceVar, willpowerVar, favorVar, fullNameVar]);
             tokenTargetData.importTokenNoteReferenceData(attributeHandler);
             tokenTargetData.refreshCombatDetails(attributeHandler);
+
+            tokenTargetData.setEnergyToStart(attributeHandler);
 
             attributeHandler.addFinishCallback(function (attrHandler) {
                 tokenTargetData.setBar(1, attrHandler.getAttribute(patienceVar), true, true);
@@ -2895,7 +2893,6 @@ var TokenReference = TokenReference || (function () {
                     tokenTargetData.unlinkBar(3);
                 }
 
-                tokenTargetData.setEnergyIcon(attrHandler.parseInt(enVar, 0, false));
                 tokenTargetData.combatDetails.onUpdateDisplayStyle(attrHandler, "Social");
                 tokenTargetData.setCombatDetails(attrHandler);
             });
