@@ -17968,6 +17968,7 @@ var DisplayAdvancedSheet = DisplayAdvancedSheet || (function () {
                 <div class="wuxFeatureHeaderDisplayTitleBlock">
                     ${this.printName()}
                     ${this.printVariants()}
+                    ${this.printRankButtons()}
                     ${this.printActionType()}
                 </div>
                 ${contents}
@@ -17982,6 +17983,18 @@ var DisplayAdvancedSheet = DisplayAdvancedSheet || (function () {
     }
 
     printVariants() {}
+
+    // Increase/Decrease Rank - only TechniqueRepeaterDisplayBuilderUsable
+    // overrides this (RepeatingFormeTech is the only repeater with a rank to
+    // change). Explicit "" (not the bare no-return stub printVariants() uses
+    // above, which prints literally as the string "undefined" unless every
+    // other subclass remembers to override it back to "" - see
+    // BaseTechniqueDisplayBuilder's own printVariants() comment) since every
+    // other caller here (items, static/non-repeater technique displays) has
+    // nothing to print for this.
+    printRankButtons() {
+        return "";
+    }
 
     printActionType() {}
     printActionTypeField (input, contents) {
@@ -18558,33 +18571,45 @@ class TechniqueRepeaterDisplayBuilderUsable extends TechniqueRepeaterDisplayBuil
     printEnhancementEffects() {
         // Enhance effect text is piggybacked onto TechOnEnter's max slot.
         let fieldName = this.getActionTypeAttribute("TechOnEnter", WuxDef._max);
-
-        // Enabled flags are piggybacked onto the rank buttons' own max slots.
-        let rankUpField = this.getActionTypeAttribute("TechRankUp");
-        let rankUpButton = WuxSheetMain.HiddenSpanFieldToggle(this.getActionTypeAttribute("TechRankUp", WuxDef._max),
-            WuxSheetMain.Button(rankUpField, "<span class='wuxFeatureButtonIcon'>&#43;</span> Increase Rank", "wuxFeatureButton"),
-            WuxSheetMain.Button(rankUpField, "<span class='wuxFeatureButtonIcon'>&#43;</span> Increase Rank", "wuxFeatureButtonDisabled"));
-        let rankDownField = this.getActionTypeAttribute("TechRankDown");
-        let rankDownButton = WuxSheetMain.HiddenSpanFieldToggle(this.getActionTypeAttribute("TechRankDown", WuxDef._max),
-            WuxSheetMain.Button(rankDownField, "<span class='wuxFeatureButtonIcon'>&#8722;</span> Decrease Rank", "wuxFeatureButton"),
-            WuxSheetMain.Button(rankDownField, "<span class='wuxFeatureButtonIcon'>&#8722;</span> Decrease Rank", "wuxFeatureButtonDisabled"));
-        let contents = `<div class="wuxFeatureHeaderInfoEffect-EnhanceButtons">${rankDownButton}${rankUpButton}</div>`;
-
-        let enhancementBlock = WuxSheetMain.HiddenField(fieldName,
-            `${this.printEnhancementEffectsField(this.printSpan(fieldName))}
-            ${contents}`
-        );
+        let enhancementBlock = WuxSheetMain.HiddenField(fieldName, this.printEnhancementEffectsField(this.printSpan(fieldName)));
 
         // Hidden outright while editing a custom filter - printFilterEditButtons
         // (below) takes over as this technique's action row instead. Every
         // technique gets that in edit mode, not just ones with an enhance
         // effect, so it can't just nest inside this fieldName-gated block -
-        // this wraps the WHOLE thing (rank buttons included) in a second,
-        // outer toggle instead. HiddenAuxField shows its content when the
-        // flag is "0" (not editing, the default) and hides it otherwise -
-        // the mirror image of printFilterEditButtons' own HiddenField below.
+        // this wraps the WHOLE thing in a second, outer toggle instead.
+        // HiddenAuxField shows its content when the flag is "0" (not editing,
+        // the default) and hides it otherwise - the mirror image of
+        // printFilterEditButtons' own HiddenField below.
         let editModeRowFlag = this.getActionTypeAttribute("Forme_EditFilter", WuxDef._max);
         return WuxSheetMain.HiddenAuxField(editModeRowFlag, enhancementBlock);
+    }
+
+    printRankButtons() {
+        let rankUpField = this.getActionTypeAttribute("TechRankUp");
+        // wuxRankButtonIcon-Up/-Down are empty spans - the triangle itself is
+        // drawn in pure CSS (WCSS-Specialized.css), not a text character, so
+        // it can't overflow the button's box the way an arrow glyph did.
+        let rankUpButton = WuxSheetMain.HiddenSpanFieldToggle(this.getActionTypeAttribute("TechRankUp", WuxDef._max),
+            WuxSheetMain.Button(rankUpField, "<span class='wuxFeatureButtonIcon wuxRankButtonIcon-Up'></span>", "wuxFeatureButton"),
+            WuxSheetMain.Button(rankUpField, "<span class='wuxFeatureButtonIcon wuxRankButtonIcon-Up'></span>", "wuxFeatureButtonDisabled"));
+        let rankDownField = this.getActionTypeAttribute("TechRankDown");
+        let rankDownButton = WuxSheetMain.HiddenSpanFieldToggle(this.getActionTypeAttribute("TechRankDown", WuxDef._max),
+            WuxSheetMain.Button(rankDownField, "<span class='wuxFeatureButtonIcon wuxRankButtonIcon-Down'></span>", "wuxFeatureButton"),
+            WuxSheetMain.Button(rankDownField, "<span class='wuxFeatureButtonIcon wuxRankButtonIcon-Down'></span>", "wuxFeatureButtonDisabled"));
+        let contents = `<div class="wuxTechRankButtons"><span class="wuxTechRankButtonsLabel">Change Rank: </span>${rankDownButton}${rankUpButton}</div>`;
+
+        // Only techniques with an enhancement effect can have their rank
+        // increased at all - same gate printEnhancementEffects' own text
+        // used to apply to this whole block back when the buttons lived
+        // there (TechOnEnter's max slot is empty for a technique with no
+        // enhancement effect, so HiddenField hides this row entirely for
+        // those instead of showing a permanently-disabled pair of arrows).
+        let fieldName = this.getActionTypeAttribute("TechOnEnter", WuxDef._max);
+        let rankButtonsBlock = WuxSheetMain.HiddenField(fieldName, contents);
+
+        let editModeRowFlag = this.getActionTypeAttribute("Forme_EditFilter", WuxDef._max);
+        return WuxSheetMain.HiddenAuxField(editModeRowFlag, rankButtonsBlock);
     }
 
     // Custom-filter edit mode's per-technique Hide/Show pair - shown for

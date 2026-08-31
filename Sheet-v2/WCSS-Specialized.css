@@ -1462,6 +1462,114 @@ button[type=roll].wuxFeatureHeaderNameButton span,
     color: #000;
 }
 
+/*========================================
+    Technique Rank Buttons
+========================================*/
+
+/* Increase/Decrease Rank - same "label + row of icon-only buttons" layout as
+   the Variants row above (printRankButtons, WuxGS-FeatureDisplayBuilder.js),
+   placed directly below it instead of at the bottom of the card. Always
+   shown (unlike .wuxTechVariantButtons, which hides when no variant slot is
+   set) - Increase/Decrease Rank apply to every technique, just individually
+   disabled via .wuxFeatureButtonDisabled when not currently available. */
+.wuxTechRankButtons
+{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+    margin: 2px 0;
+    margin-left: 5px;
+}
+
+.wuxTechRankButtonsLabel
+{
+    font-size: 10px;
+    font-weight: bold;
+    color: #000;
+}
+
+/* Shrunk to match .wuxTechVariantButton's own 16x16 footprint - these still
+   use the shared .wuxFeatureButton/.wuxFeatureButtonDisabled classes (same
+   ones the Hide/Show buttons elsewhere use), so scoped to this row only
+   rather than resizing those classes everywhere. */
+.wuxTechRankButtons div.wuxFeatureButton,
+.wuxTechRankButtons div.wuxFeatureButtonDisabled
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 16px;
+    width: 16px;
+    min-width: 16px;
+    max-height: 16px;
+    padding: 0;
+}
+
+.wuxTechRankButtons div.wuxFeatureButton span,
+.wuxTechRankButtons div.wuxFeatureButtonDisabled span
+{
+    padding: 0;
+}
+
+/* Pure CSS border-trick triangle instead of an arrow character - a text
+   glyph's bounding box varies enough by font/renderer that it overflowed
+   this 16x16 box (see the up/down arrow characters this replaced). A
+   0-size box with two transparent side borders and one colored border
+   renders as a triangle pointing away from the colored side - bottom
+   colored points up, top colored points down.
+   Selector includes the div.wuxFeatureButton/-Disabled ancestor (not just
+   .wuxTechRankButtons) specifically to outrank the shared, un-scoped
+   "div.wuxFeatureButton .wuxFeatureButtonIcon" sizing rule further down
+   this file (same class, higher specificity via its own extra "div") -
+   without that, its height:10px/max-height:10px was winning over this
+   rule's height:0, leaving the box too tall for a clean point. */
+.wuxTechRankButtons div.wuxFeatureButton .wuxFeatureButtonIcon,
+.wuxTechRankButtons div.wuxFeatureButtonDisabled .wuxFeatureButtonIcon
+{
+    display: inline-block;
+    width: 0;
+    height: 0;
+    max-height: none;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+}
+
+.wuxTechRankButtons .wuxRankButtonIcon-Up
+{
+    border-bottom: 6px solid #2b2b2b;
+}
+
+.wuxTechRankButtons .wuxRankButtonIcon-Down
+{
+    border-top: 6px solid #2b2b2b;
+}
+
+/* .wuxFeatureButtonDisabled normally dims icon color via its span's own
+   "color" rule (div.wuxFeatureButtonDisabled span, below) - doesn't reach a
+   border-drawn triangle, so it's restated here as a border-color instead. */
+.wuxTechRankButtons div.wuxFeatureButtonDisabled .wuxRankButtonIcon-Up
+{
+    border-bottom-color: #aaaaaa;
+}
+
+.wuxTechRankButtons div.wuxFeatureButtonDisabled .wuxRankButtonIcon-Down
+{
+    border-top-color: #aaaaaa;
+}
+
+/* div.wuxFeatureButton:hover normally zeroes out .wuxButton's own hover
+   glow (WCSS-Specialized.css, below) - re-enabled here, scoped to this row,
+   since an icon-only button needs more than the shared rule's text-dimming
+   (div.wuxFeatureButton:hover span) to read as interactive. The extra class
+   in the selector outweighs that rule's specificity, so this wins without
+   needing !important. */
+.wuxTechRankButtons div.wuxFeatureButton:hover
+{
+    background: linear-gradient(to bottom, #f4f6f8 0%, #cacbcf 70%, #a8aaac 100%);
+    box-shadow: #1d1e1f 0 0 3px;
+}
+
 .wuxTechVariantButton
 {
     height: 16px;
