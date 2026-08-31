@@ -920,6 +920,35 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
             attributeHandler.run();
         },
 
+        // Forme_ShowAllEffects/Forme_HideAllEffects (buildFilterPresetButtons,
+        // WuxGS-Base.js) - not to be confused with Forme_ShowAll/Forme_HideAll
+        // above (those bulk-toggle a technique's membership in the filter
+        // being edited); these bulk-toggle every technique's own Show/Hide
+        // Effects card state instead, unrelated to filter editing.
+        // FormeTechniqueDatabaseBase (not the heavier FormeTechniqueDatabase
+        // subclass showAllTechniques uses above) is all setAllTechniqueEffectsVisibility
+        // needs - it only iterates existing repeater rows, no techDictionary
+        // registration required.
+        showAllTechniqueEffects = function () {
+            Debug.Log("Showing All Technique Effects");
+            let attributeHandler = new WorkerAttributeHandler();
+            let formeTech = new FormeTechniqueDatabaseBase(attributeHandler);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                formeTech.setAllTechniqueEffectsVisibility(attrHandler, true);
+            });
+            attributeHandler.run();
+        },
+
+        hideAllTechniqueEffects = function () {
+            Debug.Log("Hiding All Technique Effects");
+            let attributeHandler = new WorkerAttributeHandler();
+            let formeTech = new FormeTechniqueDatabaseBase(attributeHandler);
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                formeTech.setAllTechniqueEffectsVisibility(attrHandler, false);
+            });
+            attributeHandler.run();
+        },
+
         // Forme_SetCustomFilter (Sheet-v2/Worker-FilterPopup.js's
         // SetCustomFilterPopup) - matchedTechniqueFilters is either a
         // DatabaseFilterData[] (something was picked in the popup) or
@@ -1226,6 +1255,8 @@ var WuxWorkerActions = WuxWorkerActions || (function () {
         ShowTechniqueInFilter: showTechniqueInFilter,
         HideAllTechniques: hideAllTechniques,
         ShowAllTechniques: showAllTechniques,
+        ShowAllTechniqueEffects: showAllTechniqueEffects,
+        HideAllTechniqueEffects: hideAllTechniqueEffects,
         ApplyFilterEditSelectionFromPopup: applyFilterEditSelectionFromPopup,
         ClearBaseFilterCheckboxes: clearBaseFilterCheckboxes,
         UpdateTechniqueChangeVisibility: updateTechniqueChangeVisibility,
@@ -1777,6 +1808,21 @@ class FormeTechniqueDatabaseBase {
             techniqueAttributeHandler.setId(id);
             let techniqueName = techniqueAttributeHandler.getTechniqueName();
             callback(techniqueAttributeHandler, techniqueName, repeater, id);
+        });
+    }
+    // Forme_ShowAllEffects/Forme_HideAllEffects (buildFilterPresetButtons,
+    // WuxGS-Base.js) - bulk-sets every technique's own Show/Hide Effects
+    // toggle (TechShowEffects, TechniqueRepeaterDisplayBuilderUsable.
+    // printShowEffectsToggle, WuxGS-FeatureDisplayBuilder.js) at once,
+    // instead of clicking through each card individually. Same iterate-every-
+    // row-and-write-one-flag shape as setFilterEditMode above.
+    // TechShowEffects' own value is inverted from what its name suggests -
+    // "0" means shown, non-"0" means hidden (see printShowEffectsToggle's
+    // own comment for why) - so isVisible=true writes "0" here, not "1".
+    setAllTechniqueEffectsVisibility(attrHandler, isVisible) {
+        this.iterateRepeaterTechniques(attrHandler, function (techniqueAttributeHandler, techniqueName, repeater) {
+            let showEffectsVar = techniqueAttributeHandler.getVariable("TechShowEffects");
+            attrHandler.addRepeatingSectionRowUpdate(repeater.definitionId, showEffectsVar, isVisible ? "0" : "1");
         });
     }
     tryUpdateRepeaterTechniqueDisplayInfoSet(techniqueAttributeHandler, techniqueName, repeater, id, characterAttrHandler, forceRebuild) {

@@ -13208,6 +13208,19 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let addFilterButton = `<div>${WuxSheetMain.Button(addFilterDef.getAttribute(),
                         `<span style="color:#4CAF50;">&#43;</span> ${addFilterDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>`;
 
+                    // Bulk-sets every technique card's own Show/Hide Effects
+                    // toggle (TechShowEffects, printShowEffectsToggle -
+                    // WuxGS-FeatureDisplayBuilder.js) at once instead of
+                    // clicking through each one - same wuxRepeatingTechActionButton
+                    // look as Add Custom Filter above, and the same
+                    // right/down-triangle glyphs each card's own toggle uses.
+                    let showAllEffectsDef = WuxDef.Get("Forme_ShowAllEffects");
+                    let hideAllEffectsDef = WuxDef.Get("Forme_HideAllEffects");
+                    let showHideAllEffectsButtons = `<div>${WuxSheetMain.Button(showAllEffectsDef.getAttribute(),
+                        `<span style="color:#4CAF50;">&#9662;</span> ${showAllEffectsDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                        ${WuxSheetMain.Button(hideAllEffectsDef.getAttribute(),
+                        `<span style="color:#4CAF50;">&#9656;</span> ${hideAllEffectsDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>`;
+
                     let customFilterDetails = buildCustomFilterDetails();
                     let filterEditModeSection = buildFilterEditModeSection();
 
@@ -13226,7 +13239,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         WuxSheetMain.CollapsibleHeader(`<span>${WuxDef.Get("Action_FormeTechniques").getTitle()}</span>`,
                             sectionExpandField, buildLoadFormeButton()));
                     let sectionContent = WuxSheetMain.HiddenAuxField(sectionExpandField,
-                        `${defaultFlag}${presetsDataField}${WuxSheetMain.Table.FlexTable(buttons.join(""))}${customFilterButtons}${addFilterButton}${customFilterDetails}${filterEditModeSection}`);
+                        `${defaultFlag}${presetsDataField}${WuxSheetMain.Table.FlexTable(buttons.join(""))}${customFilterButtons}${addFilterButton}${showHideAllEffectsButtons}${customFilterDetails}${filterEditModeSection}`);
 
                     return sectionHeader + sectionContent;
                 },
@@ -15373,6 +15386,8 @@ var ActionBuilder = ActionBuilder || (function () {
             output += listenerFinishTechFilter();
             output += listenerHideAllTechniques();
             output += listenerShowAllTechniques();
+            output += listenerShowAllTechniqueEffects();
+            output += listenerHideAllTechniqueEffects();
             output += listenerSetCustomFilter();
             output += listenerFilterEditButtons();
             output += listenerUpdateTechniqueChangeVisibility();
@@ -15517,6 +15532,17 @@ var ActionBuilder = ActionBuilder || (function () {
         listenerShowAllTechniques = function () {
             let showAllDef = WuxDef.Get("Forme_ShowAll");
             return WuxSheetBackend.OnChange([showAllDef.getVariable()], `WuxWorkerActions.ShowAllTechniques()`, false);
+        },
+        // Forme_ShowAllEffects/Forme_HideAllEffects (buildFilterPresetButtons) -
+        // not Forme_ShowAll/Forme_HideAll above (filter-edit membership) -
+        // bulk-toggles every technique card's own Show/Hide Effects state.
+        listenerShowAllTechniqueEffects = function () {
+            let showAllEffectsDef = WuxDef.Get("Forme_ShowAllEffects");
+            return WuxSheetBackend.OnChange([showAllEffectsDef.getVariable()], `WuxWorkerActions.ShowAllTechniqueEffects()`, false);
+        },
+        listenerHideAllTechniqueEffects = function () {
+            let hideAllEffectsDef = WuxDef.Get("Forme_HideAllEffects");
+            return WuxSheetBackend.OnChange([hideAllEffectsDef.getVariable()], `WuxWorkerActions.HideAllTechniqueEffects()`, false);
         },
         listenerSetCustomFilter = function () {
             let setCustomFilterDef = WuxDef.Get("Forme_SetCustomFilter");
@@ -18610,6 +18636,69 @@ class TechniqueRepeaterDisplayBuilderUsable extends TechniqueRepeaterDisplayBuil
 
         let editModeRowFlag = this.getActionTypeAttribute("Forme_EditFilter", WuxDef._max);
         return WuxSheetMain.HiddenAuxField(editModeRowFlag, rankButtonsBlock);
+    }
+
+    // Show/Hide Effects toggle - same button/format the Gear tab's owned-item
+    // technique section and the Learned Styles list already use
+    // (printCatalogItemTechniqueSection/addStyleListRepeaterContents,
+    // WuxGS-Base.js: wuxShowEffectsButton class, TechShowEffects attribute,
+    // HiddenFieldToggle). Name/Variants/Rank buttons (printRankButtons above)
+    // and the header's Action Type/Range/Cost row (printHeaderBlockField
+    // below) stay visible regardless of this toggle - only printInfoBlock's
+    // effects gate on it.
+    //
+    // Deliberately inverted from what the attribute name suggests: "0"
+    // (every never-before-set attribute's own reliable starting value - see
+    // every other HiddenFieldToggle in this app) means effects ARE shown;
+    // non-"0" means the user explicitly collapsed them. An earlier attempt
+    // gave HiddenField's own copy of the flag a "1" default (trying to make
+    // shown the default) while HiddenAuxField's own copy stayed hardcoded at
+    // "0" (it has no defaultValue parameter to override) - each button's own
+    // CSS condition matched its own literal starting value independently, so
+    // both showed at once instead of one hiding the other. Building this
+    // from the standard, unmodified HiddenFieldToggle - both branches
+    // sharing the one default they always agree on - avoids that entirely.
+    printShowEffectsToggle() {
+        let showEffectsAttr = this.getActionTypeAttribute("TechShowEffects");
+        return WuxSheetMain.HiddenFieldToggle(showEffectsAttr,
+            WuxSheetMain.Button(showEffectsAttr, "&#9662; Show Effects", "wuxShowEffectsButton"),
+            WuxSheetMain.Button(showEffectsAttr, "&#9656; Hide Effects", "wuxShowEffectsButton"));
+    }
+
+    // Overrides BaseFeatureDisplayBuilder's own version only to add the
+    // toggle button's own row below the header - Name/Variants/Rank
+    // buttons/Action Type/Range/Target/Cost (everything printHeaderBlockField
+    // already prints) stay visible either way, matching the header of every
+    // other technique display in the app; only printInfoBlock's effects
+    // (below) collapse.
+    printHeaderBlockField(contents) {
+        return `${super.printHeaderBlockField(contents)}
+            <div class="wuxCatalogSelectSection">
+                ${this.printShowEffectsToggle()}
+            </div>`;
+    }
+
+    // Overrides BaseTechniqueDisplayBuilder's own version to gate everything
+    // it normally prints behind TechShowEffects too - except
+    // printFilterEditButtons, which stays unwrapped so Hide/Show (custom
+    // filter edit mode) still works on a collapsed technique instead of
+    // requiring it to be expanded first.
+    printInfoBlock() {
+        let showEffectsAttr = this.getActionTypeAttribute("TechShowEffects");
+        let effectsContent = `${this.printTrigger()}
+            ${this.printTraits()}
+            ${this.printFlavorText()}
+            ${this.printCoreEffects()}
+            ${this.printOnEnter()}
+            ${this.printCheckEffects()}
+            ${this.printEndEffects()}
+            ${this.printWillBreakEffects()}
+            ${this.printEnhancementEffects()}`;
+        // HiddenAuxField (the "0"/default branch), not HiddenField - see
+        // printShowEffectsToggle's own comment on why "0" means shown here.
+        return this.printInfoBlockField(
+            `${WuxSheetMain.HiddenAuxField(showEffectsAttr, effectsContent)}
+            ${this.printFilterEditButtons()}`);
     }
 
     // Custom-filter edit mode's per-technique Hide/Show pair - shown for

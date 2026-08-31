@@ -688,6 +688,69 @@ class TechniqueRepeaterDisplayBuilderUsable extends TechniqueRepeaterDisplayBuil
         return WuxSheetMain.HiddenAuxField(editModeRowFlag, rankButtonsBlock);
     }
 
+    // Show/Hide Effects toggle - same button/format the Gear tab's owned-item
+    // technique section and the Learned Styles list already use
+    // (printCatalogItemTechniqueSection/addStyleListRepeaterContents,
+    // WuxGS-Base.js: wuxShowEffectsButton class, TechShowEffects attribute,
+    // HiddenFieldToggle). Name/Variants/Rank buttons (printRankButtons above)
+    // and the header's Action Type/Range/Cost row (printHeaderBlockField
+    // below) stay visible regardless of this toggle - only printInfoBlock's
+    // effects gate on it.
+    //
+    // Deliberately inverted from what the attribute name suggests: "0"
+    // (every never-before-set attribute's own reliable starting value - see
+    // every other HiddenFieldToggle in this app) means effects ARE shown;
+    // non-"0" means the user explicitly collapsed them. An earlier attempt
+    // gave HiddenField's own copy of the flag a "1" default (trying to make
+    // shown the default) while HiddenAuxField's own copy stayed hardcoded at
+    // "0" (it has no defaultValue parameter to override) - each button's own
+    // CSS condition matched its own literal starting value independently, so
+    // both showed at once instead of one hiding the other. Building this
+    // from the standard, unmodified HiddenFieldToggle - both branches
+    // sharing the one default they always agree on - avoids that entirely.
+    printShowEffectsToggle() {
+        let showEffectsAttr = this.getActionTypeAttribute("TechShowEffects");
+        return WuxSheetMain.HiddenFieldToggle(showEffectsAttr,
+            WuxSheetMain.Button(showEffectsAttr, "&#9662; Show Effects", "wuxShowEffectsButton"),
+            WuxSheetMain.Button(showEffectsAttr, "&#9656; Hide Effects", "wuxShowEffectsButton"));
+    }
+
+    // Overrides BaseFeatureDisplayBuilder's own version only to add the
+    // toggle button's own row below the header - Name/Variants/Rank
+    // buttons/Action Type/Range/Target/Cost (everything printHeaderBlockField
+    // already prints) stay visible either way, matching the header of every
+    // other technique display in the app; only printInfoBlock's effects
+    // (below) collapse.
+    printHeaderBlockField(contents) {
+        return `${super.printHeaderBlockField(contents)}
+            <div class="wuxCatalogSelectSection">
+                ${this.printShowEffectsToggle()}
+            </div>`;
+    }
+
+    // Overrides BaseTechniqueDisplayBuilder's own version to gate everything
+    // it normally prints behind TechShowEffects too - except
+    // printFilterEditButtons, which stays unwrapped so Hide/Show (custom
+    // filter edit mode) still works on a collapsed technique instead of
+    // requiring it to be expanded first.
+    printInfoBlock() {
+        let showEffectsAttr = this.getActionTypeAttribute("TechShowEffects");
+        let effectsContent = `${this.printTrigger()}
+            ${this.printTraits()}
+            ${this.printFlavorText()}
+            ${this.printCoreEffects()}
+            ${this.printOnEnter()}
+            ${this.printCheckEffects()}
+            ${this.printEndEffects()}
+            ${this.printWillBreakEffects()}
+            ${this.printEnhancementEffects()}`;
+        // HiddenAuxField (the "0"/default branch), not HiddenField - see
+        // printShowEffectsToggle's own comment on why "0" means shown here.
+        return this.printInfoBlockField(
+            `${WuxSheetMain.HiddenAuxField(showEffectsAttr, effectsContent)}
+            ${this.printFilterEditButtons()}`);
+    }
+
     // Custom-filter edit mode's per-technique Hide/Show pair - shown for
     // every technique while editing (Worker-Actions.js's
     // FormeTechniqueDatabaseBase.setFilterEditMode writes editModeRowFlag/

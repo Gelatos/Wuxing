@@ -9618,3 +9618,12 @@ div.wuxButton.wuxManualButton:hover span {
 .wuxFeatureHeaderInfoTraits div.wuxButton.wuxManualButton span {
     font-weight: bold;
 }
+
+/* printAttributeTooltip (WuxGS-FeatureDisplayBuilder.js) falls back to
+   plain "Traits" text (wrapped in .wuxHiddenInlineAuxField, not a
+   wuxManualButton) when there's no tooltip content to open - the rule
+   above only bolds the button variant, so that fallback text was
+   inheriting normal weight instead. */
+.wuxFeatureHeaderInfoTraits .wuxHiddenInlineAuxField {
+    font-weight: bold;
+}

@@ -879,6 +879,8 @@ var ActionBuilder = ActionBuilder || (function () {
             output += listenerFinishTechFilter();
             output += listenerHideAllTechniques();
             output += listenerShowAllTechniques();
+            output += listenerShowAllTechniqueEffects();
+            output += listenerHideAllTechniqueEffects();
             output += listenerSetCustomFilter();
             output += listenerFilterEditButtons();
             output += listenerUpdateTechniqueChangeVisibility();
@@ -1023,6 +1025,17 @@ var ActionBuilder = ActionBuilder || (function () {
         listenerShowAllTechniques = function () {
             let showAllDef = WuxDef.Get("Forme_ShowAll");
             return WuxSheetBackend.OnChange([showAllDef.getVariable()], `WuxWorkerActions.ShowAllTechniques()`, false);
+        },
+        // Forme_ShowAllEffects/Forme_HideAllEffects (buildFilterPresetButtons) -
+        // not Forme_ShowAll/Forme_HideAll above (filter-edit membership) -
+        // bulk-toggles every technique card's own Show/Hide Effects state.
+        listenerShowAllTechniqueEffects = function () {
+            let showAllEffectsDef = WuxDef.Get("Forme_ShowAllEffects");
+            return WuxSheetBackend.OnChange([showAllEffectsDef.getVariable()], `WuxWorkerActions.ShowAllTechniqueEffects()`, false);
+        },
+        listenerHideAllTechniqueEffects = function () {
+            let hideAllEffectsDef = WuxDef.Get("Forme_HideAllEffects");
+            return WuxSheetBackend.OnChange([hideAllEffectsDef.getVariable()], `WuxWorkerActions.HideAllTechniqueEffects()`, false);
         },
         listenerSetCustomFilter = function () {
             let setCustomFilterDef = WuxDef.Get("Forme_SetCustomFilter");

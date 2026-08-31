@@ -1073,6 +1073,19 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let addFilterButton = `<div>${WuxSheetMain.Button(addFilterDef.getAttribute(),
                         `<span style="color:#4CAF50;">&#43;</span> ${addFilterDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>`;
 
+                    // Bulk-sets every technique card's own Show/Hide Effects
+                    // toggle (TechShowEffects, printShowEffectsToggle -
+                    // WuxGS-FeatureDisplayBuilder.js) at once instead of
+                    // clicking through each one - same wuxRepeatingTechActionButton
+                    // look as Add Custom Filter above, and the same
+                    // right/down-triangle glyphs each card's own toggle uses.
+                    let showAllEffectsDef = WuxDef.Get("Forme_ShowAllEffects");
+                    let hideAllEffectsDef = WuxDef.Get("Forme_HideAllEffects");
+                    let showHideAllEffectsButtons = `<div>${WuxSheetMain.Button(showAllEffectsDef.getAttribute(),
+                        `<span style="color:#4CAF50;">&#9662;</span> ${showAllEffectsDef.getTitle()}`, "wuxRepeatingTechActionButton")}
+                        ${WuxSheetMain.Button(hideAllEffectsDef.getAttribute(),
+                        `<span style="color:#4CAF50;">&#9656;</span> ${hideAllEffectsDef.getTitle()}`, "wuxRepeatingTechActionButton")}</div>`;
+
                     let customFilterDetails = buildCustomFilterDetails();
                     let filterEditModeSection = buildFilterEditModeSection();
 
@@ -1091,7 +1104,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                         WuxSheetMain.CollapsibleHeader(`<span>${WuxDef.Get("Action_FormeTechniques").getTitle()}</span>`,
                             sectionExpandField, buildLoadFormeButton()));
                     let sectionContent = WuxSheetMain.HiddenAuxField(sectionExpandField,
-                        `${defaultFlag}${presetsDataField}${WuxSheetMain.Table.FlexTable(buttons.join(""))}${customFilterButtons}${addFilterButton}${customFilterDetails}${filterEditModeSection}`);
+                        `${defaultFlag}${presetsDataField}${WuxSheetMain.Table.FlexTable(buttons.join(""))}${customFilterButtons}${addFilterButton}${showHideAllEffectsButtons}${customFilterDetails}${filterEditModeSection}`);
 
                     return sectionHeader + sectionContent;
                 },
