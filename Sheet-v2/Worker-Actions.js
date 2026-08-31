@@ -2106,17 +2106,13 @@ class FormeTechniqueDatabase extends FormeTechniqueDatabaseBase {
         let styleTechniques = styleNames.length > 0
             ? WuxTechs.Filter([new DatabaseFilterData("style", styleNames.concat("Style"))])
             : [];
-        // "Job + Style" also always shows every learned Perk technique, so
-        // the preset covers more than just trained styles. Gear used to be
-        // folded in here too - it's now its own standalone "Gear" preset
-        // below instead.
-        let jobStyleTechniques = styleTechniques.concat(this.perkWorker.getPerkTechniques());
+        // "Job + Style" also always shows every Gear technique the character
+        // owns (not just currently-equipped ones - same "everything learned/
+        // owned, not just active" shape as learnedStyleNames above) and every
+        // learned Perk technique, so the preset covers the character's full
+        // kit rather than just their trained styles.
+        let jobStyleTechniques = styleTechniques.concat(this.collectGearTechniques(), this.perkWorker.getPerkTechniques());
         FormeTechniqueFilterPresets["Job + Style"] = new FormeTechniqueFilterPresetData("Job + Style", this.buildSortedTechniqueList(jobStyleTechniques));
-
-        // Every Gear technique the character owns (not just currently-equipped
-        // ones - same "everything learned/owned, not just active" shape
-        // Job + Style's own styleNames uses above).
-        FormeTechniqueFilterPresets["Gear"] = new FormeTechniqueFilterPresetData("Gear", this.buildSortedTechniqueList(this.collectGearTechniques()));
 
         let presetsVariable = WuxDef.GetVariable("Action_FormeTechniques", "FilterPresets");
         attrHandler.addUpdate(presetsVariable, JSON.stringify(FormeTechniqueFilterPresets));

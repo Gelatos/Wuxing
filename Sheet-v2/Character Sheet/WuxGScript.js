@@ -13122,7 +13122,7 @@ var DisplayActionSheet = DisplayActionSheet || (function () {
                     let sectionDefinition = WuxDef.Get("Action_FormeTechniques");
                     let filterPresetField = sectionDefinition.getAttribute("FilterPreset");
                     let filterPresetsField = sectionDefinition.getAttribute("FilterPresets");
-                    let presetNames = ["All", "Basic Actions", "Basic Social", "Job + Style", "Gear"];
+                    let presetNames = ["All", "Basic Actions", "Basic Social", "Job + Style"];
 
                     let defaultFlag = WuxSheetMain.CustomInput("hidden", filterPresetField, "", ` value="All"`);
                     let presetsDataField = WuxSheetMain.CustomInput("hidden", filterPresetsField, "");
