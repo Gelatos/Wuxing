@@ -164,10 +164,33 @@ class WuxWorkerBuildManager {
 		this.workers = [];
 		if (Array.isArray(definitionIds)) {
 			for (let i = 0; i < definitionIds.length; i++) {
-				this.workers.push(new WuxWorkerBuild(definitionIds[i]));
+				this.workers.push(WuxWorkerBuildManager.createWorker(definitionIds[i]));
 			}
 		} else {
-			this.workers.push(new WuxWorkerBuild(definitionIds));
+			this.workers.push(WuxWorkerBuildManager.createWorker(definitionIds));
+		}
+	}
+
+	// Several pools (Technique/Attribute/Perk/Advancement) have their own WuxWorkerBuild
+	// subclass overriding updatePoints/getPointsTotal with pool-specific counting rules -
+	// e.g. WuxStyleWorkerBuild ("Technique") only counts build-stat entries whose group is
+	// exactly "Style", since a learned style's variants each get their own entry too (group
+	// set to the style's own techSet name, not "Style" - see performAddItem in
+	// Worker-InspectPopup.js) so they don't also cost a point on top of the base style's own
+	// 1 point. Constructing the plain base class here instead (as this used to do
+	// unconditionally) silently drops that filtering: WuxWorkerBuild's own getPointsTotal
+	// sums every build-stat entry regardless of group, so it counted the base style AND
+	// every one of its variants as separate points - inflating the spent-point total by
+	// however many variants each already-learned style has, every time this manager's
+	// setAttributeHandlerPoints ran (level up, spending Advancement points into another
+	// pool, etc.), clobbering the correct value the pool's own dedicated worker had set.
+	static createWorker(definitionId) {
+		switch (definitionId) {
+			case "Technique": return new WuxStyleWorkerBuild();
+			case "Attribute": return new WuxAttributeWorkerBuild();
+			case "Perk": return new WuxPerkWorkerBuild();
+			case "Advancement": return new WuxAdvancementWorkerBuild();
+			default: return new WuxWorkerBuild(definitionId);
 		}
 	}
 

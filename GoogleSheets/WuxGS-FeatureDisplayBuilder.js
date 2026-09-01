@@ -258,8 +258,14 @@ class BaseTechniqueDisplayBuilder extends BaseFeatureDisplayBuilder {
     // Custom-filter edit mode's per-technique Hide/Show pair - only
     // TechniqueRepeaterDisplayBuilderUsable overrides this (RepeatingFormeTech
     // is the only repeater that's ever in edit mode), same stub-then-override
-    // shape as every other printX() here.
-    printFilterEditButtons() {}
+    // shape as every other printX() here. Explicit "" (not a bare no-return
+    // stub, which prints literally as the string "undefined" - see
+    // printVariants'/printRankButtons' own comments above) since every other
+    // caller (items, static/non-repeater technique displays, the Technique
+    // Inspection popup's catalog cards) has nothing to print for this.
+    printFilterEditButtons() {
+        return "";
+    }
 }
 
 class TechniqueDisplayBuilder extends BaseTechniqueDisplayBuilder {

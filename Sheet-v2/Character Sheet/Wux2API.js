@@ -3769,22 +3769,7 @@ class TokenTargetData extends TargetData {
     removeStatus(attributeHandler, statusDefinitionName) {
         this.modifyStatus(attributeHandler, statusDefinitionName, "remove");
     }
-
-    // Synchronous counterpart to removeStatus - that one (like every other
-    // modifyStatus-based mutator) defers its actual token-note write into an
-    // addGetAttrCallback so it can also refresh CombatDetails/the tooltip
-    // once attribute data is available, but that means it hasn't actually
-    // written anything yet by the time a same-pass, synchronous hasStatus()
-    // check runs later in the SAME technique resolution (e.g. Shielded:
-    // TokenTargetEffectsData.performDamageRolls's modifyDamageRollShieldedCheck,
-    // called from applySetters, WAPI-Combat.js - which always runs before any
-    // queued callback fires, regardless of registration order). This writes
-    // the token note directly, right away - hasStatus() only ever reads the
-    // token note itself (its attrHandler parameter is unused), so this alone
-    // is enough for a later hasStatus() check to see the removal. Doesn't
-    // touch CombatDetails/the tooltip - callers still also go through the
-    // normal removeStatus/performStatusResults path for that (re-removing an
-    // already-removed status is harmless).
+    
     removeStatusImmediate(statusDefinitionName) {
         let tokenNoteReference = new TokenNoteReference(this.getTokenNote());
         tokenNoteReference.statusHandler.removeStatus(statusDefinitionName);
@@ -4398,9 +4383,6 @@ class TokenTargetEffectsData {
                     surgeResults.newValue = surgeResults.current - 1;
                     results.newValue = results.max;
                     Debug.Log("Setting will results to " + results.newValue);
-                    // if (results.newValue <= 0) {
-                    //     results.newValue = 1; // we do not allow multiple willbreaks to occur. Willpower always restores to at least 1
-                    // }
                     targetEffect.effectMessages.push(`${targetEffect.tokenTargetData.displayName} consumes a Surge. ` +
                         `${targetEffect.tokenTargetData.displayName} fully heals Will ` +
                         (damageRoll.total > 0 ? `then takes ${Format.ShowTooltip(damageRoll.total, damageRoll.message)} damage.` : ""));
@@ -4523,12 +4505,6 @@ class TokenNoteReference {
         this.vitality = {current: 0, max: 0};
         this.teamIndex = 0;
         this.personality = "";
-        // Structure tokens (TechniqueCreateStructureResolver, WAPI-Combat.js)
-        // have no linked character at all, so their defenses/damage resist
-        // have nowhere else to live - undefined by default (not a zeroed
-        // object like surges/vitality above), so CombatDetailsHandler.
-        // setDataFromTokenNote only overrides a character-linked token's own
-        // combat details when a token note actually set them.
         this.defenses = undefined;
         this.damageResist = undefined;
         this.displayStyle = undefined;
@@ -5859,11 +5835,12 @@ var TokenReference = TokenReference || (function () {
             let patienceVar = WuxDef.GetVariable("Soc_Impatience");
             let willpowerVar = WuxDef.GetVariable("WILL");
             let favorVar = WuxDef.GetVariable("Soc_Favor");
-            let enVar = WuxDef.GetVariable("EN");
             let fullNameVar = WuxDef.GetVariable("FullName");
-            attributeHandler.addAttribute([patienceVar, willpowerVar, favorVar, enVar, fullNameVar]);
+            attributeHandler.addAttribute([patienceVar, willpowerVar, favorVar, fullNameVar]);
             tokenTargetData.importTokenNoteReferenceData(attributeHandler);
             tokenTargetData.refreshCombatDetails(attributeHandler);
+
+            tokenTargetData.setEnergyToStart(attributeHandler);
 
             attributeHandler.addFinishCallback(function (attrHandler) {
                 tokenTargetData.setBar(1, attrHandler.getAttribute(patienceVar), true, true);
@@ -5876,7 +5853,6 @@ var TokenReference = TokenReference || (function () {
                     tokenTargetData.unlinkBar(3);
                 }
 
-                tokenTargetData.setEnergyIcon(attrHandler.parseInt(enVar, 0, false));
                 tokenTargetData.combatDetails.onUpdateDisplayStyle(attrHandler, "Social");
                 tokenTargetData.setCombatDetails(attrHandler);
             });
