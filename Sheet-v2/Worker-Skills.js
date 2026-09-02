@@ -88,7 +88,24 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
             });
         },
         
-        getKeySkillTitles = function (jobWorker, styleWorker) {
+        // Mirrors FormeTechniqueDatabase.checkTechniqueItemTraits (Worker-Actions.js) -
+        // a learned technique whose required gear trait (e.g. Bow, Longshot) isn't
+        // currently equipped isn't actually usable, so it shouldn't count toward key
+        // skills on its own. Kept as a free function here (rather than reusing that
+        // class) since FormeTechniqueDatabase pulls in a lot of unrelated
+        // affinity/job-style/filter setup this doesn't need.
+        checkTechniqueItemTraits = function (technique, equippedItemTraits) {
+            if (!technique.itemTraits || technique.itemTraits === "") return true;
+            let requiredTraits = technique.itemTraits.split(";").map(s => s.trim()).filter(s => s !== "");
+            if (requiredTraits.length === 0) return true;
+            return requiredTraits.every(traitKey => {
+                let def = WuxDef.Get(traitKey);
+                if (def == undefined) return false;
+                return equippedItemTraits.includes(def.getTitle());
+            });
+        },
+
+        getKeySkillTitles = function (jobWorker, styleWorker, equippedItemTraits) {
             let keySkillTitles = new Set();
 
             jobWorker.iterateBuildStats(function (styleVariableData) {
@@ -108,6 +125,9 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
 
             let techniques = styleWorker.getTechniques();
             for (let i = 0; i < techniques.length; i++) {
+                if (!checkTechniqueItemTraits(techniques[i], equippedItemTraits)) {
+                    continue;
+                }
                 let skill = techniques[i].skill.trim();
                 if (skill) {
                     keySkillTitles.add(skill);
@@ -120,13 +140,18 @@ var WuxWorkerSkills = WuxWorkerSkills || (function () {
         updateKeySkills = function (attributeHandler) {
             let jobWorker = new WuxBasicWorkerBuild("Job");
             let styleWorker = new WuxStyleWorkerBuild();
-            attributeHandler.addMod([jobWorker.attrBuildDraft, styleWorker.attrBuildDraft]);
+            let equippedItemTraitsVar = WuxDef.GetVariable("Gear_EquippedItemTraits", WuxDef._max);
+            attributeHandler.addMod([jobWorker.attrBuildDraft, styleWorker.attrBuildDraft, equippedItemTraitsVar]);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 jobWorker.setBuildStatsDraft(attrHandler);
                 styleWorker.setBuildStatsDraft(attrHandler);
 
-                let keySkillTitles = getKeySkillTitles(jobWorker, styleWorker);
+                let equippedItemTraits = [];
+                try { equippedItemTraits = JSON.parse(attrHandler.parseString(equippedItemTraitsVar)); } catch (e) {}
+                if (!Array.isArray(equippedItemTraits)) equippedItemTraits = [];
+
+                let keySkillTitles = getKeySkillTitles(jobWorker, styleWorker, equippedItemTraits);
 
                 let skillDefinitions = WuxDef.Filter(new DatabaseFilterData("group", "Skill"));
                 for (let i = 0; i < skillDefinitions.length; i++) {

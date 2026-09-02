@@ -604,6 +604,10 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             });
 
             WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+            // Unequipping may drop a trait (e.g. Bow) a learned technique needed to
+            // count toward a key skill (Aim/Martial/etc.) - see checkTechniqueItemTraits,
+            // Worker-Skills.js.
+            WuxWorkerSkills.UpdateKeySkills(attributeHandler);
             attributeHandler.run();
         },
 
@@ -642,6 +646,10 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             });
 
             WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+            // Deleting may drop a trait (e.g. Bow) a learned technique needed to
+            // count toward a key skill (Aim/Martial/etc.) - see checkTechniqueItemTraits,
+            // Worker-Skills.js.
+            WuxWorkerSkills.UpdateKeySkills(attributeHandler);
             attributeHandler.run();
         },
 
@@ -1760,6 +1768,10 @@ var WuxWorkerGear = WuxWorkerGear || (function () {
             });
 
             WuxWorkerActions.UpdateAllActionsFromMenu(attributeHandler);
+            // Unequipping may drop a trait (e.g. Bow) a learned technique needed to
+            // count toward a key skill (Aim/Martial/etc.) - see checkTechniqueItemTraits,
+            // Worker-Skills.js.
+            WuxWorkerSkills.UpdateKeySkills(attributeHandler);
             attributeHandler.run();
         },
 

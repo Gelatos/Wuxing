@@ -390,8 +390,11 @@ var WuxSheetMain = WuxSheetMain || (function () {
                 ${hiddenAuxField(fieldName, offContents)}`;
         },
 
-        hiddenIndexField = function (fieldName, index, contents) {
-            return `<input type="hidden" class="wuxHiddenIndexField-flag" name="${fieldName}" value="0">
+        hiddenIndexField = function (fieldName, index, contents, defaultValue) {
+            if (defaultValue == undefined) {
+                defaultValue = "0";
+            }
+            return `<input type="hidden" class="wuxHiddenIndexField-flag" name="${fieldName}" value="${defaultValue}">
             <div class="wuxHiddenIndexField${index}">\n${contents}\n</div>\n`;
         },
 

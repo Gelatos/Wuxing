@@ -1091,15 +1091,22 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
                             let tierOptions = WuxDef.Filter([new DatabaseFilterData("group", "LoreTier")]);
 
                             // When there are no predefined sub-lores to pick from, the dropdown would
-                            // only ever offer "Choose Lore Type"/"Custom" - skip it and default straight
-                            // into the Custom name+description fields via a hidden Lore_SubType instead.
+                            // only ever offer "Choose Lore Type"/"Custom" - skip it and default
+                            // straight into the Custom name+description fields instead, by having
+                            // HiddenIndexField's own flag (below) default to "1" (Custom) rather than
+                            // its usual "0". A separate hidden Lore_SubType input here (as this used
+                            // to do) would fight that flag for the same attribute name - both are
+                            // hardcoded literals in the same repeating-row template, so which default
+                            // "wins" is undefined, and in practice neither the Name field nor the
+                            // Description textarea (both gated on this exact flag/class - see
+                            // WCSS-Specialized.css) ever showed.
                             let subTypeSelect = subLores.length > 0
                                 ? `<select class="wuxInput wuxLoreDescription" name="${WuxDef.GetAttribute("Lore_SubType")}">
                                 <option value="0">Choose Lore Type</option>
                                 ${subLores.map(k => `<option value="${k.name}">${k.name}</option>`).join("\n                                ")}
                                 <option value="1">Custom</option>
                             </select>`
-                                : `<input type="hidden" name="${WuxDef.GetAttribute("Lore_SubType")}" value="1" />`;
+                                : "";
 
                             let repeaterContents = WuxSheetMain.MultiRow(
                                 WuxSheetMain.Select(WuxDef.GetAttribute("Lore_Tier"), tierOptions, false, "wuxLoreType") +
@@ -1108,7 +1115,8 @@ var DisplayAdvancementSheet = DisplayAdvancementSheet || (function () {
 
                             repeaterContents += WuxSheetMain.HiddenIndexField(
                                 WuxDef.GetAttribute("Lore_SubType"), 1,
-                                WuxSheetMain.CustomInput("text", WuxDef.GetAttribute("Lore_Name"), "wuxLoreName", ` placeholder="${WuxDef.GetTitle("Lore_Name")}"`))
+                                WuxSheetMain.CustomInput("text", WuxDef.GetAttribute("Lore_Name"), "wuxLoreName", ` placeholder="${WuxDef.GetTitle("Lore_Name")}"`),
+                                subLores.length > 0 ? "0" : "1")
 
                             repeaterContents += `<span class="wuxLoreDescriptionArea" name="${WuxDef.GetAttribute("Lore_Description")}"></span>`;
                             repeaterContents += WuxSheetMain.Textarea(
