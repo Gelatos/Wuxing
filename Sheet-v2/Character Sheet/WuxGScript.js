@@ -18965,8 +18965,7 @@ class CharacterBackgroundBuilder {
             WuxSheetMain.Table.FlexTableGroup(WuxDefinition.BuildSelect(WuxDef.Get("Gender"), WuxDef.GetAttribute("Gender"),
                 WuxDef.Filter([new DatabaseFilterData("group", "GenderType")]), true, true))
         ], WuxSheetMain.Table.FlexTable, 2);
-        let homeRegionField = WuxDefinition.BuildSelect(WuxDef.Get("HomeRegion"), WuxDef.GetAttribute("HomeRegion"),
-            WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]), undefined, true);
+        let homeRegionField = WuxDefinition.BuildTextInput(WuxDef.Get("HomeRegion"), WuxDef.GetAttribute("HomeRegion"), undefined, true);
         let backgroundField = WuxDefinition.BuildTextarea(WuxDef.Get("Backstory"), WuxDef.GetAttribute("Backstory"),
             "wuxInput wuxHeight150", undefined, true);
         return WuxSheetMain.Table.FlexTableGroup(`${titleField}
