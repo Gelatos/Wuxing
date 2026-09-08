@@ -894,6 +894,57 @@ button.wuxRepeatingTechActionButton.wuxMoreInfoButton:hover span {
     display: block;
 }
 
+/* Background Generator field lock toggle (WuxSheetMain.LockToggle) - same bare
+   checkbox + two-span :checked icon-swap as .wuxMoreInfoBlock above, just swapping an
+   icon on the button itself rather than revealing separate content, so no :has()
+   needed here. Die (randomized) by default, swaps to a lock once toggled. */
+.wuxLockToggleButton .wuxLockIconLocked {
+    display: none;
+}
+
+.wuxLockToggleButton input:checked ~ span .wuxLockIconRandom {
+    display: none;
+}
+
+.wuxLockToggleButton input:checked ~ span .wuxLockIconLocked {
+    display: inline;
+}
+
+/* Fixed, compact width - min-width:36px/width:auto from the shared .wuxButton base
+   sizes to fit arbitrary button text, which is wider than this needs for a single
+   icon. flex/center - div.wuxButton span only gets text-align:center (horizontal)
+   from the shared base rule (WCSS-Base.css); the button[type=roll] variant is the
+   only one that also centers vertically, which this isn't, so without this the icon
+   sits at the block-flow default (top-left) instead of centered in the button. The
+   checkbox stays unaffected - it's already position:absolute, so it isn't part of
+   this flex layout. */
+.wuxLockToggleButton {
+    width: 30px;
+    min-width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom, #5a5c60 0%, #3a3c40 80%);
+}
+
+.wuxLockToggleButton:hover {
+    background: linear-gradient(to bottom, #6a6c70 0%, #4a4c50 80%);
+}
+
+/* Sits beside its field's input on the same row (see .wuxGeneratorFieldRow,
+   WuxGS-CharacterDetailsBuilder.js) rather than stacking below it like a normal
+   wuxButton. */
+.wuxGeneratorFieldRow {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+}
+
+.wuxGeneratorFieldRow .wuxLockToggleButton {
+    flex: 0 0 auto;
+    margin-bottom: 2px;
+}
+
 div.wuxRepeatingTechActionButton:hover span,
 button.wuxRepeatingTechActionButton:hover span {
     color: #f4f6f8;

@@ -1702,8 +1702,8 @@
 													</div>
 												</div>
 												<select class="wuxInput" name="attr_ttl-isplayer" value="0">
-													<option value="0">Not a Player</option>
-													<option value="1">Player Character</option>
+													<option value="0">Non-Player Character</option>
+													<option value="1">Heroic Character</option>
 													<option value="2">Generic</option>
 												</select>
 											</div>
@@ -2000,66 +2000,148 @@
 										<div class="wuxFlexTableItemGroup">
 											<div class="wuxHeader2">
 												<div class="wuxButton wuxManualButton">
-													<input type="checkbox" name="attr_note-genname_moreinfo">
+													<input type="checkbox" name="attr_ttl-name_moreinfo">
 													<span>Name</span>
 												</div>
 											</div>
-											<input type="text" class="undefined" name="attr_note-genname" />
-											<div class="wuxHeader2">
-												<div class="wuxButton wuxManualButton">
-													<input type="checkbox" name="attr_note-genfullname_moreinfo">
-													<span>Full Name</span>
+											<div class="wuxGeneratorFieldRow"><input type="text" class="undefined" name="attr_note-genname" />
+												<div class="wuxButton wuxLockToggleButton">
+													<input type="checkbox" name="attr_note-genname_lock">
+													<span><span class="wuxLockIconRandom">&#127922;</span><span class="wuxLockIconLocked">&#128274;</span></span>
 												</div>
 											</div>
-											<input type="text" class="undefined" name="attr_note-genfullname" />
+											<div class="wuxHeader2">
+												<div class="wuxButton wuxManualButton">
+													<input type="checkbox" name="attr_ttl-familyname_moreinfo">
+													<span>Family Name</span>
+												</div>
+											</div>
+											<div class="wuxGeneratorFieldRow"><input type="text" class="undefined" name="attr_note-genfullname" />
+												<div class="wuxButton wuxLockToggleButton">
+													<input type="checkbox" name="attr_note-genfullname_lock">
+													<span><span class="wuxLockIconRandom">&#127922;</span><span class="wuxLockIconLocked">&#128274;</span></span>
+												</div>
+											</div>
 											<div class="wuxHeader2">
 												<div class="wuxButton wuxManualButton">
 													<input type="checkbox" name="attr_note-gengender_moreinfo">
 													<span>Gender</span>
 												</div>
 											</div>
-											<input type="text" class="undefined" name="attr_note-gengender" />
+											<div class="wuxGeneratorFieldRow"><select class="wuxInput" name="attr_note-gengender" value="0">
+													<option value="0">-</option>
+													<option value="Male">Male</option>
+													<option value="Female">Female</option>
+													<option value="Non Binary">Non Binary</option>
+												</select>
+												<div class="wuxButton wuxLockToggleButton">
+													<input type="checkbox" name="attr_note-gengender_lock">
+													<span><span class="wuxLockIconRandom">&#127922;</span><span class="wuxLockIconLocked">&#128274;</span></span>
+												</div>
+											</div>
 											<div class="wuxHeader2">
 												<div class="wuxButton wuxManualButton">
 													<input type="checkbox" name="attr_note-genhomeregion_moreinfo">
 													<span>Home Region</span>
 												</div>
 											</div>
-											<select class="wuxInput" name="attr_note-genhomeregion" value="0">
-												<option value="0">-</option>
-												<option value="Walthair">Walthair</option>
-												<option value="EastSea">East Sea</option>
-												<option value="Khem">Khem</option>
-												<option value="Aridsha">Aridsha</option>
-												<option value="Ceres">Ceres</option>
-												<option value="Colswei">Colswei</option>
-												<option value="Dowfeng">Dowfeng</option>
-												<option value="Wayling">Wayling</option>
-												<option value="Novus">Novus</option>
-											</select>
-											<div class="wuxHeader2">
-												<div class="wuxButton wuxManualButton">
-													<input type="checkbox" name="attr_note-genrace_moreinfo">
-													<span>Race</span>
+											<div class="wuxGeneratorFieldRow"><select class="wuxInput" name="attr_note-genhomeregion" value="0">
+													<option value="0">-</option>
+													<option value="Walthair">Walthair</option>
+													<option value="EastSea">East Sea</option>
+													<option value="Khem">Khem</option>
+													<option value="Aridsha">Aridsha</option>
+													<option value="Ceres">Ceres</option>
+													<option value="Colswei">Colswei</option>
+													<option value="Dowfeng">Dowfeng</option>
+													<option value="Wayling">Wayling</option>
+													<option value="Novus">Novus</option>
+												</select>
+												<div class="wuxButton wuxLockToggleButton">
+													<input type="checkbox" name="attr_note-genhomeregion_lock">
+													<span><span class="wuxLockIconRandom">&#127922;</span><span class="wuxLockIconLocked">&#128274;</span></span>
 												</div>
 											</div>
-											<input type="text" class="undefined" name="attr_note-genrace" />
 										</div>
 										<div class="wuxFlexTableItemGroup">
-											<div class="wuxHeader2">
-												<div class="wuxButton wuxManualButton">
-													<input type="checkbox" name="attr_note-genpersonality_moreinfo">
-													<span>Personality</span>
+											<div class="wuxHeader2"><span class="wuxTooltip">
+													<span class="wuxTooltipText">
+														Personality
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Personality</div>
+														<span class="wuxDescription"><em>Generator</em></span>
+														<span class="wuxDescription"></span>
+													</div>
+												</span></div>
+											<div class="wuxGeneratorFieldRow"><select class="wuxInput" name="attr_note-genpersonality" value="0">
+													<option value="0">-</option>
+													<option value="Personality_Cultivator">Wood - Cultivator</option>
+													<option value="Personality_Pioneer">Wood - Pioneer</option>
+													<option value="Personality_Visionary">Wood - Visionary</option>
+													<option value="Personality_Idealist">Wood - Idealist</option>
+													<option value="Personality_Zealot">Fire - Zealot</option>
+													<option value="Personality_Charmer">Fire - Charmer</option>
+													<option value="Personality_Catalyst">Fire - Catalyst</option>
+													<option value="Personality_Leader">Fire - Leader</option>
+													<option value="Personality_Bastion">Earth - Bastion</option>
+													<option value="Personality_Realist">Earth - Realist</option>
+													<option value="Personality_Traditionalist">Earth - Traditionalist</option>
+													<option value="Personality_Provider">Earth - Provider</option>
+													<option value="Personality_Stoic">Metal - Stoic</option>
+													<option value="Personality_Purist">Metal - Purist</option>
+													<option value="Personality_Arbiter">Metal - Arbiter</option>
+													<option value="Personality_Blade">Metal - Blade</option>
+													<option value="Personality_Sage">Water - Sage</option>
+													<option value="Personality_Mystic">Water - Mystic</option>
+													<option value="Personality_Schemer">Water - Schemer</option>
+													<option value="Personality_Adapter">Water - Adapter</option>
+												</select>
+												<div class="wuxButton wuxLockToggleButton">
+													<input type="checkbox" name="attr_note-genpersonality_lock">
+													<span><span class="wuxLockIconRandom">&#127922;</span><span class="wuxLockIconLocked">&#128274;</span></span>
 												</div>
 											</div>
-											<input type="text" class="undefined" name="attr_note-genpersonality" />
-											<div class="wuxHeader2">
-												<div class="wuxButton wuxManualButton">
-													<input type="checkbox" name="attr_note-genmotivation_moreinfo">
-													<span>Motivation</span>
+											<span class="wuxDescription" name="attr_note-genpersonality_db"></span>
+											<div class="wuxHeader2"><span class="wuxTooltip">
+													<span class="wuxTooltipText">
+														Motivation
+													</span>
+													<div class="wuxTooltipContent">
+														<div class="wuxHeader2">Motivation</div>
+														<span class="wuxDescription"><em>Generator</em></span>
+														<span class="wuxDescription"></span>
+													</div>
+												</span></div>
+											<div class="wuxGeneratorFieldRow"><select class="wuxInput" name="attr_note-genmotivation" value="0">
+													<option value="0">-</option>
+													<option value="Motivation_Change">Wood - Change</option>
+													<option value="Motivation_Discovery">Wood - Discovery</option>
+													<option value="Motivation_Growth">Wood - Growth</option>
+													<option value="Motivation_Legacy">Wood - Legacy</option>
+													<option value="Motivation_Devotion">Fire - Devotion</option>
+													<option value="Motivation_Glory">Fire - Glory</option>
+													<option value="Motivation_Momentum">Fire - Momentum</option>
+													<option value="Motivation_Warmth">Fire - Warmth</option>
+													<option value="Motivation_Preservation">Earth - Preservation</option>
+													<option value="Motivation_Protection">Earth - Protection</option>
+													<option value="Motivation_Stability">Earth - Stability</option>
+													<option value="Motivation_Sustenance">Earth - Sustenance</option>
+													<option value="Motivation_Excellence">Metal - Excellence</option>
+													<option value="Motivation_Mastery">Metal - Mastery</option>
+													<option value="Motivation_Order">Metal - Order</option>
+													<option value="Motivation_Truth">Metal - Truth</option>
+													<option value="Motivation_Absolution">Water - Absolution</option>
+													<option value="Motivation_Enlightenment">Water - Enlightenment</option>
+													<option value="Motivation_Knowledge">Water - Knowledge</option>
+													<option value="Motivation_Mystery">Water - Mystery</option>
+												</select>
+												<div class="wuxButton wuxLockToggleButton">
+													<input type="checkbox" name="attr_note-genmotivation_lock">
+													<span><span class="wuxLockIconRandom">&#127922;</span><span class="wuxLockIconLocked">&#128274;</span></span>
 												</div>
 											</div>
-											<input type="text" class="undefined" name="attr_note-genmotivation" />
+											<span class="wuxDescription" name="attr_note-genmotivation_db"></span>
 											<div class="wuxMultiRow">
 												<div class="wuxButton">
 													<input type="checkbox" name="attr_note-generatecharacter">
@@ -2075,7 +2157,7 @@
 											<div class="wuxMultiRow">
 												<div class="wuxButton">
 													<input type="checkbox" name="attr_note-clearbackground">
-													<span>Clear Background</span>
+													<span>Unlock All Fields</span>
 												</div>
 											</div>
 										</div>
@@ -10026,8 +10108,8 @@
 														</div>
 													</div>
 													<select class="wuxInput" name="attr_ttl-isplayer" value="0">
-														<option value="0">Not a Player</option>
-														<option value="1">Player Character</option>
+														<option value="0">Non-Player Character</option>
+														<option value="1">Heroic Character</option>
 														<option value="2">Generic</option>
 													</select>
 												</div>
@@ -10324,66 +10406,148 @@
 											<div class="wuxFlexTableItemGroup">
 												<div class="wuxHeader2">
 													<div class="wuxButton wuxManualButton">
-														<input type="checkbox" name="attr_note-genname_moreinfo">
+														<input type="checkbox" name="attr_ttl-name_moreinfo">
 														<span>Name</span>
 													</div>
 												</div>
-												<input type="text" class="undefined" name="attr_note-genname" />
-												<div class="wuxHeader2">
-													<div class="wuxButton wuxManualButton">
-														<input type="checkbox" name="attr_note-genfullname_moreinfo">
-														<span>Full Name</span>
+												<div class="wuxGeneratorFieldRow"><input type="text" class="undefined" name="attr_note-genname" />
+													<div class="wuxButton wuxLockToggleButton">
+														<input type="checkbox" name="attr_note-genname_lock">
+														<span><span class="wuxLockIconRandom">&#127922;</span><span class="wuxLockIconLocked">&#128274;</span></span>
 													</div>
 												</div>
-												<input type="text" class="undefined" name="attr_note-genfullname" />
+												<div class="wuxHeader2">
+													<div class="wuxButton wuxManualButton">
+														<input type="checkbox" name="attr_ttl-familyname_moreinfo">
+														<span>Family Name</span>
+													</div>
+												</div>
+												<div class="wuxGeneratorFieldRow"><input type="text" class="undefined" name="attr_note-genfullname" />
+													<div class="wuxButton wuxLockToggleButton">
+														<input type="checkbox" name="attr_note-genfullname_lock">
+														<span><span class="wuxLockIconRandom">&#127922;</span><span class="wuxLockIconLocked">&#128274;</span></span>
+													</div>
+												</div>
 												<div class="wuxHeader2">
 													<div class="wuxButton wuxManualButton">
 														<input type="checkbox" name="attr_note-gengender_moreinfo">
 														<span>Gender</span>
 													</div>
 												</div>
-												<input type="text" class="undefined" name="attr_note-gengender" />
+												<div class="wuxGeneratorFieldRow"><select class="wuxInput" name="attr_note-gengender" value="0">
+														<option value="0">-</option>
+														<option value="Male">Male</option>
+														<option value="Female">Female</option>
+														<option value="Non Binary">Non Binary</option>
+													</select>
+													<div class="wuxButton wuxLockToggleButton">
+														<input type="checkbox" name="attr_note-gengender_lock">
+														<span><span class="wuxLockIconRandom">&#127922;</span><span class="wuxLockIconLocked">&#128274;</span></span>
+													</div>
+												</div>
 												<div class="wuxHeader2">
 													<div class="wuxButton wuxManualButton">
 														<input type="checkbox" name="attr_note-genhomeregion_moreinfo">
 														<span>Home Region</span>
 													</div>
 												</div>
-												<select class="wuxInput" name="attr_note-genhomeregion" value="0">
-													<option value="0">-</option>
-													<option value="Walthair">Walthair</option>
-													<option value="EastSea">East Sea</option>
-													<option value="Khem">Khem</option>
-													<option value="Aridsha">Aridsha</option>
-													<option value="Ceres">Ceres</option>
-													<option value="Colswei">Colswei</option>
-													<option value="Dowfeng">Dowfeng</option>
-													<option value="Wayling">Wayling</option>
-													<option value="Novus">Novus</option>
-												</select>
-												<div class="wuxHeader2">
-													<div class="wuxButton wuxManualButton">
-														<input type="checkbox" name="attr_note-genrace_moreinfo">
-														<span>Race</span>
+												<div class="wuxGeneratorFieldRow"><select class="wuxInput" name="attr_note-genhomeregion" value="0">
+														<option value="0">-</option>
+														<option value="Walthair">Walthair</option>
+														<option value="EastSea">East Sea</option>
+														<option value="Khem">Khem</option>
+														<option value="Aridsha">Aridsha</option>
+														<option value="Ceres">Ceres</option>
+														<option value="Colswei">Colswei</option>
+														<option value="Dowfeng">Dowfeng</option>
+														<option value="Wayling">Wayling</option>
+														<option value="Novus">Novus</option>
+													</select>
+													<div class="wuxButton wuxLockToggleButton">
+														<input type="checkbox" name="attr_note-genhomeregion_lock">
+														<span><span class="wuxLockIconRandom">&#127922;</span><span class="wuxLockIconLocked">&#128274;</span></span>
 													</div>
 												</div>
-												<input type="text" class="undefined" name="attr_note-genrace" />
 											</div>
 											<div class="wuxFlexTableItemGroup">
-												<div class="wuxHeader2">
-													<div class="wuxButton wuxManualButton">
-														<input type="checkbox" name="attr_note-genpersonality_moreinfo">
-														<span>Personality</span>
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Personality
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Personality</div>
+															<span class="wuxDescription"><em>Generator</em></span>
+															<span class="wuxDescription"></span>
+														</div>
+													</span></div>
+												<div class="wuxGeneratorFieldRow"><select class="wuxInput" name="attr_note-genpersonality" value="0">
+														<option value="0">-</option>
+														<option value="Personality_Cultivator">Wood - Cultivator</option>
+														<option value="Personality_Pioneer">Wood - Pioneer</option>
+														<option value="Personality_Visionary">Wood - Visionary</option>
+														<option value="Personality_Idealist">Wood - Idealist</option>
+														<option value="Personality_Zealot">Fire - Zealot</option>
+														<option value="Personality_Charmer">Fire - Charmer</option>
+														<option value="Personality_Catalyst">Fire - Catalyst</option>
+														<option value="Personality_Leader">Fire - Leader</option>
+														<option value="Personality_Bastion">Earth - Bastion</option>
+														<option value="Personality_Realist">Earth - Realist</option>
+														<option value="Personality_Traditionalist">Earth - Traditionalist</option>
+														<option value="Personality_Provider">Earth - Provider</option>
+														<option value="Personality_Stoic">Metal - Stoic</option>
+														<option value="Personality_Purist">Metal - Purist</option>
+														<option value="Personality_Arbiter">Metal - Arbiter</option>
+														<option value="Personality_Blade">Metal - Blade</option>
+														<option value="Personality_Sage">Water - Sage</option>
+														<option value="Personality_Mystic">Water - Mystic</option>
+														<option value="Personality_Schemer">Water - Schemer</option>
+														<option value="Personality_Adapter">Water - Adapter</option>
+													</select>
+													<div class="wuxButton wuxLockToggleButton">
+														<input type="checkbox" name="attr_note-genpersonality_lock">
+														<span><span class="wuxLockIconRandom">&#127922;</span><span class="wuxLockIconLocked">&#128274;</span></span>
 													</div>
 												</div>
-												<input type="text" class="undefined" name="attr_note-genpersonality" />
-												<div class="wuxHeader2">
-													<div class="wuxButton wuxManualButton">
-														<input type="checkbox" name="attr_note-genmotivation_moreinfo">
-														<span>Motivation</span>
+												<span class="wuxDescription" name="attr_note-genpersonality_db"></span>
+												<div class="wuxHeader2"><span class="wuxTooltip">
+														<span class="wuxTooltipText">
+															Motivation
+														</span>
+														<div class="wuxTooltipContent">
+															<div class="wuxHeader2">Motivation</div>
+															<span class="wuxDescription"><em>Generator</em></span>
+															<span class="wuxDescription"></span>
+														</div>
+													</span></div>
+												<div class="wuxGeneratorFieldRow"><select class="wuxInput" name="attr_note-genmotivation" value="0">
+														<option value="0">-</option>
+														<option value="Motivation_Change">Wood - Change</option>
+														<option value="Motivation_Discovery">Wood - Discovery</option>
+														<option value="Motivation_Growth">Wood - Growth</option>
+														<option value="Motivation_Legacy">Wood - Legacy</option>
+														<option value="Motivation_Devotion">Fire - Devotion</option>
+														<option value="Motivation_Glory">Fire - Glory</option>
+														<option value="Motivation_Momentum">Fire - Momentum</option>
+														<option value="Motivation_Warmth">Fire - Warmth</option>
+														<option value="Motivation_Preservation">Earth - Preservation</option>
+														<option value="Motivation_Protection">Earth - Protection</option>
+														<option value="Motivation_Stability">Earth - Stability</option>
+														<option value="Motivation_Sustenance">Earth - Sustenance</option>
+														<option value="Motivation_Excellence">Metal - Excellence</option>
+														<option value="Motivation_Mastery">Metal - Mastery</option>
+														<option value="Motivation_Order">Metal - Order</option>
+														<option value="Motivation_Truth">Metal - Truth</option>
+														<option value="Motivation_Absolution">Water - Absolution</option>
+														<option value="Motivation_Enlightenment">Water - Enlightenment</option>
+														<option value="Motivation_Knowledge">Water - Knowledge</option>
+														<option value="Motivation_Mystery">Water - Mystery</option>
+													</select>
+													<div class="wuxButton wuxLockToggleButton">
+														<input type="checkbox" name="attr_note-genmotivation_lock">
+														<span><span class="wuxLockIconRandom">&#127922;</span><span class="wuxLockIconLocked">&#128274;</span></span>
 													</div>
 												</div>
-												<input type="text" class="undefined" name="attr_note-genmotivation" />
+												<span class="wuxDescription" name="attr_note-genmotivation_db"></span>
 												<div class="wuxMultiRow">
 													<div class="wuxButton">
 														<input type="checkbox" name="attr_note-generatecharacter">
@@ -10399,7 +10563,7 @@
 												<div class="wuxMultiRow">
 													<div class="wuxButton">
 														<input type="checkbox" name="attr_note-clearbackground">
-														<span>Clear Background</span>
+														<span>Unlock All Fields</span>
 													</div>
 												</div>
 											</div>
@@ -23442,7 +23606,7 @@ WuxWorkerActions.TriggerBuilderActionUpdate();
 
 });
 on("change:note-clearbackground", function (eventinfo) {
-WuxWorkerGeneral.ClearBackground();
+WuxWorkerGeneral.UnlockAllFields();
 WuxWorkerActions.TriggerBuilderActionUpdate();
 
 });
@@ -23461,9 +23625,19 @@ WuxWorkerGeneral.UpdateSurge(eventinfo)
 on("change:cmb-vitality", function (eventinfo) {
 WuxWorkerGeneral.UpdateVitality(eventinfo)
 });
-on("change:full_name change:ancestry change:ethnicity change:quickdescription change:jin change:ttl change:age change:gender change:homeregion change:backstory change:note-genname change:note-genfullname change:note-gengender change:note-genhomeregion change:note-genrace change:note-genpersonality change:note-genmotivation", function (eventinfo) {
+on("change:full_name change:ancestry change:ethnicity change:quickdescription change:jin change:ttl change:age change:gender change:homeregion change:backstory change:note-genname change:note-genfullname change:note-gengender change:note-genhomeregion change:note-genpersonality change:note-genmotivation", function (eventinfo) {
 WuxWorkerActions.TriggerBuilderActionUpdate();
 
+});
+on("change:note-genname change:note-genfullname change:note-gengender change:note-genhomeregion change:note-genpersonality change:note-genmotivation", function (eventinfo) {
+if (eventinfo.sourceType === "sheetworker") return;
+let attributeHandler = new WorkerAttributeHandler();
+attributeHandler.addMod("note-generatecharacter_active");
+attributeHandler.addGetAttrCallback(function (attrHandler) {
+if (attrHandler.parseString("note-generatecharacter_active") === "1") { return; }
+switch (eventinfo.sourceAttribute) { case "note-genname": attrHandler.addUpdate("note-genname_lock", "on"); break; case "note-genfullname": attrHandler.addUpdate("note-genfullname_lock", "on"); break; case "note-gengender": attrHandler.addUpdate("note-gengender_lock", "on"); break; case "note-genhomeregion": attrHandler.addUpdate("note-genhomeregion_lock", "on"); break; case "note-genpersonality": attrHandler.addUpdate("note-genpersonality_lock", "on"); break; case "note-genmotivation": attrHandler.addUpdate("note-genmotivation_lock", "on"); break; }
+});
+attributeHandler.run();
 });
 on("change:soc-personality", function (eventinfo) {
 WuxWorkerGeneral.UpdatePersonalityDescription(eventinfo)
@@ -24014,8 +24188,8 @@ switch (eventinfo.sourceAttribute) { case "gear-autoequipitems_moreinfo": WuxWor
 on("change:forme-showfromnonelement_moreinfo change:forme-showlevelrestricted_moreinfo", function (eventinfo) {
 switch (eventinfo.sourceAttribute) { case "forme-showfromnonelement_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Forme_ShowFromNonElement"]); break; case "forme-showlevelrestricted_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Forme_ShowLevelRestricted"]); break; }
 });
-on("change:ttl-isplayer_moreinfo change:charsheetname_moreinfo change:sheetname_moreinfo change:full_name_moreinfo change:ancestry_moreinfo change:ethnicity_moreinfo change:quickdescription_moreinfo change:ttl_moreinfo change:age_moreinfo change:gender_moreinfo change:homeregion_moreinfo change:backstory_moreinfo change:adv-level_moreinfo change:adv-cr_moreinfo change:potency_moreinfo change:ttl-startingjin_moreinfo change:note-genname_moreinfo change:note-genfullname_moreinfo change:note-gengender_moreinfo change:note-genhomeregion_moreinfo change:note-genrace_moreinfo change:note-genpersonality_moreinfo change:note-genmotivation_moreinfo", function (eventinfo) {
-switch (eventinfo.sourceAttribute) { case "ttl-isplayer_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Title_IsPlayer"]); break; case "charsheetname_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["CharSheetName"]); break; case "sheetname_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["SheetName"]); break; case "full_name_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["FullName"]); break; case "ancestry_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Ancestry"]); break; case "ethnicity_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Ethnicity"]); break; case "quickdescription_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["QuickDescription"]); break; case "ttl_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Title"]); break; case "age_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Age"]); break; case "gender_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Gender"]); break; case "homeregion_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["HomeRegion"]); break; case "backstory_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Backstory"]); break; case "adv-level_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Level"]); break; case "adv-cr_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["CR"]); break; case "potency_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Potency"]); break; case "ttl-startingjin_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Title_StartingJin"]); break; case "note-genname_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Note_GenName"]); break; case "note-genfullname_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Note_GenFullName"]); break; case "note-gengender_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Note_GenGender"]); break; case "note-genhomeregion_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Note_GenHomeRegion"]); break; case "note-genrace_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Note_GenRace"]); break; case "note-genpersonality_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Note_GenPersonality"]); break; case "note-genmotivation_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Note_GenMotivation"]); break; }
+on("change:ttl-isplayer_moreinfo change:charsheetname_moreinfo change:sheetname_moreinfo change:full_name_moreinfo change:ancestry_moreinfo change:ethnicity_moreinfo change:quickdescription_moreinfo change:ttl_moreinfo change:age_moreinfo change:gender_moreinfo change:homeregion_moreinfo change:backstory_moreinfo change:adv-level_moreinfo change:adv-cr_moreinfo change:potency_moreinfo change:ttl-startingjin_moreinfo change:ttl-name_moreinfo change:ttl-familyname_moreinfo change:note-gengender_moreinfo change:note-genhomeregion_moreinfo change:note-genpersonality_moreinfo change:note-genmotivation_moreinfo", function (eventinfo) {
+switch (eventinfo.sourceAttribute) { case "ttl-isplayer_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Title_IsPlayer"]); break; case "charsheetname_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["CharSheetName"]); break; case "sheetname_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["SheetName"]); break; case "full_name_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["FullName"]); break; case "ancestry_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Ancestry"]); break; case "ethnicity_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Ethnicity"]); break; case "quickdescription_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["QuickDescription"]); break; case "ttl_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Title"]); break; case "age_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Age"]); break; case "gender_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Gender"]); break; case "homeregion_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["HomeRegion"]); break; case "backstory_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Backstory"]); break; case "adv-level_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Level"]); break; case "adv-cr_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["CR"]); break; case "potency_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Potency"]); break; case "ttl-startingjin_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Title_StartingJin"]); break; case "ttl-name_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Title_Name"]); break; case "ttl-familyname_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Title_FamilyName"]); break; case "note-gengender_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Note_GenGender"]); break; case "note-genhomeregion_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Note_GenHomeRegion"]); break; case "note-genpersonality_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Note_GenPersonality"]); break; case "note-genmotivation_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Note_GenMotivation"]); break; }
 });
 on("change:affinity_moreinfo", function (eventinfo) {
 switch (eventinfo.sourceAttribute) { case "affinity_moreinfo": WuxWorkerManual.OpenManualWithDefinitions(["Affinity", "Wood", "Fire", "Earth", "Metal", "Water"]); break; }

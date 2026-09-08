@@ -812,6 +812,12 @@ input[type=hidden].wuxTabHighlight-Flag[value="Jobs"] ~ .wuxPageDisplay-Jobs .wu
 input[type=hidden].wuxTabHighlight-Flag[value="Attributes"] ~ .wuxPageDisplay-Attributes .wuxTabButtonValue-Attributes,
 input[type=hidden].wuxTabHighlight-Flag[value="Knowledge"] ~ .wuxPageDisplay-Knowledge .wuxTabButtonValue-Knowledge,
 input[type=hidden].wuxTabHighlight-Flag[value="Styles"] ~ .wuxPageDisplay-Styles .wuxTabButtonValue-Styles,
+/* Standing on the top-level Styles tab actually renders DisplayActionSheet's content
+   (revealed cross-page by a separate rule, WCSS-Specialized.css, ~ .wuxPageDisplay-Actions
+   when this same flag is "Styles") rather than DisplayStylesSheet's own - so its nav copy,
+   nested inside .wuxPageDisplay-Actions instead of .wuxPageDisplay-Styles, needs its own
+   selector here too or its tab button never matches the line above. */
+input[type=hidden].wuxTabHighlight-Flag[value="Styles"] ~ .wuxPageDisplay-Actions .wuxTabButtonValue-Styles,
 input[type=hidden].wuxTabHighlight-Flag[value="Gear"] ~ .wuxPageDisplay-Gear .wuxTabButtonValue-Gear,
 input[type=hidden].wuxTabHighlight-Flag[value="Actions"] ~ .wuxPageDisplay-Actions .wuxTabButtonValue-Actions,
 input[type=hidden].wuxTabHighlight-Flag[value="Character"] ~ .wuxPageDisplay-Character .wuxTabButtonValue-Character,
@@ -830,6 +836,7 @@ input[type=hidden].wuxTabHighlight-Flag[value="Jobs"] ~ .wuxPageDisplay-Jobs .wu
 input[type=hidden].wuxTabHighlight-Flag[value="Attributes"] ~ .wuxPageDisplay-Attributes .wuxTabButtonValue-Attributes span,
 input[type=hidden].wuxTabHighlight-Flag[value="Knowledge"] ~ .wuxPageDisplay-Knowledge .wuxTabButtonValue-Knowledge span,
 input[type=hidden].wuxTabHighlight-Flag[value="Styles"] ~ .wuxPageDisplay-Styles .wuxTabButtonValue-Styles span,
+input[type=hidden].wuxTabHighlight-Flag[value="Styles"] ~ .wuxPageDisplay-Actions .wuxTabButtonValue-Styles span,
 input[type=hidden].wuxTabHighlight-Flag[value="Gear"] ~ .wuxPageDisplay-Gear .wuxTabButtonValue-Gear span,
 input[type=hidden].wuxTabHighlight-Flag[value="Actions"] ~ .wuxPageDisplay-Actions .wuxTabButtonValue-Actions span,
 input[type=hidden].wuxTabHighlight-Flag[value="Character"] ~ .wuxPageDisplay-Character .wuxTabButtonValue-Character span,

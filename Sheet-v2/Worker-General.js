@@ -221,32 +221,114 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
         },
         generateCharacter = function () {
             let attributeHandler = new WorkerAttributeHandler();
-            let nameVar = WuxDef.GetVariable("DisplayName");
-            let fullNameVar = WuxDef.GetVariable("FullName");
-            let ethnicityVar = WuxDef.GetVariable("Ethnicity");
-            let genderVar = WuxDef.GetVariable("Gender");
-            let homeRegionVar = WuxDef.GetVariable("HomeRegion");
-            let personalityVar = WuxDef.GetVariable("Soc_Personality");
-            let motivationVar = WuxDef.GetVariable("Soc_Motivation");
-            attributeHandler.addMod([nameVar, fullNameVar, ethnicityVar, genderVar, homeRegionVar, personalityVar, motivationVar]);
+            // Ad hoc modifier suffix on an already-registered definition (same trick as
+            // the "_lock" fields above) - no new definition needed. Flags this whole
+            // batch as sheet-worker-driven so listenerLockGeneratorFieldOnEdit
+            // (WuxGS-Backend.js) can tell it apart from a genuine player edit and skip
+            // locking. eventinfo.sourceType alone wasn't reliable enough under rapid,
+            // overlapping Generate Character clicks (confirmed - repeated fast presses
+            // eventually locked every field); this is a second, deterministic check.
+            // Cleared in a separate finishCallback pass (not written here directly), so
+            // it stays "on" through every one of this batch's own change-listener
+            // firings - not just the first field's - rather than being cleared before
+            // the later ones get a chance to check it.
+            let isGeneratingVar = WuxDef.GetVariable("Note_GenerateCharacter", "_active");
+            let nameVar = WuxDef.GetVariable("Note_GenName");
+            let nameLockVar = WuxDef.GetVariable("Note_GenName", "_lock");
+            let fullNameVar = WuxDef.GetVariable("Note_GenFullName");
+            let fullNameLockVar = WuxDef.GetVariable("Note_GenFullName", "_lock");
+            let genderVar = WuxDef.GetVariable("Note_GenGender");
+            let genderLockVar = WuxDef.GetVariable("Note_GenGender", "_lock");
+            let homeRegionVar = WuxDef.GetVariable("Note_GenHomeRegion");
+            let homeRegionLockVar = WuxDef.GetVariable("Note_GenHomeRegion", "_lock");
+            let personalityVar = WuxDef.GetVariable("Note_GenPersonality");
+            let personalityLockVar = WuxDef.GetVariable("Note_GenPersonality", "_lock");
+            let motivationVar = WuxDef.GetVariable("Note_GenMotivation");
+            let motivationLockVar = WuxDef.GetVariable("Note_GenMotivation", "_lock");
+            attributeHandler.addMod([
+                nameVar, nameLockVar, fullNameVar, fullNameLockVar, genderVar, genderLockVar,
+                homeRegionVar, homeRegionLockVar, personalityVar, personalityLockVar, motivationVar, motivationLockVar
+            ]);
 
             attributeHandler.addGetAttrCallback(function (attrHandler) {
                 let generator = new WuxingHumanCharacterGenerator();
-                generator.character.firstName = attrHandler.parseString(nameVar);
-                generator.character.fullName = attrHandler.parseString(fullNameVar);
-                generator.character.ancestry = attrHandler.parseString(ethnicityVar);
-                generator.character.gender = attrHandler.parseString(genderVar);
-                generator.character.homeRegion = attrHandler.parseString(homeRegionVar);
-                generator.character.personality = getTitleFromDefinitionName(attrHandler.parseString(personalityVar));
-                generator.character.motivation = getTitleFromDefinitionName(attrHandler.parseString(motivationVar));
+                // Each field's own lock toggle (WuxSheetMain.LockToggle, a plain checkbox -
+                // Roll20 sends "on" for a checked checkbox with no explicit value=, same
+                // convention Gear_AutoEquipItems etc. already rely on) decides whether this
+                // preserves the field's current draft value or always proposes a fresh one.
+                // WuxingHumanCharacterGenerator.generateCharacter()/generateName() only
+                // randomize a field when it's still blank, so leaving it blank here
+                // (unlocked) forces a fresh value, while seeding it from the CURRENT DRAFT
+                // (locked) preserves it unchanged. This replaces the old behavior of
+                // seeding from the real character attribute instead, whose "locked" state
+                // was just whatever that attribute's blank/non-blank status happened to be
+                // - not something the player could toggle independently of it.
+                let isLocked = lockVar => attrHandler.parseString(lockVar) === "on";
+                if (isLocked(nameLockVar)) {
+                    generator.character.firstName = attrHandler.parseString(nameVar);
+                }
+                if (isLocked(fullNameLockVar)) {
+                    generator.character.fullName = attrHandler.parseString(fullNameVar);
+                }
+                if (isLocked(genderLockVar)) {
+                    generator.character.gender = attrHandler.parseString(genderVar);
+                }
+                if (isLocked(homeRegionLockVar)) {
+                    generator.character.homeRegion = attrHandler.parseString(homeRegionVar);
+                }
+                if (isLocked(personalityLockVar)) {
+                    generator.character.personality = getTitleFromDefinitionName(attrHandler.parseString(personalityVar));
+                }
+                if (isLocked(motivationLockVar)) {
+                    generator.character.motivation = getTitleFromDefinitionName(attrHandler.parseString(motivationVar));
+                }
+
+                // ancestry is intentionally never set here (background generator no
+                // longer proposes a race at all - it was setting it incorrectly).
+                // generateCharacter() still generates one internally off homeRegion
+                // when ancestry is blank (WAPI-Database.js), but that value is simply
+                // never read back out or written anywhere below.
                 generator.generateCharacter();
+
+                // Note_GenFullName now holds just the family/last name (Title_FamilyName
+                // in the UI), not the generator class's own combined "First Last" string -
+                // WuxWorkerGeneral.UseGeneration joins Note_GenName + this to build the
+                // real FullName instead. The class always builds fullName as
+                // "{firstName} {familyName...}" (generateName, WAPI-Database.js - the
+                // Aridsha double-barrel case included), so stripping the known
+                // "{firstName} " prefix recovers just the family portion regardless of
+                // which fields were locked/regenerated this pass.
+                let firstNamePrefix = `${generator.character.firstName} `;
+                let familyNameOnly = generator.character.fullName.startsWith(firstNamePrefix)
+                    ? generator.character.fullName.slice(firstNamePrefix.length)
+                    : generator.character.fullName;
                 attrHandler.addUpdate(WuxDef.GetVariable("Note_GenName"), generator.character.firstName);
-                attrHandler.addUpdate(WuxDef.GetVariable("Note_GenFullName"), generator.character.fullName);
-                attrHandler.addUpdate(WuxDef.GetVariable("Note_GenRace"), generator.character.ancestry);
+                attrHandler.addUpdate(WuxDef.GetVariable("Note_GenFullName"), familyNameOnly);
                 attrHandler.addUpdate(WuxDef.GetVariable("Note_GenGender"), generator.character.gender);
                 attrHandler.addUpdate(WuxDef.GetVariable("Note_GenHomeRegion"), generator.character.homeRegion);
-                attrHandler.addUpdate(WuxDef.GetVariable("Note_GenPersonality"), generator.character.personality);
-                attrHandler.addUpdate(WuxDef.GetVariable("Note_GenMotivation"), generator.character.motivation);
+
+                // Note_GenPersonality/Note_GenMotivation are dropdowns bound by definition
+                // name (BuildInfluenceTypeSelect, same as Soc_Personality/Soc_Motivation's
+                // own selects), but the generator class itself always works in
+                // human-readable titles (see WAPI-Target.js's own use of it for NPC
+                // generation) - convert before writing so the dropdown pre-selects the
+                // generated option, and populate its description field the same way
+                // useGeneration does below for the real attribute.
+                let generatedPersonalityName = getDefinitionNameFromTitle("PersonalityType", generator.character.personality);
+                let generatedMotivationName = getDefinitionNameFromTitle("MotivationType", generator.character.motivation);
+                attrHandler.addUpdate(WuxDef.GetVariable("Note_GenPersonality"), generatedPersonalityName);
+                attrHandler.addUpdate(WuxDef.GetVariable("Note_GenMotivation"), generatedMotivationName);
+                attrHandler.addUpdate(WuxDef.GetVariable("Note_GenPersonality", WuxDef._db),
+                    generatedPersonalityName === "0" ? "" : WuxDef.Get(generatedPersonalityName).descriptions[0]);
+                attrHandler.addUpdate(WuxDef.GetVariable("Note_GenMotivation", WuxDef._db),
+                    generatedMotivationName === "0" ? "" : WuxDef.Get(generatedMotivationName).descriptions[0]);
+
+                attrHandler.addUpdate(isGeneratingVar, "1");
+            });
+            attributeHandler.addFinishCallback(function () {
+                let clearHandler = new WorkerAttributeHandler();
+                clearHandler.addUpdate(isGeneratingVar, "0");
+                clearHandler.run();
             });
             attributeHandler.run();
 
@@ -257,21 +339,35 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             let fullNameVar = WuxDef.GetVariable("Note_GenFullName");
             let genderVar = WuxDef.GetVariable("Note_GenGender");
             let homeRegionVar = WuxDef.GetVariable("Note_GenHomeRegion");
-            let raceVar = WuxDef.GetVariable("Note_GenRace");
             let personalityVar = WuxDef.GetVariable("Note_GenPersonality");
             let motivationVar = WuxDef.GetVariable("Note_GenMotivation");
-            attributeHandler.addMod([nameVar, fullNameVar, genderVar, homeRegionVar, raceVar, personalityVar, motivationVar]);
+            attributeHandler.addMod([nameVar, fullNameVar, genderVar, homeRegionVar, personalityVar, motivationVar]);
             attributeHandler.addGetAttrCallback(function (attrHandler) {
-                attrHandler.addUpdate("character_name", attrHandler.parseString(nameVar));
-                attrHandler.addUpdate(WuxDef.GetVariable("SheetName"), attrHandler.parseString(nameVar));
-                attrHandler.addUpdate(WuxDef.GetVariable("DisplayName"), attrHandler.parseString(nameVar));
-                attrHandler.addUpdate(WuxDef.GetVariable("FullName"), attrHandler.parseString(fullNameVar));
+                let firstName = attrHandler.parseString(nameVar);
+                let familyName = attrHandler.parseString(fullNameVar);
+                attrHandler.addUpdate("character_name", firstName);
+                // CharacterBackgroundBuilder (the generator's own host) is used from both
+                // the Origin page (backgroundBasics' sheetNameField shows CharSheetName,
+                // gated on Page=="OriginData") and the Character/Details page (shows
+                // SheetName, gated on Page=="CharacterData") - only one is visible at a
+                // time depending on where this ran from, so both need setting or whichever
+                // one is currently on screen silently never updates.
+                attrHandler.addUpdate(WuxDef.GetVariable("CharSheetName"), firstName);
+                attrHandler.addUpdate(WuxDef.GetVariable("SheetName"), firstName);
+                attrHandler.addUpdate(WuxDef.GetVariable("DisplayName"), firstName);
+                // Note_GenFullName (Title_FamilyName in the UI) is just the last name now,
+                // not a full "First Last" string - build the real FullName from both
+                // fields instead of copying this one directly.
+                attrHandler.addUpdate(WuxDef.GetVariable("FullName"),
+                    familyName === "" ? firstName : `${firstName} ${familyName}`);
                 attrHandler.addUpdate(WuxDef.GetVariable("Gender"), attrHandler.parseString(genderVar));
                 attrHandler.addUpdate(WuxDef.GetVariable("HomeRegion"), attrHandler.parseString(homeRegionVar));
-                attrHandler.addUpdate(WuxDef.GetVariable("Ethnicity"), attrHandler.parseString(raceVar));
 
-                let personalityName = getDefinitionNameFromTitle("PersonalityType", attrHandler.parseString(personalityVar));
-                let motivationName = getDefinitionNameFromTitle("MotivationType", attrHandler.parseString(motivationVar));
+                // Note_GenPersonality/Note_GenMotivation are already definition names
+                // (the dropdown's own option values), same as Soc_Personality/
+                // Soc_Motivation - no title->name conversion needed anymore.
+                let personalityName = attrHandler.parseString(personalityVar);
+                let motivationName = attrHandler.parseString(motivationVar);
                 attrHandler.addUpdate(WuxDef.GetVariable("Soc_Personality"), personalityName);
                 attrHandler.addUpdate(WuxDef.GetVariable("Soc_Motivation"), motivationName);
                 attrHandler.addUpdate(WuxDef.GetVariable("Soc_Personality", WuxDef._db), personalityName === "0" ? "" : WuxDef.Get(personalityName).descriptions[0]);
@@ -279,14 +375,19 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             });
             attributeHandler.run();
         },
-        clearBackground = function () {
+        // Still bound to Note_ClearBackground (its title changed to "Unlock All Fields"
+        // in the sheet's own source data, but the definition's own name/attribute
+        // didn't) - sets every Background Generator field's own "_lock" checkbox back
+        // to its unchecked/unlocked state ("0", not "on" - see WuxSheetMain.LockToggle),
+        // so the next Generate Character is free to propose a fresh value for all of
+        // them again.
+        unlockAllFields = function () {
             let attributeHandler = new WorkerAttributeHandler();
+            let lockVars = ["Note_GenName", "Note_GenFullName", "Note_GenGender",
+                "Note_GenHomeRegion", "Note_GenPersonality", "Note_GenMotivation"]
+                .map(name => WuxDef.GetVariable(name, "_lock"));
             attributeHandler.addGetAttrCallback(function (attrHandler) {
-                attrHandler.addUpdate(WuxDef.GetVariable("SheetName"), "");
-                attrHandler.addUpdate(WuxDef.GetVariable("DisplayName"), "");
-                attrHandler.addUpdate(WuxDef.GetVariable("FullName"), "");
-                attrHandler.addUpdate(WuxDef.GetVariable("Gender"), "");
-                attrHandler.addUpdate(WuxDef.GetVariable("HomeRegion"), "");
+                lockVars.forEach(lockVar => attrHandler.addUpdate(lockVar, "0"));
             });
             attributeHandler.run();
         },
@@ -294,7 +395,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
             "Title_IsPlayer", "CharSheetName", "SheetName", "DisplayName", "FullName", "Ancestry", "Ethnicity",
             "AffinityAspect", "QuickDescription", "Title", "Age", "Gender", "HomeRegion", "Backstory",
             "Level", "Potency", "Jin",
-            "Note_GenName", "Note_GenFullName", "Note_GenGender", "Note_GenHomeRegion", "Note_GenRace",
+            "Note_GenName", "Note_GenFullName", "Note_GenGender", "Note_GenHomeRegion",
             "Note_GenPersonality", "Note_GenMotivation"
         ],
 
@@ -691,7 +792,7 @@ var WuxWorkerGeneral = WuxWorkerGeneral || (function () {
         UpdatePrimaryAffinity: updatePrimaryAffinity,
         GenerateCharacter: generateCharacter,
         UseGeneration: useGeneration,
-        ClearBackground: clearBackground,
+        UnlockAllFields: unlockAllFields,
         ExportBackgroundData: exportBackgroundData,
         ImportBackgroundData: importBackgroundData,
         UpdateCR: updateCR,

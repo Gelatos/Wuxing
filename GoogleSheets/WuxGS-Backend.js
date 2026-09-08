@@ -385,12 +385,13 @@ var OverviewBuilder = OverviewBuilder || (function () {
             output += listenerSetAffinity();
             output += listenerGenerateCharacter();
             output += listenerUseGeneration();
-            output += listenerClearBackground();
+            output += listenerUnlockAllFields();
             output += listenerImportBackgroundData();
             output += listenerUpdateCR();
             output += listenerUpdateSurge();
             output += listenerUpdateVitality();
             output += listenerOriginBuilderFieldsUpdate();
+            output += listenerLockGeneratorFieldOnEdit();
             output += listenerUpdatePersonalityDescription();
             output += listenerUpdateMotivationDescription();
             return output;
@@ -431,9 +432,9 @@ var OverviewBuilder = OverviewBuilder || (function () {
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
-        listenerClearBackground = function () {
+        listenerUnlockAllFields = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Note_ClearBackground")}`];
-            let output = `WuxWorkerGeneral.ClearBackground();\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+            let output = `WuxWorkerGeneral.UnlockAllFields();\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
@@ -479,13 +480,46 @@ var OverviewBuilder = OverviewBuilder || (function () {
                 WuxDef.GetVariable("Note_GenFullName"),
                 WuxDef.GetVariable("Note_GenGender"),
                 WuxDef.GetVariable("Note_GenHomeRegion"),
-                WuxDef.GetVariable("Note_GenRace"),
                 WuxDef.GetVariable("Note_GenPersonality"),
                 WuxDef.GetVariable("Note_GenMotivation")
             ];
             let output = `WuxWorkerActions.TriggerBuilderActionUpdate();\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+        },
+        // Editing any Background Generator field by hand locks it, same as clicking its
+        // own lock toggle (WuxSheetMain.LockToggle) - a manual edit means the player
+        // wants to keep it, so the next Generate Character shouldn't overwrite it.
+        // GenerateCharacter/UseGeneration write to these same fields via setAttrs(...,
+        // {silent:true}) (WorkerAttributeHandler.run, WJS-Service.js), which is meant to
+        // suppress on("change:...") for that write - the sourceType check below guards
+        // against it firing anyway (see the near-identical commented-out check in
+        // WuxSheetBackend.onChange above), but confirmed that alone wasn't reliable
+        // enough under rapid, overlapping Generate Character clicks (repeated fast
+        // presses eventually locked every field regardless). Note_GenerateCharacter's
+        // own "_active" flag (GenerateCharacter, Worker-General.js) is the deterministic
+        // second check - it's "1" for every one of a single Generate Character pass's
+        // own change-listener firings across all 6 fields, not just the first, and only
+        // clears afterward in a separate pass.
+        listenerLockGeneratorFieldOnEdit = function () {
+            let fieldNames = [
+                "Note_GenName", "Note_GenFullName", "Note_GenGender",
+                "Note_GenHomeRegion", "Note_GenPersonality", "Note_GenMotivation"
+            ];
+            let isGeneratingVar = WuxDef.GetVariable("Note_GenerateCharacter", "_active");
+            let cases = fieldNames.map(name =>
+                `case "${WuxDef.GetVariable(name)}": attrHandler.addUpdate("${WuxDef.GetVariable(name, "_lock")}", "on"); break;`
+            ).join(" ");
+            let output = `if (eventinfo.sourceType === "sheetworker") return;
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod("${isGeneratingVar}");
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                if (attrHandler.parseString("${isGeneratingVar}") === "1") { return; }
+                switch (eventinfo.sourceAttribute) { ${cases} }
+            });
+            attributeHandler.run();`;
+
+            return WuxSheetBackend.OnChange(fieldNames.map(name => WuxDef.GetVariable(name)), output, true);
         },
         listenerUpdatePersonalityDescription = function () {
             let groupVariableNames = [WuxDef.GetVariable("Soc_Personality")];
@@ -1486,7 +1520,7 @@ var PopupBuilder = PopupBuilder || (function () {
                 "Title_IsPlayer", "CharSheetName", "SheetName", "FullName", "Ancestry", "Ethnicity", "QuickDescription",
                 "Title", "Age", "Gender", "HomeRegion", "Backstory",
                 "Level", "CR", "Potency", "Title_StartingJin",
-                "Note_GenName", "Note_GenFullName", "Note_GenGender", "Note_GenHomeRegion", "Note_GenRace", "Note_GenPersonality", "Note_GenMotivation"
+                "Title_Name", "Title_FamilyName", "Note_GenGender", "Note_GenHomeRegion", "Note_GenPersonality", "Note_GenMotivation"
             ];
             let definitions = originFieldNames.map(name => WuxDef.Get(name));
             // true - see listenerOpenManualForDefinitions' own comment. Most of

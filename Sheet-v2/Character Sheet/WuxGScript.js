@@ -10664,6 +10664,20 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return `<div class="wuxMoreInfoBlock">${toggleButton}${fullDescription}</div>`;
         },
 
+        // Per-field lock toggle for the Background Generator (Note_Gen* fields) - shows a
+        // die by default (this field gets randomized), swapping to a lock icon once
+        // toggled (Generate Character will leave this field's draft value alone -
+        // WuxWorkerGeneral.GenerateCharacter reads this same "_lock" attribute per field,
+        // instead of the old behavior of only regenerating a field when the REAL
+        // character attribute was blank). Same single-checkbox, two-span :checked
+        // icon-swap mechanism as MoreInfo above, just without a revealed description - no
+        // :has() needed here.
+        lockToggle = function (definition) {
+            let lockAttr = definition.getAttribute("_lock");
+            let icons = `<span class="wuxLockIconRandom">&#127922;</span><span class="wuxLockIconLocked">&#128274;</span>`;
+            return button(lockAttr, icons, "wuxLockToggleButton");
+        },
+
         pictosButton = function (fieldName, contents, className) {
             if (className == undefined) {
                 className = "";
@@ -11066,6 +11080,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         Select: select,
         Button: button,
         MoreInfo: moreInfo,
+        LockToggle: lockToggle,
         PictosButton: pictosButton,
         MultiRowGroup: multiRowGroup,
         HiddenField: hiddenField,
@@ -11329,9 +11344,14 @@ var WuxDefinition = WuxDefinition || (function () {
                 WuxSheetMain.Desc(textContents);
         },
 
-        buildTextInput = function (definition, fieldName, className, useManualButton) {
+        // extraContent (optional) - e.g. a lock toggle (WuxSheetMain.LockToggle) - sits
+        // beside the input on its own row (wuxGeneratorFieldRow, WCSS-Specialized.css)
+        // instead of stacking below it, while the header stays above as usual. Omitted,
+        // this is unchanged from before.
+        buildTextInput = function (definition, fieldName, className, useManualButton, extraContent) {
+            let input = WuxSheetMain.CustomInput("text", fieldName, className);
             return buildHeader(definition, useManualButton) + "\n" +
-                WuxSheetMain.CustomInput("text", fieldName, className);
+                (extraContent ? `<div class="wuxGeneratorFieldRow">${input}${extraContent}</div>` : input);
         },
 
         buildTextarea = function (definition, fieldName, className, placeholder, useManualButton) {
@@ -11349,9 +11369,11 @@ var WuxDefinition = WuxDefinition || (function () {
                 WuxSheetMain.MultiRow(WuxSheetMain.Input("number", fieldName, "", "0") + WuxSheetMain.InputLabel(labelContent));
         },
 
-        buildSelect = function (definition, fieldName, definitionGroup, showEmpty, useManualButton) {
+        // extraContent (optional) - see buildTextInput's own comment above, same shape.
+        buildSelect = function (definition, fieldName, definitionGroup, showEmpty, useManualButton, extraContent) {
+            let select = WuxSheetMain.Select(fieldName, definitionGroup, showEmpty);
             return buildHeader(definition, useManualButton) + "\n" +
-                WuxSheetMain.Select(fieldName, definitionGroup, showEmpty);
+                (extraContent ? `<div class="wuxGeneratorFieldRow">${select}${extraContent}</div>` : select);
         }
     ;
     return {
@@ -12054,16 +12076,20 @@ var WuxCharacterSheetBuilders = WuxCharacterSheetBuilders || (function () {
             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth300");
         },
 
-        buildInfluenceTypeSelect = function (selectDef, groupName) {
+        // extraContent (optional) - see WuxDefinition.BuildTextInput's own comment for
+        // the shape/purpose; sits beside the select specifically (not the DescField
+        // below it).
+        buildInfluenceTypeSelect = function (selectDef, groupName, extraContent) {
             let options = WuxDef.Filter([new DatabaseFilterData("group", groupName)]);
             let optionsHtml = `<option value="0">-</option>`;
             for (let i = 0; i < options.length; i++) {
                 optionsHtml += `\n<option value="${options[i].name}">${options[i].subGroup} - ${options[i].title}</option>`;
             }
+            let select = `<select class="wuxInput" name="${selectDef.getAttribute()}" value="0">${optionsHtml}
+                </select>`;
 
             return `${WuxDefinition.BuildHeader(selectDef)}
-                <select class="wuxInput" name="${selectDef.getAttribute()}" value="0">${optionsHtml}
-                </select>
+                ${extraContent ? `<div class="wuxGeneratorFieldRow">${select}${extraContent}</div>` : select}
                 ${WuxSheetMain.DescField(selectDef.getAttribute(WuxDef._db))}`;
         },
 
@@ -12129,6 +12155,7 @@ var WuxCharacterSheetBuilders = WuxCharacterSheetBuilders || (function () {
     ;
     return {
         BuildInfluences: buildInfluences,
+        BuildInfluenceTypeSelect: buildInfluenceTypeSelect,
         BuildBackgroundBasics: buildBackgroundBasics,
         BuildBackgroundBackstory: buildBackgroundBackstory,
         BuildBackgroundGenerator: buildBackgroundGenerator,
@@ -14895,12 +14922,13 @@ var OverviewBuilder = OverviewBuilder || (function () {
             output += listenerSetAffinity();
             output += listenerGenerateCharacter();
             output += listenerUseGeneration();
-            output += listenerClearBackground();
+            output += listenerUnlockAllFields();
             output += listenerImportBackgroundData();
             output += listenerUpdateCR();
             output += listenerUpdateSurge();
             output += listenerUpdateVitality();
             output += listenerOriginBuilderFieldsUpdate();
+            output += listenerLockGeneratorFieldOnEdit();
             output += listenerUpdatePersonalityDescription();
             output += listenerUpdateMotivationDescription();
             return output;
@@ -14941,9 +14969,9 @@ var OverviewBuilder = OverviewBuilder || (function () {
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
-        listenerClearBackground = function () {
+        listenerUnlockAllFields = function () {
             let groupVariableNames = [`${WuxDef.GetVariable("Note_ClearBackground")}`];
-            let output = `WuxWorkerGeneral.ClearBackground();\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
+            let output = `WuxWorkerGeneral.UnlockAllFields();\nWuxWorkerActions.TriggerBuilderActionUpdate();\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
         },
@@ -14989,13 +15017,46 @@ var OverviewBuilder = OverviewBuilder || (function () {
                 WuxDef.GetVariable("Note_GenFullName"),
                 WuxDef.GetVariable("Note_GenGender"),
                 WuxDef.GetVariable("Note_GenHomeRegion"),
-                WuxDef.GetVariable("Note_GenRace"),
                 WuxDef.GetVariable("Note_GenPersonality"),
                 WuxDef.GetVariable("Note_GenMotivation")
             ];
             let output = `WuxWorkerActions.TriggerBuilderActionUpdate();\n`;
 
             return WuxSheetBackend.OnChange(groupVariableNames, output, false);
+        },
+        // Editing any Background Generator field by hand locks it, same as clicking its
+        // own lock toggle (WuxSheetMain.LockToggle) - a manual edit means the player
+        // wants to keep it, so the next Generate Character shouldn't overwrite it.
+        // GenerateCharacter/UseGeneration write to these same fields via setAttrs(...,
+        // {silent:true}) (WorkerAttributeHandler.run, WJS-Service.js), which is meant to
+        // suppress on("change:...") for that write - the sourceType check below guards
+        // against it firing anyway (see the near-identical commented-out check in
+        // WuxSheetBackend.onChange above), but confirmed that alone wasn't reliable
+        // enough under rapid, overlapping Generate Character clicks (repeated fast
+        // presses eventually locked every field regardless). Note_GenerateCharacter's
+        // own "_active" flag (GenerateCharacter, Worker-General.js) is the deterministic
+        // second check - it's "1" for every one of a single Generate Character pass's
+        // own change-listener firings across all 6 fields, not just the first, and only
+        // clears afterward in a separate pass.
+        listenerLockGeneratorFieldOnEdit = function () {
+            let fieldNames = [
+                "Note_GenName", "Note_GenFullName", "Note_GenGender",
+                "Note_GenHomeRegion", "Note_GenPersonality", "Note_GenMotivation"
+            ];
+            let isGeneratingVar = WuxDef.GetVariable("Note_GenerateCharacter", "_active");
+            let cases = fieldNames.map(name =>
+                `case "${WuxDef.GetVariable(name)}": attrHandler.addUpdate("${WuxDef.GetVariable(name, "_lock")}", "on"); break;`
+            ).join(" ");
+            let output = `if (eventinfo.sourceType === "sheetworker") return;
+            let attributeHandler = new WorkerAttributeHandler();
+            attributeHandler.addMod("${isGeneratingVar}");
+            attributeHandler.addGetAttrCallback(function (attrHandler) {
+                if (attrHandler.parseString("${isGeneratingVar}") === "1") { return; }
+                switch (eventinfo.sourceAttribute) { ${cases} }
+            });
+            attributeHandler.run();`;
+
+            return WuxSheetBackend.OnChange(fieldNames.map(name => WuxDef.GetVariable(name)), output, true);
         },
         listenerUpdatePersonalityDescription = function () {
             let groupVariableNames = [WuxDef.GetVariable("Soc_Personality")];
@@ -15996,7 +16057,7 @@ var PopupBuilder = PopupBuilder || (function () {
                 "Title_IsPlayer", "CharSheetName", "SheetName", "FullName", "Ancestry", "Ethnicity", "QuickDescription",
                 "Title", "Age", "Gender", "HomeRegion", "Backstory",
                 "Level", "CR", "Potency", "Title_StartingJin",
-                "Note_GenName", "Note_GenFullName", "Note_GenGender", "Note_GenHomeRegion", "Note_GenRace", "Note_GenPersonality", "Note_GenMotivation"
+                "Title_Name", "Title_FamilyName", "Note_GenGender", "Note_GenHomeRegion", "Note_GenPersonality", "Note_GenMotivation"
             ];
             let definitions = originFieldNames.map(name => WuxDef.Get(name));
             // true - see listenerOpenManualForDefinitions' own comment. Most of
@@ -19001,21 +19062,48 @@ class CharacterBackgroundBuilder {
     }
 
     backgroundGenerator() {
+        // Each field sits beside its own lock toggle on one row (wuxGeneratorFieldRow,
+        // WCSS-Specialized.css), passed as these builders' own optional extraContent
+        // param so it lands beside the input/select itself rather than beside the
+        // whole header+input block. Locking a field is what now keeps Generate
+        // Character from touching its draft value - see
+        // WuxWorkerGeneral.GenerateCharacter, which reads this same "_lock" attribute
+        // per field instead of the old "only regenerate if the real character
+        // attribute is blank" behavior.
+        let lockToggle = definition => WuxSheetMain.LockToggle(definition);
+
+        // Title_Name/Title_FamilyName drive these two headers (and their Manual
+        // buttons - see listenerOpenManualForOrigin, WuxGS-Backend.js) instead of
+        // Note_GenName/Note_GenFullName's own titles, but the actual data attribute
+        // (2nd arg) and lock toggle both still bind to Note_GenName/Note_GenFullName
+        // as before - same "title definition != data attribute" split
+        // buildAdvancementData already uses for Title_StartingJin/Jin. The Family
+        // Name field now holds just the last name (not a full "First Last" string) -
+        // WuxWorkerGeneral.GenerateCharacter/UseGeneration compute the real FullName
+        // by joining Note_GenName + Note_GenFullName.
         let leftColumn = "";
-        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenName"), WuxDef.GetAttribute("Note_GenName"), undefined, true);
-        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenFullName"), WuxDef.GetAttribute("Note_GenFullName"), undefined, true);
-        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenGender"), WuxDef.GetAttribute("Note_GenGender"), undefined, true);
+        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Title_Name"), WuxDef.GetAttribute("Note_GenName"), undefined, true,
+            lockToggle(WuxDef.Get("Note_GenName")));
+        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Title_FamilyName"), WuxDef.GetAttribute("Note_GenFullName"), undefined, true,
+            lockToggle(WuxDef.Get("Note_GenFullName")));
+        // Gender/Personality/Motivation dropdowns use the exact same groups/builders as
+        // their Origin-information counterparts (backgroundBackstory's Gender select,
+        // WuxCharacterSheetBuilders.buildInfluences' Personality/Motivation selects) -
+        // just bound to the draft Note_Gen* attributes instead of the real ones.
+        leftColumn += WuxDefinition.BuildSelect(WuxDef.Get("Note_GenGender"), WuxDef.GetAttribute("Note_GenGender"),
+            WuxDef.Filter([new DatabaseFilterData("group", "GenderType")]), true, true, lockToggle(WuxDef.Get("Note_GenGender")));
         leftColumn += WuxDefinition.BuildSelect(WuxDef.Get("Note_GenHomeRegion"), WuxDef.GetAttribute("Note_GenHomeRegion"),
-            WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]), undefined, true);
-        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenRace"), WuxDef.GetAttribute("Note_GenRace"), undefined, true);
+            WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]), undefined, true, lockToggle(WuxDef.Get("Note_GenHomeRegion")));
         leftColumn = WuxSheetMain.Table.FlexTableGroup(leftColumn);
 
         let rightColumn = "";
         let generatorDefinition = WuxDef.Get("Note_GenerateCharacter");
         let useDefinition = WuxDef.Get("Note_UseGeneration");
         let clearDefinition = WuxDef.Get("Note_ClearBackground");
-        rightColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenPersonality"), WuxDef.GetAttribute("Note_GenPersonality"), undefined, true);
-        rightColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenMotivation"), WuxDef.GetAttribute("Note_GenMotivation"), undefined, true);
+        rightColumn += WuxCharacterSheetBuilders.BuildInfluenceTypeSelect(WuxDef.Get("Note_GenPersonality"), "PersonalityType",
+            lockToggle(WuxDef.Get("Note_GenPersonality")));
+        rightColumn += WuxCharacterSheetBuilders.BuildInfluenceTypeSelect(WuxDef.Get("Note_GenMotivation"), "MotivationType",
+            lockToggle(WuxDef.Get("Note_GenMotivation")));
         rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(generatorDefinition.getAttribute(), generatorDefinition.getTitle()));
         rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(useDefinition.getAttribute(), useDefinition.getTitle()));
         rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(clearDefinition.getAttribute(), clearDefinition.getTitle()));

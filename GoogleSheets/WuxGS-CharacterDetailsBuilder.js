@@ -98,21 +98,48 @@ class CharacterBackgroundBuilder {
     }
 
     backgroundGenerator() {
+        // Each field sits beside its own lock toggle on one row (wuxGeneratorFieldRow,
+        // WCSS-Specialized.css), passed as these builders' own optional extraContent
+        // param so it lands beside the input/select itself rather than beside the
+        // whole header+input block. Locking a field is what now keeps Generate
+        // Character from touching its draft value - see
+        // WuxWorkerGeneral.GenerateCharacter, which reads this same "_lock" attribute
+        // per field instead of the old "only regenerate if the real character
+        // attribute is blank" behavior.
+        let lockToggle = definition => WuxSheetMain.LockToggle(definition);
+
+        // Title_Name/Title_FamilyName drive these two headers (and their Manual
+        // buttons - see listenerOpenManualForOrigin, WuxGS-Backend.js) instead of
+        // Note_GenName/Note_GenFullName's own titles, but the actual data attribute
+        // (2nd arg) and lock toggle both still bind to Note_GenName/Note_GenFullName
+        // as before - same "title definition != data attribute" split
+        // buildAdvancementData already uses for Title_StartingJin/Jin. The Family
+        // Name field now holds just the last name (not a full "First Last" string) -
+        // WuxWorkerGeneral.GenerateCharacter/UseGeneration compute the real FullName
+        // by joining Note_GenName + Note_GenFullName.
         let leftColumn = "";
-        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenName"), WuxDef.GetAttribute("Note_GenName"), undefined, true);
-        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenFullName"), WuxDef.GetAttribute("Note_GenFullName"), undefined, true);
-        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenGender"), WuxDef.GetAttribute("Note_GenGender"), undefined, true);
+        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Title_Name"), WuxDef.GetAttribute("Note_GenName"), undefined, true,
+            lockToggle(WuxDef.Get("Note_GenName")));
+        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Title_FamilyName"), WuxDef.GetAttribute("Note_GenFullName"), undefined, true,
+            lockToggle(WuxDef.Get("Note_GenFullName")));
+        // Gender/Personality/Motivation dropdowns use the exact same groups/builders as
+        // their Origin-information counterparts (backgroundBackstory's Gender select,
+        // WuxCharacterSheetBuilders.buildInfluences' Personality/Motivation selects) -
+        // just bound to the draft Note_Gen* attributes instead of the real ones.
+        leftColumn += WuxDefinition.BuildSelect(WuxDef.Get("Note_GenGender"), WuxDef.GetAttribute("Note_GenGender"),
+            WuxDef.Filter([new DatabaseFilterData("group", "GenderType")]), true, true, lockToggle(WuxDef.Get("Note_GenGender")));
         leftColumn += WuxDefinition.BuildSelect(WuxDef.Get("Note_GenHomeRegion"), WuxDef.GetAttribute("Note_GenHomeRegion"),
-            WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]), undefined, true);
-        leftColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenRace"), WuxDef.GetAttribute("Note_GenRace"), undefined, true);
+            WuxDef.Filter([new DatabaseFilterData("group", "RegionType")]), undefined, true, lockToggle(WuxDef.Get("Note_GenHomeRegion")));
         leftColumn = WuxSheetMain.Table.FlexTableGroup(leftColumn);
 
         let rightColumn = "";
         let generatorDefinition = WuxDef.Get("Note_GenerateCharacter");
         let useDefinition = WuxDef.Get("Note_UseGeneration");
         let clearDefinition = WuxDef.Get("Note_ClearBackground");
-        rightColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenPersonality"), WuxDef.GetAttribute("Note_GenPersonality"), undefined, true);
-        rightColumn += WuxDefinition.BuildTextInput(WuxDef.Get("Note_GenMotivation"), WuxDef.GetAttribute("Note_GenMotivation"), undefined, true);
+        rightColumn += WuxCharacterSheetBuilders.BuildInfluenceTypeSelect(WuxDef.Get("Note_GenPersonality"), "PersonalityType",
+            lockToggle(WuxDef.Get("Note_GenPersonality")));
+        rightColumn += WuxCharacterSheetBuilders.BuildInfluenceTypeSelect(WuxDef.Get("Note_GenMotivation"), "MotivationType",
+            lockToggle(WuxDef.Get("Note_GenMotivation")));
         rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(generatorDefinition.getAttribute(), generatorDefinition.getTitle()));
         rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(useDefinition.getAttribute(), useDefinition.getTitle()));
         rightColumn += WuxSheetMain.MultiRow(WuxSheetMain.Button(clearDefinition.getAttribute(), clearDefinition.getTitle()));

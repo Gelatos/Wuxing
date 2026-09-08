@@ -346,6 +346,20 @@ var WuxSheetMain = WuxSheetMain || (function () {
             return `<div class="wuxMoreInfoBlock">${toggleButton}${fullDescription}</div>`;
         },
 
+        // Per-field lock toggle for the Background Generator (Note_Gen* fields) - shows a
+        // die by default (this field gets randomized), swapping to a lock icon once
+        // toggled (Generate Character will leave this field's draft value alone -
+        // WuxWorkerGeneral.GenerateCharacter reads this same "_lock" attribute per field,
+        // instead of the old behavior of only regenerating a field when the REAL
+        // character attribute was blank). Same single-checkbox, two-span :checked
+        // icon-swap mechanism as MoreInfo above, just without a revealed description - no
+        // :has() needed here.
+        lockToggle = function (definition) {
+            let lockAttr = definition.getAttribute("_lock");
+            let icons = `<span class="wuxLockIconRandom">&#127922;</span><span class="wuxLockIconLocked">&#128274;</span>`;
+            return button(lockAttr, icons, "wuxLockToggleButton");
+        },
+
         pictosButton = function (fieldName, contents, className) {
             if (className == undefined) {
                 className = "";
@@ -748,6 +762,7 @@ var WuxSheetMain = WuxSheetMain || (function () {
         Select: select,
         Button: button,
         MoreInfo: moreInfo,
+        LockToggle: lockToggle,
         PictosButton: pictosButton,
         MultiRowGroup: multiRowGroup,
         HiddenField: hiddenField,
@@ -1011,9 +1026,14 @@ var WuxDefinition = WuxDefinition || (function () {
                 WuxSheetMain.Desc(textContents);
         },
 
-        buildTextInput = function (definition, fieldName, className, useManualButton) {
+        // extraContent (optional) - e.g. a lock toggle (WuxSheetMain.LockToggle) - sits
+        // beside the input on its own row (wuxGeneratorFieldRow, WCSS-Specialized.css)
+        // instead of stacking below it, while the header stays above as usual. Omitted,
+        // this is unchanged from before.
+        buildTextInput = function (definition, fieldName, className, useManualButton, extraContent) {
+            let input = WuxSheetMain.CustomInput("text", fieldName, className);
             return buildHeader(definition, useManualButton) + "\n" +
-                WuxSheetMain.CustomInput("text", fieldName, className);
+                (extraContent ? `<div class="wuxGeneratorFieldRow">${input}${extraContent}</div>` : input);
         },
 
         buildTextarea = function (definition, fieldName, className, placeholder, useManualButton) {
@@ -1031,9 +1051,11 @@ var WuxDefinition = WuxDefinition || (function () {
                 WuxSheetMain.MultiRow(WuxSheetMain.Input("number", fieldName, "", "0") + WuxSheetMain.InputLabel(labelContent));
         },
 
-        buildSelect = function (definition, fieldName, definitionGroup, showEmpty, useManualButton) {
+        // extraContent (optional) - see buildTextInput's own comment above, same shape.
+        buildSelect = function (definition, fieldName, definitionGroup, showEmpty, useManualButton, extraContent) {
+            let select = WuxSheetMain.Select(fieldName, definitionGroup, showEmpty);
             return buildHeader(definition, useManualButton) + "\n" +
-                WuxSheetMain.Select(fieldName, definitionGroup, showEmpty);
+                (extraContent ? `<div class="wuxGeneratorFieldRow">${select}${extraContent}</div>` : select);
         }
     ;
     return {
@@ -1736,16 +1758,20 @@ var WuxCharacterSheetBuilders = WuxCharacterSheetBuilders || (function () {
             return WuxSheetMain.Table.FlexTableGroup(contents, " wuxMinWidth300");
         },
 
-        buildInfluenceTypeSelect = function (selectDef, groupName) {
+        // extraContent (optional) - see WuxDefinition.BuildTextInput's own comment for
+        // the shape/purpose; sits beside the select specifically (not the DescField
+        // below it).
+        buildInfluenceTypeSelect = function (selectDef, groupName, extraContent) {
             let options = WuxDef.Filter([new DatabaseFilterData("group", groupName)]);
             let optionsHtml = `<option value="0">-</option>`;
             for (let i = 0; i < options.length; i++) {
                 optionsHtml += `\n<option value="${options[i].name}">${options[i].subGroup} - ${options[i].title}</option>`;
             }
+            let select = `<select class="wuxInput" name="${selectDef.getAttribute()}" value="0">${optionsHtml}
+                </select>`;
 
             return `${WuxDefinition.BuildHeader(selectDef)}
-                <select class="wuxInput" name="${selectDef.getAttribute()}" value="0">${optionsHtml}
-                </select>
+                ${extraContent ? `<div class="wuxGeneratorFieldRow">${select}${extraContent}</div>` : select}
                 ${WuxSheetMain.DescField(selectDef.getAttribute(WuxDef._db))}`;
         },
 
@@ -1811,6 +1837,7 @@ var WuxCharacterSheetBuilders = WuxCharacterSheetBuilders || (function () {
     ;
     return {
         BuildInfluences: buildInfluences,
+        BuildInfluenceTypeSelect: buildInfluenceTypeSelect,
         BuildBackgroundBasics: buildBackgroundBasics,
         BuildBackgroundBackstory: buildBackgroundBackstory,
         BuildBackgroundGenerator: buildBackgroundGenerator,
