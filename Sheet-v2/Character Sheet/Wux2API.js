@@ -4153,7 +4153,7 @@ class TokenTargetEffectsData {
                         this.effectMessages.push("Target is Vined. Adding Vine ranks to Aflame and taking damage.");
                         rank += vined;
                         this.addStatusResult("Stat_Vined", "remove", vined);
-                        this.takeAflameEffect(attrHandler, vined);
+                        this.takeAflameDamage(this.getResultingAflameRank(attrHandler, type, rank));
                     }
                     break;
                 case "Stat_Vined":
@@ -4162,11 +4162,11 @@ class TokenTargetEffectsData {
                         this.addStatusResult("Stat_Soaked", "remove", 1);
                         rank *= 2;
                     }
-                    aflame = this.tokenTargetData.getStatusRank(attrHandler, "Stat_Soaked");
+                    aflame = this.tokenTargetData.getStatusRank(attrHandler, "Stat_Aflame");
                     if (aflame > 0) {
                         this.effectMessages.push("Target is Aflame. Adding Vine ranks to Aflame and taking damage.");
-                        this.addStatusResult("Aflame", "add", rank);
-                        this.takeAflameEffect(attrHandler, rank);
+                        this.addStatusResult("Stat_Aflame", "add", rank);
+                        this.takeAflameDamage(aflame + rank);
                         return;
                     }
                     break;
@@ -4418,17 +4418,24 @@ class TokenTargetEffectsData {
             });
     }
 
-    takeAflameEffect(attributeHandler, extraValue) {
-        let aflame = this.tokenTargetData.getStatusRank(attributeHandler, "Stat_Aflame");
-        if (extraValue != undefined && isNaN(parseInt(extraValue))) {
-            aflame += parseInt(extraValue);
-        }
-        if (aflame > 0) {
+    takeAflameEffect(attributeHandler) {
+        this.takeAflameDamage(this.tokenTargetData.getStatusRank(attributeHandler, "Stat_Aflame"));
+    }
+    // Rolls 1d6 burn per Aflame rank. Callers that change Aflame in the same resolution pass the
+    // resulting rank, since the token note isn't updated until performStatusResults runs.
+    takeAflameDamage(aflameRank) {
+        if (aflameRank > 0) {
             let roll = new DamageRoll();
-            roll.rollDice(aflame, 6);
+            roll.rollDice(aflameRank, 6);
             roll.setDamageType(WuxDef.GetTitle("Dmg_Burn"));
             this.addDamageRoll(roll);
         }
+    }
+    getResultingAflameRank(attributeHandler, type, incomingRank) {
+        if (type == "set") {
+            return incomingRank;
+        }
+        return this.tokenTargetData.getStatusRank(attributeHandler, "Stat_Aflame") + incomingRank;
     }
     takeAngeredEffect(attributeHandler) {
         if (this.tokenTargetData.hasStatus(attributeHandler, "Stat_Angered")) {
