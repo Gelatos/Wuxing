@@ -254,10 +254,13 @@ var WuxConflictManager = WuxConflictManager || (function () {
                     newAttributeHandler.run();
                 });
                 
-                // Round-start RoundEN gain removed - only the very first
-                // round of a conflict still sets everyone's starting EN.
+                // The first round of a conflict sets everyone's starting EN; every later
+                // round start grants exactly 1 EN.
                 if (startConflict) {
                     tokenTargetData.setEnergyToStart(attributeHandler);
+                }
+                else {
+                    tokenTargetData.addStartRoundEnergy(attributeHandler);
                 }
 
                 switch (state.WuxConflictManager.conflictType) {

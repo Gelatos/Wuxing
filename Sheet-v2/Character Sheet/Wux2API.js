@@ -307,10 +307,13 @@ var WuxConflictManager = WuxConflictManager || (function () {
                     newAttributeHandler.run();
                 });
                 
-                // Round-start RoundEN gain removed - only the very first
-                // round of a conflict still sets everyone's starting EN.
+                // The first round of a conflict sets everyone's starting EN; every later
+                // round start grants exactly 1 EN.
                 if (startConflict) {
                     tokenTargetData.setEnergyToStart(attributeHandler);
+                }
+                else {
+                    tokenTargetData.addStartRoundEnergy(attributeHandler);
                 }
 
                 switch (state.WuxConflictManager.conflictType) {
@@ -3562,15 +3565,8 @@ class TokenTargetData extends TargetData {
     }
 
     addStartRoundEnergy(attributeHandler, resultsCallback) {
-        let roundEnVar = WuxDef.GetVariable("RoundEN");
-        attributeHandler.addMod(roundEnVar);
-        resultsCallback = resultsCallback == undefined ? this.applyResultsToEnergy : resultsCallback;
-        
-        this.modifyIconAttribute(attributeHandler, "status_yellow", roundEnVar,
-            function (results, value, attributeHandler, tokenTargetData) {
-                results.max = 9;
-                return tokenTargetData.addModifierToAttribute(results, value, attributeHandler, tokenTargetData);
-            }, resultsCallback);
+        // Every round start grants exactly 1 EN, independent of any stat.
+        this.addEnergy(attributeHandler, 1, resultsCallback);
     }
 
     applyResultsToEnergy(results, attrHandler, attributeVar, tokenTargetData) {
