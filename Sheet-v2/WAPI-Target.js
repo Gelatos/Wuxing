@@ -1666,6 +1666,7 @@ var TargetReference = TargetReference || (function () {
                     break;
                 case "!tconditional":
                     commandTargetConditional(msg, TokenReference.GetTokenTargetDataArray(msg), content);
+                    break;
                 case "!tresetsocial":
                     commandResetSocial(msg, TokenReference.GetTokenTargetDataArray(msg));
                     break;
@@ -1848,7 +1849,7 @@ var TargetReference = TargetReference || (function () {
                     output += tokenOptionButton("Add Qi", "ten ?{How much qi to add?|1}");
                     output += tokenOptionButton("Add Surge", "thealsurge ?{How much surge to add?|1}");
                     output += tokenOptionButton("Add Vitality", "thealvit ?{How much vitality to add?|1}");
-                    output += tokenOptionButton("Take Condition Effect", `tconditional ?{Choose your conditional|${conditionals}`);
+                    output += tokenOptionButton("Take Condition Effect", `tconditional ?{Choose your conditional|${conditionals}}`);
 
                     output += tokenOptionSpacer();
                     output += tokenOptionTitle("Combat Move Options");
@@ -1871,7 +1872,7 @@ var TargetReference = TargetReference || (function () {
                         requestList += requestTypes[i].getTitle();
                     }
                     output += tokenOptionButton("Add Qi", "ten ?{How much qi to add?|1}");
-                    output += tokenOptionButton("Take Condition Effect", `tconditional ?{Choose your conditional|${conditionals}`);
+                    output += tokenOptionButton("Take Condition Effect", `tconditional ?{Choose your conditional|${conditionals}}`);
                     output += tokenOptionButton("Request Threshold", `tss ?{Set the difficulty of the request|${requestList}}`);
                     output += tokenOptionButton("Set Influence", "tinfluence ?{Set the influence level of the character|0}");
             }
@@ -2151,44 +2152,51 @@ var TargetReference = TargetReference || (function () {
         },
 
         commandTargetConditional = function (msg, targets, content) {
-            let messages = [];
             _.each(targets, function (tokenTargetData) {
                 let attributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
                 let tokenEffect = new TokenTargetEffectsData(tokenTargetData);
-                
-                switch (content) {
-                    case "Aflame":
-                        tokenEffect.takeAflameEffect(attributeHandler);
-                        break;
-                    case "Angered":
-                        tokenEffect.takeAngeredEffect(attributeHandler);
-                        break;
-                    case "Bleeding":
-                        tokenEffect.takeBleedingEffect(attributeHandler);
-                        break;
-                    case "Frightened":
-                        tokenEffect.takeFrightenedEffect(attributeHandler);
-                        break;
-                    case "Willbreak Cast":
-                        tokenEffect.takeCastWillbreakEffect(attributeHandler);
-                        break;
-                }
-                
+                // Same shape as the start-of-round effects (setStartRoundTokens,
+                // WAPI-Combat.js): the condition effects read the token's status and
+                // combat details, so they have to run once attributes are fetched,
+                // not directly against the not-yet-populated handler.
+                tokenTargetData.refreshCombatDetails(attributeHandler);
+
+                attributeHandler.addGetAttrCallback(function (attrGetter) {
+                    switch (content.trim()) {
+                        case "Aflame":
+                            tokenEffect.takeAflameEffect(attrGetter);
+                            break;
+                        case "Angered":
+                            tokenEffect.takeAngeredEffect(attrGetter);
+                            break;
+                        case "Bleeding":
+                            tokenEffect.takeBleedingEffect(attrGetter);
+                            break;
+                        case "Frightened":
+                            tokenEffect.takeFrightenedEffect(attrGetter);
+                            break;
+                        case "Willbreak Cast":
+                            tokenEffect.takeCastWillbreakEffect(attrGetter);
+                            break;
+                        default:
+                            Debug.LogError(`[tconditional] Unknown conditional: ${content}`);
+                    }
+                });
+
                 attributeHandler.addFinishCallback(function (attrGetter) {
                     let newAttributeHandler = new SandboxAttributeHandler(tokenTargetData.charId);
-
-                    tokenTargetData.performDamageRolls(attrGetter, newAttributeHandler);
+                    tokenEffect.performDamageRolls(attrGetter, newAttributeHandler);
                     newAttributeHandler.addFinishCallback(function () {
-                        messages = messages.concat(tokenTargetData.effectMessages);
-                    })
+                        if (tokenEffect.effectMessages.length > 0) {
+                            let systemMessage = new SystemInfoMessage(tokenEffect.effectMessages);
+                            systemMessage.setSender("System");
+                            WuxMessage.Send(systemMessage);
+                        }
+                    });
                     newAttributeHandler.run();
                 });
                 attributeHandler.run();
             });
-
-            let systemMessage = new SystemInfoMessage(messages);
-            systemMessage.setSender("System");
-            WuxMessage.Send(systemMessage);
         },
 
         commandResetSocial = function (msg, targets) {
